@@ -1,4 +1,4 @@
-# NukeSurvivalToolkit
+# Nuke Survival Toolkit
 Release v1.0.0
 
 For full documentation and tool index, visit:
