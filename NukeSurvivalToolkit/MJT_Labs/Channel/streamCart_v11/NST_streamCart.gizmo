@@ -1,0 +1,92 @@
+Group {
+ name streamCart
+ tile_color 0xd1ffff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {22 get_items l "get channels / geo" t "Run get items first, it will check the input type  (e.g. Deep, 2D, or Geo) and what items/channels available from upstream." T "import re\n\nthisGRP = nuke.thisGroup()\ngoStore = nuke.toNode('store')\ngoStore\['fn'].execute()\n\n### cleanup ###\n\ncleanKnobs(thisGRP)\n\n### init ###\n\ncount = 0\nchans_ls = \[]\nchans_dict = \{\}\ninType = \['Deep','2D','Geo','Unsupport','No Input']\n\n### input check ###\n\nif thisGRP.inputs() :\n  inDetect = nuke.toNode('inDetect')\n  tempD = nuke.nodes.DeepSample( inputs=\[inDetect] )\n  if tempD.inputs() > 0 :\n    temp2D = nuke.nodes.Blur( inputs=\[inDetect] )\n    if temp2D.inputs() > 0 :\n      p = nuke.Panel('select input type :')\n      p.addEnumerationPulldown( '' , '2D Deep' )\n      if p.show() :\n        if p.value('') == 'Deep' :\n          status = 0\n        else :\n          status = 1\n    else :\n      status = 0\n    nuke.delete( tempD )\n    nuke.delete( temp2D )\n  else :\n    nuke.delete( tempD )\n    tempD = nuke.nodes.Blur( inputs=\[inDetect] )\n    if tempD.inputs() > 0 :\n      status = 1\n      nuke.delete( tempD )\n    else :\n      nuke.delete( tempD )\n      tempD = nuke.nodes.Scene( inputs=\[inDetect] )\n      if tempD.inputs() > 0 :\n        status = 2\n        nuke.delete( tempD )\n      else :\n        status = 3\n        nuke.delete( tempD )\nelse :\n  status = 4\n\n### panel setting ###\n\nif inType\[status] == '2D' :\n  thisGRP\['shuffle_method'].setVisible(True)\nelse :\n  thisGRP\['shuffle_method'].setVisible(False)\n\nif inType\[status] == 'Deep' or inType\[status] == '2D' :\n  thisGRP\['alpha_type'].setVisible(True)\nelse :\n  thisGRP\['alpha_type'].setVisible(False)\n\nif inType\[status] ==  'Geo' :\n  thisGRP\['import_method'].setVisible(True)\nelse :\n  thisGRP\['import_method'].setVisible(False)\n\n### proc ###\n\nif inType\[status] == 'Deep' :\n  thisGRP\['input_type'].setValue( '<font color=cyan>' + inType\[status] + '</font>' )\n  d2img = nuke.nodes.DeepToImage( inputs=\[nuke.toNode('inDetect')] )\n  for i in d2img.channels() :\n    try :\n      chans_dict\[ i.split('.')\[0] ].append( i.split('.')\[1] )\n    except :\n      chans_dict\[ i.split('.')\[0] ] = \[ i.split('.')\[1] ]\n      chans_ls.append( i.split('.')\[0] )\n  nuke.delete( d2img )\n\n  for key,value in enumerate( chans_ls ) :\n    nknob = nuke.PyScript_Knob( 'cs_\{0\}'.format( value ) , '\{0\}'.format( value ) , 'thisGRP = nuke.thisGroup()\\ngoSTORE = nuke.toNode(\\'store\\')\\ngoSTORE\[\\'fn\\'].execute()\\nwith getLevel() :\\n\\tgen = extract(\\'\{0\}\\',\{1\},\{2\},\{3\},\{4\},\{5\})\\n\\tgen.setInput(0, thisGRP)'.format(value, chans_dict\[value] , 'int( thisGRP\[\\'shuffle_method\\'].getValue() )', 'int( thisGRP\[\\'alpha_type\\'].getValue() )', '\[thisGRP\[\\'tile_color\\'].getValue()]', status))\n    thisGRP.addKnob( nknob )\n    if count%3 == 0 :\n      thisGRP\['cs_' + value].setFlag(0x00001000)\n    count += 1\n\nif inType\[status] == '2D' :\n  thisGRP\['input_type'].setValue( '<font color=cyan>' + inType\[status] + '</font>' )\n  for i in thisGRP.channels() :\n    try :\n      chans_dict\[ i.split('.')\[0] ].append( i.split('.')\[1] )\n    except :\n      chans_dict\[ i.split('.')\[0] ] = \[ i.split('.')\[1] ]\n      chans_ls.append( i.split('.')\[0] )\n\n  for key,value in enumerate( chans_ls ) :\n    nknob = nuke.PyScript_Knob( 'cs_\{0\}'.format( value ) , '\{0\}'.format( value ) , 'thisGRP = nuke.thisGroup()\\ngoSTORE = nuke.toNode(\\'store\\')\\ngoSTORE\[\\'fn\\'].execute()\\nwith getLevel() :\\n\\tgen = extract(\\'\{0\}\\',\{1\},\{2\},\{3\},\{4\},\{5\})\\n\\tgen.setInput(0, thisGRP)'.format(value, chans_dict\[value] , 'int( thisGRP\[\\'shuffle_method\\'].getValue() )', 'int( thisGRP\[\\'alpha_type\\'].getValue() )', '\[thisGRP\[\\'tile_color\\'].getValue()]', status))\n    thisGRP.addKnob( nknob )\n    if count%3 == 0 :\n      thisGRP\['cs_' + value].setFlag(0x00001000)\n    count += 1\n\nif inType\[status] == 'Geo' :\n  readg = thisGRP.dependencies()\[0]\n  if readg.Class() != 'ReadGeo2' :\n    thisGRP\['import_method'].setVisible(False)\n    nuke.message(\"This function only support 'ReadGeo2' class node direct from input.\")\n  else :\n    thisGRP\['import_method'].setVisible(True)\n    thisGRP\['input_type'].setValue( '<font color=cyan>' + inType\[status] + '</font>' )\n    allshapes = readg\['scene_view'].getAllItems()\n    for i in allshapes :\n      nknob = nuke.Boolean_Knob( 'cs_\{0\}'.format( '_'.join( re.split('/|\\.', i)\[2:] ) ) , '\{0\}'.format( '/'.join( i.split('/')\[2:] ) ) )\n      thisGRP.addKnob( nknob )\n      thisGRP\['cs_' + '_'.join( re.split('/|\\.', i)\[2:] )].setFlag(0x00001000)\n    nknob = nuke.Text_Knob( 'cs_spacer' , ' ' )\n    thisGRP.addKnob( nknob )\n    nknob = nuke.PyScript_Knob( 'cs_invert_selection' , '\[---invert selection---]' , 'thisGRP = nuke.thisGroup()\\ngoSTORE = nuke.toNode(\\'store\\')\\ngoSTORE\[\\'fn\\'].execute()\\ninvSelGeo( \{0\} )'.format( 'thisGRP' ) )\n    thisGRP.addKnob( nknob )\n    thisGRP\['cs_invert_selection'].setFlag(0x00001000)\n    nknob = nuke.PyScript_Knob( 'cs_checkout' , '\[---READGEO CHECKOUT---]' , 'thisGRP = nuke.thisGroup()\\ngoSTORE = nuke.toNode(\\'store\\')\\ngoSTORE\[\\'fn\\'].execute()\\nwith getLevel() :\\n\\tgeoCheckout( \\'\{0\}\\' , \{1\} , \{2\} , \{3\} )'.format( readg\['file'].value() , int(readg\['range_first'].getValue()) , int(readg\['range_last'].getValue()) , 'thisGRP' ) )\n    thisGRP.addKnob( nknob )\n    thisGRP\['cs_checkout'].setFlag(0x00001000)\n\nif inType\[status] == 'Unsupport' :\n  thisGRP\['input_type'].setValue( \"connect your input and run 'get channels / geo' first.\" )\n  nuke.message(\"Input type does not support. Only work with 2D, Deep and Geo from upstream.\")\n\nif inType\[status] == 'No Input' :\n  thisGRP\['input_type'].setValue( \"connect your input and run 'get channels / geo' first.\" )\n  nuke.message(\"connect your input and run 'get channels / geo' first.\")" +STARTLINE}
+ addUserKnob {22 reset -STARTLINE T "thisGRP = nuke.thisGroup()\ngoStore = nuke.toNode('store')\ngoStore\['fn'].execute()\n\n### cleanup ###\n\ncleanKnobs(thisGRP)\nthisGRP\['input_type'].setValue( \"connect your input and run 'get channels / geo' first.\" )\nthisGRP\['shuffle_method'].setVisible(False)\nthisGRP\['alpha_type'].setVisible(False)\nthisGRP\['import_method'].setVisible(False)"}
+ addUserKnob {20 shuffle_define l "shuffle define setting" n 1}
+ shuffle_define 0
+ addUserKnob {1 r_clist l red t "name in this text field will shuffle to red channel.\n\nrules :\n- Split the item with \" , \"\n- no space\n- not a matter of upper/lower cases"}
+ r_clist red,r,front,z,u,x
+ addUserKnob {1 g_clist l green t "name in this text field will shuffle to red channel.\n\nrules :\n- Split the item with \" , \"\n- no space\n- not a matter of upper/lower cases"}
+ g_clist green,g,back,v,y
+ addUserKnob {1 b_clist l blue t "name in this text field will shuffle to red channel.\n\nrules :\n- Split the item with \" , \"\n- no space\n- not a matter of upper/lower cases"}
+ b_clist blue,b
+ addUserKnob {1 a_clist l alpha t "name in this text field will shuffle to red channel.\n\nrules :\n- Split the item with \" , \"\n- no space\n- not a matter of upper/lower cases"}
+ a_clist alpha,a
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 input_type l "input type" T "connect your input and run 'get channels / geo' first."}
+ addUserKnob {4 shuffle_method l "shuffle method" +HIDDEN M {"shuffle node" "expression node"}}
+ addUserKnob {4 alpha_type l alpha +HIDDEN M {rgba.alpha self.alpha "alpha = 0" "alpha = 1" "" "" "" ""}}
+ addUserKnob {4 import_method l "import method" +HIDDEN M {"import & activate only selected geo" "import all, activate only selected geo"}}
+ addUserKnob {26 title_extract l "extraction items"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "Dont touch"
+  note_font_size 42
+  xpos -385
+  ypos 7
+  bdwidth 512
+  bdheight 186
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x575757ff
+  label bin
+  note_font_size 42
+  xpos -386
+  ypos 220
+  bdwidth 220
+  bdheight 167
+ }
+ Input {
+  inputs 0
+  name input
+  xpos 0
+  ypos -95
+ }
+ Dot {
+  name inDetect
+  xpos 34
+  ypos 91
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 300
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nstatus = nuke.thisGroup()\['view_LayerContactSheet'].getValue()\nstDot = nuke.toNode('start_dot')\nedDot = nuke.toNode('end_dot')\n\nfor node in nuke.allNodes() :\n    if node.Class() == 'LayerContactSheet' :\n        nuke.delete( node )\n\nif status :\n    LCS = nuke.nodes.LayerContactSheet( roworder=0 , colorder=0 , showLayerNames=1 , inputs=\[stDot] )\n    edDot.setInput( 0 , LCS )\nelse :\n    edDot.setInput( 0 , stDot )\n"
+  xpos -311
+  ypos 131
+  addUserKnob {20 User}
+  addUserKnob {6 view_LayerContactSheet l "view LayerContactSheet" +STARTLINE}
+ }
+ NoOp {
+  inputs 0
+  name store
+  xpos -313
+  ypos 301
+  addUserKnob {20 User}
+  addUserKnob {22 fn T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\n#########\n\ndef cleanKnobs(node) :\n\tfor knob in node.knobs() :\n\t\tif knob\[0:3] == 'cs_' :\n\t\t\tnode.removeKnob( node\[knob] )\n\n#########\n\ndef invSelGeo( thisG ) :\n\tfor i in thisG.knobs() :\n\t\tif thisG\[i].Class() == 'Boolean_Knob' and i\[:3] == 'cs_' :\n\t\t\tif thisG\[i].getValue() == 0 :\n\t\t\t\tthisG\[i].setValue(1)\n\t\t\telse :\n\t\t\t\tthisG\[i].setValue(0)\n\n#########\n\ndef extract(chans, color, shuffle_method, alpha_mode, mainSet, code) :\n\twhitelist = \{\n\t\t\t'cr' : thisGRP\['r_clist'].value().split(',') ,\n\t\t\t'cg' : thisGRP\['g_clist'].value().split(',') ,\n\t\t\t'cb' : thisGRP\['b_clist'].value().split(','),\n\t\t\t'ca' : thisGRP\['a_clist'].value().split(',')\n\t\t\}\n\n\taset = ''\n\n\tif code == 0 :\n\t\tnewnode = nuke.nodes.DeepExpression( chans0='rgba', tile_color=mainSet\[0] )\n\t\tnewnode\['rgba.red'].setValue( '0' )\n\t\tnewnode\['rgba.green'].setValue( '0' )\n\t\tnewnode\['rgba.blue'].setValue( '0' )\n\t\tnewnode\['rgba.alpha'].setValue( '0' )\n\n\t\tfor i in color :\n\t\t\tif i.lower() in whitelist\['cr'] :\n\t\t\t\tnewnode\['rgba.red'].setValue( '\{0\}.\{1\}'.format( chans , i ) )\n\n\t\t\tif i.lower() in whitelist\['cg'] :\n\t\t\t\tnewnode\['rgba.green'].setValue( '\{0\}.\{1\}'.format( chans , i ) )\n\n\t\t\tif i.lower() in whitelist\['cb'] :\n\t\t\t\tnewnode\['rgba.blue'].setValue( '\{0\}.\{1\}'.format( chans , i ) )\n\n\t\t\tif alpha_mode == 0 :\n\t\t\t\tnewnode\['rgba.alpha'].setValue( 'rgba.alpha' )\n\t\t\t\taset = 'rgba.alpha'\n\t\t\telif alpha_mode == 1 :\n\t\t\t\tif i.lower() in whitelist\['ca'] :\n\t\t\t\t\tnewnode\['rgba.alpha'].setValue( '\{0\}.\{1\}'.format(chans , i ) )\n\t\t\t\t\taset = chans + '.alpha'\n\t\t\t\telse :\n\t\t\t\t\taset = chans + ' no alpha found'\n\t\t\telif alpha_mode == 2 :\n\t\t\t\tnewnode\['rgba.alpha'].setValue( '0' )\n\t\t\t\taset = '0'\n\t\t\telif alpha_mode == 3 :\n\t\t\t\tnewnode\['rgba.alpha'].setValue( '1' )\n\t\t\t\taset = '1'\n\n\tif code == 1 :\n\t\tif shuffle_method == 0 :\n\t\t\tnewnode = nuke.nodes.Shuffle( red='black', green='black', blue='black', alpha='black', tile_color=mainSet\[0] )\n\t\t\tnewnode\['in'].setValue( chans )\n\t\t\tfor i in color :\n\t\t\t\tif i.lower() in whitelist\['cr'] :\n\t\t\t\t\tnewnode\['red'].setValue( 'red' )\n\n\t\t\t\tif i.lower() in whitelist\['cg'] :\n\t\t\t\t\tnewnode\['green'].setValue( 'green' )\n\n\t\t\t\tif i.lower() in whitelist\['cb'] :\n\t\t\t\t\tnewnode\['blue'].setValue( 'blue' )\n\n\t\t\t\tif alpha_mode == 0 :\n\t\t\t\t\tnewnode\['in2'].setValue( 'alpha' )\n\t\t\t\t\tnewnode\['alpha'].setValue( 7 )\n\t\t\t\t\taset = 'rgba.alpha'\n\t\t\t\telif alpha_mode == 1 :\n\t\t\t\t\tif i.lower() in whitelist\['ca'] :\n\t\t\t\t\t\tnewnode\['alpha'].setValue( '\{0\}'.format( i ) )\n\t\t\t\t\t\taset = chans + '.alpha'\n\t\t\t\t\telse :\n\t\t\t\t\t\taset = chans + ' no alpha found'\n\t\t\t\telif alpha_mode == 2 :\n\t\t\t\t\tnewnode\['alpha'].setValue( 'black' )\n\t\t\t\t\taset = '0'\n\t\t\t\telif alpha_mode == 3 :\n\t\t\t\t\tnewnode\['alpha'].setValue( 'white' )\n\t\t\t\t\taset = '1'\n\t\telse :\n\t\t\tnewnode = nuke.nodes.Expression( channel0='red' , channel1='green' , channel2='blue' , channel3='alpha' , expr0='0' , expr1='0', expr2='0' , expr3='0' , tile_color=mainSet\[0] )\n\t\t\tfor i in color :\n\t\t\t\tif i.lower() in whitelist\['cr'] :\n\t\t\t\t\tnewnode\['expr0'].setValue( '\{0\}.\{1\}'.format( chans , i ) )\n\n\t\t\t\tif i.lower() in whitelist\['cg'] :\n\t\t\t\t\tnewnode\['expr1'].setValue( '\{0\}.\{1\}'.format( chans , i ) )\n\n\t\t\t\tif i.lower() in whitelist\['cb'] :\n\t\t\t\t\tnewnode\['expr2'].setValue( '\{0\}.\{1\}'.format( chans , i ) )\n\n\t\t\t\tif alpha_mode == 0 :\n\t\t\t\t\tnewnode\['expr3'].setValue( 'rgba.alpha' )\n\t\t\t\t\taset = 'rgba.alpha'\n\t\t\t\telif alpha_mode == 1 :\n\t\t\t\t\tif i.lower() in whitelist\['ca'] :\n\t\t\t\t\t\tnewnode\['expr3'].setValue( '\{0\}.\{1\}'.format(chans , i ) )\n\t\t\t\t\t\taset = chans + '.alpha'\n\t\t\t\t\telse :\n\t\t\t\t\t\taset = chans + ' no alpha found'\n\t\t\t\telif alpha_mode == 2 :\n\t\t\t\t\tnewnode\['expr3'].setValue( '0' )\n\t\t\t\t\taset = '0'\n\t\t\t\telif alpha_mode == 3 :\n\t\t\t\t\tnewnode\['expr3'].setValue( '1' )\n\t\t\t\t\taset = '1'\n\n\tnewnode\['label'].setValue( '<b><font size=4>' + chans + '</font></b><br>alpha : ' + aset)\n\t\n\treturn newnode\n\n#########\n\ndef geoCheckout( filepath, frameST, frameED, thisG ) :\n\timport random\n\txspace = nuke.toNode('preferences')\['GridWidth'].getValue() + random.randint(0,nuke.toNode('preferences')\['GridWidth'].getValue()*3)\n\n\titem_ls = \[]\n\tfor i in thisG.knobs() :\n\t\tif thisG\[i].Class() == 'Boolean_Knob' and i\[:3] == 'cs_' :\n\t\t\tif thisG\[i].getValue() == 1 :\n\t\t\t\titem_ls.append( '/root/' + thisG\[i].label() )\n\n\tnewRG = nuke.nodes.ReadGeo2( file=filepath , range_first=frameST , range_last=frameED , tile_color=int(thisG\['tile_color'].getValue()) , xpos=int(thisG.xpos()+xspace) , ypos=int(thisG.ypos()) )\n\tnewRG.showControlPanel()\n\tif thisG\['import_method'].getValue() == 0 :\n\t\tnewRG\['scene_view'].setImportedItems( item_ls )\n\telse :\n\t\tnewRG\['scene_view'].setImportedItems( newRG\['scene_view'].getAllItems() )\n\tnewRG\['scene_view'].setSelectedItems( item_ls )\n\tnewRG.hideControlPanel()" +STARTLINE}
+ }
+ NoOp {
+  inputs 0
+  name version_tag
+  tile_color 0xffb700ff
+  xpos -546
+  ypos 127
+  addUserKnob {20 t_VERSION l Version}
+  addUserKnob {26 l_VERSION l Version T 1.1}
+  addUserKnob {26 l_DATE l "Date Modified" T 2020-01-07}
+  addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.1<br>-&nbsp;when&nbsp;input&nbsp;support&nbsp;2D&nbsp;or&nbsp;Deep,&nbsp;it&nbsp;will&nbsp;prompt&nbsp;up&nbsp;selection&nbsp;for&nbsp;user<br>&nbsp;&nbsp;(e.g.&nbsp;input&nbsp;from&nbsp;scanlineRender)<br>-&nbsp;input&nbsp;type&nbsp;-&nbsp;Geo<br>&nbsp;&nbsp;changed&nbsp;knobs&nbsp;to&nbsp;checkbox&nbsp;instead&nbsp;of&nbsp;button<br>-&nbsp;exposed&nbsp;r,g,b,a&nbsp;define&nbsp;setting,<br>&nbsp;&nbsp;so&nbsp;user&nbsp;can&nbsp;setup&nbsp;their&nbsp;own&nbsp;rgba&nbsp;naming&nbsp;list.<br>-&nbsp;unblock&nbsp;deep&nbsp;&&nbsp;depth&nbsp;channel&nbsp;when&nbsp;input&nbsp;is&nbsp;deep,<br>&nbsp;&nbsp;so&nbsp;user&nbsp;can&nbsp;shuffle&nbsp;these&nbsp;2&nbsp;channels&nbsp;out&nbsp;if&nbsp;input&nbsp;is&nbsp;deep.<br><br>1.0<br>-&nbsp;quickly&nbsp;create&nbsp;shuffle&nbsp;nodes<br>-&nbsp;quickly&nbsp;generate&nbsp;ReadGeo&nbsp;with&nbsp;selection<br>-&nbsp;input&nbsp;support&nbsp;2D&nbsp;data,&nbsp;deep&nbsp;data&nbsp;and&nbsp;ReadGeo&nbsp;data.\"\nnuke.message( log )" +STARTLINE}
+  addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+ }
+end_group

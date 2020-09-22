@@ -1,0 +1,312 @@
+Group {
+ name DeepHoldoutSmoother
+ help "DeepAntialias creates an antialiased Deep edge by adding adjacent slices of the object to the original Deep image. You control the number of samples to incress softness (click Update any time you change this value) and the spread of those samples. The opacity knob makes the samples more or less transparent. Depth offset slides the overall slice in z."
+ tile_color 0x5fff
+ addUserKnob {20 User l D_DeepHoldoutSmoother}
+ addUserKnob {3 samples l "number of samples" t "Number of samples, the more, the softer it gets but longer to render. Click Update any time you change this value."}
+ samples 6
+ addUserKnob {22 btUpdate l "  Update  " -STARTLINE T "n = nuke.thisNode()\n\nwith n:\n    samples = n\['samples'].getValue()\n    opacity = n\['opacity'].getValue()\n    depth_spread = n\['depth_spread'].getValue()\n\n    deepOpacityNode = nuke.toNode('DeepExpressionOpacity')\n    deepMergeImageNode = nuke.toNode('DeepMergeImage')\n    inputDeepNode = nuke.toNode('deep')\n    deepExpressionHVNode = nuke.toNode('DeepExpressionHV')\n    deepExpressionDiagNode = nuke.toNode('DeepExpressionDiag')\n    deepHoldoutHVNode = nuke.toNode('DeepHoldoutDiag')\n    deepHoldoutDiagNode = nuke.toNode('DeepHoldoutHV')\n    deepMergeAllSamplesNode = nuke.toNode('DeepMergeAllSamples')\n\n    for i in nuke.allNodes():\n        if i.name().startswith('_Deep'):\n            nuke.delete(i)\n\n    deepMergeGlobalNode = nuke.nodes.DeepMerge()\n    deepMergeGlobalNode\['name'].setValue('_DeepMergeGlobal')\n    deepMergeGlobalNode\['operation'].setValue(0)\n    deepExpressionHVNode.setInput(0, deepOpacityNode)\n    deepExpressionDiagNode.setInput(0, deepOpacityNode)\n    deepHoldoutHVNode.setInput(0, deepMergeGlobalNode)\n    deepHoldoutDiagNode.setInput(0, deepMergeGlobalNode)\n    deepHoldoutDiagNode.setInput(0, deepMergeGlobalNode)\n    deepMergeAllSamplesNode.setInput(1, deepMergeGlobalNode)\n\n    for i in range(int(samples)):\n        index = i+1\n\n        deepTransformNode = nuke.nodes.DeepTransform()\n        deepTransformNode\['name'].setValue('_DeepTransform'+str(index))\n        if index == 1:\n            connectTo = inputDeepNode\n        else:\n            connectTo = nuke.toNode('_DeepTransform'+str(index-1))\n        deepTransformNode.setInput(0, connectTo)\n        deepTransformNode\['translate'].setExpression('-parent.depth_spread/parent.samples', 2)\n\n        deepHoldoutNode = nuke.nodes.DeepMerge()\n        deepHoldoutNode\['name'].setValue('_DeepHoldout'+str(index))\n        deepHoldoutNode\['operation'].setValue(1)\n        deepHoldoutNode.setInput(0, deepTransformNode)\n        deepHoldoutNode.setInput(1, deepOpacityNode)\n\n        deepMergeGlobalNode.setInput(i, deepHoldoutNode)"}
+ addUserKnob {7 depth_spread l "depth spread" t "Spread of the samples. All samples will fit into this z distance."}
+ depth_spread 1
+ addUserKnob {7 opacity t "Opacity of the samples."}
+ opacity 0.5
+ addUserKnob {7 depth_offset l "depth offset" t "Use this to move the origin of the samples and get more or less of the original object." R 0 10}
+ depth_offset -1
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 copyright l "" +STARTLINE T "D_DeepHoldoutSmoother v1.0 - (c) 2013 - Denis Scolan/Jesús Diez-Pérez"}
+}
+ Input {
+  inputs 0
+  name deep
+  xpos 527
+  ypos -2360
+ }
+set N154ed6a0 [stack 0]
+ Input {
+  inputs 0
+  name bbox
+  xpos 1090
+  ypos -2379
+  number 1
+ }
+ Dot {
+  name Dot1
+  xpos 1124
+  ypos -2257
+ }
+ Constant {
+  inputs 0
+  color 1
+  format "2048 932 0 0 2048 932 1 wwd"
+  name Constant7
+  xpos 1580
+  ypos -2392
+ }
+ Reformat {
+  format "2088 932 0 0 2088 932 1 wwd_Overscan"
+  resize none
+  pbb true
+  name Reformat5
+  xpos 1580
+  ypos -2302
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 1580
+  ypos -2261
+ }
+ DeepFromImage {
+  set_z true
+  name DeepFromImage
+  xpos 1756
+  ypos -2220
+ }
+ DeepExpression {
+  temp_name0 FirstOpacity
+  chans1 deep
+  rgba.alpha "1-\[value parent.opacity]"
+  name DeepExpressionOpacity
+  xpos 1756
+  ypos -2167
+ }
+set N154e6830 [stack 0]
+push $N154ed6a0
+ DeepTransform {
+  translate {0 0 {-parent.depth_spread/parent.samples}}
+  name _DeepTransform1
+  xpos 738
+  ypos -2130
+ }
+set N1ae0dd30 [stack 0]
+ DeepTransform {
+  translate {0 0 {-parent.depth_spread/parent.samples}}
+  name _DeepTransform2
+  xpos 738
+  ypos -2104
+ }
+set N1ae16130 [stack 0]
+ DeepTransform {
+  translate {0 0 {-parent.depth_spread/parent.samples}}
+  name _DeepTransform3
+  xpos 738
+  ypos -2078
+ }
+set N1ae1c180 [stack 0]
+ DeepTransform {
+  translate {0 0 {-parent.depth_spread/parent.samples}}
+  name _DeepTransform4
+  xpos 738
+  ypos -2052
+ }
+set N1ae228b0 [stack 0]
+ DeepTransform {
+  translate {0 0 {-parent.depth_spread/parent.samples}}
+  name _DeepTransform5
+  xpos 738
+  ypos -2026
+ }
+set N1ae29030 [stack 0]
+ DeepTransform {
+  translate {0 0 {-parent.depth_spread/parent.samples}}
+  name _DeepTransform6
+  xpos 738
+  ypos -2000
+ }
+ DeepMerge {
+  inputs 2
+  operation holdout
+  name _DeepHoldout6
+  xpos 1580
+  ypos -2000
+ }
+push $N154e6830
+push $N1ae29030
+ DeepMerge {
+  inputs 2
+  operation holdout
+  name _DeepHoldout5
+  xpos 1580
+  ypos -2026
+ }
+push $N154e6830
+push $N1ae228b0
+ DeepMerge {
+  inputs 2
+  operation holdout
+  name _DeepHoldout4
+  xpos 1580
+  ypos -2052
+ }
+push $N154e6830
+push $N1ae1c180
+ DeepMerge {
+  inputs 2
+  operation holdout
+  name _DeepHoldout3
+  xpos 1580
+  ypos -2078
+ }
+push $N154e6830
+push $N1ae16130
+ DeepMerge {
+  inputs 2
+  operation holdout
+  name _DeepHoldout2
+  xpos 1580
+  ypos -2104
+ }
+push $N154e6830
+push $N1ae0dd30
+ DeepMerge {
+  inputs 2
+  operation holdout
+  name _DeepHoldout1
+  xpos 1580
+  ypos -2130
+ }
+ DeepMerge {
+  inputs 6
+  name _DeepMergeGlobal
+  xpos 1861
+  ypos -1861
+ }
+set N154a72a0 [stack 0]
+push $N154e6830
+ DeepExpression {
+  chans1 deep
+  rgba.alpha 0.75
+  name DeepExpressionDiag
+  xpos 2953
+  ypos -1955
+ }
+push $N154a72a0
+ DeepMerge {
+  inputs 2
+  operation holdout
+  name DeepHoldoutDiag
+  xpos 2953
+  ypos -1720
+ }
+set N154a0240 [stack 0]
+ DeepTransform {
+  translate {1 -1 0}
+  mask_channel -rgba.alpha
+  name DeepTransform14
+  xpos 3080
+  ypos -1568
+ }
+push $N154a0240
+ DeepTransform {
+  translate {1 1 0}
+  mask_channel -rgba.alpha
+  name DeepTransform1
+  xpos 2986
+  ypos -1567
+ }
+push $N154a0240
+ DeepTransform {
+  translate {-1 -1 0}
+  mask_channel -rgba.alpha
+  name DeepTransform13
+  xpos 2891
+  ypos -1568
+ }
+push $N154a0240
+ DeepTransform {
+  translate {-1 1 0}
+  mask_channel -rgba.alpha
+  name DeepTransform10
+  xpos 2790
+  ypos -1567
+ }
+ DeepMerge {
+  inputs 4
+  name DeepMergeDiag
+  xpos 2943
+  ypos -1440
+ }
+push $N154e6830
+ DeepExpression {
+  chans1 deep
+  rgba.alpha 0.5
+  name DeepExpressionHV
+  xpos 2367
+  ypos -1970
+ }
+push $N154a72a0
+ DeepMerge {
+  inputs 2
+  operation holdout
+  name DeepHoldoutHV
+  xpos 2367
+  ypos -1730
+ }
+set N15459590 [stack 0]
+ DeepTransform {
+  translate {1 0 0}
+  mask_channel -rgba.alpha
+  name DeepTransform12
+  xpos 2500
+  ypos -1576
+ }
+push $N15459590
+ DeepTransform {
+  translate {0 -1 0}
+  mask_channel -rgba.alpha
+  name DeepTransform15
+  xpos 2408
+  ypos -1575
+ }
+push $N15459590
+ DeepTransform {
+  translate {0 1 0}
+  mask_channel -rgba.alpha
+  name DeepTransform9
+  xpos 2315
+  ypos -1574
+ }
+push $N15459590
+ DeepTransform {
+  translate {-1 0 0}
+  mask_channel -rgba.alpha
+  name DeepTransform11
+  xpos 2224
+  ypos -1572
+ }
+ DeepMerge {
+  inputs 4
+  name DeepMergeHV
+  xpos 2365
+  ypos -1434
+ }
+ DeepMerge {
+  inputs 2
+  name DeepMergeAll
+  xpos 2642
+  ypos -1267
+ }
+ DeepMerge {
+  inputs 2
+  name DeepMergeAllSamples
+  xpos 2642
+  ypos -1042
+ }
+ DeepTransform {
+  translate {0 0 {-parent.depth_offset}}
+  name DeepTransform2
+  xpos 2642
+  ypos -899
+ }
+ DeepMerge {
+  inputs 2
+  name DeepMergeAll2
+  xpos 738
+  ypos -899
+ }
+ Output {
+  name Output1
+  xpos 738
+  ypos -381
+ }
+end_group

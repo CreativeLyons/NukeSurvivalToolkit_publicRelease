@@ -1,0 +1,77 @@
+Group {
+ name apVignette
+ help "apVignette v0.4 - apEssentials by Adrian Pueyo\n\nSimple and lightweight vignetting gizmo.\n\nadrianpueyo.com, 2014-2018"
+ tile_color 0x8c8c8cff
+ addUserKnob {20 apeVignette}
+ addUserKnob {7 aspect t "Aspect ratio multiplier for the vignetting." R 0 4}
+ aspect 1
+ addUserKnob {6 img_format l "image format" t "...otherwise spherical.\nThis also gets affected by the aspect multiplier." -STARTLINE}
+ addUserKnob {7 size t "Shutter size multiplier relative to the plate width." R 0 2}
+ size 1.4
+ addUserKnob {7 falloff t "Gamma of the effect's alpha." R 0 3}
+ falloff 2
+ addUserKnob {26 ""}
+ addUserKnob {7 amount t "Multiplier for the effect's alpha." R 0 2}
+ amount 1
+ addUserKnob {41 color t "Multiplier for the image, through the resulting alpha." T Multiply1.value}
+ addUserKnob {6 output_alpha l "output matte in alpha" +STARTLINE}
+ output_alpha false
+ addUserKnob {26 version_author l "" t "apeVignette v0.4\n2014-2018" +STARTLINE T "<span style=\"color:#666\"><br/><b>apeVignette v0.4</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2014-2018</span>"}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 110
+  ypos 24
+ }
+set N2247bc50 [stack 0]
+ Radial {
+  output alpha
+  replace true
+  invert true
+  area {{"width/2 * (1 - parent.size)"} {height/2-(parent.img_format?height:width)/(2*parent.aspect)*parent.size} {"width/2 * (1 + parent.size)"} {height/2+(parent.img_format?height:width)/(2*parent.aspect)*parent.size}}
+  name Radial1
+  xpos 220
+  ypos 20
+ }
+ Gamma {
+  channels alpha
+  value {{1/parent.falloff}}
+  name Gamma1
+  xpos 220
+  ypos 52
+ }
+ Multiply {
+  channels alpha
+  value {{parent.amount}}
+  name Multiply2
+  xpos 220
+  ypos 84
+ }
+set N22465310 [stack 0]
+push $N22465310
+push $N2247bc50
+ Multiply {
+  inputs 1+1
+  channels rgb
+  value 0
+  name Multiply1
+  selected true
+  xpos 110
+  ypos 88
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name CopyA
+  xpos 110
+  ypos 112
+  disable {{!parent.output_alpha}}
+ }
+ Output {
+  name Output1
+  xpos 110
+  ypos 144
+ }
+end_group

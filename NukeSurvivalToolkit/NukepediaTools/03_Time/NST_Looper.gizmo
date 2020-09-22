@@ -1,0 +1,193 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name Looper
+ knobChanged "total = '<span style=\"color:#797979;\">Total frames looped: ' + '<span style=\"color:#979457;\">' + str(int(nuke.thisNode()\['toframe'].value() - nuke.thisNode()\['fromframe'].value()))\nnuke.thisNode()\['totalframes'].setValue(str(total))\n\n\nn = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"looptype\":\n    channelsOn = k.value() != 'Dissolve  (Fast - Simple)';\n    n.knobs()\['retimedChannels'].setVisible(channelsOn)\n\n    channelsOn = k.value() != 'Morph  (Slower - Complex) ';\n    n.knobs()\['channels'].setVisible(channelsOn)"
+ tile_color 0x242520ff
+ note_font "DejaVu Sans Bold Bold"
+ note_font_color 0xa38c58ff
+ selected true
+ lock_connections true
+ addUserKnob {20 Looper}
+ addUserKnob {41 channels l Channels T Dissolve1.channels}
+ addUserKnob {41 retimedChannels l Channels +HIDDEN T Kronos3.retimedChannels}
+ addUserKnob {26 _____________________ l "" +STARTLINE}
+ addUserKnob {68 looptype l "Loop Method" t "\nDissolve: Uses a simple Dissolve node to dissolve the input clip between an offset version of the same clip. The offset amount is determined by the number of frames looped. Works great when looping clips with constant/similar movement like rain or snow stock footage.\n\nMorph: Similar to the Dissolve method but instead uses a Kronos node to calculate motion vectors to then generate a morphed loop. Best used with clips containing complex but well defined movement.\n\nFgMatte input: An optional matte of the foreground can be used which may improve Kronos's motion estimation. Works best with big soft mattes.\n" M {"Dissolve  (Fast - Simple)" "Morph  (Slower - Complex) " "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {4 avoidclipend l "    Avoid Clip End " t "Negatively offsets the input clip to avoid looping unexisting frames before first frame." -STARTLINE M {Off "Before First Frame " "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+ avoidclipend "Before First Frame "
+ addUserKnob {20 vectorgroup l "Vector Generator Settings" n 1}
+ vectorgroup 0
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T Kronos3.useGPUIfAvailable}
+ addUserKnob {41 vectorDetailReg l "Vector Detail" T Kronos3.vectorDetailReg}
+ addUserKnob {41 strengthReg l Strength T Kronos3.strengthReg}
+ addUserKnob {41 resampleType l Resampling T Kronos3.resampleType}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ___________________ l "" +STARTLINE T " "}
+ addUserKnob {3 fromframe l "Loop from"}
+ fromframe 1
+ addUserKnob {3 toframe l " to " -STARTLINE}
+ toframe 20
+ addUserKnob {26 totalframes l " " -STARTLINE T "<span style=\"color:#797979;\">Total frames looped: <span style=\"color:#979457;\">19"}
+ addUserKnob {26 _______ l " " T " "}
+ addUserKnob {26 credits_ l "" +STARTLINE T "<font size=\"5\"><span style=\"color:#575757;\">Looper<font size=\"2\"><span style=\"color:#5a5a5a;\"> v1.0 &nbsp; │ &nbsp; <font size=\"1\">B Y &nbsp; D A M I A N &nbsp; B I N D E R"}
+}
+ Input {
+  inputs 0
+  name FgMatte
+  xpos 1335
+  ypos 288
+  number 1
+ }
+ TimeOffset {
+  time_offset {{"parent.fromframe - parent.toframe"}}
+  time ""
+  name TimeOffset2
+  xpos 1335
+  ypos 376
+  disable {{clamp(!parent.avoidclipend)}}
+ }
+ Dot {
+  name Dot6
+  xpos 1369
+  ypos 458
+ }
+ Input {
+  inputs 0
+  name Source
+  xpos 764
+  ypos -234
+ }
+ TimeOffset {
+  time_offset {{"parent.fromframe - parent.toframe"}}
+  time ""
+  name TimeOffset1
+  xpos 764
+  ypos -157
+  disable {{clamp(!parent.avoidclipend)}}
+ }
+ Dot {
+  name Dot5
+  xpos 798
+  ypos -73
+ }
+set N2e95f500 [stack 0]
+ Dot {
+  name Dot4
+  xpos 1186
+  ypos -73
+ }
+ Retime {
+  input.first {{parent.fromframe}}
+  input.first_lock true
+  input.last {{parent.toframe}}
+  input.last_lock true
+  output.first {{parent.fromframe}}
+  output.first_lock true
+  output.last {{(parent.toframe*2-parent.fromframe)+1}}
+  output.last_lock true
+  speed 0.5
+  filter nearest
+  time ""
+  name Retime3
+  xpos 1152
+  ypos 245
+ }
+push $N2e95f500
+ TimeOffset {
+  time_offset {{"-(parent.fromframe - parent.toframe)"}}
+  time ""
+  name TimeOffset4
+  xpos 764
+  ypos 89
+ }
+ Dot {
+  name Dot2
+  xpos 798
+  ypos 253
+ }
+set N2e866cf0 [stack 0]
+ Retime {
+  input.first {{parent.fromframe}}
+  input.first_lock true
+  input.last {{parent.toframe}}
+  input.last_lock true
+  output.first {{parent.fromframe}}
+  output.first_lock true
+  output.last {{(parent.toframe*2-parent.fromframe)+1}}
+  output.last_lock true
+  speed 0.5
+  filter nearest
+  time ""
+  name Retime4
+  xpos 943
+  ypos 249
+ }
+ Switch {
+  inputs 2
+  which {{"(frame - (1 + parent.fromframe))%2"}}
+  name Switch4
+  xpos 1055
+  ypos 351
+ }
+ Kronos {
+  inputs 2
+  timing2 Frame
+  timingFrame2 {{"((frame-parent.fromframe)*2+parent.fromframe) + (-(parent.fromframe - frame)) / (-(parent.fromframe - parent.toframe))"}}
+  showLegacyMode false
+  motionEstimation Regularized
+  vectorDetailReg 0.4
+  strengthReg 1.4
+  matteChannel "Matte Alpha"
+  legacyModeNuke9 false
+  vectorSpacing 40
+  name Kronos3
+  xpos 1055
+  ypos 448
+ }
+push $N2e866cf0
+push $N2e95f500
+ Dot {
+  name Dot1
+  xpos 434
+  ypos -73
+ }
+ Dissolve {
+  inputs 2
+  channels rgba
+  which {{"(-(parent.fromframe - frame)) / (-(parent.fromframe - parent.toframe))"}}
+  name Dissolve1
+  selected true
+  xpos 400
+  ypos 249
+ }
+ Dot {
+  name Dot3
+  xpos 434
+  ypos 419
+ }
+ Switch {
+  inputs 2
+  which {{parent.looptype}}
+  name Switch2
+  xpos 765
+  ypos 600
+ }
+ TimeClip {
+  time ""
+  first {{parent.fromframe}}
+  before loop
+  last {{"parent.toframe - 1"}}
+  after loop
+  origfirst 0
+  origlast 0
+  origset true
+  name TimeClip1
+  xpos 765
+  ypos 693
+ }
+ Output {
+  name Output1
+  xpos 765
+  ypos 782
+ }
+end_group

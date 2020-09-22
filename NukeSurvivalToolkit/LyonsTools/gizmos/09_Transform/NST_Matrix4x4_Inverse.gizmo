@@ -1,0 +1,191 @@
+Group {
+ name Matrix4x4_Inverse
+ tile_color 0x9c0000ff
+ selected true
+ addUserKnob {20 MatrixInverse}
+ addUserKnob {4 inputMatrixType l "Input Matrix From:" M {local world "" "" ""}}
+ inputMatrixType world
+ addUserKnob {41 inputMatrixA l "Input Matrix A" T MatrixA.matrix}
+ addUserKnob {26 result l Result}
+ addUserKnob {41 matrixInverse l "Matrix A Inverse" T Matrix_InverseResult.matrix}
+ addUserKnob {26 exportText l "Export Inverse Axis"}
+ addUserKnob {26 text l " " T "<b><font color=lightgreen>FrameRange"}
+ addUserKnob {22 createInverseAxisLinked l "FrameRange (Linked)" T "mi = nuke.thisNode()\nmiX = mi.xpos()\nmiY = mi.ypos()\nmiName = mi.name()\nmiInputName = mi.input(0).name()\n\nwith nuke.root():\n    axis = nuke.createNode('Axis2')\n    axis.setName('Axis_Inverse')\n    axis.setXpos(miX+10)\n    axis.setYpos(miY+80)\n    axis.knob('tile_color').setValue(1799395071)\n    axis.knob('label').setValue('\{\} Inverse'.format(miInputName))\n    axis.knob('useMatrix').setValue(1)\n    axis.knob('matrix').setExpression('\{\}.matrixInverse'.format(miName))\n" +STARTLINE}
+ addUserKnob {22 createInverseAxisBaked l "FrameRange (Baked)" -STARTLINE T "mi = nuke.thisNode()\nmiX = mi.xpos()\nmiY = mi.ypos()\nmiName = mi.name()\nmi_matrixInverse = mi.knob('matrixInverse')\nmiInputName = mi.input(0).name()\n\nwith nuke.root():\n    axis = nuke.createNode('Axis2')\n    axis.setName('Axis_Inverse')\n    axisName = axis.name()\n    axis.setXpos(miX+10)\n    axis.setYpos(miY+80)\n    axis.knob('tile_color').setValue(1799395071)\n    axis.knob('label').setValue('\{\} Inverse'.format(miInputName))\n    axis.knob('useMatrix').setValue(1)\n    axisMatrix= axis.knob('matrix')\n    \n    # Grab first and last frame from root\n    first_frame = int(nuke.Root()\['first_frame'].getValue())\n    last_frame = int(nuke.Root()\['last_frame'].getValue())\n    \n    # Create user input panel\n    p = nuke.Panel(\"Execute on FrameRange\")\n    p.addSingleLineInput('First Frame', first_frame)\n    p.addSingleLineInput('Last Frame', last_frame)\n    p.addSingleLineInput('Increment', 1)\n    \n    if p.show():\n        # Define first, last, increment from user input panel\n        ff = str(int(p.value(\"First Frame\")))\n        lf = str(int(p.value(\"Last Frame\")))\n        i = str(int(p.value(\"Increment\")))\n        \n    for item in xrange(16):\n        num = str(item)\n        nuke.animation(\"\{\}.matrix.\{\}\".format(axisName, num) , \"generate\", (ff, lf, i, 'y', \"\{\}.matrixInverse.\{\}\".format(miName, num) ) )\n    "}
+ addUserKnob {26 text_1 l " " T "<b><font color=lightgreen>Static Frame"}
+ addUserKnob {3 refFrame l "Ref Frame"}
+ refFrame 1001
+ addUserKnob {22 setToCurrentFrame l "Set to Current Frame" -STARTLINE T "n = nuke.thisNode()\nref = n.knob('refFrame')\nframe = nuke.frame()\n\nref.setValue(frame)"}
+ addUserKnob {22 staticFrameExportLinked l "Static Frame (Linked)" T "mi = nuke.thisNode()\nmiX = mi.xpos()\nmiY = mi.ypos()\nmiName = mi.name()\nmiInputName = mi.input(0).name()\nrefFrame = int(mi.knob('refFrame').value())\n\nwith nuke.root():\n    axis = nuke.createNode('Axis2')\n    axis.setName('Axis_Inverse')\n    axis.setXpos(miX+10)\n    axis.setYpos(miY+80)\n    axis.knob('tile_color').setValue(1799395071)\n    axis.knob('label').setValue('\{\} Inverse\\nRef Frame: \{\}'.format(miInputName, refFrame))\n    axis.knob('useMatrix').setValue(1)\n    axis.knob('matrix').setExpression('\{\}.matrixInverse(\{\})'.format(miName, refFrame))" +STARTLINE}
+ addUserKnob {22 staticFrameExportBaked l "Static Frame (Baked)" -STARTLINE T "mi = nuke.thisNode()\nmiX = mi.xpos()\nmiY = mi.ypos()\nmiName = mi.name()\nmi_matrixInverse = mi.knob('matrixInverse')\nmiInputName = mi.input(0).name()\nrefFrame = str(int(mi.knob('refFrame').value()))\n\nwith nuke.root():\n    axis = nuke.createNode('Axis2')\n    axis.setName('Axis_Inverse')\n    axisName = axis.name()\n    axis.setXpos(miX+10)\n    axis.setYpos(miY+80)\n    axis.knob('tile_color').setValue(1799395071)\n    axis.knob('label').setValue('\{\} Inverse\\nRef Frame: \{\}'.format(miInputName, refFrame))\n    axis.knob('useMatrix').setValue(1)\n    axisMatrix= axis.knob('matrix')\n        \n    for item in xrange(16):\n        num = str(item)\n        nuke.animation(\"\{\}.matrix.\{\}\".format(axisName, num) , \"generate\", (refFrame, refFrame, i, 'y', \"\{\}.matrixInverse.\{\}\".format(miName, num) ) )\n    axisMatrix.clearAnimated()"}
+ addUserKnob {20 checkResult_2 l "Check Result: Identity Matrix"}
+ addUserKnob {41 matrixResultIdentity l "Input Inverse Result:" T Matrix4x4Math.matrixC}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -544
+  ypos -329
+ }
+ Matrix {
+  matrix {
+      {{"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"}}
+      {{"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"}}
+      {{"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"}}
+      {{"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"} {"inputMatrixType == 0 ? parent.input0.matrix :  parent.input0.world_matrix"}}
+    }
+  name MatrixA
+  xpos -544
+  ypos -288
+ }
+set N8467b640 [stack 0]
+ NoOp {
+  name DeterminantA
+  xpos -544
+  ypos -221
+  addUserKnob {20 User}
+  addUserKnob {7 determinant l "Matrix A Determinant" R -1 1}
+  determinant {{"+MatrixA.matrix.0*MatrixA.matrix.5*MatrixA.matrix.10*MatrixA.matrix.15\n+MatrixA.matrix.0*MatrixA.matrix.6*MatrixA.matrix.11*MatrixA.matrix.13\n+MatrixA.matrix.0*MatrixA.matrix.7*MatrixA.matrix.9*MatrixA.matrix.14\n-MatrixA.matrix.0*MatrixA.matrix.7*MatrixA.matrix.10*MatrixA.matrix.13\n-MatrixA.matrix.0*MatrixA.matrix.6*MatrixA.matrix.9*MatrixA.matrix.15\n-MatrixA.matrix.0*MatrixA.matrix.5*MatrixA.matrix.11*MatrixA.matrix.14\n\n-MatrixA.matrix.1*MatrixA.matrix.4*MatrixA.matrix.10*MatrixA.matrix.15\n-MatrixA.matrix.2*MatrixA.matrix.4*MatrixA.matrix.11*MatrixA.matrix.13\n-MatrixA.matrix.3*MatrixA.matrix.4*MatrixA.matrix.9*MatrixA.matrix.14\n+MatrixA.matrix.3*MatrixA.matrix.4*MatrixA.matrix.10*MatrixA.matrix.13\n+MatrixA.matrix.2*MatrixA.matrix.4*MatrixA.matrix.9*MatrixA.matrix.15\n+MatrixA.matrix.1*MatrixA.matrix.4*MatrixA.matrix.11*MatrixA.matrix.14\n\n+MatrixA.matrix.1*MatrixA.matrix.6*MatrixA.matrix.8*MatrixA.matrix.15\n+MatrixA.matrix.2*MatrixA.matrix.7*MatrixA.matrix.8*MatrixA.matrix.13\n+MatrixA.matrix.3*MatrixA.matrix.5*MatrixA.matrix.8*MatrixA.matrix.14\n-MatrixA.matrix.3*MatrixA.matrix.6*MatrixA.matrix.8*MatrixA.matrix.13\n-MatrixA.matrix.2*MatrixA.matrix.5*MatrixA.matrix.8*MatrixA.matrix.15\n-MatrixA.matrix.1*MatrixA.matrix.7*MatrixA.matrix.8*MatrixA.matrix.14\n\n-MatrixA.matrix.1*MatrixA.matrix.6*MatrixA.matrix.11*MatrixA.matrix.12\n-MatrixA.matrix.2*MatrixA.matrix.7*MatrixA.matrix.9*MatrixA.matrix.12\n-MatrixA.matrix.3*MatrixA.matrix.5*MatrixA.matrix.10*MatrixA.matrix.12\n+MatrixA.matrix.3*MatrixA.matrix.6*MatrixA.matrix.9*MatrixA.matrix.12\n+MatrixA.matrix.2*MatrixA.matrix.5*MatrixA.matrix.11*MatrixA.matrix.12\n+MatrixA.matrix.1*MatrixA.matrix.7*MatrixA.matrix.10*MatrixA.matrix.12"}}
+  addUserKnob {7 oneOver l "1 / Determinant"}
+  oneOver {{1/determinant}}
+ }
+ Output {
+  name Output1
+  xpos -544
+  ypos -120
+ }
+ Matrix {
+  inputs 0
+  matrix {
+      {{"+MatrixA.matrix.5*MatrixA.matrix.10*MatrixA.matrix.15\n+MatrixA.matrix.6*MatrixA.matrix.11*MatrixA.matrix.13\n+MatrixA.matrix.7*MatrixA.matrix.9*MatrixA.matrix.14\n-MatrixA.matrix.7*MatrixA.matrix.10*MatrixA.matrix.13\n-MatrixA.matrix.6*MatrixA.matrix.9*MatrixA.matrix.15\n-MatrixA.matrix.5*MatrixA.matrix.11*MatrixA.matrix.14"} {"-MatrixA.matrix.1*MatrixA.matrix.10*MatrixA.matrix.15\n-MatrixA.matrix.2*MatrixA.matrix.11*MatrixA.matrix.13\n-MatrixA.matrix.3*MatrixA.matrix.9*MatrixA.matrix.14\n+MatrixA.matrix.3*MatrixA.matrix.10*MatrixA.matrix.13\n+MatrixA.matrix.2*MatrixA.matrix.9*MatrixA.matrix.15\n+MatrixA.matrix.1*MatrixA.matrix.11*MatrixA.matrix.14"} {"+MatrixA.matrix.1*MatrixA.matrix.6*MatrixA.matrix.15\n+MatrixA.matrix.2*MatrixA.matrix.7*MatrixA.matrix.13\n+MatrixA.matrix.3*MatrixA.matrix.5*MatrixA.matrix.14\n-MatrixA.matrix.3*MatrixA.matrix.6*MatrixA.matrix.13\n-MatrixA.matrix.2*MatrixA.matrix.5*MatrixA.matrix.15\n-MatrixA.matrix.1*MatrixA.matrix.7*MatrixA.matrix.14"} {"-MatrixA.matrix.1*MatrixA.matrix.6*MatrixA.matrix.11\n-MatrixA.matrix.2*MatrixA.matrix.7*MatrixA.matrix.9\n-MatrixA.matrix.3*MatrixA.matrix.5*MatrixA.matrix.10\n+MatrixA.matrix.3*MatrixA.matrix.6*MatrixA.matrix.9\n+MatrixA.matrix.2*MatrixA.matrix.5*MatrixA.matrix.11\n+MatrixA.matrix.1*MatrixA.matrix.7*MatrixA.matrix.10"}}
+      {{"-MatrixA.matrix.4*MatrixA.matrix.10*MatrixA.matrix.15\n-MatrixA.matrix.6*MatrixA.matrix.11*MatrixA.matrix.12\n-MatrixA.matrix.7*MatrixA.matrix.11*MatrixA.matrix.14\n+MatrixA.matrix.7*MatrixA.matrix.10*MatrixA.matrix.12\n+MatrixA.matrix.6*MatrixA.matrix.8*MatrixA.matrix.15\n+MatrixA.matrix.4*MatrixA.matrix.11*MatrixA.matrix.14"} {"+MatrixA.matrix.0*MatrixA.matrix.10*MatrixA.matrix.15\n+MatrixA.matrix.2*MatrixA.matrix.11*MatrixA.matrix.12\n+MatrixA.matrix.3*MatrixA.matrix.8*MatrixA.matrix.14\n-MatrixA.matrix.3*MatrixA.matrix.10*MatrixA.matrix.12\n-MatrixA.matrix.2*MatrixA.matrix.8*MatrixA.matrix.15\n-MatrixA.matrix.0*MatrixA.matrix.11*MatrixA.matrix.14"} {"-MatrixA.matrix.0*MatrixA.matrix.6*MatrixA.matrix.15\n-MatrixA.matrix.2*MatrixA.matrix.7*MatrixA.matrix.12\n-MatrixA.matrix.3*MatrixA.matrix.4*MatrixA.matrix.14\n+MatrixA.matrix.3*MatrixA.matrix.6*MatrixA.matrix.12\n+MatrixA.matrix.2*MatrixA.matrix.4*MatrixA.matrix.15\n+MatrixA.matrix.0*MatrixA.matrix.7*MatrixA.matrix.14"} {"+MatrixA.matrix.0*MatrixA.matrix.6*MatrixA.matrix.11\n+MatrixA.matrix.2*MatrixA.matrix.7*MatrixA.matrix.8\n+MatrixA.matrix.3*MatrixA.matrix.4*MatrixA.matrix.10\n-MatrixA.matrix.3*MatrixA.matrix.6*MatrixA.matrix.8\n-MatrixA.matrix.2*MatrixA.matrix.4*MatrixA.matrix.11\n-MatrixA.matrix.0*MatrixA.matrix.7*MatrixA.matrix.10"}}
+      {{"+MatrixA.matrix.4*MatrixA.matrix.9*MatrixA.matrix.15\n+MatrixA.matrix.5*MatrixA.matrix.11*MatrixA.matrix.12\n+MatrixA.matrix.7*MatrixA.matrix.8*MatrixA.matrix.13\n-MatrixA.matrix.7*MatrixA.matrix.9*MatrixA.matrix.12\n-MatrixA.matrix.5*MatrixA.matrix.8*MatrixA.matrix.15\n-MatrixA.matrix.4*MatrixA.matrix.11*MatrixA.matrix.13"} {"-MatrixA.matrix.0*MatrixA.matrix.9*MatrixA.matrix.15\n-MatrixA.matrix.1*MatrixA.matrix.11*MatrixA.matrix.12\n-MatrixA.matrix.3*MatrixA.matrix.8*MatrixA.matrix.13\n+MatrixA.matrix.3*MatrixA.matrix.9*MatrixA.matrix.12\n+MatrixA.matrix.1*MatrixA.matrix.8*MatrixA.matrix.15\n+MatrixA.matrix.0*MatrixA.matrix.11*MatrixA.matrix.13"} {"+MatrixA.matrix.0*MatrixA.matrix.5*MatrixA.matrix.15\n+MatrixA.matrix.1*MatrixA.matrix.7*MatrixA.matrix.12\n+MatrixA.matrix.3*MatrixA.matrix.4*MatrixA.matrix.13\n-MatrixA.matrix.3*MatrixA.matrix.5*MatrixA.matrix.12\n-MatrixA.matrix.1*MatrixA.matrix.4*MatrixA.matrix.15\n-MatrixA.matrix.0*MatrixA.matrix.7*MatrixA.matrix.13"} {"-MatrixA.matrix.0*MatrixA.matrix.5*MatrixA.matrix.11\n-MatrixA.matrix.1*MatrixA.matrix.7*MatrixA.matrix.8\n-MatrixA.matrix.3*MatrixA.matrix.4*MatrixA.matrix.9\n+MatrixA.matrix.3*MatrixA.matrix.5*MatrixA.matrix.8\n+MatrixA.matrix.1*MatrixA.matrix.4*MatrixA.matrix.11\n+MatrixA.matrix.0*MatrixA.matrix.7*MatrixA.matrix.9"}}
+      {{"-MatrixA.matrix.4*MatrixA.matrix.9*MatrixA.matrix.14\n-MatrixA.matrix.5*MatrixA.matrix.10*MatrixA.matrix.12\n-MatrixA.matrix.6*MatrixA.matrix.8*MatrixA.matrix.13\n+MatrixA.matrix.6*MatrixA.matrix.9*MatrixA.matrix.12\n+MatrixA.matrix.5*MatrixA.matrix.8*MatrixA.matrix.14\n+MatrixA.matrix.4*MatrixA.matrix.10*MatrixA.matrix.13"} {"+MatrixA.matrix.0*MatrixA.matrix.9*MatrixA.matrix.14\n+MatrixA.matrix.1*MatrixA.matrix.10*MatrixA.matrix.12\n+MatrixA.matrix.2*MatrixA.matrix.8*MatrixA.matrix.13\n-MatrixA.matrix.2*MatrixA.matrix.9*MatrixA.matrix.12\n-MatrixA.matrix.1*MatrixA.matrix.8*MatrixA.matrix.14\n-MatrixA.matrix.0*MatrixA.matrix.10*MatrixA.matrix.13"} {"-MatrixA.matrix.0*MatrixA.matrix.5*MatrixA.matrix.14\n-MatrixA.matrix.1*MatrixA.matrix.6*MatrixA.matrix.12\n-MatrixA.matrix.2*MatrixA.matrix.4*MatrixA.matrix.13\n+MatrixA.matrix.2*MatrixA.matrix.5*MatrixA.matrix.12\n+MatrixA.matrix.1*MatrixA.matrix.4*MatrixA.matrix.14\n+MatrixA.matrix.0*MatrixA.matrix.6*MatrixA.matrix.13"} {"+MatrixA.matrix.0*MatrixA.matrix.5*MatrixA.matrix.10\n+MatrixA.matrix.1*MatrixA.matrix.6*MatrixA.matrix.8\n+MatrixA.matrix.2*MatrixA.matrix.4*MatrixA.matrix.9\n-MatrixA.matrix.2*MatrixA.matrix.5*MatrixA.matrix.8\n-MatrixA.matrix.1*MatrixA.matrix.4*MatrixA.matrix.10\n-MatrixA.matrix.0*MatrixA.matrix.6*MatrixA.matrix.9"}}
+    }
+  name MatrixA_Adjugate
+  xpos -390
+  ypos -287
+ }
+push $N8467b640
+ Matrix {
+  inputs 0
+  matrix {
+      {{parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver}}
+      {{parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver}}
+      {{parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver}}
+      {{parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver} {parent.MatrixA_Adjugate.matrix*parent.DeterminantA.oneOver}}
+    }
+  name Matrix_InverseResult
+  xpos -391
+  ypos -225
+ }
+ Group {
+  inputs 2
+  name Matrix4x4Math
+  tile_color 0x9c0000ff
+  selected true
+  xpos -391
+  ypos -146
+  addUserKnob {20 MatrixMult4x4}
+  addUserKnob {4 output l Output t "Add (A+B)\nSub (A-B)\nMult (AB)" M {Add Sub Mult "" ""}}
+  output Mult
+  addUserKnob {4 chooseMatrixA l "Choose Matrix A" M {local world ""}}
+  addUserKnob {41 matrixA l "Matrix A" T MatrixA.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {4 chooseMatrixB l "Choose Matrix B" M {local world}}
+  addUserKnob {41 matrixB l "Matrix B" T MatrixB.matrix}
+  addUserKnob {26 result l Result:}
+  addUserKnob {41 matrixC l "Matrix C" T Matrix_Result.matrix}
+ }
+  Input {
+   inputs 0
+   name InputA
+   label "\[value this.number]"
+   xpos -656
+   ypos -308
+   number 1
+  }
+  Matrix {
+   matrix {
+       {{"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"}}
+       {{"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"}}
+       {{"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"}}
+       {{"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"}}
+     }
+   name MatrixA
+   xpos -656
+   ypos -218
+  }
+  Input {
+   inputs 0
+   name InputB
+   label "\[value this.number]"
+   xpos -544
+   ypos -310
+  }
+  Matrix {
+   matrix {
+       {{"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"}}
+       {{"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"}}
+       {{"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"}}
+       {{"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"}}
+     }
+   name MatrixB
+   xpos -544
+   ypos -220
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix}}
+       {{MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix}}
+       {{MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix}}
+       {{MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix}}
+     }
+   name MatrixC_Add
+   xpos -692
+   ypos -107
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix}}
+       {{MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix}}
+       {{MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix}}
+       {{MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix}}
+     }
+   name MatrixC_Sub
+   xpos -572
+   ypos -104
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"}}
+       {{"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"}}
+       {{"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"}}
+       {{"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"}}
+     }
+   name Matrix_Result
+   selected true
+   xpos -587
+  }
+  Output {
+   name Output1
+   xpos -587
+   ypos 61
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{(MatrixA.matrix.0*MatrixB.matrix.0)+(MatrixA.matrix.1*MatrixB.matrix.4)+(MatrixA.matrix.2*MatrixB.matrix.8)+(MatrixA.matrix.3*MatrixB.matrix.12)} {(MatrixA.matrix.0*MatrixB.matrix.1)+(MatrixA.matrix.1*MatrixB.matrix.5)+(MatrixA.matrix.2*MatrixB.matrix.9)+(MatrixA.matrix.3*MatrixB.matrix.13)} {(MatrixA.matrix.0*MatrixB.matrix.2)+(MatrixA.matrix.1*MatrixB.matrix.6)+(MatrixA.matrix.2*MatrixB.matrix.10)+(MatrixA.matrix.3*MatrixB.matrix.14)} {(MatrixA.matrix.0*MatrixB.matrix.3)+(MatrixA.matrix.1*MatrixB.matrix.7)+(MatrixA.matrix.2*MatrixB.matrix.11)+(MatrixA.matrix.3*MatrixB.matrix.15)}}
+       {{(MatrixA.matrix.4*MatrixB.matrix.0)+(MatrixA.matrix.5*MatrixB.matrix.4)+(MatrixA.matrix.6*MatrixB.matrix.8)+(MatrixA.matrix.7*MatrixB.matrix.12)} {(MatrixA.matrix.4*MatrixB.matrix.1)+(MatrixA.matrix.5*MatrixB.matrix.5)+(MatrixA.matrix.6*MatrixB.matrix.9)+(MatrixA.matrix.7*MatrixB.matrix.13)} {(MatrixA.matrix.4*MatrixB.matrix.2)+(MatrixA.matrix.5*MatrixB.matrix.6)+(MatrixA.matrix.6*MatrixB.matrix.10)+(MatrixA.matrix.7*MatrixB.matrix.14)} {(MatrixA.matrix.4*MatrixB.matrix.3)+(MatrixA.matrix.5*MatrixB.matrix.7)+(MatrixA.matrix.6*MatrixB.matrix.11)+(MatrixA.matrix.7*MatrixB.matrix.15)}}
+       {{(MatrixA.matrix.8*MatrixB.matrix.0)+(MatrixA.matrix.9*MatrixB.matrix.4)+(MatrixA.matrix.10*MatrixB.matrix.8)+(MatrixA.matrix.11*MatrixB.matrix.12)} {(MatrixA.matrix.8*MatrixB.matrix.1)+(MatrixA.matrix.9*MatrixB.matrix.5)+(MatrixA.matrix.10*MatrixB.matrix.9)+(MatrixA.matrix.11*MatrixB.matrix.13)} {(MatrixA.matrix.8*MatrixB.matrix.2)+(MatrixA.matrix.9*MatrixB.matrix.6)+(MatrixA.matrix.10*MatrixB.matrix.10)+(MatrixA.matrix.11*MatrixB.matrix.14)} {(MatrixA.matrix.8*MatrixB.matrix.3)+(MatrixA.matrix.9*MatrixB.matrix.7)+(MatrixA.matrix.10*MatrixB.matrix.11)+(MatrixA.matrix.11*MatrixB.matrix.15)}}
+       {{(MatrixA.matrix.12*MatrixB.matrix.0)+(MatrixA.matrix.13*MatrixB.matrix.4)+(MatrixA.matrix.14*MatrixB.matrix.8)+(MatrixA.matrix.15*MatrixB.matrix.12)} {(MatrixA.matrix.12*MatrixB.matrix.1)+(MatrixA.matrix.13*MatrixB.matrix.5)+(MatrixA.matrix.14*MatrixB.matrix.9)+(MatrixA.matrix.15*MatrixB.matrix.13)} {(MatrixA.matrix.12*MatrixB.matrix.2)+(MatrixA.matrix.13*MatrixB.matrix.6)+(MatrixA.matrix.14*MatrixB.matrix.10)+(MatrixA.matrix.15*MatrixB.matrix.14)} {(MatrixA.matrix.12*MatrixB.matrix.3)+(MatrixA.matrix.13*MatrixB.matrix.7)+(MatrixA.matrix.14*MatrixB.matrix.11)+(MatrixA.matrix.15*MatrixB.matrix.15)}}
+     }
+   name MatrixC_Mult
+   xpos -445
+   ypos -105
+  }
+ end_group
+end_group

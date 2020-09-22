@@ -1,0 +1,268 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name FractalBlur
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {4 output l Output M {rgba alpha}}
+ output alpha
+ addUserKnob {26 ""}
+ addUserKnob {7 FractalBlur_UserDilate l Spread R 0 200}
+ addUserKnob {7 FractalBlur_UserGrainSize l "Grain Size" R 0 100}
+ FractalBlur_UserGrainSize 20
+ addUserKnob {7 FractalBlur_UserContrast l Contrast}
+ addUserKnob {7 FractalBlur_UserGamma l Gamma R 0 5}
+ FractalBlur_UserGamma 1
+ addUserKnob {6 FractalBlur_UserBlackWhite l "Make black and white" +STARTLINE}
+ addUserKnob {7 FractalBlur_UserThreshold l Threshold}
+ addUserKnob {6 FractalBlur_UserBW l "Clamp output" +STARTLINE}
+ FractalBlur_UserBW true
+ addUserKnob {26 ""}
+ addUserKnob {7 FractalBlur_UserGrainEvolve l "Grain Evolution" t "Keyframe this value to animate the grain" R 0 10}
+ FractalBlur_UserGrainEvolve 1
+ addUserKnob {26 ""}
+ addUserKnob {26 instructions l "" +STARTLINE T "Plug a texture into Input2 to use that instead of noise"}
+ addUserKnob {26 ""}
+ addUserKnob {26 FractalBlur_Credit l "" +STARTLINE T "Fractal Blur v1.9 by Richard Frazer - www.richardfrazer.com\nmod-v1 by Holger Hummel - www.celluloid-vfx.com"}
+}
+ Input {
+  inputs 0
+  name TEXTURE
+  selected true
+  xpos 1874
+  ypos -423
+  number 1
+ }
+ Dot {
+  name Dot2
+  selected true
+  xpos 1908
+  ypos -118
+ }
+set Ne7325c0 [stack 0]
+ Input {
+  inputs 0
+  name ALPHA
+  selected true
+  xpos 1249
+  ypos -506
+ }
+ Dot {
+  name Dot4
+  selected true
+  xpos 1283
+  ypos -413
+ }
+set N12b7dd80 [stack 0]
+ Dot {
+  name Dot3
+  selected true
+  xpos 1550
+  ypos -370
+ }
+set N12b69400 [stack 0]
+ Dot {
+  name Dot1
+  selected true
+  xpos 1748
+  ypos -370
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle10
+  selected true
+  xpos 1714
+  ypos -255
+ }
+ Noise {
+  cliptype none
+  size {{"\[value FractalBlur_UserGrainSize]" i}}
+  zoffset {{"\[value FractalBlur_UserGrainEvolve]" i}}
+  center {1024 778}
+  name Noise1
+  selected true
+  xpos 1714
+  ypos -166
+ }
+set Nb6e7c90 [stack 0]
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input1]"}}
+  name Switch3
+  selected true
+  xpos 1714
+  ypos -122
+ }
+ Invert {
+  name Invert4
+  selected true
+  xpos 1714
+  ypos -72
+ }
+push $N12b69400
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  selected true
+  xpos 1516
+  ypos -333
+ }
+ Blur {
+  size {{"\[value FractalBlur_UserDilate]" i x101 0}}
+  name Blur1
+  selected true
+  xpos 1516
+  ypos -283
+ }
+ FilterErode {
+  channels rgba
+  size {{"(-\[value FractalBlur_UserDilate])/2" i x1 0}}
+  filter gaussian
+  name FilterErode7
+  selected true
+  xpos 1516
+  ypos -216
+ }
+ Dot {
+  name Dot10
+  selected true
+  xpos 1550
+  ypos -133
+ }
+set N12ea2320 [stack 0]
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge2
+  selected true
+  xpos 1660
+  ypos -6
+ }
+ Invert {
+  name Invert3
+  selected true
+  xpos 1660
+  ypos 37
+ }
+push $N12ea2320
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge13
+  selected true
+  xpos 1516
+  ypos 72
+ }
+set N12ea7d20 [stack 0]
+ Clamp {
+  name Clamp1
+  selected true
+  xpos 1408
+  ypos 116
+ }
+ Grade {
+  channels rgba
+  blackpoint {{FractalBlur_UserThreshold i}}
+  whitepoint {{FractalBlur_UserThreshold i}}
+  name Grade1
+  selected true
+  xpos 1408
+  ypos 195
+ }
+push $N12ea7d20
+ Switch {
+  inputs 2
+  which {{FractalBlur_UserBlackWhite i x47 1}}
+  name Switch1
+  selected true
+  xpos 1516
+  ypos 249
+ }
+ Grade {
+  channels rgba
+  blackpoint {{FractalBlur_UserContrast}}
+  whitepoint {{1-FractalBlur_UserContrast}}
+  gamma {{FractalBlur_UserGamma x101 0.985}}
+  black_clamp false
+  name Grade5
+  selected true
+  xpos 1516
+  ypos 329
+ }
+set N13100180 [stack 0]
+ Clamp {
+  name Clamp2
+  selected true
+  xpos 1426
+  ypos 394
+ }
+push $N13100180
+ Switch {
+  inputs 2
+  which {{FractalBlur_UserBW x47 0}}
+  name Switch2
+  selected true
+  xpos 1516
+  ypos 466
+ }
+ Dot {
+  name Dot6
+  selected true
+  xpos 1550
+  ypos 545
+ }
+set N12ef6c40 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle2
+  selected true
+  xpos 1516
+  ypos 619
+ }
+push $N12ef6c40
+push $N12b7dd80
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy1
+  selected true
+  xpos 1249
+  ypos 575
+ }
+ Dot {
+  name Dot5
+  selected true
+  xpos 1283
+  ypos 636
+ }
+ Switch {
+  inputs 2
+  which {{parent.output}}
+  name Switch5
+  selected true
+  xpos 1516
+  ypos 751
+ }
+ Output {
+  name Output1
+  selected true
+  xpos 1516
+  ypos 851
+ }
+push $Ne7325c0
+push $Nb6e7c90
+ Switch {
+  inputs 2
+  which {{parent.altInput}}
+  name Switch4
+  selected true
+  xpos 1874
+  ypos -65
+ }
+end_group

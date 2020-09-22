@@ -1,0 +1,132 @@
+Group {
+ name RotateVector2_
+ help "Rotate a 2D vector on the same 2D plane."
+ knobChanged "\nnode = nuke.thisNode()\nknob = nuke.thisKnob()\nif knob.name() == \"mode\":\n    if knob.value() == \"Knob (Degrees 0-360)\":\n        node\['angle'].setEnabled(True)\n    else:\n        node\['angle'].setEnabled(False)\n"
+ addUserKnob {20 main_tab l "Rotate Vector2"}
+ addUserKnob {41 in l "Vector B Layer" t "Layer containing the vector information for input B" T vector_layer.in}
+ addUserKnob {4 mode l "Rotate by" t "Pick whether to rotate the input vector by:\nKnob (Degrees 0-360)\nAngle Map (Degrees 0-360)\nAngle Map (Degrees 0-1)\nAngle Map (Radians)\n\nAn Angle map is a single channel image (expected in red channel) that represents an angle value at each pixel." M {"Knob (Degrees 0-360)" "Angle Map (Degrees 0-360)" "Angle Map (Degrees 0-1)" "Angle Map (Radians)" "" "" ""}}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {7 angle l Angle R -180 180}
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+}
+ Input {
+  inputs 0
+  name angleMap
+  xpos 479
+  ypos 5
+  number 1
+ }
+ Multiply {
+  channels rgb
+  value 360
+  name Multiply_360
+  xpos 479
+  ypos 90
+  disable {{parent.mode!=2}}
+ }
+ Expression {
+  expr0 radians(r)
+  name Degrees_to_Radians
+  xpos 479
+  ypos 132
+  disable {{parent.mode==3}}
+ }
+ Dot {
+  name Dot5
+  tile_color 0xcccccc00
+  xpos 513
+  ypos 249
+ }
+ Input {
+  inputs 0
+  name vectorB
+  xpos 0
+ }
+ Dot {
+  name Dot1
+  tile_color 0xcccccc00
+  xpos 34
+  ypos 108
+ }
+set N8a49d10 [stack 0]
+ Shuffle {
+  name vector_layer
+  xpos 140
+  ypos 104
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos 140
+  ypos 130
+ }
+ Dot {
+  name Dot3
+  tile_color 0x9e3c6300
+  xpos 174
+  ypos 181
+ }
+set N31f4270 [stack 0]
+ Dot {
+  name Dot4
+  tile_color 0x9e3c6300
+  xpos 372
+  ypos 181
+ }
+ MergeExpression {
+  inputs 2
+  expr0 "Br * cos(Ar) - Bg * sin(Ar)"
+  expr1 "Br * sin(Ar) + Bg * cos(Ar)"
+  name MergeExpression1
+  xpos 338
+  ypos 245
+ }
+ Dot {
+  name Dot6
+  tile_color 0x4b5ec600
+  xpos 372
+  ypos 311
+ }
+push $N31f4270
+ Expression {
+  temp_name0 angleRad
+  temp_expr0 radians(parent.angle)
+  expr0 "r * cos(angleRad) - g * sin(angleRad)"
+  expr1 "r * sin(angleRad) + g * cos(angleRad)"
+  name Rotation
+  xpos 140
+  ypos 240
+ }
+ Switch {
+  inputs 2
+  which {{parent.mode!=0}}
+  name Switch1
+  xpos 140
+  ypos 307
+ }
+ Dot {
+  name Dot2
+  tile_color 0xcccccc00
+  xpos 174
+  ypos 364
+ }
+push $N8a49d10
+ ShuffleCopy {
+  inputs 2
+  in2 none
+  red red
+  green green
+  blue blue
+  out {{{parent.vector_layer.in}}}
+  name ShuffleCopy1
+  xpos 0
+  ypos 360
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 506
+ }
+end_group

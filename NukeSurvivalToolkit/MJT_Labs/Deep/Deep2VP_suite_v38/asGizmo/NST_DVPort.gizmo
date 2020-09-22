@@ -1,0 +1,86 @@
+Group {
+ name DVPort
+ tile_color 0x4d00ccff
+ label "<img src='Camera.png'> info"
+ note_font "Bitstream Vera Sans Bold Bold Bold"
+ addUserKnob {20 tab_general l General}
+ addUserKnob {20 cam_data_grp l "CAMERA DATA" n 1}
+ cam_data_grp 0
+ addUserKnob {4 xform_order l "transform order" +DISABLED M {SRT STR RST RTS TSR TRS}}
+ xform_order {{"\[exists input] ? input.xform_order : 0"}}
+ addUserKnob {4 rot_order l "rotation order" +DISABLED M {XYZ XZY YXZ YZX ZXY ZYX}}
+ rot_order {{"\[exists input] ? input.rot_order : 0"}}
+ addUserKnob {13 translate +DISABLED}
+ translate {{"\[exists input] ? input.translate : 0"} {"\[exists input] ? input.translate : 0"} {"\[exists input] ? input.translate : 0"}}
+ addUserKnob {13 rotate +DISABLED}
+ rotate {{"\[exists input] ? input.rotate : 0"} {"\[exists input] ? input.rotate : 0"} {"\[exists input] ? input.rotate : 0"}}
+ addUserKnob {13 scaling l scale +DISABLED}
+ scaling {{"\[exists input] ? input.scaling : 0"} {"\[exists input] ? input.scaling : 0"} {"\[exists input] ? input.scaling : 0"}}
+ addUserKnob {7 uniform_scale l "uniform scale" +DISABLED R 0.01 10}
+ uniform_scale {{"\[exists input] ? input.uniform_scale : 0"}}
+ addUserKnob {13 skew +DISABLED}
+ skew {{"\[exists input] ? input.skew : 0"} {"\[exists input] ? input.skew : 0"} {"\[exists input] ? input.skew : 0"}}
+ addUserKnob {13 pivot +DISABLED}
+ pivot {{"\[exists input] ? input.pivot : 0"} {"\[exists input] ? input.pivot : 0"} {"\[exists input] ? input.pivot : 0"}}
+ addUserKnob {41 world_matrix l "world matrix" T camhub.world_matrix}
+ addUserKnob {7 focal +DISABLED R 5 100}
+ focal {{"\[exists input] ? input.focal : 0"}}
+ addUserKnob {7 haperture l "horiz aperture" +DISABLED R 0.1 50}
+ haperture {{"\[exists input] ? input.haperture : 0"}}
+ addUserKnob {7 near +DISABLED R 0.1 10}
+ near {{"\[exists input] ? input.near : 0"}}
+ addUserKnob {7 far +DISABLED R 11 10000}
+ far {{"\[exists input] ? input.far : 0"}}
+ addUserKnob {30 win_translate l "window translate" +DISABLED}
+ win_translate {{"\[exists input] ? input.win_translate : 0"} {"\[exists input] ? input.win_translate : 0"}}
+ addUserKnob {30 win_scale l "window scale" +DISABLED}
+ win_scale {{"\[exists input] ? input.win_scale : 0"} {"\[exists input] ? input.win_scale : 0"}}
+ addUserKnob {7 winroll l "window roll" +DISABLED R -45 45}
+ winroll {{"\[exists input] ? input.winroll : 0"}}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 3.8}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-02-13}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"3.8<br>'DVPMatte'<br>&nbsp;&nbsp;-&nbsp;fixed&nbsp;cube&nbsp;matte&nbsp;shape&nbsp;result&nbsp;when&nbsp;pivot&nbsp;changed.&nbsp;Sphere&nbsp;and&nbsp;Cylinder&nbsp;were&nbsp;fine&nbsp;in&nbsp;the&nbsp;past&nbsp;versions.<br>'DVProjection'<br>&nbsp;&nbsp;-&nbsp;link&nbsp;camera&nbsp;replaced&nbsp;transformation&nbsp;by&nbsp;world&nbsp;matrix,&nbsp;so&nbsp;it&nbsp;works&nbsp;with&nbsp;camera&nbsp;stack&nbsp;with&nbsp;axis.<br>&nbsp;&nbsp;-&nbsp;removed&nbsp;preview&nbsp;projection&nbsp;camera&nbsp;in&nbsp;3D&nbsp;view.<br><br>3.7<br>Toolset&nbsp;update&nbsp;:<br>&nbsp;&nbsp;'DVPort'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;added&nbsp;'near'&nbsp;&&nbsp;'far&nbsp;knobs<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;'DVPmatte'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;fixed&nbsp;missing&nbsp;premult&nbsp;original&nbsp;alpha&nbsp;process<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;revert&nbsp;uniform_scale&nbsp;default&nbsp;value&nbsp;back&nbsp;to&nbsp;1.0<br><br>3.6<br>'DVPsetLight'<br>-&nbsp;improved&nbsp;'generated&nbsp;normal&nbsp;(estimate&nbsp;from&nbsp;position)'&nbsp;and&nbsp;changed&nbsp;to&nbsp;blink&nbsp;script.&nbsp;Get&nbsp;better&nbsp;edges&nbsp;on&nbsp;deepNormal.\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x4c4c4cff
+  label bin
+  note_font_size 42
+  xpos -405
+  ypos -576
+  bdheight 110
+ }
+ Input {
+  inputs 0
+  name cam
+  xpos -197
+  ypos -591
+ }
+ Camera {
+  display off
+  selectable false
+  rot_order XYZ
+  focal {{parent.focal}}
+  haperture {{parent.haperture}}
+  near {{parent.near}}
+  far {{parent.far}}
+  win_translate {{parent.win_translate} {parent.win_translate}}
+  win_scale {{parent.win_scale} {parent.win_scale}}
+  winroll {{parent.winroll}}
+  name camhub
+  xpos -187
+  ypos -538
+ }
+ NoOp {
+  inputs 0
+  name store
+  xpos -395
+  ypos -496
+  addUserKnob {20 User}
+  addUserKnob {22 dev T "thisGRP = nuke.thisGroup()\nallKnobs = \['xform_order','rot_order','translate','rotate','scaling','uniform_scale','skew','pivot','world_matrix','focal','haperture','near','far','win_translate','win_scale','winroll']\nfor knob in thisGRP.knobs() :\n    if knob in allKnobs :\n        thisGRP\[knob].setEnabled( False )" +STARTLINE}
+ }
+end_group

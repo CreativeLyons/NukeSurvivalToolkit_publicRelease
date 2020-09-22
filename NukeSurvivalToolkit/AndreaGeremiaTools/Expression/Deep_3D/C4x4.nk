@@ -1,0 +1,60 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+BackdropNode {
+ inputs 0
+ name BackdropNode7
+ tile_color 0xaaaaaa00
+ label C4x4
+ note_font_size 42
+ selected true
+ xpos 2847
+ ypos -267
+ bdwidth 427
+ bdheight 322
+}
+push $cut_paste_input
+Sphere {
+ translate {0 0 -4}
+ name Sphere2
+ selected true
+ xpos 2942
+ ypos -177
+}
+push 0
+ScanlineRender {
+ inputs 2
+ conservative_shader_sampling false
+ motion_vectors_type distance
+ output_shader_vectors true
+ P_channel rgb
+ name ScanlineRender2
+ selected true
+ xpos 2942
+ ypos -113
+}
+Expression {
+ expr0 "r * Axis1.world_matrix.0 + g * Axis1.world_matrix.1 + b * Axis1.world_matrix.2 + Axis1.world_matrix.3"
+ expr1 "r * Axis1.world_matrix.4 + g * Axis1.world_matrix.5 + b * Axis1.world_matrix.6 + Axis1.world_matrix.7"
+ expr2 "r * Axis1.world_matrix.8 + g * Axis1.world_matrix.9 + b * Axis1.world_matrix.10+ Axis1.world_matrix.11"
+ name Expression3
+ selected true
+ xpos 2942
+ ypos -54
+}
+PositionToPoints2 {
+ display textured
+ render_mode textured
+ P_channel rgb
+ name PositionToPoints1
+ selected true
+ xpos 2942
+ ypos -4
+}
+Axis2 {
+ inputs 0
+ rotate {0 32 0}
+ name Axis1
+ selected true
+ xpos 3102
+ ypos -95
+}

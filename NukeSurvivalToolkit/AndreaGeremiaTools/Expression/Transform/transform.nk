@@ -1,0 +1,21 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ temp_name0 fx
+ temp_expr0 "( x - translate.x ) * scale"
+ temp_name1 fy
+ temp_expr1 "( y -  translate.y ) * scale"
+ expr0 r(fx,fy)
+ expr1 r(fx,fy)
+ expr2 r(fx,fy)
+ name Transform
+ selected true
+ xpos 2227
+ ypos -466
+ addUserKnob {20 User}
+ addUserKnob {12 translate}
+ translate {410 440}
+ addUserKnob {7 scale R 0 10}
+ scale 2
+}

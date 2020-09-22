@@ -1,0 +1,39 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+name Distance3d
+selected true
+addUserKnob {20 distance3D}
+addUserKnob {7 distance}
+distance {{"sqrt(pow(\[value input0.translate.x]-\[value input1.translate.x], 2) + pow(\[value input0.translate.y]-\[value input1.translate.y], 2) + pow(\[value input0.translate.z]-\[value input1.translate.z], 2)) "}}
+addUserKnob {26 ""}
+addUserKnob {26 info l Info: T "This is a pretty handy gizmo to measure the\ndistance between two 3D objects whether its an axis,\ncamera or geometry.\n\nOriginally built to control focus plane in 2d DOF\nor the cameras focus point with an axis!\n\nenjoy. fp"}
+}
+Input {
+inputs 0
+name InputPoint2
+xpos 348
+ypos -334
+number 1
+}
+Input {
+inputs 0
+name InputPoint1
+xpos 199
+ypos -330
+}
+MergeGeo {
+inputs 2
+name MergeGeo1
+xpos 285
+ypos -241
+addUserKnob {20 User}
+addUserKnob {7 test t "sqrt(pow(\[value input1.tranlate.x]-\[value input2.tranlate.x], 2) + pow(\[value input1.tranlate.y]-\[value input2.tranlate.y], 2) + pow(\[value input1.tranlate.z]-\[value input2.tranlate.z], 2)) "}
+test {{"sqrt(pow(\[value input0.translate.x]-\[value input1.translate.x], 2) + pow(\[value input0.translate.y]-\[value input1.translate.y], 2) + pow(\[value input0.translate.z]-\[value input1.translate.z], 2)) "}}
+}
+Output {
+name Output1
+xpos 285
+ypos -141
+}
+end_group

@@ -1,0 +1,70 @@
+Group {
+ name TransformMatrix
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nmatrix = n\['matrix'].value()\n\n\nif (int(n\['visualize'].getValue()) == 1):\n    matrix.translationOnly()\nelif (int(n\['visualize'].getValue()) == 2):\n    matrix.rotationOnly()\nelif (int(n\['visualize'].getValue()) == 3):\n    matrix.scaleOnly()\nelif (int(n\['visualize'].getValue()) == 4):\n    matrix.scaleAndRotationOnly()\n\nif (n\['transpose'].getValue() == 1):\n    matrix.transpose()\nn.node(\"Matrix1\")\['matrix'].setValue(matrix)"
+ tile_color 0xa57aaa00
+ selected true
+ addUserKnob {20 Transform}
+ addUserKnob {12 translate}
+ addUserKnob {7 rotate R -100 100}
+ addUserKnob {7 rotateRad l "rotate Rad" R -10 10}
+ rotateRad {{radians(rotate)}}
+ addUserKnob {14 scale R 0 100}
+ scale 1
+ addUserKnob {7 skewx l "skew X" R -1 1}
+ addUserKnob {7 skewy l "skew Y" R -1 1}
+ addUserKnob {12 center}
+ addUserKnob {22 centerimg l "center in the img" -STARTLINE T "node = nuke.thisNode()\n\nfrom1x = 0\nfrom1y = 0\n\nfrom2x = from1x + node.width()\nfrom2y = from1y\n\nfrom3x = from1x+node.width()\nfrom3y = from1y + node.height()\n\nfrom4x = from1x\nfrom4y = from1y +  node.height()\n\n\ncenterx= int((from2x+from1x)/2)\ncentery= int((from4y+from1y)/2)\n\nnode\['center'].setValue(centerx,0)\nnode\['center'].setValue(centery,1)"}
+ addUserKnob {6 invert +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 message l "" +STARTLINE T "<i>This is just a visualization. Can't modify directly this matrix"}
+ addUserKnob {68 visualize t "Select what you want to visualize in the matrix" M {Translation-Rotation-Scale TranslationOnly RotationOnly scaleOnly scaleAndRotationOnly "" ""}}
+ addUserKnob {6 transpose t "Operator which flips a matrix over its diagonal, that is it switches the row and column indices of the matrix " -STARTLINE}
+ transpose true
+ addUserKnob {41 matrix_3 l matrix T Matrix1.matrix}
+ addUserKnob {7 cos l cosθ}
+ cos {{cos(rotateRad)}}
+ addUserKnob {7 sin l sinθ}
+ sin {{sin(rotateRad)}}
+ addUserKnob {41 matrix T Transform1.matrix}
+ addUserKnob {20 email l @}
+ addUserKnob {22 tutorial l Tutorial t http://www.andreageremia.it/tutorial_matrix_transform.html T "nuke.tcl('start', 'http://www.andreageremia.it/tutorial_matrix_transform.html')\n" +STARTLINE}
+ addUserKnob {26 from l "" +STARTLINE T "Tool created by Andrea Geremia\n\nandrea.geremia89@gmail.com\nwww.andreageremia.it"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 269
+  ypos -186
+ }
+ Transform {
+  translate {{parent.translate} {parent.translate}}
+  rotate {{parent.rotate}}
+  scale {{parent.scale.w} {parent.scale.h}}
+  skewX {{parent.skewx}}
+  skewY {{parent.skewy}}
+  center {{parent.center} {parent.center}}
+  invert_matrix {{parent.invert}}
+  shutteroffset centred
+  name Transform1
+  selected true
+  xpos 269
+  ypos -129
+ }
+ Output {
+  name Output1
+  xpos 269
+  ypos -46
+ }
+ Matrix {
+  inputs 0
+  matrix {
+      {1 0 0 0}
+      {0 1 0 0}
+      {0 0 1 0}
+      {0 0 0 1}
+    }
+  name Matrix1
+  xpos 420
+  ypos -145
+ }
+end_group

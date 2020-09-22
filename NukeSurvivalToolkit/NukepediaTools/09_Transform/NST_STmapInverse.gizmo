@@ -1,0 +1,146 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name STMapInverse
+ tile_color 0x196654ff
+ selected true
+ addUserKnob {20 InverseSTMap}
+ addUserKnob {41 in l channels T Shuffle1.in}
+ addUserKnob {41 in2 l "UV channels" T Shuffle1.in2}
+ addUserKnob {41 box_width l "UV size" T Reformat1.box_width}
+ addUserKnob {6 fill_gap l "Fill Gap" +STARTLINE}
+ fill_gap true
+ addUserKnob {41 size -STARTLINE T Blur1.size}
+ addUserKnob {26 ""}
+ addUserKnob {41 detail l "point detail" T PositionToPoints1.detail}
+ addUserKnob {41 pointSize l "point size" T PositionToPoints1.pointSize}
+ addUserKnob {26 ""}
+ addUserKnob {32 Lookin T "start http://www.lookinvfx.com/tools/" +STARTLINE}
+ addUserKnob {26 text l "" -STARTLINE T "   in_inverseSTMap v1.0 | Luca Mignardi | 2014"}
+}
+ Camera2 {
+  inputs 0
+  translate {0.5 0.5 1}
+  projection_mode orthographic
+  focal 25
+  haperture 25
+  vaperture 25
+  near 0.5
+  far 1.5
+  name Camera1
+  xpos 93
+  ypos 157
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos -58
+  ypos -118
+ }
+ Shuffle {
+  in2 forward
+  red red2
+  green green2
+  black red
+  white green
+  red2 blue
+  green2 alpha
+  out forward
+  out2 rgba
+  name Shuffle1
+  xpos -58
+  ypos -64
+ }
+ Unpremult {
+  name Unpremult2
+  xpos -58
+  ypos -12
+ }
+ Unpremult {
+  channels forward
+  name Unpremult3
+  xpos -58
+  ypos 37
+ }
+set N1e54a7c0 [stack 0]
+push $N1e54a7c0
+ Shuffle {
+  in forward
+  blue black
+  alpha black
+  name Shuffle2
+  label "\[value in]"
+  xpos 64
+  ypos 37
+ }
+ PositionToPoints {
+  inputs 2
+  render_mode textured
+  detail 1
+  pointSize 10
+  name PositionToPoints1
+  xpos -58
+  ypos 108
+ }
+set N1e55bbf0 [stack 0]
+ Reformat {
+  inputs 0
+  type "to box"
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  box_width 1024
+  box_height {{box_width i}}
+  box_fixed true
+  name Reformat1
+  selected true
+  xpos -196
+  ypos 177
+ }
+ ScanlineRender {
+  inputs 3
+  max_tessellation 1
+  motion_vectors_type off
+  MB_channel none
+  name ScanlineRender1
+  xpos -58
+  ypos 177
+ }
+ Premult {
+  name Premult1
+  xpos -58
+  ypos 220
+ }
+ Dot {
+  name Dot1
+  xpos -24
+  ypos 276
+ }
+set N1e601350 [stack 0]
+ Blur {
+  size 1.6
+  name Blur1
+  xpos 49
+  ypos 266
+ }
+ Unpremult {
+  name Unpremult1
+  xpos 49
+  ypos 316
+ }
+push $N1e601350
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge1
+  xpos -58
+  ypos 316
+  disable {{1-fill_gap}}
+ }
+set N1e616fd0 [stack 0]
+ Output {
+  name Output1
+  xpos -58
+  ypos 375
+ }
+push $N1e616fd0
+push $N1e55bbf0
+end_group

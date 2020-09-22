@@ -1,0 +1,166 @@
+Group {
+ name DeepToPosition
+ tile_color 0x67ff
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 DeepToPosition}
+ addUserKnob {6 HoudiniScale l "Houdini Scale (0.1 scale)" +STARTLINE}
+ addUserKnob {6 Preview3d l "Preview in 3d Space" +STARTLINE}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: T DeepToPosition}
+ addUserKnob {26 ver l Version: T v01}
+}
+ Input {
+  inputs 0
+  name InputCam
+  xpos -397
+  ypos 261
+ }
+ Dot {
+  name Dot181
+  note_font_size 41
+  xpos -363
+  ypos 348
+ }
+ Dot {
+  name Dot173
+  note_font_size 41
+  xpos -363
+  ypos 431
+ }
+set N95b6ffd0 [stack 0]
+ Input {
+  inputs 0
+  name InputDeep
+  xpos -129
+  ypos 102
+  number 1
+ }
+ Dot {
+  name Dot180
+  note_font_size 41
+  xpos -95
+  ypos 160
+ }
+ DeepTransform {
+  zscale 0.1
+  name DeepTransform2
+  xpos -129
+  ypos 234
+  disable {{!parent.HoudiniScale}}
+ }
+ Dot {
+  name Dot174
+  xpos -95
+  ypos 287
+ }
+set N973cf9a0 [stack 0]
+ Dot {
+  name Dot175
+  xpos -229
+  ypos 287
+ }
+ DeepToPoints {
+  inputs 2
+  name DeepToPoints2
+  xpos -263
+  ypos 488
+ }
+push $N95b6ffd0
+push $N973cf9a0
+ DeepToImage {
+  name DeepToImage1
+  xpos -129
+  ypos 330
+ }
+ Dot {
+  name Dot176
+  xpos -95
+  ypos 383
+ }
+set N972f2bb0 [stack 0]
+ Dot {
+  name Dot177
+  xpos 20
+  ypos 383
+ }
+ DepthToPosition {
+  inputs 2
+  name DepthToPosition1
+  xpos -14
+  ypos 427
+ }
+ Dot {
+  name Dot178
+  xpos 20
+  ypos 487
+ }
+push $N972f2bb0
+add_layer {P P.red P.green P.blue P.alpha}
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 P.red
+  from1 rgba.green
+  to1 P.green
+  from2 rgba.blue
+  to2 P.blue
+  name Copy4
+  xpos -129
+  ypos 465
+ }
+set N973e1c90 [stack 0]
+ Shuffle {
+  in P
+  in2 rgba
+  alpha alpha2
+  name Shuffle10
+  label "\[value in]"
+  xpos -129
+  ypos 552
+ }
+set N973ece80 [stack 0]
+push $N973e1c90
+ PositionToPoints2 {
+  inputs 2
+  display textured
+  render_mode textured
+  name PositionToPoints1
+  xpos -259
+  ypos 558
+ }
+push $N95b6ffd0
+ Dot {
+  name Dot179
+  xpos -363
+  ypos 555
+ }
+ Scene {
+  inputs 2
+  name Scene1
+  xpos -249
+  ypos 612
+ }
+push $N973ece80
+ Switch {
+  inputs 2
+  which {{parent.Preview3d}}
+  name Preview_Switch
+  label "\[value which]"
+  xpos -129
+  ypos 626
+ }
+ Dot {
+  name OUT
+  note_font_size 41
+  xpos -95
+  ypos 691
+ }
+ Output {
+  name Output1
+  xpos -129
+  ypos 748
+ }
+end_group

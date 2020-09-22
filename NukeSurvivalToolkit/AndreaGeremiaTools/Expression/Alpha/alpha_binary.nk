@@ -1,0 +1,10 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr3 "(r || b || g) > 0 ? 1 : 0"
+ name ifColorThenAlpha
+ selected true
+ xpos 2846
+ ypos 504
+}

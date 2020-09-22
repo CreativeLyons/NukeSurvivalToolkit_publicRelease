@@ -1,0 +1,304 @@
+Group {
+ name Noise3DTexture
+ tile_color 0x303030ff
+ note_font_color 0x99ffffff
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {41 outputtype l "output type" T Expression1.outputtype}
+ addUserKnob {41 textureRes l "texture resolution" T Expression1.textureRes}
+ addUserKnob {41 position l "Position offset" T Expression1.position}
+ addUserKnob {41 scale l "World scale" T Expression1.scale}
+ addUserKnob {41 octaves T Expression1.octaves}
+ addUserKnob {41 lacunarity T Expression1.lacunarity}
+ addUserKnob {41 gain T Expression1.gain}
+ addUserKnob {41 alphatype l "Alpha output" T Expression1.alphatype}
+ addUserKnob {41 premultalpha l "Premult color by output alpha?" -STARTLINE T Expression1.premultalpha}
+ addUserKnob {26 ""}
+ addUserKnob {20 About l "Created by Ben Sumner - expand for info" n 1}
+ About 0
+ addUserKnob {26 description l "" +STARTLINE T "This Gizmo outputs either the input geometry\nwith a 3D world position noise applied as a \ntexture, or it can output the texture itself in \nthe UV space of the model.\n\nYour model must have UVs!\n\nYou can output noise or textured model, \neither with the originally applied alpha, solid \nwhite alpha, or with the generated noise in \nthe alpha channel.\n\nThis node is a good way to get seamless \nnoise textures on your 3D models, or to\nexport a texture to be used for seamless \ndisplacement.\n\ncreated by Ben Sumner\nFeel free to modify and share, just keep \noriginal credit in this description!"}
+ addUserKnob {20 endGroup n -1}
+}
+ Crop {
+  inputs 0
+  box {0 0 {Expression1.textureRes.w} {Expression1.textureRes.h}}
+  reformat true
+  crop false
+  name Crop2
+  xpos 557
+  ypos 313
+ }
+set N4a9be6b0 [stack 0]
+ Shuffle {
+  red white
+  green white
+  blue white
+  alpha white
+  name Shuffle4
+  label "<font size = \"5\"> \[value in]"
+  selected true
+  xpos 727
+  ypos 258
+  postage_stamp true
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 1015
+  ypos 180
+ }
+ Dot {
+  name Dot4
+  xpos 1049
+  ypos 227
+ }
+set N4acb4180 [stack 0]
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial2
+  xpos 1015
+  ypos 294
+ }
+ Dot {
+  name Dot1
+  xpos 1049
+  ypos 326
+ }
+set N4a8830e0 [stack 0]
+push $N4a9be6b0
+add_layer {P P.red P.green P.blue P.alpha}
+add_layer {N N.red N.green N.blue N.alpha}
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  filter Mitchell
+  projection_mode uv
+  shutter 0
+  spatial_jitter 0.1
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel P
+  N_channel N
+  name ScanlineRender1
+  xpos 676
+  ypos 405
+ }
+ Shuffle {
+  in P
+  in2 rgba
+  alpha alpha2
+  name Shuffle2
+  label "<font size = \"5\"> \[value in]"
+  xpos 745
+  ypos 443
+  postage_stamp true
+ }
+set N4a9f0d60 [stack 0]
+ Blur {
+  size 2
+  crop false
+  name Blur2
+  xpos 844
+  ypos 473
+ }
+ Shuffle {
+  black alpha
+  out2 mask
+  name Shuffle7
+  xpos 844
+  ypos 511
+ }
+ Unpremult {
+  channels rgba
+  alpha mask.a
+  name Unpremult1
+  xpos 844
+  ypos 538
+ }
+ Remove {
+  channels mask
+  name Remove1
+  xpos 844
+  ypos 576
+ }
+ Add {
+  channels rgb
+  value {{parent.Expression1.position.x} {parent.Expression1.position.y} {parent.Expression1.position.z} 0}
+  name Add6
+  xpos 844
+  ypos 614
+ }
+ Expression {
+  expr0 (fBm(r*scale.x,g*scale.y,b*scale.z,octaves,lacunarity,gain)/2+0.5)
+  expr1 (fBm(r*scale.x,g*scale.y,b*scale.z,octaves,lacunarity,gain)/2+0.5)
+  expr2 (fBm(r*scale.x,g*scale.y,b*scale.z,octaves,lacunarity,gain)/2+0.5)
+  expr3 (fBm(r*scale.x,g*scale.y,b*scale.z,octaves,lacunarity,gain)/2+0.5)
+  maskChannelInput -rgba.alpha
+  name Expression1
+  xpos 844
+  ypos 640
+  addUserKnob {20 User}
+  addUserKnob {4 outputtype l "output type" M {"UV Texture" "Textured Geometry"}}
+  addUserKnob {14 textureRes l "texture resolution" R 0 100}
+  textureRes 2048
+  addUserKnob {13 position l "Position offset"}
+  addUserKnob {13 scale l "World scale"}
+  scale {1 1 1}
+  addUserKnob {3 octaves}
+  octaves 10
+  addUserKnob {7 lacunarity R 0 10}
+  lacunarity 2
+  addUserKnob {7 gain}
+  gain 0.5
+  addUserKnob {4 alphatype l "Alpha output" M {Input "Solid white" "Noise output"}}
+  alphatype "Solid white"
+  addUserKnob {6 premultalpha l "Premult color by output alpha?" -STARTLINE}
+ }
+set N4ac045f0 [stack 0]
+ Dot {
+  name Dot3
+  xpos 960
+  ypos 697
+ }
+ Premult {
+  name Premult2
+  xpos 926
+  ypos 734
+  disable {{1-parent.Expression1.premultalpha}}
+ }
+push $N4ac045f0
+ Shuffle {
+  alpha white
+  name Shuffle6
+  xpos 844
+  ypos 694
+ }
+push $N4acb4180
+push $N4a9be6b0
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  filter Mitchell
+  projection_mode uv
+  shutter 0
+  spatial_jitter 0.1
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel P
+  N_channel N
+  name ScanlineRender2
+  xpos 513
+  ypos 375
+ }
+set N4accf280 [stack 0]
+push $N4a9f0d60
+ ShuffleCopy {
+  inputs 2
+  red alpha
+  green alpha
+  blue alpha
+  black alpha2
+  out2 mask
+  name ShuffleCopy1
+  xpos 592
+  ypos 416
+ }
+set N4acdfa30 [stack 0]
+ Shuffle {
+  in2 mask
+  alpha red2
+  name Shuffle3
+  xpos 391
+  ypos 446
+ }
+push $N4acdfa30
+ Blur {
+  size 2
+  crop false
+  name Blur1
+  xpos 513
+  ypos 443
+ }
+ Unpremult {
+  channels rgba
+  alpha mask.a
+  name Unpremult2
+  xpos 513
+  ypos 497
+ }
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos 391
+  ypos 542
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle5
+  label "<font size = \"5\"> \[value in]"
+  xpos 391
+  ypos 568
+  postage_stamp true
+ }
+push $N4ac045f0
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 752
+  ypos 683
+ }
+ Premult {
+  name Premult1
+  xpos 752
+  ypos 734
+  disable {{1-parent.Expression1.premultalpha}}
+ }
+ Switch {
+  inputs 3
+  which {{Expression1.alphatype}}
+  name Switch2
+  xpos 844
+  ypos 776
+ }
+set N4ad3da80 [stack 0]
+push $N4a8830e0
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial1
+  xpos 1015
+  ypos 818
+ }
+push $N4ad3da80
+ Switch {
+  inputs 2
+  which {{Expression1.outputtype}}
+  name Switch1
+  xpos 1015
+  ypos 911
+ }
+ Dot {
+  name Dot5
+  xpos 1049
+  ypos 977
+ }
+ Output {
+  name Output1
+  xpos 1015
+  ypos 1075
+ }
+push $N4accf280
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  black alpha
+  out2 mask
+  name Shuffle1
+  xpos 513
+  ypos 397
+ }
+end_group

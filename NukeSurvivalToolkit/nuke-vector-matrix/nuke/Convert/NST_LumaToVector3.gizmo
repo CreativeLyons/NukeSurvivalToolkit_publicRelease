@@ -1,0 +1,228 @@
+Group {
+ name LumaToVector3_
+ help "Performs a Sobel filter on the Luminance channel of an image to extract an approximation of a Normal map.\n\nFor a mathematical conversion of a displacement map to normals, do not use Details separation."
+ addUserKnob {20 luma_to_normals l "Luma to Normals"}
+ addUserKnob {26 div_pre l Pre-Process}
+ addUserKnob {7 blur t "High quality blur, may be slower than a regular blur node but will avoid loss of quality in the vectors." R 0 10}
+ addUserKnob {7 gain l "height (gain)" t "Increasing this value would result in vectors as per a stronger displacement." R 0 10}
+ gain 1
+ addUserKnob {26 div_details l "Details Separation"}
+ addUserKnob {7 size t "Bigger sizes will separate high and low frequencies more." R 0 100}
+ addUserKnob {7 details_weight t "How much the details affect the final output"}
+ addUserKnob {26 div_out l Output}
+ addUserKnob {6 zerotoone l "Use 0-1 range" t "Pack the vectors in a 0 to 1 range, so that it can be exported as an 8bit image. May cause clamped vectors, make sure to also use normalize if exporting a normal map to avoid clamped values." +STARTLINE}
+ addUserKnob {6 normalize t "Normal maps should generally be represented with a vector magnitude of 1.\nTurning on normalization will scale all vectors to ensure they all have a magnitude of 1.\n\nYou may want to disable it for more interesting effects when generating normals for a fake refraction through an iDistort, where having vectors of different length adds depth." -STARTLINE}
+ normalize true
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -576
+  ypos -320
+ }
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos -576
+  ypos -264
+ }
+ Blur {
+  size {{parent.blur}}
+  quality {{"int(max(parent.blur, 15))"}}
+  name Blur2
+  xpos -576
+  ypos -223
+ }
+ Multiply {
+  value {{parent.gain}}
+  name Multiply1
+  xpos -576
+  ypos -185
+ }
+set N8fdf0400 [stack 0]
+ Blur {
+  size {{parent.size}}
+  name Blur1
+  xpos -576
+  ypos -134
+ }
+ Dot {
+  name Dot2
+  xpos -542
+  ypos -45
+ }
+set Nc5a5fc00 [stack 0]
+ Matrix {
+  matrix {
+      {1 0 -1}
+      {2 0 -2}
+      {1 0 -1}
+    }
+  name Matrix1
+  xpos -576
+  ypos 38
+ }
+push $Nc5a5fc00
+ Dot {
+  name Dot3
+  xpos -432
+  ypos -45
+ }
+set Nc5a5f400 [stack 0]
+ Matrix {
+  matrix {
+      {-1 -2 -1}
+      {0 0 0}
+      {1 2 1}
+    }
+  name Matrix2
+  xpos -466
+  ypos 36
+ }
+ Dot {
+  name Dot4
+  xpos -432
+  ypos 92
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  blue black
+  alpha black
+  name ShuffleCopy1
+  xpos -575
+  ypos 88
+ }
+ Multiply {
+  value {{(1-parent.details_weight)*(parent.size/10+1)}}
+  name Multiply2
+  xpos -577
+  ypos 128
+ }
+push $Nc5a5f400
+push $N8fdf0400
+ Dot {
+  name Dot1
+  xpos -319
+  ypos -175
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge1
+  xpos -353
+  ypos -49
+ }
+ Dot {
+  name Dot5
+  xpos -319
+  ypos -23
+ }
+set Nb4693800 [stack 0]
+ Matrix {
+  matrix {
+      {1 0 -1}
+      {2 0 -2}
+      {1 0 -1}
+    }
+  name Matrix3
+  xpos -353
+  ypos 25
+ }
+push $Nb4693800
+ Dot {
+  name Dot6
+  xpos -181
+  ypos -23
+ }
+ Matrix {
+  matrix {
+      {-1 -2 -1}
+      {0 0 0}
+      {1 2 1}
+    }
+  name Matrix4
+  xpos -215
+  ypos 30
+ }
+ Dot {
+  name Dot7
+  xpos -181
+  ypos 87
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  blue black
+  alpha black
+  name ShuffleCopy2
+  xpos -353
+  ypos 83
+ }
+ Multiply {
+  value {{parent.details_weight}}
+  name Multiply3
+  xpos -353
+  ypos 119
+ }
+ Dot {
+  name Dot8
+  xpos -319
+  ypos 188
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge2
+  xpos -577
+  ypos 184
+ }
+ Multiply {
+  value 0.5
+  name Multiply4
+  xpos -577
+  ypos 229
+  disable {{!proxy}}
+ }
+ Expression {
+  temp_name0 mag
+  temp_expr0 sqrt(pow(r,2)+pow(g,2)+pow(b,2))
+  expr0 mag>1?r/mag:r
+  expr1 mag>1?g/mag:g
+  name Expression3
+  xpos -577
+  ypos 283
+  disable {{!parent.normalize}}
+ }
+ Expression {
+  temp_name0 facing
+  temp_expr0 sqrt(-pow(r,2)-pow(g,2)+1)
+  expr2 isnan(facing)?0:facing
+  name Expression2
+  xpos -577
+  ypos 322
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos -577
+  ypos 354
+ }
+ Grade {
+  white 0.5
+  add 0.5
+  white_clamp true
+  name Grade1
+  xpos -577
+  ypos 397
+  disable {{!parent.zerotoone}}
+ }
+ Output {
+  name Output1
+  xpos -577
+  ypos 479
+ }
+end_group

@@ -1,0 +1,421 @@
+Group {
+ name RotateVector3_
+ help "Rotate a Vector3 in 3 dimensions."
+ knobChanged "node = nuke.thisNode()\nknob = nuke.thisKnob()\nif knob.name() == \"mode\":\n    if knob.value() == \"Knob\":\n        node\['rotate'].setEnabled(True)\n        node\['rot_order'].setEnabled(True)\n    else:\n        node\['rotate'].setEnabled(False)\n        node\['rot_order'].setEnabled(False)\n"
+ addUserKnob {20 main_tab l RotateVector3}
+ addUserKnob {41 in l "Vector B Layer" t "Layer containing the vector information for input B" T vector_layer.in}
+ addUserKnob {4 mode l "Rotate by" t "Either control the rotation by the knob present on this node, or via the Matrix input." M {Knob "Pixel Matrix" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {4 rot_order l "rotation order" t "Specifies the order to apply euler angles to the rotation." M {XYZ XZY YXZ YZX ZXY ZYX "" "" ""}}
+ rot_order ZXY
+ addUserKnob {13 rotate}
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+}
+ Input {
+  inputs 0
+  name vectorB
+  xpos 0
+  ypos -30
+ }
+ Dot {
+  name Dot1
+  tile_color 0xcccccc00
+  xpos 34
+  ypos 72
+ }
+set N101e6610 [stack 0]
+ Shuffle {
+  name vector_layer
+  xpos 366
+  ypos 68
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos 366
+  ypos 94
+ }
+ Dot {
+  name Dot3
+  tile_color 0x9e3c6300
+  xpos 400
+  ypos 156
+ }
+set N102036e0 [stack 0]
+ Dot {
+  name Dot6
+  tile_color 0x9e3c6300
+  xpos 220
+  ypos 156
+ }
+ Group {
+  name Magnitude_Vector3_
+  help "Calculate the magnitude (scalar) of an input Vector3."
+  xpos 186
+  ypos 231
+  addUserKnob {20 main_tab l "Magnitude Vector3"}
+  addUserKnob {41 in l "Vector B Layer" t "Layer containing the vector information for input B" T vector_layer.in}
+  addUserKnob {26 ""}
+  addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+ }
+  Input {
+   inputs 0
+   name vectorB
+   xpos 0
+  }
+  Dot {
+   name Dot1
+   tile_color 0xcccccc00
+   xpos 34
+   ypos 108
+  }
+set N10219760 [stack 0]
+  Shuffle {
+   name vector_layer
+   xpos 140
+   ypos 104
+  }
+  Remove {
+   operation keep
+   channels rgba
+   name Remove1
+   xpos 140
+   ypos 130
+  }
+  Expression {
+   channel0 rgba
+   expr0 sqrt((r*r)+(g*g)+(b*b))
+   channel2 {-rgba.red -rgba.green -rgba.blue none}
+   channel3 {none none none -rgba.alpha}
+   name Mag3
+   xpos 140
+   ypos 227
+  }
+  Dot {
+   name Dot2
+   tile_color 0xcccccc00
+   xpos 174
+   ypos 364
+  }
+push $N10219760
+  ShuffleCopy {
+   inputs 2
+   in2 none
+   red red
+   green green
+   blue blue
+   out {{{parent.vector_layer.in}}}
+   name ShuffleCopy1
+   xpos 0
+   ypos 360
+  }
+  Output {
+   name Output1
+   xpos 0
+   ypos 506
+  }
+ end_group
+ Dot {
+  name Dot7
+  tile_color 0xcccccc00
+  xpos 220
+  ypos 529
+ }
+push $N102036e0
+ Dot {
+  name Dot4
+  tile_color 0x9e3c6300
+  xpos 556
+  ypos 156
+ }
+set N10261db0 [stack 0]
+ Input {
+  inputs 0
+  name matrix
+  xpos 614
+  ypos -30
+  number 1
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 614
+  ypos 152
+ }
+push $N10261db0
+ Dot {
+  name Dot5
+  tile_color 0x9e3c6300
+  xpos 556
+  ypos 198
+ }
+ Group {
+  inputs 2
+  name MultiplyVector3Matrix3_2
+  help "Multiply (transform) a Vector3 by a Matrix3. This is the equivalent of applying Rotation/Scale/Skew from a Matrix to the vector.\nA Matrix4 can be used, but the last row/column will be ignored."
+  xpos 614
+  ypos 195
+  addUserKnob {20 main_tab l "Mutiply Vector3 Matrix3"}
+  addUserKnob {26 ""}
+  addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+ }
+  Input {
+   inputs 0
+   name InputMatrix3
+   xpos 402
+   ypos 7
+   number 1
+  }
+  Dot {
+   name Dot3
+   tile_color 0xcccccc00
+   xpos 436
+   ypos 62
+  }
+add_layer {matrix0 matrix0.0 matrix0.1 matrix0.2 matrix0.3}
+  Shuffle {
+   in matrix0
+   name Shuffle1
+   label "in \[value in]-->out \[value out]"
+   xpos 402
+   ypos 109
+  }
+set N102888a0 [stack 0]
+add_layer {matrix1 matrix1.0 matrix1.1 matrix1.2 matrix1.3}
+  Shuffle {
+   in matrix1
+   name Shuffle2
+   label "in \[value in]-->out \[value out]"
+   xpos 402
+   ypos 147
+  }
+set N10298df0 [stack 0]
+add_layer {matrix2 matrix2.0 matrix2.1 matrix2.2 matrix2.3}
+  Shuffle {
+   in matrix2
+   name Shuffle3
+   label "in \[value in]-->out \[value out]"
+   xpos 402
+   ypos 185
+  }
+set N102a9320 [stack 0]
+add_layer {matrix3 matrix3.0 matrix3.1 matrix3.2 matrix3.3}
+  Shuffle {
+   in matrix3
+   name Shuffle4
+   label "in \[value in]-->out \[value out]"
+   xpos 402
+   ypos 223
+  }
+push $N102a9320
+  Dot {
+   name Dot7
+   tile_color 0x9e3c6300
+   xpos 343
+   ypos 195
+  }
+push $N10298df0
+  Dot {
+   name Dot6
+   tile_color 0x9e3c6300
+   xpos 343
+   ypos 157
+  }
+push $N102888a0
+  Dot {
+   name Dot5
+   tile_color 0x9e3c6300
+   xpos 343
+   ypos 119
+  }
+  Input {
+   inputs 0
+   name InputVector3
+   xpos 219
+   ypos 8
+  }
+  Dot {
+   name Dot4
+   tile_color 0xcccccc00
+   xpos 253
+   ypos 115
+  }
+  BlinkScript {
+   inputs 4
+   recompileCount 12
+   ProgramGroup 1
+   KernelDescription "2 \"TransformVector3byMatrix3\" iterate pixelWise 156e29276da8287b847626148a2a784d9969b7d1a3ad81e28187d00a7aaafaca 5 \"src\" Read Point \"matrix0\" Read Point \"matrix1\" Read Point \"matrix2\" Read Point \"dst\" Write Point 0 0 0"
+   kernelSource "kernel TransformVector3byMatrix3 : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src; // the input image\n  Image<eRead, eAccessPoint, eEdgeClamped> matrix0; // the input image\n  Image<eRead, eAccessPoint, eEdgeClamped> matrix1; // the input image\n  Image<eRead, eAccessPoint, eEdgeClamped> matrix2; // the input image\n  Image<eWrite> dst; // the output image\n\n  void process() \{\n    // Read the input image\n    SampleType(src) input = src();\n    SampleType(matrix0) m0 = matrix0();\n    SampleType(matrix1) m1 = matrix1();\n    SampleType(matrix2) m2 = matrix2();\n\n    // Create the matrix object (matrix3 in this case)\n    float3x3  matrix;\n    matrix\[0]\[0] = m0.x;\n    matrix\[0]\[1] = m0.y;\n    matrix\[0]\[2] = m0.z;\n    matrix\[1]\[0] = m1.x;\n    matrix\[1]\[1] = m1.y;\n    matrix\[1]\[2] = m1.z;\n    matrix\[2]\[0] = m2.x;\n    matrix\[2]\[1] = m2.y;\n    matrix\[2]\[2] = m2.z;\n\n    // Multiply the Matrix and the Vector\n    float3 vector(input.x, input.y, input.z);\n    vector = matrix*vector;\n\n    // Write the result to the output image\n    dst() = float4(vector.x, vector.y, vector.z, input.w);\n  \}\n\};\n"
+   rebuild ""
+   rebuild_finalise ""
+   name BlinkScript1
+   xpos 219
+   ypos 223
+  }
+  Output {
+   name Output1
+   xpos 219
+   ypos 323
+  }
+ end_group
+ Dot {
+  name Dot2
+  tile_color 0xcccccc00
+  xpos 648
+  ypos 364
+ }
+push $N102036e0
+ ColorMatrix {
+  matrix {
+      {{Axis1.world_matrix.0} {Axis1.world_matrix.1} {Axis1.world_matrix.2}}
+      {{Axis1.world_matrix.4} {Axis1.world_matrix.5} {Axis1.world_matrix.6}}
+      {{Axis1.world_matrix.8} {Axis1.world_matrix.9} {Axis1.world_matrix.10}}
+    }
+  name ColorMatrix1
+  xpos 366
+  ypos 269
+ }
+ Switch {
+  inputs 2
+  which {{parent.mode}}
+  name Switch1
+  xpos 366
+  ypos 360
+ }
+ Group {
+  name NormalizeVector3_
+  help "Normalize the magnitude of a Vector3 (to be of magnitude 1)"
+  xpos 366
+  ypos 450
+  addUserKnob {20 main_tab l "Normalize Vector3"}
+  addUserKnob {41 in l "Vector B Layer" t "Layer containing the vector information for input B" T vector_layer.in}
+  addUserKnob {26 ""}
+  addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+ }
+  Input {
+   inputs 0
+   name vectorB
+   xpos 0
+  }
+  Dot {
+   name Dot1
+   tile_color 0xcccccc00
+   xpos 34
+   ypos 108
+  }
+set N1031bd80 [stack 0]
+  Shuffle {
+   name vector_layer
+   xpos 140
+   ypos 104
+  }
+  Remove {
+   operation keep
+   channels rgba
+   name Remove1
+   xpos 140
+   ypos 130
+  }
+  Dot {
+   name Dot3
+   tile_color 0x9e3c6300
+   xpos 174
+   ypos 156
+  }
+set N10338e50 [stack 0]
+push $N10338e50
+  Dot {
+   name Dot4
+   tile_color 0x9e3c6300
+   xpos 377
+   ypos 156
+  }
+  Expression {
+   channel0 rgba
+   expr0 sqrt((r*r)+(g*g)+(b*b))
+   channel2 {-rgba.red -rgba.green -rgba.blue none}
+   channel3 {none none none -rgba.alpha}
+   name Mag3
+   xpos 343
+   ypos 209
+  }
+  Dot {
+   name Dot5
+   tile_color 0xcccccc00
+   xpos 377
+   ypos 271
+  }
+  Merge2 {
+   inputs 2
+   operation divide
+   bbox B
+   name Merge1
+   xpos 140
+   ypos 267
+  }
+  Dot {
+   name Dot2
+   tile_color 0x4b5ec600
+   xpos 174
+   ypos 364
+  }
+push $N1031bd80
+  ShuffleCopy {
+   inputs 2
+   in2 none
+   red red
+   green green
+   blue blue
+   out {{{parent.vector_layer.in}}}
+   name ShuffleCopy1
+   xpos 0
+   ypos 360
+  }
+  Output {
+   name Output1
+   xpos 0
+   ypos 506
+  }
+ end_group
+ Merge2 {
+  inputs 2
+  operation multiply
+  bbox B
+  name Merge1
+  xpos 366
+  ypos 525
+ }
+ Dot {
+  name Dot8
+  tile_color 0x4b5ec600
+  xpos 400
+  ypos 601
+ }
+push $N101e6610
+ ShuffleCopy {
+  inputs 2
+  in2 none
+  red red
+  green green
+  blue blue
+  out {{{parent.vector_layer.in}}}
+  name ShuffleCopy1
+  xpos 0
+  ypos 597
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 671
+ }
+ Axis2 {
+  inputs 0
+  rot_order {{parent.rot_order x1 2}}
+  rotate {{parent.rotate.x} {parent.rotate.y} {parent.rotate.z}}
+  name Axis1
+  xpos 471
+  ypos 252
+ }
+end_group

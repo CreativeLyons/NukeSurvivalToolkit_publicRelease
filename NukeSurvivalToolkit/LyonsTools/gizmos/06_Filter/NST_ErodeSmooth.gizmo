@@ -1,0 +1,103 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name ErodeSmooth
+ tile_color 0xcc804eff
+ selected true
+ addUserKnob {20 ErodeSmooth}
+ addUserKnob {4 type l Type M {linear smooth smooth0 smooth1 "" "" "" ""}}
+ addUserKnob {7 range l "<font color=skyblue>Range</font color>" R 0.1 0.9}
+ range 0.5
+ addUserKnob {41 size l Blur T Blur1.size}
+ addUserKnob {7 tighten l Tighten R 0 2}
+ tighten 1
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 mix T Merge1.mix}
+ addUserKnob {20 info}
+ addUserKnob {26 author l Author: T "Tony Lyons"}
+ addUserKnob {26 Desc l Description: T ErodeSmooth}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 521
+  ypos 344
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 380
+  ypos 199
+ }
+set Na91eae80 [stack 0]
+ Blur {
+  channels rgba
+  size 5
+  name Blur1
+  label "\[value size]"
+  xpos 229
+  ypos 193
+ }
+ Grade {
+  channels rgba
+  blackpoint {{((.5*tighten)+.25)*range}}
+  whitepoint {{1-((.5*tighten)+.25)*(1-range)}}
+  white_clamp true
+  name Grade9
+  xpos 229
+  ypos 231
+ }
+ ColorLookup {
+  lut {master {curve C k 0 s0 1 s0}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookupSmooth
+  xpos 229
+  ypos 292
+  disable {{"type == 1 ? 0 : 1"}}
+ }
+ ColorLookup {
+  lut {master {curve C k 0 s0 L 1}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookupSmooth0
+  xpos 229
+  ypos 318
+  disable {{"type == 2 ? 0 : 1"}}
+ }
+ ColorLookup {
+  lut {master {curve L 0 C k 1 s0}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookupSmooth1
+  xpos 229
+  ypos 344
+  disable {{"type == 3 ? 0 : 1"}}
+ }
+push $Na91eae80
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 380
+  ypos 344
+ }
+ Output {
+  name Output1
+  xpos 380
+  ypos 409
+ }
+end_group

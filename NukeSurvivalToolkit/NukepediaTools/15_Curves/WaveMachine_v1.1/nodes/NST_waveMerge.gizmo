@@ -1,0 +1,86 @@
+Group {
+ name WaveMerge
+ tile_color 0x4d6ba0ff
+ addUserKnob {20 User}
+ addUserKnob {4 operation t "Add (input0 + input1 * power)\nDissolve ((input0 * (1 - power)) + (input1 * power))\nMax (max(input0, input1 * power + (1 - power) * input0))\nMin (min(input0, input1 * power + input0 * (1 - power)))\nMultiply ((input0 * (input1 * power)))\nMinus ((input0 - (input1 * power)))\nUnion ((input0 * (1 - power)) + ((input0 + input1) - (input0 * input1)) * power)" M {Add Dissolve Max Min Multiply Minus Union "" "" "" "" "" ""}}
+ operation Dissolve
+ addUserKnob {41 inp1 +INVISIBLE T upstreamValue3.output}
+ addUserKnob {41 inp2 +INVISIBLE T upstreamValue1.output}
+ addUserKnob {7 power}
+ power 1
+ addUserKnob {7 output}
+ output {{"disable ? inp1 : operation==0 ? inp1+inp2*power : operation==1 ? (inp1*(1-power))+(inp2*power) : operation==2 ? max(inp1, inp2*power+(1-power)*inp1) : operation==3 ? min(inp1, inp2*power+inp1*(1-power)) : operation==4 ? inp1*(1-power)+(inp1*(inp2*power)) : operation==5 ? (inp1-(inp2*power)) : operation==6 ? (inp1*(1-power))+((inp1+inp2)-(inp1*inp2))*power : inp1"}}
+ addUserKnob {26 ""}
+ addUserKnob {26 credit l "" +STARTLINE T "WaveMerge v1.0 | Fynn Laue 2020"}
+}
+ Input {
+  inputs 0
+  name Input0
+  xpos -40
+  ypos -9
+ }
+ Group {
+  name upstreamValue3
+  onCreate "n = nuke.thisNode()\n# Hide these knobs from the curve editor\nn.knob(\"output\").setFlag(0x20000000)"
+  label v005
+  xpos -40
+  ypos 76
+  addUserKnob {20 User}
+  addUserKnob {43 pNode t "this script finds the upstream value. Or rather the name of the node and appends a .\nThis is then used in an expression appended by a knob name to get that knob's value." +INVISIBLE}
+  pNode "\[\n    # This throws error 'Nothing is named \"Nothing\"' when node has no input0\n    # set x \[node this.input0]\n    set starting_point \"this.input0\"\n    set default \"this.d_\"\n\n    # Set x to input if it exists, otherwise return default\n    if \{\[exists \$starting_point]\} \{\n        set x \[node \$starting_point]\n    \} \{\n        return \$default\n    \}\n\n    set finished 0\n    while \{\$finished != 1\} \{\n        # First look for a specific node type\n        set skip_node 1\n        while \{\$skip_node == 1\} \{\n            # TODO: Make better grouping to reduce nested if statements\n            if \{(\[class \$x] != \"Group\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x])\} \{\n                set x \[node \$x.input0]\n            \} \{\n                # Stop at first enabled Group node\n                if \{(\[class \$x] == \"Group\") || (\[class \$x] == \"Input\")\} \{\n                    set skip_node 0\n                \} \{\n                    if \{\$x == \[topnode \$x]\} \{\n                        return \$default\n                    \} \{\n                        set x \[node \$x.input0]\n                    \}\n                \}\n            \}\n        \}\n        # Return Group node if it has an output knob\n        if \{\[class \$x] == \"Group\" && \[exists \$x.output]\} \{\n            set x \[append x \".\"]\n            return \$x\n        \} \{\n            # If node is an Input node (of a Group node), return its parent\n            if \{\[class \$x]==\"Input\"\} \{\n                set inp \"\$x.parent.input\"\n                set inputNum \[value \$x.number]\n                set inp \[append inp \$inputNum]\n                if \{\[exists \$inp]\} \{\n                    set x \[node \$inp]\n                \} \{\n                    set finished 1\n                \}\n            \} \{\n                set finished 1\n            \}\n        \}\n    \}\n    return \$default\n]"
+  addUserKnob {7 d_output t "if no upstream value is found, default to this value"}
+  addUserKnob {7 output}
+  output {{"\[value knob.pNode]output"}}
+  addUserKnob {26 ""}
+  addUserKnob {26 credit l "" +STARTLINE T "upstreamValue v1.0 | Fynn Laue 2020"}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 0
+  }
+  Output {
+   name Output1
+   xpos 0
+   ypos 300
+  }
+ end_group
+ Output {
+  name Output1
+  xpos -40
+  ypos 423
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 180
+  ypos -9
+  number 1
+ }
+ Group {
+  name upstreamValue1
+  onCreate "n = nuke.thisNode()\n# Hide these knobs from the curve editor\nn.knob(\"output\").setFlag(0x20000000)"
+  label v005
+  xpos 180
+  ypos 76
+  addUserKnob {20 User}
+  addUserKnob {43 pNode t "this script finds the upstream value. Or rather the name of the node and appends a .\nThis is then used in an expression appended by a knob name to get that knob's value." +INVISIBLE}
+  pNode "\[\n    # This throws error 'Nothing is named \"Nothing\"' when node has no input0\n    # set x \[node this.input0]\n    set starting_point \"this.input0\"\n    set default \"this.d_\"\n\n    # Set x to input if it exists, otherwise return default\n    if \{\[exists \$starting_point]\} \{\n        set x \[node \$starting_point]\n    \} \{\n        return \$default\n    \}\n\n    set finished 0\n    while \{\$finished != 1\} \{\n        # First look for a specific node type\n        set skip_node 1\n        while \{\$skip_node == 1\} \{\n            # TODO: Make better grouping to reduce nested if statements\n            if \{(\[class \$x] != \"Group\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x])\} \{\n                set x \[node \$x.input0]\n            \} \{\n                # Stop at first enabled Group node\n                if \{(\[class \$x] == \"Group\") || (\[class \$x] == \"Input\")\} \{\n                    set skip_node 0\n                \} \{\n                    if \{\$x == \[topnode \$x]\} \{\n                        return \$default\n                    \} \{\n                        set x \[node \$x.input0]\n                    \}\n                \}\n            \}\n        \}\n        # Return Group node if it has an output knob\n        if \{\[class \$x] == \"Group\" && \[exists \$x.output]\} \{\n            set x \[append x \".\"]\n            return \$x\n        \} \{\n            # If node is an Input node (of a Group node), return its parent\n            if \{\[class \$x]==\"Input\"\} \{\n                set inp \"\$x.parent.input\"\n                set inputNum \[value \$x.number]\n                set inp \[append inp \$inputNum]\n                if \{\[exists \$inp]\} \{\n                    set x \[node \$inp]\n                \} \{\n                    set finished 1\n                \}\n            \} \{\n                set finished 1\n            \}\n        \}\n    \}\n    return \$default\n]"
+  addUserKnob {7 d_output t "if no upstream value is found, default to this value"}
+  addUserKnob {7 output}
+  output {{"\[value knob.pNode]output"}}
+  addUserKnob {26 ""}
+  addUserKnob {26 credit l "" +STARTLINE T "upstreamValue v1.0 | Fynn Laue 2020"}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 0
+  }
+  Output {
+   name Output1
+   xpos 0
+   ypos 300
+  }
+ end_group
+end_group

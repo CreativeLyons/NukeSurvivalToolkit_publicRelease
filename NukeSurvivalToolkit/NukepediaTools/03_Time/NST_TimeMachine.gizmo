@@ -1,0 +1,50 @@
+Group {
+ name TimeMachine
+ help "Does a per-pixel time offset on the image, based on a secondary mask input.\n\nPixels with a mask value of 1 will be offset by the number of frames set in \"frames\".\nMask values of 0 will return the image at the current frame. Values between 0-1 will return an interpolated offset."
+ knobChanged "\n\ng = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() in \[\"frames\",\"method\"]:\n    \n    i = nuke.toNode(\"img\")\n    i2 = nuke.toNode(\"mask\")\n    o = nuke.toNode(\"Output1\")\n    c = nuke.toNode(\"Copy1\")\n\n    if k.name() == \"frames\":\n    \n        defaultNodes = \[i,i2,o,c]\n        for n in nuke.allNodes():\n           if n not in defaultNodes:\n               nuke.delete(n)\n        \n        fvalue = g\['frames'].value()\n        step = 1\n        if fvalue < 0:\n           step = -1\n          \n        for f in range(0,int(fvalue)+step,step):\n           t = nuke.nodes.TimeOffset()\n           t\['time_offset'].setValue(-f)\n           t.setInput(0,i)\n        \n           if f == 0 :\n               lastnode = t\n        \n           else :\n               slice = nuke.nodes.Grade()\n               slice\['channels'].setValue(\"alpha\")\n               slice\['blackpoint'].setValue(abs((1/(fvalue+1))*abs(f)))\n               slice\['whitepoint'].setValue(abs((1/(fvalue+1))*(abs(f)+1)))\n               slice.setInput(0,c)\n               exp = nuke.nodes.Expression()\n               if g\['method'].value() == \"average\":\n                   exp\['expr3'].setValue('a>1?1:a')\n               else:\n                   exp\['expr3'].setValue('a>0?1:0')\n               exp.setInput(0,slice)\n               km = nuke.nodes.Keymix()\n               km.setInput(1,t)\n               km.setInput(0,lastnode)\n               km.setInput(2,exp)\n               lastnode = km\n        \n        sw = nuke.nodes.Switch()\n        sw.setInput(0,i)\n        sw.setInput(1,lastnode)\n        sw\['which'].setExpression('parent.maskChannel!=0')\n        o.setInput(0,sw)\n            \n        for n in nuke.allNodes():\n           nuke.autoplace(n)\n\n    elif k.name() == \"method\":\n\n        for e in nuke.allNodes('Expression'):\n               if g\['method'].value() == \"average\":\n                   e\['expr3'].setValue('a>1?1:a')\n               else:\n                   e\['expr3'].setValue('a>0?1:0')\n\n"
+ selected true
+ addUserKnob {20 TimeMachine}
+ addUserKnob {41 maskChannel T Copy1.from0}
+ addUserKnob {26 ""}
+ addUserKnob {4 method M {nearest average}}
+ addUserKnob {3 frames}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 400
+  ypos -57
+  number 1
+ }
+set N40175820 [stack 0]
+push $N40175820
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  name Copy1
+  xpos 400
+  ypos -33
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 217
+  ypos -111
+ }
+set N400be0e0 [stack 0]
+ TimeOffset {
+  time ""
+  name TimeOffset1
+ }
+push $N400be0e0
+ Switch {
+  inputs 2
+  which {{parent.maskChannel!=0}}
+  name Switch1
+ }
+ Output {
+  name Output1
+  xpos 1390
+  ypos 87
+ }
+end_group

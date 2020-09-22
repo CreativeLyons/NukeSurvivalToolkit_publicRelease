@@ -1,0 +1,657 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name ColorSmear
+ note_font Verdana
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {26 smearing l Smearing T ""}
+ addUserKnob {6 already_premulted l "Input is premultiplied?" t "Click checkbox \"on\" if image is already premulted" +STARTLINE}
+ already_premulted true
+ addUserKnob {7 pre_choke l Pre-choke R 0 30}
+ pre_choke 2.5
+ addUserKnob {7 pre_contrast l "Pre Contrast" R 0 0.5}
+ pre_contrast 0.084
+ addUserKnob {7 pre_blur l Pre-blur R 0 100}
+ pre_blur 8.5
+ addUserKnob {7 post_blur l "Post Blur" R 0 100}
+ post_blur 5.5
+ addUserKnob {26 ""}
+ addUserKnob {26 Masking}
+ addUserKnob {6 xor_edge_detect l "Use XOR edge detect method?" t "XOR edge detect will isolate edge mask to areas that are blurred. Regular edge detect method will apply smear evenly all the way around." +STARTLINE}
+ addUserKnob {7 dilate_mask l "Dilate Mask" R 0 30}
+ dilate_mask 2.8
+ addUserKnob {7 blur_mask l "Blur Mask" R 0 100}
+ blur_mask 3.5
+ addUserKnob {6 output_premulted l "Premultiply output" +STARTLINE}
+ output_premulted true
+ addUserKnob {26 ""}
+ addUserKnob {6 outputmask l "Output smear mask?" +STARTLINE}
+ outputmask true
+ addUserKnob {26 smearmask_description l " (uses 'smearmask.a' channel - handy for regraining later)" -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 RestoreDetail l "Restore Detail"}
+ addUserKnob {7 sharpness l Sharpness R 0 10}
+ sharpness 10
+ addUserKnob {7 amount l Amount}
+ amount 0.1
+ addUserKnob {26 ""}
+ addUserKnob {26 credit l "" +STARTLINE T "Colour Smear v2.1 by Richard Frazer - www.richardfrazer.com"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x7171c600
+  label "Restore detail"
+  note_font Verdana
+  note_font_size 42
+  xpos -833
+  ypos 14
+  bdwidth 546
+  bdheight 976
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode18
+  tile_color 0x7171c600
+  label "unpremult / blur trick"
+  note_font Verdana
+  note_font_size 42
+  xpos 653
+  ypos 25
+  bdwidth 856
+  bdheight 999
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode19
+  tile_color 0x7171c600
+  label "mask to smear back over shot"
+  note_font Verdana
+  note_font_size 42
+  xpos -239
+  ypos 27
+  bdwidth 649
+  bdheight 976
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode20
+  tile_color 0x7171c600
+  label "colour smear\n<-- in here goes plate with alpha (unpremulted) "
+  note_font Verdana
+  note_font_size 42
+  xpos -1098
+  ypos -281
+  bdwidth 2603
+  bdheight 277
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote20
+  label "bigger blur will smear\ncolour out further\nbut may cause\nbleed\nin areas of high contrast"
+  note_font Verdana
+  note_font_size 31
+  xpos 1122
+  ypos 405
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote23
+  label "xor way \nisolates areas\nwith highest\namounts of blur\n(i.e\nmotion blur)"
+  note_font Verdana
+  note_font_size 31
+  xpos -338
+  ypos 288
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote25
+  label "tweak the \ndilate and \nblur to make\nnice"
+  note_font Verdana
+  xpos -1
+  ypos 581
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote24
+  label "choose which works best"
+  note_font Verdana
+  note_font_size 31
+  xpos -115
+  ypos 774
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote22
+  label "this way \nsmears evenly\naround all\nedges"
+  note_font Verdana
+  note_font_size 31
+  xpos 211
+  ypos 235
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote27
+  label "shuffle original alpha back in"
+  note_font Verdana
+  note_font_size 31
+  xpos -1369
+  ypos 1645
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote26
+  label "smear back over edges"
+  note_font Verdana
+  note_font_size 31
+  xpos -1057
+  ypos 1295
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote19
+  label "choke back alpha first\nso that no background\ncolour is bought in"
+  note_font Verdana
+  note_font_size 31
+  xpos 1131
+  ypos 229
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "mask input - \nareas with solid matte\nwill be excluded from \nbeing effected"
+  note_font Verdana
+  note_font_size 31
+  xpos 1716
+  ypos -149
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote21
+  label "just to soften areas\nwith hard edges"
+  note_font Verdana
+  note_font_size 31
+  xpos 682
+  ypos 670
+ }
+ Input {
+  inputs 0
+  name IMG
+  label "Your main image input"
+  note_font Verdana
+  xpos -1238
+  ypos -298
+ }
+set N902c3fe0 [stack 0]
+ Dot {
+  name Dot29
+  note_font Verdana
+  xpos -1204
+  ypos -109
+ }
+set N90229a10 [stack 0]
+ Dot {
+  name Dot7
+  xpos -1204
+  ypos 1270
+ }
+ Dot {
+  name Dot18
+  note_font Verdana
+  xpos -1204
+  ypos 1564
+ }
+set N905bc670 [stack 0]
+push $N90229a10
+ Unpremult {
+  name Unpremult2
+  note_font Verdana
+  xpos -1073
+  ypos -108
+ }
+push $N90229a10
+ Switch {
+  inputs 2
+  which {{"\[value parent.already_premulted]" i}}
+  name Switch1
+  note_font Verdana
+  xpos -1073
+  ypos -56
+ }
+ Dot {
+  name Dot30
+  note_font Verdana
+  xpos -901
+  ypos -52
+ }
+set N90022dc0 [stack 0]
+ Dot {
+  name Dot5
+  xpos -562
+  ypos -52
+ }
+set N90428e90 [stack 0]
+ Dot {
+  name Dot17
+  note_font Verdana
+  xpos 42
+  ypos -52
+ }
+set N900befa0 [stack 0]
+ Dot {
+  name Dot38
+  note_font Verdana
+  xpos 42
+  ypos 122
+ }
+set N900c27b0 [stack 0]
+ Dot {
+  name Dot145
+  note_font Verdana
+  xpos -39
+  ypos 122
+ }
+set N904833c0 [stack 0]
+ Dot {
+  name Dot138
+  note_font Verdana
+  xpos -92
+  ypos 185
+ }
+push $N904833c0
+ Dot {
+  name Dot39
+  note_font Verdana
+  xpos 4
+  ypos 193
+ }
+ Merge2 {
+  inputs 2
+  operation xor
+  name Merge14
+  note_font Verdana
+  xpos -71
+  ypos 243
+ }
+ Dilate {
+  channels alpha
+  size {{"\[value parent.dilate_mask]" i}}
+  name Dilate2
+  note_font Verdana
+  xpos -71
+  ypos 319
+ }
+ Grade {
+  channels alpha
+  gamma 2
+  black_clamp false
+  name Grade16
+  note_font Verdana
+  xpos -71
+  ypos 394
+ }
+ Clamp {
+  name Clamp2
+  note_font Verdana
+  xpos -71
+  ypos 432
+ }
+ Blur {
+  size {{"\[value parent.blur_mask]" i}}
+  name Blur13
+  note_font Verdana
+  xpos -71
+  ypos 516
+ }
+ Dot {
+  name Dot156
+  note_font Verdana
+  xpos -37
+  ypos 659
+ }
+push $N900c27b0
+ Dot {
+  name Dot20
+  note_font Verdana
+  xpos 119
+  ypos 122
+ }
+ Dilate {
+  channels alpha
+  size {{"-\[value parent.dilate_mask]" i}}
+  name Dilate4
+  note_font Verdana
+  xpos 85
+  ypos 271
+ }
+ Grade {
+  channels alpha
+  blackpoint 0.022
+  whitepoint 0.69
+  gamma 0.94
+  black_clamp false
+  name Grade18
+  note_font Verdana
+  xpos 85
+  ypos 344
+ }
+ Invert {
+  channels alpha
+  name Invert4
+  note_font Verdana
+  xpos 85
+  ypos 392
+ }
+ Clamp {
+  name Clamp8
+  note_font Verdana
+  xpos 85
+  ypos 430
+ }
+ Blur {
+  size {{"\[value parent.blur_mask]" i}}
+  name Blur17
+  note_font Verdana
+  xpos 85
+  ypos 510
+ }
+ Dot {
+  name Dot147
+  note_font Verdana
+  xpos 119
+  ypos 670
+ }
+ Switch {
+  inputs 2
+  which {{"\[value parent.xor_edge_detect]" i}}
+  name Switch3
+  note_font Verdana
+  xpos 7
+  ypos 747
+ }
+push $N900befa0
+ Dot {
+  name Dot71
+  note_font Verdana
+  xpos 1045
+  ypos -52
+ }
+ Dot {
+  name Dot1
+  note_font Verdana
+  xpos 1045
+  ypos 100
+ }
+set N90501f40 [stack 0]
+push $N90501f40
+ Input {
+  inputs 0
+  name OMIT
+  label "The area to omit from being affected"
+  note_font Verdana
+  xpos 1582
+  ypos -260
+  number 1
+ }
+ Dot {
+  name Dot2
+  note_font Verdana
+  xpos 1616
+  ypos 50
+ }
+set N902a8b10 [stack 0]
+ Merge2 {
+  inputs 2
+  operation out
+  name Merge1
+  note_font Verdana
+  xpos 1088
+  ypos 147
+ }
+ Switch {
+  inputs 2
+  name Switch4
+  note_font Verdana
+  xpos 1011
+  ypos 209
+ }
+ FilterErode {
+  channels alpha
+  size {{"\[value parent.pre_choke]" i}}
+  name FilterErode2
+  note_font Verdana
+  xpos 1011
+  ypos 280
+ }
+ Grade {
+  channels alpha
+  blackpoint {{"\[value parent.pre_contrast]"}}
+  whitepoint {{"1-\[value parent.pre_contrast]"}}
+  black_clamp false
+  name Grade19
+  note_font Verdana
+  xpos 1011
+  ypos 341
+ }
+ Clamp {
+  channels alpha
+  name Clamp4
+  note_font Verdana
+  xpos 1011
+  ypos 390
+ }
+ Premult {
+  name Premult3
+  note_font Verdana
+  xpos 1011
+  ypos 471
+ }
+ Blur {
+  size {{"\[value parent.pre_blur]" i}}
+  name Blur8
+  note_font Verdana
+  xpos 1011
+  ypos 560
+ }
+ Unpremult {
+  name Unpremult1
+  note_font Verdana
+  xpos 1011
+  ypos 643
+ }
+ Blur {
+  size {{"\[value parent.post_blur]" i}}
+  name Blur20
+  note_font Verdana
+  xpos 1011
+  ypos 704
+ }
+ Dot {
+  name Dot61
+  note_font Verdana
+  xpos 1045
+  ypos 795
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy1
+  note_font Verdana
+  xpos 7
+  ypos 901
+ }
+ Premult {
+  name Premult4
+  note_font Verdana
+  xpos 7
+  ypos 1045
+ }
+ Dot {
+  name Dot4
+  note_font Verdana
+  xpos 41
+  ypos 1122
+ }
+set N9080dde0 [stack 0]
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge5
+  xpos -498
+  ypos 1611
+ }
+push $N905bc670
+push $N90428e90
+ Dot {
+  name Dot6
+  xpos -562
+  ypos 162
+ }
+set N903ec410 [stack 0]
+push $N903ec410
+ Blur {
+  size {{"\[value parent.sharpness]" i}}
+  name Blur1
+  xpos -728
+  ypos 211
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge3
+  xpos -596
+  ypos 283
+ }
+ ColorCorrect {
+  saturation 0
+  name ColorCorrect1
+  xpos -596
+  ypos 375
+ }
+ Dot {
+  name Dot8
+  xpos -554
+  ypos 1268
+ }
+push $N9080dde0
+push $N9080dde0
+push $N902a8b10
+ Dot {
+  name Dot3
+  note_font Verdana
+  xpos 1616
+  ypos 967
+ }
+ Merge2 {
+  inputs 2
+  operation out
+  name Merge2
+  note_font Verdana
+  xpos 76
+  ypos 1192
+ }
+ Switch {
+  inputs 2
+  name Switch5
+  note_font Verdana
+  xpos 7
+  ypos 1253
+ }
+ Unpremult {
+  name Unpremult3
+  xpos -471
+  ypos 1330
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  mix {{"\[value parent.amount]"}}
+  name Merge4
+  xpos -588
+  ypos 1352
+ }
+ Premult {
+  name Premult1
+  xpos -588
+  ypos 1393
+ }
+push $N90022dc0
+ Merge2 {
+  inputs 2
+  name Merge13
+  note_font Verdana
+  xpos -935
+  ypos 1393
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy2
+  note_font Verdana
+  xpos -1238
+  ypos 1725
+ }
+set N9049be20 [stack 0]
+ Premult {
+  name Premult10
+  note_font Verdana
+  xpos -1130
+  ypos 1789
+ }
+push $N9049be20
+ Switch {
+  inputs 2
+  which {{"\[value parent.output_premulted]" i}}
+  name Switch2
+  note_font Verdana
+  xpos -1238
+  ypos 1878
+ }
+ Dot {
+  name Dot9
+  xpos -1204
+  ypos 1996
+ }
+set N8ff7fde0 [stack 0]
+add_layer {smearmask smearmask.red}
+ ShuffleCopy {
+  inputs 2
+  alpha alpha2
+  black alpha
+  out2 smearmask
+  name ShuffleCopy3
+  note_font Verdana
+  xpos -1140
+  ypos 2066
+ }
+push $N8ff7fde0
+ Switch {
+  inputs 2
+  which {{"\[value parent.outputmask]"}}
+  name Switch6
+  note_font Verdana
+  selected true
+  xpos -1238
+  ypos 2141
+ }
+set N902ae100 [stack 0]
+ Dot {
+  name Dot19
+  note_font Verdana
+  xpos -1204
+  ypos 2343
+ }
+ Output {
+  name Output1
+  note_font Verdana
+  xpos -1238
+  ypos 2422
+ }
+push $N8ff7fde0
+push 0
+push 0
+push 0
+push 0
+push $N902c3fe0
+push $N902ae100
+end_group

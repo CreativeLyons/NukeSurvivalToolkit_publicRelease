@@ -1,0 +1,28 @@
+Group {
+ name GeoToPoints
+ tile_color 0x807291ff
+ addUserKnob {20 User}
+ addUserKnob {26 info l "" +STARTLINE T "This node will turn whatever input geo into a pointcloud.\n(normals are not preserved!)\n\n-by Mads Hagbarth Lund 2014\n"}
+ addUserKnob {26 ""}
+ addUserKnob {22 GeoToPoints l "     Geo To Points     " T "'''================================================================================\n; Function:                PointClouder(points):\n; Description:            Generate a pointcloud from a series of specified points\n; Parameter(s):            points - A list a points formated \[\[X,Y,Z,VEL_X,VEL_Y,VEL_Z,COL_R,COL_G,COL_B]\[...]]\n; Return:                myNode - The pointcloud node created by the function\n;                            \n; Note(s):                by Mads Hagbarth Lund 2013\n;=================================================================================='''\ndef PointClouder(points):\n    pc_Points=pc_Velocities=pc_Colors = str(len(points))+ \" \"                    \n    pc_Points = pc_Points + \" \".join(str(i) for i in chain1(*points))            \n    pc_Velocities = pc_Velocities + \" \".join(str(i) for i in chain2(*points))\n    pc_Colors = pc_Colors + \" \".join(str(i) for i in chain3(*points))\n    myNode = nuke.createNode(\"BakedPointCloud\")                                 \n    myNode.knob(\"serializePoints\").fromScript(pc_Points)                      \n    myNode.knob(\"serializeNormals\").fromScript(pc_Velocities)\n    myNode.knob(\"serializeColors\").fromScript(pc_Colors)\n    return myNode\n\ndef chain1(*iterables):\n    for it in iterables:\n        for element in it\[0:3]:\n            yield element\n\ndef chain2(*iterables):\n    for it in iterables:\n        for element in it\[3:6]:\n            yield element\n\ndef chain3(*iterables):\n    for it in iterables:\n        for element in it\[6:9]:\n            yield element       \n\ndef ConvertToTup(pointList):\n    points = \[]\n    for item in pointList:\n        for n in range(0,len(item\[0]),3):\n            points.append(\[item\[0]\[n], item\[0]\[n+1], item\[0]\[n+2],1,1,1,1,1,1])     \n    return points\n\nObjectDataPre = \[]\n\npag = nuke.thisNode()\npag.begin()\npyg = nuke.toNode(\"PYG\")\npag.end()\nprint pyg.Class()\nprint pyg.name()\ntry:\n    gObj = pyg\['geo'].getGeometry()\[0]\n    ObjectDataPre.append(\[gObj.points()])\n    PointCloudData = ConvertToTup(ObjectDataPre)\n    PointClouder(PointCloudData)\nexcept: \n    nuke.message(\"Error, no geo found in the input\")\n" +STARTLINE}
+ addUserKnob {22 GetVertCount l "Get Number of Vertices" T "pag = nuke.thisNode()\nwith pag:\n    pyg = nuke.toNode(\"PYG\")\ntry:\n    pyg.knob(\"ClickMe\").execute()\nexcept: \n    nuke.message(\"Error, no geo found in the input\")" +STARTLINE}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 384
+  ypos -218
+ }
+ PythonGeo {
+  name PYG
+  xpos 384
+  ypos -146
+  addUserKnob {20 User}
+  addUserKnob {22 ClickMe T "pyg = nuke.thisNode()\ngObj = pyg\['geo'].getGeometry()\[0]\nnuke.message(\"Number of vertecies: \"+str(len(gObj.points())))" +STARTLINE}
+ }
+ Output {
+  name Output1
+  xpos 384
+  ypos -78
+ }
+end_group

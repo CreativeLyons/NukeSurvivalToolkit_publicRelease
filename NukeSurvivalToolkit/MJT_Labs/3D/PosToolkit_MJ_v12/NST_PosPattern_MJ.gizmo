@@ -1,0 +1,347 @@
+Group {
+ name PosPattern
+ tile_color 0x5f3f7fff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {41 position l "world position" t "Select position (world space) channel.\nIf position is camera space, use 'ConvertPNZ' to convert to world space." T shuffle_pos.in}
+ addUserKnob {6 unpremult_src l "unpremult source" t "Anti-aliasing edge will process improper matte on the edge. Unpremult the data with alpha will fix this issue.\n\n* input must contain alpha in alpha channel.\n** uncheck this box if position data is un-filtered.\n*** this can be fix the external edge, but not the intersect edge." +STARTLINE}
+ addUserKnob {6 premult_result l "premult result" t "Toggle the premult result." -STARTLINE}
+ premult_result true
+ addUserKnob {26 title_pattern l <b>PATTERN</b>}
+ addUserKnob {41 pattern_type l "pattern type" t "Select parttern type on world space position.\n\nfBm : octaves, lacunarity, gain, gamma setting available.\nturbulence : octaves, lacunarity, gain, gamma setting available.\nnoise : gain, gamma setting available.\nrandom : gain, gamma setting available.\nstripes : xyz can be enable separate. gain, gamma setting available.\nripple : gain, gamma setting available.\nrays : gain, gamma, number of rays setting available." T menu.pattern_type}
+ addUserKnob {41 file_menu l @FolderIcon T transformation.file_menu}
+ addUserKnob {41 snap_menu l @AxisIcon -STARTLINE T transformation.snap_menu}
+ addUserKnob {41 n_translate l translate T transformation.translate}
+ addUserKnob {41 n_scale l scale T transformation.scaling}
+ addUserKnob {41 n_uniform_scale l "uniform scale" T transformation.uniform_scale}
+ addUserKnob {6 invert l "invert pattern" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {6 stripes_x l x +HIDDEN +STARTLINE}
+ stripes_x true
+ addUserKnob {6 stripes_y l y -STARTLINE +HIDDEN}
+ stripes_y true
+ addUserKnob {6 stripes_z l z -STARTLINE +HIDDEN}
+ stripes_z true
+ addUserKnob {3 octaves}
+ octaves 4
+ addUserKnob {7 lacunarity R 1 10}
+ lacunarity 2
+ addUserKnob {7 gain R 0.1 2}
+ gain 1
+ addUserKnob {7 gamma R 0 2}
+ gamma 1
+ addUserKnob {3 rays l "numbers of rays" +HIDDEN}
+ rays 10
+ addUserKnob {26 ""}
+ addUserKnob {20 grp_3dpreview l "Pointcloud preview" n 1}
+ grp_3dpreview 0
+ addUserKnob {4 display_ptc_type l "display type" t "When you open this node's panel, you can check the pointcloud under 3D view.\n\n<b>none</b>\nwill not show the pointcloud in 3D\n\n<b>raw pointcloud</b>\nshow the pointcloud from input data, without any effects from this node\n\n<b>with pattern applied</b>\nThis can show the instant result of the pattern. Since it feedback in real time, it might slow down the progress in 3D space." M {"no pointcloud preview" "raw pointcloud" "with pattern applied" "" "" ""}}
+ display_ptc_type "raw pointcloud"
+ addUserKnob {41 detail l "point detail" T PositionToPoints.detail}
+ addUserKnob {41 pointSize l "point size" T PositionToPoints.pointSize}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.2}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-09-04}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"v1.2<br>'PosMatte'<br>&nbsp;&nbsp;-&nbsp;fix&nbsp;'2D&nbsp;sample'&nbsp;will&nbsp;break&nbsp;animated&nbsp;'3D&nbsp;pos'&nbsp;knob<br>&nbsp;&nbsp;-&nbsp;fix&nbsp;'cube3D&nbsp;falloff'&nbsp;separation<br>&nbsp;&nbsp;-&nbsp;fix&nbsp;matte:&nbsp;cube&nbsp;pivot,&nbsp;also&nbsp;in&nbsp;3D&nbsp;preview<br>'PosProjection'<br>&nbsp;&nbsp;-&nbsp;support&nbsp;overscan<br><br>1.1<br>'PosMatte'<br>&nbsp;&nbsp;-&nbsp;corrected&nbsp;pivot&nbsp;result<br>&nbsp;&nbsp;-&nbsp;'position'&nbsp;knob&nbsp;label&nbsp;changed&nbsp;to&nbsp;'world&nbsp;position'<br><br>1.0<br>-&nbsp;using&nbsp;Deep2VP&nbsp;setup&nbsp;in&nbsp;2D&nbsp;comp\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -2000
+  ypos 339
+  bdwidth 368
+  bdheight 186
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  label bin
+  xpos -1535
+  ypos 169
+  bdwidth 498
+  bdheight 1286
+ }
+ NoOp {
+  inputs 0
+  name menu
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['pattern_type'].getValue() == 0 or thisGRP\['pattern_type'].getValue() == 1  :\n    thisGRP\['octaves'].setVisible(True)\n    thisGRP\['lacunarity'].setVisible(True)\nelse :\n    thisGRP\['octaves'].setVisible(False)\n    thisGRP\['lacunarity'].setVisible(False)\n\nif thisGRP\['pattern_type'].getValue() == 4 :\n    thisGRP\['stripes_x'].setVisible(True)\n    thisGRP\['stripes_y'].setVisible(True)\n    thisGRP\['stripes_z'].setVisible(True)\nelse :\n    thisGRP\['stripes_x'].setVisible(False)\n    thisGRP\['stripes_y'].setVisible(False)\n    thisGRP\['stripes_z'].setVisible(False)\n\nif thisGRP\['pattern_type'].getValue() == 6 :\n    thisGRP\['rays'].setVisible(True)\nelse :\n    thisGRP\['rays'].setVisible(False)\n"
+  xpos -1918
+  ypos 440
+  addUserKnob {20 User}
+  addUserKnob {4 pattern_type l "pattern type" M {fBm turbulence noise random stripes ripple rays "" "" ""}}
+ }
+ Input {
+  inputs 0
+  name CG
+  xpos 0
+  ypos 2
+ }
+ Dot {
+  name Dot1
+  xpos 34
+  ypos 122
+ }
+set N1e6bf800 [stack 0]
+ Unpremult {
+  channels all
+  name Unpremult1
+  xpos -572
+  ypos 112
+  disable {{!parent.unpremult_src}}
+ }
+set N1e6bf400 [stack 0]
+ Shuffle {
+  in none
+  in2 alpha
+  alpha red2
+  name shuffle_pos
+  xpos -572
+  ypos 206
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove3
+  xpos -572
+  ypos 288
+ }
+ Dot {
+  name Dot2
+  xpos -538
+  ypos 370
+ }
+set N1e6be800 [stack 0]
+ Expression {
+  temp_name0 pnx
+  temp_expr0 "( red - \[value parent.n_translate.x] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.x] ) ) "
+  temp_name1 pny
+  temp_expr1 "( green - \[value parent.n_translate.y] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.y] ) )"
+  temp_name2 pnz
+  temp_expr2 "( blue - \[value parent.n_translate.z] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.z] ) )"
+  expr3 "clamp( ( ( sin( atan(pnx, pnz) * \[value parent.rays] + atan(pnx, pny) * \[value parent.rays] + atan(pny, pnz) * \[value parent.rays] ) +1) /2 ) * \[value gain]) * alpha"
+  name Expression7
+  label rays
+  xpos -197
+  ypos 499
+ }
+push $N1e6be800
+ Expression {
+  temp_name0 pnx
+  temp_expr0 "( red - \[value parent.n_translate.x] ) * ( 1 / ( \[value parent.n_uniform_scale]*\[value parent.n_scale.x] ) )"
+  temp_name1 pny
+  temp_expr1 "( green - \[value parent.n_translate.y] ) * ( 1 / ( \[value parent.n_uniform_scale]*\[value parent.n_scale.y] ) )"
+  temp_name2 pnz
+  temp_expr2 "( blue  - \[value parent.n_translate.z] ) * ( 1 / ( \[value parent.n_uniform_scale]*\[value parent.n_scale.z] ) )"
+  expr3 "clamp ( ( ( sin( sqrt( pow2(pnx) + pow2(pny) + pow2(pnz) ) ) +1) /2 ) * \[value gain] ) * alpha"
+  name Expression6
+  label ripple
+  xpos -331
+  ypos 499
+ }
+push $N1e6be800
+ Expression {
+  temp_name0 pnx
+  temp_expr0 "\[value status_x] == 0 ? 0 : ( sin( ( red - \[value parent.n_translate.x] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.x] ) ) ) + 1 ) / 2"
+  temp_name1 pny
+  temp_expr1 "\[value status_y] == 0 ? 0 : ( sin( ( green - \[value parent.n_translate.y] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.y] ) ) ) + 1 ) / 2"
+  temp_name2 pnz
+  temp_expr2 "\[value status_z] == 0 ? 0 : ( sin( ( blue - \[value parent.n_translate.z] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.z] ) ) ) + 1 ) / 2"
+  expr3 "max( clamp( pnx * \[value gain] ), clamp( pny * \[value gain] ), clamp( pnz * \[value gain] ) ) * alpha"
+  name Expression5
+  label strip
+  xpos -451
+  ypos 501
+  addUserKnob {20 User}
+  addUserKnob {7 status_x}
+  status_x {{parent.stripes_x}}
+  addUserKnob {7 status_y}
+  status_y {{parent.stripes_y}}
+  addUserKnob {7 status_z}
+  status_z {{parent.stripes_z}}
+ }
+push $N1e6be800
+ Expression {
+  temp_name0 pnx
+  temp_expr0 "( red - \[value parent.n_translate.x] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.x] ) )"
+  temp_name1 pny
+  temp_expr1 "( green - \[value parent.n_translate.y] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.y] ) )"
+  temp_name2 pnz
+  temp_expr2 "( blue - \[value parent.n_translate.z] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.z] ) )"
+  expr3 "clamp( random(pnx, pny, pnz) * \[value gain] ) * alpha"
+  name Expression4
+  label random
+  xpos -572
+  ypos 501
+ }
+push $N1e6be800
+ Expression {
+  temp_name0 pnx
+  temp_expr0 "( red - \[value parent.n_translate.x] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.x] ) )"
+  temp_name1 pny
+  temp_expr1 "( green - \[value parent.n_translate.y] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.y] ) )"
+  temp_name2 pnz
+  temp_expr2 "( blue - \[value parent.n_translate.z] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.z] ) )"
+  expr3 "clamp( (noise(pnx, pny, pnz)+0.5) * \[value gain] ) * alpha"
+  name Expression3
+  label noise
+  xpos -703
+  ypos 499
+ }
+push $N1e6be800
+ Expression {
+  temp_name0 pnx
+  temp_expr0 "( red - \[value parent.n_translate.x] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.x] ) )"
+  temp_name1 pny
+  temp_expr1 "( green - \[value parent.n_translate.y] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.y] ) )"
+  temp_name2 pnz
+  temp_expr2 "( blue - \[value parent.n_translate.z] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.z] ) )"
+  expr3 "clamp( turbulence(pnx, pny, pnz, \[value octaves], \[value lacunarity], \[value gain]/2) ) * alpha"
+  name Expression2
+  label turbulence
+  xpos -837
+  ypos 499
+ }
+push $N1e6be800
+ Expression {
+  temp_name0 pnx
+  temp_expr0 "( red - \[value parent.n_translate.x] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.x] ) )"
+  temp_name1 pny
+  temp_expr1 "( green - \[value parent.n_translate.y] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.y] ) )"
+  temp_name2 pnz
+  temp_expr2 "( blue - \[value parent.n_translate.z] ) * ( 1 / ( \[value parent.n_uniform_scale] * \[value parent.n_scale.z] ) )"
+  expr3 "clamp( fBm(pnx, pny, pnz, \[value octaves], \[value lacunarity], \[value gain]/2) ) * alpha"
+  name Expression1
+  label fBm
+  xpos -968
+  ypos 499
+ }
+ Switch {
+  inputs 7
+  which {{pattern_type}}
+  name Switch1
+  xpos -572
+  ypos 644
+ }
+ Invert {
+  channels alpha
+  name Invert1
+  xpos -572
+  ypos 726
+  disable {{!invert}}
+ }
+ Gamma {
+  channels alpha
+  value {{parent.gamma}}
+  name Gamma1
+  xpos -572
+  ypos 820
+ }
+push $N1e6bf800
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 0
+  ypos 820
+ }
+ Premult {
+  channels all
+  name Premult1
+  xpos 0
+  ypos 914
+ }
+ Dot {
+  name Dot5
+  xpos 34
+  ypos 1010
+ }
+set N1e72f800 [stack 0]
+ Output {
+  name Output1
+  xpos 0
+  ypos 1299
+ }
+ Axis {
+  inputs 0
+  display off
+  name transformation
+  xpos -1173
+  ypos 389
+ }
+push $N1e72f800
+add_layer {ptc ptc.red ptc.green ptc.blue}
+ Shuffle {
+  in {{{shuffle_pos.in}}}
+  out ptc
+  name Shuffle3
+  xpos -573
+  ypos 1006
+ }
+ Remove {
+  operation keep
+  channels rgba
+  channels2 ptc
+  name Remove1
+  xpos -573
+  ypos 1088
+ }
+ Unpremult {
+  channels all
+  name Unpremult2
+  xpos -573
+  ypos 1170
+ }
+ Expression {
+  expr3 "alpha > 0 ? 1 : 0"
+  name Expression8
+  xpos -573
+  ypos 1264
+ }
+push $N1e6bf400
+ Dot {
+  name Dot3
+  xpos -1295
+  ypos 122
+ }
+ Shuffle {
+  in {{{shuffle_pos.in}}}
+  out ptc
+  name Shuffle1
+  xpos -1329
+  ypos 1100
+ }
+ Remove {
+  operation keep
+  channels rgba
+  channels2 ptc
+  name Remove2
+  xpos -1329
+  ypos 1182
+ }
+push 0
+ Switch {
+  inputs 3
+  which {{parent.display_ptc_type}}
+  name Switch2
+  xpos -1329
+  ypos 1264
+ }
+ PositionToPoints2 {
+  display textured
+  render_mode off
+  cast_shadow false
+  receive_shadow false
+  P_channel ptc
+  detail 0.1
+  pointSize 1
+  name PositionToPoints
+  xpos -1329
+  ypos 1346
+  disable {{"parent.display_ptc_type == 0 ? 1 : 0"}}
+ }
+end_group

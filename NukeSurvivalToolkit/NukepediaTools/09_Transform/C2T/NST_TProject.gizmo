@@ -1,0 +1,109 @@
+
+Group {
+ name TProject
+ help "it is just transform tracked\nnothing fancy at all\nplay with the buttons, have fun"
+ knobChanged "nn = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\n\nif kn == \"cropP\":\n\n    if nn\['cropP'].value() in \[\"Hard Crop\"]:\n        nn\[\"growBbox\"].setVisible(False)\n        nn\[\"text\"].setValue(\"Image is cropped to Input, Concatenation preserved.\")\n\n    elif nn\['cropP'].value() in \[\"Adjustable Crop\"]:\n        nn\[\"growBbox\"].setVisible(True)\n        nn\[\"text\"].setValue(\"Adjust your Bbox , Downward <b><font color='Dark Red'>Concatenation is broken<b>.\")\n\n    elif nn\['cropP'].value() in \[\"No Crop\"]:\n        nn\[\"growBbox\"].setVisible(False)\n        nn\[\"text\"].setValue(\"No Crop applied, Concatenation preserved.\")"
+ tile_color 0x7a4389ff
+ note_font Verdana
+ note_font_size 14
+ note_font_color 0x28565eff
+ addUserKnob {20 User l CProject}
+ addUserKnob {6 FreezeInput l "freeze input" t "freezing the input on the refrence frame, \nsame as putting the framehold before the node" +STARTLINE}
+ addUserKnob {22 python_button l "set current as reference frame" T "\nn = nuke.thisNode()\nn\[\"translate_1\"].setValue(\[n\[\"translate\"].value(0)*-1,n\[\"translate\"].value(1)*-1]) \n\n\nframe = nuke.frame()\nn\['refFrame'].setValue(frame)\nn\['label'].setValue(str(frame))\n\nnuke.toNode(\"FHold\")\['first_frame'].setValue(frame)\n" +STARTLINE}
+ addUserKnob {26 text_2 l "" -STARTLINE T or}
+ addUserKnob {22 setRefFrame l "set reference frame" t "setting the reference frame,\nsame as the reference frame when you are doing projection with the camera on the card.\nyou should expect that the input will be unchenged on this frame." -STARTLINE T "\nn = nuke.thisNode()\nframe = int(n\['refFrame'].value())\n\nn\[\"translate_1\"].setValue(\[n\[\"translate\"].getValueAt(0,frame)*-1,n\[\"translate\"].getValue(1,frame)*-1]) \n\n\nn\['label'].setValue(str(frame))\n\nnuke.toNode(\"FHold\")\['first_frame'].setValue(frame)\n\n"}
+ addUserKnob {3 refFrame l "" -STARTLINE}
+ addUserKnob {41 stabilize T Transform1.invert_matrix}
+ addUserKnob {41 motionblur_1 l motionblur T Transform1.motionblur}
+ addUserKnob {41 shutter_1 l shutter T Transform1.shutter}
+ addUserKnob {20 s l transforms n 1}
+ s 0
+ addUserKnob {41 translate T Transform1.translate}
+ addUserKnob {41 center -STARTLINE T Transform1.center}
+ addUserKnob {41 rotate T Transform1.rotate}
+ addUserKnob {41 scale T Transform1.scale}
+ addUserKnob {41 skewX l "skew X" T Transform1.skewX}
+ addUserKnob {41 skewY l "skew Y" -STARTLINE T Transform1.skewY}
+ addUserKnob {41 shutteroffset_1 l "shutter offset" T Transform1.shutteroffset}
+ addUserKnob {41 shuttercustomoffset l "" -STARTLINE T Transform1.shuttercustomoffset}
+ addUserKnob {41 filter_1 l filter T Reformat1.filter}
+ addUserKnob {41 clamp -STARTLINE T Transform1.clamp}
+ addUserKnob {41 black_outside l "black outside" -STARTLINE T Transform1.black_outside}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {4 cropP l crop M {"Hard Crop" "Adjustable Crop" "No Crop"}}
+ addUserKnob {7 growBbox l "grow Bbox" -STARTLINE +HIDDEN R 0 200}
+ growBbox 50
+ addUserKnob {41 o l overscan +DISABLED +HIDDEN +INVISIBLE T Crop1.o}
+ addUserKnob {26 text l tip T "Image is cropped to Input, Concatenation preserved."}
+ addUserKnob {26 ""}
+ addUserKnob {41 translate_1 l translate +INVISIBLE T refPall.translate}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 112
+  ypos -280
+ }
+ FrameHold {
+  name FHold
+  selected true
+  xpos 112
+  ypos -229
+  disable {{!parent.FreezeInput}}
+ }
+ Transform {
+  invert_matrix false
+  name Transform1
+  xpos 112
+  ypos -176
+ }
+ Transform {
+  translate {61.92474365 295.9479017}
+  center {1024 778}
+  invert_matrix {{parent.Transform1.invert_matrix}}
+  name refPall
+  xpos 112
+  ypos -140
+ }
+set Nd51711c0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 14
+  ypos -62
+ }
+push $Nd51711c0
+ Crop {
+  box {{curve-parent.growBbox} {curve-parent.growBbox} {width+parent.growBbox} {height+parent.growBbox}}
+  name Crop1
+  xpos 112
+  ypos -62
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+push $Nd51711c0
+ Reformat {
+  type "to box"
+  format "4096 2160 0 0 4096 2160 1 4K_DCP"
+  box_width {{width}}
+  box_height {{height}}
+  box_pixel_aspect {{pixel_aspect}}
+  resize none
+  name Reformat1
+  xpos 223
+  ypos -68
+ }
+ Switch {
+  inputs 3
+  which {{parent.cropP x1000 0}}
+  name Switch1
+  label "\[value which]"
+  xpos 112
+  ypos 10
+ }
+ Output {
+  name Output1
+  xpos 112
+  ypos 106
+ }
+end_group

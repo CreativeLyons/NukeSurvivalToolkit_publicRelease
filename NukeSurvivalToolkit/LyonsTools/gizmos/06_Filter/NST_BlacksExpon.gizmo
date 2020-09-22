@@ -1,0 +1,1860 @@
+Group {
+name BlacksExpon
+knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"steps\":    \n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        with n:\n            ebs1 = nuke.toNode(\"ExponBlurSimple\")\n            ebs2 = nuke.toNode(\"ExponBlurSimple1\")\n            ebs1.knob('steps').setValue(s)\n            ebs2.knob('steps').setValue(s)\n            \n            both = \[ebs1, ebs2]\n            for ebs in both:\n                with ebs:   \n                    start = nuke.toNode(\"Start\")\n                    end   = nuke.toNode(\"End\")\n                    b1    = nuke.toNode(\"Blur1\")\n                    merge = nuke.toNode(\"Merge1\")\n                    AvgMult = nuke.toNode(\"AverageMult\")\n                    \n                    b1x   = b1.xpos()\n                    b1y   = b1.ypos()\n                    b1n   = b1.name()\n                    \n                    steps = int(n.knob('steps').getValue())\n                    size  = ebs1.knob('size').getValue()\n                    mult  = ebs1.knob('mult').getValue()\n                    \n                    #b1.setInput(0, start)\n                    for i in range(1,merge.inputs()):\n                        merge.setInput(i,None)\n                    merge.setInput(0, b1)\n                    \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n                    for i in range(1,steps):\n                        # Blur\n                        b = nuke.nodes.Blur()\n                        b.setXYpos(b1x+i*100,b1y)\n                        b.setInput(0,start)\n                        b\[\"channels\"].setValue(\"rgba\")\n                        b\[\"crop\"].setValue(0)\n                        b\[\"size\"].setValue(0, 1)\n                        b\[\"size\"].setExpression(\"(Blur1.size)*(mult)**%s\"%(i))\n                        b\[\"label\"].setValue(\"\[value size]\")\n                        merge.setInput(i if i<2 else i+1, b)\n                        AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n            \n\n            \n\n"
+tile_color 0x262626ff
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
+note_font_color 0xccccccff
+selected true
+addUserKnob {20 BlacksExpon}
+addUserKnob {41 maskChannelInput l "area mask" T Merge1.maskChannelInput}
+addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+addUserKnob {41 operation2 l operation T Keyer1.operation}
+addUserKnob {6 previewKey l "Preview Key" -STARTLINE}
+addUserKnob {6 invertKey l "invert key" -STARTLINE}
+invertKey true
+addUserKnob {7 blackpoint}
+blackpoint 0.1
+addUserKnob {7 whitepoint}
+whitepoint 0.2
+addUserKnob {26 ""}
+addUserKnob {41 steps l "  Steps Min" T ExponBlurSimple.steps}
+addUserKnob {41 steps_1 l "  Steps Over" -STARTLINE T ExponBlurSimple1.steps}
+addUserKnob {7 size l Size R 0 20}
+size 3
+addUserKnob {7 mult l Multiply R 1 8}
+mult 2
+addUserKnob {14 postBlur R 0 100}
+addUserKnob {26 ""}
+addUserKnob {26 "" l mask T ""}
+addUserKnob {41 maskChannelInput_1 l "" -STARTLINE T Merge2.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T Merge2.inject}
+addUserKnob {41 invert_mask_1 l invert -STARTLINE T Merge2.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Merge2.fringe}
+addUserKnob {41 mix T Merge2.mix}
+addUserKnob {41 bbox l "set bbox to " T Merge2.bbox}
+addUserKnob {20 info l Info}
+addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+addUserKnob {26 desc l Description: T BlacksExpon}
+addUserKnob {26 ver l Version: T v02}
+}
+Input {
+inputs 0
+name Inputmask
+xpos 198
+ypos 1042
+number 2
+}
+Input {
+inputs 0
+name Inputarea
+xpos 371
+ypos 371
+number 1
+}
+Input {
+inputs 0
+name Inputimg
+xpos 52
+ypos 109
+}
+Dot {
+name Dot1
+note_font_size 41
+xpos 86
+ypos 202
+}
+set N32d06f00 [stack 0]
+Keyer {
+operation "luminance key"
+name Keyer1
+xpos 177
+ypos 192
+}
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle1
+tile_color 0xffffffff
+xpos 177
+ypos 230
+}
+Grade {
+channels rgba
+blackpoint {{parent.blackpoint}}
+whitepoint {{parent.whitepoint}}
+white_clamp true
+name Grade1
+xpos 177
+ypos 272
+}
+Invert {
+channels rgba
+name Invert1
+xpos 177
+ypos 298
+disable {{!parent.invertKey}}
+}
+Constant {
+inputs 0
+color 1
+name Constant1
+xpos 299
+ypos 303
+postage_stamp false
+}
+Merge2 {
+inputs 2+1
+operation copy
+name Merge1
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 177
+ypos 371
+}
+Dot {
+name Dot2
+note_font_size 41
+xpos 211
+ypos 450
+}
+set N9ad740a0 [stack 0]
+Dot {
+name Dot3
+note_font_size 41
+xpos 211
+ypos 984
+}
+push $N9ad740a0
+push $N32d06f00
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+xpos 52
+ypos 440
+}
+Premult {
+name Premult1
+xpos 52
+ypos 478
+}
+Unpremult {
+name Unpremult1
+xpos 52
+ypos 504
+}
+Group {
+name BinaryAlpha
+tile_color 0x2a2a2aff
+label "(\[value an] --> \[value output1])"
+note_font Verdana
+note_font_color 0xfffff9ff
+xpos 52
+ypos 580
+addUserKnob {20 BinaryAlpha}
+addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
+addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
+output1 alpha
+addUserKnob {20 info l Info}
+addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+addUserKnob {26 desc l Description: t "Analyzes channel input and creates a binary result 0 or 1 and outputs it into output channel" T BinaryAlpha}
+addUserKnob {26 ver l Version: T v03}
+}
+Input {
+inputs 0
+name Input
+xpos -398
+ypos 275
+}
+Expression {
+temp_name0 rgb_an
+temp_expr0 "r !=0 || g!=0 || b!=0?1:0"
+temp_name1 rgba_an
+temp_expr1 "r!=0 || g!=0 || b!=0 || a!=0?1:0"
+temp_name2 alpha_an
+temp_expr2 a!=0?1:0
+expr3 "parent.an == 0 ? rgb_an : parent.an == 1 ? rgba_an : alpha_an"
+name Expression
+xpos -398
+ypos 341
+}
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle
+label "\[value in]"
+xpos -398
+ypos 367
+disable {{parent.output1}}
+}
+Output {
+name Output1
+xpos -398
+ypos 456
+}
+end_group
+Group {
+name ExponBlurSimple
+onCreate "n = nuke.thisNode()\nn.knob('size').setRange(-100, 100)\nn.knob('adjustBBoxPixels').setRange(0, 400)\nn.knob('adjustBBoxPercent').setRange(1, 2)\nn.knob('safeBBoxPixels').setRange(0, 400)\nn.knob('safeBBoxPercent').setRange(1, 2)"
+knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n        \n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n        \nelif k.name() == \"steps\":\n    \n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n        \n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n        \n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('mult').getValue()\n        \n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, b1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"rgba\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression(\"(Blur1.size)*(mult)**%s\"%(i))\n            b\[\"label\"].setValue(\"\[value size]\")\n            merge.setInput(i if i<2 else i+1, b)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n            \n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n            \nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n        \nelif k.name() == \"safeBBox\":\n    if n.knob(\"safeBBox\").getValue() == 0:\n        n.knob('safeBBoxText').setVisible(False)\n        n.knob('safetyBBoxMethod').setVisible(False)\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(False)\n        \n    elif n.knob(\"safeBBox\").getValue() == 1:\n        n.knob('safetyBBoxMethod').setVisible(True)\n        n.knob('safeBBoxText').setVisible(True)\n        if n.knob('safetyBBoxMethod').value() == \"pixels\":\n            n.knob('safeBBoxPixels').setVisible(True)\n            n.knob('safeBBoxPercent').setVisible(False)\n        elif n.knob('safetyBBoxMethod').value() == \"percent\":\n            n.knob('safeBBoxPixels').setVisible(False)\n            n.knob('safeBBoxPercent').setVisible(True)\n            \nelif k.name() == \"safetyBBoxMethod\":\n    if n.knob(\"safetyBBoxMethod\").value() == \"pixels\":\n        n.knob('safeBBoxPixels').setVisible(True)\n        n.knob('safeBBoxPercent').setVisible(False)\n    elif n.knob(\"safetyBBoxMethod\").value() == \"percent\":\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(True)\n        \nelif k.name() == \"adjustBBoxExtra\":\n    if n.knob(\"adjustBBoxExtra\").value() == \"pixels\":\n        n.knob('adjustBBoxPixels').setVisible(True)\n        n.knob('adjustBBoxPercent').setVisible(False)\n    elif n.knob(\"adjustBBoxExtra\").value() == \"percent\":\n        n.knob('adjustBBoxPixels').setVisible(False)\n        n.knob('adjustBBoxPercent').setVisible(True)\n"
+tile_color 0xcc804eff
+label "(\[value output2])"
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
+note_font_color 0xffffffff
+xpos 52
+ypos 645
+addUserKnob {20 ExponBlurSimple}
+addUserKnob {41 channels T Shuffle1.in}
+addUserKnob {41 maskChannelMask_1 l area T Multiply1.maskChannelMask}
+addUserKnob {41 inject_1 l inject -STARTLINE T Multiply1.inject}
+addUserKnob {41 invert_mask_1 l invert -STARTLINE T Multiply1.invert_mask}
+addUserKnob {41 fringe_1 l fringe -STARTLINE T Multiply1.fringe}
+addUserKnob {26 ""}
+addUserKnob {4 output2 l Operation: M {Screen Plus Over Hypot Average Max Min "" "" "" "" ""}}
+output2 Min
+addUserKnob {3 steps l "  Steps" -STARTLINE}
+steps 8
+addUserKnob {3 mergeNumber -STARTLINE +INVISIBLE}
+mergeNumber {{"output2 == 0 ? 25 : output2 == 1 ? 24 : output2 == 2 ? 22 : output2 == 3 ? 13 : output2 == 4 ? 24 : output2 == 5 ? 17 : 18"}}
+addUserKnob {26 text l " " -STARTLINE T " "}
+addUserKnob {6 includeOriginal l "Include Original?" -STARTLINE}
+includeOriginal true
+addUserKnob {6 AvgMaxOriginal l "Use Max of Average and Original" +HIDDEN +STARTLINE}
+addUserKnob {14 size l Size R -100 100}
+size {{parent.ExponBlurSimple1.size} {parent.ExponBlurSimple1.size}}
+addUserKnob {7 mult l Multiplier R 1 8}
+mult {{parent.mult}}
+addUserKnob {14 postBlur l "Post Blur" R 0 100}
+postBlur {0 0}
+addUserKnob {26 text_1 l " " -STARTLINE T " "}
+addUserKnob {26 ""}
+addUserKnob {20 bboxControl l "BBox Control" n 1}
+bboxControl 0
+addUserKnob {26 text_2 l " " T " "}
+addUserKnob {4 bbox l "BBox: " -STARTLINE M {union intersectionMask A B "input format" "" "" "" "" "" "" "" "" "" "" "" ""}}
+addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+addUserKnob {6 safeBBox l "Safe BBox" t "If the output BBox is larger than the input format and the input box combined. the result will be max of the input/format bbox plus a safety \"buffer\" in pixels or percent \n\nTurning off might make your BBox grow exponentially with high blur values" -STARTLINE}
+safeBBox true
+addUserKnob {26 safeBBoxText l "" +STARTLINE T " "}
+addUserKnob {4 safetyBBoxMethod l "Safe BBox Buffer  " -STARTLINE M {pixels percent "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+safetyBBoxMethod percent
+addUserKnob {14 safeBBoxPercent l "" -STARTLINE R 1 2}
+safeBBoxPercent 1.1
+addUserKnob {26 text_3 l "" +STARTLINE T " "}
+addUserKnob {4 adjustBBoxExtra l "Extra BBox Adjust" -STARTLINE M {pixels percent "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+addUserKnob {14 adjustBBoxPixels l "" -STARTLINE R 0 400}
+addUserKnob {26 ""}
+addUserKnob {20 endGroup n -1}
+addUserKnob {41 maskChannelMask l mask T MergeKeymix.maskChannelMask}
+addUserKnob {41 inject -STARTLINE T MergeKeymix.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T MergeKeymix.invert_mask}
+addUserKnob {41 fringe -STARTLINE T MergeKeymix.fringe}
+addUserKnob {41 mix T MergeKeymix.mix}
+addUserKnob {14 safeBBoxPixels l "" +STARTLINE +HIDDEN R 0 400}
+safeBBoxPixels 100
+addUserKnob {14 adjustBBoxPercent l "" -STARTLINE +HIDDEN R 1 2}
+adjustBBoxPercent 1
+addUserKnob {20 info l Info}
+addUserKnob {26 creator l Creator: T "Tony Lyons"}
+addUserKnob {26 desc l Description: t "Add description and tooltip for gizmo" T ExponBlurSimple}
+addUserKnob {26 ver l Version: T v02}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x535e5a00
+label "BBox Management"
+note_font_size 30
+note_font_color 0xffffffff
+xpos -529
+ypos 492
+bdwidth 341
+bdheight 525
+}
+Input {
+inputs 0
+name Inputimg
+xpos 0
+ypos -969
+}
+Dot {
+name Dot16
+note_font_size 41
+xpos 34
+ypos -802
+}
+set N9ade9da0 [stack 0]
+Dot {
+name Dot2
+note_font_size 41
+xpos -367
+ypos -802
+}
+Dot {
+name Dot18
+label B
+note_font_size 41
+xpos -367
+ypos 434
+}
+Dot {
+name Dot11
+note_font_size 41
+xpos -367
+ypos 623
+}
+set N9adf8000 [stack 0]
+Dot {
+name Dot3
+note_font_size 41
+xpos -367
+ypos 675
+}
+set N9adfcc00 [stack 0]
+Dot {
+name Dot8
+note_font_size 41
+xpos -463
+ypos 675
+}
+Dot {
+name Dot15
+note_font_size 41
+xpos -463
+ypos 831
+}
+push $N9ade9da0
+Dot {
+name Dot1
+note_font_size 41
+xpos 461
+ypos -802
+}
+Shuffle {
+name Shuffle1
+label "\[value in]"
+xpos 427
+ypos -756
+}
+Remove {
+operation keep
+channels rgba
+name Remove1
+xpos 427
+ypos -718
+}
+Dot {
+name Dot21
+note_font_size 41
+xpos 461
+ypos -597
+}
+set N9ae289a0 [stack 0]
+Invert {
+channels rgba
+name Invert1
+xpos 695
+ypos -601
+disable {{"parent.size < 0 ? 0 : 1"}}
+}
+set N9ae2d530 [stack 0]
+Dot {
+name Dot4
+note_font_size 41
+xpos 540
+ypos -543
+}
+NoOp {
+name Original
+xpos 506
+ypos -327
+}
+set N9ac4da10 [stack 0]
+Dot {
+name Dot5
+note_font_size 41
+xpos 540
+ypos 14
+}
+Crop {
+inputs 0
+box {{input.format.x} {input.format.y} {input.format.r} {input.format.t}}
+reformat true
+crop false
+name Crop1
+xpos 210
+ypos -750
+addUserKnob {20 User}
+addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+}
+AddChannels {
+channels rgba
+name AddChannels2
+xpos 210
+ypos -724
+}
+push $N9ade9da0
+Merge2 {
+inputs 2
+name Merge3
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 83
+ypos -671
+}
+NoOp {
+name BBoxInput
+xpos 83
+ypos -628
+addUserKnob {20 User}
+addUserKnob {15 bbox}
+bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+}
+push $N9ac4da10
+Input {
+inputs 0
+name Inputarea
+xpos 289
+ypos -638
+number 2
+}
+AddChannels {
+channels alpha
+color 1
+name AddChannels1
+xpos 289
+ypos -580
+}
+Invert {
+channels rgba
+name Invert3
+xpos 289
+ypos -503
+}
+push $N9ae2d530
+Multiply {
+inputs 1+1
+channels rgba
+value 0
+name Multiply1
+label "\[value value]"
+xpos 695
+ypos -509
+}
+NoOp {
+name Start
+xpos 695
+ypos -450
+}
+set N9aca5f90 [stack 0]
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**7} {(Blur1.size)*(mult)**7}}
+crop false
+name Blur8
+label "\[value size]"
+xpos 1395
+ypos -370
+}
+push $N9aca5f90
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**6} {(Blur1.size)*(mult)**6}}
+crop false
+name Blur7
+label "\[value size]"
+xpos 1295
+ypos -370
+}
+push $N9aca5f90
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**5} {(Blur1.size)*(mult)**5}}
+crop false
+name Blur6
+label "\[value size]"
+xpos 1195
+ypos -370
+}
+push $N9aca5f90
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**4} {(Blur1.size)*(mult)**4}}
+crop false
+name Blur5
+label "\[value size]"
+xpos 1095
+ypos -370
+}
+push $N9aca5f90
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**3} {(Blur1.size)*(mult)**3}}
+crop false
+name Blur4
+label "\[value size]"
+xpos 995
+ypos -370
+}
+push $N9aca5f90
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**2} {(Blur1.size)*(mult)**2}}
+crop false
+name Blur3
+label "\[value size]"
+xpos 895
+ypos -370
+}
+push 0
+push $N9aca5f90
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**1} {(Blur1.size)*(mult)**1}}
+crop false
+name Blur2
+label "\[value size]"
+xpos 795
+ypos -370
+}
+push $N9aca5f90
+Blur {
+channels rgba
+size {{parent.size.w} {parent.size.h}}
+name Blur1
+label "\[value size]"
+xpos 695
+ypos -370
+}
+Merge2 {
+inputs 9+1
+operation {{parent.mergeNumber}}
+name Merge1
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 695
+ypos -256
+}
+NoOp {
+name End
+xpos 695
+ypos -230
+}
+set N9ad292a0 [stack 0]
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 585
+ypos -175
+}
+Group {
+name BBoxToFormat
+onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
+tile_color 0xa57aaaff
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
+note_font_color 0xffffffff
+xpos 585
+ypos -151
+addUserKnob {20 CropBBox}
+addUserKnob {4 type l Type +INVISIBLE M {"To Format" "To BBox"}}
+addUserKnob {41 intersect T Crop6.intersect}
+addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+addUserKnob {4 overscanType l "Overscan Type:" M {Pixels Percentage}}
+overscanType {{parent.safetyBBoxMethod}}
+addUserKnob {14 overscan l Overscan R 0 400}
+overscan {{parent.safeBBoxPixels} {parent.safeBBoxPixels}}
+addUserKnob {14 overscanPercent l "Overscan Percent" R 1 4}
+overscanPercent {{parent.safeBBoxPercent} {parent.safeBBoxPercent}}
+addUserKnob {20 inputBbox l "BBox Data" n 1}
+addUserKnob {15 inputFormat l "Input Format"}
+inputFormat {0 0 {input.width} {input.height}}
+addUserKnob {15 inputBBox l "Input BBox"}
+inputBBox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+addUserKnob {12 outputBBoxCenter l OutputBBoxCenter}
+outputBBoxCenter {{OutputBBox1.outputBBoxCenter.w} {OutputBBox1.outputBBoxCenter.h}}
+addUserKnob {15 outputBBox l "Output BBox"}
+outputBBox {{OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox}}
+addUserKnob {20 endGroup n -1}
+addUserKnob {20 info_1 l Info}
+addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+addUserKnob {26 desc l Description: t "crop to inputformat\n\ndisplays values of input bbox" T CropBBox}
+addUserKnob {26 ver l Version: T v02}
+}
+Input {
+inputs 0
+name Input
+xpos 261
+ypos 394
+}
+Dot {
+name Dot2
+note_font_size 41
+xpos 295
+ypos 462
+}
+set N9ab58640 [stack 0]
+Dot {
+name Dot1
+note_font_size 41
+xpos -160
+ypos 462
+}
+set N9ab5d180 [stack 0]
+push $N9ab58640
+Crop {
+box {{parent.inputBBox} {parent.inputBBox} {parent.inputBBox} {parent.inputBBox}}
+crop {{parent.blackOutside}}
+name Crop6
+xpos 261
+ypos 510
+addUserKnob {20 User}
+addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+}
+set N9ab61d00 [stack 0]
+Remove {
+operation keep
+channels none
+name Remove1
+xpos 120
+ypos 504
+}
+set N9ab6d0f0 [stack 0]
+Transform {
+scale {{parent.overscanPercent} {parent.overscanPercent}}
+center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
+shutteroffset centred
+name Transform1
+selected true
+xpos 120
+ypos 553
+}
+push $N9ab6d0f0
+AdjBBox {
+numpixels {{parent.overscan} {parent.overscan}}
+name AdjBBox1
+xpos -5
+ypos 510
+}
+Switch {
+inputs 2
+which {{overscanType}}
+name Switch2
+label "\[value which]"
+xpos -5
+ypos 549
+}
+Merge2 {
+inputs 2
+bbox intersection
+Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+name Merge1
+xpos -5
+ypos 647
+disable {{!parent.Crop6.intersect}}
+}
+push $N9ab5d180
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos -194
+ypos 653
+}
+BlackOutside {
+name BlackOutside1
+xpos -194
+ypos 692
+disable {{!parent.blackOutside}}
+}
+Dot {
+name Dot4
+note_font_size 41
+xpos -160
+ypos 769
+}
+push $N9ab61d00
+Switch {
+inputs 2
+which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
+name Switch1
+label "\[value which]"
+xpos 261
+ypos 759
+}
+set N9abb8db0 [stack 0]
+Output {
+name Output1
+xpos 261
+ypos 921
+}
+push $N9abb8db0
+NoOp {
+name OutputBBox1
+xpos 378
+ypos 821
+addUserKnob {20 User}
+addUserKnob {15 OutputBBox l "Output BBox"}
+OutputBBox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+addUserKnob {14 outputBBoxCenter l "Output BBox Center" R 0 100}
+outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
+}
+end_group
+push $N9ad292a0
+Merge2 {
+inputs 2
+bbox intersection
+name Merge4
+xpos 585
+ypos -127
+}
+push $N9ad292a0
+CopyBBox {
+inputs 2
+name CopyBBox2
+xpos 585
+ypos -101
+}
+push $N9ad292a0
+Switch {
+inputs 2
+which {{"parent.safeBBox && ((BBoxResult.bbox.x < BBoxInput.bbox.x || BBoxResult.bbox.y < BBoxInput.bbox.y || BBoxResult.bbox.r > BBoxInput.bbox.r || BBoxResult.bbox.t > BBoxInput.bbox.t))"}}
+name Switch2
+label "\[value which]"
+xpos 695
+ypos -106
+}
+Grade {
+channels rgba
+whitepoint 9
+black_clamp false
+name AverageMult
+xpos 695
+ypos -37
+disable {{"output2 == 4 ? 0 : 1"}}
+}
+Merge2 {
+inputs 2
+operation max
+name Merge2
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 695
+ypos 10
+disable {{"output2 == 4 && includeOriginal == 1 && AvgMaxOriginal == 1 ? 0 : 1"}}
+}
+Blur {
+channels rgba
+size {{postBlur} {postBlur}}
+name BlurOriginal
+label "\[value size]"
+xpos 695
+ypos 59
+}
+Invert {
+channels rgba
+name Invert2
+xpos 695
+ypos 97
+disable {{"parent.size < 0 ? 0 : 1"}}
+}
+push $N9ae289a0
+Switch {
+inputs 2
+which {{"parent.size == 0 ? 0 : 1"}}
+name Switch1
+label "\[value which]"
+xpos 427
+ypos 93
+}
+push $N9ade9da0
+ShuffleCopy {
+inputs 2
+in2 none
+black red
+white green
+red2 blue
+green2 alpha
+out none
+out2 {{{parent.Shuffle1.in}}}
+name ShuffleCopy1
+xpos 0
+ypos 97
+}
+Dot {
+name Dot17
+label A
+note_font_size 41
+xpos 34
+ypos 455
+}
+Dot {
+name Dot7
+note_font_size 41
+xpos 34
+ypos 585
+}
+set N9aa53770 [stack 0]
+Dot {
+name Dot12
+note_font_size 41
+xpos -260
+ypos 585
+}
+Dot {
+name Dot13
+note_font_size 41
+xpos -260
+ypos 799
+}
+push $N9adf8000
+Input {
+inputs 0
+name Inputmask
+xpos 346
+ypos 325
+number 1
+}
+Dot {
+name Dot19
+label Mask
+note_font_size 41
+xpos 380
+ypos 438
+}
+set N9aa66520 [stack 0]
+Dot {
+name Dot20
+note_font_size 41
+xpos 270
+ypos 438
+}
+push $N9aa53770
+Merge2 {
+inputs 2
+bbox intersection
+Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+Bchannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+output {rgba.red -rgba.green -rgba.blue rgba.alpha}
+name MergeIntersection
+xpos 236
+ypos 575
+disable {{"!\[exists parent.input1]"}}
+}
+Merge2 {
+inputs 2
+Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+Bchannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+output {rgba.red -rgba.green -rgba.blue rgba.alpha}
+name MergeUnion
+xpos 236
+ypos 613
+disable {{"!\[exists parent.input1]"}}
+}
+Dot {
+name Dot6
+label "intersection\nof (Mask and A) + B"
+note_font_size 14
+note_font_color 0xffffffff
+xpos 270
+ypos 773
+}
+push $N9aa66520
+Dot {
+name Dot10
+note_font_size 41
+xpos 380
+ypos 675
+}
+push $N9aa53770
+push $N9adfcc00
+Merge2 {
+inputs 2+1
+operation copy
+Achannels none
+Bchannels none
+output none
+also_merge all
+name MergeKeymix
+xpos 0
+ypos 665
+}
+Dot {
+name Dot14
+note_font_size 41
+xpos 34
+ypos 747
+}
+set N9aaaa4f0 [stack 0]
+push $N9adfcc00
+CopyBBox {
+inputs 2
+name CopyBBoxUnion
+xpos -401
+ypos 743
+disable {{parent.bbox==0?0:1}}
+}
+CopyBBox {
+inputs 2
+name CopyBBoxIntersection
+xpos -401
+ypos 769
+disable {{"parent.bbox==1 ? 0 : 1"}}
+}
+CopyBBox {
+inputs 2
+name CopyBBoxA
+xpos -401
+ypos 795
+disable {{"parent.bbox==2 ? 0 : 1"}}
+}
+CopyBBox {
+inputs 2
+name CopyBBoxB
+xpos -401
+ypos 827
+disable {{"parent.bbox==3 ? 0 : 1"}}
+}
+Crop {
+box {0 0 {parent.width} {parent.height}}
+crop false
+name CopyBBoxFormat
+xpos -401
+ypos 853
+disable {{"parent.bbox==4 ? 0 : 1"}}
+addUserKnob {20 User}
+addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+}
+set N9aace0b0 [stack 0]
+Transform {
+scale {{parent.adjustBBoxPercent} {parent.adjustBBoxPercent}}
+center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
+black_outside false
+shutteroffset centred
+name TransformBBoxAdjustPercent
+xpos -516
+ypos 898
+}
+push $N9aace0b0
+AdjBBox {
+numpixels {{parent.adjustBBoxPixels} {parent.adjustBBoxPixels}}
+name AdjBBoxPixels
+xpos -401
+ypos 901
+}
+Switch {
+inputs 2
+which {{adjustBBoxExtra}}
+name Switch3
+xpos -401
+ypos 940
+}
+Dot {
+name Dot9
+note_font_size 41
+xpos -367
+ypos 993
+}
+push $N9aaaa4f0
+CopyBBox {
+inputs 2
+name CopyBBox
+xpos 0
+ypos 989
+}
+BlackOutside {
+name BlackOutside1
+xpos 0
+ypos 1015
+disable {{!parent.blackOutside}}
+}
+Output {
+name Output1
+xpos 0
+ypos 1155
+}
+push $N9ad292a0
+NoOp {
+name BBoxResult
+xpos 588
+ypos -223
+addUserKnob {20 User}
+addUserKnob {15 bbox}
+bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+}
+end_group
+Group {
+name BinaryAlpha1
+tile_color 0x2a2a2aff
+label "(\[value an] --> \[value output1])"
+note_font Verdana
+note_font_color 0xfffff9ff
+xpos 52
+ypos 741
+addUserKnob {20 BinaryAlpha}
+addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
+addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
+output1 alpha
+addUserKnob {20 info l Info}
+addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+addUserKnob {26 desc l Description: t "Analyzes channel input and creates a binary result 0 or 1 and outputs it into output channel" T BinaryAlpha}
+addUserKnob {26 ver l Version: T v03}
+}
+Input {
+inputs 0
+name Input
+xpos -398
+ypos 275
+}
+Expression {
+temp_name0 rgb_an
+temp_expr0 "r !=0 || g!=0 || b!=0?1:0"
+temp_name1 rgba_an
+temp_expr1 "r!=0 || g!=0 || b!=0 || a!=0?1:0"
+temp_name2 alpha_an
+temp_expr2 a!=0?1:0
+expr3 "parent.an == 0 ? rgb_an : parent.an == 1 ? rgba_an : alpha_an"
+name Expression
+xpos -398
+ypos 341
+}
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle
+label "\[value in]"
+xpos -398
+ypos 367
+disable {{parent.output1}}
+}
+Output {
+name Output1
+xpos -398
+ypos 456
+}
+end_group
+Group {
+name ExponBlurSimple1
+onCreate "n = nuke.thisNode()\nn.knob('size').setRange(-100, 100)\nn.knob('adjustBBoxPixels').setRange(0, 400)\nn.knob('adjustBBoxPercent').setRange(1, 2)\nn.knob('safeBBoxPixels').setRange(0, 400)\nn.knob('safeBBoxPercent').setRange(1, 2)"
+knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n        \n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n        \nelif k.name() == \"steps\":\n    \n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n        \n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n        \n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('mult').getValue()\n        \n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, b1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"rgba\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression(\"(Blur1.size)*(mult)**%s\"%(i))\n            b\[\"label\"].setValue(\"\[value size]\")\n            merge.setInput(i if i<2 else i+1, b)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n            \n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n            \nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n        \nelif k.name() == \"safeBBox\":\n    if n.knob(\"safeBBox\").getValue() == 0:\n        n.knob('safeBBoxText').setVisible(False)\n        n.knob('safetyBBoxMethod').setVisible(False)\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(False)\n        \n    elif n.knob(\"safeBBox\").getValue() == 1:\n        n.knob('safetyBBoxMethod').setVisible(True)\n        n.knob('safeBBoxText').setVisible(True)\n        if n.knob('safetyBBoxMethod').value() == \"pixels\":\n            n.knob('safeBBoxPixels').setVisible(True)\n            n.knob('safeBBoxPercent').setVisible(False)\n        elif n.knob('safetyBBoxMethod').value() == \"percent\":\n            n.knob('safeBBoxPixels').setVisible(False)\n            n.knob('safeBBoxPercent').setVisible(True)\n            \nelif k.name() == \"safetyBBoxMethod\":\n    if n.knob(\"safetyBBoxMethod\").value() == \"pixels\":\n        n.knob('safeBBoxPixels').setVisible(True)\n        n.knob('safeBBoxPercent').setVisible(False)\n    elif n.knob(\"safetyBBoxMethod\").value() == \"percent\":\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(True)\n        \nelif k.name() == \"adjustBBoxExtra\":\n    if n.knob(\"adjustBBoxExtra\").value() == \"pixels\":\n        n.knob('adjustBBoxPixels').setVisible(True)\n        n.knob('adjustBBoxPercent').setVisible(False)\n    elif n.knob(\"adjustBBoxExtra\").value() == \"percent\":\n        n.knob('adjustBBoxPixels').setVisible(False)\n        n.knob('adjustBBoxPercent').setVisible(True)\n"
+tile_color 0xcc804eff
+label "(\[value output2])"
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
+note_font_color 0xffffffff
+selected true
+xpos 52
+ypos 823
+addUserKnob {20 ExponBlurSimple}
+addUserKnob {41 channels T Shuffle1.in}
+addUserKnob {41 maskChannelMask_1 l area T Multiply1.maskChannelMask}
+addUserKnob {41 inject_1 l inject -STARTLINE T Multiply1.inject}
+addUserKnob {41 invert_mask_1 l invert -STARTLINE T Multiply1.invert_mask}
+addUserKnob {41 fringe_1 l fringe -STARTLINE T Multiply1.fringe}
+addUserKnob {26 ""}
+addUserKnob {4 output2 l Operation: M {Screen Plus Over Hypot Average Max Min "" "" "" "" ""}}
+output2 Over
+addUserKnob {3 steps l "  Steps" -STARTLINE}
+steps 8
+addUserKnob {3 mergeNumber -STARTLINE +INVISIBLE}
+mergeNumber {{"output2 == 0 ? 25 : output2 == 1 ? 24 : output2 == 2 ? 22 : output2 == 3 ? 13 : output2 == 4 ? 24 : output2 == 5 ? 17 : 18"}}
+addUserKnob {26 text l " " -STARTLINE T " "}
+addUserKnob {6 includeOriginal l "Include Original?" -STARTLINE}
+addUserKnob {6 AvgMaxOriginal l "Use Max of Average and Original" +HIDDEN +STARTLINE}
+addUserKnob {14 size l Size R -100 100}
+size {{parent.size} {parent.size}}
+addUserKnob {7 mult l Multiplier R 1 8}
+mult {{parent.mult}}
+addUserKnob {26 text_1 l " " T " "}
+addUserKnob {14 postBlur l "Post Blur" R 0 100}
+postBlur {{parent.postBlur} {parent.postBlur}}
+addUserKnob {26 ""}
+addUserKnob {20 bboxControl l "BBox Control" n 1}
+bboxControl 0
+addUserKnob {26 text_2 l " " T " "}
+addUserKnob {4 bbox l "BBox: " -STARTLINE M {union intersectionMask A B "input format" "" "" "" "" "" "" "" "" "" "" "" ""}}
+addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+addUserKnob {6 safeBBox l "Safe BBox" t "If the output BBox is larger than the input format and the input box combined. the result will be max of the input/format bbox plus a safety \"buffer\" in pixels or percent \n\nTurning off might make your BBox grow exponentially with high blur values" -STARTLINE}
+safeBBox true
+addUserKnob {26 safeBBoxText l "" +STARTLINE T " "}
+addUserKnob {4 safetyBBoxMethod l "Safe BBox Buffer  " -STARTLINE M {pixels percent "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+safetyBBoxMethod percent
+addUserKnob {14 safeBBoxPercent l "" -STARTLINE R 1 2}
+safeBBoxPercent 1.1
+addUserKnob {26 text_3 l "" +STARTLINE T " "}
+addUserKnob {4 adjustBBoxExtra l "Extra BBox Adjust" -STARTLINE M {pixels percent "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+addUserKnob {14 adjustBBoxPixels l "" -STARTLINE R 0 400}
+addUserKnob {26 ""}
+addUserKnob {20 endGroup n -1}
+addUserKnob {41 maskChannelMask l mask T MergeKeymix.maskChannelMask}
+addUserKnob {41 inject -STARTLINE T MergeKeymix.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T MergeKeymix.invert_mask}
+addUserKnob {41 fringe -STARTLINE T MergeKeymix.fringe}
+addUserKnob {41 mix T MergeKeymix.mix}
+addUserKnob {14 safeBBoxPixels l "" +STARTLINE +HIDDEN R 0 400}
+safeBBoxPixels 100
+addUserKnob {14 adjustBBoxPercent l "" -STARTLINE +HIDDEN R 1 2}
+adjustBBoxPercent 1
+addUserKnob {20 info l Info}
+addUserKnob {26 creator l Creator: T "Tony Lyons"}
+addUserKnob {26 desc l Description: t "Add description and tooltip for gizmo" T ExponBlurSimple}
+addUserKnob {26 ver l Version: T v02}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x535e5a00
+label "BBox Management"
+note_font_size 30
+note_font_color 0xffffffff
+xpos -529
+ypos 492
+bdwidth 341
+bdheight 525
+}
+Input {
+inputs 0
+name Inputimg
+xpos 0
+ypos -969
+}
+Dot {
+name Dot16
+note_font_size 41
+xpos 34
+ypos -802
+}
+set N9a974650 [stack 0]
+Dot {
+name Dot2
+note_font_size 41
+xpos -367
+ypos -802
+}
+Dot {
+name Dot18
+label B
+note_font_size 41
+xpos -367
+ypos 434
+}
+Dot {
+name Dot11
+note_font_size 41
+xpos -367
+ypos 623
+}
+set N9a9828b0 [stack 0]
+Dot {
+name Dot3
+note_font_size 41
+xpos -367
+ypos 675
+}
+set N9a9874b0 [stack 0]
+Dot {
+name Dot8
+note_font_size 41
+xpos -463
+ypos 675
+}
+Dot {
+name Dot15
+note_font_size 41
+xpos -463
+ypos 831
+}
+push $N9a974650
+Dot {
+name Dot1
+note_font_size 41
+xpos 461
+ypos -802
+}
+Shuffle {
+name Shuffle1
+label "\[value in]"
+xpos 427
+ypos -756
+}
+Remove {
+operation keep
+channels rgba
+name Remove1
+xpos 427
+ypos -718
+}
+Dot {
+name Dot21
+note_font_size 41
+xpos 461
+ypos -597
+}
+set N9a9b3250 [stack 0]
+Invert {
+channels rgba
+name Invert1
+xpos 695
+ypos -601
+disable {{"parent.size < 0 ? 0 : 1"}}
+}
+set N9a9b7de0 [stack 0]
+Dot {
+name Dot4
+note_font_size 41
+xpos 540
+ypos -543
+}
+NoOp {
+name Original
+xpos 506
+ypos -327
+}
+Dot {
+name Dot5
+note_font_size 41
+xpos 540
+ypos 14
+}
+Crop {
+inputs 0
+box {{input.format.x} {input.format.y} {input.format.r} {input.format.t}}
+reformat true
+crop false
+name Crop1
+xpos 210
+ypos -750
+addUserKnob {20 User}
+addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+}
+AddChannels {
+channels rgba
+name AddChannels2
+xpos 210
+ypos -724
+}
+push $N9a974650
+Merge2 {
+inputs 2
+name Merge3
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 83
+ypos -671
+}
+NoOp {
+name BBoxInput
+xpos 83
+ypos -628
+addUserKnob {20 User}
+addUserKnob {15 bbox}
+bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+}
+Input {
+inputs 0
+name Inputarea
+xpos 289
+ypos -638
+number 2
+}
+AddChannels {
+channels alpha
+color 1
+name AddChannels1
+xpos 289
+ypos -580
+}
+Invert {
+channels rgba
+name Invert3
+xpos 289
+ypos -503
+}
+push $N9a9b7de0
+Multiply {
+inputs 1+1
+channels rgba
+value 0
+name Multiply1
+label "\[value value]"
+xpos 695
+ypos -509
+}
+NoOp {
+name Start
+xpos 695
+ypos -450
+}
+set N9aa20930 [stack 0]
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**7} {(Blur1.size)*(mult)**7}}
+crop false
+name Blur8
+label "\[value size]"
+xpos 1395
+ypos -370
+}
+push $N9aa20930
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**6} {(Blur1.size)*(mult)**6}}
+crop false
+name Blur7
+label "\[value size]"
+xpos 1295
+ypos -370
+}
+push $N9aa20930
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**5} {(Blur1.size)*(mult)**5}}
+crop false
+name Blur6
+label "\[value size]"
+xpos 1195
+ypos -370
+}
+push $N9aa20930
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**4} {(Blur1.size)*(mult)**4}}
+crop false
+name Blur5
+label "\[value size]"
+xpos 1095
+ypos -370
+}
+push $N9aa20930
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**3} {(Blur1.size)*(mult)**3}}
+crop false
+name Blur4
+label "\[value size]"
+xpos 995
+ypos -370
+}
+push $N9aa20930
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**2} {(Blur1.size)*(mult)**2}}
+crop false
+name Blur3
+label "\[value size]"
+xpos 895
+ypos -370
+}
+push 0
+push $N9aa20930
+Blur {
+channels rgba
+size {{(Blur1.size)*(mult)**1} {(Blur1.size)*(mult)**1}}
+crop false
+name Blur2
+label "\[value size]"
+xpos 795
+ypos -370
+}
+push $N9aa20930
+Blur {
+channels rgba
+size {{parent.size.w} {parent.size.h}}
+name Blur1
+label "\[value size]"
+xpos 695
+ypos -370
+}
+Merge2 {
+inputs 8+1
+operation {{parent.mergeNumber}}
+name Merge1
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 695
+ypos -256
+}
+NoOp {
+name End
+xpos 695
+ypos -230
+}
+set Nd6534700 [stack 0]
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 585
+ypos -175
+}
+Group {
+name BBoxToFormat
+onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
+tile_color 0xa57aaaff
+note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
+note_font_color 0xffffffff
+xpos 585
+ypos -151
+addUserKnob {20 CropBBox}
+addUserKnob {4 type l Type +INVISIBLE M {"To Format" "To BBox"}}
+addUserKnob {41 intersect T Crop6.intersect}
+addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+addUserKnob {4 overscanType l "Overscan Type:" M {Pixels Percentage}}
+overscanType {{parent.safetyBBoxMethod}}
+addUserKnob {14 overscan l Overscan R 0 400}
+overscan {{parent.safeBBoxPixels} {parent.safeBBoxPixels}}
+addUserKnob {14 overscanPercent l "Overscan Percent" R 1 4}
+overscanPercent {{parent.safeBBoxPercent} {parent.safeBBoxPercent}}
+addUserKnob {20 inputBbox l "BBox Data" n 1}
+addUserKnob {15 inputFormat l "Input Format"}
+inputFormat {0 0 {input.width} {input.height}}
+addUserKnob {15 inputBBox l "Input BBox"}
+inputBBox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+addUserKnob {12 outputBBoxCenter l OutputBBoxCenter}
+outputBBoxCenter {{OutputBBox1.outputBBoxCenter.w} {OutputBBox1.outputBBoxCenter.h}}
+addUserKnob {15 outputBBox l "Output BBox"}
+outputBBox {{OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox}}
+addUserKnob {20 endGroup n -1}
+addUserKnob {20 info_1 l Info}
+addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+addUserKnob {26 desc l Description: t "crop to inputformat\n\ndisplays values of input bbox" T CropBBox}
+addUserKnob {26 ver l Version: T v02}
+}
+Input {
+inputs 0
+name Input
+xpos 261
+ypos 394
+}
+Dot {
+name Dot2
+note_font_size 41
+xpos 295
+ypos 462
+}
+set Nd6553b90 [stack 0]
+Dot {
+name Dot1
+note_font_size 41
+xpos -160
+ypos 462
+}
+set Nd65586d0 [stack 0]
+push $Nd6553b90
+Crop {
+box {{parent.inputBBox} {parent.inputBBox} {parent.inputBBox} {parent.inputBBox}}
+crop {{parent.blackOutside}}
+name Crop6
+xpos 261
+ypos 510
+addUserKnob {20 User}
+addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+}
+set Nd655d250 [stack 0]
+Remove {
+operation keep
+channels none
+name Remove1
+xpos 120
+ypos 504
+}
+set Nd6568640 [stack 0]
+Transform {
+scale {{parent.overscanPercent} {parent.overscanPercent}}
+center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
+shutteroffset centred
+name Transform1
+selected true
+xpos 120
+ypos 553
+}
+push $Nd6568640
+AdjBBox {
+numpixels {{parent.overscan} {parent.overscan}}
+name AdjBBox1
+xpos -5
+ypos 510
+}
+Switch {
+inputs 2
+which {{overscanType}}
+name Switch2
+label "\[value which]"
+xpos -5
+ypos 549
+}
+Merge2 {
+inputs 2
+bbox intersection
+Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+name Merge1
+xpos -5
+ypos 647
+disable {{!parent.Crop6.intersect}}
+}
+push $Nd65586d0
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos -194
+ypos 653
+}
+BlackOutside {
+name BlackOutside1
+xpos -194
+ypos 692
+disable {{!parent.blackOutside}}
+}
+Dot {
+name Dot4
+note_font_size 41
+xpos -160
+ypos 769
+}
+push $Nd655d250
+Switch {
+inputs 2
+which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
+name Switch1
+label "\[value which]"
+xpos 261
+ypos 759
+}
+set N9ed07210 [stack 0]
+Output {
+name Output1
+xpos 261
+ypos 921
+}
+push $N9ed07210
+NoOp {
+name OutputBBox1
+xpos 378
+ypos 821
+addUserKnob {20 User}
+addUserKnob {15 OutputBBox l "Output BBox"}
+OutputBBox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+addUserKnob {14 outputBBoxCenter l "Output BBox Center" R 0 100}
+outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
+}
+end_group
+push $Nd6534700
+Merge2 {
+inputs 2
+bbox intersection
+name Merge4
+xpos 585
+ypos -127
+}
+push $Nd6534700
+CopyBBox {
+inputs 2
+name CopyBBox2
+xpos 585
+ypos -101
+}
+push $Nd6534700
+Switch {
+inputs 2
+which {{"parent.safeBBox && ((BBoxResult.bbox.x < BBoxInput.bbox.x || BBoxResult.bbox.y < BBoxInput.bbox.y || BBoxResult.bbox.r > BBoxInput.bbox.r || BBoxResult.bbox.t > BBoxInput.bbox.t))"}}
+name Switch2
+label "\[value which]"
+xpos 695
+ypos -106
+}
+Grade {
+channels rgba
+whitepoint 8
+black_clamp false
+name AverageMult
+xpos 695
+ypos -37
+disable {{"output2 == 4 ? 0 : 1"}}
+}
+Merge2 {
+inputs 2
+operation max
+name Merge2
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 695
+ypos 10
+disable {{"output2 == 4 && includeOriginal == 1 && AvgMaxOriginal == 1 ? 0 : 1"}}
+}
+Blur {
+channels rgba
+size {{postBlur} {postBlur}}
+name BlurOriginal
+label "\[value size]"
+xpos 695
+ypos 59
+}
+Invert {
+channels rgba
+name Invert2
+xpos 695
+ypos 97
+disable {{"parent.size < 0 ? 0 : 1"}}
+}
+push $N9a9b3250
+Switch {
+inputs 2
+which {{"parent.size == 0 ? 0 : 1"}}
+name Switch1
+label "\[value which]"
+xpos 427
+ypos 93
+}
+push $N9a974650
+ShuffleCopy {
+inputs 2
+in2 none
+black red
+white green
+red2 blue
+green2 alpha
+out none
+out2 {{{parent.Shuffle1.in}}}
+name ShuffleCopy1
+xpos 0
+ypos 97
+}
+Dot {
+name Dot17
+label A
+note_font_size 41
+xpos 34
+ypos 455
+}
+Dot {
+name Dot7
+note_font_size 41
+xpos 34
+ypos 585
+}
+set N9eda1cc0 [stack 0]
+Dot {
+name Dot12
+note_font_size 41
+xpos -260
+ypos 585
+}
+Dot {
+name Dot13
+note_font_size 41
+xpos -260
+ypos 799
+}
+push $N9a9828b0
+Input {
+inputs 0
+name Inputmask
+xpos 346
+ypos 325
+number 1
+}
+Dot {
+name Dot19
+label Mask
+note_font_size 41
+xpos 380
+ypos 438
+}
+set N9edb4a70 [stack 0]
+Dot {
+name Dot20
+note_font_size 41
+xpos 270
+ypos 438
+}
+push $N9eda1cc0
+Merge2 {
+inputs 2
+bbox intersection
+Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+Bchannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+output {rgba.red -rgba.green -rgba.blue rgba.alpha}
+name MergeIntersection
+xpos 236
+ypos 575
+disable {{"!\[exists parent.input1]"}}
+}
+Merge2 {
+inputs 2
+Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+Bchannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+output {rgba.red -rgba.green -rgba.blue rgba.alpha}
+name MergeUnion
+xpos 236
+ypos 613
+disable {{"!\[exists parent.input1]"}}
+}
+Dot {
+name Dot6
+label "intersection\nof (Mask and A) + B"
+note_font_size 14
+note_font_color 0xffffffff
+xpos 270
+ypos 773
+}
+push $N9edb4a70
+Dot {
+name Dot10
+note_font_size 41
+xpos 380
+ypos 675
+}
+push $N9eda1cc0
+push $N9a9874b0
+Merge2 {
+inputs 2+1
+operation copy
+Achannels none
+Bchannels none
+output none
+also_merge all
+name MergeKeymix
+xpos 0
+ypos 665
+}
+Dot {
+name Dot14
+note_font_size 41
+xpos 34
+ypos 747
+}
+set N9eb08930 [stack 0]
+push $N9a9874b0
+CopyBBox {
+inputs 2
+name CopyBBoxUnion
+xpos -401
+ypos 743
+disable {{parent.bbox==0?0:1}}
+}
+CopyBBox {
+inputs 2
+name CopyBBoxIntersection
+xpos -401
+ypos 769
+disable {{"parent.bbox==1 ? 0 : 1"}}
+}
+CopyBBox {
+inputs 2
+name CopyBBoxA
+xpos -401
+ypos 795
+disable {{"parent.bbox==2 ? 0 : 1"}}
+}
+CopyBBox {
+inputs 2
+name CopyBBoxB
+xpos -401
+ypos 827
+disable {{"parent.bbox==3 ? 0 : 1"}}
+}
+Crop {
+box {0 0 {parent.width} {parent.height}}
+crop false
+name CopyBBoxFormat
+xpos -401
+ypos 853
+disable {{"parent.bbox==4 ? 0 : 1"}}
+addUserKnob {20 User}
+addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+}
+set N9eb2c890 [stack 0]
+Transform {
+scale {{parent.adjustBBoxPercent} {parent.adjustBBoxPercent}}
+center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
+black_outside false
+shutteroffset centred
+name TransformBBoxAdjustPercent
+xpos -516
+ypos 898
+}
+push $N9eb2c890
+AdjBBox {
+numpixels {{parent.adjustBBoxPixels} {parent.adjustBBoxPixels}}
+name AdjBBoxPixels
+xpos -401
+ypos 901
+}
+Switch {
+inputs 2
+which {{adjustBBoxExtra}}
+name Switch3
+xpos -401
+ypos 940
+}
+Dot {
+name Dot9
+note_font_size 41
+xpos -367
+ypos 993
+}
+push $N9eb08930
+CopyBBox {
+inputs 2
+name CopyBBox
+xpos 0
+ypos 989
+}
+BlackOutside {
+name BlackOutside1
+xpos 0
+ypos 1015
+disable {{!parent.blackOutside}}
+}
+Output {
+name Output1
+xpos 0
+ypos 1155
+}
+push $Nd6534700
+NoOp {
+name BBoxResult
+xpos 588
+ypos -223
+addUserKnob {20 User}
+addUserKnob {15 bbox}
+bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+}
+end_group
+Unpremult {
+name Unpremult6
+xpos 52
+ypos 929
+}
+Switch {
+inputs 2
+which {{parent.previewKey}}
+name Switch1
+label "\[value which]"
+xpos 52
+ypos 977
+}
+push $N32d06f00
+Dot {
+name Dot4
+note_font_size 41
+xpos -124
+ypos 202
+}
+Dot {
+name Dot5
+note_font_size 41
+xpos -124
+ypos 1046
+}
+Merge2 {
+inputs 2+1
+operation copy
+name Merge2
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 52
+ypos 1043
+}
+Output {
+name Output1
+xpos 52
+ypos 1163
+}
+end_group

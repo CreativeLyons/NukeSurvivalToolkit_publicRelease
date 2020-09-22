@@ -1,0 +1,20 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr0 "sin( ( atan(x - center.x, y - center.y) + offset) * size)"
+ expr1 "sin( ( atan(x - center.x, y - center.y) + offset) * size)"
+ expr2 "sin( ( atan(x - center.x, y - center.y) + offset) * size)"
+ expr3 "sin( ( atan(x - center.x, y - center.y) + offset) * size)"
+ name Radial_Rays
+ selected true
+ xpos 1198
+ ypos 540
+ addUserKnob {20 User}
+ addUserKnob {3 offset}
+ offset 4
+ addUserKnob {7 size R 0 10}
+ size 9.3
+ addUserKnob {12 center}
+ center {868 444}
+}

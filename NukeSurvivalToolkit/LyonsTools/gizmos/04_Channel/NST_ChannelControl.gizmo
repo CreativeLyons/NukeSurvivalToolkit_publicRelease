@@ -1,0 +1,165 @@
+Group {
+ name ChannelControl
+ help "Mix the ratio of Red, Green, Blue, Alpha Channels and choose a Merge operation.\nResult is a matte output to RGBA"
+ tile_color 0x9e3c63ff
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 ChannelControl}
+ addUserKnob {41 channel l Channel T Shuffle6.in}
+ addUserKnob {41 op l Operation T Merge1.operation}
+ addUserKnob {6 clamp l "Clamp Output" -STARTLINE}
+ clamp true
+ addUserKnob {7 red l "<b><font color=crimson>Red"}
+ red 1
+ addUserKnob {7 green l "<b><font color=limegreen>Green"}
+ green 1
+ addUserKnob {7 blue l "<b><font color=dodgerblue>Blue"}
+ blue 1
+ addUserKnob {7 alpha l "<b><font color=white>Alpha"}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge4.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge4.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge4.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge4.fringe}
+ addUserKnob {41 mix T Merge4.mix}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<big> Tony Lyons"}
+ addUserKnob {26 desc l Description: T ChannelControl}
+ addUserKnob {26 ver l Version: T v07}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 354
+  ypos 238
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 141
+  ypos -279
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels1
+  xpos 141
+  ypos -224
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 175
+  ypos -181
+ }
+set N378a3fc0 [stack 0]
+ Shuffle {
+  name Shuffle6
+  note_font_color 0xffffffff
+  xpos 258
+  ypos -188
+ }
+ Multiply {
+  channels rgba
+  value {{parent.red} {parent.green} {parent.blue} {parent.alpha}}
+  name Multiply1
+  label "\[value value]"
+  xpos 258
+  ypos -131
+ }
+set N378884b0 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle5
+  tile_color 0xffffffff
+  note_font_color 0xffffffff
+  xpos 545
+  ypos -22
+ }
+push $N378884b0
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name Shuffle4
+  tile_color 0x3d3f8e00
+  note_font_color 0xffffffff
+  xpos 447
+  ypos -23
+ }
+push $N378884b0
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name Shuffle2
+  tile_color 0x3f633800
+  note_font_color 0xffffffff
+  xpos 350
+  ypos -24
+ }
+push $N378884b0
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle3
+  tile_color 0x93000000
+  note_font_color 0xffffffff
+  xpos 258
+  ypos -23
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge1
+  xpos 258
+  ypos 28
+ }
+ Merge2 {
+  inputs 2
+  operation {{parent.Merge1.operation}}
+  name Merge2
+  xpos 258
+  ypos 77
+ }
+ Merge2 {
+  inputs 2
+  operation {{parent.Merge1.operation}}
+  name Merge3
+  xpos 258
+  ypos 128
+ }
+ Clamp {
+  channels rgba
+  name Clamp1
+  xpos 258
+  ypos 177
+  disable {{!parent.clamp}}
+ }
+push $N378a3fc0
+ Multiply {
+  channels rgba
+  value 0
+  name Multiply2
+  label "\[value value]"
+  xpos 141
+  ypos -128
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge4
+  selected true
+  xpos 141
+  ypos 238
+ }
+ Output {
+  name Output1
+  xpos 141
+  ypos 296
+ }
+end_group

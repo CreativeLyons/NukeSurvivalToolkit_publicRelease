@@ -1,0 +1,372 @@
+Group {
+ name waterSchmutz
+ tile_color 0x421010ff
+ selected true
+ addUserKnob {20 User l waterSchmutz}
+ addUserKnob {41 cube l boundaries T Cube1.cube}
+ addUserKnob {26 ""}
+ addUserKnob {41 translate T Cube1.translate}
+ addUserKnob {41 rotate T Cube1.rotate}
+ addUserKnob {26 ""}
+ addUserKnob {6 spriteView +STARTLINE}
+ addUserKnob {6 customSpriteSwitch l "custom sprite" -STARTLINE}
+ addUserKnob {41 start_frame l "start at" T ParticleEmitter3.start_frame}
+ addUserKnob {7 particleDensity l "particle density"}
+ particleDensity 1
+ addUserKnob {41 size T ParticleEmitter3.size}
+ addUserKnob {41 size_variation l "size range" T ParticleEmitter3.size_variation}
+ addUserKnob {22 update l "Refresh Particles" T "import random\nnuke.thisNode().knob('seed').setValue( random.randint(1,16384) )" +STARTLINE}
+ addUserKnob {3 seed -STARTLINE}
+ seed 4191
+ addUserKnob {41 to l "wind direction" T ParticleWind1.to}
+ addUserKnob {6 wrapPart l "wrap particles" +STARTLINE}
+ wrapPart true
+ addUserKnob {7 edgefade l "edge fade"}
+ edgefade 0.4
+ addUserKnob {26 ""}
+ addUserKnob {7 tScale l "turbulence scale" R 0 10}
+ tScale 8
+ addUserKnob {7 tStrength l "turbulence stregth"}
+ tStrength 1
+ addUserKnob {26 ""}
+ addUserKnob {26 lbl l "" +STARTLINE T "waterSchmutz v1.5"}
+ addUserKnob {22 btn l DerekVFX.ca T "import os\nimport sys\n\ntry:\n    import subprocess\n    def _run(cmd, shell, wait):\n        opener = subprocess.Popen(cmd, shell=shell)\n        if wait:\n            opener.wait()\n        return opener.pid\nexcept ImportError:\n    import popen2\n    def _run(cmd, shell, wait):\n        opener = popen2.Popen3(cmd)\n        if wait:\n            opener.wait()\n        return opener.pid\n\ndef _open(url, wait=0):\n    if sys.platform == \"darwin\":\n        cmd = \[\"open\", url]\n    elif hasattr(os, \"startfile\"):\n        return os.startfile(url)\n    elif os.environ.has_key(\"KDE_FULL_SESSION\") or os.environ.has_key(\"KDE_MULTIHEAD\") or \\\n        os.environ.has_key(\"GNOME_DESKTOP_SESSION_ID\") or os.environ.has_key(\"GNOME_KEYRING_SOCKET\"):\n        cmd = \[\"xdg-open\", url]\n    else:\n        raise OSError, \"Desktop not supported.\"\n\n    return _run(cmd, 0, wait)\n\n_open('http://www.derekvfx.ca/')" +STARTLINE}
+ addUserKnob {20 render l renderSettings}
+ addUserKnob {41 format l "output format" T Reformat3.format}
+ addUserKnob {41 antialiasing T ScanlineRender1.antialiasing}
+ addUserKnob {41 overscan T ScanlineRender1.overscan}
+ addUserKnob {6 proxyRender l "proxy mode" +STARTLINE}
+ proxyRender true
+ addUserKnob {6 guiDisable l "GUI Disable" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 samples T ScanlineRender1.samples}
+ addUserKnob {41 shutter T ScanlineRender1.shutter}
+ addUserKnob {41 stochastic_samples l "stochastic samples" T ScanlineRender1.stochastic_samples}
+ addUserKnob {20 particleSettings}
+ addUserKnob {41 format_1 l format T Constant1.format}
+ addUserKnob {41 first l "frame range" T Constant1.first}
+ addUserKnob {41 last l "" -STARTLINE T Constant1.last}
+ addUserKnob {41 start_frame_animation l "start at" T ParticleEmitter3.start_frame_animation}
+ addUserKnob {41 start_wrap l "limit to range" -STARTLINE T ParticleEmitter3.start_wrap}
+ addUserKnob {41 frame_advance l advance T ParticleEmitter3.frame_advance}
+ addUserKnob {41 max_clip_length l "max clip length" -STARTLINE T ParticleEmitter3.max_clip_length}
+ addUserKnob {26 div l "" +STARTLINE T " "}
+ addUserKnob {20 spriteSettings n 1}
+ addUserKnob {41 type T Noise1.type}
+ addUserKnob {41 size_1 l x/ysize T Noise1.size}
+ addUserKnob {41 zoffset l z T Noise1.zoffset}
+ addUserKnob {41 gain T Noise1.gain}
+ addUserKnob {20 endGroup n -1}
+}
+ Cube {
+  inputs 0
+  display wireframe
+  render_mode wireframe
+  rows 1
+  columns 1
+  cube {-500 0 -500 500 500 500}
+  pivot {{"abs(cube.x-cube.r)/2+((cube.x<cube.r) ? cube.x : cube.r)"} {"abs(cube.y-cube.t)/2+((cube.y<cube.t) ? cube.y : cube.t)"} {"abs(cube.n-cube.f)/2+((cube.n<cube.f) ? cube.n : cube.f)"}}
+  name Cube1
+  tile_color 0xffcc00ff
+  gl_color 0xff3b00ff
+  xpos -870
+  ypos 484
+  hide_input true
+  addUserKnob {20 User}
+  addUserKnob {7 volume}
+  volume {{abs(cube.x-cube.r)*abs(cube.y-cube.t)*abs(cube.n-cube.f)}}
+ }
+ Input {
+  inputs 0
+  name customSprite
+  xpos -879
+  ypos 210
+ }
+ Reformat {
+  format {{{parent.Constant1.format}}}
+  resize distort
+  name Reformat1
+  xpos -879
+  ypos 313
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format "128 128 0 0 128 128 1 texture"
+  last 100
+  name Constant1
+  xpos -714
+  ypos 8
+ }
+ Noise {
+  size 82
+  zoffset 3.12
+  gain 0.57
+  center {1024 576}
+  name Noise1
+  xpos -714
+  ypos 135
+ }
+ Roto {
+  output alpha
+  replace true
+  curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097152}
+    {t x44800000 x44100000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Ellipse1 512 bezier
+     {{cc
+       {f 8192}
+       {px x4483e000
+        {xc1db2587 0}
+        {x42833332 x4179999c}
+        {x41db2586 0}
+        {0 xc1db2588}
+        {x42e66664 x42826666}
+        {0 x41db2588}
+        {x41db2586 0}
+        {x42833332 x42e59999}
+        {xc1db2587 0}
+        {0 x41db2588}
+        {x417ffff4 x42826666}
+        {0 xc1db2588}}}
+      {cc
+       {f 8192}
+       {px x4483e000
+        {xc1db2587 0}
+        {0 0}
+        {x41db2586 0}
+        {0 xc1db2588}
+        {0 0}
+        {0 x41db2588}
+        {x41db2586 0}
+        {0 0}
+        {xc1db2587 0}
+        {0 x41db2588}
+        {0 0}
+        {0 xc1db2588}}}}
+     {tx x4483e000 x4260cccc x4280cccd}
+     {a osw x41200000 osf 0 str 1 spx x44800000 spy x44100000 sb 1 ltn x4483e000 ltm x4483e000 tt x40e00000}}}}}}
+  toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 tt 7 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+  toolbar_brush_hardness 0.200000003
+  toolbar_source_transform_scale {1 1}
+  toolbar_source_transform_center {1024 576}
+  colorOverlay {0 0 0 0}
+  lifetime_type "all frames"
+  lifetime_start 1055
+  lifetime_end 1055
+  motionblur_shutter_offset_type centred
+  source_black_outside true
+  name Roto1
+  xpos -714
+  ypos 169
+ }
+ Blur {
+  channels alpha
+  size 23.4
+  name Blur1
+  xpos -714
+  ypos 207
+ }
+ Premult {
+  name Premult2
+  xpos -714
+  ypos 245
+ }
+ Crop {
+  box {0 0 128 128}
+  softness 25.8
+  name Crop1
+  xpos -714
+  ypos 271
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Switch {
+  inputs 2
+  which {{customSpriteSwitch}}
+  name Switch1
+  xpos -714
+  ypos 319
+ }
+set N1eee8c30 [stack 0]
+ Dot {
+  name Dot1
+  xpos -422
+  ypos 323
+ }
+ Dot {
+  name Dot2
+  xpos -422
+  ypos 928
+ }
+ Input {
+  inputs 0
+  name camera
+  xpos -886
+  ypos 802
+  number 1
+ }
+push $N1eee8c30
+ BlendMat {
+  operation plus
+  surfaceblend modulate
+  name BlendMat1
+  xpos -714
+  ypos 369
+ }
+push 0
+push 0
+ ParticleEmitter {
+  inputs 3
+  emit_from faces
+  rate {{"frame-start_frame > 0 & frame-start_frame < 2 ? ((Cube1.volume/1000000)*particleDensity) : 0"}}
+  lifetime inf
+  velocity 0
+  size 1
+  size_variation 4
+  start_wrap true
+  seed {{parent.seed}}
+  name ParticleEmitter3
+  knobChanged 5
+  xpos -714
+  ypos 461
+  disable {{"guiDisable ? \$gui : 0"}}
+ }
+ ParticleExpression {
+  temp_name1 c
+  temp_expr1 "v(\[value Cube1.cube.x],\[value Cube1.cube.y],\[value Cube1.cube.n])"
+  temp_name2 b
+  temp_expr2 "v(\[value Cube1.cube.r],\[value Cube1.cube.t],\[value Cube1.cube.f])"
+  posexpr v(random*abs(x(c)-x(b))+x(c),random*abs(y(c)-y(b))+y(c),random*abs(z(c)-z(b))+z(c))
+  posexpr_onlynew true
+  name spread
+  xpos -714
+  ypos 487
+  disable {{"guiDisable ? \$gui : 0"}}
+ }
+ ParticleTurbulence {
+  strength {{waterSchmutz.tStrength} {strength.x} {strength.x}}
+  scale {{waterSchmutz.tScale} {scale.x} {scale.x}}
+  name ParticleTurbulence1
+  xpos -714
+  ypos 525
+  disable {{"guiDisable ? \$gui : 0"}}
+ }
+ ParticleWind {
+  to {5 0 0}
+  name ParticleWind1
+  xpos -714
+  ypos 563
+  disable {{"guiDisable ? \$gui : 0"}}
+ }
+ ParticleExpression {
+  temp_name1 f
+  temp_expr1 "v(\[value Cube1.cube.x],\[value Cube1.cube.y],\[value Cube1.cube.n])"
+  temp_name2 b
+  temp_expr2 "v(\[value Cube1.cube.r],\[value Cube1.cube.t],\[value Cube1.cube.f])"
+  temp_name3 poz
+  temp_expr3 pos
+  posexpr v(x(poz)>x(b)?x(f):(x(poz)<x(f)?x(b):x(poz)),y(poz)>y(b)?y(f):(y(poz)<y(f)?y(b):y(poz)),z(poz)>z(b)?z(f):(z(poz)<z(f)?z(b):z(poz)))
+  name ParticleWrapper
+  xpos -714
+  ypos 601
+  disable {{"wrapPart == 0"}}
+ }
+ ParticleExpression {
+  temp_name0 f
+  temp_expr0 "v(\[value Cube1.cube.x],\[value Cube1.cube.y],\[value Cube1.cube.n])"
+  temp_name1 b
+  temp_expr1 "v(\[value Cube1.cube.r],\[value Cube1.cube.t],\[value Cube1.cube.f])"
+  temp_name2 m
+  temp_expr2 (abs((v(x(f),y(f),z(f))-v(x(b),y(b),z(b))))/2)+f
+  temp_name3 fade
+  temp_expr3 (1-(abs(x(pos)-x(m)))/abs(x(f)-x(m)))*(1-(abs(y(pos)-y(m)))/abs(y(f)-y(m)))*(1-(abs(z(pos)-z(m)))/abs(z(f)-z(m)))
+  opacityexpr "\[value edgefade] <=0 ? 1 : fade*(1/\[value edgefade])"
+  name ParticleExpression1
+  xpos -714
+  ypos 639
+  disable {{"edgefade == 0 "}}
+ }
+ TransformGeo {
+  translate {{parent.Cube1.translate} {parent.Cube1.translate} {parent.Cube1.translate}}
+  rotate {{parent.Cube1.rotate} {parent.Cube1.rotate} {parent.Cube1.rotate}}
+  pivot {{parent.Cube1.pivot} {parent.Cube1.pivot} {parent.Cube1.pivot}}
+  name TransformGeo1
+  xpos -714
+  ypos 712
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format "128 128 0 0 128 128 1 128x128"
+  name Constant2
+  xpos -592
+  ypos 657
+ }
+ Reformat {
+  resize distort
+  name Reformat3
+  xpos -592
+  ypos 729
+ }
+ Reformat {
+  type scale
+  scale 0.5
+  name Reformat2
+  xpos -592
+  ypos 802
+  disable {{"proxyRender == 0"}}
+ }
+add_layer {P P.red P.green P.blue}
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  antialiasing medium
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel P
+  name ScanlineRender1
+  xpos -714
+  ypos 802
+ }
+ Reformat {
+  format {{{parent.Reformat3.format}}}
+  pbb true
+  name Reformat4
+  xpos -714
+  ypos 868
+ }
+ Switch {
+  inputs 2
+  which {{spriteView}}
+  name Switch2
+  xpos -714
+  ypos 924
+ }
+ Output {
+  name Output1
+  xpos -714
+  ypos 976
+ }
+end_group

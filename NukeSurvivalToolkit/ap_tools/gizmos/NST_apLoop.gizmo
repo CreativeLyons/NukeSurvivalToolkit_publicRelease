@@ -1,0 +1,221 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name apLoop
+ help "apLoop BETA v0.1 by Adrian Pueyo\n\nQuick tool to simulate a loop effect while affecting the gain, blur and transformations on each \"iteration\".\n\nFeel free to play with it and see its applications. Some of them: create an exponential (or normal) glow in seconds, an expo blur, a grid or mosaic (adding this gizmo twice), godrays, directional blurs, etc.\n\nadrianpueyo.com, 2017"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nt = n\[\"times\"]\nif k == t and t.value()<0:\n    dr.setValue(0)"
+ autolabel "nuke.thisNode().name()+\" (x\"+str(int(nuke.thisNode()\[\"times\"].getValue()))+\")\""
+ tile_color 0x4d585eff
+ gl_color 0xff
+ selected true
+ addUserKnob {20 apLoop}
+ addUserKnob {26 looper l <b>Looper}
+ addUserKnob {41 channels T Merge.also_merge}
+ addUserKnob {3 times}
+ times 1
+ addUserKnob {6 include_original l "include original" -STARTLINE}
+ include_original true
+ addUserKnob {6 normalize -STARTLINE}
+ normalize true
+ addUserKnob {26 ""}
+ addUserKnob {26 gaind l <b>Gain T ""}
+ addUserKnob {41 g_start l start T cnt.g_start}
+ addUserKnob {41 g_end l end T cnt.g_end}
+ addUserKnob {41 g_each l each T cnt.g_each}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 blur_1 l <b>Blur T ""}
+ addUserKnob {41 b_start l start T cnt.b_start}
+ addUserKnob {41 b_end l end T cnt.b_end}
+ addUserKnob {41 b_each l each T cnt.b_each}
+ addUserKnob {41 b_pow l power T cnt.b_pow}
+ addUserKnob {41 filter T Blur.filter}
+ addUserKnob {41 quality l "" -STARTLINE T Blur.quality}
+ addUserKnob {41 crop l "crop to format" -STARTLINE T Blur.crop}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l "mask " T Merge.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge.fringe}
+ addUserKnob {41 mix T Merge.mix}
+ addUserKnob {26 version_author l "" t "apLoop BETA v0.1\n" +STARTLINE T "<span style=\"color:#666\"><br/><b>apLoop BETA v0.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2017</span>"}
+ addUserKnob {20 transformA l "Transform A"}
+ addUserKnob {41 translate T TransformRef.translate}
+ addUserKnob {41 rotate T TransformRef.rotate}
+ addUserKnob {41 scale T TransformRef.scale}
+ addUserKnob {41 skewX l "skew X" T TransformRef.skewX}
+ addUserKnob {41 skewY l "skew Y" T TransformRef.skewY}
+ addUserKnob {41 skew_order_1 l "skew order" T TransformB.skew_order}
+ addUserKnob {41 center T TransformRef.center}
+ addUserKnob {22 center_on_bbox l "center on bbox" -STARTLINE T "try:\n    n = nuke.thisNode().input(0)\n    nuke.toNode(\"TransformRef\")\[\"center\"].setValue(n.bbox().x()+n.bbox().w()/2,0)\n    nuke.toNode(\"TransformRef\")\[\"center\"].setValue(n.bbox().y()+n.bbox().h()/2,1)\nexcept:\n    pass"}
+ addUserKnob {22 center_on_frame l "center on frame" -STARTLINE T "nuke.toNode(\"TransformRef\")\[\"center\"].setValue(nuke.thisNode().width()/2,0)\nnuke.toNode(\"TransformRef\")\[\"center\"].setValue(nuke.thisNode().height()/2,1)"}
+ addUserKnob {41 invert_matrix l invert T TransformRef.invert_matrix}
+ addUserKnob {41 filter_1 l filter T TransformB.filter}
+ addUserKnob {41 clamp -STARTLINE T TransformB.clamp}
+ addUserKnob {41 black_outside l "black outside" -STARTLINE T TransformB.black_outside}
+ addUserKnob {41 motionblur T TransformB.motionblur}
+ addUserKnob {41 shutter T TransformB.shutter}
+ addUserKnob {41 shutteroffset l "shutter offset" T TransformB.shutteroffset}
+ addUserKnob {41 shuttercustomoffset l "" -STARTLINE T TransformB.shuttercustomoffset}
+ addUserKnob {20 transformB l "Transform B"}
+ addUserKnob {41 translate_1 l translate T TransformRefAfter.translate}
+ addUserKnob {41 rotate_1 l rotate T TransformRefAfter.rotate}
+ addUserKnob {41 scale_1 l scale T TransformRefAfter.scale}
+ addUserKnob {41 skewX_1 l "skew X" T TransformRefAfter.skewX}
+ addUserKnob {41 skewY_1 l "skew Y" T TransformRefAfter.skewY}
+ addUserKnob {41 skew_order l "skew order" T TransformRefAfter.skew_order}
+ addUserKnob {41 center_1 l center T TransformRefAfter.center}
+ addUserKnob {22 copyCenterFromA l "copy from transform A" -STARTLINE T "nuke.toNode(\"TransformRefAfter\")\[\"center\"].setValue(nuke.toNode(\"TransformRef\")\[\"center\"].getValue())"}
+ addUserKnob {41 invert_matrix_1 l invert T TransformRefAfter.invert_matrix}
+ addUserKnob {41 filter_2 l filter T TransformAfter.filter}
+ addUserKnob {41 clamp_1 l clamp -STARTLINE T TransformAfter.clamp}
+ addUserKnob {41 black_outside_1 l "black outside" -STARTLINE T TransformAfter.black_outside}
+ addUserKnob {41 motionblur_1 l motionblur T TransformAfter.motionblur}
+ addUserKnob {41 shutter_1 l shutter T TransformAfter.shutter}
+ addUserKnob {41 shutteroffset_1 l "shutter offset" T TransformAfter.shutteroffset}
+ addUserKnob {41 shuttercustomoffset_1 l "" -STARTLINE T TransformAfter.shuttercustomoffset}
+}
+ Transform {
+  inputs 0
+  name TransformRefAfter
+  xpos 510
+  ypos -501
+  disable true
+ }
+ Transform {
+  inputs 0
+  name TransformRef
+  xpos 510
+  ypos -526
+  disable true
+ }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 106
+  ypos -328
+  number 1
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos 249
+  ypos -552
+ }
+set N9c73820 [stack 0]
+ NoTimeBlur {
+  rounding floor
+  name NoTB
+  xpos 405
+  ypos -552
+ }
+ Transform {
+  translate {{TB.divisions*TransformRef.translate*TB.fr x1048 85} {TB.divisions*TransformRef.translate*TB.fr x1048 -150}}
+  rotate {{TB.divisions*TransformRef.rotate*TB.fr x1048 0}}
+  scale {{pow(TransformRef.scale,TB.ci) x1048 0}}
+  skewX {{TB.divisions*TransformRef.skewX*TB.fr x1048 0}}
+  skewY {{TB.divisions*TransformRef.skewY*TB.fr x1048 0}}
+  center {{parent.TransformRef.center x1048 1064} {parent.TransformRef.center x1048 1064}}
+  invert_matrix {{parent.TransformRef.invert_matrix}}
+  name TransformB
+  xpos 405
+  ypos -526
+ }
+ Transform {
+  translate {{TB.divisions*TransformRefAfter.translate*TB.fr x1048 85} {TB.divisions*TransformRefAfter.translate*TB.fr x1048 -150}}
+  rotate {{TB.divisions*TransformRefAfter.rotate*TB.fr x1048 0}}
+  scale {{pow(TransformRefAfter.scale,TB.ci) x1048 0}}
+  skewX {{TB.divisions*TransformRefAfter.skewX*TB.fr x1048 0}}
+  skewY {{TB.divisions*TransformRefAfter.skewY*TB.fr x1048 0}}
+  center {{parent.TransformRefAfter.center x1048 0} {parent.TransformRefAfter.center x1048 0}}
+  invert_matrix {{parent.TransformRefAfter.invert_matrix}}
+  name TransformAfter
+  xpos 405
+  ypos -500
+ }
+ Multiply {
+  value {{(cnt.g_end*TB.ffr+cnt.g_start*(1-TB.ffr))*pow(cnt.g_each,TB.ci)} {(cnt.g_end*TB.ffr+cnt.g_start*(1-TB.ffr))*pow(cnt.g_each,TB.ci)} {(cnt.g_end*TB.ffr+cnt.g_start*(1-TB.ffr))*pow(cnt.g_each,TB.ci)} {(cnt.g_end*TB.ffr+cnt.g_start*(1-TB.ffr))*pow(cnt.g_each,TB.ci)}}
+  name Multiply
+  note_font "Bitstream Vera Sans"
+  xpos 405
+  ypos -474
+ }
+ Blur {
+  size {{"TB.ci==0?(cnt.b_end*TB.ffr+cnt.b_start*(1-TB.ffr)):(cnt.b_end*TB.ffr+cnt.b_start*(1-TB.ffr)) + cnt.b_each * pow(cnt.b_pow,TB.ci-1)"}}
+  name Blur
+  xpos 405
+  ypos -436
+ }
+ Multiply {
+  value 0
+  name MultiplyOut
+  xpos 405
+  ypos -398
+  disable {{parent.include_original||TB.fr!=0}}
+ }
+ TimeBlur {
+  divisions {{parent.times i}}
+  shutter 1
+  shutteroffset start
+  shuttercustomoffset 0
+  name TB
+  xpos 405
+  ypos -360
+  addUserKnob {20 User}
+  addUserKnob {7 fr}
+  fr {{frame%1 i}}
+  addUserKnob {7 ffr}
+  ffr {{frame%1==0?(frame%1):(frame%1)/(1-1/divisions)}}
+  addUserKnob {7 ci t "current iteration"}
+  ci {{fr*divisions i}}
+ }
+ Multiply {
+  value {{parent.TB.divisions}}
+  name MultiplyBack
+  xpos 405
+  ypos -334
+  disable {{!parent.normalize}}
+ }
+push $N9c73820
+ Merge2 {
+  inputs 2+1
+  operation copy
+  Achannels none
+  Bchannels {{{Achannels}}}
+  output {{{Achannels}}}
+  also_merge all
+  name Merge
+  xpos 249
+  ypos -334
+ }
+ Output {
+  name Output1
+  xpos 249
+  ypos -296
+ }
+ NoOp {
+  inputs 0
+  name cnt
+  xpos 510
+  ypos -468
+  hide_input true
+  addUserKnob {20 Controller}
+  addUserKnob {19 g_start R 0 4}
+  g_start 1
+  addUserKnob {6 g_start_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 g_start_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {19 g_end R 0 4}
+  g_end 1
+  addUserKnob {6 g_end_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 g_end_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {19 g_each R 0 4}
+  g_each 1
+  addUserKnob {6 g_each_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 g_each_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {14 b_start R 0 100}
+  addUserKnob {14 b_end R 0 100}
+  addUserKnob {14 b_each R 0 100}
+  addUserKnob {7 b_pow R 0 4}
+  b_pow 1
+ }
+end_group

@@ -1,0 +1,462 @@
+Group {
+ name DeepSer
+ onCreate "\nnver = nuke.NUKE_VERSION_MAJOR\nthisGRP = nuke.thisGroup()\nif nver >= 11 :\n\t thisGRP\['nuke_version'].setValue(1)\nelse :\n\t thisGRP\['nuke_version'].setValue(0)\n"
+ tile_color 0x2866ff
+ label "<font color=cyan>Deep Output</font>"
+ addUserKnob {20 tab_general l General}
+ addUserKnob {4 nuke_version l INVISIBLE +INVISIBLE M {10 11 "" "" "" "" "" "" ""}}
+ nuke_version 11
+ addUserKnob {6 remove_invalid l "remove samples with nan/inf value (Required Nuke 11+)" +STARTLINE}
+ addUserKnob {41 remove_alpha_filter l "remove samples when alpha under :" T menu02.remove_alpha_filter}
+ addUserKnob {7 alpha_value l "" -STARTLINE +DISABLED}
+ addUserKnob {26 spacer_2 l "" +STARTLINE T <br>}
+ addUserKnob {20 FSL_TabBegin l "" +STARTLINE n -2}
+ addUserKnob {20 tab_force_sample_layers l "force sample layers"}
+ addUserKnob {41 selection l "" +STARTLINE T menu01.selection}
+ addUserKnob {26 spacer_3 l "" +STARTLINE T <br>}
+ addUserKnob {7 filter +HIDDEN R 0.0001 1}
+ filter 1
+ addUserKnob {22 remove_10_layers l -10 +HIDDEN T "thisGRP = nuke.thisGroup()\ncurrentCount = thisGRP\['keep_layers'].value()\ngoStore = nuke.toNode('store')\ngoStore\['fn'].execute()\nstep = 10\n\nif not currentCount == 'not set' :\n\tif int(currentCount) - step < 1 :\n\t\tprocCount = 'not set'\n\t\treset()\n\t\tthisGRP\['keep_layers'].setValue( str(procCount) )\n\telse :\n\t\tprocCount = int( currentCount ) - step\n\t\treset()\n\t\tgenlayer( procCount )\n\t\tthisGRP\['keep_layers'].setValue( str(procCount) )" +STARTLINE}
+ addUserKnob {22 remove_1_layer l - -STARTLINE +HIDDEN T "thisGRP = nuke.thisGroup()\ncurrentCount = thisGRP\['keep_layers'].value()\ngoStore = nuke.toNode('store')\ngoStore\['fn'].execute()\nstep = 1\n\nif not currentCount == 'not set' :\n\tif int(currentCount) - step < 1 :\n\t\tprocCount = 'not set'\n\t\treset()\n\t\tthisGRP\['keep_layers'].setValue( str(procCount) )\n\telse :\n\t\tprocCount = int( currentCount ) - step\n\t\treset()\n\t\tgenlayer( procCount )\n\t\tthisGRP\['keep_layers'].setValue( str(procCount) )"}
+ addUserKnob {26 spacer l "" -STARTLINE +HIDDEN T " \t"}
+ addUserKnob {26 keep_layers l "" -STARTLINE +HIDDEN T "not set"}
+ addUserKnob {26 spacer_1 l "" -STARTLINE +HIDDEN T " \t"}
+ addUserKnob {22 add_1_layer l + -STARTLINE +HIDDEN T "thisGRP = nuke.thisGroup()\ncurrentCount = thisGRP\['keep_layers'].value()\ngoStore = nuke.toNode('store')\ngoStore\['fn'].execute()\nstep = 1\n\nif currentCount == 'not set' :\n\tprocCount = step\nelse :\n\tprocCount = int( currentCount ) + step\n\nreset()\ngenlayer( procCount )\n\nthisGRP\['keep_layers'].setValue( str(procCount) )"}
+ addUserKnob {22 add_10_layers l +10 -STARTLINE +HIDDEN T "thisGRP = nuke.thisGroup()\ncurrentCount = thisGRP\['keep_layers'].value()\ngoStore = nuke.toNode('store')\ngoStore\['fn'].execute()\nstep = 10\n\nif currentCount == 'not set' :\n\tprocCount = step\nelse :\n\tprocCount = int( currentCount ) + step\n\nreset()\ngenlayer( procCount )\n\nthisGRP\['keep_layers'].setValue( str(procCount) )"}
+ addUserKnob {6 drop_hidden l "drop hidden samples" +HIDDEN +STARTLINE}
+ addUserKnob {20 FSL_TabEnd l "" +STARTLINE n -3}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.0}
+ addUserKnob {26 l_DATE l "Date Modified" T 2019-09-21}
+ addUserKnob {26 l_CHANGELOG l Changelog T "1.0\n- create various setup to\n  manage deep sample"}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "Dont touch"
+  note_font_size 42
+  xpos 211
+  ypos -649
+  bdwidth 250
+  bdheight 429
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x7f7f7fff
+  label bin
+  note_font_size 42
+  xpos 216
+  ypos -172
+  bdwidth 243
+  bdheight 902
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x5669ff
+  label "start loop"
+  note_font_size 24
+  xpos 1382
+  ypos 484
+  bdwidth 382
+  bdheight 616
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x5669ff
+  label "end loop"
+  note_font_size 24
+  xpos 2489
+  ypos 3530
+  bdwidth 429
+  bdheight 620
+ }
+ Input {
+  inputs 0
+  name deep
+  xpos 1062
+  ypos -579
+ }
+ Dot {
+  name Dot3
+  xpos 1096
+  ypos -413
+ }
+set Ndda96d20 [stack 0]
+ Dot {
+  name Dot6
+  xpos 1270
+  ypos -413
+ }
+set Nddd16350 [stack 0]
+ DeepExpression {
+  chans0 none
+  chans1 deep
+  deep.front "isnan(r) || isnan(g) || isnan(b) || isnan(a) || isnan(deep.front) || isnan(deep.back) || isinf(r) || isinf(g) || isinf(b) || isinf(a) || isinf(deep.front) || isinf(deep.back) ? -1 : deep.front"
+  deep.back "isnan(r) || isnan(g) || isnan(b) || isnan(a) || isnan(deep.front) || isnan(deep.back) || isinf(r) || isinf(g) || isinf(b) || isinf(a) || isinf(deep.front) || isinf(deep.back) ? -1 : deep.back"
+  name DeepExpression4
+  xpos 1349
+  ypos -365
+ }
+push $Nddd16350
+ Switch {
+  inputs 2
+  which {{parent.nuke_version}}
+  name Switch4
+  label "nuke version switch"
+  xpos 1236
+  ypos -302
+ }
+push $Ndda96d20
+ Switch {
+  inputs 2
+  which {{parent.remove_invalid}}
+  name Switch3
+  xpos 1062
+  ypos -296
+ }
+ Dot {
+  name Dot1
+  xpos 1096
+  ypos -129
+ }
+set Nddd25dd0 [stack 0]
+ Dot {
+  name Dot4
+  xpos 1264
+  ypos -129
+ }
+set Nddd28290 [stack 0]
+ DeepExpression {
+  temp_name0 avalue
+  temp_expr0 "\[value parent.alpha_value]"
+  chans0 deep
+  chans1 none
+  deep.front "alpha <= avalue ? -1 : deep.front"
+  deep.back "alpha <= avalue ? -1 : deep.back"
+  name DeepExpression2
+  xpos 1299
+  ypos -67
+ }
+push $Nddd28290
+ DeepExpression {
+  temp_name0 avalue
+  temp_expr0 "\[value parent.alpha_value]"
+  chans0 deep
+  chans1 none
+  deep.front "alpha <= avalue ? deep.front : -1"
+  deep.back "alpha <= avalue ? deep.back : -1"
+  name DeepExpression5
+  xpos 1154
+  ypos -64
+ }
+ Switch {
+  inputs 2
+  which {{parent.nuke_version}}
+  name Switch2
+  label "nuke version switch"
+  xpos 1231
+  ypos 6
+ }
+push $Nddd25dd0
+ Switch {
+  inputs 2
+  which {{parent.remove_alpha_filter}}
+  name Switch1
+  xpos 1062
+  ypos 12
+ }
+ DeepCrop {
+  use_znear false
+  zfar 0
+  outside_zrange true
+  bbox {204.6000061 107.8000031 818.4000244 431.2000122}
+  use_bbox false
+  name DeepCrop2
+  xpos 1062
+  ypos 158
+ }
+ Dot {
+  name Dot10
+  xpos 1096
+  ypos 346
+ }
+set Ndda9bd10 [stack 0]
+ Dot {
+  name Dot11
+  xpos 1658
+  ypos 346
+ }
+ Dot {
+  name Dot2
+  xpos 1658
+  ypos 661
+ }
+set Nddaa0550 [stack 0]
+ DeepToImage {
+  name DeepToImage1
+  xpos 1442
+  ypos 658
+ }
+add_layer {deepRawColor deepRawColor.red deepRawColor.green deepRawColor.blue deepRawColor.alpha}
+ AddChannels {
+  channels deepRawColor
+  name AddChannels1
+  xpos 1442
+  ypos 738
+ }
+push $Nddaa0550
+ DeepRecolor {
+  inputs 2
+  channels {{{parent.AddChannels1.channels}}}
+  name DeepRecolor1
+  xpos 1624
+  ypos 738
+ }
+ DeepExpression {
+  chans0 deepRawColor
+  chans1 none
+  deepRawColor.red red
+  deepRawColor.green green
+  deepRawColor.blue blue
+  deepRawColor.alpha alpha
+  name DeepExpression8
+  label "store original color"
+  xpos 1624
+  ypos 851
+ }
+ Dot {
+  name Dot8
+  xpos 1658
+  ypos 1230
+ }
+set Nd5fad910 [stack 0]
+ Dot {
+  name Dot9
+  xpos 2771
+  ypos 1230
+ }
+ DeepExpression {
+  chans0 alpha
+  chans1 none
+  rgba.alpha 1
+  name DeepExpression3
+  label "store original color"
+  xpos 2737
+  ypos 1329
+ }
+ Dot {
+  name start_loop
+  tile_color 0xff9900ff
+  xpos 2771
+  ypos 1417
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.red deepRawColor.red
+  rgba.green deepRawColor.green
+  rgba.blue deepRawColor.blue
+  rgba.alpha deepRawColor.alpha
+  name DSM_reset
+  xpos 2737
+  ypos 1491
+ }
+ DeepMerge {
+  drop_hidden {{parent.drop_hidden}}
+  name final_merge
+  xpos 2737
+  ypos 3869
+ }
+push $Nd5fad910
+ DeepExpression {
+  chans0 {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  chans1 none
+  rgba.red "alpha > \[value store.achk] || alpha == \[value store.achk] ? 1 : 0"
+  rgba.alpha 1
+  name DeepExpression1
+  xpos 1408
+  ypos 1227
+ }
+ DeepToImage {
+  name DeepToImage3
+  xpos 1408
+  ypos 1307
+ }
+ Shuffle {
+  green black
+  blue black
+  alpha white
+  name Shuffle1
+  xpos 1408
+  ypos 1387
+ }
+push $Nd5fad910
+ DeepRecolor {
+  inputs 2
+  name DeepRecolor2
+  xpos 1624
+  ypos 1387
+ }
+ Dot {
+  name Dot12
+  xpos 1658
+  ypos 1443
+ }
+set Nd5fd9740 [stack 0]
+ Dot {
+  name Dot13
+  xpos 1832
+  ypos 1443
+ }
+ DeepExpression {
+  chans1 deep
+  deep.front "red > 1 - \[value parent.filter] + \[value store.bias] ? -1 : deep.front"
+  deep.back "red > 1 - \[value parent.filter] + \[value store.bias] ? -1 : deep.back"
+  name DeepExpression9
+  xpos 1798
+  ypos 1517
+ }
+ DeepCrop {
+  use_znear false
+  zfar 0
+  outside_zrange true
+  bbox {204.6000061 107.8000031 818.4000244 431.2000122}
+  use_bbox false
+  name DeepCrop3
+  xpos 1798
+  ypos 1597
+ }
+ DeepExpression {
+  chans1 none
+  rgba.red deepRawColor.red
+  rgba.green deepRawColor.green
+  rgba.blue deepRawColor.blue
+  rgba.alpha deepRawColor.alpha
+  name DeepExpression10
+  xpos 1798
+  ypos 1677
+ }
+ Dot {
+  name Dot14
+  xpos 1832
+  ypos 2080
+ }
+push $Nd5fd9740
+ DeepExpression {
+  chans0 deep
+  chans1 none
+  deep.front "red > \[value parent.filter] - \[value store.bias] ? deep.front : -1"
+  deep.back "red > \[value parent.filter] - \[value store.bias] ? deep.back : -1"
+  name DeepExpression6
+  selected true
+  xpos 1624
+  ypos 1517
+ }
+ DeepCrop {
+  use_znear false
+  zfar 0
+  outside_zrange true
+  bbox {204.6000061 107.8000031 818.4000244 431.2000122}
+  use_bbox false
+  name DeepCrop1
+  xpos 1624
+  ypos 1597
+ }
+ DeepToImage {
+  name DeepToImage4
+  xpos 1624
+  ypos 1672
+ }
+ Shuffle {
+  in deep
+  green black
+  blue black
+  alpha black
+  out rgb
+  name Shuffle2
+  xpos 1624
+  ypos 1752
+ }
+ DeepFromImage {
+  name DeepFromImage1
+  xpos 1624
+  ypos 1832
+ }
+ DeepExpression {
+  chans0 none
+  chans1 deep
+  deep.front red
+  deep.back red
+  name DeepExpression11
+  xpos 1624
+  ypos 1892
+ }
+ DeepExpression {
+  chans1 none
+  rgba.red deepRawColor.red
+  rgba.green deepRawColor.green
+  rgba.blue deepRawColor.blue
+  rgba.alpha deepRawColor.alpha
+  name DeepExpression7
+  xpos 1624
+  ypos 1960
+ }
+ DeepMerge {
+  inputs 2
+  name DeepMerge2
+  xpos 1624
+  ypos 2077
+ }
+ Dot {
+  name Dot5
+  xpos 1658
+  ypos 3920
+ }
+push $Ndda9bd10
+ Switch {
+  inputs 3
+  which {{parent.selection}}
+  name Switch5
+  xpos 1062
+  ypos 4551
+ }
+ Output {
+  name Output1
+  xpos 1062
+  ypos 4725
+ }
+ NoOp {
+  inputs 0
+  name menu02
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['remove_alpha_filter'].getValue() == 1 :\n\t thisGRP\['alpha_value'].setEnabled(True)\nelse :\n\t thisGRP\['alpha_value'].setEnabled(False)\n"
+  xpos 295
+  ypos -445
+  addUserKnob {20 User}
+  addUserKnob {6 remove_alpha_filter l "remove samples when alpha under :" +STARTLINE}
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nadvknobs = \['remove_10_layers','remove_1_layer','spacer','keep_layers','spacer_1','add_1_layer','add_10_layers','drop_hidden']\nif thisGRP\['selection'].getValue() == 0 :\n    thisGRP\['filter'].setVisible(False)\n    for knob in advknobs :\n        thisGRP\[knob].setVisible(False)\nelif thisGRP\['selection'].getValue() == 1 :\n    thisGRP\['filter'].setVisible(True)\n    for knob in advknobs :\n        thisGRP\[knob].setVisible(False)\nelse :\n    thisGRP\['filter'].setVisible(False)\n    for knob in advknobs :\n        thisGRP\[knob].setVisible(True)\n"
+  xpos 295
+  ypos -539
+  addUserKnob {20 User}
+  addUserKnob {83 selection l "" +STARTLINE M {none "balance (quick)" "advance (slow)"}}
+ }
+ NoOp {
+  inputs 0
+  name store
+  xpos 295
+  ypos -81
+  addUserKnob {20 User}
+  addUserKnob {22 fn T "def reset() :\n\tstartloop = nuke.toNode('start_loop')\n\tfor node in nuke.allNodes() :\n\t\tif node.name()\[0:4] == 'DSM_' :\n\t\t\tnuke.delete( node )\n\n\tstartloop = nuke.toNode('start_loop')\n\tfmerge = nuke.toNode('final_merge')\n\tfor i in range( fmerge.inputs() ) :\n\t\tfmerge.setInput(i, None)\n\tdreset = nuke.nodes.DeepExpression( name='DSM_reset' )\n\tdreset\['rgba.red'].setValue('deepRawColor.red')\n\tdreset\['rgba.green'].setValue('deepRawColor.green')\n\tdreset\['rgba.blue'].setValue('deepRawColor.blue')\n\tdreset\['rgba.alpha'].setValue('deepRawColor.alpha')\n\tdreset.setInput(0, startloop)\n\n\tfmerge.setInput(0, dreset)\n\n################################\n\ndef genlayer(currentcount) :\n\tstartloop = nuke.toNode('start_loop')\n\tfmerge = nuke.toNode('final_merge')\n\n\tacheck = nuke.nodes.DeepExpression( name='DSM_acheck' , chans0='rgba.blue' , chans1='none' , inputs=\[startloop] )\n\tacheck\['rgba.blue'].setValue( '\[value parent.nuke_version] == 0 ? ( deepRawColor.alpha <= \[value store.achk] ? 1 : 0 ) : (deepRawColor.alpha <= \[value store.achk] ? 0 : 1 )' )\n\n\tlastnode = acheck\n\n\tfor i in range( currentcount ) :\n\t\tlayerid = i + 1\n\n\t\tstartdot = nuke.nodes.Dot( name='DSM_start_'+str(layerid) , inputs=\[lastnode] )\n\n\t\td2img = nuke.nodes.DeepToImage( name='DSM_d2img_'+str(layerid) )\n\n\t\tif layerid == 1 :\n\t\t\td2r = nuke.nodes.DeepExpression( name='DSM_d2r_'+str(layerid) , chans0='rgba.red' , chans1='none' , inputs=\[startdot] )\n\t\t\td2r\['rgba.red'].setValue( 'deep.front' )\n\n\t\t\td2img.setInput(0, d2r)\n\t\t\t\n\t\t\tr2all = nuke.nodes.DeepRecolor( name='DSM_r2all_'+str(layerid) , channels='rgb.red' , inputs=\[startdot, d2img] )\n\t\t\t\n\t\t\tlastnode = r2all\n\t\telse :\n\t\t\tdmvb4 = nuke.nodes.DeepExpression( name='DSM_dmvb4_'+str(layerid) , chans0='rgba.red' , chans1='deep' , inputs=\[startdot] )\n\t\t\tdmvb4\['rgba.red'].setValue( 'deep.front' )\n\t\t\tdmvb4\['deep.front'].setValue( 'deep.front == red || deep.front < red ? -1 : deep.front' )\n\t\t\tdmvb4\['deep.back'].setValue( 'deep.back == red || deep.back < red? -1 : deep.back' )\n\n\t\t\tdrmb4 = nuke.nodes.DeepCrop( name='DSM_drmb4_'+str(layerid) , inputs=\[dmvb4] )\n\t\t\tdrmb4\['use_znear'].setValue(0)\n\t\t\tdrmb4\['zfar'].setValue(0)\n\t\t\tdrmb4\['use_zfar'].setValue(1)\n\t\t\tdrmb4\['outside_zrange'].setValue(1)\n\t\t\tdrmb4\['use_bbox'].setValue(0)\n\t\t\t\n\t\t\td2img.setInput(0, drmb4)\n\n\t\t\tr2all = nuke.nodes.DeepRecolor( name='DSM_r2all_'+str(layerid) , channels='rgb.red' , inputs=\[startdot, d2img] )\n\n\t\t\tetypx = nuke.nodes.DeepExpression( name='DSM_etypx_'+str(layerid) , chans0='none' , inputs=\[r2all] )\n\t\t\tetypx\['deep.front'].setValue( 'red == 0 || red < 0 ? -1 : deep.front' )\n\t\t\tetypx\['deep.back'].setValue( 'red == 0 || red < 0 ? -1 : deep.back' )\n\n\t\t\takeepb4 = nuke.nodes.DeepExpression( name='DSM_akeepb4_'+str(layerid) , inputs=\[startdot] )\n\t\t\takeepb4\['rgba.green'].setValue( 'blue' )\n\t\t\takeepb4\['rgba.alpha'].setValue( 'blue' )\n\t\t\takeepb4\['deep.front'].setValue( '\[value parent.nuke_version] == 0 ? ( deep.front >= red ? deep.front : -1 ) : ( deep.front > red ? -1 : deep.front )' )\n\t\t\takeepb4\['deep.back'].setValue( '\[value parent.nuke_version] == 0 ? ( deep.back >= red ? deep.back : -1 ) : ( deep.back > red ? -1 : deep.back )' )\n\n\t\t\tarmb4 = nuke.nodes.DeepCrop( name='DSM_armb4_'+str(layerid) , inputs=\[akeepb4] )\n\t\t\tarmb4\['use_znear'].setValue(0)\n\t\t\tarmb4\['zfar'].setValue(0)\n\t\t\tarmb4\['use_zfar'].setValue(1)\n\t\t\tarmb4\['outside_zrange'].setValue(1)\n\t\t\tarmb4\['use_bbox'].setValue(0)\n\n\t\t\tad2img = nuke.nodes.DeepToImage( name='DSM_ad2img_'+str(layerid) , inputs=\[armb4] )\n\n\t\t\tg2all = nuke.nodes.DeepRecolor( name='DSM_g2all_'+str(layerid) , channels='rgb.green' , inputs=\[etypx, ad2img] )\n\n\t\t\tlastnode = g2all\n\n\t\tdfilter = nuke.nodes.DeepExpression( name='DSM_dfilter_'+str(layerid) , chans0='none' )\n\t\tif layerid == 1 :\n\t\t\tdfilter\['deep.front'].setValue( 'deep.front != red ? -1 : deep.front')\n\t\t\tdfilter\['deep.back'].setValue( 'deep.back != red ? -1 : deep.back')\n\t\t\tdfilter.setInput(0, r2all)\n\t\telse :\n\t\t\tdfilter\['deep.front'].setValue( 'deep.front != red || green == 1 ? -1 : deep.front')\n\t\t\tdfilter\['deep.back'].setValue( 'deep.back != red || green == 1 ? -1 : deep.back')\n\t\t\tdfilter.setInput(0, g2all)\n\n\t\tdthrow = nuke.nodes.DeepCrop( name='DSM_throw_'+str(layerid) , inputs=\[dfilter] )\n\t\tdthrow\['use_znear'].setValue(0)\n\t\tdthrow\['zfar'].setValue(0)\n\t\tdthrow\['use_zfar'].setValue(1)\n\t\tdthrow\['outside_zrange'].setValue(1)\n\t\tdthrow\['use_bbox'].setValue(0)\n\n\t\tdrevert = nuke.nodes.DeepExpression( name='DSM_revert_'+str(layerid) , chans1='none' , inputs=\[dthrow] )\n\t\tdrevert\['rgba.red'].setValue('deepRawColor.red')\n\t\tdrevert\['rgba.green'].setValue('deepRawColor.green')\n\t\tdrevert\['rgba.blue'].setValue('deepRawColor.blue')\n\t\tdrevert\['rgba.alpha'].setValue('deepRawColor.alpha')\n\n\t\tfmerge.setInput(i, drevert)" +STARTLINE}
+  addUserKnob {7 bias}
+  bias 1e-05
+  addUserKnob {7 achk}
+  achk 0.9999
+ }
+end_group

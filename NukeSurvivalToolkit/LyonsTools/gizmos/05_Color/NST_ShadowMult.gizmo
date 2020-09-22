@@ -1,0 +1,163 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name ShadowMult
+ tile_color 0x5c7fc0ff
+ note_font "Bitstream Vera Sans Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 ShadowMult}
+ addUserKnob {41 inputShadowChannel l "Shadow Channel" T ShuffleInputShadow.in}
+ addUserKnob {26 text l "" +STARTLINE T " "}
+ addUserKnob {41 multiply T Grade.multiply}
+ addUserKnob {41 gamma T Grade.gamma}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge20.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge20.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge20.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge20.fringe}
+ addUserKnob {41 mix T Merge20.mix}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 223
+  ypos -145
+  number 2
+ }
+ Input {
+  inputs 0
+  name InputshadowMatte
+  xpos 377
+  ypos -447
+  number 1
+ }
+ Shuffle {
+  name ShuffleInputShadow
+  label "\[value in]"
+  xpos 377
+  ypos -398
+ }
+ Grade {
+  reverse true
+  name Grade
+  xpos 377
+  ypos -348
+ }
+ Dot {
+  name Dot294
+  note_font_size 41
+  xpos 411
+  ypos -287
+ }
+set N28220bf0 [stack 0]
+ Dot {
+  name Dot296
+  note_font_size 41
+  xpos 411
+  ypos -249
+ }
+set N28224ad0 [stack 0]
+ Dot {
+  name Dot297
+  note_font_size 41
+  xpos 411
+  ypos -211
+ }
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name ShuffleBlue
+  tile_color 0x3d3f8e00
+  xpos 233
+  ypos -215
+ }
+push $N28224ad0
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name ShuffleGreen
+  tile_color 0x3f633800
+  xpos 231
+  ypos -253
+ }
+push $N28220bf0
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name ShuffleRed
+  tile_color 0x93000000
+  xpos 233
+  ypos -291
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos -35
+  ypos -443
+ }
+ Dot {
+  name Dot299
+  note_font_size 41
+  xpos -1
+  ypos -359
+ }
+set N28258920 [stack 0]
+ Dot {
+  name Dot295
+  note_font_size 41
+  xpos 128
+  ypos -359
+ }
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value {0 1 1 1}
+  name MultiplyRed
+  label "\[value value]"
+  xpos 94
+  ypos -297
+ }
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value {1 0 1 1}
+  name MultiplyGreen
+  label "\[value value]"
+  xpos 94
+  ypos -259
+ }
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value {1 1 0 1}
+  name MultiplyBlue
+  label "\[value value]"
+  xpos 94
+  ypos -221
+ }
+push $N28258920
+ Dot {
+  name Dot298
+  note_font_size 41
+  xpos -1
+  ypos -141
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge20
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 94
+  ypos -145
+ }
+ Output {
+  name Output1
+  xpos 94
+  ypos -45
+ }
+end_group

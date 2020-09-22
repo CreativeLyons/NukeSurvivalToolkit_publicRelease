@@ -1,0 +1,211 @@
+Group {
+ name GradeLayerPass
+ help "Select a lighting pass layer to minus from CG beauty input, do your color corrections, and plus the pass, with corrections.\n\nalso injects and replaces layer back into the stream.  If you shuffle it out later, will include these color corrections."
+ tile_color 0x5c7fc0ff
+ label "(\[value channel])"
+ note_font "Arial Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 GradeLayerPass}
+ addUserKnob {4 output2 l output M {"Final Output" "Channel Changed" "Channel Original" ""}}
+ addUserKnob {41 channel l channels T Shuffle64.in}
+ addUserKnob {26 ""}
+ addUserKnob {41 red l Exposure T Exposure16.red}
+ addUserKnob {41 multiply T Grade159.multiply}
+ addUserKnob {41 gamma T Grade159.gamma}
+ addUserKnob {41 saturation T Saturation1.saturation}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Name: t "Select a lighting pass layer to minus from CG beauty input, do your color corrections, and plus the pass, with corrections.\n\nalso injects and replaces layer back into the stream.  If you shuffle it out later, will include these color corrections." T GradeLayerPass}
+ addUserKnob {26 ver l Version T v03}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 381
+  ypos -676
+ }
+ Dot {
+  name Dot374
+  note_font_size 41
+  xpos 415
+  ypos -526
+ }
+set N33233460 [stack 0]
+ Shuffle {
+  in rgb
+  name Shuffle64
+  label "\[value in]"
+  xpos 662
+  ypos -533
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove10
+  xpos 662
+  ypos -501
+ }
+ Dot {
+  name Dot375
+  note_font_size 41
+  xpos 696
+  ypos -436
+ }
+set N331f5730 [stack 0]
+ Dot {
+  name Dot380
+  note_font_size 41
+  xpos 806
+  ypos -436
+ }
+ Dot {
+  name Dot381
+  note_font_size 41
+  xpos 806
+  ypos -127
+ }
+ Dot {
+  name Dot382
+  note_font_size 41
+  xpos 497
+  ypos -127
+ }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 896
+  ypos -687
+  number 1
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 930
+  ypos -338
+ }
+push $N331f5730
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos 528
+  ypos -436
+ }
+set N3341c8e0 [stack 0]
+ EXPTool {
+  mode Stops
+  green {{red x1001 -2.6}}
+  blue {{red x1001 -2.6}}
+  name Exposure16
+  xpos 494
+  ypos -391
+ }
+ Grade {
+  name Grade159
+  xpos 494
+  ypos -367
+ }
+ Saturation {
+  name Saturation1
+  xpos 494
+  ypos -341
+ }
+push $N331f5730
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  mix {{parent.mix}}
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  selected true
+  xpos 662
+  ypos -341
+ }
+ Dot {
+  name Dot377
+  note_font_size 41
+  xpos 696
+  ypos -276
+ }
+set N30ce7670 [stack 0]
+ Shuffle {
+  black red
+  white green
+  red2 blue
+  green2 alpha
+  out2 {{{parent.Shuffle64.in}}}
+  name Shuffle72
+  label "\[value in]"
+  xpos 662
+  ypos -232
+ }
+ Dot {
+  name Dot376
+  note_font_size 41
+  xpos 696
+  ypos -178
+ }
+set N3343b490 [stack 0]
+ Dot {
+  name Dot379
+  note_font_size 41
+  xpos 696
+  ypos -89
+ }
+push $N3343b490
+push $N30ce7670
+push $N3341c8e0
+push $N33233460
+ Merge2 {
+  inputs 2
+  operation from
+  bbox B
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge152
+  xpos 381
+  ypos -439
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox B
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge153
+  xpos 381
+  ypos -279
+ }
+ ShuffleCopy {
+  inputs 2
+  in2 none
+  black red
+  white green
+  red2 blue
+  green2 alpha
+  out none
+  out2 {{{parent.Shuffle64.in}}}
+  name ShuffleCopy1
+  xpos 381
+  ypos -181
+ }
+ Switch {
+  inputs 3
+  which {{parent.output2}}
+  name Switch7
+  xpos 381
+  ypos -93
+ }
+ Output {
+  name Output1
+  xpos 381
+  ypos 14
+ }
+end_group

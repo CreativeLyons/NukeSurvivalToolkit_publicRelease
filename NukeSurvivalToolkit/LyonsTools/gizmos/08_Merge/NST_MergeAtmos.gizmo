@@ -1,0 +1,152 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+push 0
+Group {
+ inputs 2
+ name MergeAtmos
+ tile_color 0x4b5ec6ff
+ note_font "Verdana Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 MergeAtmos}
+ addUserKnob {41 channels T MergeKeymix.also_merge}
+ addUserKnob {41 size l "blur size" T Blur1.size}
+ addUserKnob {26 text_1 l " " T " "}
+ addUserKnob {41 plusmix l "plus mix" T MergePlus.mix}
+ addUserKnob {41 mix_1 l "over mix" T MergeOver.mix}
+ addUserKnob {26 text l " " T " "}
+ addUserKnob {41 value l "Gamma Alpha A" T Gamma1.value}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T MergeKeymix.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T MergeKeymix.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T MergeKeymix.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T MergeKeymix.fringe}
+ addUserKnob {41 mix T MergeKeymix.mix}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "For merging Dust, Smoke, Atmos\n\nMix between plus and over\n\nUses alpha of FG to blur the BG which mimicks diffusion." T MergeAtmos}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 508
+  ypos 591
+  number 2
+ }
+ Dot {
+  name Dot7
+  xpos 542
+  ypos 729
+ }
+ Input {
+  inputs 0
+  name InputA
+  xpos 358
+  ypos 84
+  number 1
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels2
+  xpos 358
+  ypos 212
+ }
+ Gamma {
+  channels alpha
+  name Gamma1
+  xpos 358
+  ypos 280
+ }
+ Dot {
+  name Dot87
+  xpos 392
+  ypos 377
+ }
+set N21d63b90 [stack 0]
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos 392
+  ypos 452
+ }
+set N475d840 [stack 0]
+ Dot {
+  name Dot1
+  xpos 392
+  ypos 522
+ }
+push $N475d840
+push $N21d63b90
+ Input {
+  inputs 0
+  name InputB
+  xpos 155
+  ypos 83
+ }
+ Dot {
+  name Dot4
+  xpos 189
+  ypos 250
+ }
+set N475dd80 [stack 0]
+ Blur {
+  inputs 1+1
+  size 10
+  crop false
+  name Blur1
+  label "\[value size]"
+  xpos 155
+  ypos 365
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  mix 0.5
+  name MergePlus
+  xpos 155
+  ypos 445
+ }
+ Merge2 {
+  inputs 2
+  also_merge all
+  mix 0.5
+  name MergeOver
+  xpos 155
+  ypos 519
+ }
+push $N475dd80
+ Dot {
+  name Dot5
+  xpos 34
+  ypos 250
+ }
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos 34
+  ypos 729
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  Achannels none
+  Bchannels none
+  output none
+  also_merge rgba
+  name MergeKeymix
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 155
+  ypos 722
+ }
+ Output {
+  name Output1
+  xpos 155
+  ypos 989
+ }
+end_group

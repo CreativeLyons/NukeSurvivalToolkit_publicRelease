@@ -1,0 +1,520 @@
+Group {
+ name DVPsetLight
+ tile_color 0x597fff
+ label "<font color=cyan>Deep Output</font>"
+ addUserKnob {20 tab_general l General}
+ addUserKnob {41 normal_data l "output normal data" t "Choose which normal data to use for DVPrelight.\n\n<b>generated normal</b>\nThis will generate world space normal from deepPosition data. It is imperfect, will get artifacts on object's edge, it works fine on object's core. Give user an option without normal data. Deep data from scanlineRender will missing tesselation process. Increase subdivision of the geo will get better result.\n\n<b>input normal (world space)</b>\nUse 2D normal from normal 2D input. World space normal doesn't required camera data.\n\n<b>input normal (camera space)</b>\nUse 2D normal from normal 2D input. Camera space normal required camera data." T menu01.normal_data}
+ addUserKnob {26 ""}
+ addUserKnob {6 useGPUIfAvailable l "use GPU if available" +STARTLINE}
+ useGPUIfAvailable true
+ addUserKnob {7 deep_threshold l "Deep Threshold" t "Adjust this value for better edge result.\n\ndefault value is 0.1"}
+ deep_threshold 0.1
+ addUserKnob {1 DN_channel l "input deep normal channel" +HIDDEN}
+ DN_channel Nworld
+ addUserKnob {22 set_link l "link to selected camera" t "Deep data is related to camera. So when convert deep data to anything, it required the camera data.\n\nhow to use :\nSelect the camera, which can be link to any axis nodes. This tool will get the focal, haperture and world matrix from selected camera to generate world space position data.\n\nYou can find the world space normal pass store under <b>'deepNormal'</b> channel after this node. This function requried on 'generated normal' and 'input normal ( camera space )'. If want to bring the normal data to 2D in downstream. Please only use <b>DVPToImage</b> which comes along with this toolset.\n\nAdditional note:\nThis node will also create another channel called <b>'deepRawColor'</b> . This channel stored the original of deep data from input for any dev purposes in downstream. User not necessary to use this channel but better to keep it if this toolset occur in downstream." T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\nroot = getLevel()\nthisGRP = nuke.thisGroup()\n\nmainKnobs = \['world_matrix','cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll']\ndefaultKnobs = \{\n\t\t\t'world matrix' : 'world_matrix',\n\t\t\t'focal length' : 'focal',\n\t\t\t'horiz aperture' : 'haperture',\n\t\t\t'window translate' : 'win_translate',\n\t\t\t'window scale' : 'win_scale',\n\t\t\t'window roll' : 'winroll'\n\t\t\t\}\nselNodeKnobs = \[]\nmissingKnob = \[]\n\ntry :\n\twith root :\n\t\tselNode = nuke.selectedNode()\n\n\tfor knob in selNode.knobs() :\n\t\tselNodeKnobs.append( knob )\n\n\tselNodeKnobs.sort()\n\n\tfor key,value in defaultKnobs.items() :\n\t\tif value not in selNodeKnobs :\n\t\t\tmissingKnob.append( key )\n\n\tif not len(missingKnob) :\n\t\twith root :\n\t\t\tfor knob in mainKnobs :\n\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\tCAMnode = selNode.name()\n\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.world_matrix'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.focal'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.haperture'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.win_translate'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.win_scale'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.winroll'.format(CAMnode))\n\telse :\n\t\tp = nuke.Panel('Select knobs :')\n\t\tp.addBooleanCheckBox( '<b>Unable to find the default knobs. Please use the pulldown menu below to define the knob manually.</b>' , False)\n\t\tfor rk in missingKnob :\n\t\t\tp.addEnumerationPulldown( rk, ' '.join( selNodeKnobs ) )\n\n\t\tif p.show() :\n\t\t\ttry :\n\t\t\t\tfor key,value in defaultKnobs.items() :\n\t\t\t\t\tif p.value( key ) != None :\n\t\t\t\t\t\tdefaultKnobs\[key] = p.value( key )\n\t\t\texcept :\n\t\t\t\tpass\n\n\t\t\twith root :\n\t\t\t\tfor knob in mainKnobs :\n\t\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\t\tCAMnode = selNode.name()\n\t\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['world matrix']))\n\t\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['focal length']))\n\t\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['horiz aperture']))\n\t\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window translate']))\n\t\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window scale']))\n\t\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window roll']))\nexcept :\n\tnuke.message('no node selected.')" +STARTLINE}
+ addUserKnob {22 remove_link l "remove linked expression" t "Remove the linked camera expression but won't reset any data. So the normal data still works if input doesn't contain any camera movement." -STARTLINE T "thisGRP = nuke.thisGroup()\nmainKnobs = \['world_matrix','cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll']\n\nfor knob in thisGRP.knobs() :\n    if mainKnobs.count(knob) != 0 :\n        thisGRP\[knob].clearAnimated()"}
+ addUserKnob {22 bake_link l "bake expression link" t "Baked out the existing expression link back to this node itself. After that, camera node is not required for this node anymore. Baked value is base on the frame range in project setting of the nuke script.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." T "thisGRP = nuke.thisGroup()\n\nframeST = nuke.root().firstFrame()\nframeED = nuke.root().lastFrame()\n\nallknobs = \['cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll','world_matrix']\nalldata = \{\}\n\nchknobs = 0\nfor knob in allknobs :\n\tif thisGRP\[knob].hasExpression() :\n\t\tchknobs = 1\n\nif chknobs :\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\ttry :\n\t\t\t\talldata\[knob].append( thisGRP\[knob].getValueAt(t) )\n\t\t\texcept :\n\t\t\t\talldata\[knob] = \[ thisGRP\[knob].getValueAt(t) ]\n\n\tfor knob in allknobs :\n\t\tthisGRP\[knob].clearAnimated()\n\t\tthisGRP\[knob].setAnimated()\n\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is float :\n\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST] , t )\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is list :\n\t\t\t\tfor i in range( len( alldata\[knob]\[t-frameST] ) ) :\n\t\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST]\[i] , t , i )\nelse :\n\tnuke.message('no expression link found.')" +STARTLINE}
+ addUserKnob {22 copy_data l "copy from selected camera" t "Select the camera, then this will process 'link to selected camera' and 'bake expression link' in once.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." -STARTLINE T "thisGRP = nuke.thisGroup()\nthisGRP\['set_link'].execute()\nthisGRP\['bake_link'].execute()"}
+ addUserKnob {20 cam_data_grp l "CAMERA DATA" n 1}
+ cam_data_grp 0
+ addUserKnob {7 cam_focal l "focal length" R 5 100}
+ cam_focal 50
+ addUserKnob {7 cam_haperture l "horiz aperture" R 0.1 50}
+ cam_haperture 24.576
+ addUserKnob {30 cam_win_translate l "window translate"}
+ addUserKnob {30 cam_win_scale l "window scale"}
+ cam_win_scale {1 1}
+ addUserKnob {7 cam_winroll l "window roll" R -45 45}
+ addUserKnob {41 world_matrix l "world matrix" T cam_data.matrix}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l <b>Version</b> T 3.8}
+ addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2020-02-13}
+ addUserKnob {22 btn_CHANGELOG l <b>Changlelog</b> T "log = \"3.8<br>'DVPMatte'<br>&nbsp;&nbsp;-&nbsp;fixed&nbsp;cube&nbsp;matte&nbsp;shape&nbsp;result&nbsp;when&nbsp;pivot&nbsp;changed.&nbsp;Sphere&nbsp;and&nbsp;Cylinder&nbsp;were&nbsp;fine&nbsp;in&nbsp;the&nbsp;past&nbsp;versions.<br>'DVProjection'<br>&nbsp;&nbsp;-&nbsp;link&nbsp;camera&nbsp;replaced&nbsp;transformation&nbsp;by&nbsp;world&nbsp;matrix,&nbsp;so&nbsp;it&nbsp;works&nbsp;with&nbsp;camera&nbsp;stack&nbsp;with&nbsp;axis.<br>&nbsp;&nbsp;-&nbsp;removed&nbsp;preview&nbsp;projection&nbsp;camera&nbsp;in&nbsp;3D&nbsp;view.<br><br>3.7<br>Toolset&nbsp;update&nbsp;:<br>&nbsp;&nbsp;'DVPort'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;added&nbsp;'near'&nbsp;&&nbsp;'far&nbsp;knobs<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;'DVPmatte'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;fixed&nbsp;missing&nbsp;premult&nbsp;original&nbsp;alpha&nbsp;process<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;revert&nbsp;uniform_scale&nbsp;default&nbsp;value&nbsp;back&nbsp;to&nbsp;1.0<br><br>3.6<br>'DVPsetLight'<br>-&nbsp;improved&nbsp;'generated&nbsp;normal&nbsp;(estimate&nbsp;from&nbsp;position)'&nbsp;and&nbsp;changed&nbsp;to&nbsp;blink&nbsp;script.&nbsp;Get&nbsp;better&nbsp;edges&nbsp;on&nbsp;deepNormal.\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "<b>Developed by</b>" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x7f7f7fff
+  label bin
+  note_font_size 42
+  xpos -855
+  ypos 21
+  bdwidth 410
+  bdheight 272
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -864
+  ypos -280
+  bdwidth 412
+  bdheight 260
+ }
+ Camera {
+  inputs 0
+  display off
+  selectable false
+  rot_order XYZ
+  useMatrix true
+  focal {{parent.cam_focal}}
+  haperture {{parent.cam_haperture}}
+  name cam_data
+  xpos -598
+  ypos 174
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\ncamKnobs = \['set_link','remove_link','bake_link','copy_data','world_matrix','cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll','cam_data_grp','endGroup_1']\n\nif nuke.thisGroup()\['normal_data'].getValue() <= 1 :\n    for knob in camKnobs :\n        nuke.thisGroup()\[knob].setVisible(True)\nelse :\n    for knob in camKnobs :\n        nuke.thisGroup()\[knob].setVisible(False)\n\nif nuke.thisGroup()\['normal_data'].getValue() == 0 :\n    nuke.thisGroup()\['useGPUIfAvailable'].setVisible(True)\n    nuke.thisGroup()\['deep_threshold'].setVisible(True)\nelse :\n    nuke.thisGroup()\['useGPUIfAvailable'].setVisible(False)\n    nuke.thisGroup()\['deep_threshold'].setVisible(False)\n\nif nuke.thisGroup()\['normal_data'].getValue() == 3 :\n    nuke.thisGroup()\['DN_channel'].setVisible(True)\nelse :\n    nuke.thisGroup()\['DN_channel'].setVisible(False)\n"
+  xpos -707
+  ypos -144
+  addUserKnob {20 User}
+  addUserKnob {4 normal_data l "output normal data" M {"generated normal (estimate from position) " "input 2D normal (camera space) " "input 2D normal (world space) " "input deep normal (world space) " "" "" ""}}
+ }
+ Group {
+  inputs 0
+  name inverseMatrix_cam
+  tile_color 0x337f4cff
+  xpos -797
+  ypos 193
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path cam_data.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ NoOp {
+  inputs 0
+  name globalm
+  xpos -800
+  ypos 117
+  addUserKnob {20 User}
+  addUserKnob {7 hratio}
+  hratio {{parent.cam_haperture/parent.cam_focal}}
+  addUserKnob {1 pos}
+  pos "( pi / 2 ) - atan( height / width )"
+  addUserKnob {1 neg}
+  neg "-( pi / 2 ) - atan( height / width )"
+  addUserKnob {1 diagonal}
+  diagonal "( pi / 2 ) - atan( hypot / width )"
+ }
+add_layer {deepNormal deepNormal.red deepNormal.green deepNormal.blue deepNormal.alpha}
+ AddChannels {
+  inputs 0
+  channels deepNormal
+  name AddChannels1
+  xpos -152
+  ypos 95
+ }
+add_layer {deepRawColor deepRawColor.red deepRawColor.green deepRawColor.blue deepRawColor.alpha}
+ AddChannels {
+  inputs 0
+  channels deepRawColor
+  name AddChannels2
+  xpos -143
+  ypos -93
+ }
+ Input {
+  inputs 0
+  name deep
+  xpos 0
+  ypos -175
+ }
+ DeepRecolor {
+  inputs 2
+  channels {{{parent.AddChannels2.channels}}}
+  name DeepRecolor4
+  xpos 0
+  ypos -93
+ }
+ DeepExpression {
+  chans0 deepRawColor
+  chans1 rgb
+  rgba.red 0
+  rgba.green 0
+  rgba.blue 0
+  deepRawColor.red red
+  deepRawColor.green green
+  deepRawColor.blue blue
+  deepRawColor.alpha alpha
+  name DeepExpression6
+  label "store original color data"
+  xpos 0
+  ypos 1
+ }
+ DeepRecolor {
+  inputs 2
+  channels {{{parent.AddChannels1.channels}}}
+  name DeepRecolor1
+  xpos 0
+  ypos 95
+ }
+ Dot {
+  name Dot12
+  xpos 34
+  ypos 248
+ }
+set Ndf6c8cf0 [stack 0]
+ Dot {
+  name Dot20
+  xpos 34
+  ypos 1504
+ }
+set Ndf6cb070 [stack 0]
+ Dot {
+  name Dot27
+  xpos 758
+  ypos 1504
+ }
+set Ndf6cd530 [stack 0]
+ Dot {
+  name Dot28
+  xpos 1166
+  ypos 1504
+ }
+set Ndf6cf9f0 [stack 0]
+ Dot {
+  name Dot13
+  xpos 1748
+  ypos 1504
+ }
+ DeepExpression {
+  chans0 {deepNormal.red deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.red "\[value parent.DN_channel].red"
+  deepNormal.green "\[value parent.DN_channel].green"
+  deepNormal.blue "\[value parent.DN_channel].blue"
+  name DeepExpression3
+  xpos 1714
+  ypos 2315
+ }
+ Input {
+  inputs 0
+  name normal2D
+  xpos 1322
+  ypos -188
+  number 1
+ }
+ Dot {
+  name Dot25
+  xpos 1356
+  ypos 1936
+ }
+set Ndf6dbe30 [stack 0]
+ Remove {
+  operation keep
+  channels rgb
+  name Remove2
+  xpos 1322
+  ypos 2217
+ }
+ Shuffle {
+  alpha black
+  out deepNormal
+  name Shuffle4
+  xpos 1322
+  ypos 2291
+ }
+push $Ndf6cf9f0
+ DeepRecolor {
+  inputs 2
+  channels {deepNormal.red deepNormal.green deepNormal.blue none}
+  name DeepRecolor5
+  xpos 1132
+  ypos 2285
+ }
+push $Ndf6dbe30
+ Remove {
+  operation keep
+  channels rgb
+  name Remove3
+  xpos 904
+  ypos 1932
+ }
+ ColorMatrix {
+  matrix {
+      {{parent.world_matrix.0} {parent.world_matrix.1} {parent.world_matrix.2}}
+      {{parent.world_matrix.4} {parent.world_matrix.5} {parent.world_matrix.6}}
+      {{parent.world_matrix.8} {parent.world_matrix.9} {parent.world_matrix.10}}
+    }
+  name ColorMatrix1
+  xpos 904
+  ypos 2014
+ }
+ Shuffle {
+  alpha black
+  out deepNormal
+  name Shuffle5
+  xpos 904
+  ypos 2090
+ }
+push $Ndf6cd530
+ DeepRecolor {
+  inputs 2
+  channels {deepNormal.red deepNormal.green deepNormal.blue none}
+  name DeepRecolor6
+  xpos 724
+  ypos 2084
+ }
+ Dot {
+  name Dot31
+  xpos 758
+  ypos 2213
+ }
+push $Ndf6c8cf0
+ Dot {
+  name Dot9
+  xpos 381
+  ypos 248
+ }
+add_layer {deepPosition deepPosition.red deepPosition.green deepPosition.blue deepPosition.alpha}
+ DeepExpression {
+  chans0 {deepPosition.red deepPosition.green deepPosition.blue none}
+  chans1 none
+  deepPosition.red "\[value dx]"
+  deepPosition.green "\[value dy]"
+  deepPosition.blue "\[value dz]"
+  name DeepExpression1
+  label "reset cam"
+  xpos 347
+  ypos 322
+  addUserKnob {20 User}
+  addUserKnob {1 dx}
+  dx "( deepPosition.red - \[value cam_data.world_matrix.3] ) * \[value inverseMatrix_cam.invMatrix.0] + ( deepPosition.green - \[value cam_data.world_matrix.7] ) * \[value inverseMatrix_cam.invMatrix.1] + ( deepPosition.blue - \[value cam_data.world_matrix.11] ) * \[value inverseMatrix_cam.invMatrix.2]"
+  addUserKnob {1 dy}
+  dy "( deepPosition.red - \[value cam_data.world_matrix.3] ) * \[value inverseMatrix_cam.invMatrix.3] + ( deepPosition.green - \[value cam_data.world_matrix.7] ) * \[value inverseMatrix_cam.invMatrix.4] + ( deepPosition.blue - \[value cam_data.world_matrix.11] ) * \[value inverseMatrix_cam.invMatrix.5]"
+  addUserKnob {1 dz}
+  dz "( deepPosition.red - \[value cam_data.world_matrix.3] ) * \[value inverseMatrix_cam.invMatrix.6] + ( deepPosition.green - \[value cam_data.world_matrix.7] ) * \[value inverseMatrix_cam.invMatrix.7] + ( deepPosition.blue - \[value cam_data.world_matrix.11] ) * \[value inverseMatrix_cam.invMatrix.8]"
+ }
+ Group {
+  name DeepPositionToImage1
+  tile_color 0x3d99ff
+  label "<font color=cyan>Image Output</font>"
+  xpos 347
+  ypos 416
+  addUserKnob {20 t_VERSION l Version}
+  addUserKnob {26 l_VERSION l <b>Version</b> T n/a}
+  addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2019-05-23}
+  addUserKnob {26 l_CHANGELOG l <b>Changelog</b> T "for internal use"}
+  addUserKnob {26 l_DEV l "<b>Developed by</b>" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+ }
+  Input {
+   inputs 0
+   name deep
+   xpos 508
+   ypos -26
+  }
+  Dot {
+   name Dot5
+   xpos 542
+   ypos 31
+  }
+set Ndf4b5040 [stack 0]
+  DeepExpression {
+   chans1 none
+   rgba.red deepPosition.red
+   rgba.green deepPosition.green
+   rgba.blue deepPosition.blue
+   rgba.alpha "alpha == 0 ? 0 : 1"
+   name DeepExpression15
+   xpos 656
+   ypos 28
+  }
+  DeepToImage {
+   name DeepToImage2
+   xpos 656
+   ypos 185
+  }
+push $Ndf4b5040
+  DeepToImage {
+   name DeepToImage1
+   xpos 508
+   ypos 80
+  }
+  ShuffleCopy {
+   inputs 2
+   red red
+   green green
+   blue blue
+   alpha black
+   out deepPosition
+   name ShuffleCopy1
+   xpos 508
+   ypos 185
+  }
+  Output {
+   name Output1
+   selected true
+   xpos 508
+   ypos 265
+  }
+ end_group
+ Shuffle {
+  in deepPosition
+  in2 alpha
+  alpha red2
+  name Shuffle1
+  xpos 347
+  ypos 520
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos 347
+  ypos 602
+ }
+ Dot {
+  name Dot29
+  xpos 381
+  ypos 772
+ }
+set Ndf4db8f0 [stack 0]
+ Dot {
+  name Dot32
+  xpos 246
+  ypos 772
+ }
+ Dot {
+  name Dot30
+  xpos 246
+  ypos 1126
+ }
+push $Ndf4db8f0
+ BlinkScript {
+  recompileCount 375
+  KernelDescription "2 \"PosToNor\" iterate pixelWise ab5e1656eaf84f1b18b86d8982acb565af1476897eaf654f759130d537446a0b 2 \"src\" Read Random \"dst\" Write Point 1 \"deep threshold\" Float 1 zczMPQ== 1 \"dThreshold\" 1 1 0"
+  EncodedSource "1 2886 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"
+  useGPUIfAvailable {{parent.useGPUIfAvailable}}
+  rebuild ""
+  "PosToNor_deep threshold" {{parent.deep_threshold}}
+  protectKernelWhenPublishing true
+  rebuild_finalise ""
+  name BlinkScript1
+  selected true
+  xpos 347
+  ypos 889
+ }
+ Expression {
+  expr0 "atan( atan(red) ) * 1.5"
+  expr2 "smoothstep( 0, 1, blue )"
+  name Expression2
+  xpos 347
+  ypos 1000
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos 347
+  ypos 1116
+ }
+ Premult {
+  name Premult2
+  xpos 347
+  ypos 1210
+ }
+ Unpremult {
+  name Unpremult2
+  xpos 347
+  ypos 1292
+ }
+ Shuffle {
+  in rgb
+  alpha black
+  out deepNormal
+  name Shuffle6
+  xpos 347
+  ypos 1374
+ }
+ Dot {
+  name Dot19
+  xpos 381
+  ypos 1718
+ }
+push $Ndf6cb070
+ DeepRecolor {
+  inputs 2
+  channels {deepNormal.red deepNormal.green deepNormal.blue none}
+  name DeepRecolor3
+  xpos 0
+  ypos 1708
+ }
+ DeepExpression {
+  chans0 {deepNormal.red deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.red "\[value dx]"
+  deepNormal.green "\[value dy]"
+  deepNormal.blue "\[value dz]"
+  name DeepExpression2
+  label "world space normal"
+  xpos 0
+  ypos 1799
+  addUserKnob {20 User}
+  addUserKnob {1 dx}
+  dx "deepNormal.red * \[value cam_data.world_matrix.0] + deepNormal.green * \[value cam_data.world_matrix.1] + deepNormal.blue * \[value cam_data.world_matrix.2]"
+  addUserKnob {1 dy}
+  dy "deepNormal.red * \[value cam_data.world_matrix.4] + deepNormal.green * \[value cam_data.world_matrix.5] + deepNormal.blue * \[value cam_data.world_matrix.6]"
+  addUserKnob {1 dz}
+  dz "deepNormal.red * \[value cam_data.world_matrix.8] + deepNormal.green * \[value cam_data.world_matrix.9] + deepNormal.blue * \[value cam_data.world_matrix.10]"
+ }
+ Switch {
+  inputs 4
+  which {{parent.normal_data}}
+  name Switch1
+  xpos 0
+  ypos 2692
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 2774
+ }
+end_group

@@ -1,0 +1,12 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ channel0 depth
+ expr0 z==0?0:1/z
+ name Expression1
+ label "NORMALIZED DEPTH"
+ selected true
+ xpos -584
+ ypos 440
+}

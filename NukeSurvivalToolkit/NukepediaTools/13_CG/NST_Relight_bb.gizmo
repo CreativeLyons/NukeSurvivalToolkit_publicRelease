@@ -1,0 +1,723 @@
+Group {
+ name Relight_BB
+ help "2D tool to help relight 3d renders with help of a normals pass\n\nFeed it with a normals pass through the \"image\" input, and select the right channel for it.\nUse the \"mask\" input to isolate a specific object in your scene.\n\n\n- Antialias normals to get rid of flickering\n- use ReNorm if your normals are coded from 0 to 1\n\nHave fun !\n\nby bflat (Bastien Brenot)\nmail@bastienbrenot.com"
+ tile_color 0x55ffbfff
+ label "diff \[value enableDiffuse] / spec \[value enableSpec] / AA \[value AntiAlias_normals]"
+ selected true
+ xpos 133
+ ypos 149
+ addUserKnob {20 Settings}
+ addUserKnob {41 normalsChannel l "Normals : " T Shuffle15.in}
+ addUserKnob {6 AntiAlias_normals l antiAlias -STARTLINE}
+ addUserKnob {6 oldWay l "reNorm ( 0/1 -> -1/1 )" -STARTLINE}
+ addUserKnob {6 testRange l "test range" +STARTLINE}
+ addUserKnob {7 remapNorm l "    // old max value :" -STARTLINE R 1 4}
+ remapNorm 1
+ addUserKnob {6 softClip l "softClip ultra high" -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {6 SpecColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 DiffuseColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {20 lightdirection l "light direction" n 1}
+ addUserKnob {6 enableDiffuse l "DIFFUSE     " +STARTLINE}
+ enableDiffuse true
+ addUserKnob {6 enableSpec l "SPECULAR     " -STARTLINE}
+ enableSpec true
+ addUserKnob {26 noText l "" +STARTLINE T " "}
+ addUserKnob {7 X_Angle l "X Angle" R -180 180}
+ X_Angle -15
+ addUserKnob {7 Y_Angle l "Y Angle" R -180 180}
+ Y_Angle 75
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 settings l "light settings" n 1}
+ addUserKnob {26 void l " "}
+ addUserKnob {18 DiffuseColor l "Diffuse Color"}
+ DiffuseColor 1
+ addUserKnob {6 DiffuseColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 affectDiffuseAlpha l "affect alpha" -STARTLINE}
+ affectDiffuseAlpha true
+ addUserKnob {26 ""}
+ addUserKnob {7 spec_cosinPower l "cosin power"}
+ spec_cosinPower 0.75
+ addUserKnob {18 SpecColor l "Specular Color"}
+ SpecColor 1
+ addUserKnob {6 SpecColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 affectSpecAlpha l "affect alpha" -STARTLINE}
+ affectSpecAlpha true
+ addUserKnob {6 boostSpec l "boost spec" +STARTLINE}
+ boostSpec true
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 mask n 1}
+ addUserKnob {26 void2 l " "}
+ addUserKnob {6 postMult l "post multiply by original Alpha ? " +STARTLINE}
+ addUserKnob {6 enableMask l "enable mask" +STARTLINE}
+ addUserKnob {41 maskChannelMask l "" -STARTLINE T maskMultiply.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T maskMultiply.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T maskMultiply.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T maskMultiply.fringe}
+ addUserKnob {41 mix T maskMultiply.mix}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff00bfff
+  label ZEBRAS
+  note_font_size 42
+  xpos -638
+  ypos -74
+  bdwidth 643
+  bdheight 288
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode13
+  tile_color 0x8e8e3800
+  label "RELIGHT DIFF + SPEC"
+  note_font_size 42
+  xpos -1014
+  ypos -702
+  bdwidth 1025
+  bdheight 371
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x71c67100
+  label "remap normals\n\n+ softclip high\n\nPOSITIF\n\n\n\n\n\nNEGATIF"
+  note_font_size 42
+  xpos -817
+  ypos -1664
+  bdwidth 827
+  bdheight 772
+ }
+ Input {
+  inputs 0
+  name InputNormals
+  xpos -439
+  ypos -1994
+ }
+ Dot {
+  name Dot53
+  xpos -405
+  ypos -1914
+ }
+set Nb728d1c0 [stack 0]
+ Shuffle {
+  green blue
+  blue green
+  alpha black
+  name Shuffle15
+  label "\[value in]"
+  xpos -439
+  ypos -1875
+ }
+ Dot {
+  name Dot9
+  xpos -405
+  ypos -1803
+ }
+set Nb729dfc0 [stack 0]
+ Dot {
+  name Dot10
+  xpos -528
+  ypos -1803
+ }
+ Expression {
+  expr0 r*2-1
+  expr1 g*2-1
+  expr2 b*2-1
+  name normalize
+  label "\[value expr0]"
+  xpos -562
+  ypos -1756
+ }
+push $Nb729dfc0
+ Switch {
+  inputs 2
+  which 1
+  name Switch_oldWay
+  xpos -439
+  ypos -1750
+  disable {{parent.oldWay==0?1:0}}
+ }
+set Nb72b11c0 [stack 0]
+ Multiply {
+  channels rgb
+  value {{1/parent.remapNorm}}
+  name Multiply_setNewRange
+  label "\[value value]"
+  xpos -439
+  ypos -1639
+ }
+ Dot {
+  name Dot14
+  xpos -405
+  ypos -1582
+ }
+set Nb72c1080 [stack 0]
+ Dot {
+  name Dot15
+  xpos -260
+  ypos -1582
+ }
+set Nb72c4cd0 [stack 0]
+ ClipTest {
+  channels rgb
+  lower -10000
+  name ClipTest2
+  xpos -176
+  ypos -1585
+ }
+push $Nb72c4cd0
+ Difference {
+  inputs 2
+  name Difference2
+  xpos -176
+  ypos -1546
+ }
+ FilterErode {
+  size -3
+  name FilterErode1
+  xpos -176
+  ypos -1510
+ }
+ Blur {
+  channels rgba
+  size 5
+  name Blur1
+  label "\[value size]"
+  xpos -176
+  ypos -1449
+ }
+ Multiply {
+  channels rgba
+  value 1.2
+  name Multiply3
+  label "\[value value]"
+  xpos -176
+  ypos -1413
+ }
+ Clamp {
+  name Clamp2
+  xpos -176
+  ypos -1377
+ }
+push $Nb72c1080
+ Dot {
+  name Dot12
+  xpos -406
+  ypos -1482
+ }
+set Nb73070e0 [stack 0]
+ Expression {
+  temp_name0 Y
+  temp_expr0 "0.2126*r + 0.7152*g + 0.0722*b"
+  temp_name1 L
+  temp_expr1 (r+g+b)/3
+  channel0 rgba
+  expr0 Y
+  name Expression1
+  label "\[value expr0]"
+  xpos -296
+  ypos -1491
+ }
+ ColorLookup {
+  lut {master {curve C x0.3000000119 0 s0 x0.6999999881 1 s3.200000048}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookup1
+  xpos -296
+  ypos -1443
+ }
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value 0
+  invert_mask true
+  name Multiply2
+  label "\[value value]"
+  xpos -296
+  ypos -1377
+ }
+push $Nb73070e0
+ SoftClip {
+  conversion "logarithmic compress"
+  softclip_min 0.6
+  name SoftClip1
+  xpos -692
+  ypos -1371
+ }
+push $Nb73070e0
+ Keymix {
+  inputs 3
+  name Keymix2
+  xpos -440
+  ypos -1377
+  disable {{!parent.softClip}}
+ }
+ Expression {
+  expr0 -r
+  expr1 -g
+  expr2 -b
+  name Expression2
+  label "\[value expr0]"
+  xpos -439
+  ypos -1281
+ }
+ Dot {
+  name Dot16
+  xpos -405
+  ypos -1223
+ }
+set Nb7165f20 [stack 0]
+ Dot {
+  name Dot17
+  xpos -258
+  ypos -1223
+ }
+set Nb7169df0 [stack 0]
+ ClipTest {
+  channels rgb
+  lower -10000
+  name ClipTest3
+  xpos -175
+  ypos -1226
+ }
+push $Nb7169df0
+ Difference {
+  inputs 2
+  name Difference3
+  xpos -175
+  ypos -1188
+ }
+ FilterErode {
+  size -5
+  name FilterErode2
+  xpos -175
+  ypos -1152
+ }
+ Blur {
+  channels rgba
+  size 5
+  name Blur2
+  label "\[value size]"
+  xpos -175
+  ypos -1093
+ }
+ Multiply {
+  channels rgba
+  value 1.2
+  name Multiply4
+  label "\[value value]"
+  xpos -175
+  ypos -1057
+ }
+ Clamp {
+  name Clamp3
+  xpos -175
+  ypos -1021
+ }
+push $Nb7165f20
+ Dot {
+  name Dot13
+  xpos -405
+  ypos -1189
+ }
+set Nb71a8b90 [stack 0]
+ Expression {
+  temp_name0 Y
+  temp_expr0 "0.2126*r + 0.7152*g + 0.0722*b"
+  temp_name1 L
+  temp_expr1 (r+g+b)/3
+  channel0 rgba
+  expr0 L
+  name Expression3
+  label "\[value expr0]"
+  xpos -295
+  ypos -1198
+ }
+ ColorLookup {
+  lut {master {curve C x0.3000000119 0 s0 x0.6999999881 1 s3.200000048}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookup2
+  xpos -295
+  ypos -1149
+ }
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value 0
+  invert_mask true
+  name Multiply5
+  label "\[value value]"
+  xpos -295
+  ypos -1021
+ }
+push $Nb71a8b90
+ SoftClip {
+  conversion "logarithmic compress"
+  softclip_min 0.6
+  name SoftClip2
+  xpos -691
+  ypos -1015
+ }
+push $Nb71a8b90
+ Keymix {
+  inputs 3
+  name Keymix3
+  xpos -439
+  ypos -1021
+  disable {{!parent.softClip}}
+ }
+ Expression {
+  expr0 -r
+  expr1 -g
+  expr2 -b
+  name Expression4
+  label "\[value expr0]"
+  xpos -439
+  ypos -971
+ }
+set Nb7316ed0 [stack 0]
+ Dot {
+  name Dot4
+  xpos -405
+  ypos -808
+ }
+set Nb731f1f0 [stack 0]
+ Dot {
+  name Dot3
+  xpos -1170
+  ypos -808
+ }
+ Dot {
+  name Dot8
+  xpos -1170
+  ypos 3
+ }
+ Dot {
+  name Dot7
+  xpos -536
+  ypos 3
+ }
+set Nb732ae70 [stack 0]
+ Dot {
+  name Dot6
+  xpos -536
+  ypos 137
+ }
+push $Nb732ae70
+ Dot {
+  name Dot5
+  xpos -464
+  ypos 3
+ }
+ ClipTest {
+  channels rgb
+  lower -1
+  name ClipTest1
+  xpos -498
+  ypos 38
+ }
+ Difference {
+  inputs 2
+  name Difference1
+  xpos -498
+  ypos 128
+ }
+ Clamp {
+  name Clamp1
+  xpos -331
+  ypos 128
+ }
+ Dot {
+  name Dot2
+  xpos -205
+  ypos 137
+ }
+set Nb7353150 [stack 0]
+push $Nb7353150
+ Grade {
+  white 10
+  name Grade1
+  xpos -239
+  ypos 169
+ }
+push $Nb7353150
+push $Nb728d1c0
+ Dot {
+  name Dot55
+  xpos -727
+  ypos -1914
+ }
+ Dot {
+  name Dot11
+  xpos -727
+  ypos -175
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 151
+  ypos -286
+  number 1
+ }
+ Invert {
+  name Invert1
+  xpos 9
+  ypos -292
+ }
+ Expression {
+  inputs 0
+  temp_name0 Xx
+  temp_expr0 sin(pi*(parent.X_Angle)/180)
+  temp_name1 Xy
+  temp_expr1 cos(pi*(parent.X_Angle)/180)
+  temp_name2 Yx
+  temp_expr2 sin(pi*(parent.Y_Angle-90)/180)
+  temp_name3 Yy
+  temp_expr3 cos(pi*(parent.Y_Angle-90)/180)
+  expr0 Xx*Yx
+  expr1 Xy*Yx
+  expr2 Yy
+  name diffuseDirectionColor
+  xpos -685
+  ypos -585
+ }
+set Nb71f2190 [stack 0]
+push $Nb731f1f0
+ Matrix {
+  channels rgb
+  matrix {
+      {1 2 1}
+      {2 4 2}
+      {1 2 1}
+    }
+  normalize true
+  name antiAlias_Normals
+  xpos -439
+  ypos -768
+  disable {{parent.AntiAlias_normals==0?1:0}}
+ }
+ Dot {
+  name Dot54
+  xpos -405
+  ypos -635
+ }
+set Nb7372960 [stack 0]
+ Dot {
+  name Dot1
+  xpos -547
+  ypos -635
+ }
+ MergeExpression {
+  inputs 2
+  temp_name0 X
+  temp_expr0 A.r*B.r
+  temp_name1 Y
+  temp_expr1 A.g*B.g
+  temp_name2 Z
+  temp_expr2 A.b*B.b
+  temp_name3 DIR
+  temp_expr3 X+Y+Z
+  channel0 rgba
+  expr0 pow(DIR,(parent.spec_cosinPower/pow(parent.spec_cosinPower/1.2,5)))
+  channel1 none
+  channel2 none
+  name SpecDirMult
+  xpos -581
+  ypos -471
+ }
+ Multiply {
+  channels rgba
+  value 3
+  name Spec_Multiply
+  label "\[value value]"
+  xpos -397
+  ypos -477
+  disable {{!parent.boostSpec}}
+ }
+set Nb7386150 [stack 0]
+ Multiply {
+  channels alpha
+  value {{(0.2126*parent.SpecColor.r+0.7152*parent.SpecColor.g+0.0722*parent.SpecColor.b)}}
+  name MultiplySpecAlpha
+  label "\[value value]"
+  xpos -315
+  ypos -522
+ }
+push $Nb7386150
+ Multiply {
+  channels rgb
+  value {{parent.SpecColor.r} {parent.SpecColor.g} {parent.SpecColor.b} 1}
+  name SpecColor
+  label "\[value value]"
+  xpos -317
+  ypos -431
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name CopySpecAlpha
+  xpos -229
+  ypos -467
+  disable {{parent.affectSpecAlpha==0?1:0}}
+ }
+push $Nb71f2190
+push $Nb7372960
+ MergeExpression {
+  inputs 2
+  temp_name0 X
+  temp_expr0 A.r*B.r
+  temp_name1 Y
+  temp_expr1 A.g*B.g
+  temp_name2 Z
+  temp_expr2 A.b*B.b
+  temp_name3 DIR
+  temp_expr3 X+Y+Z
+  channel0 rgba
+  expr0 DIR
+  channel1 none
+  channel2 none
+  name DiffuseDirMult
+  xpos -439
+  ypos -585
+ }
+set Nb6719f70 [stack 0]
+ Multiply {
+  channels alpha
+  value {{(0.2126*parent.DiffuseColor.r+0.7152*parent.DiffuseColor.g+0.0722*parent.DiffuseColor.b)}}
+  name MultiplyDiffAlpha
+  label "\[value value]"
+  xpos -338
+  ypos -635
+ }
+push $Nb6719f70
+ Multiply {
+  channels rgb
+  value {{parent.DiffuseColor.r} {parent.DiffuseColor.g} {parent.DiffuseColor.b} {parent.affectDiffuseAlpha==0?1:((parent.DiffuseColor.r+parent.DiffuseColor.g+parent.DiffuseColor.b)/3)}}
+  name DiffuseColor
+  label "\[value value]"
+  xpos -341
+  ypos -571
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name CopyDiffAlpha
+  xpos -227
+  ypos -581
+  disable {{parent.affectDiffuseAlpha==0?1:0}}
+ }
+push $Nb728d1c0
+ Dot {
+  name Dot59
+  xpos -85
+  ypos -1914
+ }
+ Expression {
+  channel0 rgba
+  expr0 0
+  name BlackExpression
+  label "RGBA = 0"
+  xpos -119
+  ypos -1845
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge_DIFFUSE
+  xpos -119
+  ypos -575
+  disable {{parent.enableDiffuse==0?1:0}}
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge_SPEC
+  xpos -119
+  ypos -461
+  disable {{parent.enableSpec==0?1:0}}
+ }
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value 0
+  name maskMultiply
+  label "\[value value]"
+  xpos -119
+  ypos -292
+  disable {{parent.enableMask==0?1:0}}
+ }
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value 0
+  invert_mask true
+  name postMultiply
+  label "\[value value]"
+  xpos -119
+  ypos -184
+  disable {{parent.postMult==0?1:0}}
+ }
+ Multiply {
+  inputs 1+1
+  channels rgb
+  value 0
+  name Multiply1
+  label "\[value value]"
+  xpos -119
+  ypos 128
+  disable {{!parent.testRange}}
+ }
+ Keymix {
+  inputs 3
+  channels {rgba.red -rgba.green rgba.blue none}
+  name Keymix1
+  xpos -119
+  ypos 169
+  disable {{!parent.testRange}}
+ }
+ Output {
+  name Output1
+  xpos -119
+  ypos 379
+ }
+ Expression {
+  inputs 0
+  temp_name0 Xx
+  temp_expr0 sin(pi*(parent.X_Angle/2)/180)
+  temp_name1 Xy
+  temp_expr1 cos(pi*(parent.X_Angle/2)/180)
+  temp_name2 Yx
+  temp_expr2 sin(pi*(parent.Y_Angle/2-90)/180)
+  temp_name3 Yy
+  temp_expr3 cos(pi*(parent.Y_Angle/2-90)/180)
+  expr0 Xx*Yx
+  expr1 Xy*Yx
+  expr2 Yy
+  name specDirectionColor
+  xpos -693
+  ypos -471
+  disable true
+ }
+push $Nb72b11c0
+ ClipTest {
+  channels rgb
+  lower -1
+  upper 100
+  name ClipTest4
+  xpos -250
+  ypos -1703
+ }
+end_group

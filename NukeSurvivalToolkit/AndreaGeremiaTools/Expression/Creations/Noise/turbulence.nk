@@ -1,0 +1,50 @@
+add_layer {Pref Pref.red Pref.green Pref.blue Pref.alpha}
+add_layer {ID01 ID01.red ID01.green ID01.blue ID01.alpha}
+Shuffle {
+ in Pref
+ in2 ID01
+ alpha red2
+ name Shuffle9
+ label "\[value in]"
+ selected true
+ xpos 82
+ ypos -145
+}
+Unpremult {
+ name Unpremult1
+ selected true
+ xpos 82
+ ypos -83
+}
+add_layer {noise01 noise01.red noise01.green noise01.blue noise01.alpha}
+Expression {
+ channel0 noise01
+ expr0 random(r,g,b)+offset
+ name Expression6
+ label lacunarity
+ selected true
+ xpos 82
+ ypos -40
+ addUserKnob {20 User}
+ addUserKnob {7 offset l Offset}
+ offset 0.365
+}
+Expression {
+ temp_name0 octaves
+ temp_expr0 10
+ temp_name1 gain
+ temp_expr1 1
+ channel0 rgb
+ expr0 turbulence(r,g,b,octaves,noise01.red,gain)
+ name Expression5
+ label turbulence
+ selected true
+ xpos 82
+ ypos -8
+}
+Premult {
+ name Premult1
+ selected true
+ xpos 82
+ ypos 34
+}

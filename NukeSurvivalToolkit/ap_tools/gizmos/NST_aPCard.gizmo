@@ -1,0 +1,816 @@
+add_layer {P P.red P.green P.blue P.alpha}
+Group {
+ name aPCard
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\nif kn in \[\"in_vectors\",\"inputChange\"]:\n    kv = n\[\"in_vectors\"].value()\n    for i in nuke.allNodes(\"Input\"):\n        if i\[\"label\"].value() == \"dyn\":\n            inp = i\n    options = \{\"position\":\"pos\",\"depth\":\"depth\",\"deep\":\"deep\",\"geometry\":\"geo\"\}\n    inp\[\"name\"].setValue(\"Input\"+options\[kv])\n    if kv in \[\"position\",\"geometry\"]:\n        n\[\"p_channels\"].setValue(\"P\")\n    else:\n        n\[\"p_channels\"].setValue(\"depth\")\n    if kv==\"deep\":\n        nuke.toNode(\"ShuffleP\").setInput(0,nuke.toNode(\"DeepToImage\"))\n        nuke.toNode(\"DeepToImage\").setInput(0,nuke.toNode(\"DotDeep\"))\n        #nuke.toNode(\"DotDeep\").setInput(0,nuke.toNode(\"DotInput\"))\n    elif kv==\"geometry\":\n        nuke.toNode(\"ShuffleP\").setInput(0,nuke.toNode(\"SRGeo\"))\n        nuke.toNode(\"ApplyMat\").setInput(0,nuke.toNode(\"DotInput\"))\n    else:\n        nuke.toNode(\"ShuffleP\").setInput(0,nuke.toNode(\"DotInput\"))\n    n\[\"invert_depth\"].setVisible(kv==\"depth\")\nelif kn == \"pick\":\n    c = nuke.toNode(\"Card3D\")\n    c.knob(\"translate\").setValue(n\[\"pick\"].value())\nelif kn == \"proj_mode\":\n    kv = k.getValue()\n    for i in \[\"ref_frame\",\"ref_to_current\"]:\n        n\[i].setVisible(kv != 0)\nelif kn == \"preview_mode\":\n    kv = k.getValue()\n    for i in \[\"grid_resolution\",\"grid_size\"]:\n        n\[i].setVisible(kv != 0)\nelif kn == \"face_cam\":\n    kv = k.getValue()\n    for i in \[\"face_frame\",\"face_to_current\"]:\n        n\[i].setVisible(kv != 0)\nelif kn == \"deep_holdout\":\n    kv = k.value()\n    if kv:\n        print \"deep holdout...\"\nelif kn == \"out_mode\":\n    kv = k.getValue()\n    if kv in \[1,2]:\n        nuke.toNode(\"MergeImg\")\[\"operation\"].setValue(\"plus\" if kv==2 else \"over\")\n    #Switch output\n    opt = nuke.toNode(\"Output1\")\n    if kv == 3:\n        opt.setInput(0,nuke.toNode(\"DotDeepOut\"))\n    elif kv == 4:\n        opt.setInput(0,nuke.toNode(\"DotGeoOut\"))\n    else:\n        opt.setInput(0,nuke.toNode(\"DotImgOut\"))\n\n# Global checks here\nif kn not in \[\"xpos\",\"ypos\",\"selected\"]:\n    if n.input(4):\n        nuke.toNode(\"DotDeep\").setInput(0,nuke.toNode(\"DotInput\"))\n    #Expose deep options\n    deep_opt = True if (n\[\"in_vectors\"].value() == \"deep\" or n.input(4)) else False\n    nuke.toNode(\"DotDeep\").setInput(0,nuke.toNode(\"DotInput\"))\n    dh = n\[\"deep_holdout\"]\n    dh.setEnabled(deep_opt)\n    for i in \[\"deep_thickness\",\"deep_opacity\"]:\n        n\[i].setVisible(deep_opt and dh.value())"
+ addUserKnob {20 aPCard}
+ addUserKnob {4 in_vectors l input M {position depth deep geometry "" ""}}
+ addUserKnob {41 p_channels l channels -STARTLINE T ShuffleP.in}
+ addUserKnob {6 unpremult_p l unpremult -STARTLINE}
+ addUserKnob {6 invert_depth l "invert depth" +HIDDEN +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {20 position_group l Position n 1}
+ addUserKnob {41 pick T PickVector.pick}
+ addUserKnob {26 ctrl_alt_tip l " (ctrl+alt+click)" -STARTLINE T ""}
+ addUserKnob {4 proj_mode l mode t "place = place the input image on a card at the picked position\nproject = project the imput image on the selected frame, onto a card at the picked position" M {place project}}
+ proj_mode project
+ addUserKnob {3 ref_frame l "" -STARTLINE}
+ ref_frame 1001
+ addUserKnob {22 ref_to_current l "set to current" -STARTLINE T "nuke.thisNode()\[\"ref_frame\"].setValue(nuke.frame())"}
+ addUserKnob {14 card_size l size R 0 100}
+ card_size 1
+ addUserKnob {4 preview_mode l preview M {off "grid + img" "grid only" "" ""}}
+ preview_mode "grid + img"
+ addUserKnob {3 grid_resolution l subdiv -STARTLINE}
+ grid_resolution 10
+ addUserKnob {7 grid_size l size -STARTLINE R 0 2}
+ grid_size 5
+ addUserKnob {41 pivot T Card3D1.pivot}
+ addUserKnob {41 translate_world l translate T AxisTweakPre.translate}
+ addUserKnob {4 face_cam l "face camera" M {none "on frame" always ""}}
+ addUserKnob {3 face_frame l "" -STARTLINE +HIDDEN}
+ face_frame 1005
+ addUserKnob {22 face_to_current l "set to current" -STARTLINE +HIDDEN T "nuke.thisNode()\[\"ref_frame\"].setValue(nuke.frame())"}
+ addUserKnob {7 depth_add l "depth add" R -100 100}
+ addUserKnob {7 depth_mult l "depth mult" R 0 10}
+ depth_mult 1
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 TweakGroup l Tweak n 1}
+ TweakGroup 0
+ addUserKnob {41 translate T AxisTweak.translate}
+ addUserKnob {41 rotate T AxisTweak.rotate}
+ addUserKnob {41 skew T AxisTweak.skew}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 OutputGroup l Output n 1}
+ addUserKnob {4 out_mode l output M {"Image on black" "Image over bg" "Image plus bg" Deep Card}}
+ out_mode "Image over bg"
+ addUserKnob {6 deep_holdout l "deep holdout" -STARTLINE +DISABLED}
+ addUserKnob {7 deep_thickness l thickness +HIDDEN R 0 100}
+ deep_thickness 5
+ addUserKnob {7 deep_opacity l opacity +HIDDEN}
+ deep_opacity 0.9999
+ addUserKnob {41 motionblur T Card3D1.motionblur}
+ addUserKnob {41 shutter T Card3D1.shutter}
+ addUserKnob {41 shutteroffset l "shutter offset" T Card3D1.shutteroffset}
+ addUserKnob {41 shuttercustomoffset l "" -STARTLINE T Card3D1.shuttercustomoffset}
+ addUserKnob {20 endGroup_3 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 version_author l "" t "aPCard BETA v0.1\n2018-2019" +STARTLINE T "<span style=\"color:#666\"><br/><b>aPCard BETA v0.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2018-2019</span>"}
+}
+ Axis2 {
+  inputs 0
+  name AxisTweakPre
+  xpos 1099
+  ypos 501
+ }
+set N15ae28c0 [stack 0]
+ Axis2 {
+  useMatrix true
+  matrix {
+      {{parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix}}
+      {{parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix}}
+      {{parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix}}
+      {{parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix}}
+    }
+  name AxisInputCalc
+  xpos 1209
+  ypos 501
+ }
+ NoOp {
+  inputs 0
+  name cam_axis_vectors
+  xpos 1199
+  ypos 615
+  addUserKnob {20 User}
+  addUserKnob {13 cam_axis_vector}
+  cam_axis_vector {{"AxisCamBoss.world_matrix.3 - AxisInputCalc.world_matrix.3"} {"AxisCamBoss.world_matrix.7 - AxisInputCalc.world_matrix.7"} {"AxisCamBoss.world_matrix.11 - AxisInputCalc.world_matrix.11"}}
+  addUserKnob {7 cam_axis_dist R 0 1000}
+  cam_axis_dist {{"sqrt(pow2(cam_axis_vector.x) + pow2(cam_axis_vector.y) + pow2(cam_axis_vector.z))"}}
+  addUserKnob {13 cam_axis_normalized}
+  cam_axis_normalized {{cam_axis_vector/cam_axis_dist} {cam_axis_vector/cam_axis_dist} {cam_axis_vector/cam_axis_dist}}
+  addUserKnob {13 result_depth_vector}
+  result_depth_vector {{"cam_axis_normalized * parent.depth_add + cam_axis_vector * (parent.depth_mult - 1)"} {"cam_axis_normalized * parent.depth_add + cam_axis_vector * (parent.depth_mult - 1)"} {"cam_axis_normalized * parent.depth_add + cam_axis_vector * (parent.depth_mult - 1)"}}
+ }
+ Axis2 {
+  inputs 0
+  name AxisBoss
+  xpos 1324
+  ypos 462
+ }
+ Input {
+  inputs 0
+  name Inputpos
+  label dyn
+  xpos -146
+  ypos -281
+  number 1
+ }
+ Dot {
+  name DotInput
+  label " Main"
+  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font_size 41
+  xpos -112
+  ypos -67
+ }
+set N10457610 [stack 0]
+ Dot {
+  name DotDeep
+  label "\nDeep?"
+  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font_size 41
+  xpos -112
+  ypos 309
+ }
+ Input {
+  inputs 0
+  name Inputdeep_holdout
+  xpos -256
+  ypos 1861
+  number 4
+ }
+ Switch {
+  inputs 2
+  which 1
+  name SwitchDHSource
+  xpos -146
+  ypos 1861
+  disable {{"\[exists parent.input4]"}}
+ }
+set N105f5850 [stack 0]
+ Dot {
+  name Dot20
+  note_font_size 41
+  xpos -112
+  ypos 1911
+ }
+ Input {
+  inputs 0
+  name Inputcam
+  xpos 1845
+  ypos 82
+  number 2
+ }
+ Dot {
+  name Dot17
+  note_font_size 41
+  xpos 1879
+  ypos 186
+ }
+set N10371d40 [stack 0]
+ Dot {
+  name Dot14
+  note_font_size 41
+  xpos 1879
+  ypos 310
+ }
+set N15f28d10 [stack 0]
+ Dot {
+  name Dot28
+  xpos 1879
+  ypos 621
+ }
+set N4675590 [stack 0]
+ Dot {
+  name Dot10
+  note_font_size 41
+  xpos 1879
+  ypos 1168
+ }
+ Dot {
+  name Dot11
+  note_font_size 41
+  xpos 1157
+  ypos 1168
+ }
+set N1606cf50 [stack 0]
+ Dot {
+  name Dot15
+  note_font_size 41
+  xpos 1157
+  ypos 1247
+ }
+set Nd873290 [stack 0]
+ Dot {
+  name Dot16
+  note_font_size 41
+  xpos 1157
+  ypos 1317
+ }
+set N16271840 [stack 0]
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 1157
+  ypos 1366
+ }
+push $N16271840
+push $Nd873290
+ FrameHold {
+  first_frame {{parent.ref_frame}}
+  name FrameHoldProj
+  xpos 964
+  ypos 1237
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos 900
+  ypos 741
+ }
+ Shuffle {
+  name Shuffle2
+  label "\[value in]"
+  xpos 900
+  ypos 789
+ }
+ Dot {
+  name Dot13
+  note_font_size 41
+  xpos 934
+  ypos 868
+ }
+set N1591b320 [stack 0]
+ Dot {
+  name Dot18
+  note_font_size 41
+  xpos 824
+  ypos 868
+ }
+set N10a5f110 [stack 0]
+ Project3D2 {
+  inputs 2
+  name Project3D1
+  xpos 790
+  ypos 1243
+ }
+push $N4675590
+ Axis2 {
+  name AxisCamBoss
+  xpos 1463
+  ypos 597
+ }
+ Dot {
+  name Dot8
+  xpos 1487
+  ypos 824
+ }
+push $N15ae28c0
+ Axis2 {
+  useMatrix true
+  matrix {
+      {1 0 0 {-parent.cam_axis_vectors.result_depth_vector.x}}
+      {0 1 0 {-parent.cam_axis_vectors.result_depth_vector.y}}
+      {0 0 1 {-parent.cam_axis_vectors.result_depth_vector.z}}
+      {0 0 0 1}
+    }
+  name AxisDepth
+  xpos 1099
+  ypos 595
+ }
+ Axis2 {
+  useMatrix true
+  matrix {
+      {{parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix}}
+      {{parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix}}
+      {{parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix}}
+      {{parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix} {parent.AxisBoss.world_matrix}}
+    }
+  name AxisInput
+  xpos 1099
+  ypos 724
+ }
+set N161dfe30 [stack 0]
+ Axis2 {
+  inputs 2
+  name Axis7
+  label "lookat absolute"
+  xpos 1334
+  ypos 800
+ }
+set N15fdbb00 [stack 0]
+ Dot {
+  name Dot9
+  xpos 1358
+  ypos 966
+ }
+push $N15fdbb00
+push $N161dfe30
+ Axis2 {
+  useMatrix true
+  matrix {
+      {{AxisBoss.world_matrix.0(parent.ref_frame)} {AxisBoss.world_matrix.4(parent.ref_frame)} {AxisBoss.world_matrix.8(parent.ref_frame)} 0}
+      {{AxisBoss.world_matrix.1(parent.ref_frame)} {AxisBoss.world_matrix.5(parent.ref_frame)} {AxisBoss.world_matrix.9(parent.ref_frame)} 0}
+      {{AxisBoss.world_matrix.2(parent.ref_frame)} {AxisBoss.world_matrix.6(parent.ref_frame)} {AxisBoss.world_matrix.10(parent.ref_frame)} 0}
+      {0 0 0 1}
+    }
+  name AxisRotTransposed1
+  label "at ref frame"
+  xpos 1191
+  ypos 808
+ }
+ Axis2 {
+  inputs 2
+  useMatrix true
+  matrix {
+      {{parent.Axis7.world_matrix(parent.ref_frame)} {parent.Axis7.world_matrix(parent.ref_frame)} {parent.Axis7.world_matrix(parent.ref_frame)} 0}
+      {{parent.Axis7.world_matrix(parent.ref_frame)} {parent.Axis7.world_matrix(parent.ref_frame)} {parent.Axis7.world_matrix(parent.ref_frame)} 0}
+      {{parent.Axis7.world_matrix(parent.ref_frame)} {parent.Axis7.world_matrix(parent.ref_frame)} {parent.Axis7.world_matrix(parent.ref_frame)} 0}
+      {0 0 0 1}
+    }
+  look_strength 0
+  name Axis10
+  label "lookat rotations\nlook input but strength set to 0 to force recalculate..."
+  xpos 1191
+  ypos 892
+ }
+push $N161dfe30
+ Switch {
+  inputs 3
+  which {{parent.face_cam}}
+  name SwitchFaceCam
+  xpos 1089
+  ypos 962
+ }
+ Axis2 {
+  look_strength 0
+  name AxisTweak
+  label Post
+  xpos 1099
+  ypos 1042
+ }
+set N10653f30 [stack 0]
+push $N10a5f110
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 702
+  ypos 868
+ }
+ Card2 {
+  control_points {3 3 3 6 
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0} 
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0} 
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0} 
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0} 
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0} 
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0} 
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0} 
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0} 
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card1
+  xpos 668
+  ypos 1100
+ }
+ TransformGeo {
+  inputs 2
+  scaling {{parent.card_size} {parent.card_size} 1}
+  name TransformGeo2
+  xpos 668
+  ypos 1165
+ }
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos 702
+  ypos 1208
+ }
+set N1632b6f0 [stack 0]
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial1
+  xpos 668
+  ypos 1243
+ }
+set N15f1e930 [stack 0]
+ Input {
+  inputs 0
+  name Inputbg
+  xpos -634
+  ypos 182
+  number 3
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format "256 256 0 0 256 256 1 square_256"
+  name Black
+  xpos -497
+  ypos -97
+  postage_stamp false
+ }
+ Reformat {
+  type "to box"
+  box_width {{NoOpSize.width}}
+  box_height {{NoOpSize.height}}
+  box_fixed true
+  name ReformatToVec
+  xpos -497
+  ypos -71
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switchbg
+  xpos -497
+  ypos 182
+  disable {{"!\[exists parent.input3] "}}
+ }
+set N161f7fe0 [stack 0]
+ Remove {
+  name RemoveAll2
+  xpos 558
+  ypos 1307
+ }
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  motion_vectors_type distance
+  name ScanlineRender2
+  xpos 668
+  ypos 1313
+ }
+ MotionBlur3D {
+  inputs 2
+  Z depth.Z
+  shutter {{parent.Card3D1.shutter}}
+  shutteroffset {{parent.Card3D1.shutteroffset}}
+  shuttercustomoffset {{parent.Card3D1.shuttercustomoffset}}
+  name MotionBlur3D1
+  xpos 668
+  ypos 1362
+ }
+ VectorBlur {
+  channels rgba
+  uv motion
+  scale {{parent.Card3D1.motionblur>0}}
+  name VectorBlur1
+  xpos 668
+  ypos 1388
+ }
+ Dot {
+  name Dot22
+  note_font_size 41
+  xpos 702
+  ypos 1449
+ }
+push $N10653f30
+push $N1606cf50
+push $N1591b320
+ Card3D {
+  inputs 3
+  translate {0 0 0}
+  scaling {{parent.card_size} {parent.card_size} 1}
+  shutteroffset centred
+  name Card3D1
+  xpos 900
+  ypos 1164
+ }
+ Switch {
+  inputs 2
+  which {{parent.proj_mode}}
+  name SwitchProject
+  xpos 900
+  ypos 1445
+ }
+ Dot {
+  name Dot19
+  note_font_size 41
+  xpos 934
+  ypos 1789
+ }
+set N161f68d0 [stack 0]
+ DeepFromImage {
+  premult true
+  name DeepFromImage1
+  xpos 189
+  ypos 1785
+ }
+ DeepExpression {
+  temp_name0 ddt
+  temp_expr0 "\[value parent.deep_thickness]"
+  temp_name1 ddo
+  temp_expr1 "\[value parent.deep_opacity]"
+  chans1 deep
+  rgba.alpha rgba.alpha*ddo
+  deep.front deep.front-ddt/2
+  deep.back deep.back+ddt/2
+  name DeepExpSoften
+  xpos 189
+  ypos 1811
+ }
+set N176a7b10 [stack 0]
+ Dot {
+  name Dot21
+  note_font_size 41
+  xpos 84
+  ypos 1815
+ }
+ DeepMerge {
+  inputs 2
+  operation holdout
+  name DeepMerge1
+  xpos 50
+  ypos 1907
+  disable {{"!(parent.deep_holdout && (\[exists parent.input4] || \[exists DotDeep.input0]))"}}
+ }
+ Dot {
+  name DotDeepOut
+  label DeepOut
+  note_font_size 41
+  xpos 84
+  ypos 2147
+ }
+push $N15f28d10
+ Dot {
+  name Dot3
+  label "\ncam"
+  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font_size 12
+  xpos -1228
+  ypos 1319
+  hide_input true
+ }
+push $N10653f30
+ Wireframe {
+  inputs 0
+  operation "see through"
+  line_width 2
+  name Wireframe2
+  xpos -1203
+  ypos 699
+ }
+ Card2 {
+  image_aspect false
+  rows 2
+  columns 2
+  control_points {3 3 3 6 
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0} 
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0} 
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0} 
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0} 
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0} 
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0} 
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0} 
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0} 
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name CardPreviewCtr
+  xpos -1203
+  ypos 757
+ }
+ Wireframe {
+  inputs 0
+  operation "see through"
+  line_width 0.3
+  line_color 0.5
+  name Wireframe1
+  xpos -1113
+  ypos 699
+ }
+ Card2 {
+  image_aspect false
+  rows {{parent.grid_resolution}}
+  columns {{parent.grid_resolution}}
+  control_points {3 3 3 6 
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0} 
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0} 
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0} 
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0} 
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0} 
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0} 
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0} 
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0} 
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name CardPreview
+  xpos -1113
+  ypos 756
+ }
+ MergeGeo {
+  inputs 2
+  name MergeGeo1
+  xpos -1113
+  ypos 794
+ }
+ TransformGeo {
+  inputs 2
+  scaling {{parent.card_size} {parent.card_size} 1}
+  uniform_scale {{parent.grid_size}}
+  name TransformGeo1
+  xpos -1113
+  ypos 1062
+ }
+push $N161f7fe0
+ Remove {
+  name RemoveAll1
+  xpos -982
+  ypos 1309
+ }
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  antialiasing low
+  motion_vectors_type distance
+  name ScanlineRender1
+  xpos -1113
+  ypos 1315
+ }
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos -1079
+  ypos 2060
+ }
+push $N105f5850
+push $N176a7b10
+ DeepHoldout2 {
+  inputs 2
+  name DeepHoldout1
+  xpos 189
+  ypos 1861
+ }
+push $N161f68d0
+ Switch {
+  inputs 2
+  which {{"parent.deep_holdout && (\[exists parent.input4] || \[exists DotDeep.input0])"}}
+  name SwitchDH
+  xpos 900
+  ypos 1861
+ }
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 934
+  ypos 2028
+ }
+push $N161f7fe0
+ Remove {
+  name RemoveAll
+  xpos -497
+  ypos 385
+  disable {{!(parent.out_mode!=1&&parent.out_mode!=2)}}
+ }
+ Merge2 {
+  inputs 2
+  name MergeImg
+  xpos -497
+  ypos 2024
+  disable {{parent.preview_mode==2}}
+ }
+ Merge2 {
+  inputs 2
+  name MergeGrid
+  label PREVIEW
+  xpos -497
+  ypos 2050
+  disable {{parent.preview_mode==0}}
+ }
+ Dot {
+  name DotImgOut
+  label ImgOut
+  note_font_size 41
+  xpos -463
+  ypos 2149
+ }
+ Output {
+  name Output1
+  xpos -497
+  ypos 2351
+ }
+push $N10371d40
+ FillMat {
+  inputs 0
+  color 1
+  name FillMat1
+  xpos 1390
+  ypos 139
+ }
+push $N10457610
+ ApplyMaterial {
+  inputs 2
+  name ApplyMat
+  xpos 1280
+  ypos 139
+ }
+push $N161f7fe0
+ Remove {
+  name RemoveAll3
+  xpos 1170
+  ypos 176
+ }
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel P
+  name SRGeo
+  xpos 1280
+  ypos 182
+ }
+push $N15f28d10
+push $N10457610
+ Shuffle {
+  in P
+  in2 rgba
+  alpha alpha2
+  name ShuffleP
+  label "\[value in]"
+  xpos 941
+  ypos 242
+ }
+set Ncfe8080 [stack 0]
+ Shuffle {
+  out depth
+  name Shuffle1
+  label "\[value in]"
+  xpos 1093
+  ypos 242
+ }
+ Blur {
+  channels rgba
+  name Blur1
+  xpos 1093
+  ypos 280
+ }
+ DepthToPosition {
+  inputs 2
+  invert {{parent.in_vectors==1?parent.invert_depth:0}}
+  name DepthToPosition1
+  xpos 1093
+  ypos 306
+ }
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos 1127
+  ypos 363
+ }
+push $Ncfe8080
+ Switch {
+  inputs 2
+  which 1
+  name SwitchDepth
+  xpos 941
+  ypos 359
+  disable {{parent.in_vectors==0||parent.in_vectors==3}}
+ }
+ Unpremult {
+  name Unpremult
+  xpos 941
+  ypos 385
+  disable {{!parent.unpremult_p}}
+ }
+ NoOp {
+  name PickVector
+  knobChanged "n = nuke.thisNode()\nnuke.toNode(\"AxisBoss\")\[\"translate\"].setValue(n\[\"pick\"].value())"
+  xpos 941
+  ypos 443
+  addUserKnob {20 PickVector}
+  addUserKnob {18 pick}
+  pick {0 0 0}
+  addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 pick_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 pick_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 pick_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+push $N15f1e930
+push $N1632b6f0
+ Dot {
+  name Dot12
+  note_font_size 41
+  xpos 419
+  ypos 1208
+ }
+ Switch {
+  inputs 2
+  which 1
+  name SwitchProjMode
+  xpos 385
+  ypos 1243
+  disable {{!parent.proj_mode}}
+ }
+ Dot {
+  name DotGeoOut
+  label GeoOut
+  note_font_size 41
+  xpos 419
+  ypos 2152
+ }
+push $N10457610
+ Switch {
+  which 1
+  name SwitchInRes
+  xpos -243
+  ypos -71
+  disable {{"parent.in_vectors != 3"}}
+ }
+ NoOp {
+  name NoOpSize
+  xpos -353
+  ypos -71
+ }
+end_group

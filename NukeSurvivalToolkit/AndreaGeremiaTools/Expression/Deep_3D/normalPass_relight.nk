@@ -1,0 +1,34 @@
+add_layer {N N.red N.green N.blue N.alpha}
+Shuffle {
+ in N
+ name Shuffle1
+ label "\[value in]"
+ selected true
+ xpos 225
+ ypos -175
+}
+Expression {
+ expr3 max((r*norm.r)+(g*norm.g)+(b*norm.b),0)
+ name Expression
+ label RELIGHT
+ selected true
+ xpos 225
+ ypos -121
+ addUserKnob {20 User}
+ addUserKnob {7 round l left/right R -100 100}
+ round 1
+ addUserKnob {7 around l up/down R -100 100}
+ around 1
+ addUserKnob {26 ""}
+ addUserKnob {7 rad}
+ rad {{cos(radians(around))}}
+ addUserKnob {7 lx}
+ lx {{rad*cos(radians(round))}}
+ addUserKnob {7 ly}
+ ly {{sin(radians(around))}}
+ addUserKnob {7 lz}
+ lz {{rad*sin(radians(round))}}
+ addUserKnob {18 norm}
+ norm {{lx/sqrt(pow2(lx)+pow2(ly)+pow2(lz))} {ly/sqrt(pow2(lx)+pow2(ly)+pow2(lz))} {lz/sqrt(pow2(lx)+pow2(ly)+pow2(lz))}}
+ addUserKnob {6 norm_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}

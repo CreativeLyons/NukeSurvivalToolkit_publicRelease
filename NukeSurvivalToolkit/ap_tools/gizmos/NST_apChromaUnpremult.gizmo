@@ -1,0 +1,293 @@
+add_layer {apChroma apChroma.red apChroma.green apChroma.blue apChroma.alpha}
+Group {
+ name apChromaUnpremult
+ help "apChromaUnpremult v0.1\nadrianpueyo.com, 2019"
+ knobChanged "n=nuke.thisNode()\nk=nuke.thisKnob()\nkn=k.name()\n\nif kn == \"scale_x\" and n\[\"scale_linked\"].value():\n    n\[\"scale_y\"].setValue(k.value())\nelif kn == \"scale_y\" and n\[\"scale_linked\"].value():\n    n\[\"scale_x\"].setValue(k.value())\nelif kn == \"scale_linked\" and k.value():\n    n\[\"scale_y\"].setValue(n\[\"scale_x\"].value())\n    "
+ tile_color 0x736efdff
+ addUserKnob {20 apChromaUnpremult}
+ addUserKnob {41 channels l divide T MergeRGBA.also_merge}
+ addUserKnob {41 chroma l "by <b><font color=#9292d2>multi-alpha" T MergeCopyChroma.output}
+ addUserKnob {26 version_author l "" t "apChromaUnpremult v0.1\n2019" +STARTLINE T "<span style=\"color:#666\"><br/><b>apChromaUnpremult v0.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019</span>"}
+}
+ Merge2 {
+  inputs 0
+  operation copy
+  Achannels {{{parent.MergeCopyChroma.output}}}
+  Bchannels none
+  output {{{parent.MergeCopyChroma.output}}}
+  name MergeChosen
+  xpos 1100
+  ypos 404
+  hide_input true
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 319
+  ypos 306
+ }
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos 353
+  ypos 356
+ }
+set N41e26ae0 [stack 0]
+ Dot {
+  name Dot14
+  note_font_size 41
+  xpos 573
+  ypos 356
+ }
+set N39527690 [stack 0]
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos 943
+  ypos 356
+ }
+set N4b39dcc0 [stack 0]
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 943
+  ypos 416
+ }
+push $N4b39dcc0
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 1015
+  ypos 356
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  label "\[value in]"
+  xpos 981
+  ypos 374
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Achannels {{{parent.MergeCopyChroma.output}}}
+  Bchannels none
+  name MergeGetChroma
+  xpos 981
+  ypos 412
+  disable {{"\[\nif \{ \[lsearch -exact \[channels \[input this 1]] \[lindex \[channels MergeChosen] 0]] >= 0\} \{\n    return 0\n\} else \{\n    return 1\n\}\n]"}}
+ }
+ Dot {
+  name Dot10
+  note_font_size 41
+  xpos 1015
+  ypos 599
+ }
+set N950ce3e0 [stack 0]
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos 1015
+  ypos 892
+ }
+push $N950ce3e0
+push $N39527690
+ Dot {
+  name Dot27
+  note_font_size 41
+  xpos 573
+  ypos 498
+ }
+set Na64f7670 [stack 0]
+ Dot {
+  name Dot11
+  note_font_size 41
+  xpos 677
+  ypos 498
+ }
+set Na64fc180 [stack 0]
+ Dot {
+  name Dot12
+  note_font_size 41
+  xpos 782
+  ypos 498
+ }
+set N90ed73a0 [stack 0]
+ Dot {
+  name Dot15
+  note_font_size 41
+  xpos 884
+  ypos 498
+ }
+ Multiply {
+  value {0 0 0 1}
+  name MultiplyKeepA
+  label "\[value value]"
+  xpos 850
+  ypos 539
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy4
+  xpos 850
+  ypos 589
+ }
+ Unpremult {
+  channels all
+  name Unpremult4
+  xpos 850
+  ypos 626
+ }
+ Dot {
+  name Dot18
+  note_font_size 41
+  xpos 884
+  ypos 738
+ }
+push $N950ce3e0
+push $N90ed73a0
+ Multiply {
+  value {0 0 1 0}
+  name MultiplyKeepB
+  label "\[value value]"
+  xpos 748
+  ypos 539
+ }
+ Copy {
+  inputs 2
+  from0 rgba.blue
+  to0 rgba.alpha
+  name Copy3
+  xpos 748
+  ypos 589
+ }
+ Unpremult {
+  channels all
+  name Unpremult3
+  xpos 748
+  ypos 627
+ }
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 782
+  ypos 712
+ }
+push $N950ce3e0
+push $Na64fc180
+ Multiply {
+  value {0 1 0 0}
+  name MultiplyKeepG
+  label "\[value value]"
+  xpos 643
+  ypos 539
+ }
+ Copy {
+  inputs 2
+  from0 rgba.green
+  to0 rgba.alpha
+  name Copy2
+  xpos 643
+  ypos 589
+ }
+ Unpremult {
+  channels all
+  name Unpremult2
+  xpos 643
+  ypos 627
+ }
+ Dot {
+  name Dot17
+  note_font_size 41
+  xpos 677
+  ypos 686
+ }
+push $N950ce3e0
+push $Na64f7670
+ Multiply {
+  value {1 0 0 0}
+  name MultiplyKeepR
+  label "\[value value]"
+  xpos 539
+  ypos 538
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.alpha
+  name Copy1
+  xpos 539
+  ypos 588
+ }
+ Unpremult {
+  channels all
+  name Unpremult1
+  xpos 539
+  ypos 626
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  also_merge all
+  name Merge1
+  xpos 539
+  ypos 682
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  also_merge all
+  name Merge2
+  xpos 539
+  ypos 708
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  also_merge all
+  name Merge3
+  xpos 539
+  ypos 734
+ }
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos 573
+  ypos 854
+ }
+push $N41e26ae0
+ Merge2 {
+  inputs 2
+  operation copy
+  Achannels none
+  Bchannels none
+  output none
+  also_merge rgba
+  name MergeRGBA
+  xpos 319
+  ypos 844
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Bchannels none
+  output apChroma
+  maskChannelMask {{{parent.MergeRGBA.maskChannelMask}}}
+  inject {{parent.MergeRGBA.inject}}
+  invert_mask {{parent.MergeRGBA.invert_mask}}
+  fringe {{parent.MergeRGBA.fringe}}
+  mix {{parent.MergeRGBA.mix}}
+  name MergeCopyChroma
+  xpos 319
+  ypos 882
+ }
+ Output {
+  name Output1
+  xpos 319
+  ypos 950
+ }
+end_group

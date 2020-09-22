@@ -1,0 +1,632 @@
+add_layer {apChroma apChroma.red apChroma.green apChroma.blue apChroma.alpha}
+Group {
+name apChromaMerge
+tile_color 0x736efdff
+addUserKnob {20 apChromaMerge}
+addUserKnob {41 operation T MergeR.operation}
+addUserKnob {41 sRGB l "Video colorspace" -STARTLINE T MergeR.sRGB}
+addUserKnob {41 screen_alpha l "alpha masking" -STARTLINE T MergeR.screen_alpha}
+addUserKnob {41 bbox l "set bbox to " T MergeR.bbox}
+addUserKnob {41 metainput l "metadata from" -STARTLINE T MergeR.metainput}
+addUserKnob {41 rangeinput l "range from" -STARTLINE T MergeR.rangeinput}
+addUserKnob {26 ""}
+addUserKnob {41 Achannels l "A channels" T MergeChroma.Achannels}
+addUserKnob {41 Bchannels l "B channels" T MergeChroma.Bchannels}
+addUserKnob {41 output T MergeChroma.output}
+addUserKnob {41 also_merge l "also merge" T MergeChroma.also_merge}
+addUserKnob {26 ""}
+addUserKnob {41 chroma l "<b><font color=#9292d2>multi-alpha" T MergeCopyChroma.output}
+addUserKnob {6 keep_multi_alpha l "keep multi-alpha" t "Keep the multi-alpha channels, so that you can do more chroma operations downstream." +STARTLINE}
+addUserKnob {6 process_alpha l "process single alpha from" t "If activated, the multi-channel alpha will get combined into a regular alpha that you can use for normal operations after this node." -STARTLINE}
+process_alpha true
+addUserKnob {41 mode l "" -STARTLINE T Saturation0.mode}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannelMask l "mask " -STARTLINE T MergeChroma.maskChannelMask}
+addUserKnob {41 inject -STARTLINE T MergeChroma.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T MergeChroma.invert_mask}
+addUserKnob {41 fringe -STARTLINE T MergeChroma.fringe}
+addUserKnob {41 mix T MergeChroma.mix}
+addUserKnob {26 version_author l "" t "apChromaMerge v0.3\n2019" +STARTLINE T "<span style=\"color:#666\"><br/><b>apChromaMerge v0.3</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019</span>"}
+}
+Merge2 {
+inputs 0
+operation copy
+Achannels {{{parent.MergeCopyChroma.output}}}
+Bchannels none
+output {{{parent.MergeCopyChroma.output}}}
+name MergeChosen
+xpos -96
+ypos -96
+hide_input true
+}
+Input {
+inputs 0
+name Inputmask
+xpos 1293
+ypos 604
+number 2
+}
+set N780bb3b0 [stack 0]
+Input {
+inputs 0
+name InputA
+xpos -401
+ypos -203
+number 1
+}
+Dot {
+name Dot18
+note_font_size 41
+xpos -367
+ypos -143
+}
+set N65df40a0 [stack 0]
+Dot {
+name Dot6
+note_font_size 41
+xpos 70
+ypos -143
+}
+set N71dcff20 [stack 0]
+Dot {
+name Dot5
+note_font_size 41
+xpos 148
+ypos -143
+}
+Dot {
+name Dot8
+note_font_size 41
+xpos 148
+ypos -61
+}
+push $N71dcff20
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name ShuffleA
+label alpha
+xpos 36
+ypos -113
+}
+Merge2 {
+inputs 2
+operation copy
+Achannels {{{parent.MergeCopyChroma.output}}}
+Bchannels none
+name MergeGetChroma2
+xpos 36
+ypos -65
+disable {{"\[\nif \{ \[lsearch -exact \[channels \[input this 1]] \[lindex \[channels MergeChosen] 0]] >= 0\} \{\n    return 0\n\} else \{\n    return 1\n\}\n]"}}
+}
+Dot {
+name Dot2
+note_font_size 41
+xpos 70
+ypos 7
+}
+set N264e31e0 [stack 0]
+push $N65df40a0
+Dot {
+name Dot12
+note_font_size 41
+xpos -367
+ypos -42
+}
+set Nda92be40 [stack 0]
+Dot {
+name Dot1
+note_font_size 41
+xpos -290
+ypos -42
+}
+set N8bfac090 [stack 0]
+Dot {
+name Dot9
+note_font_size 41
+xpos -202
+ypos -42
+}
+set N5f52efb0 [stack 0]
+Dot {
+name Dot7
+note_font_size 41
+xpos -117
+ypos -42
+}
+Copy {
+inputs 2
+from0 rgba.red
+to0 rgba.alpha
+name Copy1
+xpos -151
+ypos -3
+}
+Multiply {
+value {1 0 0 1}
+name MultiplyKeepR2
+label "\[value value]"
+xpos -151
+ypos 35
+}
+Dot {
+name Dot16
+note_font_size 41
+xpos -117
+ypos 155
+}
+Input {
+inputs 0
+name InputB
+xpos 1158
+ypos -233
+}
+Dot {
+name Dot32
+note_font_size 41
+xpos 1192
+ypos -149
+}
+set N25b37bc0 [stack 0]
+Dot {
+name Dot19
+note_font_size 41
+xpos 945
+ypos -149
+}
+set N5f52cd20 [stack 0]
+Dot {
+name Dot20
+note_font_size 41
+xpos 274
+ypos -149
+}
+set N112cc370 [stack 0]
+Dot {
+name Dot21
+note_font_size 41
+xpos 196
+ypos -149
+}
+Dot {
+name Dot22
+note_font_size 41
+xpos 196
+ypos -60
+}
+push $N112cc370
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name ShuffleA1
+label alpha
+xpos 240
+ypos -119
+}
+Merge2 {
+inputs 2
+operation copy
+Achannels {{{parent.MergeCopyChroma.output}}}
+Bchannels none
+name MergeGetChroma1
+xpos 240
+ypos -64
+disable {{"\[\nif \{ \[lsearch -exact \[channels \[input this 1]] \[lindex \[channels MergeChosen] 0]] >= 0\} \{\n    return 0\n\} else \{\n    return 1\n\}\n]"}}
+}
+Dot {
+name Dot23
+note_font_size 41
+xpos 274
+ypos 1
+}
+set N959ba50 [stack 0]
+push $N5f52cd20
+Dot {
+name Dot26
+note_font_size 41
+xpos 945
+ypos -48
+}
+set N112ccff0 [stack 0]
+Dot {
+name Dot27
+note_font_size 41
+xpos 591
+ypos -48
+}
+set N83cb1050 [stack 0]
+Dot {
+name Dot28
+note_font_size 41
+xpos 503
+ypos -48
+}
+set N95988a0 [stack 0]
+Dot {
+name Dot29
+note_font_size 41
+xpos 418
+ypos -48
+}
+Copy {
+inputs 2
+from0 rgba.red
+to0 rgba.alpha
+name Copy6
+xpos 384
+ypos -9
+}
+Multiply {
+value {1 0 0 1}
+name MultiplyKeepR1
+label "\[value value]"
+xpos 384
+ypos 63
+}
+Merge2 {
+inputs 2
+Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+Bchannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+output {rgba.red -rgba.green -rgba.blue rgba.alpha}
+also_merge all
+name MergeR
+xpos 384
+ypos 145
+}
+Dot {
+name Dot31
+xpos 418
+ypos 512
+}
+set N25b673c0 [stack 0]
+push $N264e31e0
+push $N5f52efb0
+Copy {
+inputs 2
+from0 rgba.green
+to0 rgba.alpha
+name Copy2
+xpos -236
+ypos -3
+}
+Multiply {
+value {0 1 0 1}
+name MultiplyKeepG2
+label "\[value value]"
+xpos -236
+ypos 35
+}
+Dot {
+name Dot15
+note_font_size 41
+xpos -202
+ypos 189
+}
+push $N959ba50
+push $N95988a0
+Copy {
+inputs 2
+from0 rgba.green
+to0 rgba.alpha
+name Copy5
+xpos 469
+ypos -9
+}
+Multiply {
+value {0 1 0 1}
+name MultiplyKeepG1
+label "\[value value]"
+xpos 469
+ypos 63
+}
+Merge2 {
+inputs 2
+operation {{MergeR.operation}}
+sRGB {{MergeR.sRGB}}
+screen_alpha {{MergeR.screen_alpha}}
+bbox {{MergeR.bbox}}
+metainput {{MergeR.metainput}}
+rangeinput {{MergeR.rangeinput}}
+Achannels {-rgba.red rgba.green -rgba.blue rgba.alpha}
+Bchannels {-rgba.red rgba.green -rgba.blue rgba.alpha}
+output {-rgba.red rgba.green -rgba.blue rgba.alpha}
+also_merge all
+maskChannelMask none
+inject {{MergeR.inject}}
+invert_mask {{MergeR.invert_mask}}
+fringe {{MergeR.fringe}}
+mix {{MergeR.mix}}
+name MergeG
+xpos 469
+ypos 179
+}
+Dot {
+name Dot30
+xpos 503
+ypos 474
+}
+set N9a9ab90 [stack 0]
+push $N264e31e0
+push $N8bfac090
+Copy {
+inputs 2
+from0 rgba.blue
+to0 rgba.alpha
+name Copy3
+xpos -324
+ypos -3
+}
+Multiply {
+value {0 0 1 1}
+name MultiplyKeepB2
+label "\[value value]"
+xpos -324
+ypos 35
+}
+Dot {
+name Dot14
+note_font_size 41
+xpos -290
+ypos 237
+}
+push $N959ba50
+push $N83cb1050
+Copy {
+inputs 2
+from0 rgba.blue
+to0 rgba.alpha
+name Copy4
+xpos 557
+ypos -9
+}
+Multiply {
+value {0 0 1 1}
+name MultiplyKeepB1
+label "\[value value]"
+xpos 557
+ypos 63
+}
+Merge2 {
+inputs 2
+operation {{MergeR.operation}}
+sRGB {{MergeR.sRGB}}
+screen_alpha {{MergeR.screen_alpha}}
+bbox {{MergeR.bbox}}
+metainput {{MergeR.metainput}}
+rangeinput {{MergeR.rangeinput}}
+Achannels {-rgba.red -rgba.green rgba.blue rgba.alpha}
+Bchannels {-rgba.red -rgba.green rgba.blue rgba.alpha}
+output {-rgba.red -rgba.green rgba.blue rgba.alpha}
+also_merge all
+maskChannelMask none
+inject {{MergeR.inject}}
+invert_mask {{MergeR.invert_mask}}
+fringe {{MergeR.fringe}}
+mix {{MergeR.mix}}
+name MergeB
+xpos 557
+ypos 227
+}
+Dot {
+name Dot17
+note_font_size 41
+xpos 591
+ypos 436
+}
+set N57fb840 [stack 0]
+push $Nda92be40
+Dot {
+name Dot13
+note_font_size 41
+xpos -367
+ypos 281
+}
+push $N112ccff0
+Merge2 {
+inputs 2
+operation {{MergeR.operation}}
+sRGB {{MergeR.sRGB}}
+screen_alpha {{MergeR.screen_alpha}}
+bbox {{MergeR.bbox}}
+metainput {{MergeR.metainput}}
+rangeinput {{MergeR.rangeinput}}
+Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+also_merge all
+maskChannelMask none
+inject {{MergeR.inject}}
+invert_mask {{MergeR.invert_mask}}
+fringe {{MergeR.fringe}}
+mix {{MergeR.mix}}
+name MergeA
+xpos 911
+ypos 271
+}
+Multiply {
+value {0 0 0 1}
+name MultiplyKeepA
+label "\[value value]"
+xpos 911
+ypos 309
+}
+Dot {
+name Dot33
+note_font_size 41
+xpos 945
+ypos 381
+}
+set N25eb1700 [stack 0]
+Dot {
+name Dot34
+note_font_size 41
+xpos 816
+ypos 381
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.blue
+name Copy10
+xpos 782
+ypos 426
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.green
+name Copy11
+xpos 782
+ypos 464
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.red
+name Copy12
+xpos 782
+ypos 502
+}
+Dot {
+name Dot36
+xpos 816
+ypos 657
+}
+set N54143220 [stack 0]
+Saturation {
+channels apChroma
+saturation 0
+name Saturation0
+xpos 782
+ypos 703
+}
+push $N780bb3b0
+push $N54143220
+push $N780bb3b0
+push $N25eb1700
+Dot {
+name Dot3
+note_font_size 41
+xpos 1021
+ypos 381
+}
+Dot {
+name Dot4
+note_font_size 41
+xpos 1021
+ypos 544
+}
+push $N25b673c0
+push $N9a9ab90
+push $N57fb840
+push $N25eb1700
+Merge2 {
+inputs 2
+operation plus
+bbox A
+metainput A
+rangeinput A
+also_merge all
+name Merge1
+xpos 911
+ypos 432
+}
+Merge2 {
+inputs 2
+operation plus
+bbox A
+metainput A
+rangeinput A
+also_merge all
+name Merge2
+xpos 911
+ypos 470
+}
+Merge2 {
+inputs 2
+operation plus
+bbox A
+metainput A
+rangeinput A
+also_merge all
+name Merge3
+xpos 911
+ypos 508
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name CopyA
+xpos 911
+ypos 534
+}
+Dot {
+name Dot37
+xpos 945
+ypos 608
+}
+push $N959ba50
+push $N25b37bc0
+Merge2 {
+inputs 2
+operation copy
+Bchannels none
+output {{{parent.MergeCopyChroma.output}}}
+name MergeGetChroma3
+xpos 1158
+ypos -9
+}
+Merge2 {
+inputs 2+1
+operation copy
+bbox {{MergeR.bbox}}
+metainput {{MergeR.metainput}}
+rangeinput {{MergeR.rangeinput}}
+name MergeChroma
+xpos 1158
+ypos 604
+}
+Merge2 {
+inputs 2+1
+operation copy
+Bchannels none
+output apChroma
+inject {{parent.MergeChroma.inject}}
+invert_mask {{parent.MergeChroma.invert_mask}}
+fringe {{parent.MergeChroma.fringe}}
+mix {{parent.MergeChroma.mix}}
+name MergeCopyChroma
+xpos 1158
+ypos 647
+}
+Copy {
+inputs 2+1
+from0 rgba.red
+to0 rgba.alpha
+maskChannelMask {{{parent.MergeChroma.maskChannelMask}}}
+maskChannelInput {{{parent.MergeChroma.maskChannelInput}}}
+inject {{parent.MergeChroma.inject}}
+invert_mask {{parent.MergeChroma.invert_mask}}
+fringe {{parent.MergeChroma.fringe}}
+mix {{parent.MergeChroma.mix}}
+name CopySingleAlpha
+xpos 1158
+ypos 703
+disable {{!parent.process_alpha}}
+}
+Remove {
+channels {{{parent.MergeCopyChroma.output}}}
+name RemoveChroma
+xpos 1158
+ypos 741
+disable {{parent.keep_multi_alpha}}
+}
+Output {
+name Output1
+xpos 1158
+ypos 789
+}
+end_group

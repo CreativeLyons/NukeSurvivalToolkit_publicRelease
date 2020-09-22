@@ -1,0 +1,391 @@
+Group {
+ name PosProjection
+ tile_color 0x5f3f7fff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {41 position l "world position" t "Select position (world space) channel.\nIf position is camera space, use 'ConvertPNZ' to convert to world space." T shuffle_pos.in}
+ addUserKnob {6 unpremult_src l "unpremult source" t "Anti-aliasing edge will process improper matte on the edge. Unpremult the data with alpha will fix this issue.\n\n* input must contain alpha in alpha channel.\n** uncheck this box if position data is un-filtered.\n*** this can be fix the external edge, but not the intersect edge." +STARTLINE}
+ addUserKnob {26 title_projcam l <b>PROJECTION</b>}
+ addUserKnob {41 freeze_frame l "freeze frame" t "Check this box to enable framehold function for animated camera" T menu01.freeze_frame}
+ addUserKnob {3 proj_framehold l framehold t "Input the frame number and freeze the projection camera's animation" +DISABLED}
+ proj_framehold 1001
+ addUserKnob {22 setframe l "set current frame" t "Automatically set frame frame into framehold knob." -STARTLINE +DISABLED T "nuke.thisGroup()\['proj_framehold'].setValue( nuke.frame() )"}
+ addUserKnob {14 overscan t "The number of pixels to render beyond the left/right and top/bottom of frame, if requested by subsequent operations." R 0 100}
+ addUserKnob {78 proj_zrange l "project z range" n 4}
+ proj_zrange {0 1 999999 1000000}
+ addUserKnob {26 spacer l "" +STARTLINE T <br>}
+ addUserKnob {22 set_link l "link to selected camera" t "Selected any Camera nodes and this button will link the position to the projection camera." T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\nroot = getLevel()\nthisGRP = nuke.thisGroup()\nmainKnobs = \['proj_focal','proj_haperture','proj_win_translate','proj_win_scale','proj_winroll','proj_world_matrix']\ndefaultKnobs = \{\n\t\t\t'focal length' : 'focal',\n\t\t\t'horiz aperture' : 'haperture',\n\t\t\t'window translate' : 'win_translate',\n\t\t\t'window scale' : 'win_scale',\n\t\t\t'window roll' : 'winroll' ,\n\t\t\t'world matrix' : 'world_matrix'\n\t\t\t\}\nselNodeKnobs = \[]\nmissingKnob = \[]\n\ntry :\n\twith root :\n\t\tselNode = nuke.selectedNode()\n\n\tfor knob in selNode.knobs() :\n\t\tselNodeKnobs.append( knob )\n\n\tselNodeKnobs.sort()\n\n\tfor key,value in defaultKnobs.items() :\n\t\tif value not in selNodeKnobs :\n\t\t\tmissingKnob.append( key )\n\n\tif not len(missingKnob) :\n\t\twith root :\n\t\t\tfor knob in mainKnobs :\n\t\t\t\tthisGRP\[knob].clearAnimated()\n\n\t\t\tCAMnode = selNode.name()\n\t\t\tthisGRP\[mainKnobs\[0]].setExpression( '\{0\}.focal'.format(CAMnode) )\n\t\t\tthisGRP\[mainKnobs\[1]].setExpression( '\{0\}.haperture'.format(CAMnode) )\n\t\t\tthisGRP\[mainKnobs\[2]].setExpression( '\{0\}.win_translate'.format(CAMnode) )\n\t\t\tthisGRP\[mainKnobs\[3]].setExpression( '\{0\}.win_scale'.format(CAMnode) )\n\t\t\tthisGRP\[mainKnobs\[4]].setExpression( '\{0\}.winroll'.format(CAMnode) )\n\t\t\tthisGRP\[mainKnobs\[5]].setExpression( '\{0\}.world_matrix'.format(CAMnode) )\n\telse :\n\t\tp = nuke.Panel('Select knobs :')\n\t\tp.addBooleanCheckBox( '<b>Unable to find the default knobs. Please use the pulldown menu below to define the knob manually.</b>' , False)\n\t\tfor rk in missingKnob :\n\t\t\tp.addEnumerationPulldown( rk, ' '.join( selNodeKnobs ) )\n\n\t\tif p.show() :\n\t\t\ttry :\n\t\t\t\tfor key,value in defaultKnobs.items() :\n\t\t\t\t\tif p.value( key ) != None :\n\t\t\t\t\t\tdefaultKnobs\[key] = p.value( key )\n\t\t\texcept :\n\t\t\t\tpass\n\n\t\t\twith root :\n\t\t\t\tfor knob in mainKnobs :\n\t\t\t\t\tthisGRP\[knob].clearAnimated()\n\n\t\t\t\tCAMnode = selNode.name()\n\t\t\t\tthisGRP\[mainKnobs\[0]].setExpression( '\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['focal length']) )\n\t\t\t\tthisGRP\[mainKnobs\[1]].setExpression( '\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['horiz aperture']) )\n\t\t\t\tthisGRP\[mainKnobs\[2]].setExpression( '\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window translate']) )\n\t\t\t\tthisGRP\[mainKnobs\[3]].setExpression( '\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window scale']) )\n\t\t\t\tthisGRP\[mainKnobs\[4]].setExpression( '\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['winroll']) )\n\t\t\t\tthisGRP\[mainKnobs\[5]].setExpression( '\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['world matrix']) )\nexcept :\n\tnuke.message('no node selected.')" +STARTLINE}
+ addUserKnob {22 remove_link l "remove linked expression" t "Remove the linked camera expression but won't reset any data." -STARTLINE T "thisGRP = nuke.thisGroup()\nmainKnobs = \['proj_focal','proj_haperture','proj_win_translate','proj_win_scale','proj_winroll','proj_world_matrix']\n\nfor i in range (0, len(mainKnobs), 1) :\n    thisGRP\[mainKnobs\[i]].clearAnimated()"}
+ addUserKnob {22 bake_link l "bake expression link" t "Baked out the existing expression link back to this node itself. After that, camera node is not required for this node anymore. Baked value is base on the frame range in project setting of the nuke script.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." T "thisGRP = nuke.thisGroup()\n\nframeST = nuke.root().firstFrame()\nframeED = nuke.root().lastFrame()\n\nallknobs = \['proj_focal','proj_haperture','proj_win_translate','proj_win_scale','proj_winroll','proj_world_matrix']\nalldata = \{\}\n\nchknobs = 0\nfor knob in allknobs :\n\tif thisGRP\[knob].hasExpression() :\n\t\tchknobs = 1\n\nif chknobs :\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\ttry :\n\t\t\t\talldata\[knob].append( thisGRP\[knob].getValueAt(t) )\n\t\t\texcept :\n\t\t\t\talldata\[knob] = \[ thisGRP\[knob].getValueAt(t) ]\n\n\tfor knob in allknobs :\n\t\tthisGRP\[knob].clearAnimated()\n\t\tthisGRP\[knob].setAnimated()\n\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is float :\n\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST] , t )\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is list :\n\t\t\t\tfor i in range( len( alldata\[knob]\[t-frameST] ) ) :\n\t\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST]\[i] , t , i )\nelse :\n\tnuke.message('no expression link found.')" +STARTLINE}
+ addUserKnob {22 copy_data l "copy from selected camera" t "Select the camera, then this will process 'link to selected camera' and 'bake expression link' in once.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." -STARTLINE T "thisGRP = nuke.thisGroup()\nthisGRP\['set_link'].execute()\nthisGRP\['bake_link'].execute()"}
+ addUserKnob {20 cam_data_grp l "CAMERA DATA" n 1}
+ cam_data_grp 0
+ addUserKnob {7 proj_focal l "focal length" R 5 100}
+ addUserKnob {7 proj_haperture l "horiz aperture" R 0.1 50}
+ addUserKnob {30 proj_win_translate l "window translate"}
+ addUserKnob {30 proj_win_scale l "window scale"}
+ addUserKnob {7 proj_winroll l "window roll" R -45 45}
+ addUserKnob {41 proj_world_matrix l "world matrix" T ui_mtx.matrix}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 grp_3dpreview l "Pointcloud preview" n 1}
+ grp_3dpreview 0
+ addUserKnob {4 display_ptc_type l "display type" t "When you open this node's panel, you can check the pointcloud under 3D view.\n\n<b>none</b>\nwill not show the pointcloud in 3D\n\n<b>raw pointcloud</b>\nshow the pointcloud from input data, without any effects from this node\n\n<b>with project image</b>\nThis can show the instant result of the projection. Since it feedback in real time, it might slow down the progress in 3D space." M {"no pointcloud preview" "raw pointcloud" "with project image (slow)" "" "" "" "" ""}}
+ display_ptc_type "raw pointcloud"
+ addUserKnob {41 detail l "point detail" t "When you open this node's panel, you can check the pointcloud under 3D view.\n\nThis control the density of the pointcloud." T PositionToPoints.detail}
+ addUserKnob {41 pointSize l "point size" t "When you open this node's panel, you can check the pointcloud under 3D view.\n\nThis control the point size of the pointcloud." T PositionToPoints.pointSize}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 spacer01 l "" +STARTLINE T <br>}
+ addUserKnob {26 title_output l "<b>OUTPUT SETTING</b>"}
+ addUserKnob {4 output t "wrapped texture + source\nwhich is a projected texture composite with the input.\n\nwrapped texture\nwhich is only projected texture\n\nuv\nwhich is a uv map, can use this with STMap in downstream." M {"wrapped texture + source" "wrapped texture" uv "" ""}}
+ addUserKnob {20 grp_stmap l "STMap setting" n 1}
+ grp_stmap 0
+ addUserKnob {41 channels l "apply channels" t "Select channel to apply this projected texture." T STMap.channels}
+ addUserKnob {41 filter t "pixel filter of projected texture." T STMap.filter}
+ addUserKnob {6 black_outside l "black outside" +STARTLINE}
+ black_outside true
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.2}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-09-04}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"v1.2<br>'PosMatte'<br>&nbsp;&nbsp;-&nbsp;fix&nbsp;'2D&nbsp;sample'&nbsp;will&nbsp;break&nbsp;animated&nbsp;'3D&nbsp;pos'&nbsp;knob<br>&nbsp;&nbsp;-&nbsp;fix&nbsp;'cube3D&nbsp;falloff'&nbsp;separation<br>&nbsp;&nbsp;-&nbsp;fix&nbsp;matte:&nbsp;cube&nbsp;pivot,&nbsp;also&nbsp;in&nbsp;3D&nbsp;preview<br>'PosProjection'<br>&nbsp;&nbsp;-&nbsp;support&nbsp;overscan<br><br>1.1<br>'PosMatte'<br>&nbsp;&nbsp;-&nbsp;corrected&nbsp;pivot&nbsp;result<br>&nbsp;&nbsp;-&nbsp;'position'&nbsp;knob&nbsp;label&nbsp;changed&nbsp;to&nbsp;'world&nbsp;position'<br><br>1.0<br>-&nbsp;using&nbsp;Deep2VP&nbsp;setup&nbsp;in&nbsp;2D&nbsp;comp\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "don't touch"
+  note_font_size 42
+  xpos -1839
+  ypos 247
+  bdwidth 390
+  bdheight 201
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x4f4f4fff
+  label bin
+  note_font_size 42
+  xpos -1375
+  ypos 247
+  bdwidth 484
+  bdheight 1262
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['freeze_frame'].getValue() == 1 :\n    thisGRP\['proj_framehold'].setEnabled(True)\n    thisGRP\['setframe'].setEnabled(True)\nelse :\n    thisGRP\['proj_framehold'].setEnabled(False)\n    thisGRP\['setframe'].setEnabled(False)\n"
+  xpos -1805
+  ypos 322
+  addUserKnob {20 User}
+  addUserKnob {6 freeze_frame l "freeze frame" +STARTLINE}
+ }
+ NoOp {
+  inputs 0
+  name menu02
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif not thisGRP\['proj_zrange'].isAnimated() :\n    thisGRP\['proj_zrange_buffer'].clearAnimated()\n    thisGRP\['proj_zrange_buffer'].setValue( thisGRP\['proj_zrange'].getValue() )\nelse :\n    thisGRP\['proj_zrange_buffer'].setAnimated()\n    anizrange0 = thisGRP\['proj_zrange'].animation( 0 )\n    anizrange1 = thisGRP\['proj_zrange'].animation( 1 )\n    anizrange2 = thisGRP\['proj_zrange'].animation( 2 )\n    anizrange3 = thisGRP\['proj_zrange'].animation( 3 )\n    for key in anizrange0.keys() :\n        thisGRP\['proj_zrange_buffer'].setValueAt( key.y, key.x, 0 )\n    for key in anizrange1.keys() :\n        thisGRP\['proj_zrange_buffer'].setValueAt( key.y, key.x, 1 )\n    for key in anizrange2.keys() :\n        thisGRP\['proj_zrange_buffer'].setValueAt( key.y, key.x, 2 )\n    for key in anizrange3.keys() :\n        thisGRP\['proj_zrange_buffer'].setValueAt( key.y, key.x, 3 )\n"
+  xpos -1679
+  ypos 321
+  addUserKnob {20 User}
+  addUserKnob {78 proj_zrange l "distance range" n 4}
+ }
+ Input {
+  inputs 0
+  name CG
+  xpos 132
+  ypos -107
+ }
+ Dot {
+  name Dot1
+  xpos 166
+  ypos 150
+ }
+set N1e7e7400 [stack 0]
+ Unpremult {
+  channels all
+  name Unpremult1
+  xpos -524
+  ypos 140
+  disable {{!parent.unpremult_src}}
+ }
+set N1e7e7000 [stack 0]
+ Shuffle {
+  in none
+  in2 alpha
+  alpha red2
+  name shuffle_pos
+  xpos -524
+  ypos 275
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos -524
+  ypos 346
+ }
+ Add {
+  channels rgb
+  value {{-projCam_data.world_matrix.3} {-projCam_data.world_matrix.7} {-projCam_data.world_matrix.11} {curve}}
+  name Add1
+  xpos -524
+  ypos 428
+ }
+ ColorMatrix {
+  matrix {
+      {{projCam_data.world_matrix.0} {projCam_data.world_matrix.1} {projCam_data.world_matrix.2}}
+      {{projCam_data.world_matrix.4} {projCam_data.world_matrix.5} {projCam_data.world_matrix.6}}
+      {{projCam_data.world_matrix.8} {projCam_data.world_matrix.9} {projCam_data.world_matrix.10}}
+    }
+  invert true
+  name ColorMatrix1
+  xpos -524
+  ypos 510
+ }
+ Expression {
+  temp_name0 newR
+  temp_expr0 "( red - ( \[value globalm.hratio] * abs( blue ) * \[value projFB_data.win_translate.u] / 2 ) ) * 1 / \[value projFB_data.win_scale.u]"
+  temp_name1 newG
+  temp_expr1 "( green - ( \[value globalm.hratio] * abs( blue ) * \[value projFB_data.win_translate.v] / 2 ) ) * 1 / \[value projFB_data.win_scale.v]"
+  expr0 "newR * \[value projFB_data.world_matrix.0] + newG *\n\[value projFB_data.world_matrix.1]"
+  expr1 "newR * \[value projFB_data.world_matrix.4] + newG *\n\[value projFB_data.world_matrix.5]"
+  name Expression1
+  xpos -524
+  ypos 592
+ }
+ Dot {
+  name Dot2
+  xpos -490
+  ypos 710
+ }
+set N1e809800 [stack 0]
+ Expression {
+  expr0 "( r / ( abs(b) * \[value globalm.hratio] ) ) + 0.5"
+  expr1 "( g / ( ( abs(b) * \[value globalm.hratio] ) / ( \[value tex_dot.width] / \[value tex_dot.height] ) ) ) + 0.5"
+  name Expression2
+  xpos -524
+  ypos 816
+ }
+set N1e809400 [stack 0]
+ Dot {
+  name Dot6
+  xpos -265
+  ypos 819
+ }
+set N1e809000 [stack 0]
+ Dot {
+  name Dot7
+  xpos -265
+  ypos 1168
+ }
+push $N1e809800
+ Dot {
+  name Dot3
+  xpos -697
+  ypos 710
+ }
+ Expression {
+  temp_name0 posb
+  temp_expr0 "abs( blue )"
+  expr3 "posb < \[value parent.proj_zrange.0] || posb > \[value parent.proj_zrange.3] ? 0 : posb < \[value parent.proj_zrange.1] ? clamp( ( posb - \[value parent.proj_zrange.0] ) / ( \[value parent.proj_zrange.1] - \[value parent.proj_zrange.0] ) ) * alpha : posb > \[value parent.proj_zrange.2] ? clamp( 1 - ( posb - \[value parent.proj_zrange.2] ) / ( \[value parent.proj_zrange.3] - \[value parent.proj_zrange.2] ) ) * alpha : alpha"
+  name Expression3
+  xpos -731
+  ypos 811
+ }
+ Dot {
+  name Dot4
+  xpos -697
+  ypos 930
+ }
+push $N1e809400
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge1
+  xpos -524
+  ypos 926
+ }
+push $N1e809000
+ Input {
+  inputs 0
+  name tex
+  xpos -134
+  ypos -106
+  number 1
+ }
+ Crop {
+  box {{-parent.overscan.w} {-parent.overscan.h} {input.width+parent.overscan.w} {input.height+parent.overscan.h}}
+  crop {{parent.black_outside}}
+  name Crop1
+  xpos -134
+  ypos -26
+ }
+ Dot {
+  name tex_dot
+  xpos -100
+  ypos 56
+ }
+ STMap {
+  inputs 2
+  channels rgba
+  uv rgba
+  maskChannel rgba.alpha
+  name STMap
+  xpos -134
+  ypos 815
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge2
+  xpos -134
+  ypos 926
+ }
+set N1e834800 [stack 0]
+push $N1e834800
+push $N1e7e7400
+ Merge2 {
+  inputs 2
+  name Merge3
+  xpos 132
+  ypos 926
+ }
+ Dot {
+  name Dot10
+  xpos 166
+  ypos 1061
+ }
+set N1e834000 [stack 0]
+ Switch {
+  inputs 3
+  which {{output}}
+  name Switch2
+  xpos 132
+  ypos 1313
+ }
+ Output {
+  name Output1
+  xpos 132
+  ypos 1539
+ }
+push $N1e834000
+add_layer {ptc ptc.red ptc.green ptc.blue}
+ Shuffle {
+  in {{{shuffle_pos.in}}}
+  out ptc
+  name Shuffle3
+  xpos -713
+  ypos 1057
+ }
+ Remove {
+  operation keep
+  channels rgba
+  channels2 ptc
+  name Remove3
+  xpos -713
+  ypos 1139
+ }
+ Unpremult {
+  channels all
+  name Unpremult2
+  xpos -713
+  ypos 1221
+ }
+ Expression {
+  expr3 "alpha > 0 ? 1 : 0"
+  name Expression5
+  xpos -713
+  ypos 1315
+ }
+push $N1e7e7000
+ Dot {
+  name Dot8
+  xpos -1252
+  ypos 150
+ }
+ Shuffle {
+  in {{{shuffle_pos.in}}}
+  out ptc
+  name Shuffle2
+  xpos -1286
+  ypos 1151
+ }
+ Remove {
+  operation keep
+  channels rgba
+  channels2 ptc
+  name Remove2
+  xpos -1286
+  ypos 1233
+ }
+push 0
+ Switch {
+  inputs 3
+  which {{parent.display_ptc_type}}
+  name Switch3
+  xpos -1286
+  ypos 1315
+ }
+ PositionToPoints2 {
+  display textured
+  render_mode off
+  cast_shadow false
+  receive_shadow false
+  P_channel ptc
+  detail 0.1
+  pointSize 1
+  name PositionToPoints
+  xpos -1286
+  ypos 1397
+  disable {{"parent.display_ptc_type == 0 ? 1 : 0"}}
+ }
+ Camera {
+  inputs 0
+  display off
+  selectable false
+  rotate {0 0 {"parent.freeze_frame ? \nparent.proj_winroll( parent.proj_framehold ) : \nparent.proj_winroll"}}
+  win_translate {{"parent.freeze_frame ? \nparent.proj_win_translate(parent.proj_framehold) : \nparent.proj_win_translate"} {"parent.freeze_frame ? \nparent.proj_win_translate(parent.proj_framehold) : \nparent.proj_win_translate"}}
+  win_scale {{"parent.freeze_frame ? \nparent.proj_win_scale(parent.proj_framehold) : \nparent.proj_win_scale"} {"parent.freeze_frame ? \nparent.proj_win_scale(parent.proj_framehold) : \nparent.proj_win_scale"}}
+  name projFB_data
+  xpos -1090
+  ypos 507
+ }
+ NoOp {
+  inputs 0
+  name globalm
+  xpos -1097
+  ypos 629
+  addUserKnob {20 User}
+  addUserKnob {7 hratio}
+  hratio {{"parent.freeze_frame ? parent.proj_haperture( parent.proj_framehold )/parent.proj_focal( parent.proj_framehold ) : parent.proj_haperture/parent.proj_focal"}}
+ }
+ Camera {
+  inputs 0
+  display off
+  selectable false
+  useMatrix true
+  matrix {
+      {{"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"}}
+      {{"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"}}
+      {{"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"}}
+      {{"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"} {"parent.freeze_frame ? parent.proj_world_matrix( parent.proj_framehold ) : parent.proj_world_matrix"}}
+    }
+  name projCam_data
+  xpos -1089
+  ypos 418
+ }
+ Camera {
+  inputs 0
+  useMatrix true
+  matrix {
+      {0 0 0 0}
+      {0 0 0 0}
+      {0 0 0 0}
+      {0 0 0 0}
+    }
+  name ui_mtx
+  xpos -1088
+  ypos 319
+ }
+end_group

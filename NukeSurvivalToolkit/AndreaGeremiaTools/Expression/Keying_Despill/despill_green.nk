@@ -1,0 +1,21 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+ColorWheel {
+ inputs 0
+ gamma 0.45
+ name ColorWheel1
+ selected true
+ xpos 1974
+ ypos 80
+}
+Expression {
+ temp_name0 key
+ temp_expr0 max(0,g-(r+b)/2)
+ expr1 g-key
+ expr3 key
+ name Green_Despill
+ tile_color 0x3f633800
+ selected true
+ xpos 1974
+ ypos 236
+}

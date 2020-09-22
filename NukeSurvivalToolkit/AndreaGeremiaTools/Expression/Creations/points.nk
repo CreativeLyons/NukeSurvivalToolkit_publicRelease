@@ -1,0 +1,101 @@
+Flare {
+ inputs 0
+ position {288 240}
+ size_mult 0.7
+ inner_color 1
+ outer_falloff 0.1
+ inner_falloff 0.1
+ vis_mask_size 1
+ corners 6
+ flattening 1
+ sharpness 0.99
+ name Flare1
+ xpos 1365
+ ypos 200
+}
+Shuffle {
+ green red
+ blue red
+ alpha red
+ name Shuffle1
+ tile_color 0x93000000
+ xpos 1365
+ ypos 224
+}
+Crop {
+ box {198.5 168 378.5 312}
+ reformat true
+ crop false
+ name Crop1
+ xpos 1365
+ ypos 248
+}
+Dot {
+ name Dot1
+ xpos 1399
+ ypos 296
+}
+Reformat {
+ inputs 0
+ format "3840 2160 0 0 3840 2160 1 UHD_4K"
+ name Reformat1
+ xpos 1489
+ ypos 133
+}
+Expression {
+ expr0 fmod(x,offsetX)==0?fmod(y,offsetY)==0?random_colors?random:value:0:0
+ expr1 fmod(x,offsetX)==0?fmod(y,offsetY)==0?random_colors?random:value:0:0
+ expr2 fmod(x,offsetX)==0?fmod(y,offsetY)==0?random_colors?random:value:0:0
+ expr3 fmod(x,offsetX)==0?fmod(y,offsetY)==0?random_colors?1:value:0:0
+ name Points
+ xpos 1489
+ ypos 165
+ addUserKnob {20 User}
+ addUserKnob {7 value}
+ value 1
+ addUserKnob {6 random_colors l "random colors" -STARTLINE}
+ random_colors true
+ addUserKnob {7 offsetX R 0 100}
+ offsetX 200
+ addUserKnob {7 offsetY R 0 100}
+ offsetY 200
+}
+Dilate {
+ size 25
+ name Dilate1
+ label "\[value size]"
+ xpos 1489
+ ypos 189
+}
+Grade {
+ white 6
+ name Grade1
+ xpos 1489
+ ypos 231
+}
+Convolve2 {
+ inputs 2
+ name Convolve1
+ xpos 1489
+ ypos 289
+}
+Expression {
+ inputs 0
+ expr0 fmod(x,offsetX)==0?fmod(y,offsetY)==0?random_colors?random:value:0:0
+ expr1 fmod(x,offsetX)==0?fmod(y,offsetY)==0?random_colors?random:value:0:0
+ expr2 fmod(x,offsetX)==0?fmod(y,offsetY)==0?random_colors?random:value:0:0
+ expr3 fmod(x,offsetX)==0?fmod(y,offsetY)==0?random_colors?1:value:0:0
+ name Points1
+ selected true
+ xpos 1705
+ ypos 194
+ addUserKnob {20 User}
+ addUserKnob {7 value}
+ value 1
+ addUserKnob {6 random_colors l "random colors" -STARTLINE}
+ random_colors true
+ addUserKnob {7 offsetX R 0 100}
+ offsetX 200
+ addUserKnob {7 offsetY R 0 100}
+ offsetY 200
+}

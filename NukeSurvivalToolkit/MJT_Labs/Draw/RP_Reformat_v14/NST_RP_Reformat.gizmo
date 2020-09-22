@@ -1,0 +1,78 @@
+Group {
+ name RP_Reformat
+ onCreate "\nnuke.thisGroup()\['old_pixel_aspect'].setFlag(0x00000100)\nnuke.thisGroup()\['new_pixel_aspect'].setFlag(0x00000100)\n"
+ tile_color 0x115918ff
+ note_font "DejaVu LGC Sans"
+ addUserKnob {20 tab_general l General}
+ addUserKnob {26 title_oldres l "<b>OLD RESOLUTION</b>"}
+ addUserKnob {41 use_from l "use 'from' input to define" T menu01.use_from}
+ addUserKnob {3 old_width l width/height +DISABLED}
+ old_width 1280
+ addUserKnob {3 old_height l "" -STARTLINE +DISABLED}
+ old_height 720
+ addUserKnob {78 old_pixel_aspect l "pixel aspect" +DISABLED n 1}
+ old_pixel_aspect 1
+ addUserKnob {26 title_newres l "<b>NEW RESOLUTION<b>"}
+ addUserKnob {41 use_to l "use 'to' input to define" T menu02.use_to}
+ addUserKnob {3 new_width l width/height +DISABLED}
+ new_width 1920
+ addUserKnob {3 new_height l "" -STARTLINE +DISABLED}
+ new_height 1080
+ addUserKnob {78 new_pixel_aspect l "pixel aspect" +DISABLED n 1}
+ new_pixel_aspect 1
+ addUserKnob {26 ""}
+ addUserKnob {4 resize l "resize type" t "Choose which direction controls the scaling factor:\n\nwidth : scale so it fills the output width\nheight : scale so it fills the output height\ndistort : non-uniform scale to match both width & height" M {width height "distort  " "" "" "" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {6 new_connection l "connect to the new roto/rotopaint node(s)" t "Replace the new reformated Roto/Rotopaint into the tree." +STARTLINE}
+ addUserKnob {22 convert_rp l "convert roto/rotopaint node(s)" t "Convertion will generate a new roto/rotopaint node instead of override the existing one. Support multiple roto/rotopaint selected at the same time.\n\nGenerated roto/rotopaint node :\n\nclip to : will force to 'no clip'\n\nfeather : will multiply the value change\n\ntranslate : only override the new value when resize type is width/height\nscale : will override the new value\ncenter : will override the new value\n\nbrush size : will multiply the value change\neffect : will multiply the value change\n\nclone\nsource translate : will multiply the value change" T "import nuke.rotopaint as rp\nimport _curvelib as cl\nimport random\n\n##### function #####\n\ndef getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\ndef getItems( rpn , eleD , mode ) :\n\tif mode == 'root' :\n\t\tfor element in rpn\['curves'].rootLayer :\n\t\t\tif isinstance( element , rp.Shape ) :\n\t\t\t\teleD\['Shape'].append( element.name )\n\t\t\tif isinstance( element , rp.Stroke ) :\n\t\t\t\teleD\['Stroke'].append( element.name )\n\t\t\tif isinstance( element , rp.Layer ) :\n\t\t\t\teleD\['Layer'].append( element.name )\n\tif mode == 'sub' :\n\t\ttempLay = \[]\n\t\tfor i in eleD\['Layer'] :\n\t\t\tfor j in rpn\['curves'].toElement( i ) :\n\t\t\t\tif isinstance( j , rp.Shape ) :\n\t\t\t\t\teleD\['Shape'].append( i + '/' + j.name )\n\t\t\t\tif isinstance( j , rp.Stroke ) :\n\t\t\t\t\teleD\['Stroke'].append( i + '/' + j.name )\n\t\t\t\tif isinstance( j , rp.Layer ) :\n\t\t\t\t\ttempLay.append( i + '/' + j.name )\n\t\teleD\['Layer'] = tempLay\n\treturn eleD\n\ndef checkLay( layList ) :\n\tif len( layList ) > 0 :\n\t\tstatus = 0\n\telse :\n\t\tstatus = 1\n\treturn status\n\ndef duplicateNode( srcNode ) :\n\tdNode = nuke.createNode( srcNode.Class(), srcNode.writeKnobs( nuke.TO_SCRIPT | nuke.WRITE_NON_DEFAULT_ONLY ) )\n\tdNode\['cliptype'].setValue(0)\n\tfor i in range( dNode.inputs() ) :\n\t\tdNode.setInput( i, None )\n\tdNode.hideControlPanel()\n\treturn dNode\n\ndef gatherDown( srcNode ) :\n\tds = srcNode.dependent()\n\tdsCon = \[]\n\tfor dnode in ds :\n\t\ttemp = \[ dnode ]\n\t\tfor i in range( dnode.inputs() ) :\n\t\t\ttry :\n\t\t\t\tif dnode.input(i).name() == srcNode.name() :\t\t\t\t\t\t\t\n\t\t\t\t\ttemp.append( i )\n\t\t\texcept :\n\t\t\t\tpass\n\t\tdsCon.append( temp )\n\treturn dsCon\n\n###############\n\n##### base #####\nrpNodes = \[]\nrpCon = \{\}\n\nthisGRP = nuke.thisGroup()\n\nif thisGRP\['use_from'].value() :\n\tifrom = nuke.toNode('from')\n\toldres = \[ int( ifrom.width() ) , int( ifrom.height() ) , float( ifrom.pixelAspect() ) ]\nelse :\n\toldres = \[ int( thisGRP\['old_width'].getValue() ) , int( thisGRP\['old_height'].getValue() ) , float( thisGRP\['old_pixel_aspect'].getValue() ) ]\n\nif thisGRP\['use_to'].value() :\n\tito = nuke.toNode('to')\n\tnewres = \[ int( ito.width() ) , int( ito.height() ) , float( ito.pixelAspect() ) ]\nelse :\n\tnewres = \[ int( thisGRP\['new_width'].getValue() ) , int( thisGRP\['new_height'].getValue() ) , float( thisGRP\['new_pixel_aspect'].getValue() ) ]\n\nxGrid = int( nuke.toNode('preferences')\['GridWidth'].getValue() )\n\nwith getLevel() :\n\tnodeCheck = 0\n\n\tfor node in nuke.selectedNodes() :\n\t\tif node.Class() == 'Roto' or node.Class() == 'RotoPaint' :\n\t\t\trpNodes.append( node )\n\t\t\tnodeCheck = 1\n\n\tif nodeCheck :\n\n\t\t##### transformation curve #####\n\n\t\tif thisGRP\['resize'].getValue() == 0 :\n\t\t\twidthRatio = newres\[0] / oldres\[0]\n\t\t\theightRatio = ( newres\[0] / oldres\[0] ) * ( newres\[2] / oldres\[2] )\n\t\telif thisGRP\['resize'].getValue() == 1 :\n\t\t\twidthRatio = ( newres\[1] / oldres\[1] ) * ( oldres\[2] / newres\[2] )\n\t\t\theightRatio = newres\[1] / oldres\[1]\n\t\telse :\n\t\t\twidthRatio = newres\[0] / oldres\[0]\n\t\t\theightRatio = newres\[1] / oldres\[1]\n\n\t\tTranslateNC_x = cl.AnimCurve()\n\t\tTranslateNC_y = cl.AnimCurve()\n\t\tScaleNC_x = cl.AnimCurve()\n\t\tScaleNC_y = cl.AnimCurve()\n\t\tPivotNC = cl.AnimCurve()\n\n\t\tif thisGRP\['resize'].getValue() == 0 :\n\t\t\tTranslateNC_y.expressionString = str( (newres\[1]-(oldres\[1]*heightRatio))/2 )\n\t\tif thisGRP\['resize'].getValue() == 1 :\n\t\t\tTranslateNC_x.expressionString = str( (newres\[0]-(oldres\[0]*widthRatio))/2 )\n\t\tScaleNC_x.expressionString = str( widthRatio )\n\t\tScaleNC_y.expressionString = str( heightRatio )\n\t\tPivotNC.expressionString = '0'\n\t\tfor curve in \[ TranslateNC_x , TranslateNC_y , ScaleNC_x , ScaleNC_y , PivotNC ]:\n\t\t\tcurve.useExpression = True\n\n\t\t###############\n\n\t\tfor o_rpNode in rpNodes :\n\t\t\teleD = \{\n\t\t\t\t'Shape' : \[] ,\n\t\t\t\t'Stroke' : \[] ,\n\t\t\t\t'Layer' : \[]\n\t\t\t\t\}\n\n\t\t\tdownNodes = gatherDown( o_rpNode )\n\n\t\t\trpNode = duplicateNode( o_rpNode )\n\t\t\trpNode.setXYpos( int( o_rpNode.xpos() + xGrid + random.randint( 0 , xGrid ) ) , int( o_rpNode.ypos() ) )\n\t\t\trpNode\['output'].setValue( o_rpNode\['output'].value() )\n\t\t\trpNode\['label'].setValue( 'old : \{0\}x\{1\}   \{2\}<br>new : \{3\}x\{4\}   \{5\}<br>reize type : \{6\}'.format( str(oldres\[0]) , str(oldres\[1]) , str(int(oldres\[2])) , str(newres\[0]) , str(newres\[1]) , str(int(newres\[2])) , thisGRP\['resize'].value() ) )\n\n\t\t\tif thisGRP\['new_connection'].value() :\n\t\t\t\tif len(o_rpNode.dependencies()) :\n\t\t\t\t\trpCon\[rpNode.name()] = \[ o_rpNode.dependencies()\[0] , downNodes ]\n\t\t\t\telse :\n\t\t\t\t\trpCon\[rpNode.name()] = \[ None , downNodes ]\n\t\t\telse :\n\t\t\t\tif len(o_rpNode.dependencies()) :\n\t\t\t\t\trpCon\[o_rpNode.name()] = \[ o_rpNode.dependencies()\[0] , downNodes ]\n\t\t\t\telse :\n\t\t\t\t\trpCon\[o_rpNode.name()] = \[ None , downNodes ]\n\n\t\t\t##### get all items #####\n\t\t\teleD = getItems( rpNode , eleD , 'root' )\n\t\t\tchkstatus = checkLay( eleD\['Layer'] )\n\t\t\twhile chkstatus < 1 :\n\t\t\t\teleD = getItems( rpNode , eleD , 'sub' )\n\t\t\t\tchkstatus = checkLay( eleD\['Layer'] )\n\t\t\tdel eleD\['Layer']\n\n\t\t\t##### process #####\n\t\t\tfor key in eleD.keys() :\n\t\t\t\tfor i in eleD\[key] :\n\t\t\t\t\tshape = rpNode\['curves'].toElement( i )\n\t\t\t\t\tst = shape.getTransform()\n\t\t\t\t\tsa = shape.getAttributes()\n\n\t\t\t\t\tst.setTranslationAnimCurve( 0 , TranslateNC_x )\n\t\t\t\t\tst.setTranslationAnimCurve( 1 , TranslateNC_y )\n\t\t\t\t\tst.setScaleAnimCurve( 0 , ScaleNC_x )\n\t\t\t\t\tst.setScaleAnimCurve( 1 , ScaleNC_y )\n\t\t\t\t\tst.setPivotPointAnimCurve( 0 , PivotNC )\n\t\t\t\t\tst.setPivotPointAnimCurve( 1 , PivotNC )\n\n\t\t\t\t\ttry :\n\t\t\t\t\t\tsa.set( 'fx' , sa.getCurve('fx').constantValue * widthRatio )\n\t\t\t\t\t\tsa.set( 'fy' , sa.getCurve('fy').constantValue * heightRatio )\n\t\t\t\t\texcept :\n\t\t\t\t\t\tpass\n\n\t\t\t\t\tif key == 'Stroke' :\n\t\t\t\t\t\tsa.set( 'bs' , sa.getCurve('bs').constantValue * widthRatio )\n\t\t\t\t\t\tsa.set( 'ep1' , sa.getCurve('ep1').constantValue * widthRatio )\n\t\t\t\t\t\tsa.set( 'stx' , sa.getCurve('stx').constantValue * widthRatio )\n\t\t\t\t\t\tsa.set( 'sty' , sa.getCurve('sty').constantValue * heightRatio )\n\n\t\t\trpNode\['curves'].changed()\n\n\t\tfor key, value in rpCon.items() :\n\t\t\tnuke.toNode(key).setInput( 0, value\[0] )\n\t\t\tfor dNode in value\[1] :\n\t\t\t\tfor i in xrange( 1 , len(dNode) , 1 ) :\n\t\t\t\t\tdNode\[0].setInput( dNode\[i] , nuke.toNode( key ) )\n\n\telse :\n\t\tnuke.message('Only work with Roto / RotoPaint node(s).<br><br>Select one or more Roto / RotoPaint node(s) and run again.')" +STARTLINE}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.4}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-05-06}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.4<br>-&nbsp;fixed&nbsp;gizmo&nbsp;is&nbsp;a&nbsp;gizmo,&nbsp;not&nbsp;group<br><br>1.2<br>-&nbsp;Tong&nbsp;Lyons's&nbsp;feedback&nbsp;:<br>&nbsp;&nbsp;added&nbsp;'from'&nbsp;&&nbsp;'to'&nbsp;input&nbsp;for&nbsp;the&nbsp;old/new&nbsp;resolution<br><br>1.1<br>-&nbsp;fixed&nbsp;the&nbsp;Rotopaint&nbsp;nodes&nbsp;connection&nbsp;issue<br>-&nbsp;fixed&nbsp;the&nbsp;new&nbsp;Rotopaint&nbsp;node's&nbsp;output&nbsp;channel,<br>&nbsp;&nbsp;will&nbsp;keep&nbsp;that&nbsp;same&nbsp;as&nbsp;the&nbsp;source&nbsp;node.<br>-&nbsp;added&nbsp;'resize&nbsp;type'&nbsp;info&nbsp;in&nbsp;new&nbsp;RP&nbsp;node's&nbsp;label<br>-&nbsp;removed&nbsp;the&nbsp;animation&nbsp;menu&nbsp;on&nbsp;pixel_aspect&nbsp;knob.<br><br>1.0<br>-&nbsp;batch&nbsp;resize&nbsp;Roto&nbsp;/&nbsp;RotoPaint's&nbsp;vector&nbsp;data&nbsp;\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -412
+  ypos -182
+  bdwidth 226
+  bdheight 208
+ }
+ Input {
+  inputs 0
+  name to
+  xpos 62
+  ypos -125
+  number 1
+ }
+ Input {
+  inputs 0
+  name from
+  xpos -99
+  ypos -124
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nknobs = \['old_width','old_height','old_pixel_aspect']\nfor knob in knobs :\n    nuke.thisGroup()\[knob].setEnabled( not nuke.thisGroup()\['use_from'].value() )\n"
+  xpos -343
+  ypos -95
+  addUserKnob {20 User}
+  addUserKnob {6 use_from l "use 'from' input to define" +STARTLINE}
+  use_from true
+ }
+ NoOp {
+  inputs 0
+  name menu02
+  knobChanged "\nknobs = \['new_width','new_height','new_pixel_aspect']\nfor knob in knobs :\n    nuke.thisGroup()\[knob].setEnabled( not nuke.thisGroup()\['use_to'].value() )\n"
+  xpos -343
+  ypos -32
+  addUserKnob {20 User}
+  addUserKnob {6 use_to l "use 'to' input to define" +STARTLINE}
+  use_to true
+ }
+end_group

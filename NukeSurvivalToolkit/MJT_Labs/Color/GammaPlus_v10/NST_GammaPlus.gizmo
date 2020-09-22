@@ -1,0 +1,269 @@
+Group {
+ name GammaPlus
+ onCreate "\nthisGRP = nuke.thisGroup()\nfor knob in thisGRP.knobs() :\n    if thisGRP\[knob].label()\[:19] == 'panel dropped state' :\n        thisGRP.removeKnob( nuke.thisNode()\[knob] )\n    try :\n        if thisGRP\[knob].Class() == 'AColor_Knob' and thisGRP\[knob].getValue() == \[0,0,0,0] :\n            thisGRP\[knob].setSingleValue(True)\n    except :\n        pass\nthisGRP\['value_luma'].setFlag(0x00000004)\n"
+ tile_color 0x7fb2ffff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {41 channels t "The effect is applied only to these channels" T menu01.channels}
+ addUserKnob {41 channels_cs t "The effect is applied only to these channels" +INVISIBLE T menu02.channels}
+ addUserKnob {26 title_setting l "<b><font color='#77a7d9'>setting</font></b>"}
+ addUserKnob {4 method l "method use in" t "<b>Grade</b>\n- as Grade node gamma math with condition\n  0.0-1.0 use regular math\n  above 1.0 will switch to multiply\n\n  data<0 ? data : data>1 ? (data-1)*(1/gamma)+1 : data**(1/gamma)\n\n----------\n\n<b>ColorCorrect/Gamma</b>\n- as ColorCorrect/Gamma node\n  use regular gamma math\n\n  data**(1/gamma)" M {Grade ColorCorrect/Gamma ""}}
+ addUserKnob {41 apply_on l "apply on" t "<b>Color</b>\nResult apply on color, saturation might change a lot.\n\n<b>Luminance</b>\nResult apply on luminance, saturation affects the minimal." T menu03.apply_on}
+ addUserKnob {19 set_pivot l "set pivot" t "set pivot\nto lock the value for gamma correction.\n\nCtrl+Alt+colorpick\nto sample the input source value before gamma correction.\n" R 0 4}
+ set_pivot 1
+ addUserKnob {26 title_gamma l "<b><font color='#77a7d9'>gamma</font></b>"}
+ addUserKnob {19 value_color l "value color" t "Gamma correction applied to final result" R 0.2 5}
+ value_color 1
+ addUserKnob {7 value_luma l "value luma" t "Gamma correction applied to final result" +DISABLED R 0.2 5}
+ value_luma 1
+ addUserKnob {6 reverse +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {7 mix t "Dissolve between the original image at 0 and the full effect at 1."}
+ mix 1
+ addUserKnob {22 as_contrast l "Tips : use as contrast in ColorCorrect" T "nuke.message('Setting as contrast on ColorCorrect :\\n\\nmethod use in = ColorCorrect/Gamma\\napply on = Color\\nset_pivot = 0.18\\nreverse = checked\\n\\nThen value will work as Contrast in ColorCorrect.')" +STARTLINE}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.0}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-09-11}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.0<br>-&nbsp;more&nbsp;setting&nbsp;on&nbsp;gamma/contrast\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x4c4c4cff
+  label bin
+  note_font_size 42
+  xpos -1049
+  ypos -17
+  bdwidth 384
+  bdheight 351
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -1514
+  ypos -17
+  bdwidth 384
+  bdheight 351
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 0
+  ypos -77
+ }
+ Dot {
+  name Dot5
+  xpos 34
+  ypos 99
+ }
+set Nea9e000 [stack 0]
+ Dot {
+  name Dot8
+  xpos -840
+  ypos 99
+ }
+set Ne8ddc00 [stack 0]
+ Dot {
+  name Dot7
+  xpos -957
+  ypos 99
+ }
+ Multiply {
+  channels rgb
+  name menu01
+  knobChanged "\nnuke.thisGroup()\['channels_cs'].setValue( nuke.thisGroup()\['channels'].value() )\n"
+  xpos -991
+  ypos 175
+ }
+push $Ne8ddc00
+ Colorspace {
+  name menu02
+  xpos -874
+  ypos 173
+ }
+ NoOp {
+  inputs 0
+  name menu03
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['apply_on'].getValue() == 0 :\n    thisGRP\['value_color'].setEnabled(True)\n    thisGRP\['value_luma'].setEnabled(False)\nelse :\n    thisGRP\['value_color'].setEnabled(False)\n    thisGRP\['value_luma'].setEnabled(True)\n"
+  xpos -1387
+  ypos 171
+  addUserKnob {20 User}
+  addUserKnob {4 apply_on l "apply on" M {Color Luminance}}
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width 10
+  box_height 10
+  box_fixed true
+  name Reformat1
+  xpos -561
+  ypos 505
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos -561
+  ypos 585
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos -388
+  ypos -75
+  number 1
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input1]"}}
+  name Switch3
+  xpos -388
+  ypos 585
+ }
+ Dot {
+  name Dot6
+  xpos -354
+  ypos 710
+ }
+push $Nea9e000
+ Dot {
+  name Dot1
+  xpos 169
+  ypos 99
+ }
+set Ne905000 [stack 0]
+ Dot {
+  name Dot2
+  xpos 426
+  ypos 99
+ }
+ Colorspace {
+  channels {{{menu02.channels}}}
+  colorspace_out HSV
+  name HSV
+  xpos 392
+  ypos 173
+ }
+ Multiply {
+  channels {{{menu01.channels}}}
+  value {1 1 {"1/\nmax(\n        ( parent.set_pivot.r <= 0.0031308 ? parent.set_pivot.r*12.92 : 1.055 * (parent.set_pivot.r**(1/2.4)) - 0.055 ) ,\n        ( parent.set_pivot.g <= 0.0031308 ? parent.set_pivot.g*12.92 : 1.055 * (parent.set_pivot.g**(1/2.4)) - 0.055 ) ,\n        ( parent.set_pivot.b <= 0.0031308 ? parent.set_pivot.b*12.92 : 1.055 * (parent.set_pivot.b**(1/2.4)) - 0.055 )\n       )"} {1/parent.set_pivot}}
+  name Multiply3
+  xpos 392
+  ypos 253
+ }
+ Dot {
+  name Dot9
+  xpos 426
+  ypos 316
+ }
+set Ne904000 [stack 0]
+ Gamma {
+  channels {{{menu01.channels}}}
+  value {1 1 {"parent.reverse ? (1/parent.value_luma) : parent.value_luma"} {"parent.reverse ? (1/parent.value_luma) : parent.value_luma"}}
+  name Gamma2
+  xpos 499
+  ypos 382
+ }
+push $Ne904000
+ Grade {
+  channels {{{menu01.channels}}}
+  gamma {1 1 {"parent.reverse ? (1/parent.value_luma) : parent.value_luma"} {"parent.reverse ? (1/parent.value_luma) : parent.value_luma"}}
+  black_clamp false
+  name Grade2
+  xpos 392
+  ypos 383
+ }
+ Switch {
+  inputs 2
+  which {{parent.method}}
+  name Switch4
+  xpos 392
+  ypos 470
+ }
+ Multiply {
+  channels {{{menu01.channels}}}
+  value {1 1 {"max(\n        ( parent.set_pivot.r <= 0.0031308 ? parent.set_pivot.r*12.92 : 1.055 * (parent.set_pivot.r**(1/2.4)) - 0.055 ) ,\n        ( parent.set_pivot.g <= 0.0031308 ? parent.set_pivot.g*12.92 : 1.055 * (parent.set_pivot.g**(1/2.4)) - 0.055 ) ,\n        ( parent.set_pivot.b <= 0.0031308 ? parent.set_pivot.b*12.92 : 1.055 * (parent.set_pivot.b**(1/2.4)) - 0.055 )\n       )"} {parent.set_pivot}}
+  name Multiply4
+  xpos 392
+  ypos 550
+ }
+ Colorspace {
+  channels {{{menu02.channels}}}
+  colorspace_in HSV
+  name invHSV
+  xpos 392
+  ypos 630
+ }
+ Dot {
+  name Dot3
+  xpos 426
+  ypos 710
+ }
+push $Ne905000
+ Multiply {
+  channels {{{menu01.channels}}}
+  value {{1/parent.set_pivot} {1/parent.set_pivot} {1/parent.set_pivot} {1/parent.set_pivot}}
+  name Multiply1
+  xpos 135
+  ypos 173
+ }
+ Dot {
+  name Dot4
+  xpos 169
+  ypos 253
+ }
+set Ne7e2000 [stack 0]
+ Gamma {
+  channels {{{menu01.channels}}}
+  value {{"parent.reverse ? (1/parent.value_color) : parent.value_color"} {"parent.reverse ? (1/parent.value_color) : parent.value_color"} {"parent.reverse ? (1/parent.value_color) : parent.value_color"} {"parent.reverse ? (1/parent.value_color) : parent.value_color"}}
+  name Gamma1
+  xpos 248
+  ypos 328
+ }
+push $Ne7e2000
+ Grade {
+  channels {{{menu01.channels}}}
+  gamma {{"parent.reverse ? (1/parent.value_color) : parent.value_color"} {"parent.reverse ? (1/parent.value_color) : parent.value_color"} {"parent.reverse ? (1/parent.value_color) : parent.value_color"} {"parent.reverse ? (1/parent.value_color) : parent.value_color"}}
+  black_clamp false
+  name Grade1
+  xpos 135
+  ypos 327
+ }
+ Switch {
+  inputs 2
+  which {{parent.method}}
+  name Switch2
+  xpos 135
+  ypos 407
+ }
+ Multiply {
+  channels {{{menu01.channels}}}
+  value {{parent.set_pivot} {parent.set_pivot} {parent.set_pivot} {parent.set_pivot}}
+  name Multiply2
+  xpos 135
+  ypos 487
+ }
+ Switch {
+  inputs 2
+  which {{parent.apply_on}}
+  name Switch1
+  xpos 135
+  ypos 707
+ }
+push $Nea9e000
+ Keymix {
+  inputs 3
+  mix {{clamp(parent.mix)}}
+  name Keymix1
+  xpos 0
+  ypos 701
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 928
+ }
+end_group

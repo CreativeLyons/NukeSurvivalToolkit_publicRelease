@@ -1,0 +1,20 @@
+ColorWheel {
+ inputs 0
+ gamma 0.45
+ name ColorWheel1
+ selected true
+ xpos 107
+ ypos -172
+}
+Expression {
+ expr0 trunc(r*scale)/scale
+ expr1 trunc(g*scale)/scale
+ expr2 trunc(b*scale)/scale
+ name Trunc
+ selected true
+ xpos 107
+ ypos -55
+ addUserKnob {20 User}
+ addUserKnob {7 scale R 0 5}
+ scale 1
+}

@@ -1,0 +1,251 @@
+Group {
+ name RadialAdvanced
+ tile_color 0x5f5f5fff
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 RadialAdvanced}
+ addUserKnob {41 format l "output format" T Reformat1.format}
+ addUserKnob {6 replace +STARTLINE}
+ addUserKnob {6 invert -STARTLINE}
+ addUserKnob {41 color T OUTER_EDGE_RADIAL.color}
+ addUserKnob {26 ""}
+ addUserKnob {41 scale l "Master Scale" T MasterTransform.scale}
+ addUserKnob {26 ""}
+ addUserKnob {26 innerDiv l Inner}
+ addUserKnob {41 scale_1 l "Inner Scale" T InnerControl.scale}
+ addUserKnob {7 innerFeather l "Inner Feather"}
+ innerFeather 0.3
+ addUserKnob {26 ""}
+ addUserKnob {26 OuterDiv l Outer}
+ addUserKnob {41 size l "Blur Outer Edge" T Outer_Edge_Blur.size}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask -STARTLINE T Merge3.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge3.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge3.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge3.fringe}
+ addUserKnob {41 mix T Merge3.mix}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "sliders and controls to easier animate Radial Tool" T RadialAdvanced}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -230
+  ypos -583
+ }
+ Reformat {
+  pbb true
+  name Reformat1
+  xpos -230
+  ypos -527
+  disable {{"\[exists parent.input0]"}}
+ }
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos -196
+  ypos -457
+ }
+set N9918c220 [stack 0]
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos -349
+  ypos -457
+ }
+set N991900f0 [stack 0]
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos -459
+  ypos -457
+ }
+set N99193fd0 [stack 0]
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos -549
+  ypos -457
+ }
+ Transform {
+  center {{input.width/2} {input.height/2}}
+  name MasterTransform
+  xpos -583
+  ypos -405
+ }
+push $N99193fd0
+ Transform {
+  center {{input.width/2} {input.height/2}}
+  name InnerControl
+  xpos -493
+  ypos -406
+ }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -544
+  ypos 135
+  number 1
+ }
+push $N9918c220
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos -230
+  ypos -424
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  label "\[value in]"
+  xpos -230
+  ypos -400
+ }
+ Dot {
+  name Dot1
+  xpos -196
+  ypos -352
+ }
+set N991beaa0 [stack 0]
+ Dot {
+  name Dot3
+  xpos -72
+  ypos -352
+ }
+ Radial {
+  area {4 4 {input.width-4} {input.height-4}}
+  softness {{3*parent.innerFeather}}
+  name INNER_EDGE_RADIAL
+  xpos -106
+  ypos -307
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  name Crop2
+  xpos -106
+  ypos -261
+ }
+ Transform {
+  scale {{parent.InnerControl.scale}}
+  center {{input.width/2} {input.height/2}}
+  filter Mitchell
+  name Transform3
+  xpos -106
+  ypos -216
+ }
+ Blur {
+  channels rgba
+  crop false
+  name Inner_Edge_Blur
+  label "\[value size]"
+  xpos -106
+  ypos -171
+ }
+ Dot {
+  name Dot2
+  xpos -72
+  ypos -97
+ }
+set N991e6d30 [stack 0]
+push $N991beaa0
+ Radial {
+  area {{parent.INNER_EDGE_RADIAL.area} {parent.INNER_EDGE_RADIAL.area} {parent.INNER_EDGE_RADIAL.area} {parent.INNER_EDGE_RADIAL.area}}
+  softness 0
+  name OUTER_EDGE_RADIAL
+  xpos -230
+  ypos -286
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  name Crop1
+  xpos -230
+  ypos -262
+ }
+ Blur {
+  channels rgba
+  size 2
+  crop false
+  name Outer_Edge_Blur
+  label "\[value size]"
+  xpos -230
+  ypos -169
+ }
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos -196
+  ypos -103
+ }
+set N9930ecc0 [stack 0]
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox A
+  name Merge2
+  xpos -106
+  ypos -46
+ }
+push $N991e6d30
+push $N9930ecc0
+ Merge2 {
+  inputs 2
+  operation stencil
+  bbox B
+  name Merge1
+  xpos -230
+  ypos -53
+ }
+ Switch {
+  inputs 2
+  which {{parent.invert i}}
+  name INVERT_SWITCH
+  xpos -230
+  ypos 13
+ }
+ Transform {
+  scale {{parent.MasterTransform.scale}}
+  center {{parent.Transform3.center} {parent.Transform3.center}}
+  filter Mitchell
+  black_outside false
+  name transform4
+  xpos -230
+  ypos 65
+ }
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos -196
+  ypos 138
+ }
+push $N991beaa0
+push $N991900f0
+ Switch {
+  inputs 2
+  which {{parent.replace}}
+  name Switch1
+  xpos -383
+  ypos -355
+ }
+ Merge2 {
+  inputs 2+1
+  Achannels {-rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  Bchannels {-rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  output {-rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  also_merge rgba
+  name Merge3
+  xpos -383
+  ypos 135
+ }
+ Output {
+  name Output1
+  xpos -383
+  ypos 221
+ }
+end_group

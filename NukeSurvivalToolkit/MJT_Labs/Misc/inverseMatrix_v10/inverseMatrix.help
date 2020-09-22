@@ -1,0 +1,8 @@
+inverseMatrix
+
+Inverse Matrix provide the calculate output of matrix inverse, which is c44matrix and colorMatrix doesn't show the result. It handy for using this for deep expression which is heavily use in deepExpression.
+
+How to use :
+- fill in knob_path of the node with matrix. e.g. camera1.world_matrix
+- id is reassign 4x4 matrix to 3x3 matrix. Default value already good for rotation and scale inverse
+- don't have to do anything for the rest of the knob. Inverse matrix result will be shown in invMatrix knob

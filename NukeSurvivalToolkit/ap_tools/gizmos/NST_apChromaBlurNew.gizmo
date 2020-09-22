@@ -1,0 +1,369 @@
+add_layer {apChroma apChroma.red apChroma.green apChroma.blue apChroma.alpha}
+Group {
+ name apChromaBlur
+ help "apChromaBlur v0.2\nadrianpueyo.com, 2019"
+ tile_color 0x736efdff
+ selected true
+ addUserKnob {20 apChromaBlur}
+ addUserKnob {41 channels T MergeRGBA.also_merge}
+ addUserKnob {26 ""}
+ addUserKnob {4 blur_mode l mode M {blur defocus ""}}
+ addUserKnob {18 size}
+ size {0 0 0}
+ addUserKnob {6 size_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 aspect}
+ aspect 1
+ addUserKnob {6 aspect_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 bloom}
+ bloom 1
+ addUserKnob {6 bloom_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 mix_1 l mix}
+ mix_1 1
+ addUserKnob {6 mix_1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {41 chroma l "<b><font color=#9292d2>multi-alpha" T MergeCopyChroma.output}
+ addUserKnob {6 process_multi_alpha l "process multi-alpha" +STARTLINE}
+ process_multi_alpha true
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l "mask " -STARTLINE T MergeRGBA.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T MergeRGBA.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T MergeRGBA.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T MergeRGBA.fringe}
+ addUserKnob {41 mix T MergeRGBA.mix}
+ addUserKnob {26 version_author l "" t "apChromaBlur v0.2\n2019" +STARTLINE T "<span style=\"color:#666\"><br/><b>apChromaBlur v0.2</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019</span>"}
+}
+ Merge2 {
+  inputs 0
+  operation copy
+  Achannels {{{parent.MergeCopyChroma.output}}}
+  Bchannels none
+  output {{{parent.MergeCopyChroma.output}}}
+  name MergeChosen
+  xpos 824
+  ypos 296
+  hide_input true
+ }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 190
+  ypos 914
+  number 1
+ }
+set Nee2b8fc0 [stack 0]
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos 224
+  ypos 956
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos 319
+  ypos 196
+ }
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos 353
+  ypos 246
+ }
+set Nebabdf10 [stack 0]
+ Dot {
+  name Dot10
+  note_font_size 41
+  xpos 564
+  ypos 246
+ }
+set Nee2f0b50 [stack 0]
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos 665
+  ypos 246
+ }
+set Nee2e8410 [stack 0]
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 665
+  ypos 306
+ }
+push $Nee2e8410
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 737
+  ypos 246
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  label "\[value in]"
+  xpos 703
+  ypos 264
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Achannels {{{parent.MergeCopyChroma.output}}}
+  Bchannels none
+  name MergeGetChroma
+  xpos 703
+  ypos 302
+  disable {{"\[\nif \{ \[lsearch -exact \[channels \[input this 1]] \[lindex \[channels MergeChosen] 0]] >= 0\} \{\n    return 0\n\} else \{\n    return 1\n\}\n]"}}
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 737
+  ypos 348
+ }
+set Ncf9c1c10 [stack 0]
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 737
+  ypos 441
+ }
+push $Nee2f0b50
+ Gamma {
+  value {{1/parent.bloom} {1/parent.bloom} {1/parent.bloom} {1/parent.bloom}}
+  name Gamma1
+  xpos 530
+  ypos 393
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Bchannels none
+  output {{{parent.MergeCopyChroma.output}}}
+  name MergeCopyChromaFull1
+  xpos 530
+  ypos 431
+  disable {{!parent.process_multi_alpha}}
+ }
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos 564
+  ypos 496
+ }
+set Nd3018370 [stack 0]
+ Dot {
+  name Dot11
+  note_font_size 41
+  xpos 652
+  ypos 496
+ }
+set Ne424f1a0 [stack 0]
+ Dot {
+  name Dot12
+  note_font_size 41
+  xpos 737
+  ypos 496
+ }
+ Multiply {
+  value {0 0 1 1}
+  name MultiplyKeepR2
+  label "\[value value]"
+  xpos 703
+  ypos 533
+ }
+ Blur {
+  size {{parent.size.2*parent.aspect.2} {parent.size.2}}
+  mix {{parent.mix_1.b}}
+  name Blur3
+  xpos 703
+  ypos 583
+  disable {{parent.blur_mode==1}}
+ }
+ Defocus {
+  defocus {{parent.size.2}}
+  ratio {{parent.aspect.2}}
+  mix {{parent.mix_1.b}}
+  name Defocus3
+  xpos 703
+  ypos 621
+  disable {{parent.blur_mode==0}}
+ }
+ Dot {
+  name Dot16
+  note_font_size 41
+  xpos 737
+  ypos 714
+ }
+push $Ne424f1a0
+ Multiply {
+  value {0 1 0 1}
+  name MultiplyKeepG2
+  label "\[value value]"
+  xpos 618
+  ypos 533
+ }
+ Blur {
+  size {{parent.size.1*parent.aspect.1} {parent.size.1}}
+  mix {{parent.mix_1.g}}
+  name Blur2
+  xpos 618
+  ypos 583
+  disable {{parent.blur_mode==1}}
+ }
+ Defocus {
+  defocus {{parent.size.1}}
+  ratio {{parent.aspect.1}}
+  mix {{parent.mix_1.g}}
+  name Defocus2
+  xpos 618
+  ypos 621
+  disable {{parent.blur_mode==0}}
+ }
+ Dot {
+  name Dot15
+  note_font_size 41
+  xpos 652
+  ypos 688
+ }
+push $Nd3018370
+ Multiply {
+  value {1 0 0 1}
+  name MultiplyKeepB2
+  label "\[value value]"
+  xpos 530
+  ypos 533
+ }
+ Blur {
+  size {{parent.size.0*parent.aspect.0} {parent.size.0}}
+  mix {{parent.mix_1.r}}
+  name Blur1
+  xpos 530
+  ypos 583
+  disable {{parent.blur_mode==1}}
+ }
+ Defocus {
+  defocus {{parent.size.0}}
+  ratio {{parent.aspect.0}}
+  mix {{parent.mix_1.r}}
+  name Defocus1
+  xpos 530
+  ypos 621
+  disable {{parent.blur_mode==0}}
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  also_merge all
+  name Merge1
+  xpos 530
+  ypos 684
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  also_merge all
+  name Merge2
+  xpos 530
+  ypos 710
+ }
+ Dot {
+  name Dot14
+  note_font_size 41
+  xpos 564
+  ypos 758
+ }
+set Nd31e4790 [stack 0]
+ Dot {
+  name Dot17
+  note_font_size 41
+  xpos 641
+  ypos 758
+ }
+ Dot {
+  name Dot18
+  note_font_size 41
+  xpos 641
+  ypos 956
+ }
+push $Nee2b8fc0
+push $Ncf9c1c10
+push $Nebabdf10
+ Merge2 {
+  inputs 2
+  operation copy
+  Bchannels none
+  output {{{parent.MergeCopyChroma.output}}}
+  name MergeCopyChromaFull
+  xpos 319
+  ypos 338
+  disable {{!parent.process_multi_alpha}}
+ }
+ Dot {
+  name Dot13
+  note_font_size 41
+  xpos 353
+  ypos 852
+ }
+set Nd318e600 [stack 0]
+ Shuffle {
+  name ShuffleNothing
+  xpos 418
+  ypos 848
+ }
+push $Nd31e4790
+ Gamma {
+  value {{parent.bloom} {parent.bloom} {parent.bloom} {parent.bloom}}
+  name Gamma2
+  xpos 530
+  ypos 804
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name CopyA
+  xpos 530
+  ypos 842
+ }
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos 564
+  ypos 918
+ }
+push $Nd318e600
+ Merge2 {
+  inputs 2+1
+  operation copy
+  Achannels none
+  Bchannels none
+  output none
+  also_merge rgba
+  name MergeRGBA
+  xpos 319
+  ypos 908
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  Achannels {{{output}}}
+  Bchannels none
+  output apChroma
+  maskChannelMask {{{parent.MergeRGBA.maskChannelMask}}}
+  inject {{parent.MergeRGBA.inject}}
+  invert_mask {{parent.MergeRGBA.invert_mask}}
+  fringe {{parent.MergeRGBA.fringe}}
+  mix {{parent.MergeRGBA.mix}}
+  name MergeCopyChroma
+  xpos 319
+  ypos 946
+  disable {{!parent.process_multi_alpha}}
+ }
+ Output {
+  name Output1
+  xpos 319
+  ypos 1017
+ }
+end_group

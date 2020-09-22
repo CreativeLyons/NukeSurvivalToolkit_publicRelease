@@ -1,0 +1,111 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+push 0
+Group {
+ inputs 2
+ name MergeAll
+ help "MergeAll v1.0\n\nMerges all the channels as expected! Especially useful for workflows with AOVs or multi-channel mattes, where you want to mask or stencil multiple channels at the same time.\n\nDecyphered with the awesome Tony Lyons.\n\nadrianpueyo.com, 2019"
+ tile_color 0x4b60c3ff
+ selected true
+ addUserKnob {20 MergeAll}
+ addUserKnob {41 operation T MergeAllChannels.operation}
+ addUserKnob {41 sRGB l "Video colorspace" -STARTLINE T MergeAllChannels.sRGB}
+ addUserKnob {41 screen_alpha l "alpha masking" -STARTLINE T MergeAllChannels.screen_alpha}
+ addUserKnob {41 bbox l "set bbox to " T MergeAllChannels.bbox}
+ addUserKnob {41 metainput l "metadata from" -STARTLINE T MergeAllChannels.metainput}
+ addUserKnob {41 rangeinput l "range from" -STARTLINE T MergeAllChannels.rangeinput}
+ addUserKnob {26 ""}
+ addUserKnob {41 Achannels l "A channels" T MergeAllChannels.Achannels}
+ addUserKnob {41 Bchannels l "B channels" T MergeAllChannels.Bchannels}
+ addUserKnob {41 output T MergeAllChannels.output}
+ addUserKnob {41 also_merge l "also merge" T MergeAllChannels.also_merge}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T MergeAllChannels.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T MergeAllChannels.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T MergeAllChannels.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T MergeAllChannels.fringe}
+ addUserKnob {41 mix T MergeAllChannels.mix}
+ addUserKnob {26 version_author l " " t "MergeAll v1.0\n24 Sep 2019" T "<br/><span style=\"color:#666\"><b>MergeAll v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019</span>"}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 941
+  ypos -466
+  number 2
+ }
+ Input {
+  inputs 0
+  name InputB
+  xpos 831
+  ypos -663
+ }
+set N34d09f40 [stack 0]
+ Multiply {
+  value 0
+  name Multiply11
+  label "\[value value]"
+  xpos 502
+  ypos -572
+ }
+ Input {
+  inputs 0
+  name InputA
+  xpos 392
+  ypos -672
+  number 1
+ }
+set Ndbaf1390 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox B
+  Achannels {{{parent.MergeAllChannels.Achannels}}}
+  Bchannels {{{parent.MergeAllChannels.Bchannels}}}
+  output {{{parent.MergeAllChannels.output}}}
+  also_merge {{{parent.MergeAllChannels.also_merge}}}
+  name MergeBChannels
+  xpos 392
+  ypos -560
+ }
+ Dot {
+  name Dot1
+  xpos 426
+  ypos -462
+ }
+push $Ndbaf1390
+ Multiply {
+  value 0
+  name Multiply12
+  label "\[value value]"
+  xpos 721
+  ypos -571
+ }
+push $N34d09f40
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox B
+  Achannels {{{parent.MergeAllChannels.Achannels}}}
+  Bchannels {{{parent.MergeAllChannels.Bchannels}}}
+  output {{{parent.MergeAllChannels.output}}}
+  also_merge {{{parent.MergeAllChannels.also_merge}}}
+  name MergeAChannels
+  selected true
+  xpos 831
+  ypos -559
+ }
+ Merge2 {
+  inputs 2+1
+  also_merge all
+  name MergeAllChannels
+  xpos 831
+  ypos -466
+ }
+ Output {
+  name Output1
+  xpos 831
+  ypos -413
+ }
+end_group

@@ -1,0 +1,93 @@
+Group {
+ name DotProductVector2_
+ help "Calculates the dot product of 2 Vector2 inputs."
+ addUserKnob {20 main_tab l "Dot Product Vector2"}
+ addUserKnob {41 in l "Vector B Layer" t "Layer containing the vector information for input B" T vector_layer.in}
+ addUserKnob {41 in_1 l "Vector A Layer" t "Layer containing the vector information for input A" T vector_layer1.in}
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+}
+ Input {
+  inputs 0
+  name vectorA
+  xpos 457
+  ypos -6
+  number 1
+ }
+ Shuffle {
+  name vector_layer1
+  xpos 457
+  ypos 103
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove2
+  xpos 457
+  ypos 129
+ }
+ Dot {
+  name Dot3
+  tile_color 0x9e3c6300
+  xpos 491
+  ypos 210
+ }
+ Input {
+  inputs 0
+  name vectorB
+  xpos 0
+ }
+ Dot {
+  name Dot1
+  tile_color 0xcccccc00
+  xpos 34
+  ypos 108
+ }
+set N78454e0 [stack 0]
+ Shuffle {
+  name vector_layer
+  xpos 140
+  ypos 104
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos 140
+  ypos 130
+ }
+ MergeExpression {
+  inputs 2
+  channel0 rgb
+  expr0 Br*Ar+Bg*Ag
+  channel1 none
+  channel2 none
+  channel3 none
+  name MergeExpression1
+  xpos 140
+  ypos 206
+ }
+ Dot {
+  name Dot2
+  tile_color 0x4b5ec600
+  xpos 174
+  ypos 364
+ }
+push $N78454e0
+ ShuffleCopy {
+  inputs 2
+  in2 none
+  red red
+  green green
+  blue blue
+  out {{{parent.vector_layer.in}}}
+  name ShuffleCopy1
+  xpos 0
+  ypos 360
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 506
+ }
+end_group

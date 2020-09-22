@@ -1,0 +1,229 @@
+Group {
+name apeScreenClean
+help "apeScreenClean v0.5 - apEssentials by Adrian Pueyo\n\nClean up an irregular green or blue screen using your plate and a clean plate.\n\napeScreenClean is my own flavor of clean screen tool (ScreenCorrect, PxF_ScreenClean, ...) offering extended functionality.\n\napeScreenClean v0.5 by Adrian Pueyo\nwww.adrianpueyo.com, 2015-2019"
+knobChanged "k = nuke.thisKnob()\nif k.name() in \[\"use_screen_color\",\"screen_color\"]:\n    n = nuke.thisNode()\n    kv = n\[\"use_screen_color\"].value()\n    n\['screen_replace'].setEnabled(not kv)\n    if kv:\n        n\['screen_replace'].setValue(n\['screen_color'].getValue())"
+tile_color 0x8c8c8cff
+addUserKnob {20 apeScreenClean}
+addUserKnob {18 screen_color l "screen color" t "Pick the main color of your screen."}
+screen_color {0 0 0}
+addUserKnob {18 screen_replace l "screen replace" t "Select a color to replace your screen with. By default is ganged to the screen color." +DISABLED}
+screen_replace {0 0 0}
+addUserKnob {6 use_screen_color l "use screen color" t "Gang screen color / screen replace color." +STARTLINE}
+use_screen_color true
+addUserKnob {6 output_alpha l "output alpha" t "Output the alpha of the screenclean. If disabled outputs original alpha." -STARTLINE}
+output_alpha true
+addUserKnob {26 ""}
+addUserKnob {7 blackpoint t "Black point of the replacement matte." R -0.2 0.2}
+addUserKnob {7 gamma t "Gamma of the replacement matte (to fill darks)."}
+gamma 0.5
+addUserKnob {26 ""}
+addUserKnob {41 maskChannel l "mask channel" T KeymixCleanScreen.maskChannel}
+addUserKnob {41 invertMask l invert -STARTLINE T KeymixCleanScreen.invertMask}
+addUserKnob {7 mix}
+mix 1
+addUserKnob {26 version_author l "" t "apeScreenClean v0.5\n2015-2019" +STARTLINE T "<span style=\"color:#666\"><br/><b>apeScreenClean v0.5</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2015-2019</span>"}
+}
+Input {
+inputs 0
+name Inputmask
+xpos 346
+ypos 154
+number 2
+}
+Input {
+inputs 0
+name plate
+xpos 456
+ypos 29
+}
+set N9684bfd0 [stack 0]
+push $N9684bfd0
+OFXuk.co.thefoundry.keylight.keylight_v201 {
+show "Intermediate Result"
+unPreMultiply false
+screenColour {{parent.screen_color x10 0.1965884119} {parent.screen_color x10 0.5346660018} {parent.screen_color x10 0.1694011688}}
+screenGain 1
+screenBalance 0.5
+alphaBias {0.5 0.5 0.5}
+despillBias {0.5 0.5 0.5}
+gangBiases true
+preBlur 0
+"Screen Matte" 0
+screenClipMin 0
+screenClipMax 1
+screenClipRollback 0
+screenGrowShrink 0
+screenSoftness 0
+screenDespotBlack 0
+screenDespotWhite 0
+screenReplaceMethod "Soft Colour"
+screenReplaceColour {0.5 0.5 0.5}
+Tuning 0
+midPoint 0.5
+lowGain 1
+midGain 1
+highGain 1
+"Inside Mask" 0
+sourceAlphaHandling Ignore
+insideReplaceMethod "Soft Colour"
+insideReplaceColour {0.5 0.5 0.5}
+Crops 0
+SourceXMethod Colour
+SourceYMethod Colour
+SourceEdgeColour 0
+SourceCropL 0
+SourceCropR 1
+SourceCropB 0
+SourceCropT 1
+balanceSet false
+insideComponent None
+outsideComponent None
+cacheBreaker true
+name KeyP
+xpos 236
+ypos 29
+}
+Invert {
+channels alpha
+name InvertP
+xpos 236
+ypos 53
+}
+Input {
+inputs 0
+name cleanplate
+xpos 346
+ypos -8
+number 1
+}
+set Nc5a7b0d0 [stack 0]
+OFXuk.co.thefoundry.keylight.keylight_v201 {
+show "Intermediate Result"
+unPreMultiply false
+screenColour {{parent.screen_color x10 0.1965884119} {parent.screen_color x10 0.5346660018} {parent.screen_color x10 0.1694011688}}
+screenGain 1
+screenBalance 0.5
+alphaBias {0.5 0.5 0.5}
+despillBias {0.5 0.5 0.5}
+gangBiases true
+preBlur 0
+"Screen Matte" 0
+screenClipMin 0
+screenClipMax 1
+screenClipRollback 0
+screenGrowShrink 0
+screenSoftness 0
+screenDespotBlack 0
+screenDespotWhite 0
+screenReplaceMethod "Soft Colour"
+screenReplaceColour {0.5 0.5 0.5}
+Tuning 0
+midPoint 0.5
+lowGain 1
+midGain 1
+highGain 1
+"Inside Mask" 0
+sourceAlphaHandling Ignore
+insideReplaceMethod "Soft Colour"
+insideReplaceColour {0.5 0.5 0.5}
+Crops 0
+SourceXMethod Colour
+SourceYMethod Colour
+SourceEdgeColour 0
+SourceCropL 0
+SourceCropR 1
+SourceCropB 0
+SourceCropT 1
+balanceSet false
+insideComponent None
+outsideComponent None
+cacheBreaker true
+name KeyCP
+xpos 126
+ypos -8
+}
+Invert {
+channels alpha
+name InvertCP
+xpos 126
+ypos 16
+}
+ChannelMerge {
+inputs 2
+operation divide
+name NormalizeScreen
+xpos 126
+ypos 48
+}
+Grade {
+channels alpha
+blackpoint {{parent.blackpoint}}
+gamma {{parent.gamma}}
+name GradeAlpha
+xpos 126
+ypos 90
+}
+set N84241d30 [stack 0]
+Dot {
+name Dot1
+xpos 160
+ypos 125
+}
+push $N84241d30
+push $Nc5a7b0d0
+Grade {
+channels rgba
+white 0
+add {{parent.screen_replace} {parent.screen_replace} {parent.screen_replace} {parent.screen_replace}}
+name GradeScreenColor
+xpos 346
+ypos 16
+}
+push $Nc5a7b0d0
+Merge2 {
+inputs 2
+operation from
+name MergeSC
+xpos 346
+ypos 40
+}
+Merge2 {
+inputs 2
+operation mask
+name Merge1
+xpos 346
+ypos 94
+}
+push $N9684bfd0
+Merge2 {
+inputs 2
+operation from
+output {rgba.red rgba.green rgba.blue -rgba.alpha}
+name Merge3
+xpos 456
+ypos 94
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+xpos 456
+ypos 118
+disable {{!parent.output_alpha}}
+}
+Keymix {
+inputs 3
+channels {{{parent.DirBlur.channels}}}
+mix {{parent.mix}}
+name KeymixCleanScreen
+xpos 456
+ypos 150
+disable {{"!\[exists parent.input2]"}}
+}
+Output {
+name Output1
+xpos 456
+ypos 182
+}
+end_group

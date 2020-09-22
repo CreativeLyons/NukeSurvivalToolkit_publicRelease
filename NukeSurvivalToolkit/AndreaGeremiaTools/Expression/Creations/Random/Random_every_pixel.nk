@@ -1,0 +1,13 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr0 random
+ expr1 random
+ expr2 random
+ expr3 random
+ name Random_every_pixel
+ selected true
+ xpos 216
+ ypos -63
+}

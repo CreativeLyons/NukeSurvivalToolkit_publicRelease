@@ -1,0 +1,279 @@
+Group {
+ name Z2N
+ onCreate "\nthisGRP = nuke.thisGroup()\nif not thisGRP\['disable_error'].getValue() :\n    import os\n    import re\n\n    fontpath = re.split( '/|\"\"' , nuke.EXE_PATH )\n    fontpath.pop()\n    fontpath += \['plugins','fonts']\n    \n    if os.path.isfile( '/'.join( fontpath + \['UtopiaBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['UtopiaBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['CourierBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['CourierBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) )\n    else :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['BitstreamCharterBold.pfb'] ) )\n"
+ tile_color 0x7f0072ff
+ label "output : normal(\[value nor_space])"
+ addUserKnob {20 general l General}
+ addUserKnob {41 "Local GPU: " T BS_PosToNor.gpuName}
+ addUserKnob {41 "Use GPU if Available" T BS_PosToNor.useGPUIfAvailable}
+ addUserKnob {26 spacer l "" +STARTLINE T <br>}
+ addUserKnob {26 title_in l <b>INPUT</b>}
+ addUserKnob {6 depth_invert l "depth (1/z)" +STARTLINE}
+ depth_invert true
+ addUserKnob {26 title_out l <b>OUTPUT</b>}
+ addUserKnob {4 nor_space l "normal space" M {world camera}}
+ nor_space camera
+ addUserKnob {26 spacer_1 l "" +STARTLINE T <br>}
+ addUserKnob {20 CamTabBegin l "" +STARTLINE n -2}
+ addUserKnob {20 tab_cam_setup l "Camera Setup"}
+ addUserKnob {22 set_link l "link to selected camera" t "All the process calculated in camera space. So when doing any convertion, it required the camera data. Unless input data 'space' is camera.\n\nhow to use :\nSelect the camera, which can be link to any axis nodes. This tool will get the focal, haperture, filmback window and world matrix from selected camera." T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\nroot = getLevel()\nthisGRP = nuke.thisGroup()\n\nmainKnobs = \['cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll','world_matrix']\ndefaultKnobs = \{\n\t\t\t'focal length' : 'focal',\n\t\t\t'horiz aperture' : 'haperture',\n\t\t\t'window translate' : 'win_translate',\n\t\t\t'window scale' : 'win_scale',\n\t\t\t'window roll' : 'winroll',\n\t\t\t'world matrix' : 'world_matrix'\n\t\t\t\}\nselNodeKnobs = \[]\nmissingKnob = \[]\n\ntry :\n\twith root :\n\t\tselNode = nuke.selectedNode()\n\n\tfor knob in selNode.knobs() :\n\t\tselNodeKnobs.append( knob )\n\n\tselNodeKnobs.sort()\n\n\tfor key,value in defaultKnobs.items() :\n\t\tif value not in selNodeKnobs :\n\t\t\tmissingKnob.append( key )\n\n\tif not len(missingKnob) :\n\t\twith root :\n\t\t\tfor knob in mainKnobs :\n\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\tCAMnode = selNode.name()\n\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.focal'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.haperture'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.win_translate'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.win_scale'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.winroll'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.world_matrix'.format(CAMnode))\n\telse :\n\t\tp = nuke.Panel('Select knobs :')\n\t\tp.addBooleanCheckBox( '<b>Unable to find the default knobs. Please use the pulldown menu below to define the knob manually.</b>' , False)\n\t\tfor rk in missingKnob :\n\t\t\tp.addEnumerationPulldown( rk, ' '.join( selNodeKnobs ) )\n\n\t\tif p.show() :\n\t\t\ttry :\n\t\t\t\tfor key,value in defaultKnobs.items() :\n\t\t\t\t\tif p.value( key ) != None :\n\t\t\t\t\t\tdefaultKnobs\[key] = p.value( key )\n\t\t\texcept :\n\t\t\t\tpass\n\n\t\t\twith root :\n\t\t\t\tfor knob in mainKnobs :\n\t\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\t\tCAMnode = selNode.name()\n\t\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['focal length']))\n\t\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['horiz aperture']))\n\t\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window translate']))\n\t\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window scale']))\n\t\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window roll']))\n\t\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['world matrix']))\nexcept :\n\tnuke.message('no node selected.')" +STARTLINE}
+ addUserKnob {22 remove_link l "remove linked expression" t "Remove the linked camera expression but won't reset any data." -STARTLINE T "thisGRP = nuke.thisGroup()\nmainKnobs = \['cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll','world_matrix']\n\nfor knob in thisGRP.knobs() :\n    if mainKnobs.count(knob) != 0 :\n        thisGRP\[knob].clearAnimated()"}
+ addUserKnob {22 bake_link l "bake expression link" t "Baked out the existing expression link back to this node itself. After that, camera node is not required for this node anymore. Baked value is base on the frame range in project setting of the nuke script.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." T "thisGRP = nuke.thisGroup()\n\nframeST = nuke.root().firstFrame()\nframeED = nuke.root().lastFrame()\n\nallknobs = \['cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll','world_matrix']\nalldata = \{\}\n\nchknobs = 0\nfor knob in allknobs :\n\tif thisGRP\[knob].hasExpression() :\n\t\tchknobs = 1\n\nif chknobs :\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\ttry :\n\t\t\t\talldata\[knob].append( thisGRP\[knob].getValueAt(t) )\n\t\t\texcept :\n\t\t\t\talldata\[knob] = \[ thisGRP\[knob].getValueAt(t) ]\n\n\tfor knob in allknobs :\n\t\tthisGRP\[knob].clearAnimated()\n\t\tthisGRP\[knob].setAnimated()\n\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is float :\n\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST] , t )\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is list :\n\t\t\t\tfor i in range( len( alldata\[knob]\[t-frameST] ) ) :\n\t\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST]\[i] , t , i )\nelse :\n\tnuke.message('no expression link found.')" +STARTLINE}
+ addUserKnob {22 copy_data l "copy from selected camera" t "Select the camera, then this will process 'link to selected camera' and 'bake expression link' in once.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." -STARTLINE T "thisGRP = nuke.thisGroup()\nthisGRP\['set_link'].execute()\nthisGRP\['bake_link'].execute()"}
+ addUserKnob {20 cam_data_grp l "CAMERA DATA" n 1}
+ cam_data_grp 0
+ addUserKnob {7 cam_focal l "focal length" R 5 100}
+ cam_focal 50
+ addUserKnob {7 cam_haperture l "horiz aperture" R 0.1 50}
+ cam_haperture 24.576
+ addUserKnob {30 cam_win_translate l "window translate"}
+ addUserKnob {30 cam_win_scale l "window scale"}
+ cam_win_scale {1 1}
+ addUserKnob {7 cam_winroll l "window roll" R -45 45}
+ addUserKnob {41 world_matrix l "world matrix" T cam_data.matrix}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 CamTabEnd l "" +STARTLINE n -3}
+ addUserKnob {26 spacer_2 l "" +STARTLINE T <br>}
+ addUserKnob {7 depth_threshold l "depth threshold" t "depththreshold to adjust the edge defination."}
+ depth_threshold 0.1
+ addUserKnob {20 tab_misc l Misc}
+ addUserKnob {2 font}
+ font "C:/Program Files/Nuke12.0v3/plugins/fonts/UtopiaBold.pfa"
+ addUserKnob {6 disable_error l "disable onscreen message" +STARTLINE}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.4}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-01-21}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.4<br>-&nbsp;a&nbsp;package&nbsp;convert&nbsp;3D&nbsp;tech&nbsp;passes<br>&nbsp;&nbsp;included<br>&nbsp;&nbsp;*&nbsp;P2Z&nbsp;(&nbsp;Position&nbsp;To&nbsp;Depth&nbsp;)<br>&nbsp;&nbsp;*&nbsp;P2N&nbsp;(&nbsp;Position&nbsp;To&nbsp;Normal&nbsp;)<br>&nbsp;&nbsp;*&nbsp;Z2P&nbsp;(&nbsp;Depth&nbsp;To&nbsp;Position&nbsp;)<br>&nbsp;&nbsp;*&nbsp;Z2N&nbsp;(&nbsp;Depth&nbsp;To&nbsp;Normal&nbsp;)<br>&nbsp;&nbsp;*&nbsp;ConvertPNZ&nbsp;(&nbsp;self&nbsp;convertion&nbsp;)<br>-&nbsp;fixed&nbsp;camera&nbsp;window&nbsp;transformation&nbsp;issue<br><br>1.2<br>-&nbsp;changed&nbsp;camera&nbsp;input&nbsp;to&nbsp;expression&nbsp;link<br>-&nbsp;fix&nbsp;alpha&nbsp;check<br>-&nbsp;added&nbsp;support&nbsp;camera&nbsp;window&nbsp;roll<br><br>1.0<br>-&nbsp;Convert&nbsp;Position&nbsp;data&nbsp;to&nbsp;Normal\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x38408cff
+  label blinkscript
+  note_font_size 42
+  xpos 334
+  ypos 96
+  bdwidth 224
+  bdheight 134
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x388e8e00
+  label bin
+  note_font_size 42
+  xpos -146
+  ypos -417
+  bdwidth 272
+  bdheight 503
+ }
+ NoOp {
+  inputs 0
+  name global
+  xpos -107
+  ypos -293
+  addUserKnob {20 User}
+  addUserKnob {12 res}
+  res {{"\[exists parent.input0] ? parent.input0.width : width"} {"\[exists parent.input0] ? parent.input0.height : height"}}
+  addUserKnob {7 pxa}
+  pxa {{"\[exists parent.input0] ? parent.input0.pixel_aspect : pixel_aspect"}}
+  addUserKnob {7 hratio}
+  hratio {{"parent.cam_haperture / parent.cam_focal"}}
+  addUserKnob {2 font}
+  font "C:/Program Files/Nuke12.0v3/plugins/fonts/UtopiaBold.pfa"
+ }
+ Axis {
+  inputs 0
+  display off
+  selectable false
+  rotate {0 0 {parent.cam_winroll}}
+  name fb_data
+  xpos -94
+  ypos -198
+ }
+ Camera {
+  inputs 0
+  display off
+  selectable false
+  useMatrix true
+  name cam_data
+  xpos 13
+  ypos -195
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{global.res.x}}
+  box_height {{global.res.y}}
+  box_fixed true
+  box_pixel_aspect {{global.pxa}}
+  name Reformat1
+  xpos 748
+  ypos 388
+ }
+ Text {
+  message "missing depth input"
+  font "\[value parent.font]"
+  size {{global.res.x/15}}
+  xjustify center
+  yjustify center
+  Transform 1
+  box {0 0 {global.res.x} {global.res.y}}
+  center {640 360}
+  name Text1
+  xpos 748
+  ypos 470
+  disable {{parent.disable_error}}
+ }
+ Reformat {
+  type "to box"
+  box_width {{global.res.x}}
+  box_height {{global.res.y}}
+  box_fixed true
+  box_pixel_aspect {{global.pxa}}
+  black_outside true
+  name Reformat2
+  xpos 748
+  ypos 552
+ }
+ Dot {
+  name Dot5
+  xpos 782
+  ypos 634
+ }
+ Input {
+  inputs 0
+  name depth
+  xpos 404
+  ypos -533
+ }
+ Expression {
+  temp_name0 detectA
+  temp_expr0 "red == 0 && green == 0 && blue == 0 ? 0 : 1"
+  expr3 detectA
+  name Expression3
+  label "non-filtered alpha"
+  xpos 404
+  ypos -426
+ }
+ Dot {
+  name Dot2
+  xpos 438
+  ypos -343
+ }
+set Ncb34bc00 [stack 0]
+ Expression {
+  expr0 1/red
+  expr1 0
+  expr2 0
+  name Expression6
+  label "depth invert"
+  xpos 524
+  ypos -296
+ }
+push $Ncb34bc00
+ Switch {
+  inputs 2
+  which {{depth_invert}}
+  name Switch1
+  xpos 404
+  ypos -234
+ }
+ Expression {
+  temp_name0 posX
+  temp_expr0 "( x/global.res.x - 0.5) * ( global.hratio * red )"
+  temp_name1 posY
+  temp_expr1 "( y/global.res.y - 0.5) * ( global.hratio * global.res.y/global.res.x * red )"
+  temp_name2 posZ
+  temp_expr2 -red
+  expr0 posX
+  expr1 posY
+  expr2 posZ
+  name Expression7
+  label "depth to position (cam)"
+  xpos 404
+  ypos -139
+ }
+ Premult {
+  name Premult1
+  label "premult non-filtered alpha"
+  xpos 404
+  ypos -45
+ }
+ BlinkScript {
+  recompileCount 376
+  KernelDescription "2 \"PosToNor\" iterate pixelWise 02cf16da23aea1612dfbcc053c87db54f6b4c4e44f3ad9894ac3d7a7730044cc 2 \"ppass\" Read Random \"dst\" Write Point 1 \"deep threshold\" Float 1 zczMPQ== 1 \"dThreshold\" 1 1 0"
+  EncodedSource "1 2924 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"
+  rebuild ""
+  "PosToNor_deep threshold" {{parent.depth_threshold}}
+  protectKernelWhenPublishing true
+  rebuild_finalise ""
+  name BS_PosToNor
+  xpos 404
+  ypos 170
+ }
+ Expression {
+  expr0 "isnan(r) || isinf(r) ? 0 : r"
+  expr1 "isnan(g) || isinf(g) ? 0 : g"
+  expr2 "isnan(b) || isinf(b) ? 0 : b"
+  name Expression2
+  label "remove nan&inf"
+  xpos 404
+  ypos 289
+ }
+ ColorMatrix {
+  matrix {
+      {{fb_data.world_matrix.0} {fb_data.world_matrix.1} {fb_data.world_matrix.2}}
+      {{fb_data.world_matrix.4} {fb_data.world_matrix.5} {fb_data.world_matrix.6}}
+      {{fb_data.world_matrix.8} {fb_data.world_matrix.9} {fb_data.world_matrix.10}}
+    }
+  invert true
+  name ColorMatrix4
+  label "apply camera window"
+  xpos 404
+  ypos 407
+ }
+ Dot {
+  name Dot4
+  xpos 438
+  ypos 501
+ }
+set Ncb37fc00 [stack 0]
+ Dot {
+  name Dot1
+  xpos 569
+  ypos 589
+ }
+push $Ncb37fc00
+ ColorMatrix {
+  matrix {
+      {{parent.world_matrix.0} {parent.world_matrix.1} {parent.world_matrix.2}}
+      {{parent.world_matrix.4} {parent.world_matrix.5} {parent.world_matrix.6}}
+      {{parent.world_matrix.8} {parent.world_matrix.9} {parent.world_matrix.10}}
+    }
+  name ColorMatrix3
+  label "normal (world)"
+  xpos 404
+  ypos 575
+ }
+ Switch {
+  inputs 2
+  which {{parent.nor_space}}
+  name Switch2
+  xpos 404
+  ypos 669
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input0]"}}
+  name Switch3
+  xpos 404
+  ypos 871
+ }
+ Output {
+  name Output1
+  xpos 404
+  ypos 1050
+ }
+end_group

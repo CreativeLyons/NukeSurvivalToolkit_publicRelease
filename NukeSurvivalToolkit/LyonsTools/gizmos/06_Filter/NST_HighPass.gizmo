@@ -1,0 +1,182 @@
+Group {
+ name HighPass
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'output1':\n    if n.knob('output1').getValue() == 0:\n        n.knob('HighPassAmount').setVisible(False)\n        n.knob('HighContrastAmount').setVisible(True)\n    else:\n        n.knob('HighPassAmount').setVisible(True)\n        n.knob('HighContrastAmount').setVisible(False)"
+ tile_color 0xcc804eff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ mapsize {0.15 0.15}
+ addUserKnob {20 HighPass}
+ addUserKnob {41 channels T MergeKeymix.also_merge}
+ addUserKnob {4 output1 l Operation t "High Contrast, Makes details pop out while still maintaining some color\n\nHigh Pass, Makes details pop out more but becomes more grayscale" M {"High Contrast" "High Pass" "" "" "" "" "" "" ""}}
+ addUserKnob {41 blurSize l "Blur Size" t "controls the blur amount of the input before the difference operation is calculated" T Blur6.size}
+ addUserKnob {7 HighContrastAmount l Amount t "controls a multiply on the input before the difference is calculated\n\n(only works when operation is set to high contrast)" R 0.6 1}
+ HighContrastAmount 0.8
+ addUserKnob {7 HighPassAmount l Amount t "controls an offset (add) on the input before the difference is calculated\n\n(only works when operation is set to high pass)" +HIDDEN R -0.3 0}
+ HighPassAmount -0.01
+ addUserKnob {7 postMult l "Post Mult" R 0 4}
+ postMult 1
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask -STARTLINE T MergeKeymix.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T MergeKeymix.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T MergeKeymix.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T MergeKeymix.fringe}
+ addUserKnob {41 mix T MergeKeymix.mix}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "blurs image and minuses with original, producing a sharpened highpass image\n\nGood for use as a sharpen tool\nvery useful as an aid to trackers and as a viewer input to check for errors" T HighPass}
+ addUserKnob {26 ver l Version: T v05}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 99
+  ypos 428
+  number 1
+ }
+ Dot {
+  name Dot4
+  label Mask
+  note_font_size 41
+  xpos 133
+  ypos 481
+ }
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos 133
+  ypos 581
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos -273
+  ypos -335
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels1
+  xpos -273
+  ypos -264
+ }
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos -239
+  ypos -114
+ }
+set Ne5199a80 [stack 0]
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos -239
+  ypos 43
+ }
+set Ne519d820 [stack 0]
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos -367
+  ypos 43
+ }
+ Blur {
+  size 8
+  name Blur6
+  xpos -401
+  ypos 84
+ }
+set Ne27e6090 [stack 0]
+ Grade {
+  channels all
+  add {{parent.HighPassAmount}}
+  black_clamp false
+  name Grade11
+  xpos -504
+  ypos 139
+ }
+push $Ne27e6090
+ Grade {
+  channels all
+  multiply {{parent.HighContrastAmount}}
+  black_clamp false
+  name Grade1
+  xpos -401
+  ypos 138
+ }
+ Switch {
+  inputs 2
+  which {{"parent.output1==1 ? 1 : 0"}}
+  name Switch1
+  xpos -401
+  ypos 192
+ }
+ Dot {
+  name Dot5
+  xpos -367
+  ypos 244
+ }
+push $Ne519d820
+ Merge2 {
+  inputs 2
+  operation from
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -273
+  ypos 237
+ }
+ Multiply {
+  value {{parent.postMult*4}}
+  name Multiply1
+  label "\[value value]"
+  xpos -273
+  ypos 300
+ }
+ Dot {
+  name Dot17
+  label A
+  note_font_size 41
+  xpos -239
+  ypos 493
+ }
+push $Ne5199a80
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos -580
+  ypos -114
+ }
+ Dot {
+  name Dot18
+  label B
+  note_font_size 41
+  xpos -580
+  ypos 490
+ }
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos -580
+  ypos 581
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  Achannels none
+  Bchannels none
+  output none
+  also_merge rgb
+  name MergeKeymix
+  xpos -273
+  ypos 574
+ }
+ Output {
+  name Output1
+  xpos -273
+  ypos 650
+ }
+end_group

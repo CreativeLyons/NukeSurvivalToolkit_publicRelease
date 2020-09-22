@@ -1,0 +1,36 @@
+Group {
+ name viewer_render
+ inputs 0
+ tile_color 0xb7a939ff
+ addUserKnob {20 User}
+ addUserKnob {1 viewer_node l "viewer node"}
+ viewer_node Viewer1
+ addUserKnob {2 filepath l "file path"}
+ addUserKnob {26 remarks l "" -STARTLINE T "- only support *.jpg"}
+ addUserKnob {41 set_type l "set type" T menu1.set_type}
+ addUserKnob {3 select_frame l "select frame" +DISABLED}
+ select_frame 1001
+ addUserKnob {3 frameST l "frame range" +DISABLED}
+ frameST 1001
+ addUserKnob {3 frameED l "" -STARTLINE +DISABLED}
+ frameED 1010
+ addUserKnob {26 ""}
+ addUserKnob {22 render T "thisGRP = nuke.thisGroup()\nnode = thisGRP\['viewer_node'].getValue()\npath = thisGRP\['filepath'].value()\ngetType = thisGRP\['set_type'].getValue()\ncheck = 0\n\nerror = \['Invalid file extension, only <b>*.jpg</> support.','Invalid frame padding.','file path is empty']\n\nif len(path) != 0 :\n    if getType < 2 :\n        if getType == 0 :\n            frameSet = int(nuke.frame())\n        if getType == 1 :\n            frameSet = int(thisGRP\['select_frame'].getValue())\n\n        if path\[len(path)-4:-3] == '.' :\n            if path\[len(path)-3:].lower() != 'jpg' :\n                nuke.message(error\[0])\n            else :\n                newPath = path\n                check += 1\n        else :\n            newPath = path + '.jpg'\n            check += 1\n\n        if check == 1 :\n            nuke.toNode(node)\['file'].setValue(newPath)\n            nuke.render(node, frameSet, frameSet)\n            nuke.toNode(node)\['file'].setValue('')\n    else :\n        if getType == 2 :\n            frameST = int(nuke.root().firstFrame())\n            frameED = int(nuke.root().lastFrame())\n        else :\n            frameST = int(thisGRP\['frameST'].getValue())\n            frameED = int(thisGRP\['frameED'].getValue())\n\n        if path\[len(path)-4:-3] == '.' :\n            if path\[len(path)-3:].lower() != 'jpg' :\n                nuke.message('Invalid file extension, only <b>*.jpg</> support.')\n            else :\n                newPath = path\n                check += 1\n        else :\n            newPath = path + '.jpg'\n            check += 1\n\n        if check == 1 :\n            if newPath\[-5:].lower() == 'd.jpg' :\n                if newPath\[-8:-7] == '%' :\n                    if len(newPath\[newPath.find('%')+1:newPath.find('d.jpg')]) == 2 :\n                        if newPath\[newPath.find('%')+1:newPath.find('d.jpg')]\[:-1] == 0 :\n                            padding = int(newPath\[newPath.find('%')+1:newPath.find('d.jpg')]\[1:])\n                        else :\n                            padding = int(newPath\[newPath.find('%')+1:newPath.find('d.jpg')])\n\n                        for time in xrange (frameST, frameED+1, 1) :\n                            filePadding = list(str(time))\n                            while len(filePadding) < padding :\n                                filePadding.insert(0, '0')\n                            \n                            frameFilepath = newPath\[:newPath.find('%')] + ''.join(filePadding) + newPath\[newPath.find('.jpg'):]\n                            nuke.toNode(node)\['file'].setValue(frameFilepath)\n                            nuke.render(node, time, time)\n                            nuke.toNode(node)\['file'].setValue('')\n                    else :\n                        nuke.message(error\[1])\n                else :\n                    nuke.message(error\[1])\n            else :\n                nuke.message(error\[1])\nelse :\n    nuke.message(error\[2])" +STARTLINE}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l <b>Version</b> T 1.0}
+ addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2018/06/23}
+ addUserKnob {26 l_CHANGELOG l <b>Changelog</b> T "1.0\n- render viewer with all UI\n  like playblast in maya"}
+ addUserKnob {26 l_DEV l "<b>Developed by</b>" T "Mark Joey Tang"}
+}
+ NoOp {
+  inputs 0
+  name menu1
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['set_type'].getValue() == 0 or thisGRP\['set_type'].getValue() == 2 :\n    thisGRP\['select_frame'].setEnabled(False)\n    thisGRP\['frameST'].setEnabled(False)\n    thisGRP\['frameED'].setEnabled(False)\nif thisGRP\['set_type'].getValue() == 1 :\n    thisGRP\['select_frame'].setEnabled(True)\n    thisGRP\['frameST'].setEnabled(False)\n    thisGRP\['frameED'].setEnabled(False)\nif thisGRP\['set_type'].getValue() == 3 :\n    thisGRP\['select_frame'].setEnabled(False)\n    thisGRP\['frameST'].setEnabled(True)\n    thisGRP\['frameED'].setEnabled(True)\n"
+  selected true
+  xpos -47
+  ypos 2
+  addUserKnob {20 User}
+  addUserKnob {4 set_type l "set type" M {"current still frame" "another still frame" "frame sequence (project setting range)" "frame sequence (custom range)" "" "" ""}}
+  set_type "frame sequence (project setting range)"
+ }
+end_group

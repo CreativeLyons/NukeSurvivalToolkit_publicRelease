@@ -1,0 +1,122 @@
+Group {
+ name Relight_Simple
+ inputs 2
+ help "Simpliflied relight node.\nOnly requires a normal map to get started.\n\nThis node will not reproduce accurate lighting, as it does not take into account the actual 3D world space, but instead considers the image in its own local space."
+ addUserKnob {20 relight_simple l Relight_Simple}
+ addUserKnob {12 light l "Light XY" t "Controls the light position in X and Y axis"}
+ light {50 50}
+ addUserKnob {7 light_z l "Light Z" t "Controls the light position in Z axis" R 0 1000}
+ light_z 150
+ addUserKnob {18 light_color l "Light Color" t "Change the color of the light"}
+ light_color 1
+ addUserKnob {6 light_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {18 albedo l "Object Color (Albedo)" t "Control the color of the object being lit. Only used when the Albedo input is not connected."}
+ albedo 1
+ addUserKnob {6 albedo_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 specularity l Specularity t "Amount of specularity"}
+ specularity 0.2
+ addUserKnob {7 shine l Shininess t "Controls the shininess of the specular highlights." R 1 20}
+ shine 10
+ addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+ addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nRelight_Simple\nVersion 1.0\n2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.0 - 2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+ Constant {
+  inputs 0
+  channels rgb
+  color {0 0 1 0}
+  color_panelDropped true
+  name Constant1
+  xpos 689
+  ypos 218
+ }
+ Input {
+  inputs 0
+  name Normals
+  xpos 829
+  ypos 134
+ }
+ Dot {
+  name Dot1
+  tile_color 0xcccccc00
+  xpos 863
+  ypos 196
+ }
+set N82a6cc0 [stack 0]
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input]"}}
+  name Switch2
+  xpos 829
+  ypos 241
+ }
+ Dot {
+  name Dot3
+  tile_color 0xcccccc00
+  xpos 863
+  ypos 296
+ }
+set Na305b260 [stack 0]
+ Input {
+  inputs 0
+  name Albedo
+  xpos 1081
+  ypos 132
+  number 1
+ }
+push $N82a6cc0
+ Grade {
+  multiply 0
+  add {{parent.albedo} {parent.albedo} {parent.albedo} {parent.albedo}}
+  name Grade1
+  xpos 959
+  ypos 192
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input1]"}}
+  name Switch1
+  xpos 1081
+  ypos 192
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 1081
+  ypos 292
+ }
+ Dot {
+  name Dot2
+  tile_color 0x9e3c6300
+  xpos 1115
+  ypos 354
+ }
+push $Na305b260
+ BlinkScript {
+  inputs 2
+  recompileCount 15
+  ProgramGroup 1
+  KernelDescription "2 \"Dirlight\" iterate pixelWise af5b94d41d487f750c3564ae8419928a837a2e86bb8f7eba952ec26187d6fb21 3 \"src\" Read Point \"albedoIn\" Read Point \"dst\" Write Point 7 \"lightPos\" Float 2 AAAAAAAAAAA= \"lightZ\" Float 1 AAAAAA== \"lightColor\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"specularity\" Float 1 AAAAAA== \"shininess\" Float 1 AAAAAA== \"softness\" Float 1 AAAAAA== \"proxy\" Float 1 AAAAAA== 7 \"lightPos\" 2 1 \"lightZ\" 1 1 \"lightColor\" 3 1 \"specularity\" 1 1 \"shininess\" 1 1 \"softness\" 1 1 \"proxy\" 1 1 0"
+  kernelSource "kernel Dirlight : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;  //the input image\n  Image<eRead, eAccessPoint, eEdgeClamped> albedoIn;  //the input image\n  Image<eWrite> dst;  //the output image\n\n  param:\n    float2 lightPos;\n    float lightZ;\n    float3 lightColor;\n    float specularity;\n    float shininess;\n    float softness;\n    float proxy;\n\n  local:\n\n\n  //In define(), parameters can be given labels and default values.\n  void define() \{\n  \}\n\n  //The init() function is run before any calls to kernel().\n  void init() \{\n  \}\n\n  //The kernel function is run at every pixel to produce the output.\n  void process(int2 pos) \{\n    //Normalize LightDirection\n    lightPos = lightPos*proxy;\n    float3 normal = float3(src(0),src(1), src(2));\n    float3 albedo =  float3(albedoIn(0),albedoIn(1), albedoIn(2));\n    float2 lightDir =  lightPos-float2(pos.x, pos.y);\n    float3 nLightDir =  normalize(float3(lightDir.x, lightDir.y, lightZ*proxy));\n    float3 nSpecDir = normalize(float3(nLightDir.x, nLightDir.y, nLightDir.z + 1.0f));\n    float rawLight = max(0.0f,dot(normal, nLightDir)); // Lambertian\n    rawLight = pow(rawLight,max(min(softness,3.0f), 1.0f));\n    float3 diffuse = lightColor*albedo*rawLight;\n    float rawSpecular =  max(0.0f,dot(normal, nSpecDir));\n    float n = max(2.0f, shininess);\n    float shine = pow(rawSpecular, n) * ((n + 8.0f) / 25.0f) ;\n    float3 specular = lightColor * specularity * shine;\n    float3 lighting = (diffuse+specular);\n    \n    dst() = float4(lighting.x, lighting.y, lighting.z, 0.0f);\n   \}\n\};\n\n"
+  rebuild ""
+  Dirlight_lightPos {{parent.light} {parent.light}}
+  Dirlight_lightZ {{parent.light_z}}
+  Dirlight_lightColor {{parent.light_color} {parent.light_color} {parent.light_color}}
+  Dirlight_specularity {{parent.specularity}}
+  Dirlight_shininess {{parent.shine*50+2}}
+  Dirlight_softness 3
+  Dirlight_proxy {{"proxy ? (proxy_type ? proxy_scale : \[lindex \[value proxy_format] 0] / \[lindex \[value format] 0]) : 1"}}
+  rebuild_finalise ""
+  name BlinkScript2
+  xpos 829
+  ypos 344
+ }
+set N82cd0e0 [stack 0]
+ Output {
+  name Output1
+  xpos 829
+  ypos 428
+ }
+push $N82cd0e0
+end_group

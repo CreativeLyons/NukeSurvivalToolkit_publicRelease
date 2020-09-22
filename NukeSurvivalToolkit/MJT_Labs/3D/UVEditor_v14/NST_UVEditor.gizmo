@@ -1,0 +1,498 @@
+Group {
+ name UVEditor
+ onCreate "\nthisGRP = nuke.thisGroup()\nif not thisGRP\['disable_error'].getValue() :\n    import os\n    import re\n\n    fontpath = re.split( '/|\"\"' , nuke.EXE_PATH )\n    fontpath.pop()\n    fontpath += \['plugins','fonts']\n    \n    if os.path.isfile( '/'.join( fontpath + \['UtopiaBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['UtopiaBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['CourierBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['CourierBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) )\n    else :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['BitstreamCharterBold.pfb'] ) )\n"
+ tile_color 0x6666ff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {3 texSize l "texture size"}
+ texSize 1024
+ addUserKnob {41 filter T SR.filter}
+ addUserKnob {41 antialiasing T SR.antialiasing}
+ addUserKnob {26 ""}
+ addUserKnob {41 view_wireframe l "view wireframe" T menu02.view_wireframe}
+ addUserKnob {7 wireframe_size l "wireframe size" R 0.1 10}
+ wireframe_size 0.1
+ addUserKnob {26 ""}
+ addUserKnob {41 output T menu01.output}
+ addUserKnob {30 uv_shift l INVISIBLE +INVISIBLE}
+ addUserKnob {41 scanRes +INVISIBLE T store.scanRes}
+ addUserKnob {22 udim_export l export +DISABLED T "thisGRP = nuke.thisGroup()\ndataCheckNode = nuke.toNode('dataCheck')\n\n########################################################\n\nusrUV = thisGRP\['uv_shift'].getValue()\ndataReturn = \[]\n\nprogBar = nuke.ProgressTask('Checking UV')\njobCount = 0\n\nfor v in range (0, 10) :\n  for u in range (0, 10) :\n\n    ### progress bar\n    jobCount += 1\n    progShow = int(jobCount/100 * 100)\n    if progBar.isCancelled() :\n      break;\n    progBar.setProgress(progShow)\n    #################\n\n    thisGRP\['uv_shift'].setValue(\[u,v])\n    nuke.execute(dataCheckNode, nuke.frame(), nuke.frame())\n    if dataCheckNode\['maxlumapixvalue'].getValue() != \[0.0, 0.0, 0.0] :\n      dataReturn.append(1)\n    else :\n      dataReturn.append(0)\n\ndel progBar\n\ndataCheckNode\['maxlumapixdata'].clearAnimated()\ndataCheckNode\['maxlumapixvalue'].clearAnimated()\ndataCheckNode\['minlumapixdata'].clearAnimated()\ndataCheckNode\['minlumapixvalue'].clearAnimated()\n\nif len(dataReturn) == 100 :\n\tfor i in range (0, 100) :\n\t  if dataReturn\[i] == 1 :\n\t    uvMax = i\n\n\tthisGRP\['uv_shift'].setValue(usrUV)\n\n\t########################################################\n\n\tgoStore = nuke.toNode('store')\n\tgoStore\['fn'].execute()\n\n\troot = getLevel()\n\n\troot.begin()\n\toutFR = nuke.nodes.FrameRange()\n\toutFR\['first_frame'].setValue(1001)\n\toutFR\['last_frame'].setValue(1001 + uvMax)\n\toutFR\['label'].setValue( 'udim range : 1001 - \{0\}'.format( str(1001 + uvMax) ) )\n\toutFR.setInput(0, thisGRP)\n\toutFR.setXYpos(int(thisGRP\['xpos'].value()), int(thisGRP\['ypos'].value()+80))\n\n\texpDot = nuke.nodes.Dot()\n\texpDot\['label'].setValue('Texture modify here : swap the paint/patch texture into udim frame')\n\texpDot.setInput(0, outFR)\n\n\tyDot = nuke.nodes.Dot()\n\tyDot.setInput(0, expDot)\n\n\tuvGRP = nuke.nodes.Group()\n\tuvGRP\['label'].setValue('udim stitch for nuke')\n\n\tnDot = nuke.nodes.Dot()\n\tnDot\['label'].setValue('Connect to Geo')\n\troot.end()\n\n\tuvGRP.begin()\n\tinNode = nuke.nodes.Input(name='udim')\n\tcropNode = nuke.nodes.Crop()\n\tcropNode\['crop'].setValue(1)\n\tcropNode.setInput(0, inNode)\n\tallDot = nuke.nodes.Dot()\n\tallDot.setInput(0, cropNode)\n\n\tuvMerge = nuke.nodes.Merge2()\n\toutNode = nuke.nodes.Output()\n\toutNode.setInput(0, uvMerge)\n\n\tfor i in range (0, uvMax+1) :\n\t  uDimHold = nuke.nodes.FrameHold()\n\t  uDimHold\['first_frame'].setValue(1001+i)\n\t  uDimHold.setInput(0, allDot)\n\t  \n\t  uvTran = nuke.nodes.Transform()\n\t  uvTran.addKnob(nuke.UV_Knob('uv_offset'))\n\t  if i < 10 :\n\t    u = i\n\t    v = 0\n\t  else :\n\t    if i < 100 :\n\t      u = int(str(i)\[1])\n\t      v = int(str(i)\[0])\n\t  uvTran\['uv_offset'].setValue(\[u, v])\n\t  uvTran\['translate'].setExpression('input.width*uv_offset.u', 0)\n\t  uvTran\['translate'].setExpression('input.height*uv_offset.v', 1)\n\t  uvTran.setInput(0, uDimHold)\n\n\t  uvMerge.setInput(i+3, uvTran)\n\n\n\tuvGRP.end()\n\n\tuvGRP.setInput(0, yDot)\n\tnDot.setInput(0, uvGRP)\n\n\troot.begin()\n\texWrite = nuke.nodes.Write()\n\texWrite.setInput(0, yDot)\n\texWrite\['label'].setValue('export udim<br>render range : \[value input.first_frame] - \[value input.last_frame]')\n\troot.end()\n\n\tdel uvMax\nelse :\n\tnuke.message('Scan process terminated by user.')\n\ndel dataReturn" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 font T store.font}
+ addUserKnob {6 disable_error l "disable text" +STARTLINE}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.4}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-04-24}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.4<br>-&nbsp;fix&nbsp;misspelling&nbsp;of&nbsp;knob's&nbsp;label<br>-&nbsp;fix&nbsp;not&nbsp;working&nbsp;disable&nbsp;text&nbsp;knob<br><br>1.3<br>-&nbsp;fix&nbsp;font&nbsp;issue<br>&nbsp;&nbsp;works&nbsp;on&nbsp;linux,&nbsp;mac&nbsp;&&nbsp;windows<br><br>1.2<br>-&nbsp;preview&nbsp;in&nbsp;uv&nbsp;space&nbsp;set&nbsp;limited&nbsp;<br>&nbsp;&nbsp;in&nbsp;1024&nbsp;resolution&nbsp;for&nbsp;not&nbsp;drag&nbsp;<br>&nbsp;&nbsp;down&nbsp;speed&nbsp;purpose.<br>-&nbsp;added&nbsp;show&nbsp;tile&nbsp;number<br>-&nbsp;changed&nbsp;uv&nbsp;combine&nbsp;to&nbsp;uv&nbsp;stitch<br>&nbsp;&nbsp;in&nbsp;export&nbsp;group<br>-&nbsp;code&nbsp;update<br>-&nbsp;scan&nbsp;size&nbsp;reduce,&nbsp;speed&nbsp;up&nbsp;process\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -1755
+  ypos 302
+  bdwidth 263
+  bdheight 296
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x424242ff
+  label "UV preview"
+  note_font_size 42
+  xpos -824
+  ypos 451
+  bdwidth 343
+  bdheight 672
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x424242ff
+  label udim
+  note_font_size 42
+  xpos -328
+  ypos 451
+  bdwidth 354
+  bdheight 675
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x424242ff
+  label uvtile
+  note_font_size 42
+  xpos 109
+  ypos 451
+  bdwidth 354
+  bdheight 675
+ }
+ Input {
+  inputs 0
+  name tex
+  xpos -1000
+  ypos 83
+  number 1
+ }
+ Wireframe {
+  inputs 0
+  line_width {{wireframe_size}}
+  name Wireframe1
+  xpos -866
+  ypos 207
+ }
+ Switch {
+  inputs 2
+  which {{!view_wireframe}}
+  name Switch2
+  xpos -1000
+  ypos 207
+ }
+ Input {
+  inputs 0
+  name geo
+  xpos -1171
+  ypos 82
+ }
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial1
+  xpos -1171
+  ypos 207
+ }
+ Dot {
+  name Dot6
+  xpos -1137
+  ypos 287
+ }
+ Dot {
+  name Dot1
+  xpos -1137
+  ypos 384
+ }
+set Na180ec00 [stack 0]
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{store.scanRes}}
+  box_height {{box_width}}
+  box_fixed true
+  name scanRes
+  xpos -1061
+  ypos 595
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  projection_mode uv
+  overscan {{store.scanRes*10}}
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR1
+  xpos -1171
+  ypos 595
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos -1171
+  ypos 675
+ }
+ Transform {
+  translate {{store.scanRes*uv_offset.u*-1} {store.scanRes*uv_offset*-1}}
+  shutteroffset centred
+  name pos_shift
+  xpos -1171
+  ypos 740
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {{uv_shift} {uv_shift}}
+ }
+ Crop {
+  box {0 0 {store.scanRes} {store.scanRes}}
+  reformat true
+  crop false
+  name Crop1
+  xpos -1171
+  ypos 801
+ }
+ CurveTool {
+  operation "Max Luma Pixel"
+  ROI {0 0 {store.scanRes} {store.scanRes}}
+  intensitydata {0 0 0 0}
+  maxlumapixvalue {0 0 0}
+  minlumapixvalue {0 0 0}
+  name dataCheck
+  xpos -1171
+  ypos 881
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['output'].getValue() == 1 :\n    thisGRP\['udim_export'].setEnabled(True)\nelse :\n    thisGRP\['udim_export'].setEnabled(False)\n"
+  xpos -1669
+  ypos 392
+  addUserKnob {20 User}
+  addUserKnob {4 output M {"preview in uv space" udim "uv tile" "uv pass"}}
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{texSize*10}}
+  box_height {{texSize*10}}
+  box_fixed true
+  resize none
+  name Reformat4
+  xpos 719
+  ypos 638
+ }
+ Expression {
+  expr0 x/width
+  expr1 y/height
+  channel2 none
+  channel3 none
+  name uv
+  xpos 719
+  ypos 720
+ }
+ Multiply {
+  channels rgb
+  value {10 10 1 1}
+  name Multiply1
+  xpos 719
+  ypos 798
+ }
+ Reformat {
+  type "to box"
+  box_width {{texSize}}
+  box_height {{texSize}}
+  box_fixed true
+  resize none
+  center false
+  pbb true
+  name Reformat3
+  xpos 719
+  ypos 878
+ }
+ Dot {
+  name Dot8
+  xpos 753
+  ypos 1225
+ }
+push $Na180ec00
+ Dot {
+  name Dot4
+  xpos -780
+  ypos 384
+ }
+set Na061a800 [stack 0]
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{texSize}}
+  box_height {{box_width}}
+  box_fixed true
+  name res
+  xpos 5
+  ypos 381
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  filter Impulse
+  projection_mode uv
+  overscan {{texSize*10 x1009 1948}}
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR
+  xpos -154
+  ypos 381
+ }
+ Dot {
+  name Dot2
+  xpos -120
+  ypos 628
+ }
+set Nb741d400 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos -292
+  ypos 625
+ }
+ Text {
+  output rgb
+  cliptype none
+  message " 91 92 93 94 95 96 97 98 99 00\n 81 82 83 84 85 86 87 88 89 90\n 71 72 73 74 75 76 77 78 79 80\n 61 62 63 64 65 66 67 68 69 70\n 51 52 53 54 55 56 57 58 59 60\n 41 42 43 44 45 46 47 48 49 50\n 31 32 33 34 35 36 37 38 39 40\n 21 22 23 24 25 26 27 28 29 30\n 11 12 13 14 15 16 17 18 19 20\n 01 02 03 04 05 06 07 08 09 10"
+  font "\[value store.font]"
+  kerning 0.236
+  leading 1.051
+  yjustify bottom
+  Transform 1
+  box {0 0 1024 999}
+  translate {0 {"( ( texSize * 10 ) / 1024 ) *25"}}
+  scale {{"( texSize * 10 ) / 1024"}}
+  name Text2
+  selected true
+  xpos -292
+  ypos 707
+  disable {{disable_error}}
+ }
+ Multiply {
+  channels rgb
+  value {0 0.05 0.05 1}
+  name Multiply3
+  xpos -292
+  ypos 769
+ }
+ Dot {
+  name Dot13
+  xpos -258
+  ypos 821
+ }
+ Dot {
+  name Dot11
+  xpos -178
+  ypos 821
+ }
+set Nbcba2000 [stack 0]
+ Dot {
+  name Dot12
+  xpos 221
+  ypos 821
+ }
+push $Nb741d400
+ Dot {
+  name Dot5
+  xpos 281
+  ypos 628
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge4
+  xpos 247
+  ypos 879
+ }
+ Crop {
+  box {0 0 {texSize*10} {texSize*10}}
+  crop false
+  name Crop4
+  xpos 247
+  ypos 961
+ }
+ Dot {
+  name Dot7
+  xpos 281
+  ypos 1204
+ }
+push $Nbcba2000
+push $Nb741d400
+ Merge2 {
+  inputs 2
+  operation under
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge3
+  xpos -154
+  ypos 879
+ }
+ Transform {
+  translate {{texSize*uv_offset.u*-1 i} {texSize*uv_offset*-1 i}}
+  shutteroffset centred
+  name pos_shift1
+  xpos -154
+  ypos 961
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {{"frame <=1001 ? 0 : (frame-1)%10"} {"frame < 1000 ? 0 : int(((frame-1)/10)-100)"}}
+ }
+ Dot {
+  name Dot3
+  xpos -120
+  ypos 1202
+ }
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat2
+  xpos -693
+  ypos 712
+ }
+ Dot {
+  name Dot9
+  xpos -659
+  ypos 770
+ }
+set Nbcb68c00 [stack 0]
+ Dot {
+  name Dot10
+  xpos -533
+  ypos 770
+ }
+ Text {
+  output rgb
+  message " 91 92 93 94 95 96 97 98 99 00\n 81 82 83 84 85 86 87 88 89 90\n 71 72 73 74 75 76 77 78 79 80\n 61 62 63 64 65 66 67 68 69 70\n 51 52 53 54 55 56 57 58 59 60\n 41 42 43 44 45 46 47 48 49 50\n 31 32 33 34 35 36 37 38 39 40\n 21 22 23 24 25 26 27 28 29 30\n 11 12 13 14 15 16 17 18 19 20\n 01 02 03 04 05 06 07 08 09 10"
+  font "\[value store.font]"
+  kerning 0.236
+  leading 1.051
+  yjustify bottom
+  Transform 1
+  box {0 0 1024 999}
+  translate {0 25}
+  name Text1
+  xpos -567
+  ypos 818
+  disable {{disable_error}}
+ }
+ Multiply {
+  channels rgb
+  value {0 0.05 0.05 1}
+  name Multiply2
+  xpos -567
+  ypos 887
+ }
+push $Nbcb68c00
+ Grid {
+  name Grid1
+  xpos -693
+  ypos 814
+ }
+ Merge2 {
+  inputs 2
+  name Merge2
+  xpos -693
+  ypos 887
+ }
+push $Na061a800
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat5
+  xpos -689
+  ypos 531
+ }
+ Reformat {
+  type scale
+  scale 0.1
+  resize none
+  name Reformat6
+  xpos -689
+  ypos 594
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  projection_mode uv
+  overscan 2560
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR2
+  xpos -814
+  ypos 594
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge1
+  xpos -814
+  ypos 887
+ }
+ Crop {
+  box {0 0 1024 1024}
+  reformat true
+  crop false
+  name Crop2
+  xpos -814
+  ypos 969
+ }
+ Switch {
+  inputs 4
+  which {{output}}
+  name Switch1
+  xpos -814
+  ypos 1412
+ }
+ Output {
+  name Output1
+  xpos -814
+  ypos 1597
+ }
+ NoOp {
+  inputs 0
+  name menu02
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['view_wireframe'].getValue() == 1 :\n        thisGRP\['wireframe_size'].setEnabled(True)\nelse :\n        thisGRP\['wireframe_size'].setEnabled(False)\n"
+  xpos -1668
+  ypos 484
+  addUserKnob {20 User}
+  addUserKnob {6 view_wireframe l "view wireframe" +STARTLINE}
+  view_wireframe true
+ }
+ NoOp {
+  inputs 0
+  name store
+  xpos -1419
+  ypos 388
+  addUserKnob {20 User}
+  addUserKnob {22 fn T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel" +STARTLINE}
+  addUserKnob {3 scanRes}
+  scanRes 64
+  addUserKnob {2 font}
+  font "C:/Program Files/Nuke12.0v3/plugins/fonts/UtopiaBold.pfa"
+ }
+end_group

@@ -1,0 +1,629 @@
+Group {
+ name VoronoiGradient
+ knobChanged "\n\nimport random\nfrom math import sqrt\n\n################\n##Script Start##\n################    \n        \nn = nuke.thisNode() #the node\nk = nuke.thisKnob() #the knob\nkn = k.name() #the knob name\n\nprint (\"Knob name: \"+kn)\n\nif kn == \"type\":\n    if n\['type'].getValue() == 0: #generate\n        n\['sample_radius'].setVisible(False)\n        n\['generate_format'].setVisible(True)\n        n\['threshold'].setVisible(False)\n        if n\['method'].getValue() == 1: #NNI\n            n\['speedup'].setVisible(True)\n        else:\n            n\['speedup'].setVisible(False)\n    elif n\['type'].getValue() == 1: #sample\n        n\['generate_format'].setVisible(False)\n        n\['sample_radius'].setVisible(True)\n        n\['threshold'].setVisible(False)\n        if n\['method'].getValue() == 1: #NNI\n            n\['speedup'].setVisible(True)\n        else:\n            n\['speedup'].setVisible(False)\n    else: #fill\n        n\['generate_format'].setVisible(False)\n        n\['sample_radius'].setVisible(False)\n        n\['threshold'].setVisible(True)\n        n\['speedup'].setVisible(True)\n        \nif kn == \"method\":\n    if n\['method'].getValue() == 0: #voronoi\n        if n\['type'].getValue() == 2: #fill\n            n\['speedup'].setVisible(True)\n        else:\n            n\['speedup'].setVisible(False)\n        n\['aa'].setVisible(True)\n        n\['smoothness'].setVisible(False)\n    else: #NNI\n        n\['aa'].setVisible(False)\n        n\['speedup'].setVisible(True)\n        n\['smoothness'].setVisible(True)\n\n#############\n##Add Point##\n#############\n\nif kn == \"add_point\":\n    count = 0\n    found = False\n    i = 1\n\n    #Find the earliest available knob\n    while found == False:\n        try:\n            n\[\"pos_\"+str(i)]\n        except NameError:\n            found = True\n            count = i\n        else:\n            i += 1\n\n    divider = nuke.Text_Knob('divider_'+str(count), ' ')\n    position = nuke.XY_Knob('pos_'+str(count), 'Position '+str(count))\n    remove = nuke.PyScript_Knob('remove_'+str(count), 'Remove this Point', '')\n    color = nuke.AColor_Knob('color_'+str(count), 'Color '+str(count))\n\n    remove.setFlag(0x00002000) #no new line\n\n    n.addKnob(divider)\n    n.addKnob(position)\n    n.addKnob(remove)\n    n.addKnob(color)\n    \n    #Set a random color at point creation\n    randomColor = \[random.uniform(0,1), random.uniform(0,1), random.uniform(0,1), 0]\n    color.setValue(randomColor)\n    \n################\n##Remove Point##\n################\n\nif kn\[0:7] == \"remove_\":\n    id = str(kn\[7:])\n    n.removeKnob(knobs\['divider_'+id])\n    n.removeKnob(knobs\['pos_'+id])\n    n.removeKnob(knobs\['remove_'+id])\n    n.removeKnob(knobs\['color_'+id])\n    \n####################\n##Update Pointlist##\n####################\n\nknobs = n.knobs() #knoblist\n\nif kn\[0:7] == \"remove_\" or kn == \"add_point\":\n    points_orig = \[]\n    #iterate through all knobs. If a position knob is found, append to pointlist\n    for knob in knobs:\n        if knob\[0:4] == \"pos_\":\n            id = int(knob\[4:])\n            points_orig.append(id)\n    \n    points_orig.sort()\n    \n    n\['count'].setValue('<b>'+str(len(points_orig))+'</b>')\n    points = ','.join(str(i) for i in points_orig)\n    n\['points'].setValue(points)\n"
+ tile_color 0xffb300ff
+ label "\[llength \[split \[value this.points] ,]] Points"
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {26 title l "" +STARTLINE T "<font color=#ff8300 size=\"7\">Voronoi Gradient</font><font color=#ff8300 size=\"2\"> v2.7</font>"}
+ addUserKnob {26 description l "" +STARTLINE T "<font color=#ff8300 size=\"2\">by Nikolai Wüstemann</font>"}
+ addUserKnob {26 spacer_00 l "" +STARTLINE T " "}
+ addUserKnob {26 divider_general l "<b><font color=#ffd228>General</font><b>"}
+ addUserKnob {4 type l Type t "Generate: using select point colors\nSample: using select input colors\nFill: using all input colors" M {Generate Sample Fill}}
+ addUserKnob {17 generate_format l Format}
+ generate_format "1920 1080 0 0 1920 1080 1 HD"
+ addUserKnob {3 sample_radius l "Sample Radius" t "When Type is set to \"Sample\".\nBlurs the input image by this amount and samples the pixel at given position." +HIDDEN}
+ sample_radius 3
+ addUserKnob {7 threshold l "Alpha Threshold" t "Alpha needs to be bigger than this to be considered a feature point" +HIDDEN +SLIDER +LOG_SLIDER}
+ threshold 0.05
+ addUserKnob {14 overscan l "Overscan" t "This will extrapolate the gradient beyond the image bounds" R 0 100}
+ addUserKnob {26 spacer_01 l "" +STARTLINE T " "}
+ addUserKnob {26 divider_method l "<b><font color=#ffd228>Method</font><b>"}
+ addUserKnob {4 method l Output t "Voronoi Diagram: \nEvery pixel becomes the color of the feature point that is the closest\n\nNNI: \nSmooth and natural color interpolation between feature points" M {"Voronoi Diagram" "Natural Neighbor Interpolation" "" ""}}
+ method "Natural Neighbor Interpolation"
+ addUserKnob {7 smoothness l Smoothness t "0 = Voronoi Diagram\n1 = Perfect NNI\n>1 = Oversmoothing"}
+ smoothness 1
+ addUserKnob {7 aa l Anti-Aliasing t "Anti-Aliasing Levels. The image ist scaled up by this amount, the calculation is done, and the image is scaled down to original size again." +HIDDEN R 1 4}
+ aa 2
+ addUserKnob {7 speedup l "Speed Optimization" t "Reduces the image scale by the selected amount and scales up afterwards. For smooth gradients this is a great optimization that comes at hardly no cost." R 1 10}
+ speedup 5
+ addUserKnob {41 colorspace l Colorspace t "Linear: Mathematical way\nsRGB: More natural falloff\nL*a*b*: Less grey areas\nHSV: Interpolate over spectrum" T Colorspace_Forth.colorspace_out}
+ addUserKnob {26 spacer_02 l "" +STARTLINE T " "}
+ addUserKnob {26 divider_points l "<b><font color=#ffd228>Points</font><b>"}
+ addUserKnob {22 add_point l "Add Point" +STARTLINE}
+ addUserKnob {26 count l "  Count:" -STARTLINE T <b>4</b>}
+ addUserKnob {1 points l INVISIBLE +INVISIBLE}
+ points 1,2,3,4
+ addUserKnob {26 divider_1 l " "}
+ addUserKnob {12 pos_1 l "Position 1"}
+ pos_1 {1256 472}
+ addUserKnob {22 remove_1 l "Remove this Point" -STARTLINE}
+ addUserKnob {19 color_1 l "Color 1"}
+ color_1 {1 0 0 0}
+ addUserKnob {6 color_1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 divider_2 l " "}
+ addUserKnob {12 pos_2 l "Position 2"}
+ pos_2 {492 836}
+ addUserKnob {22 remove_2 l "Remove this Point" -STARTLINE}
+ addUserKnob {19 color_2 l "Color 2"}
+ color_2 {0 1 0 0}
+ addUserKnob {6 color_2_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 divider_3 l " "}
+ addUserKnob {12 pos_3 l "Position 3"}
+ pos_3 {580 272}
+ addUserKnob {22 remove_3 l "Remove this Point" -STARTLINE}
+ addUserKnob {19 color_3 l "Color 3"}
+ color_3 {0 0 1 0}
+ addUserKnob {6 color_3_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 divider_4 l " "}
+ addUserKnob {12 pos_4 l "Position 4"}
+ pos_4 {1504 876}
+ addUserKnob {22 remove_4 l "Remove this Point" -STARTLINE}
+ addUserKnob {19 color_4 l "Color 4"}
+ color_4 {1 1 0 0}
+ addUserKnob {6 color_4_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff8e00ff
+  label NNI
+  note_font_size 42
+  xpos -2
+  ypos 998
+  bdwidth 161
+  bdheight 168
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 25
+  ypos -488
+ }
+ AdjBBox {
+  numpixels {{overscan(0)} {overscan(1)}}
+  name AdjBBox
+  xpos 25
+  ypos -393
+ }
+ set C2941ec80 [stack 0]
+ Dot {
+  name Dot4
+  xpos 59
+  ypos -322
+ }
+set N2942c1a0 [stack 0]
+ Dot {
+  name Dot8
+  xpos 345
+  ypos -322
+ }
+ Dot {
+  name Dot31
+  xpos 345
+  ypos 584
+ }
+set N29420b70 [stack 0]
+ Dot {
+  name Dot12
+  xpos 345
+  ypos 1654
+ }
+push $N2942c1a0
+ Reformat {
+  type scale
+  scale {{1/speedup}}
+  pbb true
+  name Reformat_Downscale
+  xpos 150
+  ypos -243
+ }
+ set C29429860 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  pbb true
+  name Reformat_FillModeSpeedboost
+  xpos 150
+  ypos -182
+ }
+ Dot {
+  name Dot18
+  label Fill
+  note_font_color 0xff
+  xpos 184
+  ypos -94
+ }
+push $N2942c1a0
+ Blur {
+  size {{"\[value this.parent.sample_radius]-1"}}
+  name Blur_SampleRadius
+  xpos 25
+  ypos -247
+ }
+ Dot {
+  name Dot2
+  label Sample
+  xpos 59
+  ypos -100
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format {{{this.parent.generate_format}}}
+  name Constant_Base
+  xpos -111
+  ypos -492
+ }
+clone $C2941ec80 {
+  xpos -111
+  ypos -393
+  selected false
+ }
+ Dot {
+  name Dot19
+  label Generate
+  xpos -77
+  ypos -99
+ }
+ Switch {
+  inputs 3
+  which {{type}}
+  name Switch_Mode
+  label "\[value this.parent.type]"
+  xpos 25
+  ypos -22
+ }
+ set C28ff84a0 [stack 0]
+ Reformat {
+  type scale
+  scale {{aa}}
+  pbb true
+  name Reformat_AAUpscale
+  xpos 25
+  ypos 44
+  disable {{method==0?0:1}}
+ }
+set N294253a0 [stack 0]
+ Dot {
+  name Dot30
+  xpos 163
+  ypos 106
+ }
+set N29426f20 [stack 0]
+ Expression {
+  expr3 a<0.9999?1:0
+  name Expression_MakeBinary1
+  xpos 78
+  ypos 157
+ }
+ Dot {
+  name Dot29
+  xpos 112
+  ypos 445
+ }
+push $N29426f20
+ Expression {
+  temp_name0 threshold
+  temp_expr0 "\[value this.parent.threshold]"
+  expr0 a<threshold?0:(a==0?0:r/a)
+  expr1 a<threshold?0:(a==0?0:g/a)
+  expr2 a<threshold?0:(a==0?0:b/a)
+  expr3 a<threshold?0:(a==0?0:a/a)
+  name Expression_MakeBinary
+  xpos 186
+  ypos 158
+ }
+set N29429bd0 [stack 0]
+ Dilate {
+  size -1
+  name Dilate_GetEdge
+  xpos 385
+  ypos 154
+ }
+push $N29429bd0
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge_GetEdge
+  xpos 385
+  ypos 223
+ }
+push $N29429bd0
+ BlinkScript {
+  inputs 2
+  ProgramGroup 1
+  KernelDescription "1 \"NNIKernel\" iterate pixelWise 4638993104c78e1e3e815b53970f28315848d08f3f55918cb092e5beedc9e034 3 \"src\" Read Random \"points\" Read Random \"dst\" Write Point 1 \"smoothness\" Float 1 AAAAAA=="
+  kernelSource "float distance(int2 q, float2 p)\{\n  return sqrt(pow(q.x - p.x, 2) + pow(q.y - p.y, 2));\n\}\n\nkernel NNIKernel : public ImageComputationKernel<ePixelWise>\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src;\n  Image<eRead, eAccessRandom, eEdgeClamped> points;\n  Image<eWrite> dst;\n\n  param:\n    float smoothness;\n\n  void process(int2 pos)\{\n    int x,y,dx,dy;\n    float4 rgba = 0;\n    float dist = 99999;\n    if(src(pos.x, pos.y, 3) == 0)\{\n      for(int i = src.bounds.x1; i < src.bounds.x2; i+=1)\{\n        for(int j = src.bounds.y1; j < src.bounds.y2; j+=1)\{\n          if(points(i,j,3) != 0)\{\n            if(distance(pos, float2(i,j)) <= dist)\{\n              dist = distance(pos, float2(i,j));\n              rgba.x = src(i,j,0);\n              rgba.y = src(i,j,1);\n              rgba.z = src(i,j,2);\n              rgba.w = dist*smoothness;\n            \}\n          \}\n        \}\n      \}\n    \}\n    else\{\n      rgba = src(pos.x, pos.y);\n    \}\n    dst() = rgba;\n  \}\n\};"
+  rebuild ""
+  NNIKernel_smoothness {{smoothness}}
+  name BlinkScript_Filler
+  xpos 186
+  ypos 303
+  disable {{"type == 2 ? 0 : 1"}}
+ }
+set N2942a2b0 [stack 0]
+ ShuffleCopy {
+  inputs 2
+  alpha alpha2
+  black alpha
+  out2 mask
+  name ShuffleCopy_SetMask
+  xpos 186
+  ypos 442
+ }
+ Dot {
+  name Dot20
+  label Fill
+  note_font_color 0xff
+  xpos 220
+  ypos 645
+ }
+ Crop {
+  inputs 0
+  box {0 0 2 {"\[llength \[split \[value this.parent.points] ,]]"}}
+  reformat true
+  crop false
+  name Crop_Points
+  xpos -394
+  ypos -86
+ }
+set N2942b750 [stack 0]
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  expr3 x==0?0:1
+  name Expression_MaskRightColumn
+  xpos -248
+  ypos -2
+ }
+ Dot {
+  name Dot27
+  xpos -214
+  ypos 101
+ }
+push $N2942b750
+ Expression {
+  expr0 "\[\nset points \[split \[value this.parent.points] ,]\nset string \"\"\nset y 0\nforeach pos \$points \{\n  append string \"y==\" \$y \"?\" \[value this.parent.pos_\$pos.x] \":\"\n  incr y\n\}\nappend string \"0\"\nreturn \$string\n]"
+  expr1 "\[\nset points \[split \[value this.parent.points] ,]\nset string \"\"\nset y 0\nforeach pos \$points \{\n  append string \"y==\" \$y \"?\" \[value this.parent.pos_\$pos.y] \":\"\n  incr y\n\}\nappend string \"0\"\nreturn \$string\n]"
+  expr2 0
+  name Expression_SetPositions
+  xpos -394
+  ypos -4
+ }
+ Expression {
+  inputs 1+1
+  expr0 "\[\nset points \[split \[value this.parent.points] ,]\nset string \"\"\nset y 0\nforeach col \$points \{\n  append string \"y==\" \$y \"?\" \[value this.parent.color_\$col.r] \":\"\n  incr y\n\}\nappend string \"0\"\nreturn \$string\n]"
+  expr1 "\[\nset points \[split \[value this.parent.points] ,]\nset string \"\"\nset y 0\nforeach col \$points \{\n  append string \"y==\" \$y \"?\" \[value this.parent.color_\$col.g] \":\"\n  incr y\n\}\nappend string \"0\"\nreturn \$string\n]"
+  expr2 "\[\nset points \[split \[value this.parent.points] ,]\nset string \"\"\nset y 0\nforeach col \$points \{\n  append string \"y==\" \$y \"?\" \[value this.parent.color_\$col.b] \":\"\n  incr y\n\}\nappend string \"0\"\nreturn \$string\n]"
+  name Expression_SetColors
+  xpos -394
+  ypos 98
+ }
+ PostageStamp {
+  name PostageStamp_SamplePoints
+  xpos -394
+  ypos 204
+  postage_stamp true
+ }
+ Dot {
+  name Dot9
+  xpos -224
+  ypos 231
+ }
+push $N294253a0
+ Dot {
+  name Dot7
+  xpos -80
+  ypos 134
+ }
+ BlinkScript {
+  inputs 2
+  ProgramGroup 1
+  KernelDescription "1 \"VoronoiKernel\" iterate pixelWise d1e0d556f3d1495cfe74544b59bfecc564c77ac6819187c975df8c8c3cc4cc5a 3 \"src\" Read Random \"points\" Read Random \"dst\" Write Point 3 \"smoothness\" Float 1 AAAAAA== \"sample\" Bool 1 AA== \"scale\" Float 1 AAAAAA=="
+  kernelSource "float distance(int2 q, float2 p)\{\n  return sqrt(pow(q.x - p.x, 2) + pow(q.y - p.y, 2));\n\}\n\nkernel VoronoiKernel : public ImageComputationKernel<ePixelWise>\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src;\n  Image<eRead, eAccessRandom, eEdgeClamped> points;\n  Image<eWrite> dst;\n\t\n  param:\n    float smoothness;\n    bool sample;\n    float scale;\n\n  void process(int2 pos)\{\n    int shortest = 0;\n    float dist_temp = 99999;\n    float2 pnt;\n    float4 color = 0;\n    int x, y;\n\t\t\n    for (int p = points.bounds.y1; p < points.bounds.y2; p+=1)\{\n      pnt.x = points(0, p, 0)*scale;\n      pnt.y = points(0, p, 1)*scale;\n      if(distance(pos, pnt)<dist_temp)\{  \n        dist_temp = min(distance(pos, pnt), dist_temp);\n        x = pnt.x;\n        y = pnt.y;\n        color = points(1, p);\n      \}\n    \}\n    if(sample == true)\{\n      color = src(x, y);\n    \}\n    dst(0) = color.x;\n    dst(1) = color.y;\n    dst(2) = color.z;\n    dst(3) = dist_temp*smoothness;\n  \}\n\};"
+  rebuild ""
+  VoronoiKernel_smoothness {{smoothness}}
+  VoronoiKernel_sample {{type==1?1:0}}
+  VoronoiKernel_scale {{"method == 0 ? aa : 1"}}
+  name BlinkScript_VoronoiDiagram
+  xpos -114
+  ypos 307
+  disable {{"type == 2 ? 1 : 0"}}
+ }
+set N29427290 [stack 0]
+ Multiply {
+  channels alpha
+  value {{1/speedup}}
+  name Multiply_ScaleDistances
+  xpos -114
+  ypos 381
+ }
+ Shuffle {
+  black white
+  out2 mask
+  name Shuffle_SetMask
+  xpos -114
+  ypos 449
+ }
+clone $C29429860 {
+  xpos -114
+  ypos 519
+  selected false
+ }
+set N29424950 [stack 0]
+ Dot {
+  name Dot1
+  xpos 72
+  ypos 522
+ }
+ Dot {
+  name Dot17
+  label Sample
+  xpos 72
+  ypos 646
+ }
+push $N29424950
+ Dot {
+  name Dot3
+  label Generate
+  xpos -80
+  ypos 650
+ }
+clone $C28ff84a0 {
+  inputs 3
+  xpos 38
+  ypos 758
+  selected false
+ }
+set N28ffa1a0 [stack 0]
+ Shuffle {
+  in mask
+  red black
+  green black
+  blue black
+  alpha red
+  name Shuffle_GetMask
+  xpos 183
+  ypos 830
+ }
+push $N28ffa1a0
+ Colorspace {
+  name Colorspace_Forth
+  knobChanged "id = nuke.thisNode().knob(\"colorspace_out\").getValue()\nnuke.toNode(\"Colorspace_Back\").knob(\"colorspace_in\").setValue(int(id))"
+  xpos 38
+  ypos 827
+ }
+ PostageStamp {
+  name PostageStamp_VoronoiDiagram
+  xpos 38
+  ypos 896
+  postage_stamp true
+ }
+ BlinkScript {
+  inputs 2
+  ProgramGroup 1
+  KernelDescription "1 \"NNIKernel\" iterate pixelWise 6686a101b1a20245c97ca97df6de6aa9de029344db904f11b0103cb70408d85c 3 \"src\" Read Random \"mask\" Read Random \"dst\" Write Point 0"
+  kernelSource "float distance(int2 q, float2 p)\{\n  return sqrt(pow(q.x - p.x, 2) + pow(q.y - p.y, 2));\n\}\n\nkernel NNIKernel : public ImageComputationKernel<ePixelWise>\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src;\n  Image<eRead, eAccessRandom, eEdgeClamped> mask;\n  Image<eWrite> dst;\n\n  void process(int2 pos)\{\n    int x,y,dx,dy;\n    float4 rgba = 0;\n    int c = 0;\n    bool found = true;\n    float dist;\n    if(mask(pos.x, pos.y, 3) > 0.9999)\{\n      for(int i = src.bounds.x1; i < src.bounds.x2; i+=1)\{\n        for(int j = src.bounds.y1; j < src.bounds.y2; j+=1)\{\n          if(distance(pos, float2(i,j)) <= src(i, j, 3))\{\n            rgba += src(i, j);\n            c += 1;\n          \}\n        \}\n      \}\n      dst() = rgba/c;\n    \}\n    else\{\n      dst() = src(pos.x, pos.y);\n    \}\n  \}\n\};"
+  rebuild ""
+  name BlinkScript_NaturalNeighborInterpolation
+  xpos 38
+  ypos 1074
+  disable {{method!=1?1:0}}
+  addUserKnob {20 about l About}
+  addUserKnob {26 description l Description T "Natural Neighbor Interpolation\n\nThe algorithm scales quadratically with image scale, \nso we try to keep the input as small as possible and scale up the result instead.\n\nThe node is disabled, when the Voronoi Diagram is shown. \nThis prevents Nuke from executing the Natural Neighbor Interpolation \nalgorithm in the background and crashing.\n "}
+ }
+ PostageStamp {
+  name PostageStamp_NNI
+  xpos 38
+  ypos 1213
+  postage_stamp true
+ }
+ Colorspace {
+  name Colorspace_Back
+  xpos 38
+  ypos 1375
+ }
+set N29420120 [stack 0]
+ Reformat {
+  type "to box"
+  box_width {{this.parent.input.width}}
+  box_height {{this.parent.input.height}}
+  box_fixed true
+  box_pixel_aspect {{this.parent.input.pixel_aspect}}
+  resize distort
+  filter Notch
+  pbb true
+  name Reformat_OriginalSize
+  xpos 115
+  ypos 1481
+ }
+ set C29427600 [stack 0]
+set N29427600 [stack 0]
+ Dot {
+  name Dot28
+  xpos 220
+  ypos 1587
+ }
+ Merge2 {
+  inputs 2
+  name Merge_RestoreOriginal
+  xpos 186
+  ypos 1651
+ }
+ set C294245e0 [stack 0]
+ Dot {
+  name Dot6
+  label Fill
+  note_font_color 0xff
+  xpos 220
+  ypos 1725
+ }
+push $N29427600
+ Dot {
+  name Dot14
+  xpos 72
+  ypos 1583
+ }
+ Dot {
+  name Dot10
+  label Sample
+  xpos 72
+  ypos 1726
+ }
+push $N29420120
+ Reformat {
+  type "to box"
+  box_width {{Constant_Base.width}}
+  box_height {{Constant_Base.height}}
+  box_fixed true
+  scale {{speedup}}
+  resize distort
+  filter Notch
+  pbb true
+  name Reformat_ConstantSize
+  xpos -41
+  ypos 1481
+ }
+ set C29428e10 [stack 0]
+ Dot {
+  name Dot15
+  xpos -80
+  ypos 1595
+ }
+ Dot {
+  name Dot13
+  label Generate
+  xpos -80
+  ypos 1730
+ }
+clone $C28ff84a0 {
+  inputs 3
+  xpos 38
+  ypos 1884
+  selected false
+ }
+push $N29420b70
+push $N2942a2b0
+ Dot {
+  name Dot26
+  xpos 290
+  ypos 356
+ }
+ Dot {
+  name Dot11
+  xpos 704
+  ypos 356
+ }
+clone $C29427600 {
+  xpos 670
+  ypos 522
+  selected false
+ }
+clone $C294245e0 {
+  inputs 2
+  xpos 670
+  ypos 581
+  selected false
+ }
+ Dot {
+  name Dot21
+  label Fill
+  note_font_color 0xff
+  xpos 704
+  ypos 640
+ }
+push $N29427290
+ Dot {
+  name Dot25
+  xpos 43
+  ypos 392
+ }
+ Dot {
+  name Dot24
+  xpos 429
+  ypos 392
+ }
+set N29425df0 [stack 0]
+ Dot {
+  name Dot5
+  xpos 566
+  ypos 392
+ }
+clone $C29427600 {
+  xpos 532
+  ypos 521
+  selected false
+ }
+ Dot {
+  name Dot22
+  label Sample
+  xpos 566
+  ypos 639
+ }
+push $N29425df0
+clone $C29428e10 {
+  xpos 395
+  ypos 519
+  selected false
+ }
+ Dot {
+  name Dot23
+  label Generate
+  xpos 429
+  ypos 645
+ }
+clone $C28ff84a0 {
+  inputs 3
+  xpos 532
+  ypos 755
+  selected false
+ }
+ Dot {
+  name Dot16
+  xpos 566
+  ypos 1788
+ }
+ Switch {
+  inputs 2
+  which {{method}}
+  name Switch_Method
+  label "\[value this.parent.method]"
+  xpos 38
+  ypos 2047
+ }
+ Output {
+  name Output1
+  xpos 38
+  ypos 2122
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote4
+  label "    Create an 2D array of colors and positions for all sample points    \n    This is stored as an image and fed to the core algorithms    \n"
+  xpos -824
+  ypos 103
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote6
+  label "  Stores the voronoi diagram and the distance to the next input point in each pixel. This will be used by the NNI  \n"
+  xpos -885
+  ypos -324
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote12
+  label " Upscaling the interpolated result with the Notch filter \npreserves the smooth look and feel we want to achieve.\n"
+  xpos -417
+  ypos 1475
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "Generating the Natural Neighbor Interpolation, \n  based on the Voronoi Diagram (rgb) and the Voronoi Distances (alpha)  "
+  xpos -473
+  ypos 1074
+ }
+end_group

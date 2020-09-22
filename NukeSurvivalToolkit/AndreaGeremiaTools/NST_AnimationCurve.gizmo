@@ -1,0 +1,144 @@
+Group {
+ inputs 0
+ name ANIMATION_CURVES
+ knobChanged "nk = nuke.thisNode()\nk = nuke.thisKnob()\nif ('active_translate' in k.name()) or ('active_scale' in k.name()) or ('active_time' in k.name())or ('scale_1' in k.name()) or ('translate' in k.name()) or ('delay' in k.name()):\n    input = nk.knob('input_modify').getValue()\n    value = input\n    expression = 'input_modify'\n    string = 'input'\n    if(nk.knob('active_time').getValue() == 1):\n        expression = 'input_modify(frame + delay)'\n        string = 'input(frame + offset)'\n    if(nk.knob('active_scale').getValue() == 1):\n        value = value * nk.knob('scale_1').getValue()\n        expression = expression + '*scale_1'\n        string = string + ' * scale'\n    if(nk.knob('active_translate').getValue() == 1):\n        value = value + nk.knob('translate').getValue()\n        expression = '(' + expression + ' + translate)'\n        string = '(' + string + '+ translate)'\n    nk.knob('output_modify').setExpression(expression)\n    nk.knob('expression_modify').setValue(string)\nif ('wave_type' in k.name()):\n    if int(nk.knob('wave_type').getValue())==0:\n        expression = 'random((frame+offset)/speed) * (max_val-min_val) + min_val'\n    elif int(nk.knob('wave_type').getValue())==1:\n        expression = '(noise((frame+offset)/speed)+1)/2 * (max_val-min_val) + min_val'\n    elif int(nk.knob('wave_type').getValue())==2:\n        expression = '(sin(2*pi*(frame+offset)/speed)+1)/2 * (max_val-min_val) + min_val'\n    elif int(nk.knob('wave_type').getValue())==3:\n        expression = '(asin(sin(2*pi*(frame+offset)/speed))/pi+0.5) * (max_val-min_val) + min_val'\n    elif int(nk.knob('wave_type').getValue())==4:\n        expression = 'int(sin(2*pi*(frame+offset)/speed)+1) * (max_val-min_val) + min_val'\n    elif int(nk.knob('wave_type').getValue())==5:\n        expression = '((frame+(offset+speed)) % (speed+blip)/(speed)) *(speed/blip) - (speed/blip) >= 0 ? max_val : min_val'\n    elif int(nk.knob('wave_type').getValue())==6:\n        expression = '((int((frame+offset) % speed)) >= 0 ? ((int((frame+offset) % speed)) <= (0+(blip-1)) ? ((sin(pi*((frame+offset) % speed)/blip)/2+1/2) * (2*max_val-2*min_val) + (2*min_val-max_val)) : min_val)  : min_val)'\n    elif int(nk.knob('wave_type').getValue())==7:\n        expression = 'abs(sin(pi*(frame + offset)/speed))* (max_val-min_val) + min_val'\n    elif int(nk.knob('wave_type').getValue())==8:\n        expression = '((frame+offset) % speed)/speed * (max_val-min_val) + min_val'\n    elif int(nk.knob('wave_type').getValue())==9:\n        expression = 'sin((pi*(frame+offset)/(2*speed)) % (pi/2)) * (max_val-min_val) + min_val'\n    elif int(nk.knob('wave_type').getValue())==10:\n        expression = 'cos((pi*(frame+offset)/(2*speed)) % (pi/2)) * (max_val-min_val) + min_val'\n    elif int(nk.knob('wave_type').getValue())==11:\n        expression = '(exp(2*pi*((frame+offset) % speed)/speed)-1)/exp(2*pi) * (max_val-min_val) + min_val'\n    nk.knob('output_wave').setExpression(expression)\n    nk.knob('expression_wave').setValue(expression)\n#----------------------------------------\n#FADE\n\n\nif ('fade_type' in k.name()) or ('fade_dissolve' in k.name()):\n    fadeStart = nk.knob('fadeStart').getValue()\n    fadeEnd = nk.knob('fadeEnd').getValue()\n    \n    if int(nk.knob('fade_type').getValue())==0:\n        expression_fade=\"clamp((frame-fadeStart)/(fadeEnd-fadeStart))\"\n    elif int(nk.knob('fade_type').getValue())==1:\n        expression_fade=\"(sin(clamp(((frame-fadeStart)*pi)/(fadeEnd-fadeStart) - pi/2, -pi/2, pi/2))+1) /2\"\n    elif int(nk.knob('fade_type').getValue())==2:\n        expression_fade=\"sin(clamp(((frame-fadeStart)*pi)/((fadeEnd-fadeStart)*2)-pi/2, -pi/2,0))+1\"\n    elif int(nk.knob('fade_type').getValue())==3:\n        expression_fade=\"sin(clamp(((frame-(fadeStart*2-fadeEnd))*pi)/((fadeEnd-fadeStart)*2)-pi/2,0,pi/2))\"\n\n\n           \n    saveExpression = expression_fade\n        \n    if int(nk.knob('fade_dissolve').getValue())==0:\n        expression_fade = saveExpression\n    elif int(nk.knob('fade_dissolve').getValue())==1:\n        expression_fade = \"1-(\" + saveExpression + \")\"\n        \n    nk.knob('out_fade').setExpression(expression_fade)\n    nk.knob('expression_fade').setValue(expression_fade)\n"
+ autolabel nuke.thisNode().name()
+ tile_color 0x367f5eff
+ note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold"
+ note_font_color 0xffffffff
+ addUserKnob {20 wave_generator l "Wave Generator"}
+ addUserKnob {4 wave_type l "Wave type" M {Random Noise Sine Triangle Square Blip "Sine Blip" Bounce SawTooth "Saw Parabolic" "Saw Parabolic Reverse" "Saw Exponential" ""}}
+ addUserKnob {7 min_val l "Min val" R -10 10}
+ min_val 10
+ addUserKnob {7 max_val l "Max val" R -10 10}
+ max_val 28
+ addUserKnob {7 speed l "Speed (frequency)" R 1 100}
+ speed 2
+ addUserKnob {7 offset l "Time offset" R -10 10}
+ addUserKnob {7 blip l Blip R 1 10}
+ blip 1
+ addUserKnob {26 ""}
+ addUserKnob {7 output_wave l "<font color=orangered><i>output wave"}
+ output_wave {{"random((frame+offset)/speed) * (max_val-min_val) + min_val"}}
+ addUserKnob {1 expression_wave l "<font color=darkcyan>Expression"}
+ expression_wave "random((frame+offset)/speed) * (max_val-min_val) + min_val"
+ addUserKnob {26 ""}
+ addUserKnob {26 email l "" +STARTLINE T "<b><font color=\"MediumSeaGreen\">Animation and Curves v2.1</font></b><br>\n<font size=“1”><i>by Andrea Geremia</i><br>\n<br>\nandrea.geremia89@gmail.com<br>\nwww.andreageremia.it</font>"}
+ addUserKnob {20 newrange l "New Range"}
+ addUserKnob {26 message l "" +STARTLINE T "Normalize animation curves\nShift a curve into a new range, keeping the proportion"}
+ addUserKnob {7 input_range l "<font color=springgreen><i>input"}
+ addUserKnob {26 original l "ORIGINAL RANGE"}
+ addUserKnob {22 calc_min_max l "Calculate Min and Max" t "Drag and drop your input curve, then press this button. \nYou can calculate automatically the min and max value of the curve" T "first = nuke.Root().firstFrame()\nlast = nuke.Root().lastFrame()\n\nframeRange = str(first) + \"-\" + str(last)\n\n\nret = nuke.getFramesAndViews('insert frame range', frameRange)\nif ret:\n    frame_range = ret\[0].split('-')\n    \n    min = max = nuke.thisNode()\['input_range'].getValueAt(int(frame_range\[0]))\n    \n    nuke.frame(int(frame_range\[0]))\n    \n    for i in range(int(frame_range\[0]), int(frame_range\[1])+1):\n        knob = nuke.thisNode()\['input_range'].getValueAt(i)\n        if (knob > max):\n            max = knob\n    \n        if (knob < max):\n            min = knob\n    \n    \n    nuke.thisNode()\['min_old'].setValue(min)\n    nuke.thisNode()\['max_old'].setValue(max)" +STARTLINE}
+ addUserKnob {7 min_old l min}
+ min_old -5
+ addUserKnob {7 max_old l max}
+ max_old 6
+ addUserKnob {26 new l "NEW RANGE"}
+ addUserKnob {7 min_new l min}
+ addUserKnob {7 max_new l max}
+ max_new 1
+ addUserKnob {26 ""}
+ addUserKnob {7 output_range l "<font color=orangered><i>output range" -STARTLINE}
+ output_range {{min_new+(((max_new-min_new)/(max_old-min_old))*(input_range-min_old))}}
+ addUserKnob {1 expression_range l "<font color=darkcyan>Expression"}
+ expression_range min_new+(((max_new-min_new)/(max_old-min_old))*(input-min_old))
+ addUserKnob {22 generate l Generate -STARTLINE T "nk = nuke.thisNode()\nnk.knob('expression_range').setValue(\"min_new+(((max_new-min_new)/(max_old-min_old))*(input-min_old))\")"}
+ addUserKnob {20 smooth_curve l "Smooth Curves"}
+ addUserKnob {26 message_2 l "" +STARTLINE T "Drag and drop your curve and apply the smooth."}
+ addUserKnob {14 input_smooth l "<font color=springgreen><i>input" R 0 100}
+ addUserKnob {26 ""}
+ addUserKnob {14 smooth l Smooth R 0 100}
+ smooth 2
+ addUserKnob {4 smooth_type l Type M {low high "" ""}}
+ smooth_type high
+ addUserKnob {26 ""}
+ addUserKnob {14 output_smooth l "<font color=orangered><i>output smooth" R 0 100}
+ output_smooth {{"smooth_type==0?input_smooth.w.integrate(frame-1, frame+1) / (2*smooth.w):input_smooth.w.integrate(frame-smooth.w, frame+smooth.w) / (2*smooth.w)"}}
+ addUserKnob {1 expression_smooth l "<font color=darkcyan>Expression"}
+ expression_smooth "input.x.integrate(frame-smooth, frame+smooth) / (2*smooth)"
+ addUserKnob {22 generate_smooth l Generate -STARTLINE T "nk = nuke.thisNode()\nnk.knob('expression_smooth').setValue(\"input.x.integrate(frame-smooth, frame+smooth) / (2*smooth)\")"}
+ addUserKnob {20 modify l "Modify Curves"}
+ addUserKnob {14 input_modify l "<font color=springgreen><i>input" R 0 100}
+ addUserKnob {26 ""}
+ addUserKnob {6 active_translate l "" +STARTLINE +STARTLINE}
+ addUserKnob {26 position l TRANSLATE -STARTLINE T " "}
+ addUserKnob {14 translate R 0 100}
+ translate 1
+ addUserKnob {26 ""}
+ addUserKnob {6 active_scale l "" +STARTLINE +STARTLINE}
+ addUserKnob {26 scale l SCALE -STARTLINE T " "}
+ addUserKnob {14 scale_1 l scale R 0 100}
+ scale_1 1
+ addUserKnob {26 ""}
+ addUserKnob {6 active_time l "" +STARTLINE +STARTLINE}
+ addUserKnob {26 time l TIME -STARTLINE T " "}
+ addUserKnob {3 delay l "Time offset"}
+ delay 1
+ addUserKnob {26 frames -STARTLINE T " "}
+ addUserKnob {26 ""}
+ addUserKnob {14 output_modify l "<font color=orangered><i>output modify" R 0 100}
+ output_modify {{input_modify}}
+ addUserKnob {1 expression_modify l "<font color=darkcyan>Expression"}
+ expression_modify input
+ addUserKnob {20 Fade}
+ addUserKnob {26 fade_message l "" +STARTLINE T "Create the fade/dissolve from start frame till end frame. \nYou can animate mix or another value from 0-1 or 1-0"}
+ addUserKnob {4 fade_type l Type M {Linear "Slow-in Slow-out" "Slow-in Linear-out" "Linear-in Slow-Out"}}
+ fade_type "Slow-in Slow-out"
+ addUserKnob {4 fade_dissolve l "fade from" M {"0 to 1" "1 to 0"}}
+ fade_dissolve "1 to 0"
+ addUserKnob {26 ""}
+ addUserKnob {26 fade_message_1 l "" +STARTLINE T "Start frame has to be minor than End frame"}
+ addUserKnob {3 fadeStart l "start Frame"}
+ addUserKnob {3 fadeEnd l "end Frame"}
+ fadeEnd 5
+ addUserKnob {26 ""}
+ addUserKnob {7 out_fade l "<font color=orangered><i>output fade"}
+ out_fade {{"1-((sin(clamp(((frame-fadeStart)*pi)/(fadeEnd-fadeStart) - pi/2, -pi/2, pi/2))+1) /2)"}}
+ addUserKnob {1 expression_fade l "<font color=darkcyan>Expression"}
+ expression_fade "1-((sin(clamp(((frame-fadeStart)*pi)/(fadeEnd-fadeStart) - pi/2, -pi/2, pi/2))+1) /2)"
+ addUserKnob {20 reference_frame l "Ref frame"}
+ addUserKnob {26 message_1 l "" +STARTLINE T "Set the input equal to 0 in the reference frame"}
+ addUserKnob {7 input_ref l "<font color=springgreen><i>input"}
+ addUserKnob {3 ref_frame l "Reference frame"}
+ ref_frame 100
+ addUserKnob {22 set_frame l "set current to frame" -STARTLINE T "nk = nuke.thisNode()\nnk.knob('ref_frame').setValue(nuke.frame())"}
+ addUserKnob {26 ""}
+ addUserKnob {7 output_ref l "<font color=orangered><i>output ref"}
+ output_ref {{"input_ref - input_ref(ref_frame)"}}
+ addUserKnob {1 expression_ref l "<font color=darkcyan>Expression"}
+ expression_ref "input - input(frame)"
+ addUserKnob {22 generate_3 l Generate -STARTLINE T "nk = nuke.thisNode()\nnk.knob('expression_ref').setValue(\"input - input(frame)\")"}
+ addUserKnob {20 percentage l Percentage}
+ addUserKnob {26 message_4 l "" +STARTLINE T "Increase or reduce a % to the curve"}
+ addUserKnob {7 input_percentage l "<font color=springgreen><i>input"}
+ addUserKnob {4 operation M {increase reduce "" "" ""}}
+ addUserKnob {3 percentage_1 l "       "}
+ percentage_1 10
+ addUserKnob {26 percentage_2 l % -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {7 output_percentage l "<font color=orangered><i>output percentage"}
+ output_percentage {{operation==0?input_percentage+(input_percentage*percentage_1)/100:input_percentage-(input_percentage*percentage_1)/100}}
+ addUserKnob {1 expression_percentage l "<font color=darkcyan>Expression" t "nk = nuke.thisNode()\nnk.knob('expression_percentage').setValue(\"input+(input*percentage)/100\")"}
+ expression_percentage input+(input*percentage)/100
+ addUserKnob {22 generate_1 l Generate -STARTLINE T "nk = nuke.thisNode()\nnk.knob('expression_percentage').setValue(\"input+(input*percentage)/100\")"}
+ addUserKnob {20 average_1 l Average}
+ addUserKnob {26 message_3 l "" +STARTLINE T "Find the average number of the curve values"}
+ addUserKnob {7 input_average l "<font color=springgreen><i>input"}
+ addUserKnob {3 frame_in l "frame range"}
+ frame_in 1
+ addUserKnob {3 frame_out l "" -STARTLINE}
+ frame_out 100
+ addUserKnob {26 ""}
+ addUserKnob {7 average l "<font color=orangered><i>average"}
+ average {{"input_average.integrate(frame_in, frame_out)/(frame_out-frame_in)"}}
+ addUserKnob {1 expression_average l "<font color=darkcyan>Expression"}
+ expression_average "input.integrate(frame_in, frame_out)/(frame_out-frame_in)"
+ addUserKnob {22 generate_2 l Generate -STARTLINE T "nk = nuke.thisNode()\nnk.knob('expression_average').setValue(\"input.integrate(frame_in, frame_out)/(frame_out-frame_in)\")"}
+}
+ Output {
+  inputs 0
+  name Output1
+  xpos 0
+  ypos 300
+ }
+end_group

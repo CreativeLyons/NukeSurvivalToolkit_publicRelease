@@ -1,0 +1,541 @@
+Group {
+ name DeepSampleCount
+ onCreate "\nthisGRP = nuke.thisGroup()\nfor knob in thisGRP.knobs() :\n    if knob\[0:6] == 'sCount' :\n        if int(knob.split('sCount')\[1]) %3 == 1 :\n            thisGRP\[knob].setFlag(0x0000000000001000)\n"
+ tile_color 0x2866ff
+ label "<font color=cyan>2D image Output</font>"
+ addUserKnob {20 tab_general l General}
+ addUserKnob {41 max_count l "max count" T menu1.max_count}
+ addUserKnob {6 show_colormap l "show colormap" +STARTLINE}
+ show_colormap true
+ addUserKnob {20 grp_count_colormap l "samples count colormap" n 1}
+ grp_count_colormap 0
+ addUserKnob {40 sCount1 l "1 sample"}
+ sCount1 0x7f2626ff
+ addUserKnob {40 sCount2 l "2 samples" -STARTLINE}
+ sCount2 0x7f4126ff
+ addUserKnob {40 sCount3 l "3 samples" -STARTLINE}
+ sCount3 0x7f5b26ff
+ addUserKnob {40 sCount4 l "4 samples"}
+ sCount4 0x7f7626ff
+ addUserKnob {40 sCount5 l "5 samples" -STARTLINE}
+ sCount5 0x6d7f26ff
+ addUserKnob {40 sCount6 l "6 samples" -STARTLINE}
+ sCount6 0x527f26ff
+ addUserKnob {40 sCount7 l "7 samples"}
+ sCount7 0x377f26ff
+ addUserKnob {40 sCount8 l "8 samples" -STARTLINE}
+ sCount8 0x267f2eff
+ addUserKnob {40 sCount9 l "9 samples" -STARTLINE}
+ sCount9 0x267f49ff
+ addUserKnob {40 sCount10 l "10 samples"}
+ sCount10 0x267f64ff
+ addUserKnob {40 sCount11 l "11 samples" -STARTLINE}
+ sCount11 0x267f7fff
+ addUserKnob {40 sCount12 l "12 samples" -STARTLINE}
+ sCount12 0x26647fff
+ addUserKnob {40 sCount13 l "13 samples"}
+ sCount13 0x26497fff
+ addUserKnob {40 sCount14 l "14 samples" -STARTLINE}
+ sCount14 0x262e7fff
+ addUserKnob {40 sCount15 l "15 samples" -STARTLINE}
+ sCount15 0x37267fff
+ addUserKnob {40 sCount16 l "16 samples"}
+ sCount16 0x52267fff
+ addUserKnob {40 sCount17 l "17 samples" -STARTLINE}
+ sCount17 0x6d267fff
+ addUserKnob {40 sCount18 l "18 samples" -STARTLINE}
+ sCount18 0x7f2676ff
+ addUserKnob {40 sCount19 l "19 samples"}
+ sCount19 0x7f265bff
+ addUserKnob {40 sCount20 l "20 samples" -STARTLINE}
+ sCount20 0x7f2640ff
+ addUserKnob {40 sCount21 l "21 samples" -STARTLINE +HIDDEN}
+ sCount21 0xff0000ff
+ addUserKnob {40 sCount22 l "22 samples" +HIDDEN}
+ sCount22 0xff4c00ff
+ addUserKnob {40 sCount23 l "23 samples" -STARTLINE +HIDDEN}
+ sCount23 0xff9900ff
+ addUserKnob {40 sCount24 l "24 samples" -STARTLINE +HIDDEN}
+ sCount24 0xffe500ff
+ addUserKnob {40 sCount25 l "25 samples" +HIDDEN}
+ sCount25 0xcbff00ff
+ addUserKnob {40 sCount26 l "26 samples" -STARTLINE +HIDDEN}
+ sCount26 0x7fff00ff
+ addUserKnob {40 sCount27 l "27 samples" -STARTLINE +HIDDEN}
+ sCount27 0x32ff00ff
+ addUserKnob {40 sCount28 l "28 samples" +HIDDEN}
+ sCount28 0xff19ff
+ addUserKnob {40 sCount29 l "29 samples" -STARTLINE +HIDDEN}
+ sCount29 0xff66ff
+ addUserKnob {40 sCount30 l "30 samples" -STARTLINE +HIDDEN}
+ sCount30 0xffb2ff
+ addUserKnob {40 sCount31 l "31 samples" +HIDDEN}
+ sCount31 0xffffff
+ addUserKnob {40 sCount32 l "32 samples" -STARTLINE +HIDDEN}
+ sCount32 0xb2ffff
+ addUserKnob {40 sCount33 l "33 samples" -STARTLINE +HIDDEN}
+ sCount33 0x65ffff
+ addUserKnob {40 sCount34 l "34 samples" +HIDDEN}
+ sCount34 0x19ffff
+ addUserKnob {40 sCount35 l "35 samples" -STARTLINE +HIDDEN}
+ sCount35 0x3200ffff
+ addUserKnob {40 sCount36 l "36 samples" -STARTLINE +HIDDEN}
+ sCount36 0x7f00ffff
+ addUserKnob {40 sCount37 l "37 samples" +HIDDEN}
+ sCount37 0xcc00ffff
+ addUserKnob {40 sCount38 l "38 samples" -STARTLINE +HIDDEN}
+ sCount38 0xff00e5ff
+ addUserKnob {40 sCount39 l "39 samples" -STARTLINE +HIDDEN}
+ sCount39 0xff0099ff
+ addUserKnob {40 sCount40 l "40 samples" +HIDDEN}
+ sCount40 0xff004cff
+ addUserKnob {40 sCount41 l "41 samples" -STARTLINE +HIDDEN}
+ sCount41 0x191919ff
+ addUserKnob {40 sCount42 l "42 samples" -STARTLINE +HIDDEN}
+ sCount42 0x191919ff
+ addUserKnob {40 sCount43 l "43 samples" +HIDDEN}
+ sCount43 0x333333ff
+ addUserKnob {40 sCount44 l "44 samples" -STARTLINE +HIDDEN}
+ sCount44 0x4c4c4cff
+ addUserKnob {40 sCount45 l "45 samples" -STARTLINE +HIDDEN}
+ sCount45 0x666666ff
+ addUserKnob {40 sCount46 l "46 samples" +HIDDEN}
+ sCount46 0x7f7f7fff
+ addUserKnob {40 sCount47 l "47 samples" -STARTLINE +HIDDEN}
+ sCount47 0x999999ff
+ addUserKnob {40 sCount48 l "48 + samples" -STARTLINE +HIDDEN}
+ sCount48 0xb2b2b2ff
+ addUserKnob {20 endGroup n -1}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "don't touch"
+  note_font_size 42
+  xpos -640
+  ypos -438
+  bdwidth 223
+  bdheight 210
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0xaaaaaa00
+  note_font_size 42
+  xpos -133
+  ypos 18
+  bdwidth 574
+  bdheight 4283
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x666666ff
+  label bin
+  note_font_size 42
+  xpos -638
+  ypos -189
+  bdwidth 218
+  bdheight 227
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  label "Version\n1.3\n\nDate Modified\n2019-09-14\n\nChangelog\n1.3\n- clear UI\n- '48 samples' change label to '48+ samples'\n- set default 'max count' to 20\n\n1.2\n- fix algorithm, break the 24 samples limit.\n  The tool support 48 samples now.\n\n1.1\n- change max count to pulldown menu\n- set max limited to 23 samples, if more than 23 samples will assigned '24+ samples colormap'\n- no more remove knobs, the color setting will be keep\n\n1.0\n- using math + TCL to create deepSamplesCount colormap\n\nDeveloped by\nMark Joey Tang\nhttps://facebook.com/MJTLab"
+  xpos -1148
+  ypos -437
+  bdwidth 474
+  bdheight 475
+ }
+ Input {
+  inputs 0
+  name deep
+  xpos 116
+  ypos -508
+ }
+ Dot {
+  name Dot2
+  xpos 150
+  ypos -428
+ }
+set N7984e730 [stack 0]
+ Dot {
+  name Dot3
+  xpos 915
+  ypos -428
+ }
+ DeepToImage {
+  name DeepToImage2
+  xpos 881
+  ypos 4557
+ }
+push $N7984e730
+ DeepExpression {
+  chans0 alpha
+  chans1 none
+  rgba.alpha "\[value globalm.base]"
+  name DeepExpression1
+  xpos 116
+  ypos -330
+ }
+ DeepToImage {
+  name DeepToImage1
+  xpos 116
+  ypos -250
+ }
+add_layer {deepSample deepSample.count}
+ AddChannels {
+  channels deepSample
+  name AddChannels2
+  xpos 116
+  ypos -170
+ }
+ Dot {
+  name start_count
+  tile_color 0xff7f00ff
+  xpos 150
+  ypos 53
+  addUserKnob {20 User}
+  addUserKnob {7 sum}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression1
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 1
+  addUserKnob {78 sum n 1}
+  sum {{globalm.base}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount1] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount1] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount1] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression2
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 2
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount2] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount2] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount2] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression3
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 3
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount3] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount3] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount3] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression4
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 4
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount4] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount4] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount4] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression5
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 5
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount5] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount5] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount5] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression6
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 6
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount6] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount6] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount6] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression7
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 7
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount7] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount7] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount7] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression8
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 8
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount8] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount8] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount8] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression9
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 9
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount9] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount9] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount9] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression10
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 10
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount10] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount10] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount10] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression11
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 11
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount11] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount11] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount11] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression12
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 12
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount12] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount12] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount12] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression13
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 13
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount13] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount13] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount13] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression14
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 14
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount14] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount14] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount14] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression15
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 15
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount15] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount15] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount15] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression16
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 16
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount16] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount16] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount16] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression17
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 17
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount17] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount17] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount17] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression18
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 18
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount18] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount18] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount18] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression19
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 19
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount19] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount19] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount19] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Expression {
+  channel3 deepSample
+  expr3 "\[value globalm.eCount]"
+  name Expression20
+  addUserKnob {20 User}
+  addUserKnob {78 id n 1}
+  id 20
+  addUserKnob {78 sum n 1}
+  sum {{"input.sum + globalm.base - input.sum * globalm.base"}}
+  addUserKnob {18 assignColor}
+  assignColor {{"\[expr 0x\[string range \[value parent.sCount20] 2 3]] / 255"} {"\[expr 0x\[string range \[value parent.sCount20] 4 5]] / 255"} {"\[expr 0x\[string range \[value parent.sCount20] 6 7]] / 255"}}
+  addUserKnob {6 assignColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Dot {
+  name end_count
+  tile_color 0xff7f00ff
+  xpos 148
+  ypos 4113
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  name ShuffleCopy2
+  xpos 114
+  ypos 4557
+ }
+ Dot {
+  name Dot1
+  xpos 148
+  ypos 4833
+ }
+set N798bc250 [stack 0]
+ Dot {
+  name start_colormap
+  tile_color 0xffffff
+  xpos 349
+  ypos 4833
+ }
+ Expression {
+  expr0 "deepSample.count == 1 ? Expression1.assignColor.r : deepSample.count == 2 ? Expression2.assignColor.r : deepSample.count == 3 ? Expression3.assignColor.r : deepSample.count == 4 ? Expression4.assignColor.r : deepSample.count == 5 ? Expression5.assignColor.r : deepSample.count == 6 ? Expression6.assignColor.r : deepSample.count == 7 ? Expression7.assignColor.r : deepSample.count == 8 ? Expression8.assignColor.r : deepSample.count == 9 ? Expression9.assignColor.r : deepSample.count == 10 ? Expression10.assignColor.r : deepSample.count == 11 ? Expression11.assignColor.r : deepSample.count == 12 ? Expression12.assignColor.r : deepSample.count == 13 ? Expression13.assignColor.r : deepSample.count == 14 ? Expression14.assignColor.r : deepSample.count == 15 ? Expression15.assignColor.r : deepSample.count == 16 ? Expression16.assignColor.r : deepSample.count == 17 ? Expression17.assignColor.r : deepSample.count == 18 ? Expression18.assignColor.r : deepSample.count == 19 ? Expression19.assignColor.r : deepSample.count == 20 ? Expression20.assignColor.r : 0"
+  expr1 "deepSample.count == 1 ? Expression1.assignColor.g : deepSample.count == 2 ? Expression2.assignColor.g : deepSample.count == 3 ? Expression3.assignColor.g : deepSample.count == 4 ? Expression4.assignColor.g : deepSample.count == 5 ? Expression5.assignColor.g : deepSample.count == 6 ? Expression6.assignColor.g : deepSample.count == 7 ? Expression7.assignColor.g : deepSample.count == 8 ? Expression8.assignColor.g : deepSample.count == 9 ? Expression9.assignColor.g : deepSample.count == 10 ? Expression10.assignColor.g : deepSample.count == 11 ? Expression11.assignColor.g : deepSample.count == 12 ? Expression12.assignColor.g : deepSample.count == 13 ? Expression13.assignColor.g : deepSample.count == 14 ? Expression14.assignColor.g : deepSample.count == 15 ? Expression15.assignColor.g : deepSample.count == 16 ? Expression16.assignColor.g : deepSample.count == 17 ? Expression17.assignColor.g : deepSample.count == 18 ? Expression18.assignColor.g : deepSample.count == 19 ? Expression19.assignColor.g : deepSample.count == 20 ? Expression20.assignColor.g : 0"
+  expr2 "deepSample.count == 1 ? Expression1.assignColor.b : deepSample.count == 2 ? Expression2.assignColor.b : deepSample.count == 3 ? Expression3.assignColor.b : deepSample.count == 4 ? Expression4.assignColor.b : deepSample.count == 5 ? Expression5.assignColor.b : deepSample.count == 6 ? Expression6.assignColor.b : deepSample.count == 7 ? Expression7.assignColor.b : deepSample.count == 8 ? Expression8.assignColor.b : deepSample.count == 9 ? Expression9.assignColor.b : deepSample.count == 10 ? Expression10.assignColor.b : deepSample.count == 11 ? Expression11.assignColor.b : deepSample.count == 12 ? Expression12.assignColor.b : deepSample.count == 13 ? Expression13.assignColor.b : deepSample.count == 14 ? Expression14.assignColor.b : deepSample.count == 15 ? Expression15.assignColor.b : deepSample.count == 16 ? Expression16.assignColor.b : deepSample.count == 17 ? Expression17.assignColor.b : deepSample.count == 18 ? Expression18.assignColor.b : deepSample.count == 19 ? Expression19.assignColor.b : deepSample.count == 20 ? Expression20.assignColor.b : 0"
+  name Expression21
+ }
+ Dot {
+  name end_colormap
+  tile_color 0xffffff
+  xpos 349
+  ypos 5136
+ }
+push $N798bc250
+ Switch {
+  inputs 2
+  which {{parent.show_colormap}}
+  name Switch1
+  xpos 114
+  ypos 5300
+ }
+ Output {
+  name Output1
+  xpos 114
+  ypos 5405
+ }
+ NoOp {
+  inputs 0
+  name menu1
+  knobChanged "\nthisGRP = nuke.thisGroup()\nstCount = nuke.toNode('start_count')\nenCount = nuke.toNode('end_count')\nstColormap = nuke.toNode('start_colormap')\nenColormap = nuke.toNode('end_colormap')\n\nfor node in nuke.allNodes() :\n    if node.Class() == 'Expression' :\n        if not node.name()\[0:7] == 'filter_' :\n            nuke.delete( node )\n\nfor knob in thisGRP.knobs() :\n    if knob\[0:6] == 'sCount' :\n        thisGRP\[knob].setVisible(False)\n        try :\n            if knob.split('_')\[1] == 'panelDropped' :\n                thisGRP.removeKnob( thisGRP\[knob] )\n        except :\n            pass\n\nlastNode = stCount\ncolormapString = \[]\n\nfor i in range( int( thisGRP\['max_count'].value() ) ) :\n    n = nuke.nodes.Expression()\n    idKnob = nuke.Array_Knob( 'id', 'id' )\n    sumKnob = nuke.Array_Knob( 'sum', 'sum' )\n    colorKnob = nuke.Color_Knob( 'assignColor', 'assignColor')\n    n.addKnob( idKnob )\n    n.addKnob( sumKnob )\n    n.addKnob( colorKnob )\n    n\['id'].setValue( i+1 )\n    if i == 0 :\n        n\['sum'].setExpression( 'globalm.base' )\n    else :\n        n\['sum'].setExpression( 'input.sum + globalm.base - input.sum * globalm.base' )\n    n\['assignColor'].setExpression( '\[expr 0x\[string range \[value parent.sCount\{0\}] 2 3]] / 255'.format(i+1) , 0 )\n    n\['assignColor'].setExpression( '\[expr 0x\[string range \[value parent.sCount\{0\}] 4 5]] / 255'.format(i+1) , 1 )\n    n\['assignColor'].setExpression( '\[expr 0x\[string range \[value parent.sCount\{0\}] 6 7]] / 255'.format(i+1) , 2 )\n    n\['channel3'].setValue( 'deepSample.count' )\n    if i < 47 :\n        n\['expr3'].setValue( '\[value globalm.eCount]' )\n    else :\n        n\['expr3'].setValue( '\[value globalm.overCount]' )\n\n    n.setInput( 0, lastNode )\n    lastNode = n\n\n    thisGRP\['sCount' + str( i+1 ) ].setVisible(True)\n\n    colormapString.append( 'deepSample.count == \{0\} ? \{1\}.assignColor.'.format(i+1, n.name()) )\n\nenCount.setInput( 0, lastNode )\n\nn = nuke.nodes.Expression()\nn\['channel0'].setValue( 'rgb.red' )\nn\['channel1'].setValue( 'rgb.green' )\nn\['channel2'].setValue( 'rgb.blue' )\nn\['expr0'].setValue( 'r : '.join( colormapString ) + 'r : 0' )\nn\['expr1'].setValue( 'g : '.join( colormapString ) + 'g : 0' )\nn\['expr2'].setValue( 'b : '.join( colormapString ) + 'b : 0' )\nn.setInput(0, stColormap)\nenColormap.setInput(0, n)\n"
+  xpos -568
+  ypos -302
+  addUserKnob {20 User}
+  addUserKnob {4 max_count l "max count" M {5 10 15 20 25 30 35 40 45 48 "" "" "" "" "" "" "" ""}}
+  max_count 20
+ }
+ NoOp {
+  inputs 0
+  name globalm
+  xpos -566
+  ypos -65
+  addUserKnob {20 User}
+  addUserKnob {7 base}
+  base 0.1
+  addUserKnob {7 bias}
+  bias 1e-07
+  addUserKnob {1 channel}
+  channel alpha
+  addUserKnob {1 eCount}
+  eCount "\[value globalm.channel] > sum - \[value globalm.bias] && \[value globalm.channel] < sum + \[value globalm.bias] ? id : deepSample.count"
+  addUserKnob {1 overCount}
+  overCount "\[value globalm.channel] > sum - \[value globalm.bias] ? id : deepSample.count"
+ }
+end_group

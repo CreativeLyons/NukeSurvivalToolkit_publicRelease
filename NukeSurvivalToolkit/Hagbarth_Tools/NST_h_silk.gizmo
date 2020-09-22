@@ -1,0 +1,443 @@
+Group {
+ name Silk
+ tile_color 0x70ffcdff
+ addUserKnob {20 User}
+ addUserKnob {26 Credits l "" +STARTLINE T "Silk for Nuke"}
+ addUserKnob {26 devider_general l "<b><font color=#7DBAB9>General</font><b>"}
+ addUserKnob {4 Algorithm M {Gaussian Disk E-Box E-Triangle E-Quadratic E-Gaussian E-Dir "" "" "" "" ""}}
+ addUserKnob {6 inverse l "Inverse E filters" -STARTLINE}
+ addUserKnob {3 Streaks}
+ Streaks 1
+ addUserKnob {7 Size}
+ Size 0.35
+ addUserKnob {26 text_blank l "" +STARTLINE T " "}
+ addUserKnob {41 size l Erode T Erode.size}
+ addUserKnob {41 size_1 l Re-Erode T ReErode.size}
+ addUserKnob {7 ReErodeSoften l "Erode Soften"}
+ addUserKnob {26 devider_shading l "<b><font color=#7DBAB9>Shading</font><b>"}
+ addUserKnob {7 Offset R 0 2}
+ Offset 1
+ addUserKnob {7 contrast l Contrast R 0 2}
+ contrast 1
+ addUserKnob {26 text_blank2 l "" +STARTLINE T " "}
+ addUserKnob {19 Gamma}
+ Gamma {0.72705 0.651014 0.8 0.67}
+ addUserKnob {6 Gamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ Gamma_panelDropped true
+ addUserKnob {26 text_blank3 l "" +STARTLINE T " "}
+ addUserKnob {7 Prim_HueRed l "Offset Red <font color=#FF4040>●</font>" R -1 1}
+ Prim_HueRed 0.36
+ addUserKnob {7 Prim_HueGreen l "Offset Green <font color=#40FF40>●</font>" R -1 1}
+ Prim_HueGreen 0.12
+ addUserKnob {7 Prim_HueBlue l "Offset Blue <font color=#4040FF>●</font>" R -1 1}
+ Prim_HueBlue 0.56
+ addUserKnob {26 devider_sampler l "<b><font color=#7DBAB9>Multisample</font><b>"}
+ addUserKnob {6 multisample_enable l "Enable Multisample" +STARTLINE}
+ addUserKnob {3 no_samples l Samples}
+ no_samples 2
+ addUserKnob {7 sample_width l "Sample Width" -STARTLINE R 0 4}
+ sample_width 1.5
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x8e388e00
+  label Algorithms
+  note_font_size 42
+  xpos -937
+  ypos -3
+  bdwidth 521
+  bdheight 244
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x8e388e00
+  label "NYI NORMALIZE"
+  note_font_size 42
+  xpos -635
+  ypos 916
+  bdwidth 319
+  bdheight 181
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x71c67100
+  label "Razor Sharp!"
+  note_font_size 42
+  xpos -641
+  ypos 1253
+  bdwidth 328
+  bdheight 235
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x7171c600
+  label "Multisample Hack"
+  note_font_size 42
+  xpos -622
+  ypos 349
+  bdwidth 318
+  bdheight 191
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos -508
+  ypos -95
+ }
+ Dot {
+  name Dot39
+  xpos -474
+  ypos -31
+ }
+ Dot {
+  name Dot5
+  xpos -474
+  ypos 57
+ }
+set N23df10 [stack 0]
+ Dot {
+  name Dot9
+  xpos -584
+  ypos 57
+ }
+set N230b10 [stack 0]
+ Dot {
+  name Dot7
+  xpos -747
+  ypos 57
+ }
+set N2a3a10 [stack 0]
+ Dot {
+  name Dot6
+  xpos -895
+  ypos 57
+ }
+ DirBlurWrapper {
+  BlurCenter {{width/2} {height/2}}
+  BlurLength {{parent.inverse?(parent.Size*100):-(parent.Size*100)}}
+  BlurAngle 54
+  name G
+  xpos -929
+  ypos 125
+ }
+ Dot {
+  name Dot8
+  xpos -895
+  ypos 196
+ }
+push $N2a3a10
+ FilterErode {
+  channels rgb
+  size {{parent.inverse?(parent.Size*100):-(parent.Size*100)}}
+  filter {{max(0,min(3,parent.Algorithm-2))}}
+  name CDEF
+  xpos -781
+  ypos 124
+ }
+push $N230b10
+ Defocus {
+  defocus {{parent.Size*100}}
+  name B
+  xpos -618
+  ypos 117
+ }
+push $N23df10
+ Blur {
+  channels {rgba.red rgba.green rgba.blue none}
+  size {{parent.Size*100}}
+  quality 40
+  crop false
+  name A
+  xpos -508
+  ypos 122
+ }
+ Switch {
+  inputs 4
+  which {{parent.Algorithm<2?parent.Algorithm:parent.Algorithm>5?parent.Algorithm:2}}
+  name Switch1
+  xpos -508
+  ypos 193
+ }
+ Blur {
+  size 5
+  quality 5
+  crop false
+  name RefineEdges
+  xpos -508
+  ypos 261
+ }
+ NoTimeBlur {
+  name NoTimeBlur
+  xpos -508
+  ypos 428
+ }
+ Transform {
+  translate {{((frame*samplecount)-floor(frame*samplecount)-.5)*samplewidth} {((floor(frame*(samplecount+0))/(samplecount-1))-(floor((floor(frame*samplecount)/(samplecount)))+(floor(frame)/(samplecount-1)))-.5)*samplewidth x2 0}}
+  center {512 512}
+  filter Lanczos4
+  name SampleOffset
+  xpos -508
+  ypos 452
+  disable {{1-parent.multisample_enable}}
+  addUserKnob {20 User}
+  addUserKnob {7 samplecount}
+  samplecount {{parent.no_samples}}
+  addUserKnob {7 samplewidth R 0 20}
+  samplewidth {{parent.sample_width}}
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  reformat true
+  crop false
+  name PreCrop
+  xpos -508
+  ypos 476
+ }
+ Erode {
+  channels rgba
+  size 0
+  quality 100
+  name Erode
+  xpos -508
+  ypos 666
+ }
+ FilterErode {
+  channels rgb
+  size 0
+  filter gaussian
+  name ReErode
+  xpos -507
+  ypos 695
+ }
+ Blur {
+  size {{parent.ReErodeSoften*10}}
+  name Soften
+  xpos -507
+  ypos 719
+ }
+ Group {
+  name SilkKernel
+  xpos -507
+  ypos 858
+  addUserKnob {20 SilkKernel}
+  addUserKnob {41 "Local GPU: " T BlinkScript2.gpuName}
+  addUserKnob {41 "Use GPU if Available" T BlinkScript2.useGPUIfAvailable}
+  addUserKnob {26 ""}
+  addUserKnob {41 Streaks T BlinkScript2.SilkKernel_Streaks}
+  addUserKnob {41 Size T BlinkScript2.SilkKernel_Size}
+  addUserKnob {41 Offset T BlinkScript2.SilkKernel_Offset}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -382
+   ypos 400
+  }
+  BlinkScript {
+   recompileCount 13
+   ProgramGroup 1
+   KernelDescription "2 \"SilkKernel\" iterate componentWise a8d20f769bc5f1146178c19e66f6939a5a62084403c064c3e35b7dd54065c60d 2 \"imageIn\" Read Ranged2D \"imageOut\" Write Point 3 \"Streaks\" Int 1 AwAAAA== \"Size\" Float 1 AABIQg== \"Offset\" Float 1 AACAPw== 3 \"radius\" 1 1 \"_size\" 1 1 \"_offset\" 1 1 3 \"imageInrangeMin\" Int 2 1 AAAAAAAAAAA= \"imageInrangeMax\" Int 2 1 AAAAAAAAAAA= \"_filterWidth\" Int 1 1 AAAAAA=="
+   EncodedSource "1 1479 dhEQzoHxuPZMTdlATdMOWo2dFJcBVepmv6cp1NCeZWF+Mf5M0u80yBHudvlCkY6QzaXnS8kgn2bC+1HxdrsgE2MNp2hxP6weoR9eXGJSmA4Ipxy7tjAplgO7Ziww2ePVBhVJ/9TLn7XocM6jxn+51vwvMvkp6zv3UTIHvyPQ53zzTBNX4EREGYAg0juBopJLTxm6OuSSu1pt6d/0/w7Y6NDYJnRPkJYQtTB6BxUXBipyC1urZoNfDDexKBxWdHnNX/2C5LpHmyRHW7DBqih5puqF1v2wK3M7zUAwAefC1cQf4Y51jt00IyTpd+DJhQhgj7PTHcZHSmU0cHrgm2jr6NI8/1ZbiNQdUgGOCm6z2AVgzckBO5m5Bcwb4isjOMk6dCZyMuRo9eTFwWvALWAbQ1L5e/xxDN0C4v5WI8ctoIgtNUveQAzCut7+XqDXLTnEGKPSN0htmry8pIqitUe/1lLhoo2MlLZvQeAsxpcDvUPgMneye1DZ4d2/GITXV29yA6kdJxg2O1LgmF+H3viS7XC4O5S/HrQmfBK6nz1LREHb5mqmGhwzM9axnTE4Z2iHoP88JUTOZlnGoIQ/30kW3vSuH5wrbJk2NEB/Nf1HQUpXGg5VyLHLWRb1MBfW0M2OWnfRk9/yTVvj0PV+DkOAmiZ72NMiBFPbwnF+POtT9o+wZt7lQoKwUNu6qIeFokXHeuNfe/oELFWmakDd5Bz/q3cbfteJryiEqascGYVMVtygjYD/NAM5oXsJM3onEZxRLT6UbkFXfexwjYFRaMMQw4BRSq5LmO0qQYs4Xi/deSbRzv9zGzCq5d33nK7rLYEQO7ADUTyb4epF6p3M64Y1BT5w6Vhn9oAAeWoxMTefRFxPNXGYZ4vThzZV/dorJbQh2AbjltNp7qfZ2V/Q5MFdBgD9Zn4wc2sgdQ0qZJ4DsG4ctUId4rc+My+VKW789aYBzdaXVNNpblH2TRhKMNOYxkIFSItVOKLcGWrN//worJyIJu2NfuMV6qcpMPY95NlhXlTVbq8ySJ65gcJDhiHYeWsGRd3Cwon0fh58WKq9d0zUopU38enhOYuXtLMx8jc8qpf0UDw5J/yKUKll5MDvOvZh70T9YvZeU8snD8AinVu1yCd9uJaUq6gQ3pkWRZ9XC+1YN4yPo2/3Ppx/y9D76kNxajXfmkOqTflLjgmKDCw/dCvkDXutj7rrs03OffctiKCxEjFndQO4oSycDR2wCz22mfvHddBMiuLQln1M6SZihyR1otSvL8gekCk+sHyFbap7vj2gGxty86ZhGf1F7/9agdrNYWJfoakkYEnH0I3Q0mVIZ+ET9Ts5ojvLGhwtetcWG+ZE2CMt7aCAzQQw5lnX6BXbfHOjPxyesCHlsqnqsOb2N0C+4BG2K1bhLOJy2c050pPpuxJjj2Q3msDanYmb1qafvVo6oF/TsSGZMEVGsjFbFb3URPHQi4/I2igSsNx9qPv/yuUt+RhWgc106qzZXyT6jsAJK9lqdc2EHF1/dgVNa+KssoB2zqrKUkX5lwhS9fZFI4Fi0vgz7u+V0AxnpsySFUfpP7BKgmx+W0NgsTgSXiQQOA44ZPAGspc9MsLgLqn2CNHet1c7uX3MRjhHoPTdplgj133pZ6Qr5HaBSy3munkTSVKKuWbP8sznux1okaF8z82N+FSoVfPGaYU9HRR3caSoJxWxcNrlGUI1FZoCwrvCj2bVswHQrMtrYhEm6y5Xubhb10VzfpxegsYQus8YyoXhfgi3MIfjwBIULPQTThTIFz7QQ9E4GjPCguOPiiGVpwmwEmpFHl32nMZhX2Jpaei75SAPVFSAm+F0qpB7/YPsJ/QFqAfVLdR73/EGY3wRdp1IorOhFQBJvhX2mDPyVzXUSsLcjwRcCC56aOi3Cwvk53KsrAABdt0iF3K7JWnGQ2m7rl9FNJ/V7txafkY5xei1bXUSHEQ+53YKNGxk3j++e++HppcQ2tom"
+   rebuild ""
+   SilkKernel_Streaks {{Controller.Streaks}}
+   SilkKernel_Size {{Controller.Size}}
+   SilkKernel_Offset {{Controller.Offset}}
+   protectKernelWhenPublishing true
+   rebuild_finalise ""
+   name BlinkScript2
+   xpos -382
+   ypos 440
+  }
+  Output {
+   name Output1
+   xpos -382
+   ypos 540
+  }
+ end_group
+ Dot {
+  name Dot1
+  xpos -473
+  ypos 976
+ }
+set N117e4710 [stack 0]
+ Dot {
+  name Dot2
+  xpos -558
+  ypos 976
+ }
+ Dot {
+  name Dot3
+  xpos -558
+  ypos 1064
+ }
+push $N117e4710
+ Grade {
+  gamma 1.2
+  black_clamp false
+  name Extend
+  xpos -507
+  ypos 1017
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  mix 0
+  name Uniform
+  xpos -507
+  ypos 1061
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  softness 13
+  reformat true
+  crop false
+  name PostCrop
+  xpos -507
+  ypos 1151
+ }
+ Group {
+  name SilkShader
+  xpos -507
+  ypos 1193
+  addUserKnob {20 SilkShader}
+  addUserKnob {41 "Local GPU: " T BlinkScript2.gpuName}
+  addUserKnob {41 "Use GPU if Available" T BlinkScript2.useGPUIfAvailable}
+  addUserKnob {26 ""}
+  addUserKnob {41 Contrast T BlinkScript2.SilkShader_Contrast}
+  addUserKnob {41 Gamma T BlinkScript2.SilkShader_Gamma}
+  addUserKnob {41 Shift T BlinkScript2.SilkShader_Shift}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -492
+   ypos 684
+  }
+  BlinkScript {
+   recompileCount 36
+   ProgramGroup 1
+   KernelDescription "2 \"SilkShader\" iterate pixelWise 37886f6e25026b952dbda1c9c26e50da6f0ab7552ea7b4d1b217c2a63b64b133 2 \"src\" Read Point \"dst\" Write Point 3 \"Contrast\" Float 1 mpmZPw== \"Gamma\" Float 3 AACAPwAAgD8AAIA/AAAAAA== \"Shift\" Float 3 AACAPwAAgD8AAIA/AAAAAA== 3 \"Contrast\" 1 1 \"Gamma\" 3 1 \"Shift\" 3 1 1 \"coefficients\" Float 9 1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+   EncodedSource "1 3160 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"
+   rebuild ""
+   SilkShader_Contrast {{parent.parent.Controller.Contrast}}
+   SilkShader_Gamma {{parent.parent.Controller.Gamma} {parent.parent.Controller.Gamma} {parent.parent.Controller.Gamma}}
+   SilkShader_Shift {{parent.parent.Controller.Shift} {parent.parent.Controller.Shift} {parent.parent.Controller.Shift}}
+   protectKernelWhenPublishing true
+   rebuild_finalise ""
+   name BlinkScript2
+   xpos -492
+   ypos 724
+  }
+  Output {
+   name Output1
+   xpos -492
+   ypos 824
+  }
+ end_group
+ Clamp {
+  maximum_enable false
+  name Clamp
+  xpos -507
+  ypos 1317
+ }
+ Colorspace {
+  colorspace_out Cineon
+  name Colorspace18
+  xpos -507
+  ypos 1354
+ }
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace11
+  xpos -507
+  ypos 1378
+ }
+ Sharpen {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  amount 4
+  name Sharpen1
+  xpos -507
+  ypos 1408
+ }
+ Colorspace {
+  colorspace_in YCbCr
+  name Colorspace12
+  xpos -507
+  ypos 1432
+ }
+ Colorspace {
+  colorspace_in Cineon
+  name Colorspace19
+  xpos -507
+  ypos 1458
+ }
+ Grade {
+  white {{"(1-(sqrt(SampleOffset.translate.x*SampleOffset.translate.x+SampleOffset.translate.y*SampleOffset.translate.y) / sqrt(SampleOffset.samplewidth*SampleOffset.samplewidth+SampleOffset.samplewidth*SampleOffset.samplewidth)*2))*2"}}
+  name SampleFocus
+  xpos -507
+  ypos 1533
+  disable {{1-parent.multisample_enable}}
+ }
+ TimeBlur {
+  divisions {{parent.SampleOffset.samplecount*5}}
+  shutter 1
+  shutteroffset start
+  shuttercustomoffset 0
+  name MultiSampler
+  xpos -507
+  ypos 1557
+  disable {{1-parent.multisample_enable}}
+ }
+ Expression {
+  temp_name0 Add
+  temp_expr0 2.285
+  temp_name1 Offset
+  temp_expr1 1
+  expr0 r/(r+Offset)*Add
+  expr1 g/(g+Offset)*Add
+  expr2 b/(b+Offset)*Add
+  expr3 max(r/(r+Offset)*Add,g/(g+Offset)*Add,b/(b+Offset)*Add)
+  name HighlightReduction
+  xpos -507
+  ypos 1601
+ }
+ Output {
+  name Output1
+  xpos -507
+  ypos 1664
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "This may cause artifacts!!!"
+  xpos -417
+  ypos 1409
+ }
+ NoOp {
+  inputs 0
+  name Controller
+  label "(don't ask!)"
+  selected true
+  xpos -772
+  ypos 852
+  addUserKnob {20 User}
+  addUserKnob {7 Contrast}
+  Contrast {{parent.contrast}}
+  addUserKnob {18 Gamma}
+  Gamma {{((parent.Gamma.r-((parent.Gamma.r+parent.Gamma.g+parent.Gamma.b)/3))*1)+(parent.Gamma.a)} {((parent.Gamma.g-((parent.Gamma.r+parent.Gamma.g+parent.Gamma.b)/3))*1)+(parent.Gamma.a)} {((parent.Gamma.b-((parent.Gamma.r+parent.Gamma.g+parent.Gamma.b)/3))*1)+(parent.Gamma.a)}}
+  addUserKnob {6 Gamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 Shift}
+  Shift {{parent.Prim_HueRed} {parent.Prim_HueGreen} {parent.Prim_HueBlue}}
+  addUserKnob {6 Shift_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 Streaks}
+  Streaks {{parent.Streaks}}
+  addUserKnob {7 Size}
+  Size {{parent.Algorithm<2?parent.A.size:parent.A.size/2}}
+  addUserKnob {7 Offset}
+  Offset {{parent.Offset>1?pow(parent.Offset,6):parent.Offset}}
+ }
+end_group

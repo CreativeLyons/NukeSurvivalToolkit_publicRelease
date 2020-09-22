@@ -1,0 +1,71 @@
+Group {
+ name renameChannels
+ tile_color 0x9e3c6300
+ addUserKnob {20 Rename}
+ addUserKnob {26 message01 l "" +STARTLINE T "<i><font color=\"Aqua\">1. Select old Layer and enter a new one"}
+ addUserKnob {41 oldLayer l "old Layer" T Copy1.channels}
+ addUserKnob {1 newLayer l "new Layer"}
+ addUserKnob {22 clear -STARTLINE T "nuke.thisNode()\['newLayer'].setValue('')"}
+ addUserKnob {26 ""}
+ addUserKnob {26 message02 l "" +STARTLINE T "<i><font color=\"DeepSkyBlue\">2. Select channels and populate list"}
+ addUserKnob {22 rgba l "<i><font color=\"yellow\">rgba" T "newLayer = nuke.thisNode()\[\"newLayer\"].value()\n#nuke.Layer(newLayer,  \['red', 'green', 'blue', 'alpha'] )\n\noldLayer = nuke.thisNode()\[\"oldLayer\"].value()\n\nnewRed = str(newLayer) + \".red\"\nnewGreen = str(newLayer) + \".green\"\nnewBlue = str(newLayer) + \".blue\"\nnewAlpha = str(newLayer) + \".alpha\"\n\noldRed = str(oldLayer) + \".red\"\noldGreen = str(oldLayer) + \".green\"\noldBlue = str(oldLayer) + \".blue\"\noldAlpha = str(oldLayer) + \".alpha\"\n\nif (newLayer != \"\"):\n    nuke.thisNode()\[\"from_channel01\"].setValue(oldRed)\n    nuke.thisNode()\[\"from_channel02\"].setValue(oldGreen)\n    nuke.thisNode()\[\"from_channel03\"].setValue(oldBlue)\n    nuke.thisNode()\[\"from_channel04\"].setValue(oldAlpha)\n    \n    nuke.thisNode()\[\"to_channel01\"].setValue(newRed)\n    nuke.thisNode()\[\"to_channel02\"].setValue(newGreen)\n    nuke.thisNode()\[\"to_channel03\"].setValue(newBlue)\n    nuke.thisNode()\[\"to_channel04\"].setValue(newAlpha)\nelse:\n    nuke.message(\"Insert the name of new Layer\")" +STARTLINE}
+ addUserKnob {22 rgb l "<i><font color=\"gold\">rgb" -STARTLINE T "newLayer = nuke.thisNode()\[\"newLayer\"].value()\n#nuke.Layer(newLayer,  \['red', 'green', 'blue'] )\n\noldLayer = nuke.thisNode()\[\"oldLayer\"].value()\n\nnewRed = str(newLayer) + \".red\"\nnewGreen = str(newLayer) + \".green\"\nnewBlue = str(newLayer) + \".blue\"\n\noldRed = str(oldLayer) + \".red\"\noldGreen = str(oldLayer) + \".green\"\noldBlue = str(oldLayer) + \".blue\"\n\nif (newLayer != \"\"):\n    nuke.thisNode()\[\"from_channel01\"].setValue(oldRed)\n    nuke.thisNode()\[\"from_channel02\"].setValue(oldGreen)\n    nuke.thisNode()\[\"from_channel03\"].setValue(oldBlue)\n    nuke.thisNode()\[\"from_channel04\"].setValue(\"\")\n    \n    nuke.thisNode()\[\"to_channel01\"].setValue(newRed)\n    nuke.thisNode()\[\"to_channel02\"].setValue(newGreen)\n    nuke.thisNode()\[\"to_channel03\"].setValue(newBlue)\n    nuke.thisNode()\[\"to_channel04\"].setValue(\"\")\nelse:\n    nuke.message(\"Insert the name of new Layer\")"}
+ addUserKnob {22 a l "<i><font color=\"orange\">a" -STARTLINE T "newLayer = nuke.thisNode()\[\"newLayer\"].value()\n#nuke.Layer(newLayer,  \['alpha'] )\n\noldLayer = nuke.thisNode()\[\"oldLayer\"].value()\n\nnewAlpha =  str(newLayer) + \".a\"\n\noldAlpha = str(oldLayer) + \".a\"\n\nif (newLayer != \"\"):\n    nuke.thisNode()\[\"from_channel01\"].setValue(\"\")\n    nuke.thisNode()\[\"from_channel02\"].setValue(\"\")\n    nuke.thisNode()\[\"from_channel03\"].setValue(\"\")\n    nuke.thisNode()\[\"from_channel04\"].setValue(oldAlpha)\n    \n    nuke.thisNode()\[\"to_channel01\"].setValue(\"\")\n    nuke.thisNode()\[\"to_channel02\"].setValue(\"\")\n    nuke.thisNode()\[\"to_channel03\"].setValue(\"\")\n    nuke.thisNode()\[\"to_channel04\"].setValue(newAlpha)\nelse:\n    nuke.message(\"Insert the name of new Layer\")"}
+ addUserKnob {22 uv l "<i><font color=\"coral\">u v" -STARTLINE T "newLayer = nuke.thisNode()\[\"newLayer\"].value()\n#nuke.Layer(newLayer,  \['u', 'v'] )\n\noldLayer = nuke.thisNode()\[\"oldLayer\"].value()\n\nnewRed = str(newLayer) + \".u\"\nnewGreen = str(newLayer) + \".v\"\n\noldRed = str(oldLayer) + \".u\"\noldGreen = str(oldLayer) + \".v\"\n\nif (newLayer != \"\"):\n    nuke.thisNode()\[\"from_channel01\"].setValue(oldRed)\n    nuke.thisNode()\[\"from_channel02\"].setValue(oldGreen)\n    nuke.thisNode()\[\"from_channel03\"].setValue(\"\")\n    nuke.thisNode()\[\"from_channel04\"].setValue(\"\")\n    \n    nuke.thisNode()\[\"to_channel01\"].setValue(newRed)\n    nuke.thisNode()\[\"to_channel02\"].setValue(newGreen)\n    nuke.thisNode()\[\"to_channel03\"].setValue(\"\")\n    nuke.thisNode()\[\"to_channel04\"].setValue(\"\")\nelse:\n    nuke.message(\"Insert the name of new Layer\")"}
+ addUserKnob {22 N l "<i><font color=\"orangered\">nx ny nz" -STARTLINE T "newLayer = nuke.thisNode()\[\"newLayer\"].value()\n#nuke.Layer(newLayer,  \['NX', 'NY', 'NZ'] )\n\noldLayer = nuke.thisNode()\[\"oldLayer\"].value()\n\nnewRed = str(newLayer) + \".NX\"\nnewGreen = str(newLayer) + \".NY\"\nnewBlue = str(newLayer) + \".NZ\"\n\noldRed = str(oldLayer) + \".NX\"\noldGreen = str(oldLayer) + \".NY\"\noldBlue = str(oldLayer) + \".NZ\"\n\nif (newLayer != \"\"):\n    nuke.thisNode()\[\"from_channel01\"].setValue(oldRed)\n    nuke.thisNode()\[\"from_channel02\"].setValue(oldGreen)\n    nuke.thisNode()\[\"from_channel03\"].setValue(oldBlue)\n    nuke.thisNode()\[\"from_channel04\"].setValue(\"\")\n    \n    nuke.thisNode()\[\"to_channel01\"].setValue(newRed)\n    nuke.thisNode()\[\"to_channel02\"].setValue(newGreen)\n    nuke.thisNode()\[\"to_channel03\"].setValue(newBlue)\n    nuke.thisNode()\[\"to_channel04\"].setValue(\"\")\nelse:\n    nuke.message(\"Insert the name of new Layer\")"}
+ addUserKnob {22 front l "<i><font color=\"red\">front back" -STARTLINE T "newLayer = nuke.thisNode()\[\"newLayer\"].value()\n#nuke.Layer(newLayer,  \['red', 'green', 'blue', 'alpha'] )\n\noldLayer = nuke.thisNode()\[\"oldLayer\"].value()\n\nnewRed = str(newLayer) + \".front\"\nnewGreen = str(newLayer) + \".back\"\n\noldRed = str(oldLayer) + \".front\"\noldGreen = str(oldLayer) + \".back\"\n\nif (newLayer != \"\"):\n    nuke.thisNode()\[\"from_channel01\"].setValue(oldRed)\n    nuke.thisNode()\[\"from_channel02\"].setValue(oldGreen)\n    nuke.thisNode()\[\"from_channel03\"].setValue(\"\")\n    nuke.thisNode()\[\"from_channel04\"].setValue(\"\")\n    \n    nuke.thisNode()\[\"to_channel01\"].setValue(newRed)\n    nuke.thisNode()\[\"to_channel02\"].setValue(newGreen)\n    nuke.thisNode()\[\"to_channel03\"].setValue(\"\")\n    nuke.thisNode()\[\"to_channel04\"].setValue(\"\")\nelse:\n    nuke.message(\"Insert the name of new Layer\")"}
+ addUserKnob {22 z l "<i><font color=\"maroon\">Z" -STARTLINE T "newLayer = nuke.thisNode()\[\"newLayer\"].value()\n#nuke.Layer(newLayer,  \['red', 'green', 'blue', 'alpha'] )\n\noldLayer = nuke.thisNode()\[\"oldLayer\"].value()\n\nnewZ = str(newLayer) + \".Z\"\n\noldZ = str(oldLayer) + \".Z\"\n\nif (newLayer != \"\"):\n    nuke.thisNode()\[\"from_channel01\"].setValue(oldZ)\n    nuke.thisNode()\[\"from_channel02\"].setValue(\"\")\n    nuke.thisNode()\[\"from_channel03\"].setValue(\"\")\n    nuke.thisNode()\[\"from_channel04\"].setValue(\"\")\n    \n    nuke.thisNode()\[\"to_channel01\"].setValue(newZ)\n    nuke.thisNode()\[\"to_channel02\"].setValue(\"\")\n    nuke.thisNode()\[\"to_channel03\"].setValue(\"\")\n    nuke.thisNode()\[\"to_channel04\"].setValue(\"\")\nelse:\n    nuke.message(\"Insert the name of new Layer\")"}
+ addUserKnob {22 clearAll l "Clear All" T "nuke.thisNode()\[\"from_channel01\"].setValue(\"\")\nnuke.thisNode()\[\"from_channel02\"].setValue(\"\")\nnuke.thisNode()\[\"from_channel03\"].setValue(\"\")\nnuke.thisNode()\[\"from_channel04\"].setValue(\"\")    \nnuke.thisNode()\[\"to_channel01\"].setValue(\"\")\nnuke.thisNode()\[\"to_channel02\"].setValue(\"\")\nnuke.thisNode()\[\"to_channel03\"].setValue(\"\")\nnuke.thisNode()\[\"to_channel04\"].setValue(\"\")" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 message03 l "" +STARTLINE T "<i><font color=\"RoyalBlue\">3. Create Copy and Remove nodes"}
+ addUserKnob {1 from_channel01 l "Channel 1"}
+ addUserKnob {1 to_channel01 l --> -STARTLINE}
+ addUserKnob {1 from_channel02 l "Channel 2"}
+ addUserKnob {1 to_channel02 l --> -STARTLINE}
+ addUserKnob {1 from_channel03 l "Channel 3"}
+ addUserKnob {1 to_channel03 l --> -STARTLINE}
+ addUserKnob {1 from_channel04 l "Channel 4"}
+ addUserKnob {1 to_channel04 l --> -STARTLINE}
+ addUserKnob {22 createNodes l "<i><font color=\"indianred\">Create Copy and Remove Nodes" T "def generate():\n    toList = \['to0', 'to1', 'to2', 'to3'] ## List of Copy Node to variables\n    fromList = \[ 'from0', 'from1', 'from2', 'from3'] ## List of Copy Node knobs\n      \n    fromKnob = \['from_channel01', 'from_channel02', 'from_channel03', 'from_channel04']\n    toKnob = \['to_channel01', 'to_channel02', 'to_channel03', 'to_channel04']\n    \n\n\t## Grab group node name\t\n    group = nuke.thisNode()\n    group.end()\n    \n    #read position\n    x_pos = group\['xpos'].value()\n    y_pos = group\['ypos'].value()\n\t\n\t## Deselect all nodes\n    nuke.selectAll()\n    nuke.invertSelection()\n    \n    listChannels = \[]\n    newLayer = group\['newLayer'].value()\n    oldLayer = group\['oldLayer'].value()\n\n    #layers = list( set(\[c.split('.')\[0] for c in channels]) )\n    for name_knob in toKnob:\n        value_knob = group\[name_knob].value()\n        value_knob = value_knob.replace( ' ', '_')\n        #value_knob = value_knob.lower()\n        if value_knob != \"\":\n            value_knob = value_knob.split('.')\[1]\n            listChannels.append(newLayer + '.' + value_knob)\n            \n    if newLayer != \"\":\n        nuke.Layer( newLayer, listChannels)\n        \n        \n        ##Create Dots\n        dot01 = nuke.createNode('Dot')\n        dot01.setYpos( int(y_pos) + 80 )\n        \n        \n        \n\t    ## Create Copy Node\n        copyNode = nuke.createNode('Copy')\n        #copyNode.setYpos( int(y_pos) + 160 )\n        \n        copyNode.connectInput(0, dot01)\n    \n        for i in range(4):\n            copyNode\[fromList\[i]].setValue(group\[fromKnob\[i]].value())\n        \n        for i in range(4):\n            copyNode\[toList\[i]].setValue(group\[toKnob\[i]].value())\n        \n        #Create Remove Node\n        removeNode = nuke.createNode('Remove')\n        removeNode\['channels'].setValue(oldLayer)\n        \n        \n\n\ngenerate()" +STARTLINE}
+ addUserKnob {20 help_1 l ?}
+ addUserKnob {26 message02_1 l "" +STARTLINE T "<b><font color=\"RED\">HELP:"}
+ addUserKnob {26 message l "" +STARTLINE T "1. Connect renameChannels node to your script.\n2. Select the oldLayer and insert the name of the newLayer. Basically you want to rename the old name with the new one. \n3. Select the Channels you want to create. They depend from the oldLayer \n4. Click on button \"Create Copy and Remove Nodes\" \n5. Connect the nodes created to your script."}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {22 info l Info T "nuke.tcl('start', 'http://www.andreageremia.it/tutorial.html')" +STARTLINE}
+ addUserKnob {26 gizmo l "" +STARTLINE T "Gizmo created by Andrea Geremia\n\nwww.andreageremia.it\nandrea.geremia89@gmail.com"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 170
+  ypos -176
+ }
+ Shuffle {
+  in forward
+  name Shuffle1
+  xpos 170
+  ypos -136
+  disable true
+ }
+ Dot {
+  name Dot1
+  xpos 204
+  ypos -112
+ }
+set N22951c40 [stack 0]
+push $N22951c40
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  channels rgba
+  name Copy1
+  xpos 170
+  ypos -77
+ }
+ Output {
+  name Output1
+  xpos 170
+  ypos -36
+ }
+end_group

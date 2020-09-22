@@ -1,0 +1,509 @@
+Group {
+ name WaterLens
+ inputs 3
+ tile_color 0xffccff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {12 center}
+ addUserKnob {26 ""}
+ addUserKnob {7 zdistortion l "z distortion"}
+ zdistortion 1
+ addUserKnob {7 edgeScale l "edge scale" R 0 4}
+ edgeScale 1
+ addUserKnob {7 bend R -1 1}
+ addUserKnob {41 filter l "distortion filter" T IDistort1.filter}
+ addUserKnob {7 matte_filter l "matte filter"}
+ matte_filter 0.2
+ addUserKnob {26 ""}
+ addUserKnob {41 abberation T killPanel.abberation}
+ addUserKnob {26 ""}
+ addUserKnob {20 grp_cc l "color correction" n 1}
+ grp_cc 0
+ addUserKnob {41 saturation T ColorCorrect.saturation}
+ addUserKnob {41 contrast T ColorCorrect.contrast}
+ addUserKnob {41 gamma T ColorCorrect.gamma}
+ addUserKnob {41 gain T ColorCorrect.gain}
+ addUserKnob {41 offset T ColorCorrect.offset}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {4 output M {composite element}}
+ addUserKnob {20 tab_defocus l Defocus}
+ addUserKnob {7 defocus_value l "defocus value" R 0 100}
+ addUserKnob {26 ""}
+ addUserKnob {41 auto_layer_spacing l "automatic layer spacing" T dof_setting2.auto_layer_spacing}
+ addUserKnob {3 depth_layers l "depth layers" +DISABLED}
+ depth_layers 50
+ addUserKnob {7 layer_curve +DISABLED R 0 5}
+ layer_curve 1
+ addUserKnob {26 ""}
+ addUserKnob {41 filter_type l "filter type" T ZDefocus.filter_type}
+ addUserKnob {7 filter_shape l "filter shape"}
+ filter_shape 1
+ addUserKnob {7 aspect_ratio l "aspect ratio" R 0.5 2}
+ aspect_ratio 1
+ addUserKnob {3 blades +HIDDEN}
+ blades 5
+ addUserKnob {7 roundness +HIDDEN R -1 1}
+ roundness 0.2
+ addUserKnob {7 rotation +HIDDEN R 0 360}
+ addUserKnob {7 inner_size l "inner size" +HIDDEN}
+ inner_size 0.8
+ addUserKnob {7 inner_feather l "inner feather" +HIDDEN}
+ inner_feather 1
+ addUserKnob {7 inner_brightness l "inner brightness" +HIDDEN}
+ inner_brightness 0.8
+ addUserKnob {7 catadioptric_size l "catadioptric size" +HIDDEN}
+ catadioptric_size 0.3
+ addUserKnob {6 catadioptric -STARTLINE +HIDDEN}
+ addUserKnob {20 grp_image l "image filter" n 1}
+ grp_image 0
+ addUserKnob {41 filter_channel l "filter channel" T ZDefocus.filter_channel}
+ addUserKnob {41 use_input_channels l "use input channels" -STARTLINE T ZDefocus.use_input_channels}
+ addUserKnob {41 image_filter l "image filter" T ZDefocus.image_filter}
+ addUserKnob {41 clamp_image_filter l "clamp image filter" -STARTLINE T ZDefocus.clamp_image_filter}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {6 gamma_correction l "gamma correction" +STARTLINE}
+ addUserKnob {41 bloom -STARTLINE T dof_setting.bloom}
+ addUserKnob {7 bloom_threshold l "bloom threshold"}
+ bloom_threshold 0.8
+ addUserKnob {7 bloom_gain l "bloom gain" R 1 4}
+ bloom_gain 2
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l <b>Version</b> T 1.1}
+ addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2019-04-17}
+ addUserKnob {26 l_CHANGELOG l <b>Changelog</b> T "1.1\n- soften abberation\n\n1.0\n- create water droplet"}
+ addUserKnob {26 l_DEV l "<b>Developed by</b>" T "Mark Joey Tang"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -424
+  ypos 1127
+  bdwidth 353
+  bdheight 281
+ }
+ Input {
+  inputs 0
+  name filter
+  xpos -812
+  ypos 1264
+  number 2
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos -1138
+  ypos -508
+  number 1
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos -1138
+  ypos -421
+ }
+ Dot {
+  name Dot2
+  xpos -1104
+  ypos -213
+ }
+set N27c12c40 [stack 0]
+ Histogram {
+  in {{0.2-(parent.matte_filter/10)} 1 {0.2+(parent.matte_filter/10)}}
+  name Histogram1
+  xpos -1138
+  ypos 46
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha red
+  name Shuffle3
+  xpos -1138
+  ypos 126
+ }
+ Dot {
+  name Dot7
+  xpos -1104
+  ypos 814
+ }
+push $N27c12c40
+ Input {
+  inputs 0
+  name img
+  xpos 221
+  ypos -515
+ }
+ Dot {
+  name Dot1
+  xpos 255
+  ypos -348
+ }
+set N27c27b60 [stack 0]
+ Remove {
+  operation keep
+  channels rgb
+  name Remove2
+  xpos 38
+  ypos -351
+ }
+ Dot {
+  name Dot5
+  xpos -326
+  ypos -348
+ }
+set N27c2e6e0 [stack 0]
+ Remove {
+  name Remove1
+  xpos -552
+  ypos -355
+ }
+ Dot {
+  name Dot4
+  xpos -647
+  ypos -348
+ }
+set N27c35120 [stack 0]
+ Dot {
+  name Dot3
+  xpos -866
+  ypos -348
+ }
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos -900
+  ypos -216
+ }
+ FilterErode {
+  size {{1000-(parent.zdistortion*1000)} {1000-(parent.zdistortion*1000)}}
+  filter gaussian
+  name FilterErode1
+  xpos -900
+  ypos -136
+ }
+ Invert {
+  channels alpha
+  name Invert1
+  xpos -900
+  ypos -25
+ }
+ Shuffle {
+  red black
+  green black
+  blue alpha
+  alpha black
+  name Shuffle2
+  xpos -900
+  ypos 54
+ }
+push $N27c35120
+ Expression {
+  expr0 "(x-\[value center.x])/width"
+  expr1 "(y-\[value center.y])/height"
+  name Expression1
+  xpos -681
+  ypos -26
+  addUserKnob {20 User}
+  addUserKnob {12 center}
+  center {{parent.center} {parent.center}}
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge2
+  xpos -681
+  ypos 54
+ }
+ Grade {
+  channels {rgba.red rgba.green -rgba.blue none}
+  blackpoint {{parent.bend*0.5}}
+  white {{parent.zdistortion/10}}
+  gamma {{parent.edgeScale}}
+  black_clamp false
+  maskChannelInput rgba.blue
+  name Grade1
+  xpos -681
+  ypos 144
+ }
+ Dot {
+  name Dot6
+  xpos -647
+  ypos 498
+ }
+push $N27c2e6e0
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  crop false
+  name Crop1
+  xpos -360
+  ypos -274
+ }
+ Dot {
+  name Dot8
+  xpos -326
+  ypos -77
+ }
+set N27c729d0 [stack 0]
+ Dot {
+  name Dot10
+  xpos -215
+  ypos -77
+ }
+set N27c74e90 [stack 0]
+ Dot {
+  name Dot9
+  xpos -106
+  ypos -77
+ }
+ Shuffle {
+  red black
+  green black
+  alpha black
+  name blue
+  tile_color 0xffff
+  xpos -140
+  ypos -3
+ }
+ Transform {
+  scale {{1+(parent.abberation.b/10)}}
+  center {{parent.center} {parent.center}}
+  invert_matrix true
+  black_outside false
+  name Transform2
+  xpos -140
+  ypos 77
+ }
+ Blur {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  size {{abs(parent.abberation.b*10)}}
+  name Blur3
+  xpos -140
+  ypos 147
+ }
+ Dot {
+  name Dot12
+  xpos -106
+  ypos 320
+ }
+push $N27c74e90
+ Shuffle {
+  red black
+  blue black
+  alpha black
+  name green
+  tile_color 0xff00ff
+  xpos -249
+  ypos -3
+ }
+ Transform {
+  scale {{1+(parent.abberation.g/10)}}
+  center {{parent.center} {parent.center}}
+  invert_matrix true
+  black_outside false
+  name Transform4
+  xpos -249
+  ypos 77
+ }
+ Blur {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  size {{abs(parent.abberation.g*10)}}
+  name Blur2
+  xpos -249
+  ypos 147
+ }
+ Dot {
+  name Dot11
+  xpos -215
+  ypos 240
+ }
+push $N27c729d0
+ Shuffle {
+  green black
+  blue black
+  alpha black
+  name red
+  tile_color 0xff0000ff
+  xpos -360
+  ypos -3
+ }
+ Transform {
+  scale {{1+(parent.abberation.r/10)}}
+  center {{parent.center} {parent.center}}
+  invert_matrix true
+  black_outside false
+  name Transform1
+  xpos -360
+  ypos 77
+ }
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{abs(parent.abberation.r*10)}}
+  name Blur1
+  xpos -360
+  ypos 149
+ }
+ Merge2 {
+  inputs 2
+  operation max
+  name Merge5
+  xpos -360
+  ypos 237
+ }
+ Merge2 {
+  inputs 2
+  operation max
+  name Merge6
+  xpos -360
+  ypos 317
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  out forward
+  name ShuffleCopy1
+  xpos -360
+  ypos 495
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  uv_scale -4750
+  name IDistort1
+  xpos -360
+  ypos 575
+ }
+ Shuffle {
+  alpha white
+  name Shuffle4
+  xpos -360
+  ypos 655
+ }
+ ColorCorrect {
+  name ColorCorrect
+  xpos -360
+  ypos 735
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge3
+  xpos -360
+  ypos 811
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  out depth
+  name Shuffle5
+  xpos -360
+  ypos 933
+ }
+ ZDefocus2 {
+  inputs 2
+  channels rgba
+  focal_point {10000 10000}
+  size {{parent.defocus_value}}
+  max_size {{parent.defocus_value}}
+  autoLayerSpacing {{parent.auto_layer_spacing}}
+  layers {{parent.depth_layers}}
+  layerCurve {{parent.layer_curve}}
+  legacy_resize_mode false
+  show_legacy_resize_mode false
+  shape {{parent.filter_shape}}
+  aspect {{parent.aspect_ratio}}
+  blades {{parent.blades}}
+  roundness {{parent.roundness}}
+  rotation {{parent.rotation}}
+  inner_size {{parent.inner_size}}
+  inner_feather {{parent.inner_feather}}
+  inner_brightness {{parent.inner_brightness}}
+  catadioptric_size {{parent.catadioptric_size}}
+  catadioptric {{parent.catadioptric}}
+  bloom_gamma {{parent.gamma_correction}}
+  bloom {{parent.bloom}}
+  bloom_threshold {{parent.bloom_threshold}}
+  bloom_gain {{parent.bloom_gain}}
+  name ZDefocus
+  knobChanged "\nthisGRP = nuke.thisGroup()\nknob_ls = \['filter_shape','aspect_ratio','blades','roundness','rotation','inner_size','inner_feather','inner_brightness','catadioptric_size','catadioptric']\nfor i in range( len(knob_ls) ) :\n    if thisGRP\['filter_type'].getValue() == 0 :\n        if i < 2 :\n            thisGRP\[knob_ls\[i]].setVisible(True)\n        else :\n            thisGRP\[knob_ls\[i]].setVisible(False)\n    elif thisGRP\['filter_type'].getValue() == 1 :\n        if i != 0 :\n            thisGRP\[knob_ls\[i]].setVisible(True)\n        else :\n            thisGRP\[knob_ls\[i]].setVisible(False)\n    else :\n        thisGRP\[knob_ls\[i]].setVisible(False)\n"
+  xpos -360
+  ypos 1260
+  disable {{"parent.defocus_value <= 1 ? 1 : 0"}}
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove3
+  xpos -360
+  ypos 1562
+ }
+ Dot {
+  name Dot13
+  xpos -326
+  ypos 1642
+ }
+set N278b2140 [stack 0]
+push $N278b2140
+push $N27c27b60
+ Merge2 {
+  inputs 2
+  bbox B
+  name Merge4
+  xpos 221
+  ypos 1639
+ }
+ Switch {
+  inputs 2
+  which {{output}}
+  name Switch1
+  xpos 221
+  ypos 1865
+ }
+ Output {
+  name Output1
+  xpos 221
+  ypos 2076
+ }
+ NoOp {
+  inputs 0
+  name killPanel
+  knobChanged "\nthisNODE = nuke.thisNode()\nfor knob in thisNODE.knobs() :\n    if knob\[:11] == 'abberation_' :\n        thisNODE.removeKnob(thisNODE\[knob])\n"
+  xpos -203
+  ypos 1199
+  addUserKnob {20 User}
+  addUserKnob {18 abberation}
+  abberation {0.2 0 -0.2}
+  addUserKnob {6 abberation_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 abberation_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 abberation_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ NoOp {
+  inputs 0
+  name dof_setting
+  knobChanged "\nthisGRP = nuke.thisGroup()\nknob_ls = \['bloom_threshold','bloom_gain']\nfor i in range( len(knob_ls) ) :\n    if thisGRP\['bloom'].getValue() == 0 :\n        thisGRP\[knob_ls\[i]].setEnabled(False)\n    else :\n        thisGRP\[knob_ls\[i]].setEnabled(True)\n"
+  xpos -202
+  ypos 1258
+  addUserKnob {20 User}
+  addUserKnob {6 bloom +STARTLINE}
+  bloom true
+ }
+ NoOp {
+  inputs 0
+  name dof_setting2
+  knobChanged "\nthisGRP = nuke.thisGroup()\nknob_ls = \['depth_layers','layer_curve']\nfor i in range( len(knob_ls) ) :\n    if thisGRP\['auto_layer_spacing'].getValue() == 0 :\n        thisGRP\[knob_ls\[i]].setEnabled(True)\n    else :\n        thisGRP\[knob_ls\[i]].setEnabled(False)\n"
+  xpos -203
+  ypos 1322
+  addUserKnob {20 User}
+  addUserKnob {6 auto_layer_spacing l "automatic layer spacing" +STARTLINE}
+  auto_layer_spacing true
+ }
+end_group

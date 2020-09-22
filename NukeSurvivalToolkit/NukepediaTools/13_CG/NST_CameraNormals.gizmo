@@ -1,0 +1,283 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+add_layer {N N.red N.green N.blue N.alpha}
+add_layer {P P.red P.green P.blue P.alpha}
+Group {
+ name CameraNormals
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"fix\":\n    if int(k.value()) == False:\n        n.knobs()\['pworld'].setVisible(False)\n    else:\n        n.knobs()\['pworld'].setVisible(True)\n        \nif k.name() == \"output_mask\":\n    if int(k.value()) == False:\n        n.knobs()\['invert'].setVisible(False)\n        n.knobs()\['math'].setVisible(False)\n        n.knobs()\['bias'].setVisible(False)\n    else:\n        n.knobs()\['invert'].setVisible(True)\n        n.knobs()\['math'].setVisible(True)\n        if n.knobs()\['math'].value() == \"Biased\":\n            n.knobs()\['bias'].setVisible(True)\n        else:\n            n.knobs()\['bias'].setVisible(False)\n            \nif k.name() == \"math\":\n    if n.knobs()\['math'].value() == \"Biased\":\n        n.knobs()\['bias'].setVisible(True)\n    else:\n        n.knobs()\['bias'].setVisible(False)"
+ tile_color 0x7f7f7fff
+ selected true
+ addUserKnob {20 User l CameraNormals}
+ addUserKnob {41 nworld l "N channels" T Shuffle_N.in}
+ addUserKnob {26 divider1 l "" +STARTLINE}
+ addUserKnob {6 fix l "Fix Camera Facing Normals" t "This will fix the blue component of your Normals, making it a perfect facing ratio mask for your CG" +STARTLINE}
+ fix true
+ addUserKnob {41 pworld l "P channels" T Shuffle_P.in}
+ addUserKnob {26 divider2 l "" +STARTLINE}
+ addUserKnob {6 output_mask l "Output Facing Ratio Mask" t "Instead of writing the new normals to your existing N channel, directly output_mask the Facing Ratio Mask in the RGBA\n(Note: This operation requires an alpha channel on the input)" +STARTLINE}
+ output_mask true
+ addUserKnob {6 invert l Invert? +STARTLINE}
+ invert true
+ addUserKnob {4 math l Math M {Simple Biased "" "" "" ""}}
+ math Biased
+ addUserKnob {26 spacer1 l "" -STARTLINE T "   "}
+ addUserKnob {7 bias l Bias -STARTLINE R -1 1}
+ addUserKnob {20 about l About}
+ addUserKnob {26 description l "" +STARTLINE T "This Gizmo converts your world-normals to camera-normals.\n\nCameraNormalsv1.0 by Nikolai Wüstemann (inspired by Eyal Shirazi)\nDummyCamv1.1 by Adrian Pueyo"}
+}
+ Input {
+  inputs 0
+  name cam
+  xpos 421
+  ypos -32
+  number 1
+ }
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {{"\[expression \[value the_cam]far(\[value the_frame])]"}}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyCam
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nadrianpueyo.com, 2019-2020"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  xpos 431
+  ypos 22
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam +INVISIBLE}
+  the_cam "\[\n#DummyCam v1.1. Updated 5 April 2020.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame +INVISIBLE}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 50
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 24.576
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 0.1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 10000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 April 2020" T "<span style=\"color:#666\"><br/><b>DummyCam v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2020</span>"}
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 239
+  ypos -24
+ }
+ Dot {
+  name Dot1
+  xpos 273
+  ypos 146
+ }
+set N6850e630 [stack 0]
+ Dot {
+  name Dot2
+  xpos -128
+  ypos 146
+ }
+set N6854eb60 [stack 0]
+ Dot {
+  name Dot3
+  xpos -638
+  ypos 146
+ }
+ Shuffle {
+  in P
+  name Shuffle_P
+  xpos -672
+  ypos 229
+ }
+ Add {
+  value {{-DummyCam.world_matrix.3} {-DummyCam.world_matrix.7} {-DummyCam.world_matrix.11} {DummyCam.translate}}
+  name Add_ZeroCamPos
+  xpos -672
+  ypos 302
+ }
+ Expression {
+  temp_name0 t
+  temp_expr0 1/sqrt(r*r+g*g+b*b)
+  channel0 {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  expr0 r*t
+  expr1 g*t
+  expr2 b*t
+  name Expression1
+  xpos -672
+  ypos 381
+ }
+push $N6854eb60
+ Shuffle {
+  in N
+  name Shuffle_N
+  selected true
+  xpos -162
+  ypos 233
+ }
+ Dot {
+  name Dot6
+  xpos -128
+  ypos 375
+ }
+set N685ea4d0 [stack 0]
+ MergeExpression {
+  inputs 2
+  channel0 rgb
+  expr0 -(Ar*Br+Ag*Bg+Ab*Bb)
+  name MergeExpression_DotProduct
+  xpos -422
+  ypos 517
+ }
+ Dot {
+  name Dot7
+  xpos -388
+  ypos 1016
+ }
+push $N685ea4d0
+ ColorMatrix {
+  matrix {
+      {{DummyCam.world_matrix.0} {DummyCam.world_matrix.1} {DummyCam.world_matrix.2}}
+      {{DummyCam.world_matrix.4} {DummyCam.world_matrix.5} {DummyCam.world_matrix.6}}
+      {{DummyCam.world_matrix.8} {DummyCam.world_matrix.9} {DummyCam.world_matrix.10}}
+    }
+  invert true
+  name ColorMatrix_RotateNormals
+  xpos -162
+  ypos 729
+ }
+ Dot {
+  name Dot10
+  xpos -128
+  ypos 915
+ }
+set N6910d360 [stack 0]
+ Dot {
+  name Dot11
+  xpos -260
+  ypos 915
+ }
+ ShuffleCopy {
+  inputs 2
+  blue blue
+  alpha alpha2
+  name ShuffleCopy_FixFacingRatio
+  xpos -294
+  ypos 1013
+ }
+ Dot {
+  name Dot12
+  xpos -260
+  ypos 1134
+ }
+push $N6910d360
+ Switch {
+  inputs 2
+  which {{fix}}
+  name Switch_FixFacingRatio
+  label "\[value this.which]"
+  xpos -162
+  ypos 1125
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove_KeepRGBA
+  xpos -162
+  ypos 1341
+ }
+ Dot {
+  name Dot4
+  xpos -128
+  ypos 1525
+ }
+set N69134780 [stack 0]
+push $N6850e630
+ ShuffleCopy {
+  inputs 2
+  alpha alpha2
+  black red
+  white green
+  red2 blue
+  green2 alpha
+  out2 {{{Shuffle_N.in}}}
+  name ShuffleCopy_CopyNormals
+  xpos 239
+  ypos 1522
+ }
+ Dot {
+  name Dot8
+  xpos 273
+  ypos 1921
+ }
+set N69145c30 [stack 0]
+push $N69134780
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name Shuffle_UseBlueChannel
+  xpos -162
+  ypos 1655
+ }
+ Expression {
+  temp_name0 b
+  temp_expr0 bias/2+0.5
+  temp_name1 i
+  temp_expr1 invert
+  temp_name2 m
+  temp_expr2 math
+  temp_name3 v
+  temp_expr3 i==0?r:1-r
+  channel0 rgba
+  expr0 (m==0)?v:(b**10)**(1-v)
+  name Expression_FacingRatioMath
+  xpos -162
+  ypos 1779
+ }
+ Clamp {
+  name Clamp
+  xpos -162
+  ypos 1827
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge_MaskWithAlpha
+  xpos -162
+  ypos 1918
+ }
+ Dot {
+  name Dot5
+  xpos -128
+  ypos 2079
+ }
+push $N69145c30
+ Switch {
+  inputs 2
+  which {{output_mask}}
+  name Switch_Output
+  label "\[value this.which]"
+  xpos 239
+  ypos 2070
+ }
+ Output {
+  name Output1
+  xpos 239
+  ypos 2192
+ }
+end_group

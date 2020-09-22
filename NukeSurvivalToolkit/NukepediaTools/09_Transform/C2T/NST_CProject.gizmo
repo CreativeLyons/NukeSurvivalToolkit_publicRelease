@@ -1,0 +1,124 @@
+Group {
+name CProject
+help "it is just cornerpin tracked\nnothing fancy at all\nhave fun!"
+knobChanged "nn = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\n\nif kn == \"cropP\":\n\n    if nn\['cropP'].value() in \[\"Hard Crop\"]:\n        nn\[\"growBbox\"].setVisible(False)\n        nn\[\"text\"].setValue(\"Image is cropped to Input, Concatenation preserved.\")\n\n    elif nn\['cropP'].value() in \[\"Adjustable Crop\"]:\n        nn\[\"growBbox\"].setVisible(True)\n        nn\[\"text\"].setValue(\"Adjust your Bbox , Downward <b><font color='Dark Red'>Concatenation is broken<b>.\")\n\n    elif nn\['cropP'].value() in \[\"No Crop\"]:\n        nn\[\"growBbox\"].setVisible(False)\n        nn\[\"text\"].setValue(\"No Crop applied, Concatenation preserved.\")"
+tile_color 0x7a4389ff
+note_font Verdana
+note_font_size 14
+note_font_color 0x28565eff
+addUserKnob {20 User l CProject}
+addUserKnob {6 FreezeInput l "freeze input" t "freezing the input on the refrence frame, \nsame as putting the framehold before the node" +STARTLINE}
+addUserKnob {22 python_button l "set current as reference frame" T "\nn = nuke.thisNode()\nfor one in range(1,5):\n   n\['from'+str(one)].setValue(n\['to'+str(one)].value()) \n\nframe = nuke.frame()\nn\['refFrame'].setValue(frame)\nn\['label'].setValue(str(frame))\n\nnuke.toNode(\"FHold\")\['first_frame'].setValue(frame)\n" +STARTLINE}
+addUserKnob {26 text_2 l "" -STARTLINE T or}
+addUserKnob {22 setRefFrame l "set reference frame" t "setting the reference frame,\nsame as the reference frame when you are doing projection with the camera on the card.\nyou should expect that the input will be unchenged on this frame." -STARTLINE T "\nn = nuke.thisNode()\nfor one in range(1,5):\n   n\['from'+str(one)].setValue(n\['to'+str(one)].value()) \n\n\nframe = int(n\['refFrame'].value())\nn\['label'].setValue(str(frame))\n\nnuke.toNode(\"FHold\")\['first_frame'].setValue(frame)\n\n"}
+addUserKnob {3 refFrame l "" -STARTLINE}
+refFrame 69
+addUserKnob {41 set_to_input l "Set to input" t "this will distort the input texture with the corner pin, it is the same as applying the texture on the card " T CornerPin2D2.set_to_input}
+addUserKnob {41 invert l stabilize t "stabilize the input on the reference frame" T CornerPin2D2.invert}
+addUserKnob {41 motionblur T CornerPin2D2.motionblur}
+addUserKnob {41 shutter T CornerPin2D2.shutter}
+addUserKnob {20 s l "" +STARTLINE n 1}
+s 0
+addUserKnob {41 shutteroffset l "shutter offset" -STARTLINE T CornerPin2D2.shutteroffset}
+addUserKnob {41 shuttercustomoffset -STARTLINE T CornerPin2D2.shuttercustomoffset}
+addUserKnob {41 clamp T CornerPin2D2.clamp}
+addUserKnob {41 black_outside l "black outside" -STARTLINE T CornerPin2D2.black_outside}
+addUserKnob {41 filter_1 l filter T Reformat1.filter}
+addUserKnob {26 add l "" +STARTLINE T "source card, camera..."}
+addUserKnob {26 camera l camera: T Camera2}
+addUserKnob {13 translate}
+translate {0.1914808601 -0.1767024994 0.4249224663}
+addUserKnob {13 rotation}
+rotation {-20.90365344 -156.0216134 0}
+addUserKnob {20 endGroup n -1}
+addUserKnob {26 ""}
+addUserKnob {4 cropP l crop M {"Hard Crop" "Adjustable Crop" "No Crop"}}
+addUserKnob {7 growBbox l "grow Bbox" -STARTLINE +HIDDEN R 0 200}
+growBbox 50
+addUserKnob {41 o l overscan +DISABLED +HIDDEN +INVISIBLE T Crop1.o}
+addUserKnob {26 text l tip T "Image is cropped to Input, Concatenation preserved."}
+addUserKnob {26 ""}
+addUserKnob {26 element l element: T elem}
+addUserKnob {20 fromto l From/To}
+addUserKnob {41 from4 -STARTLINE T CornerPin2D2.from4}
+addUserKnob {41 from3 -STARTLINE T CornerPin2D2.from3}
+addUserKnob {41 from1 T CornerPin2D2.from1}
+addUserKnob {41 from2 -STARTLINE T CornerPin2D2.from2}
+addUserKnob {26 ""}
+addUserKnob {41 to4 T CornerPin2D2.to4}
+addUserKnob {41 to3 -STARTLINE T CornerPin2D2.to3}
+addUserKnob {41 to1 T CornerPin2D2.to1}
+addUserKnob {41 to2 -STARTLINE T CornerPin2D2.to2}
+}
+Input {
+ inputs 0
+ name Input1
+ xpos 112
+ ypos -259
+}
+FrameHold {
+ first_frame 59
+ name FHold
+ xpos 112
+ ypos -207
+ disable {{!parent.FreezeInput}}
+}
+CornerPin2D {
+ to1 {0 0}
+ to2 {0 0}
+ to3 {0 0}
+ to4 {0 0}
+ invert false
+ shutteroffset centred
+ from1 {0 0}
+ from2 {0 0}
+ from3 {0 0}
+ from4 {0 0}
+ name CornerPin2D2
+ xpos 112
+ ypos -171
+ addUserKnob {20 User}
+ addUserKnob {22 "set reference frame" -STARTLINE T cornerPinZero()}
+}
+set N26348700 [stack 0]
+Dot {
+ name Dot1
+ xpos 14
+ ypos -62
+}
+push $N26348700
+Crop {
+ box {{curve-parent.growBbox} {curve-parent.growBbox} {width+parent.growBbox} {height+parent.growBbox}}
+ name Crop1
+ xpos 112
+ ypos -62
+ addUserKnob {20 User}
+ addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+}
+push $N26348700
+Reformat {
+ type "to box"
+ format "4096 2160 0 0 4096 2160 1 4K_DCP"
+ box_width {{width}}
+ box_height {{height}}
+ box_pixel_aspect {{pixel_aspect}}
+ resize none
+ name Reformat1
+ selected true
+ xpos 223
+ ypos -69
+}
+Switch {
+ inputs 3
+ which {{parent.cropP x1000 0}}
+ name Switch1
+ label "\[value which]"
+ xpos 112
+ ypos 10
+}
+Output {
+ name Output1
+ xpos 112
+ ypos 106
+}
+end_group

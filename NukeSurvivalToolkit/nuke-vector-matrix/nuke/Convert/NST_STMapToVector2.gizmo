@@ -1,0 +1,47 @@
+Group {
+ name STMapToVector2_
+ help "Transforms a distorted UV Map to Motion Vectors corresponding to the distortion."
+ addUserKnob {20 UV_to_Vectors l "STMap to Vector2"}
+ addUserKnob {41 in l UV_Layer t "Select the layer containing your UV_map" T UV_Channel.in}
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -291
+  ypos -63
+ }
+set Na0950a0 [stack 0]
+ Shuffle {
+  name UV_Channel
+  xpos -151
+  ypos -17
+ }
+ Expression {
+  expr0 -x+r*width-0.5
+  expr1 -y+g*height-0.5
+  channel2 {-rgba.red -rgba.green -rgba.blue none}
+  channel3 {none none none -rgba.alpha}
+  name UV_to_Vectors1
+  xpos -151
+  ypos 97
+ }
+push $Na0950a0
+ ShuffleCopy {
+  inputs 2
+  in2 none
+  red red
+  green green
+  alpha black
+  out {{{parent.UV_Channel.in}}}
+  name ShuffleCopy1
+  xpos -291
+  ypos 97
+ }
+ Output {
+  name Output1
+  xpos -291
+  ypos 167
+ }
+end_group

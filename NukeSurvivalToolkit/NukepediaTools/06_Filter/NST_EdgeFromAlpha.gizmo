@@ -1,0 +1,131 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name EdgeFromAlpha
+ note_font Verdana
+ selected true
+ mapsize {0.15 0.15}
+ addUserKnob {20 "" l Settings}
+ addUserKnob {41 from0 l "control channel" T Copy2.from0}
+ addUserKnob {41 output T ChannelMerge4.output}
+ addUserKnob {41 blackpoint T Grade1.blackpoint}
+ addUserKnob {41 whitepoint T Grade1.whitepoint}
+ addUserKnob {26 "" l "edge size"}
+ addUserKnob {41 size l inside T ErodeInside.size}
+ addUserKnob {14 ErodeOutside_size l outside R 0 100}
+ ErodeOutside_size 3
+ addUserKnob {26 "" l "edge blur"}
+ addUserKnob {41 size_3 l inside T BlurInside.size}
+ addUserKnob {41 size_1 l outside T BlurOutside.size}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -448
+  ypos 2
+ }
+ AddChannels {
+  channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  name AddChannels1
+  xpos -448
+  ypos 30
+ }
+set N37967ad0 [stack 0]
+push $N37967ad0
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.red
+  name Copy2
+  xpos -193
+  ypos 30
+ }
+ Clamp {
+  channels {rgba.red -rgba.green -rgba.blue}
+  name Clamp1
+  xpos -193
+  ypos 94
+ }
+ Grade {
+  channels {rgba.red -rgba.green -rgba.blue}
+  black_clamp false
+  name Grade1
+  xpos -193
+  ypos 146
+ }
+set N36ef2460 [stack 0]
+ Erode {
+  channels {none none none rgba.red}
+  size 3
+  name ErodeInside
+  xpos -126
+  ypos 198
+ }
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue}
+  name BlurInside
+  xpos -126
+  ypos 250
+ }
+push $N36ef2460
+ Erode {
+  channels {none none none rgba.red}
+  size {{-parent.ErodeOutside_size.w} {-parent.ErodeOutside_size.h}}
+  name ErodeOutside
+  xpos -264
+  ypos 199
+ }
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue}
+  name BlurOutside
+  xpos -264
+  ypos 251
+ }
+ ChannelMerge {
+  inputs 2
+  A rgba.red
+  operation stencil
+  B rgba.red
+  name ChannelMerge4
+  xpos -191
+  ypos 308
+ }
+set N36eeda60 [stack 0]
+ Dot {
+  name Dot1
+  xpos -52
+  ypos 324
+ }
+ Dot {
+  name Dot2
+  xpos -52
+  ypos 465
+ }
+push $N37967ad0
+ Dot {
+  name Dot3
+  xpos -414
+  ypos 416
+ }
+push $N36eeda60
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  name Copy1
+  xpos -191
+  ypos 407
+ }
+ Switch {
+  inputs 2
+  which {{"parent.output == 1" i}}
+  name Switch1
+  xpos -191
+  ypos 463
+ }
+ Output {
+  name Output1
+  xpos -191
+  ypos 526
+ }
+end_group

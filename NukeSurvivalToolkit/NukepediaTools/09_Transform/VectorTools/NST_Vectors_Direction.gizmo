@@ -1,0 +1,78 @@
+Group {
+ name Vectors_Direction
+ help "Edit the direction of motion vectors"
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {41 in l Vector_Layer t "Pick the layer containing your motion vectors." T UV_Channel.in}
+ addUserKnob {26 ""}
+ addUserKnob {6 shuffleXY l swapXY t "enable if it seems like X and Y vectors are in the wrong channel.\nRed should contain X\nGreen should contain Y" +STARTLINE}
+ addUserKnob {6 mirrorX t "negates X values" +STARTLINE}
+ addUserKnob {6 mirrorY t "Negates Y values" -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {7 rotation t "Rotates the vectors direction" R 0 360}
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" t www.erwanleroy.com +STARTLINE T "v1.0 - Part of VectorTools by Erwan Leroy - 2016"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -303
+  ypos 91
+ }
+set N58fb7c00 [stack 0]
+ Shuffle {
+  name UV_Channel
+  xpos -163
+  ypos 91
+ }
+ Shuffle {
+  red green
+  green red
+  name Shuffle1
+  xpos -163
+  ypos 128
+  disable {{1-parent.shuffleXY}}
+ }
+ Multiply {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  value -1
+  name neg_red1
+  xpos -163
+  ypos 165
+  disable {{1-parent.mirrorX}}
+ }
+ Multiply {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  value -1
+  name neg_green1
+  xpos -163
+  ypos 191
+  disable {{1-parent.mirrorY}}
+ }
+ Expression {
+  temp_name0 angleRad
+  temp_expr0 radians(parent.rotation)
+  expr0 "r * cos(angleRad) - g * sin(angleRad)"
+  expr1 "r * sin(angleRad) + g * cos(angleRad)"
+  name Direction
+  xpos -163
+  ypos 228
+ }
+push $N58fb7c00
+ ShuffleCopy {
+  inputs 2
+  in2 none
+  red red
+  green green
+  alpha black
+  out {{{parent.UV_Channel.in}}}
+  name ShuffleCopy1
+  xpos -303
+  ypos 228
+ }
+ Output {
+  name Output1
+  xpos -303
+  ypos 299
+ }
+end_group

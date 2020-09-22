@@ -1,0 +1,1016 @@
+Group {
+ name X_Tesla
+ help "With this gizmo you can create lightning and electricity effects"
+ tile_color 0x1a3d99ff
+ gl_color 0xbed7ffff
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 Base}
+ addUserKnob {12 point1}
+ point1 {578 1162}
+ addUserKnob {12 point2 t "Sets the final point of the lightning, where the bolt dies."}
+ point2 {1428 496}
+ addUserKnob {3 arcs l bolts t "A general multiplier that duplicates the entire structure multiple times, using the same settings for all the lightning bolts."}
+ arcs 1
+ addUserKnob {26 ""}
+ addUserKnob {7 amplitude t "The bigger the amplitude, the less straight and more wiggly the lightning will be." R 0 500}
+ amplitude 250
+ addUserKnob {7 soft_start l "soft start" t "Sets the initial amplitude. Values over 0 will assure that the lightning starts in the point1. Bigger values make a smoother transition."}
+ soft_start 0.255
+ addUserKnob {7 soft_end l "soft end" t "Sets the final amplitude. A value over 0 will assure that the lightning dies at point2. Bigger values make a smoother transition."}
+ soft_end 0.04
+ addUserKnob {26 ""}
+ addUserKnob {7 frequency t "How often the lightning changes direction. Higher values will do smaller shapes."}
+ frequency 0.4
+ addUserKnob {3 complexity t "How many octaves are used in the fractal noise. Higher values will produce a more detailed lightning, but it is slower. Usually there's no difference over 8 octaves."}
+ complexity 6
+ addUserKnob {7 secondary_amplitude l "secondary amp" t "Each octave has its amplitude scaled by this much. A value of .5 means that each iteration will have half of the influence of the previous octave." R 0 2}
+ secondary_amplitude 0.4
+ addUserKnob {7 secondary_frequency l "secondary freq" t "Each octave has its frequency scaled by this much. A value of 2 means that each iteration will add detail twice as small."}
+ secondary_frequency 0.42
+ addUserKnob {26 ""}
+ addUserKnob {7 size l width t "The width of the entire lightning. Higher values will create thicker bolts. The units are pixels, so a width of 10 means that the maximum width that the lightning will have is 10." R 0 100}
+ size 10
+ addUserKnob {7 end_size l "end width" t "The factor at which the width is scaled at the end of the lightning. A value of 1 means that the with is constant, and a value of 0 means that the lightning will get thinner the closer it gets to the second point."}
+ addUserKnob {20 Branches}
+ addUserKnob {3 branches t "The number of secondary branches born from each main bolt"}
+ branches 5
+ addUserKnob {7 random_spacing l "random spacing" t "When set to 0, secondary branches will be born from equidistant points along the main bolt. A more random spacing will make the branches less evenly distributed."}
+ random_spacing 0.2
+ addUserKnob {26 ""}
+ addUserKnob {7 direction t "The tendency of the secondary branches to point in the same direction as the main bolt."}
+ direction 0.2
+ addUserKnob {7 random_direction l randomize t "A random value for the direction. It will make the secondary branches point in different directions."}
+ random_direction 0.5
+ addUserKnob {26 ""}
+ addUserKnob {7 length t "The length of the secondary branches, relative to the length of the main bolt." R 0 2}
+ length 0.935
+ addUserKnob {7 random_length l randomize t "Makes the secondary branches have different sizes between each other."}
+ random_length 0.5
+ addUserKnob {26 ""}
+ addUserKnob {7 branch_amplitude l amplitude t "How turbulent will the secondary branches be, relative to the main bolt."}
+ branch_amplitude 2
+ addUserKnob {7 random_amplitude l randomize t "Makes the secondary branches have different amplitudes between each other."}
+ random_amplitude 0.5
+ addUserKnob {26 ""}
+ addUserKnob {7 branch_size l width t "The width of the stroke, relative to the main bolt." R 0 2}
+ branch_size 1
+ addUserKnob {7 branch_end_size l "end size" t "The width at the end of the branches"}
+ branch_end_size 0.1
+ addUserKnob {7 random_branch_size l randomize t "Different branches will have slightly different width values."}
+ random_branch_size 0.2
+ addUserKnob {20 Animation}
+ addUserKnob {7 speed t "The rate of change of the lightning shape. The bigger the value, the faster it will move."}
+ speed 10
+ addUserKnob {7 flow t "The shape of the lightning can flow from the start to the end of the bolt, givig the feeling that the energy is moving forwards"}
+ flow 30
+ addUserKnob {26 ""}
+ addUserKnob {7 retract t "Use this to animate the lightning growing or shrinking."}
+ addUserKnob {26 ""}
+ addUserKnob {3 seed}
+ seed 42
+ addUserKnob {22 make_random_seed l "Random Seed" -STARTLINE T "import random\n\nnuke.thisNode()\['seed'].setValue( random.randint(1,999) )"}
+ addUserKnob {20 Render}
+ addUserKnob {68 mode M {"Stroke Only (faster)" "Medium Quality (slow)" "Best Quality (very slow)" "" "" ""}}
+ mode "Best Quality (very slow)"
+ addUserKnob {18 primary_color l primary}
+ primary_color {1 0.875814 0.732576}
+ addUserKnob {6 primary_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 primary_color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 secondary_color l secondary}
+ secondary_color {0.372524 0.663819 1}
+ addUserKnob {6 secondary_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 secondary_color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 saturation R 0 2}
+ saturation 0.8
+ addUserKnob {7 global_intensity l intensity R 0 10}
+ global_intensity 1
+ addUserKnob {26 ""}
+ addUserKnob {7 chromatic_aberration l aberration R 0 10}
+ chromatic_aberration 2
+ addUserKnob {7 sharpening R 0 10}
+ sharpening 2
+ addUserKnob {26 ""}
+ addUserKnob {26 Glow_Text l Glow}
+ addUserKnob {7 glow l radius R 0 1000}
+ glow 300
+ addUserKnob {7 intensity}
+ intensity 0.3
+ addUserKnob {6 soft_highlights l "soft highlights" -STARTLINE}
+ soft_highlights true
+ addUserKnob {7 gamma R 0 3}
+ gamma 1.5
+ addUserKnob {7 noise R 0 10}
+ addUserKnob {20 about l About}
+ addUserKnob {26 about_1 l "" t "A bunny:\n(\\(\\ \n( - -)\n((') (')" +STARTLINE T "<br>\n<b>Xavier Martín © 2016</b>"}
+ addUserKnob {26 ""}
+ addUserKnob {26 website l "" +STARTLINE T "<a href=\"http://www.xaviermartinvfx.com\"><span style=\"color:#C8C8C8;\">www.xaviermartinvfx.com</span></a>"}
+ addUserKnob {26 space4_1 l "" +STARTLINE T <br>}
+ addUserKnob {22 version l "<center>   version   </center>" T "nuke.message('X_Tesla Gizmo <i>v2.0</i><br><b>Xavier Martín © 2016</b>')\nnuke.message('<i><center>To my grandad, wherever you are, know we love you.</center></i>')" +STARTLINE}
+ addUserKnob {22 help_1 l "<center> ? " -STARTLINE T "nuke.message('You can find more documentation<br>on <a href=\"http://www.nukepedia.com/gizmos/draw/x_tesla\"><span style=\"color:#BCBCBC;\">Nukepedia</span></a> or my <a href=\"http://www.xaviermartinvfx.com/x_tesla/\"><span style=\"color:#BCBCBC;\">website</span></a>.')"}
+}
+ Crop {
+  inputs 0
+  box {0 0 {parent.Crop1.box.r} 1}
+  reformat true
+  intersect true
+  crop false
+  name Crop3
+  xpos -251
+  ypos -190
+ }
+set Ne968f1f0 [stack 0]
+ Noise {
+  output {-rgba.red rgba.green -rgba.blue none}
+  size {{100/frequency} 1}
+  zoffset {{speed*frame/100+(frame-int(frame))*11107.7}}
+  octaves {{complexity}}
+  lacunarity {{1/secondary_frequency}}
+  gain {{secondary_amplitude}}
+  gamma 1
+  translate {{frame*flow} {-seed*717}}
+  scale {1 1}
+  xrotate 0
+  yrotate 0
+  name Noise2
+  xpos -129
+  ypos -190
+ }
+ Multiply {
+  value 2
+  name Multiply4
+  xpos -129
+  ypos -164
+ }
+ Add {
+  value -1
+  name Add2
+  xpos -129
+  ypos -126
+ }
+ Reformat {
+  type scale
+  scale {1 {max(amplitude,size+amplitude/2)}}
+  filter Impulse
+  name Reformat4
+  xpos -129
+  ypos -88
+ }
+ Dot {
+  name Dot1
+  xpos -95
+  ypos 85
+ }
+push $Ne968f1f0
+ Expression {
+  channel0 none
+  expr0 "y<amplitude/2 "
+  expr1 1-((-cx/2+.5))**2
+  expr2 "(((-cx/2+.5))*(1+size - 1-branch_end_size)+(1+branch_end_size*size))"
+  channel3 none
+  expr3 fBm(x/100*frequency,seed*717,speed*frame/100,complexity,1/secondary_frequency,secondary_amplitude)*smoothstep(0,soft_start*Crop1.box.r,x)*smoothstep(0,soft_end*Crop1.box.r,Crop1.box.r-x)/clamp((smoothstep(0,soft_start,.5)*smoothstep(0,soft_end,.5))*2,0,1)**2
+  name Expression2
+  xpos -251
+  ypos -164
+ }
+ Reformat {
+  type scale
+  scale {1 {max(amplitude*branch_amplitude,size*branch_size+amplitude*branch_amplitude/2)}}
+  filter Impulse
+  name Reformat3
+  xpos -251
+  ypos -138
+ }
+ Expression {
+  expr0 -abs(y-(max(amplitude*branch_amplitude,size+amplitude*branch_amplitude/2))/2)+b/2
+  name Expression3
+  xpos -251
+  ypos -112
+ }
+ Remove {
+  operation keep
+  channels {rgba.red rgba.green -rgba.blue none}
+  name Remove2
+  xpos -251
+  ypos -86
+ }
+ NoTimeBlur {
+  rounding floor
+  name NoTimeBlur1
+  xpos -251
+  ypos -48
+ }
+ Clamp {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  maximum_enable false
+  name Clamp1
+  xpos -251
+  ypos -22
+ }
+ Transform {
+  scale {1 {"((1-(Transform4.translate.x/Crop1.box.r))*(1-end_size)+end_size)*branch_size*(1-random(seed*123+(frame-int(frame))*branches*10)*random_branch_size)             "}}
+  center {0 {format.t/2}}
+  black_outside false
+  name Transform3
+  xpos -251
+  ypos 4
+ }
+ Reformat {
+  type scale
+  scale {{length*(1-random(seed*71+(frame-int(frame))*branches*10)*random_length)} 1}
+  name Reformat5
+  xpos -251
+  ypos 30
+ }
+ Multiply {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  value {1 {1-random_amplitude+random(seed*71+(frame-int(frame))*branches)*random_amplitude} 1 1}
+  value_panelDropped true
+  name Multiply1
+  xpos -251
+  ypos 56
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  Achannels {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  Bchannels {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  name Merge3
+  xpos -251
+  ypos 81
+ }
+ Multiply {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  value {{Transform3.scale.h/branch_size/branch_size*.5}}
+  name Multiply5
+  xpos -251
+  ypos 107
+ }
+ Crop {
+  box {0 0 {format.r} {format.t}}
+  crop false
+  name Crop4
+  xpos -251
+  ypos 145
+ }
+ IDistort {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  uv {-rgba.red rgba.green}
+  uv_scale {0 {amplitude/2*branch_amplitude}}
+  name IDistort2
+  xpos -251
+  ypos 171
+ }
+ Transform {
+  translate {{(random(seed*71+(frame-int(frame))*10*branches)*random_spacing+(frame-int(frame))*(1-random_spacing))*Crop1.box.r} {-(fBm((translate.x-int(frame)*flow)/100*frequency,seed*717,speed*int(frame)/100,complexity,1/secondary_frequency,secondary_amplitude)*smoothstep(0,soft_start*Crop1.box.r,translate.x)*smoothstep(0,soft_end*Crop1.box.r,Crop1.box.r-translate.x)/clamp((smoothstep(0,soft_start,.5)*smoothstep(0,soft_end,.5))*2,0,1)**2)*amplitude/2+(1-branch_amplitude)*amplitude/2}}
+  rotate {{(-1)**(int((frame-int(frame))*branches*10))*direction*90*(1-random(seed*111+((frame-int(frame))*branches*11))*random_direction*2)}}
+  center {0 {format.t/2}}
+  clamp true
+  name Transform4
+  xpos -251
+  ypos 197
+ }
+ Remove {
+  operation keep
+  channels {rgba.red -rgba.green -rgba.blue none}
+  name Remove1
+  xpos -251
+  ypos 223
+ }
+ Add {
+  value {{-size/branch_size*retract*.5}}
+  name Add3
+  xpos -251
+  ypos 261
+ }
+ Clamp {
+  maximum {{size/2*(1-retract)}}
+  name Clamp3
+  xpos -251
+  ypos 299
+ }
+ TimeBlur {
+  divisions {{branches-1}}
+  shutter 1
+  shutteroffset start
+  shuttercustomoffset 0
+  name TimeBlur2
+  xpos -251
+  ypos 337
+ }
+ Multiply {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  value {{branches}}
+  name Multiply2
+  xpos -251
+  ypos 363
+ }
+ Crop {
+  inputs 0
+  box {0 0 {hypot(point1.x-point2.x,point1.y-point2.y)} 1}
+  reformat true
+  intersect true
+  crop false
+  name Crop1
+  xpos -29
+  ypos 39
+ }
+set Ne95aa750 [stack 0]
+ Noise {
+  output {-rgba.red rgba.green -rgba.blue none}
+  size {{100/frequency} 1}
+  zoffset {{speed*frame/100}}
+  octaves {{complexity}}
+  lacunarity {{1/secondary_frequency}}
+  gain {{secondary_amplitude}}
+  gamma 1
+  translate {{frame*flow} {-seed*717}}
+  scale {1 1}
+  xrotate 0
+  yrotate 0
+  name Noise1
+  xpos 96
+  ypos 39
+ }
+ Multiply {
+  value 2
+  name Multiply3
+  xpos 96
+  ypos 65
+ }
+ Add {
+  value -1
+  name Add1
+  xpos 96
+  ypos 103
+ }
+ Reformat {
+  type scale
+  scale {1 {max(amplitude,size+amplitude/2)}}
+  filter Impulse
+  name Reformat2
+  xpos 96
+  ypos 195
+ }
+push $Ne95aa750
+ Expression {
+  channel0 none
+  expr0 "y<amplitude/2 "
+  expr1 smoothstep(0,soft_start*Crop1.box.r,x)*smoothstep(0,soft_end*Crop1.box.r,Crop1.box.r-x)/clamp((smoothstep(0,soft_start,.5)*smoothstep(0,soft_end,.5))*2,0,1)**2
+  expr2 ((-cx/2+.5))*size*(1-end_size)+end_size*size
+  channel3 none
+  expr3 fBm(x/100*frequency,seed*717,speed*frame/100,complexity,1/secondary_frequency,secondary_amplitude)*smoothstep(0,soft_start*Crop1.box.r,x)*smoothstep(0,soft_end*Crop1.box.r,Crop1.box.r-x)/clamp((smoothstep(0,soft_start,.5)*smoothstep(0,soft_end,.5))*2,0,1)**2
+  name Expression1
+  xpos -29
+  ypos 65
+ }
+ Reformat {
+  type scale
+  scale {1 {max(amplitude,size+amplitude/2)}}
+  filter Impulse
+  name Reformat1
+  xpos -29
+  ypos 91
+ }
+ Expression {
+  expr0 -abs(y-(max(amplitude,size+amplitude/2))/2)+b/2
+  name Expression4
+  xpos -29
+  ypos 117
+ }
+ NoTimeBlur {
+  rounding floor
+  name NoTimeBlur2
+  xpos -29
+  ypos 143
+ }
+ Remove {
+  operation keep
+  channels {rgba.red rgba.green -rgba.blue none}
+  name Remove3
+  xpos -29
+  ypos 169
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  Achannels {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  Bchannels {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  name Merge2
+  xpos -29
+  ypos 195
+ }
+ Clamp {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  maximum_enable false
+  name Clamp2
+  xpos -29
+  ypos 221
+ }
+ IDistort {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  uv {-rgba.red rgba.green}
+  uv_scale {0 {amplitude/2}}
+  name IDistort1
+  xpos -29
+  ypos 247
+ }
+ BlackOutside {
+  name BlackOutside1
+  xpos -29
+  ypos 273
+ }
+ Remove {
+  operation keep
+  channels {rgba.red -rgba.green -rgba.blue none}
+  name Remove4
+  xpos -29
+  ypos 299
+ }
+ Add {
+  value {{-size*retract}}
+  name Add4
+  xpos -29
+  ypos 325
+ }
+ Merge2 {
+  inputs 2
+  operation max
+  Achannels {rgba.red -rgba.green -rgba.blue none}
+  Bchannels {rgba.red -rgba.green -rgba.blue none}
+  output {rgba.red -rgba.green -rgba.blue none}
+  name Merge4
+  xpos -29
+  ypos 363
+ }
+set Nea143860 [stack 0]
+push $Nea143860
+ FrameHold {
+  first_frame {{frame+(frame-int(frame))*123}}
+  name FrameHold1
+  xpos -29
+  ypos 400
+ }
+ TimeBlur {
+  divisions {{parent.arcs}}
+  shutter 50
+  shutteroffset start
+  shuttercustomoffset 0
+  name TimeBlur3
+  xpos -29
+  ypos 438
+ }
+ Multiply {
+  value {{parent.arcs}}
+  name Multiply6
+  xpos -29
+  ypos 464
+ }
+ Switch {
+  inputs 2
+  which {{"arcs <= 1"}}
+  name Switch1
+  xpos -29
+  ypos 502
+ }
+ Transform {
+  translate {{point1.x} {point1.y-amplitude/2}}
+  rotate {{-atan2(point1.y-point2.y,-point1.x+point2.x)/2/pi*360}}
+  center {0 {amplitude/2}}
+  black_outside false
+  name Transform1
+  xpos -29
+  ypos 528
+ }
+set Nea170780 [stack 0]
+ Dot {
+  name Dot2
+  xpos 548
+  ypos 532
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle1
+  xpos 514
+  ypos 1204
+ }
+push $Nea170780
+ Crop {
+  box {{parent.Crop2.box.x} {parent.Crop2.box.y} {parent.Crop2.box.r} {parent.Crop2.box.t}}
+  intersect true
+  crop false
+  name Crop5
+  xpos -29
+  ypos 554
+ }
+ Reformat {
+  type scale
+  scale 0.5
+  pbb true
+  name Reformat6
+  xpos -29
+  ypos 580
+  disable {{"1-(mode == 1)"}}
+ }
+ Expression {
+  expr0 2*r/(r+1)
+  name Expression5
+  xpos -29
+  ypos 606
+ }
+ Multiply {
+  value {{parent.global_intensity}}
+  name Multiply9
+  xpos -29
+  ypos 632
+ }
+set Nea1af1a0 [stack 0]
+ Gamma {
+  value 0.5
+  name Gamma2
+  xpos 111
+  ypos 632
+ }
+ Dot {
+  name Dot14
+  xpos 254
+  ypos 642
+ }
+set Ne94a9eb0 [stack 0]
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{"glow*(1-(mode == 1)*.5)"}}
+  filter quadratic
+  quality {{"mode == 2 ? ceil(size) : 10"}}
+  name Blur5
+  xpos 294
+  ypos 638
+ }
+ Dot {
+  name Dot20
+  xpos 438
+  ypos 642
+ }
+push $Ne94a9eb0
+ Dot {
+  name Dot15
+  xpos 254
+  ypos 664
+ }
+set Nea1bd9d0 [stack 0]
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{"glow/2*(1-(mode == 1)*.5)"}}
+  filter quadratic
+  quality {{"mode == 2 ? ceil(size) : 10"}}
+  name Blur4
+  xpos 294
+  ypos 660
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox A
+  Achannels {rgba.red -rgba.green -rgba.blue none}
+  Bchannels {rgba.red -rgba.green -rgba.blue none}
+  output {rgba.red -rgba.green -rgba.blue none}
+  name Merge12
+  xpos 404
+  ypos 660
+ }
+push $Nea1bd9d0
+ Dot {
+  name Dot16
+  xpos 254
+  ypos 690
+ }
+set Nea1da200 [stack 0]
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{"glow/4*(1-(mode == 1)*.5)"}}
+  filter quadratic
+  quality {{"mode == 2 ? ceil(size) : 10"}}
+  name Blur3
+  xpos 294
+  ypos 686
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox A
+  Achannels {rgba.red -rgba.green -rgba.blue none}
+  Bchannels {rgba.red -rgba.green -rgba.blue none}
+  output {rgba.red -rgba.green -rgba.blue none}
+  name Merge13
+  xpos 404
+  ypos 686
+ }
+push $Nea1da200
+ Dot {
+  name Dot23
+  xpos 254
+  ypos 716
+ }
+set Nea1f6930 [stack 0]
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{"glow/16*(1-(mode == 1)*.5)"}}
+  filter quadratic
+  quality {{"mode == 2 ? ceil(size) : 10"}}
+  name Blur7
+  xpos 294
+  ypos 712
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox A
+  Achannels {rgba.red -rgba.green -rgba.blue none}
+  Bchannels {rgba.red -rgba.green -rgba.blue none}
+  output {rgba.red -rgba.green -rgba.blue none}
+  name Merge18
+  xpos 404
+  ypos 712
+ }
+push $Nea1f6930
+ Dot {
+  name Dot18
+  xpos 254
+  ypos 742
+ }
+set Nea215a20 [stack 0]
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{"glow/32*(1-(mode == 1)*.5)"}}
+  filter quadratic
+  quality {{"mode == 2 ? ceil(size) : 10"}}
+  name Blur2
+  xpos 294
+  ypos 738
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox A
+  Achannels {rgba.red -rgba.green -rgba.blue none}
+  Bchannels {rgba.red -rgba.green -rgba.blue none}
+  output {rgba.red -rgba.green -rgba.blue none}
+  name Merge14
+  xpos 404
+  ypos 738
+ }
+push $Nea215a20
+ Dot {
+  name Dot19
+  xpos 254
+  ypos 768
+ }
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{"glow/64*(1-(mode == 1)*.5)"}}
+  filter quadratic
+  quality {{"mode == 2 ? ceil(size) : 10"}}
+  name Blur1
+  xpos 294
+  ypos 764
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox A
+  Achannels {rgba.red -rgba.green -rgba.blue none}
+  Bchannels {rgba.red -rgba.green -rgba.blue none}
+  output {rgba.red -rgba.green -rgba.blue none}
+  name Merge15
+  xpos 404
+  ypos 764
+ }
+ Crop {
+  box {{parent.Crop2.box.x} {parent.Crop2.box.y} {parent.Crop2.box.r} {parent.Crop2.box.t}}
+  intersect true
+  crop false
+  name Crop6
+  xpos 404
+  ypos 790
+ }
+ Multiply {
+  channels rgba
+  value {{parent.intensity}}
+  name Multiply7
+  xpos 404
+  ypos 816
+ }
+set Ne94cf030 [stack 0]
+ Noise {
+  output {rgba.red -rgba.green -rgba.blue none}
+  cliptype bbox
+  replace true
+  size {{parent.Noise1.size.0*((mode==2)+1)}}
+  zoffset {{parent.Noise1.zoffset}}
+  octaves {{parent.Noise1.octaves}}
+  lacunarity {{parent.Noise1.lacunarity}}
+  gain {{parent.Noise1.gain}}
+  gamma 1
+  rotate {{parent.Transform1.rotate}}
+  center {{parent.point1.x} {parent.point1.y}}
+  name Noise3
+  xpos 294
+  ypos 816
+ }
+set Nea0532e0 [stack 0]
+ Multiply {
+  value {{parent.noise}}
+  name Multiply8
+  xpos 294
+  ypos 844
+ }
+ Add {
+  value 1
+  name Add5
+  xpos 294
+  ypos 882
+ }
+ Shuffle {
+  in rgb
+  green red
+  blue red
+  out rgb
+  name Shuffle4
+  xpos 294
+  ypos 920
+ }
+push $Ne94cf030
+ Shuffle {
+  in rgb
+  green red
+  blue red
+  alpha black
+  out rgb
+  name Shuffle2
+  xpos 404
+  ypos 842
+ }
+ Grade {
+  multiply {{parent.primary_color.r} {parent.primary_color.g} {parent.primary_color.b} 0}
+  multiply_panelDropped true
+  gamma {{parent.secondary_color.r} {parent.secondary_color.g} {parent.secondary_color.b} 0}
+  name Grade1
+  xpos 404
+  ypos 868
+ }
+ Gamma {
+  channels rgb
+  value {{gamma}}
+  name Gamma1
+  xpos 404
+  ypos 894
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  Bchannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Multiply
+  xpos 404
+  ypos 920
+  disable {{parent.noise==0}}
+ }
+ Expression {
+  expr0 r/(r+1)*1.2
+  expr1 g/(g+1)*1.2
+  expr2 b/(b+1)*1.2
+  name Expression6
+  xpos 404
+  ypos 946
+  disable {{1-parent.soft_highlights}}
+ }
+push $Nea0532e0
+ Blur {
+  size {{15*(1+(mode==2))}}
+  name Blur8
+  xpos 191
+  ypos 810
+ }
+ Dot {
+  name Dot3
+  xpos 225
+  ypos 848
+ }
+set Nea26cc40 [stack 0]
+ Matrix {
+  channels rgba
+  matrix {
+      {0 0 0}
+      {-100 0 100}
+      {0 0 0}
+    }
+  name Matrix1
+  xpos 191
+  ypos 876
+ }
+push $Nea26cc40
+ Matrix {
+  channels rgba
+  matrix {
+      {0 -100 0}
+      {0 0 0}
+      {0 100 0}
+    }
+  name Matrix2
+  xpos 81
+  ypos 844
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.green
+  name Copy1
+  xpos 81
+  ypos 870
+ }
+push $Nea1af1a0
+ Blur {
+  size 2
+  filter box
+  maskChannelInput -rgba.red
+  name Blur6
+  xpos -29
+  ypos 748
+  disable {{"1- (mode==2)"}}
+ }
+ FilterErode {
+  channels {none none none rgba.red}
+  filter gaussian
+  maskChannelInput -rgba.red
+  invert_mask true
+  fringe true
+  name FilterErode1
+  xpos -29
+  ypos 786
+  disable {{"1- (mode==2)"}}
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle3
+  xpos -29
+  ypos 885
+ }
+ Grade {
+  multiply {{parent.primary_color.r} {parent.primary_color.g} {parent.primary_color.b} 0}
+  multiply_panelDropped true
+  gamma {{parent.secondary_color.r} {parent.secondary_color.g} {parent.secondary_color.b} 0}
+  name Grade2
+  xpos -29
+  ypos 970
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 forward.u
+  from1 rgba.green
+  to1 forward.v
+  name Copy2
+  xpos 81
+  ypos 957
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox A
+  Achannels {rgba.red rgba.green rgba.blue none}
+  Bchannels {rgba.red rgba.green rgba.blue none}
+  output {rgba.red rgba.green rgba.blue none}
+  name Merge5
+  xpos 404
+  ypos 970
+ }
+ Saturation {
+  saturation {{parent.saturation}}
+  mode Average
+  name Saturation1
+  xpos 404
+  ypos 996
+ }
+ VectorBlur {
+  channels {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  uv motion
+  scale {{parent.chromatic_aberration*(1+(mode==2)*3)}}
+  offset -1
+  name VectorBlur1
+  xpos 404
+  ypos 1022
+ }
+ VectorBlur {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  uv motion
+  scale {{parent.VectorBlur1.scale}}
+  name VectorBlur2
+  xpos 404
+  ypos 1048
+ }
+ VectorBlur {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  uv motion
+  scale {{parent.VectorBlur1.scale}}
+  offset 0
+  name VectorBlur3
+  xpos 404
+  ypos 1074
+ }
+set Nea30b550 [stack 0]
+ Sharpen {
+  channels rgb
+  amount {{parent.sharpening}}
+  filter quadratic
+  name Sharpen1
+  xpos 294
+  ypos 1074
+ }
+ Dot {
+  name Dot4
+  xpos 328
+  ypos 1104
+ }
+push $Nea30b550
+ Merge2 {
+  inputs 2
+  operation max
+  mix {{1-1/parent.Sharpen1.amount}}
+  name Merge6
+  xpos 404
+  ypos 1100
+ }
+ Reformat {
+  type scale
+  scale 2
+  pbb true
+  name Reformat7
+  xpos 404
+  ypos 1126
+  disable {{"1-(mode == 1)"}}
+ }
+ Crop {
+  box {{parent.Crop2.box.x} {parent.Crop2.box.y} {parent.Crop2.box.r} {parent.Crop2.box.t}}
+  intersect true
+  crop false
+  name Crop7
+  xpos 404
+  ypos 1152
+ }
+ BlackOutside {
+  name BlackOutside2
+  xpos 404
+  ypos 1178
+ }
+ Switch {
+  inputs 2
+  which {{"mode == 0"}}
+  name Switch2
+  xpos 404
+  ypos 1204
+ }
+ Reformat {
+  format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+  resize none
+  center false
+  filter Impulse
+  pbb true
+  name Reformat8
+  xpos 404
+  ypos 1232
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 646
+  ypos 1097
+ }
+ Crop {
+  box {{format.x} {format.y} {format.r} {format.t}}
+  crop false
+  name Crop2
+  xpos 646
+  ypos 1145
+  disable true
+ }
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos 646
+  ypos 1232
+ }
+ Output {
+  name Output1
+  xpos 646
+  ypos 1320
+ }
+push $Nea1af1a0
+end_group

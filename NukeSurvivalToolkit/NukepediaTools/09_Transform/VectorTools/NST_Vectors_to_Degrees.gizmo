@@ -1,0 +1,91 @@
+Group {
+ name Vectors_to_Degrees
+ help "Convert the vector's directions to a value in Degrees."
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {41 in l Vector_Layer t "Pick the layer containing your motion vectors." T UV_Channel.in}
+ addUserKnob {26 ""}
+ addUserKnob {6 flip_angle t "Flips the directions of the rotations" +STARTLINE}
+ addUserKnob {7 rotate R 0 360}
+ addUserKnob {26 ""}
+ addUserKnob {6 anisotropic t "The default anisotropic shader in Maya requires a value of 180 degrees in order to rotate the anisotropy by 90 degrees. Checking this box will multiply the values by 2." +STARTLINE}
+ addUserKnob {6 normalize_range t "Display the values in a range of 0-1 instead of 0-360" -STARTLINE}
+ normalize_range true
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" t www.erwanleroy.com +STARTLINE T "v1.0 - Part of VectorTools by Erwan Leroy - 2016"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -303
+  ypos 91
+ }
+set N37ffcc00 [stack 0]
+ Shuffle {
+  name UV_Channel
+  xpos -113
+  ypos 91
+ }
+ Expression {
+  channel0 rgb
+  expr0 degrees(atan(r,g))+180
+  name Vector_to_Degrees
+  xpos -113
+  ypos 145
+ }
+ Expression {
+  channel0 rgb
+  expr0 360-r
+  name Counter_clockwise
+  xpos -113
+  ypos 187
+  disable {{1-parent.flip_angle}}
+ }
+ Add {
+  value {{parent.rotate}}
+  name Rotate
+  xpos -113
+  ypos 224
+ }
+ Multiply {
+  value 2
+  name Multiply1
+  xpos -113
+  ypos 262
+  disable {{1-parent.anisotropic}}
+ }
+ Expression {
+  channel0 rgb
+  expr0 r%360
+  name Range360
+  xpos -113
+  ypos 317
+ }
+ Expression {
+  channel0 rgb
+  expr0 r/360
+  name Range_0_1
+  xpos -113
+  ypos 365
+  disable {{1-parent.normalize_range}}
+ }
+push $N37ffcc00
+ ShuffleCopy {
+  inputs 2
+  in2 none
+  red red
+  green green
+  blue blue
+  alpha black
+  out {{{parent.UV_Channel.in}}}
+  name ShuffleCopy1
+  selected true
+  xpos -303
+  ypos 365
+ }
+ Output {
+  name Output1
+  xpos -303
+  ypos 440
+ }
+end_group

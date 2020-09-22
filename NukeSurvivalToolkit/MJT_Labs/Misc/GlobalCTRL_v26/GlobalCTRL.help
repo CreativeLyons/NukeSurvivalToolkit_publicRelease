@@ -1,0 +1,14 @@
+GlobalCTRL
+
+Simplify the step to set all control in one place. Massive nodes/knobs value change, animate curve and expression.
+
+How to use :
+- click 'Add Knob Control' and select the class of knob you want to create.
+- after knob created, select node/nodes and click 'Update Nodes' to put nodes into nodes list.
+- type in the knob you want to link, for example 'disable'
+- click 'Set Link'. So the nodes in node list will link disable knob to this node and have 1 node to control all nodes at the same time.
+- if you pass to script to someone or you doesn't need this node anymore, click 'Bake/Remove', so the value will put it back to the node itself and the link expression will be removed.
+
+If you set animation or expression in GlobalCTRL's knob, 'Bake/Remove' will copy back the animation curve to the original node.
+
+When you copy the node or the node name changed, click 'Check Connection', it will fix the broken node list and fix all the linked expression.

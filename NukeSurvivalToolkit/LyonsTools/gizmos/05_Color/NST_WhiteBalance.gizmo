@@ -1,0 +1,53 @@
+Group {
+ name WhiteBalance
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'reverse':\n    if n.knob('reverse').value() == True:\n        n.knob('reverseText').setValue('Reversed')\n    else:\n        n.knob('reverseText').setValue('')\n"
+ tile_color 0x6493e9ff
+ label "\[value reverseText]"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 WhiteBalance}
+ addUserKnob {26 directions l Directions: T "Sample white area in image"}
+ addUserKnob {41 channels T Grade8.channels}
+ addUserKnob {41 whitepoint T Grade8.whitepoint}
+ addUserKnob {6 reverse +STARTLINE}
+ addUserKnob {1 reverseText l Reversed +INVISIBLE}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Grade8.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Grade8.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Grade8.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Grade8.fringe}
+ addUserKnob {41 unpremult l "(un)premult by" T Grade8.unpremult}
+ addUserKnob {41 invert_unpremult l invert -STARTLINE T Grade8.invert_unpremult}
+ addUserKnob {41 mix T Grade8.mix}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -205
+  ypos -441
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -341
+  ypos -519
+ }
+ Grade {
+  inputs 1+1
+  whitepoint {1 1 1 0}
+  white {{(whitepoint.r*0.2126)+(whitepoint.g*0.7152)+(whitepoint.b*0.0722)}}
+  reverse {{parent.reverse}}
+  black_clamp false
+  invert_mask true
+  name Grade8
+  label WB
+  xpos -341
+  ypos -445
+ }
+ Output {
+  name Output1
+  xpos -341
+  ypos -366
+ }
+end_group

@@ -1,0 +1,26 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+StickyNote {
+ inputs 0
+ name StickyNote3
+ label "Hypot: calculate the pythagora's theorem"
+ selected true
+ xpos 1151
+ ypos 344
+}
+push $cut_paste_input
+Expression {
+ expr0 "sin(hypot(x-center.x, y-center.y ) / size)"
+ expr1 "sin(hypot(x-center.x, y-center.y ) / size)"
+ expr2 "sin(hypot(x-center.x, y-center.y ) / size)"
+ expr3 "sin(hypot(x-center.x, y-center.y ) / size)"
+ name Circles_User
+ selected true
+ xpos 1204
+ ypos 317
+ addUserKnob {20 User}
+ addUserKnob {7 size R 0 10}
+ size 5.8
+ addUserKnob {12 center}
+ center {1161 547}
+}

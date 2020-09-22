@@ -1,0 +1,24 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ temp_name0 fx
+ temp_expr0 "(cos(rotationRad) * (x-translate.x) - sin(rotationRad) * (y - translate.y)+center.x)*scale"
+ temp_name1 fy
+ temp_expr1 "(sin(rotationRad) * (x-translate.x) + cos(rotationRad) * (y-translate.y) + center.y)*scale"
+ expr0 r(fx,fy)
+ expr1 g(fx,fy)
+ expr2 b(fx,fy)
+ name Transform
+ selected true
+ xpos 79
+ ypos -30
+ addUserKnob {20 Parameters}
+ addUserKnob {12 translate}
+ addUserKnob {7 rotation R -360 360}
+ addUserKnob {7 rotationRad l "rotation Rad" t "Radiant Rotation\n"}
+ rotationRad {{radians(rotation)}}
+ addUserKnob {7 scale R 0 10}
+ scale 1
+ addUserKnob {12 center}
+}

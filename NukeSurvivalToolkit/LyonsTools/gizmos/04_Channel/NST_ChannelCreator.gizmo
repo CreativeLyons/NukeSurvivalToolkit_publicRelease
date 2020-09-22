@@ -1,0 +1,47 @@
+Group {
+ name ChannelCreator
+ tile_color 0x9e3c63ff
+ label "\n"
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 User l ChannelCreator}
+ addUserKnob {41 in l input T Shuffle1.in}
+ addUserKnob {22 pop_list l "Populate List" T "channelName = nuke.thisNode()\[\"in\"].value()\n\nnewRed = str(channelName) + \".red\"\nnewGreen = str(channelName) + \".green\"\nnewBlue = str(channelName) + \".blue\"\nnewAlpha = str(channelName) + \".alpha\"\n\nnuke.thisNode()\[\"in_red\"].setValue(newRed)\nnuke.thisNode()\[\"in_green\"].setValue(newGreen)\nnuke.thisNode()\[\"in_blue\"].setValue(newBlue)\nnuke.thisNode()\[\"in_alpha\"].setValue(newAlpha)\n" +STARTLINE}
+ addUserKnob {1 in_red l Red}
+ in_red rgba.red
+ addUserKnob {1 channel1 l Channel1 -STARTLINE}
+ addUserKnob {1 in_green l Green}
+ in_green rgba.green
+ addUserKnob {1 channel2 l Channel2 -STARTLINE}
+ addUserKnob {1 in_blue l Blue}
+ in_blue rgba.blue
+ addUserKnob {1 channel3 l Channel3 -STARTLINE}
+ addUserKnob {1 in_alpha l Alpha}
+ in_alpha rgba.alpha
+ addUserKnob {1 channel4 l Channel4 -STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {22 generateCopy l "generate copy node" T "## Function Variables\nchannelDict = \{\} ## Dictionary for all channel variables\ncopyChannels = \{\} ## Dictionary for Copy node to place layer variable\ntoList = \['to0', 'to1', 'to2', 'to3'] ## List of Copy Node to variables\ngroupLayerName = \[ 'in_red', 'in_green', 'in_blue', 'in_alpha'] ## List of Channel knobs\ncopyLayerNames = \[ 'from0', 'from1', 'from2', 'from3'] ## List of Copy Node knobs\n\n## Grab group node name\t\ngroup = nuke.toNode('this')\ngroup.end()\n\n## Deselect all nodes\nnuke.selectAll()\nnuke.invertSelection()\n\n## List for channel variables\nchannelList = sorted (\[ each for each in group.knobs().keys() if 'channel' in each.lower()])\n\n## Set up channel dictionary with values\nfor each in channelList:\n\tvalue = group\[each].getValue()\n\tchannelDict\[each] = value\n\n## Creates new channel and sets up copyNode dictionary\nfor each, copy in zip(sorted(channelDict.keys()), toList):\n\tif channelDict\[each] == '':\n\t\t## Store name in copy Dictionary\n\t\tcopyChannels\[copy] = 'none'\n\t\n\tif channelDict\[each] != '':\n\t\tif ' ' in channelDict\[each]:\n\t\t\tchannelDict\[each] = channelDict\[each].replace( ' ', '_')\n\t\t\n\t\t## Construct channel name\n\t\tvalue = channelDict\[each]+'.red'\n\n\t\t## Store name in copy Dictionary\n\t\tcopyChannels\[copy] = value \n\t\t\n\t\t## Create layer from channel values\n\t\tnuke.Layer( channelDict\[each], \[ value] )\n\n## Create Copy Node\ncopyNode = nuke.createNode('Copy')\n\n## Grab layer names\nfor each, x in zip( groupLayerName, copyLayerNames):\n\tvalue = group\[each].getValue()\n\t\n\t## Set Copy node layer\n\tcopyNode\[x].setValue( value)\n\n## Set Copy Node channel\nfor key in sorted(copyChannels.keys()):\n\tcopyNode\[ key].setValue( copyChannels\[key])\n\n\nfor num, channel in enumerate( sorted( copyChannels.keys())):\n\tprint copyChannels\[ channel], channel\n\tif copyChannels\[channel] == 'none':\n\t\tcopyNode\[ copyLayerNames\[num]].setValue( 'none')" +STARTLINE}
+ addUserKnob {26 help_2 l " " T "All new Channels will end in .red\n<New_Channel_Name>.red"}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Add layer name descriptions to Channels 1,2,3,4\n\nPopulate list enters rgba.red, rgba.green, rgba.blue, rgba.alpha into input side\n\nCreates a copy node, that copies red, green, blue, alpha channels over to newly created channels with layernames\n\nThis creates layer.red only to minimize channels, Does Not create layer.red, layer.green, layer.blue, etc" T ChannelCreator}
+ addUserKnob {26 ver l Version: T v02}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 170
+  ypos -177
+ }
+ Shuffle {
+  name Shuffle1
+  xpos 170
+  ypos -136
+ }
+ Output {
+  name Output1
+  xpos 170
+  ypos -36
+ }
+end_group

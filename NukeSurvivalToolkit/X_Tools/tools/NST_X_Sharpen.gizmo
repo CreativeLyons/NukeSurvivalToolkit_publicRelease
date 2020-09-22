@@ -1,0 +1,186 @@
+Group {
+ name X_Sharpen
+ help "An accelerated weighted sharpen filter. This does a similar operation to nuke's sharpen solving three of its issues: negative values, dark edges and hue inversions."
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"radius\":\n        k.setValue(max(k.value(),0))\n        \nif k.name() == \"quality\":\n        k.setValue(max(k.value(),1))\n        \nif k.name() == \"bias\":\n        k.setValue(max(k.value(),0))\n        \nif k.name() == \"sharpen\":\n        k.setValue(max(k.value(),0))"
+ tile_color 0xcc804eff
+ addUserKnob {20 Sharpen}
+ addUserKnob {41 "Local GPU: " T BlinkScript1.gpuName}
+ addUserKnob {41 "Use GPU if Available" T BlinkScript1.useGPUIfAvailable}
+ addUserKnob {26 ""}
+ addUserKnob {41 channels t "Channels to apply the smoothing to." T Merge1.Achannels}
+ addUserKnob {7 sharpen t "Increase the local contrast of your image.\nA value of 0 will leave the image untouched.\nHigher values will result in crispier images." R 0 4}
+ sharpen 1
+ addUserKnob {7 radius t "Radius to apply the sharpening to." R 0 100}
+ radius 15
+ addUserKnob {7 bias t "In order to sharpen the image, a blurred copy of the image needs to be created.\n\nControlling the bias of the blur will avoid created banding or negative loves around edges.\n\nHigher values will apply the sharpen only to similar pixels, avoiding cross-object contamination  and unwanted artefacts.\n\nA value of 0 is equivalent to Nuke's sharpen." R 0 100}
+ bias 40
+ addUserKnob {3 quality l "  quality " t "The maximum number of samples to use for the smoothing. When using very large radius the filter can become very slow. Limiting the number of samples will hugely increase performance at the cost of smoothing out some fine details." -STARTLINE}
+ quality 15
+ addUserKnob {41 unpremult T Unpremult1.alpha}
+ addUserKnob {6 luma_only l "luma only" t "If checked, only the luminance of the rgb will be sharpened, keeping the same hue and saturation as the input." +STARTLINE}
+ luma_only true
+ addUserKnob {20 about l About}
+ addUserKnob {26 about_1 l "" t "A bunny:\n(\\(\\ \n( - -)\n((') (')" +STARTLINE T "<br>\n<b>Xavier Martín © 2017</b>"}
+ addUserKnob {26 ""}
+ addUserKnob {26 website l "" +STARTLINE T "<a href=\"http://www.xaviermartinvfx.com\"><span style=\"color:#C8C8C8;\">www.xaviermartinvfx.com</span></a>"}
+ addUserKnob {26 space4_1 l "" +STARTLINE T <br>}
+ addUserKnob {22 version l <center>version</center> T "nuke.message('X_Soften Gizmo <i>v1.0</i><br><b>Xavier Martín © 2017</b>')" +STARTLINE}
+ addUserKnob {22 help_documentation l <center>?</center> -STARTLINE T "nuke.message('You can find more documentation<br>on <a href=\"http://www.nukepedia.com/blink/filters/x_sharpen\"><span style=\"color:#BCBCBC;\">Nukepedia</span></a> or my <a href=\"http://www.xaviermartinvfx.com/x_sharpen/\"><span style=\"color:#BCBCBC;\">website</span></a>.')"}
+}
+ Input {
+  inputs 0
+  name Source
+  xpos 2960
+  ypos -660
+ }
+ Unpremult {
+  channels all
+  alpha -rgba.alpha
+  name Unpremult1
+  xpos 2960
+  ypos -616
+ }
+ Dot {
+  name Dot8
+  xpos 2994
+  ypos -556
+ }
+set N8979500 [stack 0]
+push $N8979500
+ Remove {
+  name Remove1
+  xpos 3060
+  ypos -566
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Achannels rgb
+  name Merge1
+  xpos 3060
+  ypos -510
+ }
+ Dot {
+  name Dot3
+  xpos 3094
+  ypos -456
+ }
+set N2fe7dc00 [stack 0]
+ Dot {
+  name Dot2
+  xpos 3094
+  ypos -156
+ }
+push $N2fe7dc00
+ Dot {
+  name Dot4
+  xpos 3194
+  ypos -456
+ }
+ Saturation {
+  saturation 0
+  mode Average
+  name Saturation1
+  xpos 3160
+  ypos -410
+  disable {{1-parent.luma_only}}
+ }
+set Na1860e00 [stack 0]
+ Dot {
+  name Dot6
+  xpos 3394
+  ypos -406
+ }
+ Dot {
+  name Dot7
+  xpos 3394
+  ypos -206
+ }
+push $Na1860e00
+ Dot {
+  name Dot1
+  xpos 3194
+  ypos -356
+ }
+set Na1861880 [stack 0]
+ Blur {
+  channels rgba
+  size {{parent.radius/parent.quality}}
+  filter box
+  crop false
+  name Blur1
+  xpos 3260
+  ypos -310
+  disable {{parent.radius/parent.quality<=1}}
+ }
+push $Na1861880
+ BlinkScript {
+  inputs 2
+  ProgramGroup 1
+  KernelDescription "1 \"FastWeightedBlur\" iterate componentWise 7db38cadf585143162376d5e48625a8d4ef028893bbb529123eef77a2122fd98 3 \"src\" Read Point \"downres\" Read Ranged2D \"dst\" Write Point 4 \"Radius\" Float 1 AAAAAA== \"bias\" Float 1 AAAAAA== \"Quality\" Int 1 AAAAAA== \"luma\" Int 1 AAAAAA=="
+  kernelSource "kernel FastWeightedBlur : public ImageComputationKernel<eComponentWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;\n  Image<eRead, eAccessRanged2D, eEdgeClamped> downres;\n  Image<eWrite, eAccessPoint> dst;\n\n  param:\n    float Radius;\n    float bias;\n    int Quality;\n    int luma;\n\n  void init() \{\n    downres.setRange(-Radius*Quality,-Radius*Quality,Radius*Quality,Radius*Quality);\n  \}\n\n  void process(int c) \{\n    int channel = 0;\n    if(luma==0)\n      channel = c;\n    if(c==channel) \{\n      float sum = 0.0f;\n      float sumWeight = 0.0f;\n      float source = src();\n      float weight = 0.0f;\n      float sample = 0.0f;\n      for(int j = -Quality; j <= Quality; j++) \{\n        for(int i = -Quality; i <= Quality; i++) \{\n          sample = downres(int(Radius*i),int(Radius*j));\n          weight = 1.0/(pow(bias*(sample-source),2)+1);\n          sum += sample*weight;\n          sumWeight += weight;\n        \}\n      \}\n      dst() = sum/sumWeight;\n    \}\n  \}\n\};"
+  rebuild ""
+  FastWeightedBlur_Radius {{max(parent.radius/parent.quality,1)}}
+  FastWeightedBlur_bias {{parent.bias}}
+  FastWeightedBlur_Quality {{min(parent.quality,radius)}}
+  FastWeightedBlur_luma {{parent.luma_only}}
+  rebuild_finalise ""
+  name BlinkScript1
+  xpos 3160
+  ypos -266
+ }
+ MergeExpression {
+  inputs 2
+  expr0 Br==0?0:((Ar/Br)**sharpen)*Br
+  expr1 Bg==0?0:((Ag/Bg)**sharpen)*Bg
+  expr2 Bb==0?0:((Ab/Bb)**sharpen)*Bb
+  expr3 Ba==0?0:((Aa/Ba)**sharpen)*Ba
+  name MergeExpression2
+  xpos 3160
+  ypos -210
+  addUserKnob {20 User}
+  addUserKnob {7 sharpen}
+  sharpen {{parent.sharpen+1}}
+ }
+ MergeExpression {
+  inputs 2
+  temp_name0 Al
+  temp_expr0 (Ar+Ag+Ab)/3
+  expr0 Al==0?0:Ar*Br/Al
+  expr1 Al==0?0:Ag*Br/Al
+  expr2 Al==0?0:Ab*Br/Al
+  expr3 Aa
+  name MergeExpression1
+  xpos 3160
+  ypos -160
+  disable {{1-parent.luma_only}}
+ }
+push $N8979500
+ Dot {
+  name Dot5
+  xpos 2994
+  ypos -104
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Bchannels {{{parent.Merge1.Achannels}}}
+  output {{{parent.Merge1.Achannels}}}
+  name Merge2
+  xpos 3160
+  ypos -108
+ }
+ Premult {
+  channels all
+  alpha {{{parent.Unpremult1.alpha}}}
+  invert {{parent.Unpremult1.invert}}
+  name Premult1
+  xpos 3160
+  ypos -66
+ }
+ Output {
+  name Output1
+  xpos 3160
+  ypos -8
+ }
+end_group

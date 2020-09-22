@@ -1,0 +1,170 @@
+Group {
+ name Contrast
+ tile_color 0x6a93ddff
+ note_font "DejaVu LGC Sans Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 Contrast}
+ addUserKnob {6 unpremult1 l "unpremult input" +STARTLINE}
+ addUserKnob {41 Amount l HighContrast T Multiply1.value}
+ addUserKnob {41 lowContrast l "Low Contrast" T Multiply2.value}
+ addUserKnob {41 overallContrast l "Overall Contrast" T Multiply3.value}
+ addUserKnob {41 whitepoint l pivot T Grade12.whitepoint}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge2.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge2.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge2.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge2.fringe}
+ addUserKnob {41 mix T Merge2.mix}
+}
+ Input {
+  inputs 0
+  name InputMask
+  xpos -246
+  ypos 60
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos -399
+  ypos -523
+ }
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos -365
+  ypos -452
+ }
+set N936a4a60 [stack 0]
+ Unpremult {
+  name Unpremult2
+  xpos -399
+  ypos -393
+  disable {{!unpremult1}}
+ }
+ Grade {
+  whitepoint 0.18
+  black_clamp false
+  name Grade12
+  xpos -399
+  ypos -367
+ }
+ Add {
+  channels rgb
+  value -1
+  name Add1
+  xpos -399
+  ypos -341
+ }
+set N936af620 [stack 0]
+ Grade {
+  multiply -1
+  black_clamp false
+  name Grade1
+  xpos -289
+  ypos -312
+ }
+ Clamp {
+  channels rgb
+  maximum_enable false
+  name Clamp2
+  xpos -289
+  ypos -286
+ }
+ Multiply {
+  channels rgb
+  name Multiply2
+  xpos -289
+  ypos -260
+ }
+ Grade {
+  multiply -1
+  black_clamp false
+  name Grade2
+  xpos -289
+  ypos -222
+ }
+push $N936af620
+ Clamp {
+  channels rgb
+  maximum_enable false
+  name Clamp1
+  xpos -399
+  ypos -289
+ }
+ Multiply {
+  channels rgb
+  name Multiply1
+  xpos -399
+  ypos -263
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge1
+  xpos -399
+  ypos -222
+ }
+ Multiply {
+  channels rgb
+  name Multiply3
+  label "\[value value]"
+  xpos -399
+  ypos -183
+ }
+ Add {
+  channels rgb
+  value 1
+  name Add2
+  xpos -399
+  ypos -134
+ }
+ Grade {
+  whitepoint {{parent.Grade12.whitepoint} {parent.Grade12.whitepoint} {parent.Grade12.whitepoint} {parent.Grade12.whitepoint}}
+  reverse true
+  black_clamp false
+  name Grade15
+  xpos -399
+  ypos -108
+ }
+ Premult {
+  name Premult3
+  xpos -399
+  ypos -82
+  disable {{!unpremult1}}
+ }
+ Dot {
+  name Dot16
+  note_font_size 41
+  xpos -365
+  ypos -21
+ }
+push $N936a4a60
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos -509
+  ypos -452
+ }
+ Dot {
+  name Dot17
+  note_font_size 41
+  xpos -509
+  ypos 63
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge2
+  xpos -399
+  ypos 60
+ }
+ Output {
+  name Output1
+  xpos -399
+  ypos 152
+ }
+end_group

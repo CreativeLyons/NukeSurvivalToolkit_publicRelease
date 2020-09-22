@@ -1,0 +1,196 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name EnvReflect_Bb_
+ help "Fake Env reflections using a normals pass only.\n\n\nFeed it with a normals pass through the \"image\" input, and select the right channel for it.\n\n- Antialias normals to get rid of flickering\n\n- Use Env Preview to preview the Envball with transformations\n(works better with cameraSpace Normals)\n\n\n\nHave fun !\n\nby bflat (Bastien Brenot)\nmail@bastienbrenot.com"
+ tile_color 0xffffff
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {41 inNormals l normals T Shuffle24.in}
+ addUserKnob {6 antiAlias l "antiAlias normals" -STARTLINE}
+ antiAlias true
+ addUserKnob {41 input l "Env Input Type" T SphericalTransform3.input}
+ addUserKnob {26 ""}
+ addUserKnob {6 envBlur l "IBL blur :" +STARTLINE}
+ addUserKnob {7 envBlurSize l " " -STARTLINE R 0 500}
+ envBlurSize 250
+ addUserKnob {26 ""}
+ addUserKnob {20 envExposure l "Env exposure" n 1}
+ addUserKnob {41 mode l "Adjust in" T Exposure3.mode}
+ addUserKnob {41 exposure T Exposure3.red}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 rotateEnv l "rotate Env" n 1}
+ addUserKnob {41 out_rx l rx T SphericalTransform3.out_rx}
+ addUserKnob {41 out_ry l ry T SphericalTransform3.out_ry}
+ addUserKnob {41 out_rz l rz T SphericalTransform3.out_rz}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 EnvPreview l "Env Preview" n 1}
+ addUserKnob {6 previewEnv l "preview Env" +STARTLINE}
+ addUserKnob {6 previewOnly l "preview only" -STARTLINE}
+ addUserKnob {41 previewPos l position T previewPosition.translate}
+ addUserKnob {7 previeScale l scale -STARTLINE R 0 3}
+ previeScale 1
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+}
+ Input {
+  inputs 0
+  name Env
+  xpos -449
+  ypos 170
+  number 1
+ }
+ EXPTool {
+  mode Stops
+  gang false
+  green {{red x126 0.2777777924}}
+  blue {{red x126 0.2777777924}}
+  name Exposure3
+  xpos -449
+  ypos 213
+ }
+ SphericalTransform {
+  output "Mirror Ball"
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  fix true
+  name SphericalTransform3
+  xpos -449
+  ypos 267
+ }
+set N698007f0 [stack 0]
+ Dot {
+  name Dot1
+  xpos -291
+  ypos 276
+ }
+ SphericalTransform {
+  ry 180
+  output "Mirror Ball"
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  fix true
+  name SphericalTransform2
+  xpos -325
+  ypos 378
+ }
+ Keyer {
+  operation "luminance key"
+  range {0 0 1 1}
+  name Keyer1
+  xpos -325
+  ypos 440
+ }
+ Blur {
+  channels rgb
+  size {{parent.envBlurSize}}
+  name Blur2
+  label "\[value size]"
+  xpos -325
+  ypos 488
+  disable {{!parent.envBlur}}
+ }
+ Transform {
+  translate {{parent.previewPosition.translate.x-512.833333} {parent.previewPosition.translate.y-512.833333}}
+  scale {{parent.previeScale/3}}
+  center {512 512}
+  name Transform1
+  xpos -325
+  ypos 646
+ }
+ Input {
+  inputs 0
+  name Normals
+  xpos -599
+  ypos 395
+ }
+ Shuffle {
+  in rgb
+  name Shuffle24
+  label "\[value in]"
+  xpos -599
+  ypos 436
+ }
+ Clamp {
+  channels rgba
+  minimum -1
+  minimum_enable false
+  MinClampTo -1
+  name Clamp3
+  xpos -599
+  ypos 472
+ }
+ Expression {
+  expr0 (r+1)/2
+  expr1 (g+1)/2
+  expr2 (b+1)/2
+  name Expression9
+  label "\[value expr0]"
+  xpos -599
+  ypos 496
+ }
+ Matrix {
+  channels rgb
+  matrix {
+      {1 2 1}
+      {2 4 2}
+      {1 2 1}
+    }
+  normalize true
+  name antiAlias_Normals2
+  xpos -602
+  ypos 532
+  disable {{parent.antiAlias==0?1:0}}
+ }
+push $N698007f0
+ SphericalTransform {
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  fix true
+  name SphericalTransform1
+  xpos -447
+  ypos 327
+ }
+ Blur {
+  channels rgb
+  size {{parent.envBlurSize}}
+  name Blur1
+  label "\[value size]"
+  xpos -447
+  ypos 472
+  disable {{!parent.envBlur}}
+ }
+ STMap {
+  inputs 2
+  channels rgb
+  uv rgb
+  name STMap3
+  xpos -447
+  ypos 532
+ }
+ Multiply {
+  value 0
+  mix {{parent.previewEnv==1?parent.previewOnly:0}}
+  name Multiply1
+  label "\[value value]"
+  xpos -447
+  ypos 574
+ }
+ Merge2 {
+  inputs 2
+  mix {{parent.previewEnv}}
+  name Merge1
+  xpos -447
+  ypos 646
+ }
+ Output {
+  name Output1
+  xpos -447
+  ypos 797
+ }
+ Position {
+  inputs 0
+  translate {171.5 171.5}
+  name previewPosition
+  xpos -216
+  ypos 573
+ }
+end_group

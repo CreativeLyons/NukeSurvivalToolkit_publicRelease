@@ -1,0 +1,16 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+DeepExpression {
+ temp_name3 t
+ temp_expr3 "\[value tickness]/2"
+ chans1 deep
+ deep.front deep.front-t
+ deep.back deep.back+t
+ name DeepThickness
+ selected true
+ xpos 2156
+ ypos 594
+ addUserKnob {20 Thickness}
+ addUserKnob {7 thickness R 0 100}
+}

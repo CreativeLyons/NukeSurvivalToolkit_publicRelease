@@ -1,0 +1,152 @@
+Group {
+ name LabelFromRead
+ tile_color 0x1f1f1fff
+ note_font "Verdana Bold"
+ note_font_color 0xe5e500ff
+ selected true
+ addUserKnob {20 LabelFromRead}
+ addUserKnob {1 inputName l INVISIBLE +INVISIBLE}
+ inputName "\[file tail \[value \[topnode].file]] \n"
+ addUserKnob {6 filenameCheck l "Include FIle Name?" +STARTLINE}
+ filenameCheck true
+ addUserKnob {1 inputDesc l Description}
+ addUserKnob {6 descCheck l "Include Description?" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {18 color l "Text Color"}
+ color {1 1 0}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {18 borderColor l "Border Color"}
+ borderColor {0 0 0}
+ addUserKnob {6 borderColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 color_rgb_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 borderSize l "Border Size" R 0 5}
+ borderSize 2
+ addUserKnob {26 ""}
+ addUserKnob {7 size l "Overall Size" R -50 50}
+ addUserKnob {7 YPos l "Y Position" R -100 100}
+ addUserKnob {26 ""}
+ addUserKnob {41 mix T Merge1.mix}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Takes the last section of the filename and displays in on the top of frame\n\n- Can toggle dsiplay of a User Description\n- Can adjust size and position of Text" T LabelFromRead}
+ addUserKnob {26 text l Version: T v05}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -195
+  ypos -608
+ }
+ Dot {
+  name Dot1
+  xpos -161
+  ypos -550
+ }
+set Nd7407130 [stack 0]
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos -339
+  ypos -553
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  label "\[value in]"
+  xpos -339
+  ypos -529
+ }
+ Text2 {
+  font_size_toolbar 100
+  font_width_toolbar 100
+  font_height_toolbar 100
+  message "\[value parent.inputDesc]"
+  old_expression_markers {{0 -1}
+    }
+  box {0 {input.height-(input.height/5)} {input.width} {input.height-(input.height/37.25)}}
+  transforms {{0 2}
+    }
+  font {{ Arial : Regular : Arial.ttf : 0 }}
+  global_font_scale {{(input.width/35+parent.size)/100}}
+  scale {1 1}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{0 1556}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform"}
+  animation_layers {{1 11 0 {input.height-(input.height/7)} {input.width/40} {parent.YPos} 1 1 0 0 0 0}
+    }
+  color {{parent.color} {parent.color} {parent.color} 1}
+  background_border_x 0
+  background_border_y 0
+  enable_shadows true
+  shadow_color {{parent.borderColor} {parent.borderColor} {parent.borderColor} 1}
+  shadow_opacity 1
+  shadow_distance 0
+  shadow_size {{parent.borderSize}}
+  name Description
+  xpos -339
+  ypos -433
+  disable {{!parent.descCheck}}
+ }
+ Text2 {
+  font_size_toolbar 100
+  font_width_toolbar 100
+  font_height_toolbar 100
+  message "\n\[value parent.inputName]"
+  old_message {{10 77 97 114 99 105 101 95 50 75 46 100 112 120 32 10}
+    }
+  old_expression_markers {{1 15}
+    }
+  box {0 {input.height-(input.height/5)} {input.width} {input.height-(input.height/37.25)}}
+  transforms {{0 2}
+    }
+  cursor_position 25
+  font {{ Arial : Regular : Arial.ttf : 0 }}
+  global_font_scale {{(input.width/35+parent.size)/100}}
+  scale {1 1}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{0 1556}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform"}
+  animation_layers {{1 11 0 {input.height-(input.height/7)} {input.width/40} {"descCheck == 1 ? parent.YPos : input.height/20 + parent.YPos"} 1 1 0 0 0 0}
+    }
+  color {{parent.color} {parent.color} {parent.color} 1}
+  background_border_x 0
+  background_border_y 0
+  enable_shadows true
+  shadow_color {{parent.borderColor} {parent.borderColor} {parent.borderColor} 1}
+  shadow_opacity 1
+  shadow_distance 0
+  shadow_size {{parent.borderSize}}
+  name FileName
+  xpos -339
+  ypos -409
+  disable {{!parent.filenameCheck}}
+ }
+ Dot {
+  name Dot2
+  xpos -305
+  ypos -342
+ }
+push $Nd7407130
+ Merge2 {
+  inputs 2
+  bbox B
+  name Merge1
+  xpos -195
+  ypos -345
+ }
+ Output {
+  name Output1
+  xpos -195
+  ypos -201
+ }
+end_group

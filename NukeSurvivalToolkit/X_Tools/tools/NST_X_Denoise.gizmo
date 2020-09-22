@@ -1,0 +1,1683 @@
+Group {
+ name X_Denoise
+ help "Clean digital noise on video"
+ knobChanged "import math\nn = nuke.thisNode()\nk = nuke.thisKnob()\ni = n\['iterations'].value()\nm = n\['x2'].value()\n\n\nif k.name() == \"iterations\":\n  n\['active_frames'].setValue(1+math.ceil(i)*2*(1+m))\nelif k.name() == \"x2\":\n  n\['active_frames'].setValue(1+math.ceil(i)*2*(1+m))\nif n\['fix_artifacts'].value() == 0:\n  n\['motion_threshold'].setEnabled(False)\n  n\['smooth_threshold'].setEnabled(False)\n  n\['preview_mask'].setEnabled(False)\n  n\['median'].setEnabled(False)\nelse:\n  n\['motion_threshold'].setEnabled(True)\n  n\['smooth_threshold'].setEnabled(True)\n  n\['preview_mask'].setEnabled(True)\n  n\['median'].setEnabled(True)\n\nif n\['static'].value() == 1:\n  n\['vectorDetail'].setEnabled(False)\n  n\['smoothness'].setEnabled(False)\n  n\['flickerCompensation'].setEnabled(False)\nelse:\n  n\['vectorDetail'].setEnabled(True)\n  n\['smoothness'].setEnabled(True)\n  n\['flickerCompensation'].setEnabled(True)"
+ tile_color 0xcc804eff
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 NoiseReduction l "Noise Reduction"}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T VectorGenerator2.useGPUIfAvailable}
+ addUserKnob {26 ""}
+ addUserKnob {7 luminance l "fix luminance" t "The <b>brightness</b> of the pixels will remain untouched at 0 and will be changed at 1. Values over 1 do not have any effect."}
+ luminance 1
+ addUserKnob {7 chrominance l "fix chrominance" t "The <b>color</b> of the pixels will remain untouched at 0 and will be changed at 1. Values over 1 do not have any effect."}
+ chrominance 1
+ addUserKnob {26 ""}
+ addUserKnob {7 iterations t "\nThe more <b>iterations</b>, the more noise will be reduced. Increasing too much the iterations will slow down the render and could cause artifacts or blur in some areas.\n\nEach iteration loads the previous and next frames to use them in the calculation. The further a frame is from the current frame, the less effect it will have on the calculation.\n\nUsing <b>intigers</b> instead of decimals will lead to a much efficient process and therefore faster render times.\n\nYou can use the <b>x2</b> multiplier at the right of this slider to drastically increase the number of frames that will be used in the calculation.\n\nCheck the <b>Active Frames</b> to see how many frames are being processed with the noise reduction algorithm.\n" R 1 5}
+ iterations 2
+ addUserKnob {6 x2 t "\nBy default, each iteration will look to the previous and next frame. If the <b>x2</b> multiplier is activated, each iteration will add the 2 previous frames and the 2 next frames, increasing the quality of the calculation at the cost of really slow renders.\n\nFurther frames have less consitency, so they will have less effect to the final output.\n" -STARTLINE}
+ addUserKnob {3 active_frames l " " t "\nThis shows <b>how many frames are being used </b>in the calculation. \n\nBy default, each <b>iteration</b> will load the next two closest frames to the current frame. The further a loaded frame is from the current frame, the less effect it will have on the calculation. \n\nThe amount of iterations is doubled if the <b>x2</b> multiplier is checked. Keep in mind that each new frame added to the calculation will increase the render time.\n\nTherefore, the total amount of frames that are being used is calculated with this formula:\n\n1 + 2 * iterations * multiplier\n\n" +DISABLED}
+ active_frames 5
+ addUserKnob {26 active_frames_text l "" t "\nThis shows <b>how many frames are being used</b> in the calculation. \n\nBy default, each <b>iteration </b>will load the next two closest frames to the current frame. The further a loaded frame is from the current frame, the less effect it will have on the calculation. \n\nThe amount of iterations is doubled if the <b>x2</b> multiplier is checked. Keep in mind that each new frame added to the calculation will increase the render time. \n\nTherefore, the total amount of frames that are being used is calculated with this formula: \n\n1 + 2 * iterations * multiplier \n" -STARTLINE T "active frames"}
+ addUserKnob {26 active_frames_python l INVISIBLE t "w = nuke.toNode(\"X_Denoise\")\nw\['active_frames'].setEnabled(False)\n\ndef activeFrames():\n import math\n n = nuke.thisNode()\n k = nuke.thisKnob()\n i = n\['iterations'].value()\n m = n\['x2'].value()\n\n \n if k.name() == \"iterations\":\n   n\['active_frames'].setValue(1+math.ceil(i)*2*(1+m))\n elif k.name() == \"x2\":\n   n\['active_frames'].setValue(1+math.ceil(i)*2*(1+m))\nnuke.addKnobChanged(activeFrames, nodeClass=\"Group\")\n\nif n\['fix_artifacts'].value() == 1:\n  n\['motion_threshold'].setEnabled(False)\n  n\['smooth_threshold'].setEnabled(False)\n  n\['preview_mask'].setEnabled(False)\n  n\['median'].setEnabled(False)\nelse:\n  n\['motion_threshold'].setEnabled(True)\n  n\['smooth_threshold'].setEnabled(True)\n  n\['preview_mask'].setEnabled(True)\n  n\['median'].setEnabled(True)\n\nif n\['static'].value() == 1:\n  n\['vectorDetail'].setEnabled(False)\n  n\['smoothness'].setEnabled(False)\n  n\['flickerCompensation'].setEnabled(False)\nelse:\n  n\['vectorDetail'].setEnabled(True)\n  n\['smoothness'].setEnabled(True)\n  n\['flickerCompensation'].setEnabled(True)" -STARTLINE +INVISIBLE}
+ addUserKnob {26 ""}
+ addUserKnob {41 filter t "<b>Impulse</b> is the fastes but will create really poor results.\n<b>Cubic</b> will work fine in most cases, but it will smooth the detail.\n<b>Lanczos</b> will sharpen the image a little bit to contrarrest the softness of the image. It will also keep borders intact.\n<b>Sinc4</b> will drastically sharpen the image, and could cause the noise to reappear." T IDistort16.filter}
+ addUserKnob {4 node_output l "    output" t "Choose if you want to output the <b>Result</b> image without the noise or to visualize the <b>Noise</b> separately.\n\nYou can also output the <b>Mask</b> where artifacts are ocurring (but first you need to select the <b>fix artifacts</b> checkbox in the Qaulity tab." -STARTLINE M {Result Noise Mask}}
+ addUserKnob {20 Quality}
+ addUserKnob {6 fix_artifacts l "fix artifacts" t "\nThe noise reduction algorithm fails when an object is moving too fast. That will cause <b>artifacts</b> to appear.\n\nIf the <b>Fix Artifacts</b> checkbox is activated, a procedural mask will be created around moving abjects. The objects inside the mask will not be affected.\n\nYou can see how the mask looks like with the <b>preview</b> checkbox. Use the <b>motion threshold</b> and the <b>smooth</b> sliders to adjust the mask.\n\nBy default, a <b>median</b> filter is applied to the moving objects instead of the noise reduction algorithm, but you can disable that option.\n\nRemember that you can select the <b>Mask</b> as the <b>Output</b> of this node. You can use this mask to apply the Nuke Denoise to the fast moving areas and X_Distort to the rest of the image for a professional accurate noise reduction.\n" +STARTLINE}
+ addUserKnob {7 motion_threshold l "motion threshold" t "This determines the maximum velocity which a pixel can have in order to be used in the noise reduction process. The higher the value, the less object will be excluded from the algorithm.\n\nUse the <b>preview</b> checkbox in order to see the mask." +DISABLED R 0 10}
+ motion_threshold 2.9
+ addUserKnob {7 smooth_threshold l smooth t "This blurs the mask that determines which objects are used in the noise reduction algorithm.\n\nUse the <b>preview</b> checkbox in order to see the mask." +DISABLED R 0 20}
+ smooth_threshold 10
+ addUserKnob {6 preview_mask l preview t "Use the <b>preview</b> checkbox in order to see the mask that determines which objects are used in the algorithm.\n\nWhite areas will be excluded from the effect, and black areas will be denoised." +DISABLED +STARTLINE}
+ addUserKnob {6 median t "Use this so apply a subtle <b>median</b> filter to those areas that move too fast for the algorithm. This will also apply some chromatic noise reduction." -STARTLINE +DISABLED}
+ median true
+ addUserKnob {26 ""}
+ addUserKnob {41 vectorDetail l "Vector Detail" +INVISIBLE T VectorGenerator2.vectorDetail}
+ addUserKnob {41 smoothness l Smoothness +INVISIBLE T VectorGenerator2.smoothness}
+ addUserKnob {41 flickerCompensation l "Flicker Compensation" T VectorGenerator2.flickerCompensation}
+ addUserKnob {6 static l "static shot" t "Check this if the image is static and no object is moving at all. This will drastically increase the speed but any moving objects will be blurred out." -STARTLINE}
+ addUserKnob {20 Tolerances n 2}
+ addUserKnob {41 weightRed l "Weight Red" T VectorGenerator2.weightRed}
+ addUserKnob {41 weightGreen l "Weight Green" T VectorGenerator2.weightGreen}
+ addUserKnob {41 weightBlue l "Weight Blue" T VectorGenerator2.weightBlue}
+ addUserKnob {20 "" n -1}
+ addUserKnob {20 about l About}
+ addUserKnob {26 about_1 l "" t "A bunny:\n(\\(\\ \n( - -)\n((') (')" +STARTLINE T "<br>\n<b>Xavier Martín © 2015</b>"}
+ addUserKnob {26 ""}
+ addUserKnob {26 website l "" +STARTLINE T "<a href=\"http://www.xaviermartinvfx.com\"><span style=\"color:#C8C8C8;\">www.xaviermartinvfx.com</span></a>"}
+ addUserKnob {26 space4_1 l "" +STARTLINE T <br>}
+ addUserKnob {22 version l <center>version</center> T "nuke.message('X_Denoise Gizmo <i>v1.0</i><br><b>Xavier Martín © 2015</b>')" +STARTLINE}
+ addUserKnob {22 help_documentation l <center>?</center> -STARTLINE T "nuke.message('You can find more documentation<br>on <a href=\"http://www.nukepedia.com/gizmos/filter/x_denoise\"><span style=\"color:#BCBCBC;\">Nukepedia</span></a> or my <a href=\"http://www.xaviermartinvfx.com/x_denoise/\"><span style=\"color:#BCBCBC;\">website</span></a>.')"}
+}
+ Input {
+  inputs 0
+  name Source
+  xpos -451
+  ypos 109
+ }
+set N9b31c740 [stack 0]
+ Dot {
+  name Dot53
+  xpos -673
+  ypos 112
+ }
+ Dot {
+  name Dot2
+  xpos -673
+  ypos 1214
+ }
+set N9b1ab830 [stack 0]
+ Dot {
+  name Dot54
+  xpos -673
+  ypos 1314
+ }
+set N9b1af1a0 [stack 0]
+ Dot {
+  name Dot55
+  xpos -775
+  ypos 1314
+ }
+set N9b1bb410 [stack 0]
+ Dot {
+  name Dot7
+  xpos -828
+  ypos 1314
+ }
+set N9b1a5e70 [stack 0]
+ Dot {
+  name Dot8
+  xpos -828
+  ypos 1587
+ }
+push $N9b31c740
+ Dot {
+  name Dot16
+  xpos -417
+  ypos 133
+ }
+set N9b1c2070 [stack 0]
+ VectorGenerator {
+  vectorDetailLocal 1
+  smoothnessLocal 0.05
+  Advanced 1
+  Tolerances 1
+  name VectorGenerator2
+  xpos -265
+  ypos 124
+  cached true
+ }
+set N9b329590 [stack 0]
+ Dot {
+  name Dot3
+  xpos -949
+  ypos 133
+ }
+ Dot {
+  name Dot4
+  xpos -949
+  ypos 779
+ }
+set N9a697120 [stack 0]
+push $N9a697120
+ Merge2 {
+  inputs 2
+  operation average
+  Achannels forward
+  Bchannels backward
+  output forward
+  name Merge2
+  xpos -983
+  ypos 774
+ }
+ Shuffle {
+  in forward
+  blue black
+  alpha black
+  name Shuffle1
+  xpos -983
+  ypos 810
+ }
+push 0
+ Merge2 {
+  inputs 2
+  metainput A
+  name Merge5
+  xpos -983
+  ypos 834
+ }
+ Matrix {
+  channels {rgba.red rgba.green -rgba.blue none}
+  matrix {
+      {-1 -1 -1}
+      {-1 8 -1}
+      {-1 -1 -1}
+    }
+  name Matrix1
+  xpos -983
+  ypos 857
+ }
+ Expression {
+  channel0 alpha
+  expr0 (abs(r)+abs(g))*.5
+  channel1 none
+  channel2 none
+  channel3 none
+  name Expression1
+  xpos -983
+  ypos 893
+ }
+ Blur {
+  channels alpha
+  size 2
+  name Blur3
+  xpos -983
+  ypos 917
+ }
+ FrameBlend {
+  channels alpha
+  numframes 3
+  startframe {{frame-(1+x2)}}
+  endframe {{frame+(1+x2)}}
+  userange true
+  name FrameBlend1
+  xpos -983
+  ypos 953
+ }
+ FrameBlend {
+  channels alpha
+  numframes 3
+  startframe {{frame-(1+x2)}}
+  endframe {{frame+(1+x2)}}
+  userange true
+  name FrameBlend2
+  xpos -983
+  ypos 989
+  disable {{"iterations < 2"}}
+ }
+ FrameBlend {
+  channels alpha
+  numframes 3
+  startframe {{frame-(1+x2)}}
+  endframe {{frame+(1+x2)}}
+  userange true
+  name FrameBlend3
+  xpos -983
+  ypos 1025
+  disable {{"iterations < 3"}}
+ }
+ FrameBlend {
+  channels alpha
+  numframes 3
+  startframe {{frame-(1+x2)}}
+  endframe {{frame+(1+x2)}}
+  userange true
+  name FrameBlend4
+  xpos -983
+  ypos 1061
+  disable {{"iterations < 4"}}
+ }
+ FrameBlend {
+  channels alpha
+  numframes 3
+  startframe {{frame-(1+x2)}}
+  endframe {{frame+(1+x2)}}
+  userange true
+  name FrameBlend5
+  xpos -983
+  ypos 1097
+  disable {{"iterations < 5"}}
+ }
+ Grade {
+  channels alpha
+  add {{-(motion_threshold**2)}}
+  name Grade1
+  xpos -983
+  ypos 1133
+ }
+ Blur {
+  channels alpha
+  size {{abs(smooth_threshold)+.5}}
+  name Blur2
+  xpos -983
+  ypos 1169
+ }
+set N9b46ae90 [stack 0]
+ Clamp {
+  channels alpha
+  name Clamp2
+  xpos -983
+  ypos 1364
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle2
+  xpos -983
+  ypos 1400
+ }
+set N9b53fac0 [stack 0]
+ Dot {
+  name Dot6
+  xpos -949
+  ypos 1516
+ }
+ Dot {
+  name Dot5
+  xpos -559
+  ypos 1516
+ }
+push $N9b46ae90
+push $N9b1ab830
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos -983
+  ypos 1205
+ }
+ Median {
+  size 1
+  ignore_top_line false
+  name Median1
+  xpos -983
+  ypos 1241
+  disable {{1-median}}
+ }
+ Premult {
+  name Premult1
+  xpos -983
+  ypos 1265
+ }
+push $N9b1c2070
+ Expression {
+  channel0 motion
+  expr0 0
+  channel1 none
+  channel2 none
+  channel3 none
+  name Expression2
+  xpos -451
+  ypos 160
+ }
+push $N9b329590
+ Switch {
+  inputs 2
+  which {{static}}
+  name Switch7
+  xpos -265
+  ypos 160
+ }
+ Blur {
+  channels motion
+  size {{1+parent.VectorGenerator2.smoothness*5}}
+  filter triangle
+  name Blur1
+  xpos -265
+  ypos 184
+ }
+ Dot {
+  name Dot12
+  xpos -231
+  ypos 262
+ }
+set N9b4950a0 [stack 0]
+ Dot {
+  name Dot18
+  xpos -231
+  ypos 336
+ }
+set N9b498c70 [stack 0]
+ Dot {
+  name Dot20
+  xpos -231
+  ypos 474
+ }
+set N9b49c880 [stack 0]
+ Dot {
+  name Dot21
+  xpos -231
+  ypos 548
+ }
+set N9b4a0490 [stack 0]
+ Dot {
+  name Dot22
+  xpos -231
+  ypos 608
+ }
+ Dot {
+  name Dot19
+  xpos -231
+  ypos 686
+ }
+set N9b4a7cb0 [stack 0]
+ Dot {
+  name Dot28
+  xpos -231
+  ypos 760
+ }
+set N9b566d40 [stack 0]
+ Dot {
+  name Dot29
+  xpos -231
+  ypos 820
+ }
+ Dot {
+  name Dot35
+  xpos -231
+  ypos 898
+ }
+set N9b56eaf0 [stack 0]
+ Dot {
+  name Dot36
+  xpos -231
+  ypos 972
+ }
+set N9b5729c0 [stack 0]
+ Dot {
+  name Dot37
+  xpos -231
+  ypos 1110
+ }
+set N9b576890 [stack 0]
+ Dot {
+  name Dot43
+  xpos -231
+  ypos 1184
+ }
+set N9b57a760 [stack 0]
+push $N9b576890
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset39
+  xpos 182
+  ypos 1107
+ }
+push $N9b5729c0
+push $N9b56eaf0
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset33
+  xpos 182
+  ypos 895
+ }
+push $N9b566d40
+push $N9b4a7cb0
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset27
+  xpos 182
+  ypos 683
+ }
+push $N9b4a0490
+push $N9b49c880
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset21
+  xpos 182
+  ypos 471
+ }
+push $N9b498c70
+push $N9b4950a0
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset18
+  xpos -25
+  ypos 259
+ }
+push $N9b1c2070
+ Dot {
+  name Dot11
+  xpos -417
+  ypos 205
+ }
+set N9b5a2ca0 [stack 0]
+ Dot {
+  name Dot15
+  xpos -95
+  ypos 205
+ }
+set N9b4aa8b0 [stack 0]
+ TimeOffset {
+  time_offset 2
+  time ""
+  name TimeOffset17
+  xpos -129
+  ypos 223
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy17
+  xpos -129
+  ypos 249
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort17
+  xpos -129
+  ypos 297
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy18
+  xpos -129
+  ypos 321
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort18
+  xpos -129
+  ypos 369
+ }
+push $N9b4950a0
+push $N9b5a2ca0
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset15
+  xpos -341
+  ypos 223
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy15
+  xpos -341
+  ypos 247
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort15
+  xpos -341
+  ypos 295
+ }
+set N9b5d6e50 [stack 0]
+push 0
+push $N9b498c70
+push $N9b4950a0
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset19
+  xpos 182
+  ypos 259
+ }
+push $N9b4aa8b0
+ Dot {
+  name Dot17
+  xpos 106
+  ypos 205
+ }
+ TimeOffset {
+  time_offset -2
+  time ""
+  name TimeOffset20
+  xpos 72
+  ypos 223
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy19
+  xpos 72
+  ypos 247
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort19
+  xpos 72
+  ypos 295
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy20
+  xpos 72
+  ypos 321
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort20
+  xpos 72
+  ypos 369
+ }
+push $N9b4950a0
+push $N9b5a2ca0
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset16
+  xpos -451
+  ypos 223
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy16
+  xpos -451
+  ypos 247
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter Lanczos4
+  name IDistort16
+  xpos -451
+  ypos 295
+ }
+set N9b735d90 [stack 0]
+ Merge2 {
+  inputs 4+1
+  operation average
+  name Merge14
+  xpos -341
+  ypos 369
+ }
+push $N9b5d6e50
+push $N9b735d90
+ Merge2 {
+  inputs 2
+  operation average
+  name Merge13
+  xpos -451
+  ypos 369
+ }
+ Switch {
+  inputs 2
+  which {{parent.x2}}
+  name Switch1
+  xpos -451
+  ypos 393
+ }
+set N9b75a2d0 [stack 0]
+ Dot {
+  name Dot23
+  xpos -417
+  ypos 417
+ }
+set N9b760d70 [stack 0]
+ Dot {
+  name Dot24
+  xpos -95
+  ypos 417
+ }
+set N9b764ca0 [stack 0]
+ Dot {
+  name Dot25
+  xpos 106
+  ypos 417
+ }
+ TimeOffset {
+  time_offset -2
+  time ""
+  name TimeOffset22
+  xpos 72
+  ypos 435
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy21
+  xpos 72
+  ypos 459
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort21
+  xpos 72
+  ypos 507
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy22
+  xpos 72
+  ypos 533
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort22
+  xpos 72
+  ypos 581
+ }
+push $N9b4a0490
+push $N9b49c880
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset23
+  xpos -25
+  ypos 471
+ }
+push $N9b764ca0
+ TimeOffset {
+  time_offset 2
+  time ""
+  name TimeOffset24
+  xpos -129
+  ypos 435
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy23
+  xpos -129
+  ypos 461
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort23
+  xpos -129
+  ypos 509
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy24
+  xpos -129
+  ypos 533
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort24
+  xpos -129
+  ypos 581
+ }
+push $N9b49c880
+push $N9b760d70
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset25
+  xpos -341
+  ypos 435
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy25
+  xpos -341
+  ypos 459
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort25
+  xpos -341
+  ypos 507
+ }
+set N9b78c4c0 [stack 0]
+push 0
+push $N9b760d70
+ Dot {
+  name Dot26
+  xpos -520
+  ypos 417
+ }
+ Dot {
+  name Dot27
+  xpos -520
+  ypos 584
+ }
+set N9b79a1c0 [stack 0]
+push $N9b49c880
+push $N9b760d70
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset26
+  xpos -451
+  ypos 435
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy26
+  xpos -451
+  ypos 459
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort26
+  xpos -451
+  ypos 507
+ }
+set N9b4ef880 [stack 0]
+ Merge2 {
+  inputs 5+1
+  operation average
+  name Merge15
+  xpos -341
+  ypos 581
+ }
+push $N9b79a1c0
+push 0
+push $N9b78c4c0
+push $N9b4ef880
+ Merge2 {
+  inputs 3+1
+  operation average
+  name Merge16
+  xpos -451
+  ypos 581
+ }
+ Switch {
+  inputs 2
+  which {{parent.Switch1.which}}
+  name Switch2
+  xpos -451
+  ypos 605
+ }
+set N9b7b1250 [stack 0]
+ Dot {
+  name Dot30
+  xpos -417
+  ypos 629
+ }
+set N9b7b7a60 [stack 0]
+ Dot {
+  name Dot31
+  xpos -95
+  ypos 629
+ }
+set N9b7bb9a0 [stack 0]
+ Dot {
+  name Dot32
+  xpos 106
+  ypos 629
+ }
+ TimeOffset {
+  time_offset -2
+  time ""
+  name TimeOffset28
+  xpos 72
+  ypos 647
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy27
+  xpos 72
+  ypos 671
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort27
+  xpos 72
+  ypos 719
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy28
+  xpos 72
+  ypos 745
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort28
+  xpos 72
+  ypos 793
+ }
+push $N9b566d40
+push $N9b4a7cb0
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset29
+  xpos -25
+  ypos 683
+ }
+push $N9b7bb9a0
+ TimeOffset {
+  time_offset 2
+  time ""
+  name TimeOffset30
+  xpos -129
+  ypos 647
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy29
+  xpos -129
+  ypos 673
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort29
+  xpos -129
+  ypos 721
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy30
+  xpos -129
+  ypos 745
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort30
+  xpos -129
+  ypos 793
+ }
+push $N9b4a7cb0
+push $N9b7b7a60
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset31
+  xpos -341
+  ypos 647
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy31
+  xpos -341
+  ypos 671
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort31
+  xpos -341
+  ypos 719
+ }
+set N9b64a9c0 [stack 0]
+push 0
+push $N9b7b7a60
+ Dot {
+  name Dot33
+  xpos -520
+  ypos 629
+ }
+ Dot {
+  name Dot34
+  xpos -520
+  ypos 796
+ }
+set N9d141e00 [stack 0]
+push $N9b4a7cb0
+push $N9b7b7a60
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset32
+  xpos -451
+  ypos 647
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy32
+  xpos -451
+  ypos 671
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort32
+  xpos -451
+  ypos 719
+ }
+set N9d158e90 [stack 0]
+ Merge2 {
+  inputs 5+1
+  operation average
+  name Merge17
+  xpos -341
+  ypos 793
+ }
+push $N9d141e00
+push 0
+push $N9b64a9c0
+push $N9d158e90
+ Merge2 {
+  inputs 3+1
+  operation average
+  name Merge18
+  xpos -451
+  ypos 793
+ }
+ Switch {
+  inputs 2
+  which {{parent.Switch1.which}}
+  name Switch3
+  xpos -451
+  ypos 817
+ }
+set N9d010430 [stack 0]
+ Dot {
+  name Dot38
+  xpos -417
+  ypos 841
+ }
+set N9d016f10 [stack 0]
+ Dot {
+  name Dot39
+  xpos -95
+  ypos 841
+ }
+set N9d01ae50 [stack 0]
+ Dot {
+  name Dot40
+  xpos 106
+  ypos 841
+ }
+ TimeOffset {
+  time_offset -2
+  time ""
+  name TimeOffset34
+  xpos 72
+  ypos 859
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy33
+  xpos 72
+  ypos 883
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort33
+  xpos 72
+  ypos 931
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy34
+  xpos 72
+  ypos 957
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort34
+  xpos 72
+  ypos 1005
+ }
+push $N9b5729c0
+push $N9b56eaf0
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset35
+  xpos -25
+  ypos 895
+ }
+push $N9d01ae50
+ TimeOffset {
+  time_offset 2
+  time ""
+  name TimeOffset36
+  xpos -129
+  ypos 859
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy35
+  xpos -129
+  ypos 885
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort35
+  xpos -129
+  ypos 933
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy36
+  xpos -129
+  ypos 957
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort36
+  xpos -129
+  ypos 1005
+ }
+push $N9b56eaf0
+push $N9d016f10
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset37
+  xpos -341
+  ypos 859
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy37
+  xpos -341
+  ypos 883
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort37
+  xpos -341
+  ypos 931
+ }
+set N9d0a2b50 [stack 0]
+push 0
+push $N9d016f10
+ Dot {
+  name Dot41
+  xpos -520
+  ypos 841
+ }
+ Dot {
+  name Dot42
+  xpos -520
+  ypos 1008
+ }
+set N9d0b08b0 [stack 0]
+push $N9b56eaf0
+push $N9d016f10
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset38
+  xpos -451
+  ypos 859
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy38
+  xpos -451
+  ypos 883
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort38
+  xpos -451
+  ypos 931
+ }
+set N995862f0 [stack 0]
+ Merge2 {
+  inputs 5+1
+  operation average
+  name Merge19
+  xpos -341
+  ypos 1005
+ }
+push $N9d0b08b0
+push 0
+push $N9d0a2b50
+push $N995862f0
+ Merge2 {
+  inputs 3+1
+  operation average
+  name Merge20
+  xpos -451
+  ypos 1005
+ }
+ Switch {
+  inputs 2
+  which {{parent.Switch1.which}}
+  name Switch4
+  xpos -451
+  ypos 1029
+ }
+set N9d0c2bf0 [stack 0]
+ Dot {
+  name Dot44
+  xpos -417
+  ypos 1053
+ }
+set N9d0c96e0 [stack 0]
+ Dot {
+  name Dot45
+  xpos -95
+  ypos 1053
+ }
+set N9d0cd620 [stack 0]
+ Dot {
+  name Dot46
+  xpos 106
+  ypos 1053
+ }
+ TimeOffset {
+  time_offset -2
+  time ""
+  name TimeOffset40
+  xpos 72
+  ypos 1071
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy39
+  xpos 72
+  ypos 1095
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort39
+  xpos 72
+  ypos 1143
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy40
+  xpos 72
+  ypos 1169
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort40
+  xpos 72
+  ypos 1217
+ }
+push $N9b57a760
+push $N9b576890
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset41
+  xpos -25
+  ypos 1107
+ }
+push $N9d0cd620
+ TimeOffset {
+  time_offset 2
+  time ""
+  name TimeOffset42
+  xpos -129
+  ypos 1071
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy41
+  xpos -129
+  ypos 1097
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort41
+  xpos -129
+  ypos 1145
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy42
+  xpos -129
+  ypos 1169
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort42
+  xpos -129
+  ypos 1217
+ }
+push $N9b576890
+push $N9d0c96e0
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset43
+  xpos -341
+  ypos 1071
+ }
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  name Copy43
+  xpos -341
+  ypos 1095
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort43
+  xpos -341
+  ypos 1143
+ }
+set N9d2592a0 [stack 0]
+push 0
+push $N9d0c96e0
+ Dot {
+  name Dot47
+  xpos -520
+  ypos 1053
+ }
+ Dot {
+  name Dot48
+  xpos -520
+  ypos 1220
+ }
+set N9d267000 [stack 0]
+push $N9b576890
+push $N9d0c96e0
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset44
+  xpos -451
+  ypos 1071
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 forward.u
+  from1 backward.v
+  to1 forward.v
+  name Copy44
+  xpos -451
+  ypos 1095
+ }
+ IDistort {
+  channels rgb
+  uv forward
+  filter {{IDistort16.filter}}
+  name IDistort44
+  xpos -451
+  ypos 1143
+ }
+set N9d27d2f0 [stack 0]
+ Merge2 {
+  inputs 5+1
+  operation average
+  name Merge21
+  xpos -341
+  ypos 1217
+ }
+push $N9d267000
+push 0
+push $N9d2592a0
+push $N9d27d2f0
+ Merge2 {
+  inputs 3+1
+  operation average
+  name Merge22
+  xpos -451
+  ypos 1217
+ }
+ Switch {
+  inputs 2
+  which {{parent.Switch1.which}}
+  name Switch6
+  xpos -451
+  ypos 1241
+ }
+push $N9d0c2bf0
+ Dot {
+  name Dot49
+  xpos -578
+  ypos 1032
+ }
+push $N9d010430
+ Dot {
+  name Dot50
+  xpos -578
+  ypos 820
+ }
+push 0
+push $N9b7b1250
+ Dot {
+  name Dot51
+  xpos -578
+  ypos 608
+ }
+push $N9b75a2d0
+ Dot {
+  name Dot52
+  xpos -578
+  ypos 396
+ }
+ Dissolve {
+  inputs 5+1
+  channels rgb
+  which {{parent.iterations-1}}
+  name Dissolve1
+  xpos -612
+  ypos 1241
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  name Merge1
+  xpos -612
+  ypos 1265
+  disable {{1-fix_artifacts}}
+ }
+push 0
+ Merge2 {
+  inputs 2
+  bbox A
+  metainput A
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  name Merge3
+  xpos -612
+  ypos 1289
+ }
+ Clamp {
+  channels rgb
+  name Clamp1
+  xpos -612
+  ypos 1313
+ }
+ Dot {
+  name Dot56
+  xpos -578
+  ypos 1337
+ }
+set N9d186c80 [stack 0]
+ Expression {
+  channel0 rgb
+  expr0 r+g+b
+  channel1 none
+  channel2 none
+  channel3 none
+  enable_mix_luminance false
+  name Expression4
+  xpos -612
+  ypos 1355
+ }
+push $N9b1af1a0
+ Expression {
+  channel0 rgb
+  expr0 r+g+b
+  channel1 none
+  channel2 none
+  channel3 none
+  enable_mix_luminance false
+  name Expression5
+  xpos -707
+  ypos 1332
+ }
+ Dot {
+  name Dot1
+  xpos -673
+  ypos 1382
+ }
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{luminance}}
+  name Dissolve2
+  xpos -612
+  ypos 1379
+ }
+ Dot {
+  name Dot59
+  xpos -578
+  ypos 1497
+ }
+push $N9b53fac0
+push $N9d186c80
+ Dot {
+  name Dot57
+  xpos -474
+  ypos 1337
+ }
+ Expression {
+  temp_name0 L
+  temp_expr0 r+g+b
+  expr0 "L == 0 ? 0.5 : r/L"
+  expr1 "L == 0 ? 0.5 : g/L"
+  expr2 "L == 0 ? 0.5 : b/L"
+  channel3 none
+  enable_mix_luminance false
+  name Expression8
+  xpos -508
+  ypos 1355
+ }
+ Blur {
+  inputs 1+1
+  size 12
+  mix 0.5
+  name Blur4
+  xpos -508
+  ypos 1394
+  disable {{(1-fix_artifacts*median)}}
+ }
+push $N9b1bb410
+ Expression {
+  temp_name0 L
+  temp_expr0 r+g+b
+  expr0 "L == 0 ? 0.5 : r/L"
+  expr1 "L == 0 ? 0.5 : g/L"
+  expr2 "L == 0 ? 0.5 : b/L"
+  channel3 none
+  enable_mix_luminance false
+  name Expression6
+  xpos -809
+  ypos 1332
+ }
+ Dot {
+  name Dot58
+  xpos -775
+  ypos 1473
+ }
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{chrominance}}
+  name Dissolve3
+  xpos -508
+  ypos 1470
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  name Merge23
+  xpos -508
+  ypos 1494
+ }
+ Dot {
+  name Dot60
+  xpos -474
+  ypos 1542
+ }
+set N9d31fed0 [stack 0]
+push $N9b1a5e70
+ Dot {
+  name Dot61
+  xpos -885
+  ypos 1314
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  name Merge24
+  xpos -919
+  ypos 1539
+ }
+ Dot {
+  name Dot62
+  xpos -885
+  ypos 1563
+ }
+push $N9d31fed0
+ Switch {
+  inputs 3
+  which {{(node_output)*(1-preview_mask)+preview_mask*2}}
+  name Switch5
+  xpos -508
+  ypos 1560
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  name Merge4
+  xpos -508
+  ypos 1584
+  disable {{"1-(disable == 2)"}}
+ }
+ Output {
+  name Output1
+  xpos -508
+  ypos 1608
+ }
+end_group

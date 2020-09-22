@@ -1,0 +1,170 @@
+Group {
+ name DVPToImage
+ onCreate "\nnver = nuke.NUKE_VERSION_MAJOR\nthisGRP = nuke.thisGroup()\nif nver >= 11 :\n    thisGRP\['nuke_version'].setValue(1)\nelse :\n    thisGRP\['nuke_version'].setValue(0)\n"
+ tile_color 0x3d99ff
+ label "<font color=cyan>2D image Output</font>"
+ addUserKnob {20 t_general l General}
+ addUserKnob {4 nuke_version l "" +STARTLINE +INVISIBLE M {10 11 "" ""}}
+ nuke_version 11
+ addUserKnob {6 keep_deepPosition l "keep deepPosition" +STARTLINE}
+ keep_deepPosition true
+ addUserKnob {6 keep_deepNormal l "keep deepNormal" +STARTLINE}
+ keep_deepNormal true
+ addUserKnob {26 spacer l "" +STARTLINE}
+ addUserKnob {26 description l "description :" T "This node converts <b>'deepPosition'</b> & <b>'deepNormal'</b> data generated <br>\nby <b>Deep2VPosition</b> to 2D image in downstream. <br>\nIt is because the transparent pixels on 3D data needs to be unfiltered and <br>\nnormal deepToImage will not opperate correctly with 3D data pass."}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l <b>Version</b> T 3.8}
+ addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2020-02-13}
+ addUserKnob {22 btn_CHANGELOG l <b>Changlelog</b> T "log = \"3.8<br>'DVPMatte'<br>&nbsp;&nbsp;-&nbsp;fixed&nbsp;cube&nbsp;matte&nbsp;shape&nbsp;result&nbsp;when&nbsp;pivot&nbsp;changed.&nbsp;Sphere&nbsp;and&nbsp;Cylinder&nbsp;were&nbsp;fine&nbsp;in&nbsp;the&nbsp;past&nbsp;versions.<br>'DVProjection'<br>&nbsp;&nbsp;-&nbsp;link&nbsp;camera&nbsp;replaced&nbsp;transformation&nbsp;by&nbsp;world&nbsp;matrix,&nbsp;so&nbsp;it&nbsp;works&nbsp;with&nbsp;camera&nbsp;stack&nbsp;with&nbsp;axis.<br>&nbsp;&nbsp;-&nbsp;removed&nbsp;preview&nbsp;projection&nbsp;camera&nbsp;in&nbsp;3D&nbsp;view.<br><br>3.7<br>Toolset&nbsp;update&nbsp;:<br>&nbsp;&nbsp;'DVPort'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;added&nbsp;'near'&nbsp;&&nbsp;'far&nbsp;knobs<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;'DVPmatte'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;fixed&nbsp;missing&nbsp;premult&nbsp;original&nbsp;alpha&nbsp;process<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;revert&nbsp;uniform_scale&nbsp;default&nbsp;value&nbsp;back&nbsp;to&nbsp;1.0<br><br>3.6<br>'DVPsetLight'<br>-&nbsp;improved&nbsp;'generated&nbsp;normal&nbsp;(estimate&nbsp;from&nbsp;position)'&nbsp;and&nbsp;changed&nbsp;to&nbsp;blink&nbsp;script.&nbsp;Get&nbsp;better&nbsp;edges&nbsp;on&nbsp;deepNormal.\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "<b>Developed by</b>" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ Input {
+  inputs 0
+  name deep
+  xpos 508
+  ypos -26
+ }
+ Dot {
+  name Dot5
+  xpos 542
+  ypos 31
+ }
+set Ne1fdcb70 [stack 0]
+ Dot {
+  name Dot2
+  xpos 704
+  ypos 31
+ }
+set Ne1fdf030 [stack 0]
+ Dot {
+  name Dot1
+  xpos 973
+  ypos 31
+ }
+set Ne1fe14f0 [stack 0]
+ DeepExpression {
+  chans1 none
+  rgba.red deepNormal.red
+  rgba.green deepNormal.green
+  rgba.blue deepNormal.blue
+  rgba.alpha "alpha <= 0 ? 0 : 1"
+  name DeepExpression2
+  xpos 1050
+  ypos 103
+ }
+push $Ne1fe14f0
+ DeepExpression {
+  chans1 none
+  rgba.red deepNormal.red
+  rgba.green deepNormal.green
+  rgba.blue deepNormal.blue
+  rgba.alpha "alpha <= 0 ? 1 : 0"
+  name DeepExpression3
+  xpos 939
+  ypos 105
+ }
+ Switch {
+  inputs 2
+  which {{parent.nuke_version}}
+  name Switch2
+  label nuke_ver_switch
+  xpos 939
+  ypos 187
+ }
+ DeepToImage {
+  name DeepToImage3
+  xpos 939
+  ypos 281
+ }
+ Dot {
+  name Dot3
+  xpos 973
+  ypos 445
+ }
+push $Ne1fdf030
+ DeepExpression {
+  chans1 none
+  rgba.red deepPosition.red
+  rgba.green deepPosition.green
+  rgba.blue deepPosition.blue
+  rgba.alpha "alpha <= 0 ? 0 : 1"
+  name DeepExpression1
+  xpos 774
+  ypos 104
+ }
+push $Ne1fdf030
+ DeepExpression {
+  chans1 none
+  rgba.red deepPosition.red
+  rgba.green deepPosition.green
+  rgba.blue deepPosition.blue
+  rgba.alpha "alpha <= 0 ? 1 : 0"
+  name DeepExpression15
+  xpos 670
+  ypos 105
+ }
+ Switch {
+  inputs 2
+  which {{parent.nuke_version}}
+  name Switch1
+  label nuke_ver_switch
+  xpos 670
+  ypos 187
+ }
+ DeepToImage {
+  name DeepToImage2
+  xpos 670
+  ypos 281
+ }
+ Dot {
+  name Dot6
+  xpos 704
+  ypos 363
+ }
+push $Ne1fdcb70
+ DeepToImage {
+  name DeepToImage1
+  xpos 508
+  ypos 105
+ }
+add_layer {deepPosition deepPosition.red deepPosition.green deepPosition.blue deepPosition.alpha}
+add_layer {deepNormal deepNormal.red deepNormal.green deepNormal.blue deepNormal.alpha}
+add_layer {deepRawColor deepRawColor.red deepRawColor.green deepRawColor.blue deepRawColor.alpha}
+ Remove {
+  channels deepPosition
+  channels2 deepNormal
+  channels3 deepRawColor
+  name Remove1
+  xpos 508
+  ypos 187
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha black
+  out deepPosition
+  name ShuffleCopy1
+  xpos 508
+  ypos 359
+  disable {{!parent.keep_deepPosition}}
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha black
+  out deepNormal
+  name ShuffleCopy2
+  xpos 508
+  ypos 441
+  disable {{!parent.keep_deepNormal}}
+ }
+ Output {
+  name Output1
+  xpos 508
+  ypos 521
+ }
+end_group

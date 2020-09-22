@@ -1,0 +1,208 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name LumaKeyer
+ onCreate "n = nuke.thisNode()\nn.knob('blackpoint').setRange(0, 1)\nn.knob('whitepoint').setRange(0, 1)"
+ tile_color 0x421010ff
+ note_font "Bitstream Vera Sans Bold Bold"
+ selected true
+ addUserKnob {20 User l lumaKeyer}
+ addUserKnob {4 output M {Alpha RGBA}}
+ addUserKnob {41 blackpoint T picker.blackpoint}
+ addUserKnob {41 whitepoint T picker.whitepoint}
+ addUserKnob {6 invert +STARTLINE}
+ addUserKnob {4 smoothing l Smoothing: M {None Smooth Smooth0 Smooth1 ""}}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 mix T Merge1.mix}
+ addUserKnob {20 info}
+ addUserKnob {22 btn l DerekVFX.ca T "import os\nimport sys\n\ntry:\n    import subprocess\n    def _run(cmd, shell, wait):\n        opener = subprocess.Popen(cmd, shell=shell)\n        if wait:\n            opener.wait()\n        return opener.pid\nexcept ImportError:\n    import popen2\n    def _run(cmd, shell, wait):\n        opener = popen2.Popen3(cmd)\n        if wait:\n            opener.wait()\n        return opener.pid\n\ndef _open(url, wait=0):\n    if sys.platform == \"darwin\":\n        cmd = \[\"open\", url]\n    elif hasattr(os, \"startfile\"):\n        return os.startfile(url)\n    elif os.environ.has_key(\"KDE_FULL_SESSION\") or os.environ.has_key(\"KDE_MULTIHEAD\") or \\\n        os.environ.has_key(\"GNOME_DESKTOP_SESSION_ID\") or os.environ.has_key(\"GNOME_KEYRING_SOCKET\"):\n        cmd = \[\"xdg-open\", url]\n    else:\n        raise OSError, \"Desktop not supported.\"\n\n    return _run(cmd, 0, wait)\n\n_open('http://www.derekvfx.ca/')" +STARTLINE}
+ addUserKnob {26 versionUpdate l "" -STARTLINE T "<font color = gray> adjusted by Tony Lyons </font color = gray>"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 57
+  ypos -347
+ }
+set N244c6660 [stack 0]
+ Colorspace {
+  colorspace_out HSL
+  name Colorspace1
+  xpos -181
+  ypos -181
+ }
+set N24517b10 [stack 0]
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name Shuffle1
+  tile_color 0x3d3f8e00
+  xpos -336
+  ypos -181
+ }
+ Grade {
+  name picker
+  xpos -336
+  ypos -139
+ }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 231
+  ypos 446
+  number 1
+ }
+push $N244c6660
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 91
+  ypos 284
+ }
+set N24532110 [stack 0]
+push $N24517b10
+ Expression {
+  expr3 smoothstep(parent.picker.blackpoint,parent.picker.whitepoint,b)
+  name Expression1
+  xpos -181
+  ypos -138
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos -147
+  ypos -58
+ }
+set N24542110 [stack 0]
+ ColorLookup {
+  channels {{{parent.ColorLookup_smooth.channels}}}
+  lut {master {curve L 0 C k 1 s0}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookup_smooth1
+  xpos -69
+  ypos 33
+ }
+push $N24542110
+ ColorLookup {
+  channels {{{parent.ColorLookup_smooth.channels}}}
+  lut {master {curve L 0 s0 1}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookup_smooth0
+  xpos -181
+  ypos 32
+ }
+push $N24542110
+ ColorLookup {
+  lut {master {curve L 0 s0 C k 1 s0}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookup_smooth
+  xpos -293
+  ypos 32
+ }
+push $N24542110
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos -345
+  ypos -52
+ }
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos -345
+  ypos 131
+ }
+ Switch {
+  inputs 4
+  which {{parent.smoothing}}
+  name Switch1
+  label "\[value which]"
+  xpos -181
+  ypos 121
+ }
+ Expression {
+  expr3 1-a
+  name Expression2
+  xpos -181
+  ypos 191
+  disable {{"parent.invert == 0"}}
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  Bchannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -181
+  ypos 280
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle2
+  tile_color 0xffffffff
+  xpos -181
+  ypos 328
+  disable {{!parent.output}}
+ }
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos -147
+  ypos 450
+ }
+push $N24532110
+ Shuffle {
+  alpha black
+  name Shuffle3
+  label "\[value in]"
+  xpos 57
+  ypos 331
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle4
+  label "\[value in]"
+  selected true
+  xpos 57
+  ypos 369
+  disable {{!parent.output}}
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  also_merge rgba
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 57
+  ypos 446
+ }
+set N2457f1d0 [stack 0]
+ Output {
+  name Output1
+  xpos 57
+  ypos 602
+ }
+push $N2457f1d0
+end_group

@@ -1,0 +1,109 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ inputs 2
+ name Matrix4x4Math
+ tile_color 0x9c0000ff
+ selected true
+ addUserKnob {20 MatrixMult4x4}
+ addUserKnob {4 output l Output t "Add (A+B)\nSub (A-B)\nMult (AB)" M {Add Sub Mult "" ""}}
+ output Mult
+ addUserKnob {4 chooseMatrixA l "Choose Matrix A" M {local world ""}}
+ addUserKnob {41 matrixA l "Matrix A" T MatrixA.matrix}
+ addUserKnob {26 ""}
+ addUserKnob {4 chooseMatrixB l "Choose Matrix B" M {local world}}
+ addUserKnob {41 matrixB l "Matrix B" T MatrixB.matrix}
+ addUserKnob {26 result l Result:}
+ addUserKnob {41 matrixC l "Matrix C" T Matrix_Result.matrix}
+}
+ Input {
+  inputs 0
+  name InputA
+  label "\[value this.number]"
+  xpos -656
+  ypos -308
+  number 1
+ }
+ Matrix {
+  matrix {
+      {{"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"}}
+      {{"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"}}
+      {{"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"}}
+      {{"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"} {"chooseMatrixA == 0 ? parent.input1.matrix : parent.input1.world_matrix"}}
+    }
+  name MatrixA
+  xpos -656
+  ypos -218
+ }
+ Input {
+  inputs 0
+  name InputB
+  label "\[value this.number]"
+  xpos -544
+  ypos -310
+ }
+ Matrix {
+  matrix {
+      {{"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"}}
+      {{"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"}}
+      {{"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"}}
+      {{"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"} {"chooseMatrixB == 0 ? parent.input0.matrix : parent.input0.world_matrix"}}
+    }
+  name MatrixB
+  xpos -544
+  ypos -220
+ }
+ Matrix {
+  inputs 0
+  matrix {
+      {{MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix}}
+      {{MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix}}
+      {{MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix}}
+      {{MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix} {MatrixA.matrix+MatrixB.matrix}}
+    }
+  name MatrixC_Add
+  xpos -692
+  ypos -107
+ }
+ Matrix {
+  inputs 0
+  matrix {
+      {{MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix}}
+      {{MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix}}
+      {{MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix}}
+      {{MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix} {MatrixA.matrix-MatrixB.matrix}}
+    }
+  name MatrixC_Sub
+  xpos -572
+  ypos -104
+ }
+ Matrix {
+  inputs 0
+  matrix {
+      {{"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"}}
+      {{"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"}}
+      {{"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"}}
+      {{"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"} {"output == 0 ? MatrixC_Add.matrix : output == 1 ? MatrixC_Sub.matrix : MatrixC_Mult.matrix"}}
+    }
+  name Matrix_Result
+  selected true
+  xpos -587
+ }
+ Output {
+  name Output1
+  xpos -587
+  ypos 61
+ }
+ Matrix {
+  inputs 0
+  matrix {
+      {{(MatrixA.matrix.0*MatrixB.matrix.0)+(MatrixA.matrix.1*MatrixB.matrix.4)+(MatrixA.matrix.2*MatrixB.matrix.8)+(MatrixA.matrix.3*MatrixB.matrix.12)} {(MatrixA.matrix.0*MatrixB.matrix.1)+(MatrixA.matrix.1*MatrixB.matrix.5)+(MatrixA.matrix.2*MatrixB.matrix.9)+(MatrixA.matrix.3*MatrixB.matrix.13)} {(MatrixA.matrix.0*MatrixB.matrix.2)+(MatrixA.matrix.1*MatrixB.matrix.6)+(MatrixA.matrix.2*MatrixB.matrix.10)+(MatrixA.matrix.3*MatrixB.matrix.14)} {(MatrixA.matrix.0*MatrixB.matrix.3)+(MatrixA.matrix.1*MatrixB.matrix.7)+(MatrixA.matrix.2*MatrixB.matrix.11)+(MatrixA.matrix.3*MatrixB.matrix.15)}}
+      {{(MatrixA.matrix.4*MatrixB.matrix.0)+(MatrixA.matrix.5*MatrixB.matrix.4)+(MatrixA.matrix.6*MatrixB.matrix.8)+(MatrixA.matrix.7*MatrixB.matrix.12)} {(MatrixA.matrix.4*MatrixB.matrix.1)+(MatrixA.matrix.5*MatrixB.matrix.5)+(MatrixA.matrix.6*MatrixB.matrix.9)+(MatrixA.matrix.7*MatrixB.matrix.13)} {(MatrixA.matrix.4*MatrixB.matrix.2)+(MatrixA.matrix.5*MatrixB.matrix.6)+(MatrixA.matrix.6*MatrixB.matrix.10)+(MatrixA.matrix.7*MatrixB.matrix.14)} {(MatrixA.matrix.4*MatrixB.matrix.3)+(MatrixA.matrix.5*MatrixB.matrix.7)+(MatrixA.matrix.6*MatrixB.matrix.11)+(MatrixA.matrix.7*MatrixB.matrix.15)}}
+      {{(MatrixA.matrix.8*MatrixB.matrix.0)+(MatrixA.matrix.9*MatrixB.matrix.4)+(MatrixA.matrix.10*MatrixB.matrix.8)+(MatrixA.matrix.11*MatrixB.matrix.12)} {(MatrixA.matrix.8*MatrixB.matrix.1)+(MatrixA.matrix.9*MatrixB.matrix.5)+(MatrixA.matrix.10*MatrixB.matrix.9)+(MatrixA.matrix.11*MatrixB.matrix.13)} {(MatrixA.matrix.8*MatrixB.matrix.2)+(MatrixA.matrix.9*MatrixB.matrix.6)+(MatrixA.matrix.10*MatrixB.matrix.10)+(MatrixA.matrix.11*MatrixB.matrix.14)} {(MatrixA.matrix.8*MatrixB.matrix.3)+(MatrixA.matrix.9*MatrixB.matrix.7)+(MatrixA.matrix.10*MatrixB.matrix.11)+(MatrixA.matrix.11*MatrixB.matrix.15)}}
+      {{(MatrixA.matrix.12*MatrixB.matrix.0)+(MatrixA.matrix.13*MatrixB.matrix.4)+(MatrixA.matrix.14*MatrixB.matrix.8)+(MatrixA.matrix.15*MatrixB.matrix.12)} {(MatrixA.matrix.12*MatrixB.matrix.1)+(MatrixA.matrix.13*MatrixB.matrix.5)+(MatrixA.matrix.14*MatrixB.matrix.9)+(MatrixA.matrix.15*MatrixB.matrix.13)} {(MatrixA.matrix.12*MatrixB.matrix.2)+(MatrixA.matrix.13*MatrixB.matrix.6)+(MatrixA.matrix.14*MatrixB.matrix.10)+(MatrixA.matrix.15*MatrixB.matrix.14)} {(MatrixA.matrix.12*MatrixB.matrix.3)+(MatrixA.matrix.13*MatrixB.matrix.7)+(MatrixA.matrix.14*MatrixB.matrix.11)+(MatrixA.matrix.15*MatrixB.matrix.15)}}
+    }
+  name MatrixC_Mult
+  xpos -445
+  ypos -105
+ }
+end_group

@@ -1,0 +1,270 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name DespillToColor
+ tile_color 0x475247ff
+ note_font "Bitstream Vera Sans Bold Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 User l main}
+ addUserKnob {68 sto l "screen type" t "- auto - The screen type will be controlled by \n  the screen color:\n\n   g>b : green despill\n   b>g : blue despill\n\n- 'blue' and  'green' act as an override so you can pick a blue-ish screen color but still despill green tones and vice versa.\n" M {auto green blue "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {18 sc l "screen color"}
+ sc {0.11 0.11 0.1}
+ addUserKnob {6 sc_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 sc_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 sc_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 tc l "target color"}
+ tc {0.11 0.11 0.1}
+ addUserKnob {6 tc_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 tc_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 tc_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 balance t "- determines which colors get affected more by the despill operation. \nlower : red\nhigher : green / blue" R 0 2}
+ balance 1
+ addUserKnob {7 gain t "Increasing gain will affect a wider range of colors." R 0.5 3.5}
+ gain 1
+ addUserKnob {26 ""}
+ addUserKnob {6 enableErode l "enable erode" +STARTLINE}
+ addUserKnob {6 spillmatte l "spillmatte output" t "- spillmatte output to alpha channel.\nThis channel is normalised, so the picked color has an alpha value of 1. \nIn ordner not to clamp values above 1 you might choose to grade this mask down a bit." -STARTLINE}
+ addUserKnob {7 erode t "For blurry edges, eroding the despill matte is an alternative to increasing the gain." R 0.1 50}
+ erode 1
+ addUserKnob {7 erodeMix l mix}
+ erodeMix 1
+ addUserKnob {26 ""}
+ addUserKnob {7 falloff t "- controls the gamma on the despill matte." R 0.5 1.5}
+ falloff 1
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask -STARTLINE T Merge1.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 unpremult l "(un)premult by" T despillGreen.unpremult}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {26 ""}
+ addUserKnob {20 info l "info / advanced" n 1}
+ info 0
+ addUserKnob {26 jm l "" +STARTLINE T "Despill to Color by Johannes Masanz\nVersion: 4.1"}
+ addUserKnob {26 ""}
+ addUserKnob {7 ir l "increase range" t "compensates for screen values higher than 1" R 0 100}
+ ir 50
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos -234
+  ypos 479
+  number 1
+ }
+set N19c2ece0 [stack 0]
+ Input {
+  inputs 0
+  name source
+  xpos -84
+  ypos 76
+ }
+set N19c32900 [stack 0]
+ Expression {
+  expr0 r
+  expr1 g
+  expr2 b
+  channel3 alpha
+  expr3 parent.gain<1?min((b-(r*parent.balance+g*(1-(parent.balance-1)))/2),(b*parent.gain-(r*parent.balance+g*(1-(parent.balance-1)))/2)):(b*parent.gain-(r*parent.balance+g*(1-(parent.balance-1)))/2)
+  name ExpBlue
+  xpos 516
+  ypos 76
+ }
+ Grade {
+  channels alpha
+  whitepoint {{parent.NoOp1.avb}}
+  name despillWhite1
+  xpos 516
+  ypos 102
+ }
+set N19c42b50 [stack 0]
+push $N19c32900
+ Expression {
+  expr0 r
+  expr1 g
+  expr2 b
+  channel3 alpha
+  expr3 parent.gain<1?min((g*parent.gain-(r*parent.balance+b*(1-(parent.balance-1)))/2),(g-(r*parent.balance+b*(1-(parent.balance-1)))/2)):(g*parent.gain-(r*parent.balance+b*(1-(parent.balance-1)))/2)
+  name ExpGreen
+  xpos 402
+  ypos 76
+ }
+ Grade {
+  channels alpha
+  whitepoint {{parent.NoOp1.avg}}
+  name despillWhite
+  xpos 402
+  ypos 102
+ }
+set N19c5b330 [stack 0]
+push $N19c5b330
+push $N19c42b50
+ Switch {
+  inputs 2
+  which {{parent.sc.b>parent.sc.g?0:1}}
+  name Switch2
+  xpos 456
+  ypos 149
+ }
+ Switch {
+  inputs 3
+  which {{parent.sto}}
+  name Switch3
+  xpos 456
+  ypos 175
+ }
+ FilterErode {
+  size {{-parent.erode}}
+  filter gaussian
+  mix {{parent.erodeMix}}
+  name despillGaussian
+  xpos 456
+  ypos 219
+  disable {{1-parent.enableErode}}
+ }
+set N19c74f40 [stack 0]
+ Grade {
+  channels alpha
+  gamma {{parent.falloff}}
+  black_clamp false
+  name falloff
+  xpos 346
+  ypos 264
+ }
+set N19c7f520 [stack 0]
+push $N19c74f40
+ ChannelMerge {
+  inputs 2
+  operation max
+  name ChannelMerge1
+  xpos 456
+  ypos 257
+ }
+push $N19c7f520
+push $N19c74f40
+ ChannelMerge {
+  inputs 2
+  operation min
+  name ChannelMerge2
+  xpos 563
+  ypos 257
+  disable {{parent.falloff==1?1:0}}
+ }
+ Switch {
+  inputs 2
+  which {{parent.falloff>1?1:0}}
+  name Switch1
+  xpos 456
+  ypos 307
+ }
+set N19ca11a0 [stack 0]
+push $N19c2ece0
+push $N19ca11a0
+ Grade {
+  channels alpha
+  whitepoint {{parent.NoOp1.avb}}
+  white {{parent.ir+1}}
+  reverse true
+  name Grade2
+  xpos 516
+  ypos 347
+ }
+push $N19c32900
+ Grade {
+  inputs 1+1
+  channels rgba
+  add {{parent.tc*(clamp(1/clamp(parent.NoOp1.avb/(parent.ir+1)),0,1000000))-parent.sc*(clamp(1/clamp(parent.NoOp1.avb/(parent.ir+1)),0,1000000))} {parent.tc*(clamp(1/clamp(parent.NoOp1.avb/(parent.ir+1)),0,1000000))-parent.sc*(clamp(1/clamp(parent.NoOp1.avb/(parent.ir+1)),0,1000000))} {parent.tc*(clamp(1/clamp(parent.NoOp1.avb/(parent.ir+1)),0,1000000))-parent.sc*(clamp(1/clamp(parent.NoOp1.avb/(parent.ir+1)),0,1000000))} {curve}}
+  black_clamp false
+  unpremult {{{parent.despillGreen.unpremult}}}
+  name despillBlue
+  xpos 516
+  ypos 383
+ }
+set N19cb43c0 [stack 0]
+push $N19ca11a0
+ Grade {
+  channels alpha
+  whitepoint {{parent.NoOp1.avg}}
+  white {{parent.ir+1}}
+  reverse true
+  name Grade4
+  xpos 402
+  ypos 348
+ }
+push $N19c32900
+ Grade {
+  inputs 1+1
+  channels rgba
+  add {{parent.tc*(clamp(1/clamp(parent.NoOp1.avg/(parent.ir+1)),0,inf))-parent.sc*(clamp(1/clamp(parent.NoOp1.avg/(parent.ir+1)),0,inf))} {parent.tc*(clamp(1/clamp(parent.NoOp1.avg/(parent.ir+1)),0,inf))-parent.sc*(clamp(1/clamp(parent.NoOp1.avg/(parent.ir+1)),0,inf))} {parent.tc*(clamp(1/clamp(parent.NoOp1.avg/(parent.ir+1)),0,inf))-parent.sc*(clamp(1/clamp(parent.NoOp1.avg/(parent.ir+1)),0,inf))} {curve}}
+  black_clamp false
+  unpremult -rgba.alpha
+  name despillGreen
+  xpos 402
+  ypos 383
+ }
+set N19ccd5a0 [stack 0]
+push $N19ccd5a0
+push $N19cb43c0
+ Switch {
+  inputs 2
+  which {{parent.sc.b>parent.sc.g?0:1}}
+  name Switch4
+  xpos 456
+  ypos 453
+ }
+ Switch {
+  inputs 3
+  which {{parent.sto}}
+  name Switch5
+  xpos 456
+  ypos 479
+ }
+push $N19c32900
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  maskChannelInput -rgba.alpha
+  mix {{parent.mix}}
+  name Merge1
+  xpos -84
+  ypos 479
+ }
+ Shuffle {
+  alpha black
+  name Shuffle1
+  xpos -84
+  ypos 505
+  disable {{1-spillmatte}}
+ }
+ Copy {
+  inputs 2+1
+  from0 rgba.alpha
+  to0 rgba.alpha
+  bbox B
+  name Copy2
+  xpos -84
+  ypos 545
+  disable {{1-spillmatte}}
+ }
+ Output {
+  name Output1
+  xpos -84
+  ypos 599
+ }
+ NoOp {
+  inputs 0
+  name NoOp1
+  xpos 181
+  ypos 160
+  addUserKnob {20 User}
+  addUserKnob {7 avg l alphavalueGreen}
+  avg {{parent.sc.g*clamp(1,parent.gain,inf)-(parent.sc.b*(1-(parent.balance-1))+parent.sc.r*parent.balance)/2}}
+  addUserKnob {7 avb l alphavalueBlue}
+  avb {{parent.sc.b*clamp(1,parent.gain,inf)-(parent.sc.g*(1-(parent.balance-1))+parent.sc.r*parent.balance)/2}}
+ }
+end_group

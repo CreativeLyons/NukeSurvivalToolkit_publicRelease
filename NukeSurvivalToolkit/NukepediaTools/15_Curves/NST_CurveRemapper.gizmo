@@ -1,0 +1,34 @@
+Group {
+name CurveRemapper
+ inputs 0
+ help "A simple, albeit handy tool to remap curves from one value to the other. Made to help tackle the random output from the curve tool."
+ tile_color 0x232323ff
+ addUserKnob {20 userTab l Options}
+ addUserKnob {26 ""}
+ addUserKnob {26 helpText_01 l "" +STARTLINE T "C O P Y  A N I M A T I O N  C U R V E  H E R E :\n\nInput Animation Curve expects keyframes\n(expression-links must be baked.)\n"}
+ addUserKnob {7 curveValue l "Animation Curve"}
+ addUserKnob {22 autoMinMax l "Find Minimum and Maximum Curve Values" T "#Adds python into expression knob, which evalutes and finds the answer\nnuke.thisNode().knob('curveMin').setExpression(\"\[python min((key.y for key in nuke.thisNode().knob('curveValue').animation(0).keys()))]\")\nnuke.thisNode().knob('curveMax').setExpression(\"\[python max((key.y for key in nuke.thisNode().knob('curveValue').animation(0).keys()))]\")\n\n#Remove the expression\nnuke.thisNode().knob('curveMin').clearAnimated()\nnuke.thisNode().knob('curveMax').clearAnimated()" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {7 curveMin l "Curve Minimum"}
+ addUserKnob {7 curveMax l "Curve Maximum"}
+ addUserKnob {7 newMin l "New Minimum"}
+ addUserKnob {7 newMax l "New Maximum"}
+ newMax 1
+ addUserKnob {26 ""}
+ addUserKnob {26 helpText_02 l "" +STARTLINE T "C O P Y   N E W   A N I M A T I O N   C U R V E\nO U T   O F   H E R E :\n"}
+ addUserKnob {7 curveOutput l Output}
+ curveOutput {{lerp(curveMin,newMin,curveMax,newMax,curveValue)}}
+ addUserKnob {26 ""}
+ addUserKnob {20 infoTab l Info}
+ addUserKnob {26 ""}
+ addUserKnob {26 versionInfo l "" +STARTLINE T "\nCreated by Ben McEwan\nwww.benmcewan.com\n\nVersion 1.2\nLast Updated: November 7th, 2018\n"}
+ addUserKnob {26 ""}
+}
+ Output {
+  inputs 0
+  name Output1
+  selected true
+  xpos -651
+  ypos -209
+ }
+end_group

@@ -1,0 +1,603 @@
+set cut_paste_input [stack 0]
+push 0
+push $cut_paste_input
+Group {
+ inputs 2
+ name RotoQC
+ help "matte QC tool for checking roto work, choose between different overlay modes or merge-operations to QC the roto work.\n\nThe node is stackable, meaning the alpha carries over and is merged properly if you stack multiple matteQC nodes together (keep matte in alpha channel must be checked). This can be used to view Red, Green and Blue mattes at the same time in RGB mode for example.\n\nDeveloped by Tor Andreassen - www.fxtor.net"
+ knobChanged "if nuke.thisKnob().name()=='mode':\n n=nuke.thisNode()\n\n val=n\['mode'].value()\n\n if val == 'red overlay':\n  n\['tile_color'].setValue(0xff0000ff)\n\n elif val == 'green overlay':\n  n\['tile_color'].setValue(0x3d962bff)\n\n elif val == 'blue overlay':\n  n\['tile_color'].setValue(0x3b54b7ff)\n\n elif val == 'premult: grey':\n  n\['tile_color'].setValue(0x8e8e8eff)\n\n elif val == 'premult: checkerboard':\n  n\['tile_color'].setValue(0xf8ff00ff)\n\n elif val == 'premult: custom color':\n  n\['tile_color'].setValue(0xf8ff00ff)\n\n elif val == 'stencil from rgb':\n  n\['tile_color'].setValue(0x2c2c2cff)\n\n elif val == 'check core for holes':\n  n\['tile_color'].setValue(0xf8ff00ff)"
+ tile_color 0xff0000ff
+ label "\[value mode]"
+ note_font Verdana
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 fxT_matteQC}
+ addUserKnob {4 mode t "pick your display mode\n___________________________________________\nmost modes are self explaining.\n\npremult agains custom color: the custom color can be set in the 'custom BG color' slider.\n\ncheck core for holes:\nthis is an expression that sets the alpha to 0 if the alpha value is below 1, making it easier to see if overlapping shapes are giving you holes in the core of your matte." M {"red overlay" "green overlay" "blue overlay" "stencil from rgb" "premult: grey" "premult: checkerboard" "premult: custom color" "check core for holes" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {7 colorOpacity l "color opacity" t "this will change the overlay opacity when the mode is set to red, green, or blue overlay."}
+ colorOpacity 0.25
+ addUserKnob {41 color l "custom BG color" T AddCustom.value}
+ addUserKnob {6 keepAlpha l "keep matte in alpha channel" t "When a matte is hooked into the node, this gives you the option to keep the matte in the alpha channel.\n\nIf the box is uncheked, the alpha channel will replaced with a solid alpha." +STARTLINE}
+ keepAlpha true
+ addUserKnob {6 bbox l "keep bbox" t "If this is checked, the bbox from the 'rgb' input will be used. Uncheck this checkbox to keep the bbox from the 'matte' input. " -STARTLINE}
+ addUserKnob {6 pipeAlpaThrough l "pipe alpha through" t "This option lets you see the rgb input with alpha channel from the matte input. \n\nMode dropdown is ignorored to let you see the raw bg with alpha copied in." +STARTLINE}
+ addUserKnob {6 invertMatte l "invert matte" t "Click this to invert the input matte.\n\nPS: This will only invert the matte if overlay mode is active (red,green, or blue)." -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "<font color='#454545'>// fxT_matteQC v2.4 © Tor Andreassen = www.fxtor.net</font>"}
+ addUserKnob {20 tab}
+ addUserKnob {26 info l "" +STARTLINE T "<font color = grey>This tool is intended for checking matte accuracy.<br />\nThe format will default to the rgb input's format.<br /><br />\n\nThe node is stackable if you want to see R,G,B<br />\noverlay at the same time over the plate.<br /><br />\nThe alpha will carry through between stacked nodes<br />\nif the 'keep matte in alpha channel' checkbox is checked.<br /><br />\n\nPS: for the alpha to carry through, the nodename<br />\nneeds to start with 'fxT_matteQC', as it's based on regEx<br />\nto only stack alphas from fxT_matteQC nodes.<br />\n</font>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x505a6101
+  label "BG COLOR OVERLAY\ndefined by user dropdown"
+  note_font "Arial Black"
+  note_font_size 25
+  note_font_color 0xffffff01
+  xpos -1211
+  ypos -1017
+  bdwidth 484
+  bdheight 559
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode10
+  tile_color 0x505a6101
+  label "raw input, but pipe the alpha into the alpha-channel"
+  note_font "Arial Black"
+  note_font_size 25
+  note_font_color 0xffffff01
+  xpos -1205
+  ypos 1031
+  bdwidth 1756
+  bdheight 170
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x505a6101
+  label "WHEN PREMULTED AGAINST BG; USE THIS BG\ndefined by user dropdown"
+  note_font "Arial Black"
+  note_font_size 25
+  note_font_color 0xffffff01
+  xpos 484
+  ypos -1173
+  bdwidth 876
+  bdheight 721
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x505a6101
+  label "PREMULTED AGAINST RED,GREEN, BLUE OR INPUT\ndefined by user dropdown"
+  note_font "Arial Black"
+  note_font_size 25
+  note_font_color 0xffffff01
+  xpos -725
+  ypos -371
+  bdwidth 698
+  bdheight 551
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x505a6101
+  label "merge with or without mix depending on mode"
+  note_font "Arial Black"
+  note_font_size 25
+  note_font_color 0xffffff01
+  xpos -1211
+  ypos 297
+  bdwidth 1762
+  bdheight 411
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode5
+  tile_color 0x505a6101
+  label "BG INPUT"
+  note_font "Arial Black"
+  note_font_size 25
+  note_font_color 0xffffff01
+  xpos 211
+  ypos -1603
+  bdwidth 365
+  bdheight 314
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode7
+  tile_color 0x505a6101
+  label "keep RGB input's bbox"
+  note_font "Arial Black"
+  note_font_size 25
+  note_font_color 0xffffff01
+  xpos -1206
+  ypos 1222
+  bdwidth 1753
+  bdheight 109
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode8
+  tile_color 0x505a6101
+  label "keep alpha"
+  note_font "Arial Black"
+  note_font_size 25
+  note_font_color 0xffffff01
+  xpos -1207
+  ypos 753
+  bdwidth 1756
+  bdheight 234
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode12
+  tile_color 0x434b51ff
+  label checkerboard
+  note_font "Arial Black"
+  note_font_size 20
+  note_font_color 0xffffff01
+  xpos 839
+  ypos -1045
+  bdwidth 188
+  bdheight 378
+  z_order 1
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode13
+  tile_color 0x434b51ff
+  label "custom color"
+  note_font "Arial Black"
+  note_font_size 20
+  note_font_color 0xffffff01
+  xpos 1093
+  ypos -1050
+  bdwidth 174
+  bdheight 386
+  z_order 1
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode6
+  tile_color 0x434b51ff
+  label "0.33 grey"
+  note_font "Arial Black"
+  note_font_size 20
+  note_font_color 0xffffff01
+  xpos 576
+  ypos -1047
+  bdwidth 194
+  bdheight 380
+  z_order 1
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  tile_color 0xa8a8a8ff
+  label "merge alpha from previous fxT_matteQC-node if the nodes are stacked.\nBased on regEx matching. so removing 'fxT_matteQC' from the node-name will break this"
+  xpos -357
+  ypos 920
+ }
+ Input {
+  inputs 0
+  name rgb
+  label "\[value number]"
+  xpos 358
+  ypos -1537
+ }
+set N567ddb00 [stack 0]
+ Shuffle {
+  alpha white
+  name Shuffle8
+  tile_color 0xffffffff
+  label solidAlpha
+  xpos 358
+  ypos -1348
+ }
+set N3e024400 [stack 0]
+ Dot {
+  name Dot15
+  xpos -1256
+  ypos -1347
+ }
+ Dot {
+  name Dot17
+  xpos -1256
+  ypos 1129
+ }
+set N59ef5860 [stack 0]
+ Dot {
+  name Dot19
+  xpos -1256
+  ypos 1271
+ }
+push $N567ddb00
+push $N3e024400
+ Dot {
+  name Dot9
+  xpos 383
+  ypos -870
+ }
+set N18f109b0 [stack 0]
+ Remove {
+  name Remove2
+  xpos 631
+  ypos -873
+ }
+set N36ff6dd0 [stack 0]
+push $N36ff6dd0
+ Shuffle {
+  name Shuffle6
+  label rgba
+  xpos 631
+  ypos -802
+ }
+set N21fd8bd0 [stack 0]
+ Add {
+  value 0.2
+  name AddCustom
+  tile_color 0x191919ff
+  label custom
+  xpos 1140
+  ypos -807
+ }
+ Shuffle {
+  alpha white
+  name Shuffle3
+  tile_color 0xffffffff
+  label solidAlpha
+  xpos 1140
+  ypos -744
+ }
+ Dot {
+  name Dot7
+  xpos 1168
+  ypos -605
+ }
+push $N36ff6dd0
+ Expression {
+  channel0 rgb
+  expr0 "(floor(x/64)+floor(y/64)) % 2 == 0 ? 0.1 : 0.5"
+  channel1 none
+  channel2 none
+  name checkerBoard
+  xpos 902
+  ypos -873
+ }
+ Shuffle {
+  alpha white
+  name Shuffle7
+  tile_color 0xffffffff
+  label solidAlpha
+  xpos 902
+  ypos -839
+ }
+ Dot {
+  name Dot5
+  xpos 930
+  ypos -629
+ }
+push $N21fd8bd0
+ Add {
+  channels rgba
+  value {0.33 0.33 0.33 1}
+  name Add
+  tile_color 0x8e8e8eff
+  label "grey: .33"
+  xpos 631
+  ypos -755
+ }
+ Dot {
+  name Dot4
+  xpos 659
+  ypos -623
+ }
+push $N18f109b0
+push $N18f109b0
+push $N18f109b0
+push $N18f109b0
+ Switch {
+  inputs 8
+  which {{parent.mode}}
+  name modeSwitch3
+  tile_color 0x262626ff
+  xpos 364
+  ypos -480
+ }
+ Dot {
+  name Dot3
+  xpos 389
+  ypos -54
+ }
+set N4962a1a0 [stack 0]
+ Shuffle {
+  alpha white
+  name Shuffle4
+  tile_color 0xffffffff
+  label solidAlpha
+  xpos -250
+  ypos -55
+ }
+ Input {
+  inputs 0
+  name matte
+  label "\[value number]"
+  xpos -427
+  ypos -275
+  number 1
+ }
+set N4ef04280 [stack 0]
+ Invert {
+  channels alpha
+  name Invert1
+  xpos -534
+  ypos -200
+  disable {{modeSwitch01.which>3?1:0}}
+ }
+push $N4ef04280
+ Switch {
+  inputs 2
+  which {{parent.invertMatte}}
+  name invertMatteSwitch
+  tile_color 0x242424ff
+  xpos -427
+  ypos -194
+ }
+ Dot {
+  name Dot14
+  xpos -399
+  ypos -133
+ }
+set N444b8130 [stack 0]
+ Switch {
+  inputs 2
+  which {{!parent.autoAlphaCheck.a}}
+  name Switch1
+  tile_color 0x242424ff
+  label autoInputCheck
+  xpos -424
+  ypos -55
+ }
+ Expression {
+  channel0 alpha
+  expr0 a<1?0:1
+  name Expression3
+  label checkCore
+  xpos -424
+  ypos 10
+  disable {{parent.mode==7?0:1}}
+ }
+push $N18f109b0
+push $N18f109b0
+push $N18f109b0
+push $N18f109b0
+push $N18f109b0
+push $N18f109b0
+ Dot {
+  name Dot10
+  xpos -970
+  ypos -870
+ }
+ Remove {
+  name Remove1
+  xpos -998
+  ypos -773
+ }
+ Shuffle {
+  name Shuffle5
+  label rgba
+  xpos -998
+  ypos -709
+ }
+set N32555cc0 [stack 0]
+ Add {
+  value {0 0 1 1}
+  name Add3
+  tile_color 0xffff
+  xpos -899
+  ypos -648
+ }
+push $N32555cc0
+ Add {
+  value {0 1 0 1}
+  name Add2
+  tile_color 0xff00ff
+  xpos -998
+  ypos -648
+ }
+push $N32555cc0
+ Add {
+  value {1 0 0 1}
+  name Add1
+  tile_color 0xff0000ff
+  xpos -1107
+  ypos -647
+ }
+ Switch {
+  inputs 8
+  which {{parent.mode}}
+  name modeSwitch01
+  tile_color 0x262626ff
+  xpos -998
+  ypos -523
+ }
+ Dot {
+  name Dot2
+  xpos -973
+  ypos 74
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy8
+  xpos -424
+  ypos 73
+ }
+set N47636810 [stack 0]
+ Dot {
+  name Dot12
+  xpos -506
+  ypos 142
+ }
+ Dot {
+  name Dot18
+  note_font_size 50
+  xpos -506
+  ypos 800
+ }
+set N19a2bbc0 [stack 0]
+ Dot {
+  name Dot13
+  xpos -506
+  ypos 873
+ }
+ ChannelMerge {
+  inputs 2
+  name ChannelMerge1
+  xpos -196
+  ypos 863
+  disable {{"!\[regexp \"(fxT_matteQC)\" \[value this.parent.input.name] ?0:1]"}}
+ }
+set N34d8a250 [stack 0]
+push $N59ef5860
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos -196
+  ypos 1128
+ }
+push $N19a2bbc0
+ Shuffle {
+  alpha white
+  name Shuffle2
+  tile_color 0xffffffff
+  label solidAlpha
+  xpos 101
+  ypos 799
+ }
+push $N34d8a250
+ Switch {
+  inputs 2
+  which {{!parent.keepAlpha}}
+  name keepAlphaSwitch
+  xpos 101
+  ypos 875
+ }
+push $N47636810
+ Premult {
+  name Premult7
+  xpos -424
+  ypos 132
+ }
+ Dot {
+  name Dot1
+  xpos -399
+  ypos 412
+ }
+set N21f5d6d0 [stack 0]
+ Dot {
+  name Dot6
+  xpos -399
+  ypos 490
+ }
+set N3e0114c0 [stack 0]
+push $N4962a1a0
+ Dot {
+  name Dot8
+  xpos 224
+  ypos 230
+ }
+set N4efa5a00 [stack 0]
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos 202
+  ypos 495
+ }
+set N8c7f26a0 [stack 0]
+push $N8c7f26a0
+push $N8c7f26a0
+push $N8c7f26a0
+push $N3e0114c0
+ Dot {
+  name Dot11
+  xpos -399
+  ypos 574
+ }
+push $N4efa5a00
+ Dot {
+  name Dot16
+  xpos 127
+  ypos 230
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge2
+  xpos 102
+  ypos 579
+ }
+push $N21f5d6d0
+push $N4962a1a0
+ Merge2 {
+  inputs 2
+  mix {{parent.colorOpacity}}
+  name Merge45
+  xpos 367
+  ypos 418
+  disable {{parent.disable}}
+ }
+set N4b570570 [stack 0]
+push $N4b570570
+push $N4b570570
+ Switch {
+  inputs 8
+  which {{parent.mode}}
+  name modeSwitch1
+  tile_color 0x262626ff
+  xpos 358
+  ypos 677
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 367
+  ypos 871
+ }
+ Switch {
+  inputs 2
+  which {{parent.pipeAlpaThrough}}
+  name pipeAlpaThroughSwitch
+  xpos 367
+  ypos 1134
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 367
+  ypos 1276
+  disable {{!parent.bbox}}
+ }
+ Output {
+  name Output1
+  xpos 367
+  ypos 1486
+ }
+push $N444b8130
+ NoOp {
+  name autoAlphaCheck
+  xpos -540
+  ypos -122
+  addUserKnob {20 autoAlphaCheck}
+  addUserKnob {6 a +STARTLINE}
+  a {{"\[string first \".a\" \[channels \[input this 0]]]>-1"}}
+ }
+end_group

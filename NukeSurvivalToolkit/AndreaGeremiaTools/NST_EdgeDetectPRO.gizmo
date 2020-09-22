@@ -1,0 +1,472 @@
+Group {
+ name EdgeDetectPRO
+ tile_color 0xcc804e00
+ addUserKnob {20 EdgeDetect}
+ addUserKnob {41 channels T CTRL.channels}
+ addUserKnob {26 IN l "" +STARTLINE T "<b><font color=\"SandyBrown\">IN</font></b>"}
+ addUserKnob {26 line l "" -STARTLINE}
+ addUserKnob {7 in_erode l "IN erode" R -100 100}
+ addUserKnob {7 in_blur l "IN blur" R 0 50}
+ addUserKnob {26 OUT l "" +STARTLINE T "<b><font color=\"SandyBrown\">OUT</font></b>"}
+ addUserKnob {26 line2 l "" -STARTLINE}
+ addUserKnob {7 out_erode l "OUT erode" R -100 100}
+ addUserKnob {7 out_blur l "OUT blur" R 0 50}
+ addUserKnob {26 OVERALL l "" +STARTLINE T "<b><font color=\"SandyBrown\">OVERALL</font></b>"}
+ addUserKnob {26 line03 l "" -STARTLINE}
+ addUserKnob {41 size l Dilate T Dilate1.size}
+ addUserKnob {41 size_1 l Blur T BlurOverall.size}
+ addUserKnob {41 value l Gain T MultiplyOverall.value}
+ addUserKnob {6 clamp -STARTLINE}
+ clamp true
+ addUserKnob {26 ""}
+ addUserKnob {6 enableRotate l "" +STARTLINE +STARTLINE}
+ addUserKnob {41 which l rotate -STARTLINE T Switch1.which}
+ addUserKnob {26 ""}
+ addUserKnob {20 filters l Filters n 1}
+ filters 0
+ addUserKnob {41 filter l "filter erode" T FilterErodeIN.filter}
+ addUserKnob {41 filter_1 l "filter blur" T BlurIN.filter}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 email l @}
+ addUserKnob {26 email_1 l "" +STARTLINE T "<b><font color=\"SandyBrown\">EdgeDetect PRO v2.0</font></b><br>\n<font size=“1”><i>by Andrea Geremia</i><br>\n<br>\nandrea.geremia89@gmail.com<br>\nwww.andreageremia.it</font>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x56705aff
+  label rotate
+  note_font_size 42
+  xpos -2496
+  ypos -223
+  bdwidth 2029
+  bdheight 509
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 149
+  ypos -285
+ }
+ Dilate {
+  channels {{{parent.CTRL.channels}}}
+  name Dilate1
+  label "\[value size]"
+  xpos 147
+  ypos -234
+ }
+ Dot {
+  name Dot4
+  xpos 181
+  ypos -143
+ }
+set N46af5a00 [stack 0]
+ Dot {
+  name Dot21
+  xpos -176
+  ypos -143
+ }
+set N46af7ec0 [stack 0]
+ Dot {
+  name Dot16
+  xpos -525
+  ypos -143
+ }
+set N46afa460 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {-1 0 1}
+      {-1 -1 0}
+    }
+  name Matrix15
+  xpos -557
+  ypos -29
+ }
+push $N46afa460
+ Dot {
+  name Dot5
+  xpos -658
+  ypos -143
+ }
+set N46a71040 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 1}
+      {-1 0 1}
+      {-1 -1 -1}
+    }
+  name Matrix14
+  xpos -690
+  ypos -31
+ }
+push $N46a71040
+ Dot {
+  name Dot14
+  xpos -788
+  ypos -143
+ }
+set N46a5bb90 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 1}
+      {0 0 0}
+      {-1 -1 -1}
+    }
+  name Matrix13
+  xpos -820
+  ypos -29
+ }
+push $N46a5bb90
+ Dot {
+  name Dot13
+  xpos -934
+  ypos -143
+ }
+set N46a63330 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 1}
+      {1 0 -1}
+      {-1 -1 -1}
+    }
+  name Matrix12
+  xpos -966
+  ypos -29
+ }
+push $N46a63330
+ Dot {
+  name Dot12
+  xpos -1068
+  ypos -143
+ }
+set N46a6aad0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 0 -1}
+      {0 -1 -1}
+    }
+  name Matrix11
+  xpos -1100
+  ypos -31
+ }
+push $N46a6aad0
+ Dot {
+  name Dot11
+  xpos -1219
+  ypos -143
+ }
+set N46a50a40 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 -1}
+      {0 0 0}
+      {1 -1 -1}
+    }
+  name Matrix10
+  xpos -1251
+  ypos -32
+ }
+push $N46a50a40
+ Dot {
+  name Dot10
+  xpos -1351
+  ypos -143
+ }
+set N46a49300 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 -1}
+      {1 0 -1}
+      {1 -1 -1}
+    }
+  name Matrix9
+  xpos -1385
+  ypos -34
+ }
+push $N46a49300
+ Dot {
+  name Dot9
+  xpos -1500
+  ypos -143
+ }
+set N46a31fc0 [stack 0]
+ Matrix {
+  matrix {
+      {1 0 -1}
+      {1 0 -1}
+      {1 0 -1}
+    }
+  name Matrix8
+  xpos -1534
+  ypos -31
+ }
+push $N46a31fc0
+ Dot {
+  name Dot8
+  xpos -1640
+  ypos -143
+ }
+set N46a2fdd0 [stack 0]
+ Matrix {
+  matrix {
+      {1 -1 -1}
+      {1 0 -1}
+      {1 1 -1}
+    }
+  name Matrix7
+  xpos -1674
+  ypos -31
+ }
+push $N46a2fdd0
+ Dot {
+  name Dot15
+  xpos -1745
+  ypos -143
+ }
+set N46a10560 [stack 0]
+ Matrix {
+  matrix {
+      {0 -1 -1}
+      {1 0 -1}
+      {1 1 0}
+    }
+  name Matrix6
+  xpos -1779
+  ypos -32
+ }
+push $N46a10560
+ Dot {
+  name Dot7
+  xpos -1851
+  ypos -143
+ }
+set N46a17ca0 [stack 0]
+ Matrix {
+  matrix {
+      {-1 -1 -1}
+      {1 0 -1}
+      {1 1 1}
+    }
+  name Matrix5
+  xpos -1885
+  ypos -31
+ }
+push $N46a17ca0
+ Dot {
+  name Dot6
+  xpos -1961
+  ypos -143
+ }
+set N46a06770 [stack 0]
+ Matrix {
+  matrix {
+      {-1 -1 -1}
+      {0 0 0}
+      {1 1 1}
+    }
+  name Matrix4
+  xpos -1995
+  ypos -32
+ }
+push $N46a06770
+ Dot {
+  name Dot17
+  xpos -2082
+  ypos -143
+ }
+set N2a2039f0 [stack 0]
+ Matrix {
+  matrix {
+      {-1 -1 -1}
+      {-1 0 1}
+      {1 1 1}
+    }
+  name Matrix3
+  xpos -2116
+  ypos -32
+ }
+push $N2a2039f0
+ Dot {
+  name Dot18
+  xpos -2203
+  ypos -143
+ }
+set N2a20b040 [stack 0]
+ Matrix {
+  matrix {
+      {-1 -1 0}
+      {-1 0 1}
+      {0 1 1}
+    }
+  name Matrix2
+  xpos -2237
+  ypos -31
+ }
+push $N2a20b040
+ Dot {
+  name Dot19
+  xpos -2319
+  ypos -143
+ }
+set N2a212a00 [stack 0]
+ Matrix {
+  matrix {
+      {-1 -1 1}
+      {-1 0 1}
+      {-1 1 1}
+    }
+  name Matrix1
+  xpos -2353
+  ypos -31
+ }
+push $N2a212a00
+ Dot {
+  name Dot20
+  xpos -2452
+  ypos -143
+ }
+ Matrix {
+  matrix {
+      {-1 0 1}
+      {-1 0 1}
+      {-1 0 1}
+    }
+  name Matrix0
+  xpos -2486
+  ypos -31
+ }
+ Switch {
+  inputs 16
+  name Switch1
+  xpos -1534
+  ypos 258
+ }
+push $N46af7ec0
+ Matrix {
+  channels {{{parent.CTRL.channels}}}
+  matrix {
+      {{"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(0,0)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(0,1)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(0,2)]"}}
+      {{"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(1,0)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(1,1)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(1,2)]"}}
+      {{"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(2,0)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(2,1)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(2,2)]"}}
+    }
+  name MatrixSUPER
+  xpos -208
+  ypos 68
+ }
+ FilterErode {
+  channels {{{parent.CTRL.channels}}}
+  size {{(abs(parent.FilterErodeOUT.size)+abs(parent.FilterErodeIN.size)+parent.BlurOUT.size+parent.BlurIN.size+10)*-1}}
+  name FilterErode1
+  label "\[value size]"
+  xpos -208
+  ypos 215
+ }
+push $N46af5a00
+ Dot {
+  name Dot2
+  label IN
+  note_font_size 30
+  xpos 239
+  ypos -96
+ }
+ FilterErode {
+  channels {{{parent.CTRL.channels}}}
+  size {{parent.in_erode}}
+  name FilterErodeIN
+  label "\[value size]"
+  xpos 205
+  ypos -44
+ }
+ Blur {
+  channels {{{parent.CTRL.channels}}}
+  size {{parent.in_blur}}
+  name BlurIN
+  label "\[value size]"
+  selected true
+  xpos 205
+  ypos 14
+ }
+ Dot {
+  name Dot3
+  xpos 239
+  ypos 169
+ }
+push $N46af5a00
+ Dot {
+  name Dot1
+  label OUT
+  note_font_size 30
+  xpos 106
+  ypos -93
+ }
+ FilterErode {
+  channels {{{parent.CTRL.channels}}}
+  size {{parent.out_erode}}
+  filter {{FilterErodeIN.filter}}
+  name FilterErodeOUT
+  label "\[value size]"
+  xpos 72
+  ypos -39
+ }
+ Blur {
+  channels {{{parent.CTRL.channels}}}
+  size {{parent.out_blur}}
+  filter {{BlurIN.filter}}
+  name BlurOUT
+  label "\[value size]"
+  xpos 72
+  ypos 15
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  xpos 72
+  ypos 166
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge2
+  label ROTATE
+  xpos 72
+  ypos 215
+  disable {{!parent.enableRotate}}
+ }
+ Blur {
+  channels {{{parent.CTRL.channels}}}
+  name BlurOverall
+  label "\[value size]"
+  xpos 72
+  ypos 286
+ }
+ Multiply {
+  channels {{{parent.CTRL.channels}}}
+  name MultiplyOverall
+  label "\[value value]"
+  xpos 72
+  ypos 340
+ }
+ Clamp {
+  channels {{{parent.CTRL.channels}}}
+  name Clamp1
+  xpos 72
+  ypos 383
+  disable {{!parent.clamp}}
+ }
+ Output {
+  name Output1
+  xpos 72
+  ypos 432
+ }
+ FilterErode {
+  inputs 0
+  channels rgba
+  size 0
+  name CTRL
+  label "\[value size]"
+  xpos 385
+  ypos -166
+ }
+end_group

@@ -1,0 +1,217 @@
+set cut_paste_input [stack 0]
+ColorBars {
+ inputs 0
+ name ColorBars1
+ selected true
+ xpos 2
+ ypos -334
+}
+Blur {
+ size 150
+ name Blur1
+ label "size \[value size]"
+ selected true
+ xpos 2
+ ypos -262
+}
+Dot {
+ name Dot2
+ tile_color 0xcc804e00
+ label plate
+ note_font_size 30
+ selected true
+ xpos 36
+ ypos -184
+}
+set N12350460 [stack 0]
+Colorspace {
+ colorspace_out YCbCr
+ name Colorspace1
+ label "input \[value colorspace_in]\noutput \[value colorspace_out]"
+ selected true
+ xpos 2
+ ypos -121
+}
+Shuffle {
+ red green
+ green blue
+ blue black
+ name Shuffle1
+ label "in \[value in]-->out \[value out]"
+ selected true
+ xpos 2
+ ypos -73
+}
+Dot {
+ name Dot3
+ tile_color 0x9e3c6300
+ selected true
+ xpos 36
+ ypos -10
+}
+set N1456efa0 [stack 0]
+Dot {
+ name Dot4
+ tile_color 0x9e3c6300
+ selected true
+ xpos 264
+ ypos -10
+}
+push $N1456efa0
+push $N12350460
+Dot {
+ name Dot1
+ tile_color 0xcc804e00
+ selected true
+ xpos -110
+ ypos -60
+}
+BlinkScript {
+ inputs 2
+ recompileCount 1
+ ProgramGroup 1
+ KernelDescription "2 \"InverseSTKernel\" iterate pixelWise 79737837f0b8f5ef5ba9dd8c86c9e76f184ef0da76c94577b5431d3e3e08b063 3 \"src\" Read Point \"stmap\" Read Point \"dst\" Write Random 1 \"resolution\" Float 2 AAAAAAAAAAA= 1 \"resolution\" 2 1 0"
+ kernelSource "// Original Kernel by Mads Hagbarth, modified to use STMaps by Erwan Leroy\n\nkernel InverseSTKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;\n  Image<eRead, eAccessPoint, eEdgeClamped> stmap;\n  Image<eWrite, eAccessRandom> dst;\n\n  param:\n    float2 resolution;\n\n  void process() \{\n    float2 uv;\n    uv.x = stmap().x * resolution.x - 0.5f;\n    uv.y = stmap().y * resolution.y - 0.5f;\n    //always make sure that you don't write outside bounds\n    //as it will usually crash nuke.\n    if (dst.bounds.inside(uv.x,uv.y)) \{ \n      dst(uv.x,uv.y) = src(); \n    \}\n  \}\n\};"
+ useGPUIfAvailable false
+ rebuild ""
+ InverseSTKernel_resolution {{width} {height}}
+ rebuild_finalise ""
+ name BlinkScript1
+ selected true
+ xpos 2
+ ypos 60
+}
+Roto {
+ output alpha
+ cliptype none
+ replace true
+ curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097152}
+    {t x44800000 x44428000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Bezier1 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {xc0000000 0}
+        {x440d8000 x44024000}
+        {x40000000 0}
+        {xc1a80000 x41000000}
+        {x442ec000 x43f70000}
+        {x41a80000 xc1000000}
+        {xc0800000 x41d80000}
+        {x4440c667 x43bf0000}
+        {x40800000 xc1d80000}
+        {x40a00000 x41400000}
+        {x4441c000 x43928000}
+        {xc0a00000 xc1400000}
+        {x41b80000 x40000000}
+        {x442b0000 x43750000}
+        {xc1b80000 xc0000000}
+        {x41500000 xc1500000}
+        {x440c0000 x438d8000}
+        {xc1500000 x41500000}
+        {0 xc1700000}
+        {x43f60000 x43b48000}
+        {0 x41700000}
+        {0 0}
+        {x43fe8000 x43dc8000}
+        {0 0}}}
+      {cc
+       {f 8192}
+       {px 1
+        {xc0000000 0}
+        {0 0}
+        {x40000000 0}
+        {xc1a80000 x41000000}
+        {x421903f0 x42c8da30}
+        {x41a80000 xc1000000}
+        {xc0800000 x41d80000}
+        {x431a824c x41b71e70}
+        {x40800000 xc1d80000}
+        {x40a00000 x41400000}
+        {x433eb874 xc29ef132}
+        {xc0a00000 xc1400000}
+        {x41b80000 x40000000}
+        {0 0}
+        {xc1b80000 xc0000000}
+        {x41500000 xc1500000}
+        {0 0}
+        {xc1500000 x41500000}
+        {0 xc1700000}
+        {0 0}
+        {0 x41700000}
+        {0 0}
+        {0 0}
+        {0 0}}}}
+     {tx 1 x441e1000 x43bcc000}
+     {a osw x41200000 osf 0 str 1 spx x44800000 spy x44428000 sb 1 tt x40800000}}}}}}
+ toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+ toolbar_brush_hardness 0.200000003
+ toolbar_source_transform_scale {1 1}
+ toolbar_source_transform_center {1024 778}
+ colorOverlay {0 0 0 0}
+ lifetime_type "all frames"
+ motionblur_shutter_offset_type centred
+ source_black_outside true
+ link_output false
+ name Roto1
+ selected true
+ xpos 2
+ ypos 138
+}
+Shuffle {
+ red alpha
+ green alpha
+ blue alpha
+ name Shuffle2
+ label "in \[value in]-->out \[value out]"
+ selected true
+ xpos 2
+ ypos 174
+}
+STMap {
+ inputs 2
+ uv rgb
+ name STMap1
+ selected true
+ xpos 230
+ ypos 174
+}
+push $N12350460
+Dot {
+ name Dot5
+ tile_color 0xcc804e00
+ selected true
+ xpos 419
+ ypos -184
+}
+Merge2 {
+ inputs 2
+ operation mask
+ bbox B
+ name Merge1
+ selected true
+ xpos 385
+ ypos 231
+}
