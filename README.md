@@ -11,7 +11,7 @@ Here’s how to install and use the Nuke Survival Toolkit:
 
 1.) Download the .zip folder from the Nuke Survival Toolkit github website.  
 
-https://github.com/CreativeLyons/NukeSurvivalToolkit_public
+https://github.com/CreativeLyons/NukeSurvivalToolkit_publicRelease
 
 This github will have all of the up to date changes, bug fixes, tweaks, additions, etc. So feel free to watch or star the github, and check back regularly if you’d like to stay up to date.
 
