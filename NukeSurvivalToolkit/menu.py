@@ -19,6 +19,13 @@ prefixNST = "NST_"
 # Store the location of this menu.py to help with nuke.nodePaste() which requires a filepath to paste
 NST_FolderPath = os.path.dirname(__file__)
 
+# give the name of the help doc .pdf in main folder
+NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v1.0.0.pdf"
+
+# create filepath to help doc
+NST_helpDoc_os_path = os.path.join(NST_FolderPath, NST_helpDoc)
+NST_helpDocPath = "file:///{}".format(NST_helpDoc_os_path)
+
 # Create NukeSurivalToolkit Menu
 toolbar = nuke.menu('Nodes')
 m = toolbar.addMenu('NukeSurvivalToolkit', icon = "SurvivalToolkit.png")
@@ -31,7 +38,8 @@ m = toolbar.addMenu('NukeSurvivalToolkit', icon = "SurvivalToolkit.png")
 def openNSTDocumentation():
     # Feel free to change the path from this website, you can downloaded the pdf file onot your folder system, just replace
     # the string in the quotations below with the full filepath to the .pdf file instead of this website.
-    webbrowser.open("https://docs.google.com/document/d/1sMpK-TTZ06wLiTmTjuoXDbVfpbdWjAM--g7d6B8_Urk/edit")
+    webbrowser.open(NST_helpDocPath)
+
 
 m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png")
 
