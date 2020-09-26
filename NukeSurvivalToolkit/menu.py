@@ -360,7 +360,7 @@ ThreeDMenu.addCommand('Noise3DTexture NKPD', "nuke.createNode('{}Noise3DTexture'
 particlesMenu = m.addMenu('Particles', icon = 'ToolbarParticles.png', index = 110)
 
 particlesMenu.addCommand('waterSchmutz DR', "nuke.createNode('{}waterSchmutz')".format(prefixNST), icon="WaterLens.png")
-particlesMenu.addCommand('Sparky NKPD', "nuke.createNode('{}Sparky')".format(prefixNST), icon="Sparky.png")
+particlesMenu.addCommand('Sparky DB', "nuke.createNode('{}Sparky')".format(prefixNST), icon="Sparky.png")
 particlesMenu.addCommand('ParticleLights MHD', "nuke.createNode('{}ParticleLights')".format(prefixNST), icon="ToolbarParticles.png")
 particlesMenu.addCommand('ParticleKiller NKPD', "nuke.createNode('{}ParticleKiller')".format(prefixNST), icon="ToolbarParticles.png")
 
@@ -517,7 +517,7 @@ gizmoDemoMenu = templatesMenu.addMenu("Gizmo Demo Scripts", icon='Group.png')
 gizmoDemoMenu.addCommand('WaterLens Demo MJT', "nuke.nodePaste('{}/MJT_Labs/Draw/WaterLens_11/demo_script/{}WaterLens_sampleScript.nk')".format(NST_FolderPath, prefixNST), icon="WaterLens.png")
 gizmoDemoMenu.addCommand('SSMesh Demo MJT', "nuke.nodePaste('{}/MJT_Labs/3D/SSMesh_v13/demo_script/{}SSMesh_demo.nk')".format(NST_FolderPath, prefixNST), icon="SSMesh.png")
 gizmoDemoMenu.addCommand('UVEditor Demo MJT', "nuke.nodePaste('{}/MJT_Labs/3D/UVEditor_v14/demo_script/{}UVEditor_demo_clean.nk')".format(NST_FolderPath, prefixNST), icon="UVEditor.png")
-gizmoDemoMenu.addCommand('Sparky Demo NKPD', "nuke.nodePaste('{}/NukepediaTools/11_Particles/DB_Sparky_v1.4/ExampleScene/{}SparkyExampleScene.nk')".format(NST_FolderPath, prefixNST), icon="Sparky.png")
+gizmoDemoMenu.addCommand('Sparky Demo DB', "nuke.nodePaste('{}/NukepediaTools/11_Particles/DB_Sparky_v1.5/ExampleScene/{}SparkyExampleScene.nk')".format(NST_FolderPath, prefixNST), icon="Sparky.png")
 gizmoDemoMenu.addCommand('ParticleLights Demo MHD', "nuke.nodePaste('{}/Hagbarth_Tools/{}ParticleLights_ExampleScript.nk')".format(NST_FolderPath, prefixNST), icon="ToolbarParticles.png")
 
 

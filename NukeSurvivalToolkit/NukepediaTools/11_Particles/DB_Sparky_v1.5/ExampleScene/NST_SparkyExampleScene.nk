@@ -3,10 +3,11 @@ BackdropNode {
  name BackdropNode1
  tile_color 0x7171c600
  label "Cam/Axis setup. \nDeep compatible!"
- note_font "Verdana Bold Italic"
+ note_font "Verdana Bold Italic Bold Italic"
  note_font_size 80
- xpos 243
- ypos -822
+ selected true
+ xpos -2908
+ ypos -539
  bdwidth 1592
  bdheight 1334
 }
@@ -16,13 +17,14 @@ BackdropNode {
  tile_color 0x8e8e3800
  label "2D Setup"
  note_font_size 80
- xpos -378
- ypos -817
+ selected true
+ xpos -3529
+ ypos -534
  bdwidth 428
  bdheight 366
 }
+push $cut_paste_input
 Camera2 {
- inputs 0
  translate {{curve x1001 930 x1098 524.2270508 x1200 9.730261803} {curve x1001 520 x1098 895.1622314 x1200 1183.430542} {curve x1001 3504 x1098 1449.996826 x1200 1276.928467}}
  rotate {{curve x1001 4.3 x1098 19.60003662 x1200 9.119994164} {curve x1001 30.2 x1098 84.99999237 x1200 132.1900024} {curve x1001 0 x1098 -3.398572801e-07 x1200 -8.647048162e-07}}
  focal 24
@@ -31,27 +33,31 @@ Camera2 {
  near 1
  far 100000
  name Camera1
- xpos 630
- ypos -318
+ selected true
+ xpos -2521
+ ypos -35
 }
 Dot {
  name Dot3
- xpos 654
- ypos -198
+ selected true
+ xpos -2497
+ ypos 85
 }
-set N352ad400 [stack 0]
+set N4aa30170 [stack 0]
 Dot {
  name Dot4
- xpos 1016
- ypos -198
+ selected true
+ xpos -2135
+ ypos 85
 }
-set N352ad000 [stack 0]
+set N49cf22b0 [stack 0]
 Dot {
  name Dot2
- xpos 1016
- ypos -30
+ selected true
+ xpos -2135
+ ypos 253
 }
-set N352acc00 [stack 0]
+set N49c97eb0 [stack 0]
 RotoPaint {
  inputs 0
  curves {{{v x3f99999a}
@@ -318,8 +324,9 @@ RotoPaint {
  source_black_outside true
  name RotoPaint1
  tile_color 0xff
- xpos 1610
- ypos -394
+ selected true
+ xpos -1541
+ ypos -111
 }
 Sphere {
  translate {57.00060513 560.261795 1277.047357}
@@ -327,16 +334,18 @@ Sphere {
  uniform_scale 9000
  name Sphere1
  tile_color 0xff
- xpos 1610
- ypos -202
+ selected true
+ xpos -1541
+ ypos 81
 }
-push $N352ad000
+push $N49cf22b0
 CheckerBoard2 {
  inputs 0
  boxsize {120 60}
  name CheckerBoard2
- xpos 958
- ypos -571
+ selected true
+ xpos -2193
+ ypos -288
  postage_stamp false
 }
 Card2 {
@@ -358,36 +367,40 @@ Card2 {
 1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
  name Card1
  tile_color 0xff
- xpos 958
- ypos -397
+ selected true
+ xpos -2193
+ ypos -114
 }
 CheckerBoard2 {
  inputs 0
  boxsize {130 108}
  centerlinewidth 0
  name CheckerBoard1
- xpos 1170
- ypos -574
+ selected true
+ xpos -1981
+ ypos -291
  postage_stamp false
 }
 Reflection {
  reflection_value 0.1
  name Reflection1
  tile_color 0xff
- xpos 1170
- ypos -490
+ selected true
+ xpos -1981
+ ypos -207
 }
-set N35308400 [stack 0]
+set N34df3520 [stack 0]
 Cube {
  translate {-368 465 166}
  scaling {0.5 1 1}
  uniform_scale 1000
  name Cube3
  tile_color 0xff
- xpos 1062
- ypos -394
+ selected true
+ xpos -2089
+ ypos -111
 }
-push $N35308400
+push $N34df3520
 Cube {
  rows 1
  columns 1
@@ -397,10 +410,11 @@ Cube {
  uniform_scale 2000
  name Cube1
  tile_color 0xff
- xpos 1294
- ypos -399
+ selected true
+ xpos -1857
+ ypos -116
 }
-push $N35308400
+push $N34df3520
 Cube {
  rows 1
  columns 1
@@ -409,18 +423,20 @@ Cube {
  uniform_scale 1000
  name Cube2
  tile_color 0xff
- xpos 1170
- ypos -394
+ selected true
+ xpos -1981
+ ypos -111
 }
 Scene {
  inputs 6
  display textured+wireframe
  name Scene1
  tile_color 0xff
- xpos 1180
- ypos -222
+ selected true
+ xpos -1971
+ ypos 61
 }
-set N35309400 [stack 0]
+set N34de79f0 [stack 0]
 push 0
 add_layer {reflection reflection.red reflection.green reflection.blue reflection.alpha}
 RayRender {
@@ -429,41 +445,45 @@ RayRender {
  AOV_Reflection reflection
  name RayRender1
  tile_color 0xff
- xpos 1390
- ypos -34
+ selected true
+ xpos -1761
+ ypos 249
 }
-set N6a1df800 [stack 0]
-push $N6a1df800
+set N49e28390 [stack 0]
+push $N49e28390
 Blur {
  size 55
  maskChannelInput -rgba.alpha
  name Blur1
  tile_color 0xff
- xpos 1390
- ypos 8
+ selected true
+ xpos -1761
+ ypos 291
 }
-Shuffle2 {
- fromInput1 {{0} B}
- in1 reflection
- fromInput2 {{0} B}
- mappings "4 reflection.red 0 0 rgba.red 0 0 reflection.green 0 1 rgba.green 0 1 reflection.blue 0 2 rgba.blue 0 2 reflection.alpha 0 3 rgba.alpha 0 3"
+Shuffle {
+ in reflection
  name Shuffle1
- tile_color 0xff
- xpos 1390
- ypos 86
+ label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+ note_font_size 21
+ note_font_color 0xffffffff
+ selected true
+ xpos -1761
+ ypos 355
 }
 Merge2 {
  inputs 2
  operation plus
  name Merge3
  tile_color 0xff
- xpos 1610
- ypos 86
+ selected true
+ xpos -1541
+ ypos 369
 }
 Dot {
  name Dot1
- xpos 1644
- ypos 186
+ selected true
+ xpos -1507
+ ypos 469
 }
 EXPTool {
  mode Stops
@@ -472,43 +492,48 @@ EXPTool {
  blue -1
  name Exposure2
  tile_color 0xff
- xpos 1390
- ypos 182
+ selected true
+ xpos -1761
+ ypos 465
 }
-push $N352acc00
-push $N35309400
+push $N49c97eb0
+push $N34de79f0
 push 0
 ScanlineRender {
  inputs 3
  conservative_shader_sampling false
  motion_vectors_type distance
  name ScanlineRender1
- xpos 1170
- ypos -34
+ selected true
+ xpos -1981
+ ypos 249
 }
 DeepRecolor {
  inputs 2
  name DeepRecolor1
  tile_color 0xff
- xpos 1170
- ypos 182
+ selected true
+ xpos -1981
+ ypos 465
 }
 Axis2 {
  inputs 0
  translate {-92 1202 1345}
  name Axis1
- xpos 300
- ypos -54
+ selected true
+ xpos -2851
+ ypos 229
 }
-push $N352ad400
+push $N4aa30170
 Group {
  inputs 2
  name Sparky3D
  tile_color 0xbd4600ff
  label "\[if \{\[value ROrP]==false\} \{return \"Render Mode\"\} \{return \"!! PARTICLE MODE !! \\nENABLED\"\}]"
- note_font "Bitstream Vera Sans Bold"
- xpos 620
- ypos -40
+ note_font "Bitstream Vera Sans Bold Bold"
+ selected true
+ xpos -2531
+ ypos 243
  addUserKnob {20 SparkTab l "Sparky Settings"}
  addUserKnob {41 start_frame l "Initial Frame" T SparkEmit.start_frame}
  addUserKnob {7 EmissionRate l "Emission Amount" R 0 100}
@@ -631,13 +656,13 @@ Group {
   xpos -676
   ypos -548
  }
-set N6a263400 [stack 0]
+set N49e114c0 [stack 0]
  Sphere {
   name Sphere1
   xpos -770
   ypos -456
  }
-push $N6a263400
+push $N49e114c0
  Sphere {
   translate {{parent.input1.translate} {parent.input1.translate} {parent.input1.translate}}
   rotate {{parent.input1.rotate} {parent.input1.rotate} {parent.input1.rotate}}
@@ -731,7 +756,7 @@ push 0
   xpos -676
   ypos 265
  }
-set N6a2ae800 [stack 0]
+set N37869af0 [stack 0]
  Dot {
   name Dot2
   xpos -924
@@ -772,14 +797,14 @@ set N6a2ae800 [stack 0]
   xpos -1227
   ypos 548
  }
-set N6c5cac00 [stack 0]
-push $N6a2ae800
+set N37891e70 [stack 0]
+push $N37869af0
  Dot {
   name Dot6
   xpos -642
   ypos 516
  }
-set N6a2ae400 [stack 0]
+set N37898940 [stack 0]
  Constant {
   inputs 0
   name Constant1
@@ -800,7 +825,7 @@ set N6a2ae400 [stack 0]
   xpos -127
   ypos 551
  }
-set N6c5f1c00 [stack 0]
+set N378b0eb0 [stack 0]
  ScanlineRender {
   inputs 3
   conservative_shader_sampling false
@@ -825,14 +850,14 @@ set N6c5f1c00 [stack 0]
   xpos -448
   ypos 708
  }
-push $N6c5cac00
+push $N37891e70
  Dot {
   name Dot48
   xpos -1192
   ypos 640
  }
-push $N6a2ae400
-push $N6c5f1c00
+push $N37898940
+push $N378b0eb0
  Dot {
   name Dot5
   xpos -126
@@ -899,37 +924,39 @@ DeepColorCorrect2 {
  gain 3
  name DeepColorCorrect1
  tile_color 0xff
- xpos 620
- ypos 86
+ selected true
+ xpos -2531
+ ypos 369
 }
-DeepMerge2 {
+DeepMerge {
  inputs 2
- name DeepMerge1
- tile_color 0xff
- xpos 620
- ypos 182
+ name DeepMerge2
+ selected true
+ xpos -2531
+ ypos 465
 }
-DeepToImage2 {
- name DeepToImage1
- tile_color 0xff
- xpos 620
- ypos 278
+DeepToImage {
+ name DeepToImage2
+ selected true
+ xpos -2531
+ ypos 561
 }
 NoOp {
  name LookAtMe
  tile_color 0xe955ffff
- note_font "Verdana Bold Italic"
+ note_font "Verdana Bold Italic Bold Italic"
  note_font_size 70
- xpos 620
- ypos 357
+ selected true
+ xpos -2531
+ ypos 640
 }
-push $N352ad400
+push $cut_paste_input
 Axis2 {
- inputs 0
  translate {-100 0 0}
  name Axis2
- xpos -289
- ypos -746
+ selected true
+ xpos -3440
+ ypos -463
 }
 push 0
 Group {
@@ -937,10 +964,10 @@ Group {
  name Sparky2D
  tile_color 0xbd4600ff
  label "\[if \{\[value ROrP]==false\} \{return \"Render Mode\"\} \{return \"!! PARTICLE MODE !! \\nENABLED\"\}]"
- note_font "Bitstream Vera Sans Bold"
+ note_font "Bitstream Vera Sans Bold Bold"
  selected true
- xpos -299
- ypos -644
+ xpos -3450
+ ypos -361
  addUserKnob {20 SparkTab l "Sparky Settings"}
  addUserKnob {41 start_frame l "Initial Frame" T SparkEmit.start_frame}
  addUserKnob {7 EmissionRate l "Emission Amount" R 0 100}
@@ -1063,13 +1090,13 @@ Group {
   xpos -676
   ypos -548
  }
-set N6c67d000 [stack 0]
+set N4aba6030 [stack 0]
  Sphere {
   name Sphere1
   xpos -770
   ypos -456
  }
-push $N6c67d000
+push $N4aba6030
  Sphere {
   translate {{parent.input1.translate} {parent.input1.translate} {parent.input1.translate}}
   rotate {{parent.input1.rotate} {parent.input1.rotate} {parent.input1.rotate}}
@@ -1163,7 +1190,7 @@ push 0
   xpos -676
   ypos 265
  }
-set N6c734400 [stack 0]
+set N37cd0d90 [stack 0]
  Dot {
   name Dot2
   xpos -924
@@ -1204,14 +1231,14 @@ set N6c734400 [stack 0]
   xpos -1227
   ypos 548
  }
-set N6c774800 [stack 0]
-push $N6c734400
+set N37cf9110 [stack 0]
+push $N37cd0d90
  Dot {
   name Dot6
   xpos -642
   ypos 516
  }
-set N6c734000 [stack 0]
+set N37d03b60 [stack 0]
  Constant {
   inputs 0
   name Constant1
@@ -1232,7 +1259,7 @@ set N6c734000 [stack 0]
   xpos -127
   ypos 551
  }
-set N6c793800 [stack 0]
+set N37d1c0d0 [stack 0]
  ScanlineRender {
   inputs 3
   conservative_shader_sampling false
@@ -1257,14 +1284,14 @@ set N6c793800 [stack 0]
   xpos -448
   ypos 708
  }
-push $N6c774800
+push $N37cf9110
  Dot {
   name Dot48
   xpos -1192
   ypos 640
  }
-push $N6c734000
-push $N6c793800
+push $N37d03b60
+push $N37d1c0d0
  Dot {
   name Dot5
   xpos -126
@@ -1330,31 +1357,36 @@ end_group
 Grade {
  white 2
  name Grade1
- xpos -299
- ypos -569
+ selected true
+ xpos -3450
+ ypos -286
 }
 Glow2 {
  brightness 3
  size 3
  name Glow1
- xpos -299
- ypos -512
+ selected true
+ xpos -3450
+ ypos -229
 }
 CheckerBoard2 {
  inputs 0
  name CheckerBoard3
- xpos -93
- ypos -668
+ selected true
+ xpos -3244
+ ypos -385
 }
 Grade {
  white 0.125
  name Grade2
- xpos -93
- ypos -596
+ selected true
+ xpos -3244
+ ypos -313
 }
 Merge2 {
  inputs 2
  name Merge1
- xpos -93
- ypos -512
+ selected true
+ xpos -3244
+ ypos -229
 }
