@@ -3,8 +3,6 @@
 
 # Nuke Survival Toolkit
 
-### Release v1.0.0
-
 [Intro and Installation Video](https://youtu.be/MQq9GH3SekA)
 
 For full documentation and tool index, visit:
