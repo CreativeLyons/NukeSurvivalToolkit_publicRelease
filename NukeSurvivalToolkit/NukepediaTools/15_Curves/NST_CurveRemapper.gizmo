@@ -1,28 +1,32 @@
+set cut_paste_input [stack 0]
+version 12.2 v1
 Group {
-name CurveRemapper
  inputs 0
- help "A simple, albeit handy tool to remap curves from one value to the other. Made to help tackle the random output from the curve tool."
+ name bm_CurveRemapper
+ help "A simple, albeit handy tool to remap animation curves from arbitrary values to something more sensible & controllable. Made to help tackle the random output from the curve tool."
+ knobChanged "n = nuke.thisNode()\nif n\['curve_input'].isAnimated() == True:\n n\['curve_minimum'].setEnabled(True)\n n\['curve_maximum'].setEnabled(True)\n n\['new_minimum'].setEnabled(True)\n n\['new_maximum'].setEnabled(True)\n n\['helpText_02'].setEnabled(True)\n n\['curve_output'].setEnabled(True)\nelse:\n n\['curve_minimum'].setEnabled(False)\n n\['curve_maximum'].setEnabled(False)\n n\['new_minimum'].setEnabled(False)\n n\['new_maximum'].setEnabled(False)\n n\['helpText_02'].setEnabled(False)\n n\['curve_output'].setEnabled(False)\n"
  tile_color 0x232323ff
+ selected true
+ xpos -360
+ ypos 83
  addUserKnob {20 userTab l Options}
  addUserKnob {26 ""}
- addUserKnob {26 helpText_01 l "" +STARTLINE T "C O P Y  A N I M A T I O N  C U R V E  H E R E :\n\nInput Animation Curve expects keyframes\n(expression-links must be baked.)\n"}
- addUserKnob {7 curveValue l "Animation Curve"}
- addUserKnob {22 autoMinMax l "Find Minimum and Maximum Curve Values" T "#Adds python into expression knob, which evalutes and finds the answer\nnuke.thisNode().knob('curveMin').setExpression(\"\[python min((key.y for key in nuke.thisNode().knob('curveValue').animation(0).keys()))]\")\nnuke.thisNode().knob('curveMax').setExpression(\"\[python max((key.y for key in nuke.thisNode().knob('curveValue').animation(0).keys()))]\")\n\n#Remove the expression\nnuke.thisNode().knob('curveMin').clearAnimated()\nnuke.thisNode().knob('curveMax').clearAnimated()" +STARTLINE}
+ addUserKnob {26 helpText_01 l "" +STARTLINE T "I N P U T  A N I M A T I O N  C U R V E  H E R E :\n"}
+ addUserKnob {7 curve_input l "Animation Curve" t "Paste animation, or expression-link another knob here to start..."}
+ addUserKnob {22 autoMinMax l "Find Minimum and Maximum Curve Values" t "This button will bake the input animation / expression, and find the min & max values of the curve. These values will be auto-set in the appropriate knobs below." T "#Bake expression link.\nname = nuke.thisNode().name()+\".curve_input\"\nnuke.animation(name, \"generate\", (nuke.knob('first_frame'), nuke.knob('last_frame'), \".01\", \"y\", name))\n\n#Adds python into expression knob, which evalutes and finds the answer\nnuke.thisNode().knob('curve_minimum').setExpression(\"\[python min((key.y for key in nuke.thisNode().knob('curve_input').animation(0).keys()))]\")\nnuke.thisNode().knob('curve_maximum').setExpression(\"\[python max((key.y for key in nuke.thisNode().knob('curve_input').animation(0).keys()))]\")\n\n#Remove the expression\nnuke.thisNode().knob('curve_minimum').clearAnimated()\nnuke.thisNode().knob('curve_maximum').clearAnimated()" +STARTLINE}
  addUserKnob {26 ""}
- addUserKnob {7 curveMin l "Curve Minimum"}
- addUserKnob {7 curveMax l "Curve Maximum"}
- addUserKnob {7 newMin l "New Minimum"}
- addUserKnob {7 newMax l "New Maximum"}
- newMax 1
+ addUserKnob {7 curve_minimum l "Curve Minimum" t "Minimum value of the input curve.\n(use the button above to auto-set this value)" +DISABLED}
+ addUserKnob {7 curve_maximum l "Curve Maximum" t "Maximum value of the input curve.\n(use the button above to auto-set this value)" +DISABLED}
+ curve_maximum 1
+ addUserKnob {7 new_minimum l "New Minimum" t "Set the new minimum value of the curve." +DISABLED}
+ addUserKnob {7 new_maximum l "New Maximum" t "Set the new maxmum value of the curve." +DISABLED}
+ new_maximum 1
  addUserKnob {26 ""}
- addUserKnob {26 helpText_02 l "" +STARTLINE T "C O P Y   N E W   A N I M A T I O N   C U R V E\nO U T   O F   H E R E :\n"}
- addUserKnob {7 curveOutput l Output}
- curveOutput {{lerp(curveMin,newMin,curveMax,newMax,curveValue)}}
+ addUserKnob {26 helpText_02 l "" +STARTLINE +DISABLED T "O U T P U T  R E M A P P E D  C U R V E  F R O M  H E R E :\n"}
+ addUserKnob {7 curve_output l Output t "Your remapped animation curve!" +DISABLED}
+ curve_output {{lerp(curve_minimum,new_minimum,curve_maximum,new_maximum,curve_input)}}
  addUserKnob {26 ""}
- addUserKnob {20 infoTab l Info}
- addUserKnob {26 ""}
- addUserKnob {26 versionInfo l "" +STARTLINE T "\nCreated by Ben McEwan\nwww.benmcewan.com\n\nVersion 1.2\nLast Updated: November 7th, 2018\n"}
- addUserKnob {26 ""}
+ addUserKnob {26 version_info l "" +STARTLINE T "<font color='#666'><b>bm_CurveRemapper v2.0</b> created by <a href='https://www.benmcewan.com/blog' style=\"color: #888;\"><b>Ben McEwan</b></a>.<br> <b>Last updated:</b> 28th August, 2020.<br>\n"}
 }
  Output {
   inputs 0
