@@ -1,11 +1,10 @@
 Group {
  name bm_CameraShake
  help "Gives more control than Nuke's built-in CameraShake gizmo.\n\nCamera float, shake & sub-frame jitter settings are defined independently, then all 3 curves are added together into a final, new expression so your output curve has plenty of detail (especially in the motion blur) & only filters your image once."
+ onCreate "n = nuke.thisNode()\nn.knob(\"edgeTranslate\").setFlag(0x00008000)\nn.knob(\"outputOverallValue\").setFlag(0x00008000)\nn.knob(\"outputJitterValue\").setFlag(0x00008000)\nn.knob(\"outputShakeValue\").setFlag(0x00008000)\nn.knob(\"outputFloatValue\").setFlag(0x00008000)"
  tile_color 0x222222ff
  note_font Verdana
  selected true
- xpos 44
- ypos -9
  mapsize {0.15 0.15}
  addUserKnob {20 Options}
  addUserKnob {26 ""}
@@ -26,7 +25,6 @@ Group {
  addUserKnob {7 shakeAmt l "" t "How much camera shake?" -STARTLINE R 0 5}
  shakeAmt 1
  addUserKnob {6 toggleFloat l Float +STARTLINE}
- toggleFloat true
  addUserKnob {7 floatAmt l "  " t "How much camera float?" -STARTLINE R 0 5}
  floatAmt 1
  addUserKnob {20 endGroup n -1}
@@ -49,11 +47,11 @@ Group {
  addUserKnob {41 filter T jitterCTRL_fBm.filter}
  addUserKnob {26 spacer_misc l "" +STARTLINE T " "}
  addUserKnob {7 moblurSamples l INVISIBLE +INVISIBLE}
- moblurSamples {{"\$gui ? GUISamples : RenderSamples"}}
+ moblurSamples {{"\[python \{nuke.executing()\}] == 0 ? GUISamples : RenderSamples"}}
  addUserKnob {3 GUISamples l "GUI Samples"}
  GUISamples 1
  addUserKnob {3 RenderSamples l "    Render Samples" -STARTLINE}
- RenderSamples 16
+ RenderSamples 10
  addUserKnob {26 spacer_misc2 l "" +STARTLINE T " "}
  addUserKnob {41 shutter T jitterCTRL_fBm.shutter}
  addUserKnob {41 shutteroffset l "shutter offset" T jitterCTRL_fBm.shutteroffset}
@@ -67,7 +65,7 @@ Group {
  addUserKnob {20 jitterTab l Jitter}
  addUserKnob {26 ""}
  addUserKnob {14 jitterTranslate l Translate R 0 100}
- jitterTranslate {4 3}
+ jitterTranslate {2 4}
  addUserKnob {7 jitterRotate l Rotate R 0 3}
  addUserKnob {26 ""}
  addUserKnob {3 jitterOctaves l Octaves}
@@ -85,7 +83,7 @@ Group {
  addUserKnob {20 shakeTab l Shake}
  addUserKnob {26 ""}
  addUserKnob {14 shakeTranslate l Translate R 0 100}
- shakeTranslate {10 7}
+ shakeTranslate {5 10}
  addUserKnob {7 shakeRotate l Rotate R 0 3}
  shakeRotate 0.2
  addUserKnob {26 ""}
@@ -104,9 +102,9 @@ Group {
  addUserKnob {20 floatTab l Float}
  addUserKnob {26 ""}
  addUserKnob {14 floatTranslate l Translate R 0 100}
- floatTranslate {40 32}
+ floatTranslate {25 40}
  addUserKnob {7 floatRotate l Rotate R 0 3}
- floatRotate 7
+ floatRotate 3
  addUserKnob {26 ""}
  addUserKnob {3 floatOctaves l Octaves}
  floatOctaves 1
@@ -151,7 +149,7 @@ Group {
   xpos 17
   ypos -277
  }
-set N4b868d00 [stack 0]
+set Nc571d870 [stack 0]
  Dot {
   name Dot11
   label "  "
@@ -168,7 +166,7 @@ set N4b868d00 [stack 0]
   xpos 298
   ypos 365
  }
-push $N4b868d00
+push $Nc571d870
  Dot {
   name Dot10
   label "  "
@@ -177,7 +175,7 @@ push $N4b868d00
   xpos -87
   ypos -151
  }
-set N4b87dc00 [stack 0]
+set Nc6abd160 [stack 0]
  Mirror {
   Horizontal true
   name Mirror8
@@ -192,7 +190,7 @@ set N4b87dc00 [stack 0]
   xpos -121
   ypos -107
  }
-push $N4b87dc00
+push $Nc6abd160
  Dot {
   name Dot9
   label "  "
@@ -201,7 +199,7 @@ push $N4b87dc00
   xpos -197
   ypos -151
  }
-set N4b87d000 [stack 0]
+set Nc6a43360 [stack 0]
  Mirror {
   Horizontal true
   Vertical true
@@ -217,7 +215,7 @@ set N4b87d000 [stack 0]
   xpos -228
   ypos -105
  }
-push $N4b87d000
+push $Nc6a43360
  Dot {
   name Dot8
   label "  "
@@ -226,7 +224,7 @@ push $N4b87d000
   xpos -315
   ypos -151
  }
-set N4b87c400 [stack 0]
+set Nc6ac6ac0 [stack 0]
  Dot {
   name Dot7
   label "  "
@@ -235,7 +233,7 @@ set N4b87c400 [stack 0]
   xpos -425
   ypos -151
  }
-set N4b87c000 [stack 0]
+set Nc6a58990 [stack 0]
  Dot {
   name Dot6
   label "  "
@@ -244,7 +242,7 @@ set N4b87c000 [stack 0]
   xpos -535
   ypos -151
  }
-set N4b899c00 [stack 0]
+set Nc6a5ba50 [stack 0]
  Dot {
   name Dot5
   label "  "
@@ -253,7 +251,7 @@ set N4b899c00 [stack 0]
   xpos -645
   ypos -151
  }
-set N4b899800 [stack 0]
+set Nc6a62fb0 [stack 0]
  Dot {
   name Dot4
   label "  "
@@ -262,7 +260,7 @@ set N4b899800 [stack 0]
   xpos -748
   ypos -151
  }
-set N4b899400 [stack 0]
+set Nc6a66830 [stack 0]
  Mirror {
   Vertical true
   name Mirror2
@@ -277,7 +275,7 @@ set N4b899400 [stack 0]
   xpos -782
   ypos -108
  }
-push $N4b899800
+push $Nc6a62fb0
  Mirror {
   Horizontal true
   Vertical true
@@ -293,7 +291,7 @@ push $N4b899800
   xpos -679
   ypos -107
  }
-push $N4b899c00
+push $Nc6a5ba50
  Mirror {
   Horizontal true
   name Mirror4
@@ -308,7 +306,7 @@ push $N4b899c00
   xpos -569
   ypos -108
  }
-push $N4b87c000
+push $Nc6a58990
  Mirror {
   Horizontal true
   Vertical true
@@ -325,7 +323,7 @@ push $N4b87c000
   ypos -107
  }
 push 0
-push $N4b87c400
+push $Nc6ac6ac0
  Mirror {
   Vertical true
   name Mirror6
@@ -340,7 +338,7 @@ push $N4b87c400
   xpos -349
   ypos -107
  }
-push $N4b899400
+push $Nc6a66830
  Dot {
   name Dot3
   label "  "
@@ -370,7 +368,7 @@ push $N4b899400
   xpos -459
   ypos -49
  }
-push $N4b868d00
+push $Nc571d870
  Merge2 {
   inputs 2
   name Merge2
@@ -386,7 +384,7 @@ push $N4b868d00
   xpos 51
   ypos 50
  }
-set N4b8ed400 [stack 0]
+set Nc5728e80 [stack 0]
  Transform {
   translate {{noise(((jitterSeed+frame)*jitterSpeed),2.5,3.5)*jitterTranslate.w*globalAmt*jitterAmt} {noise(2.5,((jitterSeed+frame)*jitterSpeed),3.5)*jitterTranslate.h*globalAmt*jitterAmt}}
   rotate {{noise((jitterSeed+frame)*jitterSpeed,jitterOctaves,.5)*jitterRotate*globalAmt*jitterAmt}}
@@ -453,7 +451,7 @@ set N4b8ed400 [stack 0]
   xpos 169
   ypos 211
  }
-push $N4b8ed400
+push $Nc5728e80
  Transform {
   translate {{turbulence((jitterSeed+frame)*jitterSpeed,2.5,3.5,jitterOctaves,2,.5)*jitterTranslate.w*globalAmt*jitterAmt} {turbulence((jitterSeed+frame)*jitterSpeed+100,10.5,11.5,jitterOctaves,2,.5)*jitterTranslate.h*globalAmt*jitterAmt}}
   rotate {{turbulence((jitterSeed+frame)*jitterSpeed,20.5,21.5,jitterOctaves,2,.5)*jitterRotate*globalAmt*jitterAmt}}
@@ -467,7 +465,6 @@ push $N4b8ed400
   shutteroffset {{jitterCTRL_fBm.shutteroffset}}
   shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
   name jitterCTRL_turbulence
-  selected true
   xpos 17
   ypos 109
   disable {{!toggleJitter}}
@@ -521,7 +518,7 @@ push $N4b8ed400
   xpos 17
   ypos 209
  }
-push $N4b8ed400
+push $Nc5728e80
  Transform {
   translate {{fBm((jitterSeed+frame)*jitterSpeed,2.5,3.5,jitterOctaves,2,.5)*jitterTranslate.w*globalAmt*jitterAmt} {fBm((jitterSeed+frame)*jitterSpeed+100,10.5,11.5,jitterOctaves,2,.5)*jitterTranslate.h*globalAmt*jitterAmt}}
   rotate {{fBm((jitterSeed+frame)*jitterSpeed,20.5,21.5,jitterOctaves,2,.5)*jitterRotate*globalAmt*jitterAmt}}
@@ -532,7 +529,7 @@ push $N4b8ed400
   shutteroffset centred
   name jitterCTRL_fBm
   xpos -128
-  ypos 101
+  ypos 103
   disable {{!toggleJitter}}
  }
  Transform {

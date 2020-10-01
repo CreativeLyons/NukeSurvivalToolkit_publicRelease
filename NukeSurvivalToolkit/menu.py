@@ -11,9 +11,6 @@ import os
 import webbrowser
 
 # This is the prefix being used to customize the gizmo's in this toolkit
-# If you decided to find/replace this prefix on your NukeSurvivalTookit gizmos to
-# give them a unique name, you can just enter the new prefix you have used here
-# ie. if you replace 'NST_' with 'WOW_' for all tools, then enter 'WOW_' in the quotations below
 prefixNST = "NST_"
 
 # Store the location of this menu.py to help with nuke.nodePaste() which requires a filepath to paste
@@ -22,9 +19,28 @@ NST_FolderPath = os.path.dirname(__file__)
 # give the name of the help doc .pdf in main folder
 NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v1.0.0.pdf"
 
-# create filepath to help doc
+# creating full filepath to the help doc
 NST_helpDoc_os_path = os.path.join(NST_FolderPath, NST_helpDoc)
 NST_helpDocPath = "file:///{}".format(NST_helpDoc_os_path)
+
+# Define function to replace filepaths on tools importing files on creation
+def filepathCreateNode(gizmoName, paste=False):
+    if paste == True:
+        nukescripts.clear_selection_recursive()
+        nuke.nodePaste(nukeScriptName)
+        fileNodes = nuke.selectedNodes()
+    else:
+        newGizmo = nuke.createNode(gizmoName)
+        fileNodes = newGizmo.nodes()
+    for i in fileNodes:
+        if i.Class() == "Read" or i.Class() == "ReadGeo2" or i.Class() == "Camera2"  or  i.Class() == "Axis2":
+            filepath = i.knob("file").getValue()
+            if "<<<replace>>>" in filepath:
+                newFilepath = filepath.replace("<<<replace>>>", NST_FolderPath)
+                i.knob("file").setValue(newFilepath)
+
+############################################################################################################
+############################################################################################################
 
 # Create NukeSurivalToolkit Menu
 toolbar = nuke.menu('Nodes')
@@ -36,10 +52,7 @@ m = toolbar.addMenu('NukeSurvivalToolkit', icon = "SurvivalToolkit.png")
 
 # Create Button to Open NukeSurivalToolkit Documentation
 def openNSTDocumentation():
-    # Feel free to change the path from this website, you can downloaded the pdf file onot your folder system, just replace
-    # the string in the quotations below with the full filepath to the .pdf file instead of this website.
     webbrowser.open(NST_helpDocPath)
-
 
 m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png")
 
@@ -74,6 +87,9 @@ drawMenu.addCommand('LineTool NKPD', "nuke.createNode('{}LineTool')".format(pref
 drawMenu.addCommand('PlotScanline NKPD', "nuke.createNode('{}PlotScanline')".format(prefixNST), icon="nukepedia_icon.png")
 drawMenu.addCommand('SliceTool FR', "nuke.createNode('{}SliceTool')".format(prefixNST), icon="Histogram.png")
 drawMenu.addCommand('DasGrain FH', "nuke.createNode('{}DasGrain')".format(prefixNST), icon="Grain.png")
+drawMenu.addCommand('DasGrain FH', "nuke.nodePaste('{}/NukepediaTools/Draw/{}DasGrain.nk')".format(NST_FolderPath, prefixNST), icon="Grain.png")
+
+
 drawMenu.addCommand('LumaGrain LUMA', "nuke.createNode('{}LumaGrain')".format(prefixNST), icon="nukepedia_icon.png")
 drawMenu.addCommand('Grain_Advanced SPIN', "nuke.createNode('{}Grain_Advanced')".format(prefixNST), icon="spin_tools.png")
 drawMenu.addCommand('PerspectiveGuide NKPD', "nuke.createNode('{}PerspectiveGuide')".format(prefixNST), icon="nukepedia_icon.png")
@@ -82,6 +98,7 @@ drawMenu.addSeparator()
 
 drawMenu.addCommand('SpotFlare MHD', "nuke.createNode('{}SpotFlare')".format(prefixNST), icon="Flare.png")
 drawMenu.addCommand('FlareSuperStar NKPD', "nuke.createNode('{}FlareSuperStar')".format(prefixNST), icon="nukepedia_icon.png")
+drawMenu.addCommand('AutoFlare NKPD', "filepathCreateNode('{}AutoFlare2')".format(prefixNST), icon="Flare.png")
 
 ############################################################################################################
 ############################################################################################################
@@ -202,7 +219,11 @@ filterMenu.addCommand('BlacksExpon TL', "nuke.createNode('{}BlacksExpon')".forma
 filterMenu.addCommand('Halation TL', "nuke.createNode('{}Halation')".format(prefixNST), icon="EdgeBlur.png")
 filterMenu.addCommand('HighPass TL', "nuke.createNode('{}HighPass')".format(prefixNST), icon="Invert.png")
 filterMenu.addCommand('Diffusion TL', "nuke.createNode('{}Diffusion')".format(prefixNST), icon="Spark.png")
+
+filterMenu.addSeparator()
+
 filterMenu.addCommand('LightWrapPro TL', "nuke.createNode('{}LightWrapPro')".format(prefixNST), icon="LightWrap.png")
+filterMenu.addCommand('bm_Lightwrap BM', "nuke.createNode('{}bm_Lightwrap')".format(prefixNST), icon="bm_Lightwrap_icon.png")
 
 filterMenu.addSeparator()
 
@@ -246,6 +267,7 @@ keyerMenu.addCommand('apScreenGrow AP', 'nuke.createNode("{}apeScreenGrow")'.for
 
 keyerMenu.addSeparator()
 
+keyerMenu.addCommand('KeyChew NKPD', "nuke.createNode('{}KeyChew')".format(prefixNST), icon="Gamma.png")
 keyerMenu.addCommand('LumaKeyer DR', "nuke.createNode('{}LumaKeyer')".format(prefixNST), icon="Keyer.png")
 
 ############################################################################################################
@@ -312,7 +334,7 @@ transformMenu.addCommand('CornerPin2D_Matrix AG', "nuke.createNode('{}CornerPin2
 transformMenu.addSeparator()
 
 transformMenu.addCommand('IIDistort EL', "nuke.createNode('{}IIDistort')".format(prefixNST), icon="nukepedia_icon.png")
-transformMenu.addCommand('CameraShake BM', "nuke.createNode('{}CameraShake_bm')".format(prefixNST), icon="nukepedia_icon.png")
+transformMenu.addCommand('bm_CameraShake BM', "nuke.createNode('{}bm_CameraShake')".format(prefixNST), icon="bm_CameraShake_icon.png")
 transformMenu.addCommand('ITransform FR', "nuke.createNode('{}ITransformU')".format(prefixNST), icon="STMap.png")
 transformMenu.addCommand('MorphDissolve SPIN', "nuke.createNode('{}MorphDissolve')".format(prefixNST), icon="spin_tools.png")
 transformMenu.addCommand('RotoCentroid NKPD', "nuke.createNode('{}RotoCentroid')".format(prefixNST), icon="nukepedia_icon.png")
@@ -398,6 +420,7 @@ deepMenu.addCommand('DeepRecolorMatte TL', "nuke.createNode('{}DeepRecolorMatte'
 
 deepMenu.addSeparator()
 
+deepMenu.addCommand('DeepMerge_Advanced BM', "nuke.createNode('{}DeepMerge_Advanced')".format(prefixNST), icon="DeepMerge.png")
 deepMenu.addCommand('DeepCropSoft NKPD', "nuke.createNode('{}DeepCropSoft')".format(prefixNST), icon="DeepCrop.png")
 deepMenu.addCommand('DeepKeyMix NKPD', "nuke.createNode('{}DeepKeyMix')".format(prefixNST), icon="DeepMerge.png")
 deepMenu.addCommand('DeepHoldoutSmoother NKPD', "nuke.createNode('{}DeepHoldoutSmoother')".format(prefixNST), icon="DeepHoldout.png")
@@ -447,6 +470,8 @@ cgMenu.addCommand('Relight_bb NKPD', "nuke.createNode('{}Relight_bb')".format(pr
 cgMenu.addCommand('EnvReflect_bb NKPD', "nuke.createNode('{}EnvReflect_BB')".format(prefixNST), icon="Sphere.png")
 cgMenu.addCommand('N_Reflection NKPD', "nuke.createNode('{}N_Reflection')".format(prefixNST), icon="Sphere.png")
 
+cgMenu.addCommand('SimpleSSS MHD', "nuke.createNode('{}SimpleSSS')".format(prefixNST), icon="Toolbar3D.png")
+
 cgMenu.addSeparator()
 
 cgMenu.addCommand('aPmatte AP', 'nuke.createNode("{}aPMatte_v2")'.format(prefixNST), icon='aPmatte.png')
@@ -472,8 +497,8 @@ curvesMenu.addSeparator()
 
 curvesMenu.addCommand('Randomizer TL', "nuke.createNode('{}Randomizer')".format(prefixNST), icon="RenderMan.png")
 curvesMenu.addCommand('AnimationCurve AG', "nuke.createNode('{}AnimationCurve')".format(prefixNST), icon="nukepedia_icon.png")
-curvesMenu.addCommand('CurveRemapper BM', "nuke.createNode('{}CurveRemapper')".format(prefixNST), icon="bm_CurveRemapper_icon.png")
-curvesMenu.addCommand('NoiseGen BM', "nuke.createNode('{}NoiseGen')".format(prefixNST), icon="bm_NoiseGen_icon.png")
+curvesMenu.addCommand('bm_CurveRemapper BM', "nuke.createNode('{}bm_CurveRemapper')".format(prefixNST), icon="bm_CurveRemapper_icon.png")
+curvesMenu.addCommand('bm_NoiseGen BM', "nuke.createNode('{}bm_NoiseGen')".format(prefixNST), icon="bm_NoiseGen_icon.png")
 
 ############################################################################################################
 ############################################################################################################
@@ -490,7 +515,8 @@ utilitiesMenu.addSeparator()
 utilitiesMenu.addCommand('apViewerBlocker AP', 'nuke.createNode("{}apViewerBlocker")'.format(prefixNST), icon='ap_tools.png')
 utilitiesMenu.addCommand('Python_and_TCL AG', 'nuke.createNode("{}Python_and_TCL")'.format(prefixNST), icon="nukepedia_icon.png")
 
-utilitiesMenu.addCommand('Roto QC NKPD', "nuke.createNode('{}RotoQC')".format(prefixNST), icon="Roto.png")
+utilitiesMenu.addCommand('RotoQC NKPD', "nuke.createNode('{}RotoQC')".format(prefixNST), icon="Roto.png")
+utilitiesMenu.addCommand('bm_MatteCheck BM', "nuke.createNode('{}bm_MatteCheck')".format(prefixNST), icon="bm_MatteCheck_icon.png")
 
 utilitiesMenu.addSeparator()
 

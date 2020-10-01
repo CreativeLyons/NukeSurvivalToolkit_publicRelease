@@ -1,0 +1,365 @@
+Group {
+ inputs 0
+ name SimpleSSS
+ tile_color 0xff5155ff
+ addUserKnob {20 User}
+ addUserKnob {26 infoLabel l " " T "Simple Subsurface Scattering / Translucency\nby Hagbarth 2020"}
+ addUserKnob {26 didiver_general l "<b><font color=#F9AD7D>General</font><b>"}
+ addUserKnob {6 ScatterColor_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ ScatterColor_panelDropped true
+ addUserKnob {4 method l Method t "First Backface will calculate the distance from the front facing surface to the first backfacing surface.\n\nFull Backface will calculate the distance from the front facing surface to the surface furthest away from the camera" M {"First Backface" "Full Backface" "" ""}}
+ addUserKnob {7 scene_scale l "Scene Scale" t "The size of the scene where the object is or the width (in nuke units) of the object." -STARTLINE R 0 1000}
+ scene_scale 10
+ addUserKnob {26 divider_scatter l "<b><font color=#F9AD7D>Scattering</font><b>"}
+ addUserKnob {7 diffusion l "Scatter Diffusion" t "How much blur to be applied to the depth map."}
+ diffusion 0.25
+ addUserKnob {7 scattering l "Scatter Depth" t "How deep should the translucency be visible."}
+ scattering 0.4
+ addUserKnob {18 scatter_color l "Scatter Color" t "The color of the translucency"}
+ scatter_color {1 0.5 0.4}
+ addUserKnob {6 scatter_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ scatter_color_panelDropped true
+ addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ color_rgb_panelDropped true
+ addUserKnob {26 dividerr_light l "<b><font color=#F9AD7D>Light</font><b>"}
+ addUserKnob {6 scenecolor l "Use Scene Color" t "If enabled the tool will use the color and light intensity from the scene itself.\nIf disabled it will use a constant white (1.0) across the object." +STARTLINE}
+ addUserKnob {6 normalize l "Normalize Scene Light" t "If enabled the scene color will be \"normalized\" so that the intensity is evenly distributed across the object." -STARTLINE}
+ addUserKnob {41 white l "Light Gain" t "This will let you control the gain of the light" T GrainAndGamma.white}
+ addUserKnob {41 gamma l "Light Gamma" t "This will let you control the gamma of the light" T GrainAndGamma.gamma}
+ addUserKnob {7 softlight l "Soften Scene Light" t "How much blur should be applied to the scene light? Setting this low will look like porcelain, and hig more like jade"}
+ softlight 0.1
+ addUserKnob {7 frontbackmix l "Front<->Back mix" t "This will control how much light from the back and from the front will affect the light intensity.\n\nIf set to -1 only light from the back will cause an effect.\nIf set to 0 both back and front light will have an effect.\nIf set to 1 only light comming from the front will have an effect." R -1 1}
+ addUserKnob {26 ""}
+}
+ Input {
+  inputs 0
+  name Camera
+  xpos 413
+  ypos -523
+ }
+ Dot {
+  name Dot5
+  xpos 447
+  ypos -410
+ }
+set Nfb2cc800 [stack 0]
+ Dot {
+  name Dot2
+  xpos 447
+  ypos -269
+ }
+ BasicMaterial {
+  inputs 0
+  specular 0
+  name BasicMaterial1
+  xpos 224
+  ypos -276
+ }
+ Input {
+  inputs 0
+  name Scene
+  xpos 132
+  ypos -523
+  number 1
+ }
+ Dot {
+  name Dot1
+  xpos 166
+  ypos -272
+ }
+set Nfb2ccc00 [stack 0]
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial1
+  xpos 224
+  ypos -252
+ }
+push 0
+add_layer {point point.red point.green point.blue point.alpha}
+add_layer {normal normal.red normal.green normal.blue normal.alpha}
+ ScanlineRender {
+  inputs 3
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel point
+  N_channel normal
+  name ScanlineRender2
+  xpos 282
+  ypos -181
+ }
+ Dot {
+  name Dot3
+  xpos 316
+  ypos 7
+ }
+set Nfb2f7000 [stack 0]
+ Multiply {
+  channels rgb
+  value {{min(1,1+parent.frontbackmix)}}
+  name Multiply2
+  xpos -29
+  ypos 4
+ }
+push $Nfb2cc800
+ Camera2 {
+  inputs 0
+  useMatrix true
+  matrix {
+      {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+      {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+      {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+      {{parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix} {parent.DummyCam.world_matrix}}
+    }
+  focal {{parent.DummyCam.focal}}
+  haperture {{parent.DummyCam.haperture}}
+  vaperture {{parent.DummyCam.vaperture}}
+  near {{parent.DummyCam.far}}
+  far 0.1
+  win_translate {{parent.DummyCam.win_translate} {parent.DummyCam.win_translate}}
+  win_scale {{parent.DummyCam.win_scale} {parent.DummyCam.win_scale}}
+  winroll {{parent.DummyCam.winroll}}
+  focal_point {{parent.DummyCam.focal_point}}
+  fstop {{parent.DummyCam.fstop}}
+  name Camera2
+  xpos -127
+  ypos -434
+ }
+ Switch {
+  inputs 2
+  which {{!parent.method}}
+  name Switch1
+  xpos -137
+  ypos -306
+ }
+ Dot {
+  name Dot4
+  xpos -103
+  ypos -270
+ }
+set Nfb2f6000 [stack 0]
+push $Nfb2f6000
+ BasicMaterial {
+  inputs 0
+  specular 0
+  name BasicMaterial2
+  xpos 31
+  ypos -297
+ }
+ Project3D2 {
+  inputs 2
+  project_on back
+  name Project3D1
+  xpos 31
+  ypos -273
+ }
+push $Nfb2ccc00
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial3
+  xpos 31
+  ypos -234
+ }
+push 0
+ ScanlineRender {
+  inputs 3
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel point
+  N_channel normal
+  name ScanlineRender5
+  xpos 31
+  ypos -164
+ }
+set Nfb329800 [stack 0]
+ Dot {
+  name Dot6
+  xpos -105
+  ypos -161
+ }
+ Multiply {
+  channels rgb
+  value {{min(1,1-parent.frontbackmix)}}
+  name Multiply1
+  xpos -139
+  ypos -60
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  Bchannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge1
+  xpos -139
+  ypos 4
+ }
+ Inpaint2 {
+  fillRegion "Source Inverted Alpha"
+  center {640 360}
+  name Inpaint1
+  xpos -262
+  ypos 4
+ }
+ Blur {
+  channels rgb
+  size {{(parent.softlight*1000)+4}}
+  name Blur2
+  selected true
+  xpos -262
+  ypos 52
+ }
+ Dot {
+  name Dot7
+  xpos -448
+  ypos 55
+ }
+ Fill {
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name NoLight
+  xpos -482
+  ypos 138
+  disable {{parent.scenecolor}}
+ }
+ Colorspace {
+  colorspace_out CIE-Lab
+  name Colorspace1
+  xpos -482
+  ypos 256
+ }
+ Grade {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  black_clamp false
+  name GrainAndGamma
+  xpos -482
+  ypos 280
+ }
+ Colorspace {
+  colorspace_in CIE-Lab
+  name Colorspace2
+  xpos -482
+  ypos 316
+ }
+ Expression {
+  expr0 a>0?r/max(r,g,b):0
+  expr1 a>0?g/max(r,g,b):0
+  expr2 a>0?b/max(r,g,b):0
+  name NormalizeLight
+  xpos -482
+  ypos 388
+  disable {{!parent.normalize}}
+ }
+ Premult {
+  name Premult1
+  xpos -482
+  ypos 499
+ }
+push $Nfb2f7000
+ Shuffle {
+  in depth
+  in2 rgba
+  red blue
+  green blue
+  alpha alpha2
+  name Shuffle6
+  xpos 282
+  ypos 216
+ }
+push $Nfb329800
+ Shuffle {
+  in depth
+  in2 rgba
+  red blue
+  green blue
+  alpha alpha2
+  name Shuffle7
+  xpos 31
+  ypos 249
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  Bchannels rgb
+  name Merge4
+  xpos 282
+  ypos 249
+ }
+ Blur {
+  channels rgb
+  size {{parent.diffusion*100}}
+  name Blur3
+  xpos 282
+  ypos 499
+ }
+ Grade {
+  white {{parent.scene_scale}}
+  black_clamp false
+  name Grade11
+  xpos -24
+  ypos 499
+ }
+ MergeExpression {
+  inputs 2
+  expr0 "exp(-B.r * sigma_t.r) * A.r"
+  expr1 "exp(-B.g * sigma_t.g) * A.g"
+  expr2 "exp(-B.b * sigma_t.b) * A.b"
+  name MergeExpression1
+  xpos -156
+  ypos 499
+  addUserKnob {20 User}
+  addUserKnob {18 sigma_t}
+  sigma_t {{(((1/((parent.scattering*parent.scatter_color)+0.0000001))-0.9999999)*(parent.scene_scale/3))} {(((1/((parent.scattering*parent.scatter_color)+0.0000001))-0.9999999)*(parent.scene_scale/3))} {(((1/((parent.scattering*parent.scatter_color)+0.0000001))-0.9999999)*(parent.scene_scale/3))}}
+  addUserKnob {6 sigma_t_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  color_rgb_panelDropped true
+ }
+ Output {
+  name Output1
+  xpos -156
+  ypos 640
+ }
+push $Nfb2cc800
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {{"\[expression \[value the_cam]far(\[value the_frame])]"}}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyCam
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nadrianpueyo.com, 2019-2020"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  label "By Adrian Pryo"
+  xpos 0
+  ypos -434
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam +INVISIBLE}
+  the_cam "\[\n#DummyCam v1.1. Updated 5 April 2020.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame +INVISIBLE}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 50
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 24.576
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 0.1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 10000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 April 2020" T "<span style=\"color:#666\"><br/><b>DummyCam v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2020</span>"}
+ }
+end_group
