@@ -1,9 +1,7 @@
-set cut_paste_input [stack 0]
-push $cut_paste_input
 Group {
  name AdditiveKeyerPro
  tile_color 0x5200ff
- note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font "Verdana Bold"
  note_font_color 0xffffffff
  selected true
  addUserKnob {20 AdditiveKeyer}
@@ -12,7 +10,7 @@ Group {
  addUserKnob {6 despillSat l "Despill Screen Color from Saturation?" +STARTLINE}
  despillSat true
  addUserKnob {26 ""}
- addUserKnob {7 DarkValue l "Dark Value" R 0 10}
+ addUserKnob {7 DarkValue l "Dark Value" R 0 5}
  DarkValue 1
  addUserKnob {7 satDarks l "Saturate Darks"}
  satDarks 0.2
@@ -21,14 +19,14 @@ Group {
  addUserKnob {6 darkTint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {26 ""}
  addUserKnob {6 lightTint_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
- addUserKnob {7 ExtraLightValue l "Light Value Plus"}
+ addUserKnob {7 ExtraLightValue l "Light Value Plus" R 0 2}
  ExtraLightValue 1
  addUserKnob {7 satLights l "Saturate Lights"}
  satLights 0.2
  addUserKnob {18 lightTint l "Light Tint"}
  lightTint 1
  addUserKnob {6 lightTint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {7 LightValue l "Light Value BG Mult" R 0 10}
+ addUserKnob {7 LightValue l "Light Value BG Mult" R 0 5}
  LightValue 0.25
  addUserKnob {26 ""}
  addUserKnob {6 darkTint_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" +HIDDEN +STARTLINE}
@@ -92,7 +90,7 @@ Group {
   xpos -466
   ypos 5
  }
-set N573012e0 [stack 0]
+set Ne63218b0 [stack 0]
  OFXuk.co.thefoundry.keylight.keylight_v201 {
   show "Final Result"
   unPreMultiply false
@@ -138,8 +136,8 @@ set N573012e0 [stack 0]
   xpos -500
   ypos 73
  }
-set N91ad09f0 [stack 0]
-push $N573012e0
+set Nda7c91c0 [stack 0]
+push $Ne63218b0
  Dot {
   name Dot27
   note_font_size 41
@@ -166,7 +164,7 @@ push $N573012e0
   xpos -390
   ypos 125
  }
-push $N91ad09f0
+push $Nda7c91c0
  Merge2 {
   inputs 2
   operation plus
@@ -175,7 +173,7 @@ push $N91ad09f0
   xpos -500
   ypos 125
  }
-push $N573012e0
+push $Ne63218b0
  Dot {
   name Dot30
   note_font_size 41
@@ -201,7 +199,7 @@ push $N573012e0
   xpos -466
   ypos 373
  }
-set Na25261a0 [stack 0]
+set Ne61ad600 [stack 0]
  Input {
   inputs 0
   name clean
@@ -236,11 +234,11 @@ set Na25261a0 [stack 0]
   xpos 160
   ypos 50
  }
-set N3373c310 [stack 0]
+set Ne61d0820 [stack 0]
  OFXuk.co.thefoundry.keylight.keylight_v201 {
   show "Final Result"
   unPreMultiply false
-  screenColour {{parent.Keylight1.screenColour x1001 0.2000732422} {parent.Keylight1.screenColour x1001 0.3078613281} {parent.Keylight1.screenColour x1001 0.08349609375}}
+  screenColour {{parent.Keylight1.screenColour} {parent.Keylight1.screenColour} {parent.Keylight1.screenColour}}
   screenGain 1
   screenBalance 0.5
   alphaBias {0.5 0.5 0.5}
@@ -282,8 +280,8 @@ set N3373c310 [stack 0]
   xpos 126
   ypos 118
  }
-set Nc357e680 [stack 0]
-push $N3373c310
+set Ne61d4760 [stack 0]
+push $Ne61d0820
  Dot {
   name Dot29
   note_font_size 41
@@ -310,7 +308,7 @@ push $N3373c310
   xpos 236
   ypos 170
  }
-push $Nc357e680
+push $Ne61d4760
  Merge2 {
   inputs 2
   operation plus
@@ -319,7 +317,7 @@ push $Nc357e680
   xpos 126
   ypos 170
  }
-push $N3373c310
+push $Ne61d0820
  Dot {
   name Dot33
   note_font_size 41
@@ -346,7 +344,7 @@ push $N3373c310
   xpos 160
   ypos 320
  }
-set N2ae60cb0 [stack 0]
+set Ndc6e9920 [stack 0]
  Dot {
   name Dot6
   xpos 412
@@ -393,7 +391,7 @@ set N2ae60cb0 [stack 0]
    xpos 558
    ypos -668
   }
-set Na1d9a780 [stack 0]
+set Ne600a100 [stack 0]
   Shuffle {
    green red
    blue red
@@ -409,7 +407,7 @@ set Na1d9a780 [stack 0]
    xpos 386
    ypos -492
   }
-push $Na1d9a780
+push $Ne600a100
   Shuffle {
    red green
    blue green
@@ -432,8 +430,8 @@ push $Na1d9a780
    xpos 411
    ypos -428
   }
-  set C23e79cc0 [stack 0]
-push $Na1d9a780
+  set C310f6910 [stack 0]
+push $Ne600a100
   Shuffle {
    red blue
    green blue
@@ -449,13 +447,13 @@ push $Na1d9a780
    xpos 610
    ypos -494
   }
-clone $C23e79cc0 {
+clone $C310f6910 {
    inputs 2
    xpos 486
    ypos -369
    selected false
   }
-push $Na1d9a780
+push $Ne600a100
   Shuffle {
    red alpha
    green alpha
@@ -472,7 +470,7 @@ push $Na1d9a780
    xpos 725
    ypos -494
   }
-clone $C23e79cc0 {
+clone $C310f6910 {
    inputs 2
    xpos 580
    ypos -307
@@ -514,29 +512,29 @@ clone $C23e79cc0 {
   xpos -811
   ypos 1449
  }
-set N1592b310 [stack 0]
+set Nd631a0b0 [stack 0]
  Dot {
   name Dot13
   note_font_size 41
   xpos -811
   ypos 1688
  }
-set Na17a9140 [stack 0]
-push $Na25261a0
+set Nd631df90 [stack 0]
+push $Ne61ad600
  Dot {
   name Dot2
   note_font_size 41
   xpos -466
   ypos 421
  }
-set N8096e700 [stack 0]
+set Nd6321e60 [stack 0]
  Saturation {
   saturation {{parent.satDarks}}
   name Saturation9
   xpos -378
   ypos 418
  }
-push $N2ae60cb0
+push $Ndc6e9920
  Saturation {
   saturation {{parent.satDarks}}
   name Saturation8
@@ -579,19 +577,26 @@ push $N2ae60cb0
   xpos -215
   ypos 892
  }
- Multiply {
-  channels rgba
-  value {{parent.darkTint} {parent.darkTint} {parent.darkTint} {parent.darkTint}}
+ Grade {
+  multiply {{parent.darkTint} {parent.darkTint} {parent.darkTint} {parent.darkTint}}
+  reverse true
+  black_clamp false
   name DARK_TINT
   xpos -215
-  ypos 934
+  ypos 931
  }
  Add {
   channels rgba
   value 1
   name Add4
   xpos -215
-  ypos 1002
+  ypos 988
+ }
+ Clamp {
+  channels rgb
+  name Clamp5
+  xpos -215
+  ypos 1065
  }
  Dot {
   name Dot39
@@ -599,7 +604,7 @@ push $N2ae60cb0
   xpos -181
   ypos 1257
  }
-push $N8096e700
+push $Nd6321e60
  Dot {
   name Dot36
   note_font_size 41
@@ -612,15 +617,15 @@ push $N8096e700
   xpos -101
   ypos 574
  }
-set Na17a3550 [stack 0]
-push $N2ae60cb0
+set Nb662b010 [stack 0]
+push $Ndc6e9920
  Saturation {
   saturation {{parent.satLights}}
   name Saturation6
   xpos 126
   ypos 500
  }
-set N30ed7260 [stack 0]
+set Nb662f000 [stack 0]
  Merge2 {
   inputs 2
   operation divide
@@ -682,7 +687,7 @@ set N30ed7260 [stack 0]
   xpos 162
   ypos 1354
  }
-set N336f9230 [stack 0]
+set Nd6028a80 [stack 0]
  Dot {
   name Dot3
   xpos -8
@@ -694,14 +699,14 @@ set N336f9230 [stack 0]
   xpos -8
   ypos 1611
  }
-push $N30ed7260
+push $Nb662f000
  Dot {
   name Dot7
   note_font_size 41
   xpos 310
   ypos 503
  }
-push $Na17a3550
+push $Nb662b010
  Dot {
   name Dot5
   note_font_size 41
@@ -744,14 +749,14 @@ push $Na17a3550
   xpos 310
   ypos 1513
  }
-push $N336f9230
+push $Nd6028a80
  Dot {
   name Dot1
   note_font_size 41
   xpos 162
   ypos 1449
  }
-push $N1592b310
+push $Nd631a0b0
  Merge2 {
   inputs 2
   operation multiply
@@ -768,7 +773,6 @@ push $N1592b310
   output rgb
   name Merge2
   label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
-  selected true
   xpos 128
   ypos 1510
  }
@@ -805,7 +809,7 @@ push $N1592b310
   xpos 162
   ypos 1910
  }
-push $Na17a9140
+push $Nd631df90
  Dot {
   name Dot18
   label B
