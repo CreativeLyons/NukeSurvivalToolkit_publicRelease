@@ -7,8 +7,8 @@ BackdropNode {
  note_font_size 200
  note_font_color 0xffffffff
  selected true
- xpos -4239
- ypos -5014
+ xpos -4211
+ ypos -4950
  bdwidth 8480
  bdheight 9896
  z_order -2
@@ -21,8 +21,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos 5491
- ypos -4010
+ xpos 5519
+ ypos -3946
  bdwidth 610
  bdheight 387
 }
@@ -33,8 +33,8 @@ BackdropNode {
  label "Green\nScreen Footage"
  note_font_size 112
  selected true
- xpos -1867
- ypos -4677
+ xpos -1839
+ ypos -4613
  bdwidth 1208
  bdheight 847
 }
@@ -46,8 +46,8 @@ BackdropNode {
  note_font_size 140
  note_font_color 0xffffffff
  selected true
- xpos 1009
- ypos -2858
+ xpos 1037
+ ypos -2794
  bdwidth 1411
  bdheight 2103
 }
@@ -59,8 +59,8 @@ BackdropNode {
  note_font_size 140
  note_font_color 0xffffffff
  selected true
- xpos 2592
- ypos -2855
+ xpos 2620
+ ypos -2791
  bdwidth 1026
  bdheight 1464
 }
@@ -72,8 +72,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -1559
- ypos 108
+ xpos -1531
+ ypos 172
  bdwidth 514
  bdheight 240
 }
@@ -85,8 +85,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -1561
- ypos 404
+ xpos -1533
+ ypos 468
  bdwidth 511
  bdheight 299
 }
@@ -98,8 +98,8 @@ BackdropNode {
  note_font_size 26
  note_font_color 0xffffffff
  selected true
- xpos -246
- ypos -953
+ xpos -218
+ ypos -889
  bdwidth 420
  bdheight 275
 }
@@ -111,8 +111,8 @@ BackdropNode {
  note_font_size 50
  note_font_color 0xffffffff
  selected true
- xpos -1653
- ypos 906
+ xpos -1625
+ ypos 970
  bdwidth 433
  bdheight 480
 }
@@ -124,8 +124,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -1604
- ypos 4107
+ xpos -1576
+ ypos 4171
  bdwidth 719
  bdheight 391
 }
@@ -137,8 +137,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos 5390
- ypos 4529
+ xpos 5418
+ ypos 4593
  bdwidth 665
  bdheight 399
 }
@@ -150,8 +150,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -1963
- ypos -289
+ xpos -1935
+ ypos -225
  bdwidth 634
  bdheight 344
 }
@@ -163,8 +163,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -1945
- ypos -1023
+ xpos -1917
+ ypos -959
  bdwidth 1009
  bdheight 557
 }
@@ -176,8 +176,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -1525
- ypos 3785
+ xpos -1497
+ ypos 3849
  bdwidth 160
  bdheight 160
 }
@@ -189,8 +189,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos 5423
- ypos 4131
+ xpos 5451
+ ypos 4195
  bdwidth 736
  bdheight 282
 }
@@ -202,8 +202,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -1522
- ypos 2208
+ xpos -1494
+ ypos 2272
  bdwidth 922
  bdheight 305
 }
@@ -215,8 +215,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos 5328
- ypos -5071
+ xpos 5356
+ ypos -5007
  bdwidth 643
  bdheight 492
 }
@@ -228,8 +228,8 @@ BackdropNode {
  note_font_size 30
  note_font_color 0xffffffff
  selected true
- xpos 5268
- ypos 5198
+ xpos 5296
+ ypos 5262
  bdwidth 350
  bdheight 243
 }
@@ -241,8 +241,8 @@ BackdropNode {
  note_font_size 62
  note_font_color 0xffffffff
  selected true
- xpos -1762
- ypos 2689
+ xpos -1734
+ ypos 2753
  bdwidth 1601
  bdheight 854
 }
@@ -254,8 +254,8 @@ BackdropNode {
  note_font_size 140
  note_font_color 0xffffffff
  selected true
- xpos -3318
- ypos -2781
+ xpos -3290
+ ypos -2717
  bdwidth 1205
  bdheight 1295
 }
@@ -267,8 +267,8 @@ BackdropNode {
  note_font_size 42
  note_font_color 0xffffffff
  selected true
- xpos -1672
- ypos -3710
+ xpos -1644
+ ypos -3646
  bdwidth 554
  bdheight 462
 }
@@ -280,8 +280,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -1674
- ypos 1515
+ xpos -1646
+ ypos 1579
  bdwidth 478
  bdheight 481
 }
@@ -293,8 +293,8 @@ BackdropNode {
  note_font_size 140
  note_font_color 0xffffffff
  selected true
- xpos -162
- ypos -2842
+ xpos -134
+ ypos -2778
  bdwidth 1097
  bdheight 1475
 }
@@ -306,8 +306,8 @@ BackdropNode {
  note_font_size 140
  note_font_color 0xffffffff
  selected true
- xpos -1959
- ypos -2806
+ xpos -1931
+ ypos -2742
  bdwidth 1485
  bdheight 1364
 }
@@ -396,16 +396,16 @@ Roto {
  source_black_outside true
  name Roto14
  selected true
- xpos 5548
- ypos -4839
+ xpos 5576
+ ypos -4775
 }
 Blur {
  size 100
  name Blur2
  label "\[value size]"
  selected true
- xpos 5548
- ypos -4779
+ xpos 5576
+ ypos -4715
 }
 Constant {
  inputs 0
@@ -413,30 +413,30 @@ Constant {
  color {2.960000038 2.999999762 3.039999962 12}
  name Constant1
  selected true
- xpos 5404
- ypos -4729
+ xpos 5432
+ ypos -4665
 }
 CheckerBoard2 {
  inputs 0
  name CheckerBoard1
  selected true
- xpos 5725
- ypos -5005
+ xpos 5753
+ ypos -4941
 }
 Grade {
  multiply 0.105
  name Grade1
  selected true
- xpos 5725
- ypos -4893
+ xpos 5753
+ ypos -4829
 }
 Keymix {
  inputs 3
  channels rgba
  name Keymix1
  selected true
- xpos 5725
- ypos -4705
+ xpos 5753
+ ypos -4641
  disable true
 }
 Dot {
@@ -444,18 +444,18 @@ Dot {
  label BG_ELEMENT
  note_font_size 51
  selected true
- xpos 5759
- ypos -3748
+ xpos 5787
+ ypos -3684
 }
 Dot {
  name Dot6
  label BG
  note_font_size 71
  selected true
- xpos 5759
- ypos 4318
+ xpos 5787
+ ypos 4382
 }
-set Ndaf54da0 [stack 0]
+set N914af150 [stack 0]
 NoOp {
  name Anchor_3cad2b60ea
  help "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019"
@@ -465,8 +465,8 @@ NoOp {
  tile_color 0xffffff01
  note_font_size 20
  selected true
- xpos 5553
- ypos 4310
+ xpos 5581
+ ypos 4374
  addUserKnob {20 anchor_tab l "Anchor Stamp"}
  addUserKnob {26 identifier -STARTLINE +HIDDEN T anchor}
  addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
@@ -486,7 +486,7 @@ NoOp {
  addUserKnob {22 buttonHelp l Help -STARTLINE T stamps.showHelp()}
  addUserKnob {26 version l " " t "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019." -STARTLINE T "<a href=\"http://www.nukepedia.com/gizmos/other/stamps\" style=\"color:#666;text-decoration: none;\"><span style=\"color:#666\"> <big>Stamps v1.0</big></b></a>"}
 }
-set Ndaf65f00 [stack 0]
+set N914d1670 [stack 0]
 NoOp {
  name Stamp43
  help "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019"
@@ -497,8 +497,8 @@ NoOp {
  note_font "Bitstream Vera Sans"
  note_font_size 20
  selected true
- xpos -1181
- ypos 4205
+ xpos -1153
+ ypos 4269
  hide_input true
  addUserKnob {20 wired_tab l "Wired Stamp"}
  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
@@ -544,8 +544,8 @@ Dot {
  label BG
  note_font_size 101
  selected true
- xpos -1147
- ypos 4346
+ xpos -1119
+ ypos 4410
 }
 Dot {
  inputs 0
@@ -553,21 +553,21 @@ Dot {
  label GreenScreenPlate
  note_font_size 41
  selected true
- xpos -1451
- ypos -4276
+ xpos -1423
+ ypos -4212
 }
 AddChannels {
  channels rgba
  name AddChannels3
  selected true
- xpos -1485
- ypos -4206
+ xpos -1457
+ ypos -4142
 }
 Dot {
  name Dot26
  selected true
- xpos -1451
- ypos -3593
+ xpos -1423
+ ypos -3529
 }
 add_layer {GS_Plate GS_Plate.red GS_Plate.green GS_Plate.blue GS_Plate.alpha}
 Shuffle {
@@ -579,59 +579,59 @@ Shuffle {
  name Shuffle33
  label "\[value in] → \[value out2]"
  selected true
- xpos -1485
- ypos -3530
+ xpos -1457
+ ypos -3466
 }
 Dot {
  name Dot8
  note_font_size 41
  selected true
- xpos -1451
- ypos -3393
+ xpos -1423
+ ypos -3329
 }
-set Nda3a33c0 [stack 0]
+set N9144ae90 [stack 0]
 Dot {
  name Dot34
  selected true
- xpos -1451
- ypos -3063
+ xpos -1423
+ ypos -2999
 }
-set Ndaf6cdf0 [stack 0]
+set N919a5f20 [stack 0]
 Dot {
  name Dot38
  selected true
- xpos 345
- ypos -3063
+ xpos 373
+ ypos -2999
 }
-set Ndaf70b60 [stack 0]
+set N919a9e60 [stack 0]
 Dot {
  name Dot46
  selected true
- xpos 1609
- ypos -3063
+ xpos 1637
+ ypos -2999
 }
-set Ndaeebb90 [stack 0]
+set N919add90 [stack 0]
 Remove {
  operation keep
  channels rgb
  name Remove30
  selected true
- xpos 1575
- ypos -2942
+ xpos 1603
+ ypos -2878
 }
 Dot {
  name Dot17
  note_font_size 41
  selected true
- xpos 1609
- ypos -2664
+ xpos 1637
+ ypos -2600
 }
-set Ndaf7a950 [stack 0]
+set N914f07d0 [stack 0]
 IBKColourV3 {
  name IBKColourV3_10
  selected true
- xpos 1817
- ypos -2667
+ xpos 1845
+ ypos -2603
 }
 Group {
  name BinaryAlpha5
@@ -640,8 +640,8 @@ Group {
  note_font Verdana
  note_font_color 0xfffff9ff
  selected true
- xpos 1817
- ypos -2609
+ xpos 1845
+ ypos -2545
  addUserKnob {20 BinaryAlpha}
  addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
  addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
@@ -690,8 +690,8 @@ EdgeBlur {
  size 10
  name EdgeBlur1
  selected true
- xpos 1817
- ypos -2571
+ xpos 1845
+ ypos -2507
 }
 Group {
  name ExponBlurSimple
@@ -699,11 +699,11 @@ Group {
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n        \n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n        \nelif k.name() == \"steps\":\n    \n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n        \n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n        \n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('mult').getValue()\n        \n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, b1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"all\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression(\"(Blur1.size)*(mult)**%s\"%(i))\n            b\[\"label\"].setValue(\"\[value size]\")\n            merge.setInput(i if i<2 else i+1, b)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n            \n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n            \nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n        \nelif k.name() == \"safeBBox\":\n    if n.knob(\"safeBBox\").getValue() == 0:\n        n.knob('safeBBoxText').setVisible(False)\n        n.knob('safetyBBoxMethod').setVisible(False)\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(False)\n        \n    elif n.knob(\"safeBBox\").getValue() == 1:\n        n.knob('safetyBBoxMethod').setVisible(True)\n        n.knob('safeBBoxText').setVisible(True)\n        if n.knob('safetyBBoxMethod').value() == \"pixels\":\n            n.knob('safeBBoxPixels').setVisible(True)\n            n.knob('safeBBoxPercent').setVisible(False)\n        elif n.knob('safetyBBoxMethod').value() == \"percent\":\n            n.knob('safeBBoxPixels').setVisible(False)\n            n.knob('safeBBoxPercent').setVisible(True)\n            \nelif k.name() == \"safetyBBoxMethod\":\n    if n.knob(\"safetyBBoxMethod\").value() == \"pixels\":\n        n.knob('safeBBoxPixels').setVisible(True)\n        n.knob('safeBBoxPercent').setVisible(False)\n    elif n.knob(\"safetyBBoxMethod\").value() == \"percent\":\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(True)\n        \nelif k.name() == \"adjustBBoxExtra\":\n    if n.knob(\"adjustBBoxExtra\").value() == \"pixels\":\n        n.knob('adjustBBoxPixels').setVisible(True)\n        n.knob('adjustBBoxPercent').setVisible(False)\n    elif n.knob(\"adjustBBoxExtra\").value() == \"percent\":\n        n.knob('adjustBBoxPixels').setVisible(False)\n        n.knob('adjustBBoxPercent').setVisible(True)\n"
  tile_color 0xcc804eff
  label "(\[value output2])"
- note_font "Verdana Bold Bold Bold Bold Bold"
+ note_font "Verdana Bold Bold Bold Bold Bold Bold"
  note_font_color 0xffffffff
  selected true
- xpos 1817
- ypos -2514
+ xpos 1845
+ ypos -2450
  addUserKnob {20 ExponBlurSimple}
  addUserKnob {41 channels T Remove1.channels}
  addUserKnob {41 maskChannelMask_1 l area T Multiply1.maskChannelMask}
@@ -781,7 +781,7 @@ Group {
   xpos 34
   ypos -802
  }
-set Ndc083a10 [stack 0]
+set N918dbcb0 [stack 0]
  Dot {
   name Dot2
   note_font_size 41
@@ -801,14 +801,14 @@ set Ndc083a10 [stack 0]
   xpos -367
   ypos 623
  }
-set Ndc08f700 [stack 0]
+set N918e79a0 [stack 0]
  Dot {
   name Dot3
   note_font_size 41
   xpos -367
   ypos 675
  }
-set Ndc093680 [stack 0]
+set N918eb920 [stack 0]
  Dot {
   name Dot8
   note_font_size 41
@@ -821,7 +821,7 @@ set Ndc093680 [stack 0]
   xpos -463
   ypos 831
  }
-push $Ndc083a10
+push $N918dbcb0
  Dot {
   name Dot1
   note_font_size 41
@@ -841,14 +841,14 @@ push $Ndc083a10
   xpos 461
   ypos -597
  }
-set Ndc200d60 [stack 0]
+set N91b068d0 [stack 0]
  Invert {
   name Invert1
   xpos 695
   ypos -604
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-set Ndc204b70 [stack 0]
+set N91b0a6e0 [stack 0]
  Dot {
   name Dot4
   note_font_size 41
@@ -860,7 +860,7 @@ set Ndc204b70 [stack 0]
   xpos 506
   ypos -327
  }
-set Ndc212ad0 [stack 0]
+set N91b185e0 [stack 0]
  Dot {
   name Dot5
   note_font_size 41
@@ -884,7 +884,7 @@ set Ndc212ad0 [stack 0]
   xpos 210
   ypos -724
  }
-push $Ndc083a10
+push $N918dbcb0
  Merge2 {
   inputs 2
   name Merge3
@@ -900,7 +900,7 @@ push $Ndc083a10
   addUserKnob {15 bbox}
   bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
  }
-push $Ndc212ad0
+push $N91b185e0
  Input {
   inputs 0
   name Inputarea
@@ -921,7 +921,7 @@ push $Ndc212ad0
   xpos 289
   ypos -503
  }
-push $Ndc204b70
+push $N91b0a6e0
  Multiply {
   inputs 1+1
   value 0
@@ -935,7 +935,7 @@ push $Ndc204b70
   xpos 695
   ypos -450
  }
-set Ndc0ce3b0 [stack 0]
+set N91ab6210 [stack 0]
  Blur {
   size {{(Blur1.size)*(mult)**3} {(Blur1.size)*(mult)**3}}
   crop false
@@ -944,7 +944,7 @@ set Ndc0ce3b0 [stack 0]
   xpos 995
   ypos -370
  }
-push $Ndc0ce3b0
+push $N91ab6210
  Blur {
   size {{(Blur1.size)*(mult)**2} {(Blur1.size)*(mult)**2}}
   crop false
@@ -954,7 +954,7 @@ push $Ndc0ce3b0
   ypos -370
  }
 push 0
-push $Ndc0ce3b0
+push $N91ab6210
  Blur {
   size {{(Blur1.size)*(mult)**1} {(Blur1.size)*(mult)**1}}
   crop false
@@ -963,7 +963,7 @@ push $Ndc0ce3b0
   xpos 795
   ypos -370
  }
-push $Ndc0ce3b0
+push $N91ab6210
  Blur {
   size {{parent.size.w} {parent.size.h}}
   name Blur1
@@ -985,7 +985,7 @@ push $Ndc0ce3b0
   xpos 695
   ypos -230
  }
-set Ndc180310 [stack 0]
+set N91af4980 [stack 0]
  CopyBBox {
   inputs 2
   name CopyBBox1
@@ -996,7 +996,7 @@ set Ndc180310 [stack 0]
   name BBoxToFormat
   onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
   tile_color 0xa57aaaff
-  note_font "Verdana Bold Bold Bold Bold Bold Bold"
+  note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 585
   ypos -151
@@ -1037,15 +1037,15 @@ set Ndc180310 [stack 0]
    xpos 295
    ypos 462
   }
-set Ndc0ecf20 [stack 0]
+set N91c13920 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
    xpos -160
    ypos 462
   }
-set Ndc213270 [stack 0]
-push $Ndc0ecf20
+set N91c17840 [stack 0]
+push $N91c13920
   Crop {
    box {{parent.inputBBox} {parent.inputBBox} {parent.inputBBox} {parent.inputBBox}}
    crop {{parent.blackOutside}}
@@ -1055,7 +1055,7 @@ push $Ndc0ecf20
    addUserKnob {20 User}
    addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
   }
-set Nda3af290 [stack 0]
+set N91c1b720 [stack 0]
   Remove {
    operation keep
    channels none
@@ -1063,7 +1063,7 @@ set Nda3af290 [stack 0]
    xpos 120
    ypos 504
   }
-set Ndc1817b0 [stack 0]
+set N91c24fd0 [stack 0]
   Transform {
    scale {{parent.overscanPercent} {parent.overscanPercent}}
    center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -1073,7 +1073,7 @@ set Ndc1817b0 [stack 0]
    xpos 120
    ypos 553
   }
-push $Ndc1817b0
+push $N91c24fd0
   AdjBBox {
    numpixels {{parent.overscan} {parent.overscan}}
    name AdjBBox1
@@ -1099,7 +1099,7 @@ push $Ndc1817b0
    ypos 647
    disable {{!parent.Crop6.intersect}}
   }
-push $Ndc213270
+push $N91c17840
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -1118,7 +1118,7 @@ push $Ndc213270
    xpos -160
    ypos 769
   }
-push $Nda3af290
+push $N91c1b720
   Switch {
    inputs 2
    which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -1127,13 +1127,13 @@ push $Nda3af290
    xpos 261
    ypos 759
   }
-set Ndc1b4aa0 [stack 0]
+set N91c58460 [stack 0]
   Output {
    name Output1
    xpos 261
    ypos 921
   }
-push $Ndc1b4aa0
+push $N91c58460
   NoOp {
    name OutputBBox1
    xpos 378
@@ -1145,7 +1145,7 @@ push $Ndc1b4aa0
    outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
   }
  end_group
-push $Ndc180310
+push $N91af4980
  Merge2 {
   inputs 2
   bbox intersection
@@ -1154,14 +1154,14 @@ push $Ndc180310
   xpos 585
   ypos -127
  }
-push $Ndc180310
+push $N91af4980
  CopyBBox {
   inputs 2
   name CopyBBox2
   xpos 585
   ypos -101
  }
-push $Ndc180310
+push $N91af4980
  Switch {
   inputs 2
   which {{"parent.safeBBox && ((BBoxResult.bbox.x < BBoxInput.bbox.x || BBoxResult.bbox.y < BBoxInput.bbox.y || BBoxResult.bbox.r > BBoxInput.bbox.r || BBoxResult.bbox.t > BBoxInput.bbox.t))"}}
@@ -1209,7 +1209,7 @@ push $Ndc180310
   ypos 144
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-push $Ndc200d60
+push $N91b068d0
  Switch {
   inputs 2
   which {{"parent.size == 0 ? 0 : 1"}}
@@ -1231,7 +1231,7 @@ push $Ndc200d60
   xpos 34
   ypos 579
  }
-set Ndc4150c0 [stack 0]
+set N91cc7a70 [stack 0]
  Dot {
   name Dot12
   note_font_size 41
@@ -1244,7 +1244,7 @@ set Ndc4150c0 [stack 0]
   xpos -260
   ypos 799
  }
-push $Ndc08f700
+push $N918e79a0
  Input {
   inputs 0
   name Inputmask
@@ -1259,14 +1259,14 @@ push $Ndc08f700
   xpos 546
   ypos 435
  }
-set Ndc424bc0 [stack 0]
+set N91cd7570 [stack 0]
  Dot {
   name Dot20
   note_font_size 41
   xpos 436
   ypos 435
  }
-push $Ndc4150c0
+push $N91cc7a70
  Merge2 {
   inputs 2
   bbox intersection
@@ -1296,15 +1296,15 @@ push $Ndc4150c0
   xpos 436
   ypos 770
  }
-push $Ndc424bc0
+push $N91cd7570
  Dot {
   name Dot10
   note_font_size 41
   xpos 546
   ypos 672
  }
-push $Ndc4150c0
-push $Ndc093680
+push $N91cc7a70
+push $N918eb920
  Merge2 {
   inputs 2+1
   operation copy
@@ -1322,8 +1322,8 @@ push $Ndc093680
   xpos 34
   ypos 747
  }
-set Ndc45b980 [stack 0]
-push $Ndc093680
+set N91d132a0 [stack 0]
+push $N918eb920
  CopyBBox {
   inputs 2
   name CopyBBoxUnion
@@ -1362,7 +1362,7 @@ push $Ndc093680
   addUserKnob {20 User}
   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
  }
-set Ndc479810 [stack 0]
+set N91d31130 [stack 0]
  Transform {
   scale {{parent.adjustBBoxPercent} {parent.adjustBBoxPercent}}
   center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -1372,7 +1372,7 @@ set Ndc479810 [stack 0]
   xpos -516
   ypos 898
  }
-push $Ndc479810
+push $N91d31130
  AdjBBox {
   numpixels {{parent.adjustBBoxPixels} {parent.adjustBBoxPixels}}
   name AdjBBoxPixels
@@ -1392,7 +1392,7 @@ push $Ndc479810
   xpos -367
   ypos 993
  }
-push $Ndc45b980
+push $N91d132a0
  CopyBBox {
   inputs 2
   name CopyBBox
@@ -1419,7 +1419,7 @@ push $Ndc45b980
   addUserKnob {3 mergeNumber}
   mergeNumber {{"output2 == 0 ? 25 : output2 == 1 ? 24 : output2 == 2 ? 22 : output2 == 3 ? 13 : output2 == 4 ? 24 : output2 == 5 ? 17 : 18"}}
  }
-push $Ndc180310
+push $N91af4980
  NoOp {
   name BBoxResult
   xpos 585
@@ -1432,8 +1432,8 @@ end_group
 Unpremult {
  name Unpremult2
  selected true
- xpos 1817
- ypos -2476
+ xpos 1845
+ ypos -2412
 }
 Dot {
  name Dot36
@@ -1441,8 +1441,8 @@ Dot {
  note_font "DejaVu LGC Sans"
  note_font_size 20
  selected true
- xpos 1851
- ypos -2422
+ xpos 1879
+ ypos -2358
 }
 Group {
  name BinaryAlpha6
@@ -1451,8 +1451,8 @@ Group {
  note_font Verdana
  note_font_color 0xfffff9ff
  selected true
- xpos 1817
- ypos -2384
+ xpos 1845
+ ypos -2320
  addUserKnob {20 BinaryAlpha}
  addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
  addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
@@ -1501,8 +1501,8 @@ EdgeBlur {
  size 79
  name EdgeBlur5
  selected true
- xpos 1817
- ypos -2346
+ xpos 1845
+ ypos -2282
 }
 Group {
  name ExponBlurSimple2
@@ -1510,11 +1510,11 @@ Group {
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n        \n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n        \nelif k.name() == \"steps\":\n    \n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n        \n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n        \n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('mult').getValue()\n        \n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, b1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"all\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression(\"(Blur1.size)*(mult)**%s\"%(i))\n            b\[\"label\"].setValue(\"\[value size]\")\n            merge.setInput(i if i<2 else i+1, b)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n            \n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n            \nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n        \nelif k.name() == \"safeBBox\":\n    if n.knob(\"safeBBox\").getValue() == 0:\n        n.knob('safeBBoxText').setVisible(False)\n        n.knob('safetyBBoxMethod').setVisible(False)\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(False)\n        \n    elif n.knob(\"safeBBox\").getValue() == 1:\n        n.knob('safetyBBoxMethod').setVisible(True)\n        n.knob('safeBBoxText').setVisible(True)\n        if n.knob('safetyBBoxMethod').value() == \"pixels\":\n            n.knob('safeBBoxPixels').setVisible(True)\n            n.knob('safeBBoxPercent').setVisible(False)\n        elif n.knob('safetyBBoxMethod').value() == \"percent\":\n            n.knob('safeBBoxPixels').setVisible(False)\n            n.knob('safeBBoxPercent').setVisible(True)\n            \nelif k.name() == \"safetyBBoxMethod\":\n    if n.knob(\"safetyBBoxMethod\").value() == \"pixels\":\n        n.knob('safeBBoxPixels').setVisible(True)\n        n.knob('safeBBoxPercent').setVisible(False)\n    elif n.knob(\"safetyBBoxMethod\").value() == \"percent\":\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(True)\n        \nelif k.name() == \"adjustBBoxExtra\":\n    if n.knob(\"adjustBBoxExtra\").value() == \"pixels\":\n        n.knob('adjustBBoxPixels').setVisible(True)\n        n.knob('adjustBBoxPercent').setVisible(False)\n    elif n.knob(\"adjustBBoxExtra\").value() == \"percent\":\n        n.knob('adjustBBoxPixels').setVisible(False)\n        n.knob('adjustBBoxPercent').setVisible(True)\n"
  tile_color 0xcc804eff
  label "(\[value output2])"
- note_font "Verdana Bold Bold Bold Bold Bold Bold"
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
  note_font_color 0xffffffff
  selected true
- xpos 1817
- ypos -2292
+ xpos 1845
+ ypos -2228
  addUserKnob {20 ExponBlurSimple}
  addUserKnob {41 channels T Remove1.channels}
  addUserKnob {41 maskChannelMask_1 l area T Multiply1.maskChannelMask}
@@ -1592,7 +1592,7 @@ Group {
   xpos 34
   ypos -802
  }
-set Ndc5084e0 [stack 0]
+set N91dc2470 [stack 0]
  Dot {
   name Dot2
   note_font_size 41
@@ -1612,14 +1612,14 @@ set Ndc5084e0 [stack 0]
   xpos -367
   ypos 623
  }
-set Ndc31e6a0 [stack 0]
+set N91dce160 [stack 0]
  Dot {
   name Dot3
   note_font_size 41
   xpos -367
   ypos 675
  }
-set Ndc322640 [stack 0]
+set N91dd20e0 [stack 0]
  Dot {
   name Dot8
   note_font_size 41
@@ -1632,7 +1632,7 @@ set Ndc322640 [stack 0]
   xpos -463
   ypos 831
  }
-push $Ndc5084e0
+push $N91dc2470
  Dot {
   name Dot1
   note_font_size 41
@@ -1652,14 +1652,14 @@ push $Ndc5084e0
   xpos 461
   ypos -597
  }
-set Ndc222100 [stack 0]
+set N91de9110 [stack 0]
  Invert {
   name Invert1
   xpos 695
   ypos -604
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-set Ndc226080 [stack 0]
+set N91decf20 [stack 0]
  Dot {
   name Dot4
   note_font_size 41
@@ -1671,7 +1671,7 @@ set Ndc226080 [stack 0]
   xpos 506
   ypos -327
  }
-set Ndc233fe0 [stack 0]
+set N91dfae20 [stack 0]
  Dot {
   name Dot5
   note_font_size 41
@@ -1695,7 +1695,7 @@ set Ndc233fe0 [stack 0]
   xpos 210
   ypos -724
  }
-push $Ndc5084e0
+push $N91dc2470
  Merge2 {
   inputs 2
   name Merge3
@@ -1711,7 +1711,7 @@ push $Ndc5084e0
   addUserKnob {15 bbox}
   bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
  }
-push $Ndc233fe0
+push $N91dfae20
  Input {
   inputs 0
   name Inputarea
@@ -1732,7 +1732,7 @@ push $Ndc233fe0
   xpos 289
   ypos -503
  }
-push $Ndc226080
+push $N91decf20
  Multiply {
   inputs 1+1
   value 0
@@ -1746,7 +1746,7 @@ push $Ndc226080
   xpos 695
   ypos -450
  }
-set Ndc23e660 [stack 0]
+set N91e484d0 [stack 0]
  Blur {
   size {{(Blur1.size)*(mult)**3} {(Blur1.size)*(mult)**3}}
   crop false
@@ -1755,7 +1755,7 @@ set Ndc23e660 [stack 0]
   xpos 995
   ypos -370
  }
-push $Ndc23e660
+push $N91e484d0
  Blur {
   size {{(Blur1.size)*(mult)**2} {(Blur1.size)*(mult)**2}}
   crop false
@@ -1765,7 +1765,7 @@ push $Ndc23e660
   ypos -370
  }
 push 0
-push $Ndc23e660
+push $N91e484d0
  Blur {
   size {{(Blur1.size)*(mult)**1} {(Blur1.size)*(mult)**1}}
   crop false
@@ -1774,7 +1774,7 @@ push $Ndc23e660
   xpos 795
   ypos -370
  }
-push $Ndc23e660
+push $N91e484d0
  Blur {
   size {{parent.size.w} {parent.size.h}}
   name Blur1
@@ -1796,7 +1796,7 @@ push $Ndc23e660
   xpos 695
   ypos -230
  }
-set Ndc58dbc0 [stack 0]
+set N91e86b80 [stack 0]
  CopyBBox {
   inputs 2
   name CopyBBox1
@@ -1807,7 +1807,7 @@ set Ndc58dbc0 [stack 0]
   name BBoxToFormat
   onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
   tile_color 0xa57aaaff
-  note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
+  note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 585
   ypos -151
@@ -1848,15 +1848,15 @@ set Ndc58dbc0 [stack 0]
    xpos 295
    ypos 462
   }
-set Ndc5a89c0 [stack 0]
+set N91b46d20 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
    xpos -160
    ypos 462
   }
-set Ndc5ac8e0 [stack 0]
-push $Ndc5a89c0
+set N91b4ac40 [stack 0]
+push $N91b46d20
   Crop {
    box {{parent.inputBBox} {parent.inputBBox} {parent.inputBBox} {parent.inputBBox}}
    crop {{parent.blackOutside}}
@@ -1866,7 +1866,7 @@ push $Ndc5a89c0
    addUserKnob {20 User}
    addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
   }
-set Ndc5b07c0 [stack 0]
+set N91e984f0 [stack 0]
   Remove {
    operation keep
    channels none
@@ -1874,7 +1874,7 @@ set Ndc5b07c0 [stack 0]
    xpos 120
    ypos 504
   }
-set Ndc5ba070 [stack 0]
+set N91ea1750 [stack 0]
   Transform {
    scale {{parent.overscanPercent} {parent.overscanPercent}}
    center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -1884,7 +1884,7 @@ set Ndc5ba070 [stack 0]
    xpos 120
    ypos 553
   }
-push $Ndc5ba070
+push $N91ea1750
   AdjBBox {
    numpixels {{parent.overscan} {parent.overscan}}
    name AdjBBox1
@@ -1910,7 +1910,7 @@ push $Ndc5ba070
    ypos 647
    disable {{!parent.Crop6.intersect}}
   }
-push $Ndc5ac8e0
+push $N91b4ac40
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -1929,7 +1929,7 @@ push $Ndc5ac8e0
    xpos -160
    ypos 769
   }
-push $Ndc5b07c0
+push $N91e984f0
   Switch {
    inputs 2
    which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -1938,13 +1938,13 @@ push $Ndc5b07c0
    xpos 261
    ypos 759
   }
-set Nda3c2200 [stack 0]
+set N91edf990 [stack 0]
   Output {
    name Output1
    xpos 261
    ypos 921
   }
-push $Nda3c2200
+push $N91edf990
   NoOp {
    name OutputBBox1
    xpos 378
@@ -1956,7 +1956,7 @@ push $Nda3c2200
    outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
   }
  end_group
-push $Ndc58dbc0
+push $N91e86b80
  Merge2 {
   inputs 2
   bbox intersection
@@ -1965,14 +1965,14 @@ push $Ndc58dbc0
   xpos 585
   ypos -127
  }
-push $Ndc58dbc0
+push $N91e86b80
  CopyBBox {
   inputs 2
   name CopyBBox2
   xpos 585
   ypos -101
  }
-push $Ndc58dbc0
+push $N91e86b80
  Switch {
   inputs 2
   which {{"parent.safeBBox && ((BBoxResult.bbox.x < BBoxInput.bbox.x || BBoxResult.bbox.y < BBoxInput.bbox.y || BBoxResult.bbox.r > BBoxInput.bbox.r || BBoxResult.bbox.t > BBoxInput.bbox.t))"}}
@@ -2020,7 +2020,7 @@ push $Ndc58dbc0
   ypos 144
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-push $Ndc222100
+push $N91de9110
  Switch {
   inputs 2
   which {{"parent.size == 0 ? 0 : 1"}}
@@ -2042,7 +2042,7 @@ push $Ndc222100
   xpos 34
   ypos 579
  }
-set Ndc625da0 [stack 0]
+set N91bb7710 [stack 0]
  Dot {
   name Dot12
   note_font_size 41
@@ -2055,7 +2055,7 @@ set Ndc625da0 [stack 0]
   xpos -260
   ypos 799
  }
-push $Ndc31e6a0
+push $N91dce160
  Input {
   inputs 0
   name Inputmask
@@ -2070,14 +2070,14 @@ push $Ndc31e6a0
   xpos 546
   ypos 435
  }
-set Ndc6358a0 [stack 0]
+set N905a32e0 [stack 0]
  Dot {
   name Dot20
   note_font_size 41
   xpos 436
   ypos 435
  }
-push $Ndc625da0
+push $N91bb7710
  Merge2 {
   inputs 2
   bbox intersection
@@ -2107,15 +2107,15 @@ push $Ndc625da0
   xpos 436
   ypos 770
  }
-push $Ndc6358a0
+push $N905a32e0
  Dot {
   name Dot10
   note_font_size 41
   xpos 546
   ypos 672
  }
-push $Ndc625da0
-push $Ndc322640
+push $N91bb7710
+push $N91dd20e0
  Merge2 {
   inputs 2+1
   operation copy
@@ -2133,8 +2133,8 @@ push $Ndc322640
   xpos 34
   ypos 747
  }
-set Ndc25c8d0 [stack 0]
-push $Ndc322640
+set N905db210 [stack 0]
+push $N91dd20e0
  CopyBBox {
   inputs 2
   name CopyBBoxUnion
@@ -2173,7 +2173,7 @@ push $Ndc322640
   addUserKnob {20 User}
   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
  }
-set Ndc27a770 [stack 0]
+set N91eeb140 [stack 0]
  Transform {
   scale {{parent.adjustBBoxPercent} {parent.adjustBBoxPercent}}
   center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -2183,7 +2183,7 @@ set Ndc27a770 [stack 0]
   xpos -516
   ypos 898
  }
-push $Ndc27a770
+push $N91eeb140
  AdjBBox {
   numpixels {{parent.adjustBBoxPixels} {parent.adjustBBoxPixels}}
   name AdjBBoxPixels
@@ -2203,7 +2203,7 @@ push $Ndc27a770
   xpos -367
   ypos 993
  }
-push $Ndc25c8d0
+push $N905db210
  CopyBBox {
   inputs 2
   name CopyBBox
@@ -2230,7 +2230,7 @@ push $Ndc25c8d0
   addUserKnob {3 mergeNumber}
   mergeNumber {{"output2 == 0 ? 25 : output2 == 1 ? 24 : output2 == 2 ? 22 : output2 == 3 ? 13 : output2 == 4 ? 24 : output2 == 5 ? 17 : 18"}}
  }
-push $Ndc58dbc0
+push $N91e86b80
  NoOp {
   name BBoxResult
   xpos 585
@@ -2243,8 +2243,8 @@ end_group
 Unpremult {
  name Unpremult3
  selected true
- xpos 1817
- ypos -2254
+ xpos 1845
+ ypos -2190
 }
 Dot {
  name Dot37
@@ -2252,8 +2252,8 @@ Dot {
  note_font "DejaVu LGC Sans"
  note_font_size 20
  selected true
- xpos 1851
- ypos -2207
+ xpos 1879
+ ypos -2143
 }
 Group {
  name BinaryAlpha7
@@ -2262,8 +2262,8 @@ Group {
  note_font Verdana
  note_font_color 0xfffff9ff
  selected true
- xpos 1817
- ypos -2158
+ xpos 1845
+ ypos -2094
  addUserKnob {20 BinaryAlpha}
  addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
  addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
@@ -2312,8 +2312,8 @@ EdgeBlur {
  size 62
  name EdgeBlur6
  selected true
- xpos 1817
- ypos -2120
+ xpos 1845
+ ypos -2056
 }
 Group {
  name ExponBlurSimple3
@@ -2321,11 +2321,11 @@ Group {
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n        \n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n        \nelif k.name() == \"steps\":\n    \n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n        \n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n        \n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('mult').getValue()\n        \n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, b1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"all\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression(\"(Blur1.size)*(mult)**%s\"%(i))\n            b\[\"label\"].setValue(\"\[value size]\")\n            merge.setInput(i if i<2 else i+1, b)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n            \n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n            \nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n        \nelif k.name() == \"safeBBox\":\n    if n.knob(\"safeBBox\").getValue() == 0:\n        n.knob('safeBBoxText').setVisible(False)\n        n.knob('safetyBBoxMethod').setVisible(False)\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(False)\n        \n    elif n.knob(\"safeBBox\").getValue() == 1:\n        n.knob('safetyBBoxMethod').setVisible(True)\n        n.knob('safeBBoxText').setVisible(True)\n        if n.knob('safetyBBoxMethod').value() == \"pixels\":\n            n.knob('safeBBoxPixels').setVisible(True)\n            n.knob('safeBBoxPercent').setVisible(False)\n        elif n.knob('safetyBBoxMethod').value() == \"percent\":\n            n.knob('safeBBoxPixels').setVisible(False)\n            n.knob('safeBBoxPercent').setVisible(True)\n            \nelif k.name() == \"safetyBBoxMethod\":\n    if n.knob(\"safetyBBoxMethod\").value() == \"pixels\":\n        n.knob('safeBBoxPixels').setVisible(True)\n        n.knob('safeBBoxPercent').setVisible(False)\n    elif n.knob(\"safetyBBoxMethod\").value() == \"percent\":\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(True)\n        \nelif k.name() == \"adjustBBoxExtra\":\n    if n.knob(\"adjustBBoxExtra\").value() == \"pixels\":\n        n.knob('adjustBBoxPixels').setVisible(True)\n        n.knob('adjustBBoxPercent').setVisible(False)\n    elif n.knob(\"adjustBBoxExtra\").value() == \"percent\":\n        n.knob('adjustBBoxPixels').setVisible(False)\n        n.knob('adjustBBoxPercent').setVisible(True)\n"
  tile_color 0xcc804eff
  label "(\[value output2])"
- note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold"
  note_font_color 0xffffffff
  selected true
- xpos 1817
- ypos -2066
+ xpos 1845
+ ypos -2002
  addUserKnob {20 ExponBlurSimple}
  addUserKnob {41 channels T Remove1.channels}
  addUserKnob {41 maskChannelMask_1 l area T Multiply1.maskChannelMask}
@@ -2403,7 +2403,7 @@ Group {
   xpos 34
   ypos -802
  }
-set Ndc677ca0 [stack 0]
+set N91f88520 [stack 0]
  Dot {
   name Dot2
   note_font_size 41
@@ -2423,14 +2423,14 @@ set Ndc677ca0 [stack 0]
   xpos -367
   ypos 623
  }
-set Ndc683990 [stack 0]
+set N91f94210 [stack 0]
  Dot {
   name Dot3
   note_font_size 41
   xpos -367
   ypos 675
  }
-set Ndc687910 [stack 0]
+set N91f98190 [stack 0]
  Dot {
   name Dot8
   note_font_size 41
@@ -2443,7 +2443,7 @@ set Ndc687910 [stack 0]
   xpos -463
   ypos 831
  }
-push $Ndc677ca0
+push $N91f88520
  Dot {
   name Dot1
   note_font_size 41
@@ -2463,14 +2463,14 @@ push $Ndc677ca0
   xpos 461
   ypos -597
  }
-set Ndc69e940 [stack 0]
+set N91bc4c30 [stack 0]
  Invert {
   name Invert1
   xpos 695
   ypos -604
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-set Ndc6a2750 [stack 0]
+set N91bc8a50 [stack 0]
  Dot {
   name Dot4
   note_font_size 41
@@ -2482,7 +2482,7 @@ set Ndc6a2750 [stack 0]
   xpos 506
   ypos -327
  }
-set Ndc6b0650 [stack 0]
+set N91bd69b0 [stack 0]
  Dot {
   name Dot5
   note_font_size 41
@@ -2506,7 +2506,7 @@ set Ndc6b0650 [stack 0]
   xpos 210
   ypos -724
  }
-push $Ndc677ca0
+push $N91f88520
  Merge2 {
   inputs 2
   name Merge3
@@ -2522,7 +2522,7 @@ push $Ndc677ca0
   addUserKnob {15 bbox}
   bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
  }
-push $Ndc6b0650
+push $N91bd69b0
  Input {
   inputs 0
   name Inputarea
@@ -2543,7 +2543,7 @@ push $Ndc6b0650
   xpos 289
   ypos -503
  }
-push $Ndc6a2750
+push $N91bc8a50
  Multiply {
   inputs 1+1
   value 0
@@ -2557,7 +2557,7 @@ push $Ndc6a2750
   xpos 695
   ypos -450
  }
-set Ndc3c6cd0 [stack 0]
+set N91732800 [stack 0]
  Blur {
   size {{(Blur1.size)*(mult)**3} {(Blur1.size)*(mult)**3}}
   crop false
@@ -2566,7 +2566,7 @@ set Ndc3c6cd0 [stack 0]
   xpos 995
   ypos -370
  }
-push $Ndc3c6cd0
+push $N91732800
  Blur {
   size {{(Blur1.size)*(mult)**2} {(Blur1.size)*(mult)**2}}
   crop false
@@ -2576,7 +2576,7 @@ push $Ndc3c6cd0
   ypos -370
  }
 push 0
-push $Ndc3c6cd0
+push $N91732800
  Blur {
   size {{(Blur1.size)*(mult)**1} {(Blur1.size)*(mult)**1}}
   crop false
@@ -2585,7 +2585,7 @@ push $Ndc3c6cd0
   xpos 795
   ypos -370
  }
-push $Ndc3c6cd0
+push $N91732800
  Blur {
   size {{parent.size.w} {parent.size.h}}
   name Blur1
@@ -2607,7 +2607,7 @@ push $Ndc3c6cd0
   xpos 695
   ypos -230
  }
-set Ndc3f28a0 [stack 0]
+set N91770f70 [stack 0]
  CopyBBox {
   inputs 2
   name CopyBBox1
@@ -2618,7 +2618,7 @@ set Ndc3f28a0 [stack 0]
   name BBoxToFormat
   onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
   tile_color 0xa57aaaff
-  note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 585
   ypos -151
@@ -2659,15 +2659,15 @@ set Ndc3f28a0 [stack 0]
    xpos 295
    ypos 462
   }
-set Ndc6f8d30 [stack 0]
+set N93015e30 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
    xpos -160
    ypos 462
   }
-set Ndc800bd0 [stack 0]
-push $Ndc6f8d30
+set N93019d50 [stack 0]
+push $N93015e30
   Crop {
    box {{parent.inputBBox} {parent.inputBBox} {parent.inputBBox} {parent.inputBBox}}
    crop {{parent.blackOutside}}
@@ -2677,7 +2677,7 @@ push $Ndc6f8d30
    addUserKnob {20 User}
    addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
   }
-set Ndc7081c0 [stack 0]
+set N9301dc30 [stack 0]
   Remove {
    operation keep
    channels none
@@ -2685,7 +2685,7 @@ set Ndc7081c0 [stack 0]
    xpos 120
    ypos 504
   }
-set Ndc7113e0 [stack 0]
+set N930274e0 [stack 0]
   Transform {
    scale {{parent.overscanPercent} {parent.overscanPercent}}
    center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -2695,7 +2695,7 @@ set Ndc7113e0 [stack 0]
    xpos 120
    ypos 553
   }
-push $Ndc7113e0
+push $N930274e0
   AdjBBox {
    numpixels {{parent.overscan} {parent.overscan}}
    name AdjBBox1
@@ -2721,7 +2721,7 @@ push $Ndc7113e0
    ypos 647
    disable {{!parent.Crop6.intersect}}
   }
-push $Ndc800bd0
+push $N93019d50
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -2740,7 +2740,7 @@ push $Ndc800bd0
    xpos -160
    ypos 769
   }
-push $Ndc7081c0
+push $N9301dc30
   Switch {
    inputs 2
    which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -2749,13 +2749,13 @@ push $Ndc7081c0
    xpos 261
    ypos 759
   }
-set Ndc74f620 [stack 0]
+set N930656d0 [stack 0]
   Output {
    name Output1
    xpos 261
    ypos 921
   }
-push $Ndc74f620
+push $N930656d0
   NoOp {
    name OutputBBox1
    xpos 378
@@ -2767,7 +2767,7 @@ push $Ndc74f620
    outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
   }
  end_group
-push $Ndc3f28a0
+push $N91770f70
  Merge2 {
   inputs 2
   bbox intersection
@@ -2776,14 +2776,14 @@ push $Ndc3f28a0
   xpos 585
   ypos -127
  }
-push $Ndc3f28a0
+push $N91770f70
  CopyBBox {
   inputs 2
   name CopyBBox2
   xpos 585
   ypos -101
  }
-push $Ndc3f28a0
+push $N91770f70
  Switch {
   inputs 2
   which {{"parent.safeBBox && ((BBoxResult.bbox.x < BBoxInput.bbox.x || BBoxResult.bbox.y < BBoxInput.bbox.y || BBoxResult.bbox.r > BBoxInput.bbox.r || BBoxResult.bbox.t > BBoxInput.bbox.t))"}}
@@ -2831,7 +2831,7 @@ push $Ndc3f28a0
   ypos 144
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-push $Ndc69e940
+push $N91bc4c30
  Switch {
   inputs 2
   which {{"parent.size == 0 ? 0 : 1"}}
@@ -2853,7 +2853,7 @@ push $Ndc69e940
   xpos 34
   ypos 579
  }
-set Ndc7b1980 [stack 0]
+set N930d4c80 [stack 0]
  Dot {
   name Dot12
   note_font_size 41
@@ -2866,7 +2866,7 @@ set Ndc7b1980 [stack 0]
   xpos -260
   ypos 799
  }
-push $Ndc683990
+push $N91f94210
  Input {
   inputs 0
   name Inputmask
@@ -2881,14 +2881,14 @@ push $Ndc683990
   xpos 546
   ypos 435
  }
-set Ndc7c1480 [stack 0]
+set N930e4780 [stack 0]
  Dot {
   name Dot20
   note_font_size 41
   xpos 436
   ypos 435
  }
-push $Ndc7b1980
+push $N930d4c80
  Merge2 {
   inputs 2
   bbox intersection
@@ -2918,15 +2918,15 @@ push $Ndc7b1980
   xpos 436
   ypos 770
  }
-push $Ndc7c1480
+push $N930e4780
  Dot {
   name Dot10
   note_font_size 41
   xpos 546
   ypos 672
  }
-push $Ndc7b1980
-push $Ndc687910
+push $N930d4c80
+push $N91f98190
  Merge2 {
   inputs 2+1
   operation copy
@@ -2944,8 +2944,8 @@ push $Ndc687910
   xpos 34
   ypos 747
  }
-set Ndc7f9230 [stack 0]
-push $Ndc687910
+set N93120630 [stack 0]
+push $N91f98190
  CopyBBox {
   inputs 2
   name CopyBBoxUnion
@@ -2984,7 +2984,7 @@ push $Ndc687910
   addUserKnob {20 User}
   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
  }
-set Ndc90dea0 [stack 0]
+set N9313e4c0 [stack 0]
  Transform {
   scale {{parent.adjustBBoxPercent} {parent.adjustBBoxPercent}}
   center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -2994,7 +2994,7 @@ set Ndc90dea0 [stack 0]
   xpos -516
   ypos 898
  }
-push $Ndc90dea0
+push $N9313e4c0
  AdjBBox {
   numpixels {{parent.adjustBBoxPixels} {parent.adjustBBoxPixels}}
   name AdjBBoxPixels
@@ -3014,7 +3014,7 @@ push $Ndc90dea0
   xpos -367
   ypos 993
  }
-push $Ndc7f9230
+push $N93120630
  CopyBBox {
   inputs 2
   name CopyBBox
@@ -3041,7 +3041,7 @@ push $Ndc7f9230
   addUserKnob {3 mergeNumber}
   mergeNumber {{"output2 == 0 ? 25 : output2 == 1 ? 24 : output2 == 2 ? 22 : output2 == 3 ? 13 : output2 == 4 ? 24 : output2 == 5 ? 17 : 18"}}
  }
-push $Ndc3f28a0
+push $N91770f70
  NoOp {
   name BBoxResult
   xpos 585
@@ -3054,55 +3054,55 @@ end_group
 Unpremult {
  name Unpremult6
  selected true
- xpos 1817
- ypos -2028
+ xpos 1845
+ ypos -1964
 }
 Dot {
  name Dot47
  label "final level,\nfill rest of \nscreen"
  note_font_size 20
  selected true
- xpos 1851
- ypos -1956
+ xpos 1879
+ ypos -1892
 }
 Dot {
  name Dot18
  note_font_size 41
  selected true
- xpos 1851
- ypos -1866
+ xpos 1879
+ ypos -1802
 }
-set Ndc814a40 [stack 0]
+set N91fab100 [stack 0]
 Dot {
  name Dot19
  note_font_size 41
  selected true
- xpos 3099
- ypos -1866
+ xpos 3127
+ ypos -1802
 }
 Dot {
  name Dot16
  label Cleanplate
  note_font_size 60
  selected true
- xpos 3099
- ypos -1503
+ xpos 3127
+ ypos -1439
 }
 Dot {
  name Dot49
  label Cleanplate
  note_font_size 60
  selected true
- xpos 3099
- ypos -786
+ xpos 3127
+ ypos -722
 }
 Dot {
  name Dot53
  label Cleanplate
  note_font_size 60
  selected true
- xpos 3099
- ypos 611
+ xpos 3127
+ ypos 675
 }
 add_layer {cleanplate cleanplate.red cleanplate.green cleanplate.blue cleanplate.alpha}
 Shuffle {
@@ -3114,24 +3114,24 @@ Shuffle {
  name Shuffle34
  label "\[value in] → \[value out2]"
  selected true
- xpos -1325
- ypos 601
+ xpos -1297
+ ypos 665
 }
-push $Ndaf70b60
+push $N919a9e60
 Remove {
  operation keep
  channels rgb
  name Remove31
  selected true
- xpos 311
- ypos -2942
+ xpos 339
+ ypos -2878
 }
 Dot {
  name Dot13
  note_font_size 41
  selected true
- xpos 345
- ypos -2641
+ xpos 373
+ ypos -2577
 }
 Primatte3 {
  data { 5
@@ -3587,8 +3587,8 @@ Primatte3 {
  "Fine Tuning" 0
  name Primatte2
  selected true
- xpos 311
- ypos -2503
+ xpos 339
+ ypos -2439
 }
 Shuffle {
  red alpha
@@ -3597,38 +3597,38 @@ Shuffle {
  name Shuffle35
  tile_color 0xffffffff
  selected true
- xpos 311
- ypos -2459
+ xpos 339
+ ypos -2395
 }
 Dot {
  name Dot54
  label "Core\nMatte"
  note_font_size 60
  selected true
- xpos 345
- ypos -1134
+ xpos 373
+ ypos -1070
 }
 Dot {
  name Dot57
  selected true
- xpos 345
- ypos -1041
+ xpos 373
+ ypos -977
 }
-set Ndc2d1200 [stack 0]
+set N931acc30 [stack 0]
 Dot {
  name Dot58
  note_font_size 41
  selected true
- xpos 345
- ypos -341
+ xpos 373
+ ypos -277
 }
-push $Ndc814a40
-push $Ndaf7a950
+push $N91fab100
+push $N914f07d0
 IBKGizmoV3 {
  inputs 2
  name IBKGizmoV3_3
- xpos 1575
- ypos -1869
+ xpos 1603
+ ypos -1805
 }
 Shuffle {
  red alpha
@@ -3637,16 +3637,16 @@ Shuffle {
  name Shuffle36
  tile_color 0xffffffff
  selected true
- xpos 1575
- ypos -1818
+ xpos 1603
+ ypos -1754
 }
 Dot {
  name Dot59
  label "Edge\nMatte"
  note_font_size 60
  selected true
- xpos 1609
- ypos -574
+ xpos 1637
+ ypos -510
 }
 Merge2 {
  inputs 2
@@ -3654,32 +3654,32 @@ Merge2 {
  bbox B
  name Merge4
  selected true
- xpos 1575
- ypos -345
+ xpos 1603
+ ypos -281
 }
 Dot {
  name Dot60
  label "Combined\nMatte"
  note_font_size 60
  selected true
- xpos 1609
- ypos 249
+ xpos 1637
+ ypos 313
 }
 Dot {
  name Dot61
  label "Combined\nMatte"
  note_font_size 60
  selected true
- xpos -1332
- ypos 249
+ xpos -1304
+ ypos 313
 }
-push $Nda3a33c0
+push $N9144ae90
 Remove {
  channels rgba
  name Remove32
  selected true
- xpos -1623
- ypos -3396
+ xpos -1595
+ ypos -3332
 }
 NoOp {
  name Anchor_217ff93ec8
@@ -3690,8 +3690,8 @@ NoOp {
  tile_color 0xffffff01
  note_font_size 20
  selected true
- xpos -1623
- ypos -3347
+ xpos -1595
+ ypos -3283
  addUserKnob {20 anchor_tab l "Anchor Stamp"}
  addUserKnob {26 identifier -STARTLINE +HIDDEN T anchor}
  addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
@@ -3721,8 +3721,8 @@ NoOp {
  note_font "Bitstream Vera Sans"
  note_font_size 20
  selected true
- xpos -1722
- ypos -140
+ xpos -1694
+ ypos -76
  hide_input true
  addUserKnob {20 wired_tab l "Wired Stamp"}
  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
@@ -3767,32 +3767,32 @@ Dot {
  name Dot10
  note_font_size 41
  selected true
- xpos -1688
- ypos -62
+ xpos -1660
+ ypos 2
 }
 Dot {
  name Dot286
  note_font_size 41
  selected true
- xpos -1555
- ypos -62
+ xpos -1527
+ ypos 2
 }
-set Ndc866a10 [stack 0]
+set N917edbb0 [stack 0]
 Dot {
  name Dot287
  note_font_size 41
  selected true
- xpos -1555
- ypos -12
+ xpos -1527
+ ypos 52
 }
-push $Ndc866a10
-push $Ndc2d1200
+push $N917edbb0
+push $N931acc30
 Dot {
  name Dot288
  note_font_size 41
  selected true
- xpos -40
- ypos -1041
+ xpos -12
+ ypos -977
 }
 Group {
  name ExponBlurSimple4
@@ -3800,11 +3800,11 @@ Group {
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n        \n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n        \nelif k.name() == \"steps\":\n    \n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n        \n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n        \n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('mult').getValue()\n        \n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, b1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"all\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression(\"(Blur1.size)*(mult)**%s\"%(i))\n            b\[\"label\"].setValue(\"\[value size]\")\n            merge.setInput(i if i<2 else i+1, b)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n            \n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n            \nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n        \nelif k.name() == \"safeBBox\":\n    if n.knob(\"safeBBox\").getValue() == 0:\n        n.knob('safeBBoxText').setVisible(False)\n        n.knob('safetyBBoxMethod').setVisible(False)\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(False)\n        \n    elif n.knob(\"safeBBox\").getValue() == 1:\n        n.knob('safetyBBoxMethod').setVisible(True)\n        n.knob('safeBBoxText').setVisible(True)\n        if n.knob('safetyBBoxMethod').value() == \"pixels\":\n            n.knob('safeBBoxPixels').setVisible(True)\n            n.knob('safeBBoxPercent').setVisible(False)\n        elif n.knob('safetyBBoxMethod').value() == \"percent\":\n            n.knob('safeBBoxPixels').setVisible(False)\n            n.knob('safeBBoxPercent').setVisible(True)\n            \nelif k.name() == \"safetyBBoxMethod\":\n    if n.knob(\"safetyBBoxMethod\").value() == \"pixels\":\n        n.knob('safeBBoxPixels').setVisible(True)\n        n.knob('safeBBoxPercent').setVisible(False)\n    elif n.knob(\"safetyBBoxMethod\").value() == \"percent\":\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(True)\n        \nelif k.name() == \"adjustBBoxExtra\":\n    if n.knob(\"adjustBBoxExtra\").value() == \"pixels\":\n        n.knob('adjustBBoxPixels').setVisible(True)\n        n.knob('adjustBBoxPercent').setVisible(False)\n    elif n.knob(\"adjustBBoxExtra\").value() == \"percent\":\n        n.knob('adjustBBoxPixels').setVisible(False)\n        n.knob('adjustBBoxPercent').setVisible(True)\n"
  tile_color 0xcc804eff
  label "(\[value output2])"
- note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold"
  note_font_color 0xffffffff
  selected true
- xpos -74
- ypos -802
+ xpos -46
+ ypos -738
  addUserKnob {20 ExponBlurSimple}
  addUserKnob {41 channels T Remove1.channels}
  addUserKnob {41 maskChannelMask_1 l area T Multiply1.maskChannelMask}
@@ -3881,7 +3881,7 @@ Group {
   xpos 34
   ypos -802
  }
-set Ndc8876b0 [stack 0]
+set N931daad0 [stack 0]
  Dot {
   name Dot2
   note_font_size 41
@@ -3901,14 +3901,14 @@ set Ndc8876b0 [stack 0]
   xpos -367
   ypos 623
  }
-set Ndc989730 [stack 0]
+set N932071e0 [stack 0]
  Dot {
   name Dot3
   note_font_size 41
   xpos -367
   ypos 675
  }
-set Ndc98d6d0 [stack 0]
+set N931e59b0 [stack 0]
  Dot {
   name Dot8
   note_font_size 41
@@ -3921,7 +3921,7 @@ set Ndc98d6d0 [stack 0]
   xpos -463
   ypos 831
  }
-push $Ndc8876b0
+push $N931daad0
  Dot {
   name Dot1
   note_font_size 41
@@ -3941,14 +3941,14 @@ push $Ndc8876b0
   xpos 461
   ypos -597
  }
-set Ndc99bd80 [stack 0]
+set N933009a0 [stack 0]
  Invert {
   name Invert1
   xpos 695
   ypos -604
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-set Ndc99fba0 [stack 0]
+set N933047b0 [stack 0]
  Dot {
   name Dot4
   note_font_size 41
@@ -3960,7 +3960,7 @@ set Ndc99fba0 [stack 0]
   xpos 506
   ypos -327
  }
-set Ndc9adaa0 [stack 0]
+set N91ff6a30 [stack 0]
  Dot {
   name Dot5
   note_font_size 41
@@ -3984,7 +3984,7 @@ set Ndc9adaa0 [stack 0]
   xpos 210
   ypos -724
  }
-push $Ndc8876b0
+push $N931daad0
  Merge2 {
   inputs 2
   name Merge3
@@ -4000,7 +4000,7 @@ push $Ndc8876b0
   addUserKnob {15 bbox}
   bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
  }
-push $Ndc9adaa0
+push $N91ff6a30
  Input {
   inputs 0
   name Inputarea
@@ -4021,7 +4021,7 @@ push $Ndc9adaa0
   xpos 289
   ypos -503
  }
-push $Ndc99fba0
+push $N933047b0
  Multiply {
   inputs 1+1
   value 0
@@ -4035,7 +4035,7 @@ push $Ndc99fba0
   xpos 695
   ypos -450
  }
-set Ndc8b26f0 [stack 0]
+set N93444170 [stack 0]
  Blur {
   size {{(Blur1.size)*(mult)**3} {(Blur1.size)*(mult)**3}}
   crop false
@@ -4044,7 +4044,7 @@ set Ndc8b26f0 [stack 0]
   xpos 995
   ypos -370
  }
-push $Ndc8b26f0
+push $N93444170
  Blur {
   size {{(Blur1.size)*(mult)**2} {(Blur1.size)*(mult)**2}}
   crop false
@@ -4054,7 +4054,7 @@ push $Ndc8b26f0
   ypos -370
  }
 push 0
-push $Ndc8b26f0
+push $N93444170
  Blur {
   size {{(Blur1.size)*(mult)**1} {(Blur1.size)*(mult)**1}}
   crop false
@@ -4063,7 +4063,7 @@ push $Ndc8b26f0
   xpos 795
   ypos -370
  }
-push $Ndc8b26f0
+push $N93444170
  Blur {
   size {{parent.size.w} {parent.size.h}}
   name Blur1
@@ -4085,7 +4085,7 @@ push $Ndc8b26f0
   xpos 695
   ypos -230
  }
-set Ndc8d87f0 [stack 0]
+set N934828e0 [stack 0]
  CopyBBox {
   inputs 2
   name CopyBBox1
@@ -4096,7 +4096,7 @@ set Ndc8d87f0 [stack 0]
   name BBoxToFormat
   onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
   tile_color 0xa57aaaff
-  note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 585
   ypos -151
@@ -4137,15 +4137,15 @@ set Ndc8d87f0 [stack 0]
    xpos 295
    ypos 462
   }
-set Ndc8f2aa0 [stack 0]
+set N9349caa0 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
    xpos -160
    ypos 462
   }
-set Ndc8f69c0 [stack 0]
-push $Ndc8f2aa0
+set N934a09c0 [stack 0]
+push $N9349caa0
   Crop {
    box {{parent.inputBBox} {parent.inputBBox} {parent.inputBBox} {parent.inputBBox}}
    crop {{parent.blackOutside}}
@@ -4155,7 +4155,7 @@ push $Ndc8f2aa0
    addUserKnob {20 User}
    addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
   }
-set Ndc8fa8a0 [stack 0]
+set N934a48a0 [stack 0]
   Remove {
    operation keep
    channels none
@@ -4163,7 +4163,7 @@ set Ndc8fa8a0 [stack 0]
    xpos 120
    ypos 504
   }
-set Ndcb080d0 [stack 0]
+set N934ae150 [stack 0]
   Transform {
    scale {{parent.overscanPercent} {parent.overscanPercent}}
    center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -4173,7 +4173,7 @@ set Ndcb080d0 [stack 0]
    xpos 120
    ypos 553
   }
-push $Ndcb080d0
+push $N934ae150
   AdjBBox {
    numpixels {{parent.overscan} {parent.overscan}}
    name AdjBBox1
@@ -4199,7 +4199,7 @@ push $Ndcb080d0
    ypos 647
    disable {{!parent.Crop6.intersect}}
   }
-push $Ndc8f69c0
+push $N934a09c0
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -4218,7 +4218,7 @@ push $Ndc8f69c0
    xpos -160
    ypos 769
   }
-push $Ndc8fa8a0
+push $N934a48a0
   Switch {
    inputs 2
    which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -4227,13 +4227,13 @@ push $Ndc8fa8a0
    xpos 261
    ypos 759
   }
-set Ndcc08310 [stack 0]
+set N934ec340 [stack 0]
   Output {
    name Output1
    xpos 261
    ypos 921
   }
-push $Ndcc08310
+push $N934ec340
   NoOp {
    name OutputBBox1
    xpos 378
@@ -4245,7 +4245,7 @@ push $Ndcc08310
    outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
   }
  end_group
-push $Ndc8d87f0
+push $N934828e0
  Merge2 {
   inputs 2
   bbox intersection
@@ -4254,14 +4254,14 @@ push $Ndc8d87f0
   xpos 585
   ypos -127
  }
-push $Ndc8d87f0
+push $N934828e0
  CopyBBox {
   inputs 2
   name CopyBBox2
   xpos 585
   ypos -101
  }
-push $Ndc8d87f0
+push $N934828e0
  Switch {
   inputs 2
   which {{"parent.safeBBox && ((BBoxResult.bbox.x < BBoxInput.bbox.x || BBoxResult.bbox.y < BBoxInput.bbox.y || BBoxResult.bbox.r > BBoxInput.bbox.r || BBoxResult.bbox.t > BBoxInput.bbox.t))"}}
@@ -4309,7 +4309,7 @@ push $Ndc8d87f0
   ypos 144
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-push $Ndc99bd80
+push $N933009a0
  Switch {
   inputs 2
   which {{"parent.size == 0 ? 0 : 1"}}
@@ -4331,7 +4331,7 @@ push $Ndc99bd80
   xpos 34
   ypos 579
  }
-set Ndcc31fd0 [stack 0]
+set N9355f870 [stack 0]
  Dot {
   name Dot12
   note_font_size 41
@@ -4344,7 +4344,7 @@ set Ndcc31fd0 [stack 0]
   xpos -260
   ypos 799
  }
-push $Ndc989730
+push $N932071e0
  Input {
   inputs 0
   name Inputmask
@@ -4359,14 +4359,14 @@ push $Ndc989730
   xpos 546
   ypos 435
  }
-set Ndcb357a0 [stack 0]
+set N9356f370 [stack 0]
  Dot {
   name Dot20
   note_font_size 41
   xpos 436
   ypos 435
  }
-push $Ndcc31fd0
+push $N9355f870
  Merge2 {
   inputs 2
   bbox intersection
@@ -4396,15 +4396,15 @@ push $Ndcc31fd0
   xpos 436
   ypos 770
  }
-push $Ndcb357a0
+push $N9356f370
  Dot {
   name Dot10
   note_font_size 41
   xpos 546
   ypos 672
  }
-push $Ndcc31fd0
-push $Ndc98d6d0
+push $N9355f870
+push $N931e59b0
  Merge2 {
   inputs 2+1
   operation copy
@@ -4422,8 +4422,8 @@ push $Ndc98d6d0
   xpos 34
   ypos 747
  }
-set Ndcb697e0 [stack 0]
-push $Ndc98d6d0
+set N935a7120 [stack 0]
+push $N931e59b0
  CopyBBox {
   inputs 2
   name CopyBBoxUnion
@@ -4462,7 +4462,7 @@ push $Ndc98d6d0
   addUserKnob {20 User}
   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
  }
-set Ndcd01f50 [stack 0]
+set N935c4fb0 [stack 0]
  Transform {
   scale {{parent.adjustBBoxPercent} {parent.adjustBBoxPercent}}
   center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -4472,7 +4472,7 @@ set Ndcd01f50 [stack 0]
   xpos -516
   ypos 898
  }
-push $Ndcd01f50
+push $N935c4fb0
  AdjBBox {
   numpixels {{parent.adjustBBoxPixels} {parent.adjustBBoxPixels}}
   name AdjBBoxPixels
@@ -4492,7 +4492,7 @@ push $Ndcd01f50
   xpos -367
   ypos 993
  }
-push $Ndcb697e0
+push $N935a7120
  CopyBBox {
   inputs 2
   name CopyBBox
@@ -4519,7 +4519,7 @@ push $Ndcb697e0
   addUserKnob {3 mergeNumber}
   mergeNumber {{"output2 == 0 ? 25 : output2 == 1 ? 24 : output2 == 2 ? 22 : output2 == 3 ? 13 : output2 == 4 ? 24 : output2 == 5 ? 17 : 18"}}
  }
-push $Ndc8d87f0
+push $N934828e0
  NoOp {
   name BBoxResult
   xpos 585
@@ -4533,47 +4533,47 @@ Dot {
  name Dot289
  note_font_size 41
  selected true
- xpos -40
- ypos -634
+ xpos -12
+ ypos -570
 }
 Dot {
  name Dot290
  label "Core\nMatte"
  note_font_size 60
  selected true
- xpos -1111
- ypos -634
+ xpos -1083
+ ypos -570
 }
 Dot {
  name Dot291
  note_font_size 41
  selected true
- xpos -1221
- ypos -634
+ xpos -1193
+ ypos -570
 }
-set Ndcc6be70 [stack 0]
-push $Ndaf6cdf0
+set N935d7820 [stack 0]
+push $N919a5f20
 Dot {
  name Dot67
  selected true
- xpos -3099
- ypos -3063
+ xpos -3071
+ ypos -2999
 }
 Remove {
  operation keep
  channels rgb
  name Remove33
  selected true
- xpos -3133
- ypos -2942
+ xpos -3105
+ ypos -2878
 }
 Dot {
  name Dot292
  selected true
- xpos -3099
- ypos -2580
+ xpos -3071
+ ypos -2516
 }
-set Ndcc7b160 [stack 0]
+set N935e6b10 [stack 0]
 Group {
  name apDespill3
  help "apDespill v1.0 by Adrian Pueyo\n\nGizmo to despill an image, with options to despill any hue (and not only the primaries), select different algorithms for des/respilling, and protect tones from the despill.\n\nIf you just want a basic despill, its default values should already be enough and the tool will avoid any extra calculations.\n\nadrianpueyo.com, 2014-2017"
@@ -4581,8 +4581,280 @@ Group {
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"color\":\n    if k.getValue() == 0:\n        n\[\"custom_weight\"].setLabel(\"green - blue\")\n    elif k.getValue() == 1:\n        n\[\"custom_weight\"].setLabel(\"red - blue\")\n    elif k.getValue() == 2:\n        n\[\"custom_weight\"].setLabel(\"red - green\")\n    n\[\"pick\"].setVisible(k.getValue() == 3)\nelif k.name() == \"mode\":\n    n\[\"custom_weight\"].setVisible(n\[\"mode\"].getValue()==3)\nelif k.name() in \[\"out\",\"output_alpha\"]:\n    n\[\"respill_math\"].setEnabled(n\[\"out\"].getValue()==0 or n\[\"output_alpha\"].getValue()==1)\n    n\[\"respill_color\"].setEnabled(n\[\"out\"].getValue()==0)\nelif k.name() == \"prot1_activate\":\n    protA = n\[\"prot1_activate\"].value()\n    n\[\"prot1_preview\"].setEnabled(protA)\n    n\[\"prot1\"].setVisible(protA)\n    n\[\"prot1_tolerance\"].setVisible(protA)\n    n\[\"prot1_falloff\"].setVisible(protA)\n    n\[\"prot1_effect\"].setVisible(protA)"
  tile_color 0x8b8b8bff
  selected true
- xpos -3133
- ypos -2381
+ xpos -3105
+ ypos -2317
+ addUserKnob {20 apDespill}
+ addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {41 "Local GPU: " T apDespillKernel.gpuName}
+ addUserKnob {41 "Use GPU if Available" T apDespillKernel.useGPUIfAvailable}
+ addUserKnob {41 vectorize l "Vectorize on CPU" -STARTLINE T apDespillKernel.vectorize}
+ addUserKnob {26 ""}
+ addUserKnob {4 color t "Select a primary as a starting point, or custom to show RGB controls to select any color." M {red green blue custom ""}}
+ color green
+ addUserKnob {18 pick +HIDDEN}
+ pick {0 0 0}
+ addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 pick_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 pick_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 pick_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 pick_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 pick_panelDropped_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 pick_panelDropped_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 dfg_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {4 out l output t "Quick switch to output the despilled image or the substracted one." M {despill spill}}
+ addUserKnob {6 output_alpha l "output spill matte in alpha" t "Output the spill luminance in the alpha channel." -STARTLINE}
+ addUserKnob {4 mode l "despill math" t "average = avg of other two channels\nmaximum = max of other two channels\nminimum = min of other two channels\ncustom = select custom weights" M {average maximum minimum custom}}
+ addUserKnob {4 logLin l "Colorspace Log/Lin" -STARTLINE +INVISIBLE M {Log Lin ""}}
+ logLin Lin
+ addUserKnob {6 logspace l "Log Space" -STARTLINE}
+ addUserKnob {7 custom_weight l "red - blue" t "-1 = only capped by the first channel\n0 = capped by avg of both\n1 = only capped by the second channel" -STARTLINE +HIDDEN R -1 1}
+ addUserKnob {41 colorspace_out l colorspace T Colorspace1.colorspace_out}
+ addUserKnob {41 illuminant_out l "" -STARTLINE T Colorspace1.illuminant_out}
+ addUserKnob {41 primary_out l "" -STARTLINE T Colorspace1.primary_out}
+ addUserKnob {26 text l " " T " "}
+ addUserKnob {7 hue_offset l "hue offset" t "Rotate the despill vectors to despill an arbitrary tone other than the primaries.\nNote: A rotation of +-120 degrees is the same as selecting another color channel." R -180 180}
+ addUserKnob {7 tolerance t "Use this to multiply the hue tolerance (the limiter value). You can move it all the way down to 0 to completely remove a hue from your image." R 0 2}
+ tolerance 1
+ addUserKnob {6 prot1_activate l "protect tones" t "Enable controls to select tones to protect from despilling." +STARTLINE}
+ addUserKnob {6 prot1_preview l preview t "Output the protected tones." -STARTLINE +DISABLED}
+ addUserKnob {18 prot1 l protect t "Pick the central hue to protect.\n(ctrl/cmd+alt+click)" +HIDDEN}
+ prot1 {0 0 0}
+ addUserKnob {6 prot1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 prot1_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 prot1_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 prot1_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 prot1_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 prot1_panelDropped_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 prot1_panelDropped_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 prot1_tolerance l tolerance t "Amount of hues to include in the selection." +HIDDEN}
+ prot1_tolerance 0.2
+ addUserKnob {7 prot1_falloff l falloff t "Falloff for the hue selection. A higher falloff will make hues apart from the picked one lose weight more quickly." +HIDDEN R 0 4}
+ prot1_falloff 2
+ addUserKnob {7 prot1_effect l effect t "Multiplier for the hue protection, and for the spill limit value." +HIDDEN R 0 10}
+ prot1_effect 1
+ addUserKnob {26 respill_divider l "" +STARTLINE}
+ addUserKnob {4 respill_math l "respill math" t "Settings for the way of desaturating the spill before adding it back." M {"Rec 709" "Ccir 601" Average Maximum "" ""}}
+ addUserKnob {18 respill_color l "respill color" t "RGB multiplier for the desaturated spill when adding it back.\n\nNote: if used on non-degrained plates (which should be avoided anyway), any value other than 1 here will most likely produce grain artifacts." R 0 4}
+ respill_color 1
+ addUserKnob {6 respill_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 respill_color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 respill_color_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 respill_color_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 respill_color_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 respill_color_panelDropped_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 respill_color_panelDropped_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask T Merge.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge.fringe}
+ addUserKnob {41 mix T Merge.mix}
+ addUserKnob {26 version_author l "" t "apDespill v1.0\n14 March, 2017" +STARTLINE T "<span style=\"color:#666\"><br/><b>apDespill v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2014-2017</span>"}
+ addUserKnob {20 GPU_Settings l "GPU Settings"}
+ addUserKnob {41 maxGPUMemory l "Percentage of GPU memory to use" T apDespillKernel.maxGPUMemory}
+ addUserKnob {41 maxTileLines l "Percentage of image height per tile" T apDespillKernel.maxTileLines}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 339
+  ypos -447
+  number 1
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos 449
+  ypos -764
+ }
+set N936045b0 [stack 0]
+ Colorspace {
+  name Colorspace1
+  label "\[value colorspace_in] >> \[value colorspace_out]"
+  xpos 559
+  ypos -703
+ }
+ Log2Lin {
+  operation lin2log
+  name Log2Lin1
+  xpos 559
+  ypos -665
+  disable {{!logspace}}
+ }
+ Shuffle {
+  name Shuffle
+  xpos 559
+  ypos -608
+  disable {{"\[exists parent.input0]"}}
+ }
+ BlinkScript {
+  ProgramGroup 1
+  KernelDescription "2 \"apDespillKernel\" iterate pixelWise 86d17838f15464a9e9273cd415388c19006f9163a6efd15e7ad521c828dc89ac 2 \"src\" Read Point \"dst\" Write Point 17 \"limit\" Float 1 AACAPw== \"shift\" Float 1 AAAAAA== \"weights\" Float 1 AAAAAA== \"outmode\" Int 1 AAAAAA== \"output_alpha\" Int 1 AAAAAA== \"clr\" Int 1 AAAAAA== \"mode\" Int 1 AAAAAA== \"respill_math\" Int 1 AAAAAA== \"respill_color\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"prot1_on\" Int 1 AAAAAA== \"prot1_preview\" Int 1 AAAAAA== \"prot1\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"prot1_tolerance\" Float 1 AAAAAA== \"prot1_mult\" Float 1 AAAAAA== \"prot1_falloff\" Float 1 AAAAAA== \"lumaHueShift\" Int 1 AAAAAA== \"pickSpill\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== 17 \"limit\" 1 1 \"shift\" 1 1 \"weights\" 1 1 \"outmode\" 1 1 \"output_alpha\" 1 1 \"clr\" 1 1 \"mode\" 1 1 \"respill_math\" 1 1 \"respill_color\" 4 1 \"prot1_on\" 1 1 \"prot1_preview\" 1 1 \"prot1\" 3 1 \"prot1_tolerance\" 1 1 \"prot1_mult\" 1 1 \"prot1_falloff\" 1 1 \"lumaHueShift\" 1 1 \"pickSpill\" 3 1 3 \"_usePicked\" Int 1 1 AAAAAA== \"_clr\" Int 1 1 AAAAAA== \"_ret\" Int 1 1 AAAAAA=="
+  kernelSource "//---------------------------------------------------------\n// apDespillKernel - apDespill v1.0 by Adrian Pueyo\n//\n// Despill an image, with options to despill any hue (and\n// not only the primaries), select different algorithms for\n// des/respilling, and protect tones from the despill.\n//\n// adrianpueyo.com, 2014-2017\n// ---------------------------------------------------------\n\nstatic inline float y_convert_ccir601(const float4 in)\{\n  return in.x * 0.299f + in.y * 0.587f + in.z * 0.114f;\n\}\n\nstatic inline float y_convert_rec709(const float4 in)\{\n  return in.x * 0.2125f + in.y * 0.7154f + in.z * 0.0721f;\n\}\n\nstatic inline float4 hueShift(const float4 in, const float H)\{\n  if(H==0.0f)\{\n    return in;\n  \}else\{\n    float U = cos(H*PI/180);\n    float W = sin(H*PI/180);\n    float3 ret;\n    ret.x = (.299+.701*U+.168*W)*in.x + (.587-.587*U+.330*W)*in.y + (.114-.114*U-.497*W)*in.z;\n    ret.y = (.299-.299*U-.328*W)*in.x + (.587+.413*U+.035*W)*in.y + (.114-.114*U+.292*W)*in.z;\n    ret.z = (.299-.3*U+1.25*W)*in.x + (.587-.588*U-1.05*W)*in.y + (.114+.886*U-.203*W)*in.z;\n    return float4(ret.x,ret.y,ret.z,in\[3]);\n  \}\n\}\n\nstatic inline float4 hueRotate(const float4 in, const float H)\{\n  if(H==0.0f)\{\n    return in;\n  \}else\{\n    float cosH = cos(H*PI/180);\n    float sinH = sin(H*PI/180);\n    float3 ret;\n    ret.x = (in.x+in.y+in.z)*(1-cosH)/3 + in.x*cosH + (-in.y/sqrt(3.0f)+in.z/sqrt(3.0f))*sinH;\n    ret.y = (in.x+in.y+in.z)*(1-cosH)/3 + in.y*cosH + (in.x/sqrt(3.0f)-in.z/sqrt(3.0f))*sinH;\n    ret.z = (in.x+in.y+in.z)*(1-cosH)/3 + in.z*cosH + (-in.x/sqrt(3.0f)+in.y/sqrt(3.0f))*sinH;\n    return float4(ret.x,ret.y,ret.z,in\[3]);\n  \}\n\}\n\nfloat3 vecToPlane(float3 v1, float3 v2 = float3(1.0f,1.0f,1.0f))\{\n  float3 v1onv2;\n  v1onv2 = v2 * float((float(dot(v2,v1))/float(dot(v2,v2)))); //Projection of vector on another (plane's normal)\n  return v1-v1onv2; //Projection of vector on plane\n\}\n\nstatic inline float colorAngle(const float3 v1, const float3 v2)\{\n  const float3 vN=float3(1.0f,1.0f,1.0f);\n  float ang = acos(float(dot(v1,v2))/float(sqrt(dot(v1,v1)*dot(v2,v2))));\n  float3 crs = cross(v1,v2);\n  if (dot(vN, crs) > 0) \{\n    ang = -ang;\n  \}\n  return ang;\n\}\n\nkernel apDespillKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;\n  Image<eWrite> dst;\n\n  param:\n    float limit;\n    float shift;\n    float weights;\n    int outmode;//0=despill,1=spill\n    int output_alpha;\n    int clr; //0=red,1=green,2=blue\n    int mode; //0=average,1=maximum,2=minimum,3=custom\n    int respill_math; //0=Rec709,1=Ccir601,2=Avg,3=Max\n    float4 respill_color;\n    int prot1_on;\n    int prot1_preview;\n    float3 prot1;\n    float prot1_tolerance;\n    float prot1_mult;\n    float prot1_falloff;\n    int lumaHueShift;//If disabled, the hue is just rotated without the luma coefficients\n    float3 pickSpill;\n  local:\n    int _usePicked;\n    int _clr;\n    int _ret;\n\n  void define() \{\n    defineParam(limit, \"limit\", 1.0f);\n    defineParam(shift, \"shift\", 0.0f);\n  \}\n\n  void init() \{\n    _ret = 0;\n    if(clr!=3)\{//red green or blue\n      _usePicked = 0;\n      _clr = clr;\n    \}else if(pickSpill.x==pickSpill.y && pickSpill.x==pickSpill.z)\{\n      _ret = 1;//if \"custom\" selected but has a gray value, avoid any calculations\n    \}else\{\n      _usePicked = 1;\n      _clr = 0;\n    \}\n  \}\n\n  void process() \{\n\n    if(_ret == 1)\{ dst()=src(); return; \}//Avoid any calculations if no despill selected\n    //0. Calculate autoShift if picked spill is not 0\n    float autoShift = 0.0f;\n    if(_usePicked==1)\{\n      float3 vNorm = float3(1.0f,1.0f,1.0f);\n      autoShift = colorAngle(vecToPlane(pickSpill,vNorm),vecToPlane(float3(1.0f,0.0f,0.0f),vNorm));\n      autoShift = autoShift*180/PI;//to deg\n    \}\n\n    //1. HueShift IN\n    float4 despilled;\n    if (lumaHueShift==1)\{\n      despilled = hueShift(src(),shift-autoShift);\n    \}else\{\n      despilled = hueRotate(src(),shift-autoShift);\n    \}\n\n    //2. Calculate the limit\n    float resultLimit = 0.0f;\n    int2 others;\n    if(_clr==0)\{//If red (and if _usePicked, also set red)\n      others = int2(1,2);\n    \}else if(_clr==1)\{\n      others=int2(0,2);\n    \}else if(_clr==2)\{\n      others=int2(0,1);\n    \}\n\n    if(mode==0)\{//average\n      resultLimit = (despilled\[others\[0]]+despilled\[others\[1]])/2;\n    \}else if(mode==1)\{//max\n      resultLimit = max(despilled\[others\[0]],despilled\[others\[1]]);\n    \}else if(mode==2)\{//min\n      resultLimit = min(despilled\[others\[0]],despilled\[others\[1]]);\n    \}else\{//custom\n      resultLimit = despilled\[others\[0]]*weights+despilled\[others\[1]]*(1-weights);\n    \}\n\n    //3. Protect tones\n    float prot1_result;\n    if(prot1_on==1&&(prot1\[0]!=prot1\[1]||prot1\[0]!=prot1\[2]||prot1\[1]!=prot1\[2]))\{\n      float cos_prot1_angle;\n      cos_prot1_angle = (src(0)*prot1\[0]+src(1)*prot1\[1]+src(2)*prot1\[2]) / (sqrt(prot1\[0]*prot1\[0]+prot1\[1]*prot1\[1]+prot1\[2]*prot1\[2]) * sqrt(src(0)*src(0)+src(1)*src(1)+src(2)*src(2)));\n      prot1_result = pow(clamp(cos_prot1_angle,0.0f,1.0f),1/pow(prot1_tolerance,prot1_falloff));\n      resultLimit = resultLimit*(1+prot1_result*prot1_mult);\n    \}\n    \n\n    //4. Calculate the despill and return the hue shift\n    for (int component = 0; component < dst.kComps; component++)\{\n      despilled\[component] = component==_clr?min(despilled\[component],resultLimit*limit):despilled\[component];\n    \}\n    if (lumaHueShift==1)\{\n      despilled = hueShift(despilled,-shift+autoShift);\n    \}else\{\n      despilled = hueRotate(despilled,-shift+autoShift);\n    \}\n\n    //5. Respill/restore despill values\n    float luma;\n    float4 spill = src()-despilled;\n    if(respill_math==0)\{\n      luma = y_convert_rec709(spill);\n    \}else if(respill_math==1)\{\n      luma = y_convert_ccir601(spill);\n    \}else if(respill_math==2)\{\n      luma = (spill\[0]+spill\[1]+spill\[2])/3;\n    \}else\{\n      luma = max(max(spill\[0],spill\[1]),spill\[2]);\n    \}\n\n    //6. Output (options)\n    if(prot1_preview==1 && prot1_on==1)\{\n      dst() = src()*clamp(prot1_result*prot1_mult,0.0f,1.0f);\n    \}else if(outmode==0)\{\n      dst() = despilled+luma*respill_color;\n      if(output_alpha==0)\{\n        dst(3)=src(3);\n      \}else\{\n        dst(3)=luma;\n      \}\n    \}else\{\n      if(output_alpha==0)\{\n        spill\[3]=src(3);\n      \}else\{\n        spill\[3]=luma;\n      \}\n      dst() = spill;\n    \}\n    //dst() = hueRotate(src(),shift-autoShift);\n    //dst() = autoShift;\n  \}\n\};"
+  rebuild ""
+  apDespillKernel_limit {{parent.tolerance}}
+  apDespillKernel_shift {{parent.hue_offset}}
+  apDespillKernel_weights {{(parent.custom_weight+1)/2}}
+  apDespillKernel_outmode {{parent.out}}
+  apDespillKernel_output_alpha {{parent.output_alpha}}
+  apDespillKernel_clr {{parent.color}}
+  apDespillKernel_mode {{parent.mode}}
+  apDespillKernel_respill_math {{parent.respill_math}}
+  apDespillKernel_respill_color {{parent.respill_color.r} {parent.respill_color.g} {parent.respill_color.b} 1}
+  apDespillKernel_prot1_on {{parent.prot1_activate}}
+  apDespillKernel_prot1_preview {{parent.prot1_preview}}
+  apDespillKernel_prot1 {{parent.prot1} {parent.prot1} {parent.prot1}}
+  apDespillKernel_prot1_tolerance {{parent.prot1_tolerance}}
+  apDespillKernel_prot1_mult {{parent.prot1_effect}}
+  apDespillKernel_prot1_falloff {{parent.prot1_falloff}}
+  apDespillKernel_pickSpill {{parent.pick} {parent.pick} {parent.pick}}
+  rebuild_finalise ""
+  maxGPUMemory 60
+  maxTileLines 8
+  name apDespillKernel
+  xpos 559
+  ypos -582
+ }
+ Log2Lin {
+  name Log2Lin2
+  xpos 559
+  ypos -520
+  disable {{!logspace}}
+ }
+ Colorspace {
+  channels {{{parent.Colorspace5.channels}}}
+  colorspace_in {{parent.Colorspace1.colorspace_out}}
+  illuminant_in {{parent.Colorspace1.illuminant_out}}
+  primary_in {{parent.Colorspace1.primary_out}}
+  name Colorspace2
+  label "\[value colorspace_in] >> \[value colorspace_out]"
+  xpos 559
+  ypos -494
+ }
+push $N936045b0
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  name Merge
+  xpos 449
+  ypos -447
+ }
+ Output {
+  name Output
+  xpos 449
+  ypos -400
+ }
+end_group
+Dot {
+ name Dot294
+ selected true
+ xpos -3071
+ ypos -2085
+}
+set N933c0400 [stack 0]
+push $N935e6b10
+Dot {
+ name Dot293
+ selected true
+ xpos -2489
+ ypos -2516
+}
+Merge2 {
+ inputs 2
+ operation from
+ name Merge13
+ label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+ selected true
+ xpos -2523
+ ypos -2089
+}
+Saturation {
+ saturation 0
+ name Saturation1
+ selected true
+ xpos -2523
+ ypos -2038
+}
+Dot {
+ name Dot295
+ selected true
+ xpos -2489
+ ypos -1947
+}
+Dot {
+ name Dot296
+ label "Restore Lum"
+ note_font_size 41
+ selected true
+ xpos -2944
+ ypos -1947
+}
+push $N933c0400
+Merge2 {
+ inputs 2
+ operation plus
+ output {rgba.red rgba.green rgba.blue -rgba.alpha}
+ name Merge6
+ selected true
+ xpos -3105
+ ypos -1951
+}
+Dot {
+ name Dot297
+ label "core \ndespill"
+ note_font_size 60
+ selected true
+ xpos -3071
+ ypos -1591
+}
+Dot {
+ name Dot298
+ selected true
+ xpos -3071
+ ypos -570
+}
+Dot {
+ name Dot299
+ label "core \ndespill"
+ note_font_size 60
+ selected true
+ xpos -1722
+ ypos -570
+}
+push $N935d7820
+Dot {
+ name Dot300
+ note_font_size 41
+ selected true
+ xpos -1193
+ ypos -693
+}
+push $N919a5f20
+Remove {
+ operation keep
+ channels rgb
+ name Remove34
+ selected true
+ xpos -1457
+ ypos -2878
+}
+Dot {
+ name Dot301
+ selected true
+ xpos -1423
+ ypos -2529
+}
+set N9381fb20 [stack 0]
+Group {
+ name apDespill2
+ help "apDespill v1.0 by Adrian Pueyo\n\nGizmo to despill an image, with options to despill any hue (and not only the primaries), select different algorithms for des/respilling, and protect tones from the despill.\n\nIf you just want a basic despill, its default values should already be enough and the tool will avoid any extra calculations.\n\nadrianpueyo.com, 2014-2017"
+ onCreate "n = nuke.thisNode()\nn\['tolerance'].setRange(0,2)\nn\['prot1_tolerance'].setFlag(0x00000004)\nn\['prot1_effect'].setFlag(0x00000004)"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"color\":\n    if k.getValue() == 0:\n        n\[\"custom_weight\"].setLabel(\"green - blue\")\n    elif k.getValue() == 1:\n        n\[\"custom_weight\"].setLabel(\"red - blue\")\n    elif k.getValue() == 2:\n        n\[\"custom_weight\"].setLabel(\"red - green\")\n    n\[\"pick\"].setVisible(k.getValue() == 3)\nelif k.name() == \"mode\":\n    n\[\"custom_weight\"].setVisible(n\[\"mode\"].getValue()==3)\nelif k.name() in \[\"out\",\"output_alpha\"]:\n    n\[\"respill_math\"].setEnabled(n\[\"out\"].getValue()==0 or n\[\"output_alpha\"].getValue()==1)\n    n\[\"respill_color\"].setEnabled(n\[\"out\"].getValue()==0)\nelif k.name() == \"prot1_activate\":\n    protA = n\[\"prot1_activate\"].value()\n    n\[\"prot1_preview\"].setEnabled(protA)\n    n\[\"prot1\"].setVisible(protA)\n    n\[\"prot1_tolerance\"].setVisible(protA)\n    n\[\"prot1_falloff\"].setVisible(protA)\n    n\[\"prot1_effect\"].setVisible(protA)"
+ tile_color 0x8b8b8bff
+ selected true
+ xpos -1457
+ ypos -2313
  addUserKnob {20 apDespill}
  addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {41 "Local GPU: " T apDespillKernel.gpuName}
@@ -4664,7 +4936,7 @@ Group {
   xpos 449
   ypos -764
  }
-set Ndca57500 [stack 0]
+set N9320ed60 [stack 0]
  Colorspace {
   name Colorspace1
   label "\[value colorspace_in] >> \[value colorspace_out]"
@@ -4728,7 +5000,7 @@ set Ndca57500 [stack 0]
   xpos 559
   ypos -494
  }
-push $Ndca57500
+push $N9320ed60
  Merge2 {
   inputs 2+1
   operation copy
@@ -4743,273 +5015,7 @@ push $Ndca57500
   ypos -400
  }
 end_group
-Dot {
- name Dot294
- selected true
- xpos -3099
- ypos -2149
-}
-set Ndcac1230 [stack 0]
-push $Ndcc7b160
-Dot {
- name Dot293
- selected true
- xpos -2517
- ypos -2580
-}
-Merge2 {
- inputs 2
- operation from
- name Merge13
- label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
- selected true
- xpos -2551
- ypos -2153
-}
-Saturation {
- saturation 0
- name Saturation1
- selected true
- xpos -2551
- ypos -2102
-}
-Dot {
- name Dot295
- selected true
- xpos -2517
- ypos -2011
-}
-Dot {
- name Dot296
- label "Restore Lum"
- note_font_size 41
- selected true
- xpos -2972
- ypos -2011
-}
-push $Ndcac1230
-Merge2 {
- inputs 2
- operation plus
- output {rgba.red rgba.green rgba.blue -rgba.alpha}
- name Merge6
- selected true
- xpos -3133
- ypos -2015
-}
-Dot {
- name Dot297
- label "core \ndespill"
- note_font_size 60
- selected true
- xpos -3099
- ypos -1655
-}
-Dot {
- name Dot298
- selected true
- xpos -3099
- ypos -634
-}
-Dot {
- name Dot299
- label "core \ndespill"
- note_font_size 60
- selected true
- xpos -1750
- ypos -634
-}
-push $Ndcc6be70
-Dot {
- name Dot300
- note_font_size 41
- selected true
- xpos -1221
- ypos -757
-}
-push $Ndaf6cdf0
-Remove {
- operation keep
- channels rgb
- name Remove34
- selected true
- xpos -1485
- ypos -2942
-}
-Dot {
- name Dot301
- selected true
- xpos -1451
- ypos -2593
-}
-set Ndcad0500 [stack 0]
-Group {
- name apDespill2
- help "apDespill v1.0 by Adrian Pueyo\n\nGizmo to despill an image, with options to despill any hue (and not only the primaries), select different algorithms for des/respilling, and protect tones from the despill.\n\nIf you just want a basic despill, its default values should already be enough and the tool will avoid any extra calculations.\n\nadrianpueyo.com, 2014-2017"
- onCreate "n = nuke.thisNode()\nn\['tolerance'].setRange(0,2)\nn\['prot1_tolerance'].setFlag(0x00000004)\nn\['prot1_effect'].setFlag(0x00000004)"
- knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"color\":\n    if k.getValue() == 0:\n        n\[\"custom_weight\"].setLabel(\"green - blue\")\n    elif k.getValue() == 1:\n        n\[\"custom_weight\"].setLabel(\"red - blue\")\n    elif k.getValue() == 2:\n        n\[\"custom_weight\"].setLabel(\"red - green\")\n    n\[\"pick\"].setVisible(k.getValue() == 3)\nelif k.name() == \"mode\":\n    n\[\"custom_weight\"].setVisible(n\[\"mode\"].getValue()==3)\nelif k.name() in \[\"out\",\"output_alpha\"]:\n    n\[\"respill_math\"].setEnabled(n\[\"out\"].getValue()==0 or n\[\"output_alpha\"].getValue()==1)\n    n\[\"respill_color\"].setEnabled(n\[\"out\"].getValue()==0)\nelif k.name() == \"prot1_activate\":\n    protA = n\[\"prot1_activate\"].value()\n    n\[\"prot1_preview\"].setEnabled(protA)\n    n\[\"prot1\"].setVisible(protA)\n    n\[\"prot1_tolerance\"].setVisible(protA)\n    n\[\"prot1_falloff\"].setVisible(protA)\n    n\[\"prot1_effect\"].setVisible(protA)"
- tile_color 0x8b8b8bff
- selected true
- xpos -1485
- ypos -2377
- addUserKnob {20 apDespill}
- addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {41 "Local GPU: " T apDespillKernel.gpuName}
- addUserKnob {41 "Use GPU if Available" T apDespillKernel.useGPUIfAvailable}
- addUserKnob {41 vectorize l "Vectorize on CPU" -STARTLINE T apDespillKernel.vectorize}
- addUserKnob {26 ""}
- addUserKnob {4 color t "Select a primary as a starting point, or custom to show RGB controls to select any color." M {red green blue custom ""}}
- color green
- addUserKnob {18 pick +HIDDEN}
- pick {0 0 0}
- addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 pick_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 pick_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 pick_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 pick_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 dfg_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {4 out l output t "Quick switch to output the despilled image or the substracted one." M {despill spill}}
- addUserKnob {6 output_alpha l "output spill matte in alpha" t "Output the spill luminance in the alpha channel." -STARTLINE}
- addUserKnob {4 mode l "despill math" t "average = avg of other two channels\nmaximum = max of other two channels\nminimum = min of other two channels\ncustom = select custom weights" M {average maximum minimum custom}}
- addUserKnob {4 logLin l "Colorspace Log/Lin" -STARTLINE +INVISIBLE M {Log Lin ""}}
- logLin Lin
- addUserKnob {6 logspace l "Log Space" -STARTLINE}
- addUserKnob {7 custom_weight l "red - blue" t "-1 = only capped by the first channel\n0 = capped by avg of both\n1 = only capped by the second channel" -STARTLINE +HIDDEN R -1 1}
- addUserKnob {41 colorspace_out l colorspace T Colorspace1.colorspace_out}
- addUserKnob {41 illuminant_out l "" -STARTLINE T Colorspace1.illuminant_out}
- addUserKnob {41 primary_out l "" -STARTLINE T Colorspace1.primary_out}
- addUserKnob {26 text l " " T " "}
- addUserKnob {7 hue_offset l "hue offset" t "Rotate the despill vectors to despill an arbitrary tone other than the primaries.\nNote: A rotation of +-120 degrees is the same as selecting another color channel." R -180 180}
- addUserKnob {7 tolerance t "Use this to multiply the hue tolerance (the limiter value). You can move it all the way down to 0 to completely remove a hue from your image." R 0 2}
- tolerance 1
- addUserKnob {6 prot1_activate l "protect tones" t "Enable controls to select tones to protect from despilling." +STARTLINE}
- addUserKnob {6 prot1_preview l preview t "Output the protected tones." -STARTLINE +DISABLED}
- addUserKnob {18 prot1 l protect t "Pick the central hue to protect.\n(ctrl/cmd+alt+click)" +HIDDEN}
- prot1 {0 0 0}
- addUserKnob {6 prot1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 prot1_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 prot1_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 prot1_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 prot1_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {7 prot1_tolerance l tolerance t "Amount of hues to include in the selection." +HIDDEN}
- prot1_tolerance 0.2
- addUserKnob {7 prot1_falloff l falloff t "Falloff for the hue selection. A higher falloff will make hues apart from the picked one lose weight more quickly." +HIDDEN R 0 4}
- prot1_falloff 2
- addUserKnob {7 prot1_effect l effect t "Multiplier for the hue protection, and for the spill limit value." +HIDDEN R 0 10}
- prot1_effect 1
- addUserKnob {26 respill_divider l "" +STARTLINE}
- addUserKnob {4 respill_math l "respill math" t "Settings for the way of desaturating the spill before adding it back." M {"Rec 709" "Ccir 601" Average Maximum "" ""}}
- addUserKnob {18 respill_color l "respill color" t "RGB multiplier for the desaturated spill when adding it back.\n\nNote: if used on non-degrained plates (which should be avoided anyway), any value other than 1 here will most likely produce grain artifacts." R 0 4}
- respill_color 1
- addUserKnob {6 respill_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 respill_color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 respill_color_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 respill_color_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 respill_color_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {26 ""}
- addUserKnob {41 maskChannelMask l mask T Merge.maskChannelMask}
- addUserKnob {41 inject -STARTLINE T Merge.inject}
- addUserKnob {41 invert_mask l invert -STARTLINE T Merge.invert_mask}
- addUserKnob {41 fringe -STARTLINE T Merge.fringe}
- addUserKnob {41 mix T Merge.mix}
- addUserKnob {26 version_author l "" t "apDespill v1.0\n14 March, 2017" +STARTLINE T "<span style=\"color:#666\"><br/><b>apDespill v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2014-2017</span>"}
- addUserKnob {20 GPU_Settings l "GPU Settings"}
- addUserKnob {41 maxGPUMemory l "Percentage of GPU memory to use" T apDespillKernel.maxGPUMemory}
- addUserKnob {41 maxTileLines l "Percentage of image height per tile" T apDespillKernel.maxTileLines}
-}
- Input {
-  inputs 0
-  name Inputmask
-  xpos 339
-  ypos -447
-  number 1
- }
- Input {
-  inputs 0
-  name Inputimg
-  xpos 449
-  ypos -764
- }
-set Ndcad81a0 [stack 0]
- Colorspace {
-  name Colorspace1
-  label "\[value colorspace_in] >> \[value colorspace_out]"
-  xpos 559
-  ypos -703
- }
- Log2Lin {
-  operation lin2log
-  name Log2Lin1
-  xpos 559
-  ypos -665
-  disable {{!logspace}}
- }
- Shuffle {
-  name Shuffle
-  xpos 559
-  ypos -608
-  disable {{"\[exists parent.input0]"}}
- }
- BlinkScript {
-  ProgramGroup 1
-  KernelDescription "2 \"apDespillKernel\" iterate pixelWise 86d17838f15464a9e9273cd415388c19006f9163a6efd15e7ad521c828dc89ac 2 \"src\" Read Point \"dst\" Write Point 17 \"limit\" Float 1 AACAPw== \"shift\" Float 1 AAAAAA== \"weights\" Float 1 AAAAAA== \"outmode\" Int 1 AAAAAA== \"output_alpha\" Int 1 AAAAAA== \"clr\" Int 1 AAAAAA== \"mode\" Int 1 AAAAAA== \"respill_math\" Int 1 AAAAAA== \"respill_color\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"prot1_on\" Int 1 AAAAAA== \"prot1_preview\" Int 1 AAAAAA== \"prot1\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"prot1_tolerance\" Float 1 AAAAAA== \"prot1_mult\" Float 1 AAAAAA== \"prot1_falloff\" Float 1 AAAAAA== \"lumaHueShift\" Int 1 AAAAAA== \"pickSpill\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== 17 \"limit\" 1 1 \"shift\" 1 1 \"weights\" 1 1 \"outmode\" 1 1 \"output_alpha\" 1 1 \"clr\" 1 1 \"mode\" 1 1 \"respill_math\" 1 1 \"respill_color\" 4 1 \"prot1_on\" 1 1 \"prot1_preview\" 1 1 \"prot1\" 3 1 \"prot1_tolerance\" 1 1 \"prot1_mult\" 1 1 \"prot1_falloff\" 1 1 \"lumaHueShift\" 1 1 \"pickSpill\" 3 1 3 \"_usePicked\" Int 1 1 AAAAAA== \"_clr\" Int 1 1 AAAAAA== \"_ret\" Int 1 1 AAAAAA=="
-  kernelSource "//---------------------------------------------------------\n// apDespillKernel - apDespill v1.0 by Adrian Pueyo\n//\n// Despill an image, with options to despill any hue (and\n// not only the primaries), select different algorithms for\n// des/respilling, and protect tones from the despill.\n//\n// adrianpueyo.com, 2014-2017\n// ---------------------------------------------------------\n\nstatic inline float y_convert_ccir601(const float4 in)\{\n  return in.x * 0.299f + in.y * 0.587f + in.z * 0.114f;\n\}\n\nstatic inline float y_convert_rec709(const float4 in)\{\n  return in.x * 0.2125f + in.y * 0.7154f + in.z * 0.0721f;\n\}\n\nstatic inline float4 hueShift(const float4 in, const float H)\{\n  if(H==0.0f)\{\n    return in;\n  \}else\{\n    float U = cos(H*PI/180);\n    float W = sin(H*PI/180);\n    float3 ret;\n    ret.x = (.299+.701*U+.168*W)*in.x + (.587-.587*U+.330*W)*in.y + (.114-.114*U-.497*W)*in.z;\n    ret.y = (.299-.299*U-.328*W)*in.x + (.587+.413*U+.035*W)*in.y + (.114-.114*U+.292*W)*in.z;\n    ret.z = (.299-.3*U+1.25*W)*in.x + (.587-.588*U-1.05*W)*in.y + (.114+.886*U-.203*W)*in.z;\n    return float4(ret.x,ret.y,ret.z,in\[3]);\n  \}\n\}\n\nstatic inline float4 hueRotate(const float4 in, const float H)\{\n  if(H==0.0f)\{\n    return in;\n  \}else\{\n    float cosH = cos(H*PI/180);\n    float sinH = sin(H*PI/180);\n    float3 ret;\n    ret.x = (in.x+in.y+in.z)*(1-cosH)/3 + in.x*cosH + (-in.y/sqrt(3.0f)+in.z/sqrt(3.0f))*sinH;\n    ret.y = (in.x+in.y+in.z)*(1-cosH)/3 + in.y*cosH + (in.x/sqrt(3.0f)-in.z/sqrt(3.0f))*sinH;\n    ret.z = (in.x+in.y+in.z)*(1-cosH)/3 + in.z*cosH + (-in.x/sqrt(3.0f)+in.y/sqrt(3.0f))*sinH;\n    return float4(ret.x,ret.y,ret.z,in\[3]);\n  \}\n\}\n\nfloat3 vecToPlane(float3 v1, float3 v2 = float3(1.0f,1.0f,1.0f))\{\n  float3 v1onv2;\n  v1onv2 = v2 * float((float(dot(v2,v1))/float(dot(v2,v2)))); //Projection of vector on another (plane's normal)\n  return v1-v1onv2; //Projection of vector on plane\n\}\n\nstatic inline float colorAngle(const float3 v1, const float3 v2)\{\n  const float3 vN=float3(1.0f,1.0f,1.0f);\n  float ang = acos(float(dot(v1,v2))/float(sqrt(dot(v1,v1)*dot(v2,v2))));\n  float3 crs = cross(v1,v2);\n  if (dot(vN, crs) > 0) \{\n    ang = -ang;\n  \}\n  return ang;\n\}\n\nkernel apDespillKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;\n  Image<eWrite> dst;\n\n  param:\n    float limit;\n    float shift;\n    float weights;\n    int outmode;//0=despill,1=spill\n    int output_alpha;\n    int clr; //0=red,1=green,2=blue\n    int mode; //0=average,1=maximum,2=minimum,3=custom\n    int respill_math; //0=Rec709,1=Ccir601,2=Avg,3=Max\n    float4 respill_color;\n    int prot1_on;\n    int prot1_preview;\n    float3 prot1;\n    float prot1_tolerance;\n    float prot1_mult;\n    float prot1_falloff;\n    int lumaHueShift;//If disabled, the hue is just rotated without the luma coefficients\n    float3 pickSpill;\n  local:\n    int _usePicked;\n    int _clr;\n    int _ret;\n\n  void define() \{\n    defineParam(limit, \"limit\", 1.0f);\n    defineParam(shift, \"shift\", 0.0f);\n  \}\n\n  void init() \{\n    _ret = 0;\n    if(clr!=3)\{//red green or blue\n      _usePicked = 0;\n      _clr = clr;\n    \}else if(pickSpill.x==pickSpill.y && pickSpill.x==pickSpill.z)\{\n      _ret = 1;//if \"custom\" selected but has a gray value, avoid any calculations\n    \}else\{\n      _usePicked = 1;\n      _clr = 0;\n    \}\n  \}\n\n  void process() \{\n\n    if(_ret == 1)\{ dst()=src(); return; \}//Avoid any calculations if no despill selected\n    //0. Calculate autoShift if picked spill is not 0\n    float autoShift = 0.0f;\n    if(_usePicked==1)\{\n      float3 vNorm = float3(1.0f,1.0f,1.0f);\n      autoShift = colorAngle(vecToPlane(pickSpill,vNorm),vecToPlane(float3(1.0f,0.0f,0.0f),vNorm));\n      autoShift = autoShift*180/PI;//to deg\n    \}\n\n    //1. HueShift IN\n    float4 despilled;\n    if (lumaHueShift==1)\{\n      despilled = hueShift(src(),shift-autoShift);\n    \}else\{\n      despilled = hueRotate(src(),shift-autoShift);\n    \}\n\n    //2. Calculate the limit\n    float resultLimit = 0.0f;\n    int2 others;\n    if(_clr==0)\{//If red (and if _usePicked, also set red)\n      others = int2(1,2);\n    \}else if(_clr==1)\{\n      others=int2(0,2);\n    \}else if(_clr==2)\{\n      others=int2(0,1);\n    \}\n\n    if(mode==0)\{//average\n      resultLimit = (despilled\[others\[0]]+despilled\[others\[1]])/2;\n    \}else if(mode==1)\{//max\n      resultLimit = max(despilled\[others\[0]],despilled\[others\[1]]);\n    \}else if(mode==2)\{//min\n      resultLimit = min(despilled\[others\[0]],despilled\[others\[1]]);\n    \}else\{//custom\n      resultLimit = despilled\[others\[0]]*weights+despilled\[others\[1]]*(1-weights);\n    \}\n\n    //3. Protect tones\n    float prot1_result;\n    if(prot1_on==1&&(prot1\[0]!=prot1\[1]||prot1\[0]!=prot1\[2]||prot1\[1]!=prot1\[2]))\{\n      float cos_prot1_angle;\n      cos_prot1_angle = (src(0)*prot1\[0]+src(1)*prot1\[1]+src(2)*prot1\[2]) / (sqrt(prot1\[0]*prot1\[0]+prot1\[1]*prot1\[1]+prot1\[2]*prot1\[2]) * sqrt(src(0)*src(0)+src(1)*src(1)+src(2)*src(2)));\n      prot1_result = pow(clamp(cos_prot1_angle,0.0f,1.0f),1/pow(prot1_tolerance,prot1_falloff));\n      resultLimit = resultLimit*(1+prot1_result*prot1_mult);\n    \}\n    \n\n    //4. Calculate the despill and return the hue shift\n    for (int component = 0; component < dst.kComps; component++)\{\n      despilled\[component] = component==_clr?min(despilled\[component],resultLimit*limit):despilled\[component];\n    \}\n    if (lumaHueShift==1)\{\n      despilled = hueShift(despilled,-shift+autoShift);\n    \}else\{\n      despilled = hueRotate(despilled,-shift+autoShift);\n    \}\n\n    //5. Respill/restore despill values\n    float luma;\n    float4 spill = src()-despilled;\n    if(respill_math==0)\{\n      luma = y_convert_rec709(spill);\n    \}else if(respill_math==1)\{\n      luma = y_convert_ccir601(spill);\n    \}else if(respill_math==2)\{\n      luma = (spill\[0]+spill\[1]+spill\[2])/3;\n    \}else\{\n      luma = max(max(spill\[0],spill\[1]),spill\[2]);\n    \}\n\n    //6. Output (options)\n    if(prot1_preview==1 && prot1_on==1)\{\n      dst() = src()*clamp(prot1_result*prot1_mult,0.0f,1.0f);\n    \}else if(outmode==0)\{\n      dst() = despilled+luma*respill_color;\n      if(output_alpha==0)\{\n        dst(3)=src(3);\n      \}else\{\n        dst(3)=luma;\n      \}\n    \}else\{\n      if(output_alpha==0)\{\n        spill\[3]=src(3);\n      \}else\{\n        spill\[3]=luma;\n      \}\n      dst() = spill;\n    \}\n    //dst() = hueRotate(src(),shift-autoShift);\n    //dst() = autoShift;\n  \}\n\};"
-  rebuild ""
-  apDespillKernel_limit {{parent.tolerance}}
-  apDespillKernel_shift {{parent.hue_offset}}
-  apDespillKernel_weights {{(parent.custom_weight+1)/2}}
-  apDespillKernel_outmode {{parent.out}}
-  apDespillKernel_output_alpha {{parent.output_alpha}}
-  apDespillKernel_clr {{parent.color}}
-  apDespillKernel_mode {{parent.mode}}
-  apDespillKernel_respill_math {{parent.respill_math}}
-  apDespillKernel_respill_color {{parent.respill_color.r} {parent.respill_color.g} {parent.respill_color.b} 1}
-  apDespillKernel_prot1_on {{parent.prot1_activate}}
-  apDespillKernel_prot1_preview {{parent.prot1_preview}}
-  apDespillKernel_prot1 {{parent.prot1} {parent.prot1} {parent.prot1}}
-  apDespillKernel_prot1_tolerance {{parent.prot1_tolerance}}
-  apDespillKernel_prot1_mult {{parent.prot1_effect}}
-  apDespillKernel_prot1_falloff {{parent.prot1_falloff}}
-  apDespillKernel_pickSpill {{parent.pick} {parent.pick} {parent.pick}}
-  rebuild_finalise ""
-  maxGPUMemory 60
-  maxTileLines 8
-  name apDespillKernel
-  xpos 559
-  ypos -582
- }
- Log2Lin {
-  name Log2Lin2
-  xpos 559
-  ypos -520
-  disable {{!logspace}}
- }
- Colorspace {
-  channels {{{parent.Colorspace5.channels}}}
-  colorspace_in {{parent.Colorspace1.colorspace_out}}
-  illuminant_in {{parent.Colorspace1.illuminant_out}}
-  primary_in {{parent.Colorspace1.primary_out}}
-  name Colorspace2
-  label "\[value colorspace_in] >> \[value colorspace_out]"
-  xpos 559
-  ypos -494
- }
-push $Ndcad81a0
- Merge2 {
-  inputs 2+1
-  operation copy
-  bbox B
-  name Merge
-  xpos 449
-  ypos -447
- }
- Output {
-  name Output
-  xpos 449
-  ypos -400
- }
-end_group
-set Nd826f600 [stack 0]
+set N92be2200 [stack 0]
 Shuffle {
  red alpha
  green alpha
@@ -5017,8 +5023,8 @@ Shuffle {
  name Shuffle18
  tile_color 0xffffffff
  selected true
- xpos -1359
- ypos -2377
+ xpos -1331
+ ypos -2313
 }
 Grade {
  channels rgba
@@ -5026,31 +5032,31 @@ Grade {
  whitepoint 0.01
  name Grade2
  selected true
- xpos -1359
- ypos -2325
+ xpos -1331
+ ypos -2261
 }
-push $Nd826f600
+push $N92be2200
 Saturation {
  inputs 1+1
  saturation 0.67
  name Saturation4
  selected true
- xpos -1485
- ypos -2325
+ xpos -1457
+ ypos -2261
 }
 Dot {
  name Dot303
  selected true
- xpos -1451
- ypos -2037
+ xpos -1423
+ ypos -1973
 }
-set Ndcdc88e0 [stack 0]
-push $Ndcad0500
+set N9395bb60 [stack 0]
+push $N9381fb20
 Dot {
  name Dot302
  selected true
- xpos -837
- ypos -2593
+ xpos -809
+ ypos -2529
 }
 Merge2 {
  inputs 2
@@ -5058,31 +5064,31 @@ Merge2 {
  name Merge5
  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
  selected true
- xpos -871
- ypos -2041
+ xpos -843
+ ypos -1977
 }
 Clamp {
  channels rgba
  maximum_enable false
  name Clamp1
  selected true
- xpos -871
- ypos -2015
+ xpos -843
+ ypos -1951
 }
 Saturation {
  saturation 0
  name Saturation2
  selected true
- xpos -871
- ypos -1989
+ xpos -843
+ ypos -1925
 }
 Clamp {
  channels rgba
  maximum_enable false
  name Clamp3
  selected true
- xpos -871
- ypos -1963
+ xpos -843
+ ypos -1899
 }
 Shuffle {
  green red
@@ -5091,34 +5097,34 @@ Shuffle {
  name Shuffle11
  tile_color 0x93000000
  selected true
- xpos -871
- ypos -1937
+ xpos -843
+ ypos -1873
 }
 Dot {
  name Dot304
  label "despill\nmatte"
  note_font_size 60
  selected true
- xpos -837
- ypos -1860
+ xpos -809
+ ypos -1796
 }
-set Ndcdd6230 [stack 0]
+set N9399f500 [stack 0]
 Dot {
  name Dot305
  label "despill\nMatte"
  note_font_size 60
  selected true
- xpos -837
- ypos -1663
+ xpos -809
+ ypos -1599
 }
-push $Ndcdc88e0
+push $N9395bb60
 Dot {
  name Dot306
  selected true
- xpos -1451
- ypos -1861
+ xpos -1423
+ ypos -1797
 }
-set Ndcf4a1f0 [stack 0]
+set N939a7290 [stack 0]
 add_layer {despill despill.red}
 Copy {
  inputs 2
@@ -5126,16 +5132,16 @@ Copy {
  to0 despill.red
  name Copy7
  selected true
- xpos -1485
- ypos -1673
+ xpos -1457
+ ypos -1609
 }
 Dot {
  name Dot307
  label "edge\ndespill"
  note_font_size 60
  selected true
- xpos -1451
- ypos -911
+ xpos -1423
+ ypos -847
 }
 Multiply {
  inputs 1+1
@@ -5144,16 +5150,16 @@ Multiply {
  name Multiply2
  label "\[value value]"
  selected true
- xpos -1485
- ypos -769
+ xpos -1457
+ ypos -705
 }
 Keymix {
  inputs 3
  channels rgb
  name Keymix3
  selected true
- xpos -1485
- ypos -638
+ xpos -1457
+ ypos -574
 }
 add_layer {despill_RGB despill_RGB.red despill_RGB.green despill_RGB.blue despill_RGB.alpha}
 Shuffle {
@@ -5165,23 +5171,23 @@ Shuffle {
  name Shuffle26
  label "\[value in] → \[value out2]"
  selected true
- xpos -1485
- ypos -565
+ xpos -1457
+ ypos -501
 }
 Copy {
  inputs 2
  channels all
  name Copy12
  selected true
- xpos -1485
- ypos -78
+ xpos -1457
+ ypos -14
 }
 CopyBBox {
  inputs 2
  name CopyBBox3
  selected true
- xpos -1485
- ypos -16
+ xpos -1457
+ ypos 48
 }
 Copy {
  inputs 2
@@ -5190,8 +5196,8 @@ Copy {
  bbox B
  name Copy14
  selected true
- xpos -1485
- ypos 239
+ xpos -1457
+ ypos 303
 }
 Copy {
  inputs 2
@@ -5199,69 +5205,69 @@ Copy {
  bbox B
  name Copy15
  selected true
- xpos -1485
- ypos 595
+ xpos -1457
+ ypos 659
 }
 Dot {
  name Dot313
  note_font_size 41
  selected true
- xpos -1451
- ypos 999
+ xpos -1423
+ ypos 1063
 }
 Dot {
  name Dot314
  note_font_size 41
  selected true
- xpos -1451
- ypos 1460
+ xpos -1423
+ ypos 1524
 }
 Dot {
  name Dot315
  note_font_size 41
  selected true
- xpos -1451
- ypos 1786
+ xpos -1423
+ ypos 1850
 }
 Dot {
  name Dot15
  note_font_size 41
  selected true
- xpos -1451
- ypos 2308
+ xpos -1423
+ ypos 2372
 }
-set Ndce5cbe0 [stack 0]
+set N939f8230 [stack 0]
 Dot {
  name Dot7
  note_font_size 41
  selected true
- xpos -1187
- ypos 2308
+ xpos -1159
+ ypos 2372
 }
-set Ndce60b10 [stack 0]
+set N93a000b0 [stack 0]
 Dot {
  name Dot108
  note_font_size 41
  selected true
- xpos -996
- ypos 2308
+ xpos -968
+ ypos 2372
 }
-set Ndce64a40 [stack 0]
+set N93a04010 [stack 0]
 Shuffle {
  in despill
  name Shuffle23
  label "\[value in]"
  selected true
- xpos -1030
- ypos 2352
+ xpos -1002
+ ypos 2416
 }
 Remove {
  operation keep
  channels rgba
  name Remove2
  selected true
- xpos -1030
- ypos 2390
+ xpos -1002
+ ypos 2454
 }
 NoOp {
  name Anchor_30be3b7c88
@@ -5272,8 +5278,8 @@ NoOp {
  tile_color 0xffffff01
  note_font_size 20
  selected true
- xpos -1030
- ypos 2441
+ xpos -1002
+ ypos 2505
  addUserKnob {20 anchor_tab l "Anchor Stamp"}
  addUserKnob {26 identifier -STARTLINE +HIDDEN T anchor}
  addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
@@ -5303,8 +5309,8 @@ NoOp {
  note_font "Bitstream Vera Sans"
  note_font_size 20
  selected true
- xpos -1107
- ypos 2835
+ xpos -1079
+ ypos 2899
  hide_input true
  addUserKnob {20 wired_tab l "Wired Stamp"}
  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
@@ -5351,34 +5357,34 @@ Grade {
  black_clamp false
  name Grade4
  selected true
- xpos -1107
- ypos 2912
+ xpos -1079
+ ypos 2976
 }
-set Ndce7ba00 [stack 0]
+set N93a2c830 [stack 0]
 Dot {
  name Dot318
  label "despill\nmatte"
  note_font_size 41
  selected true
- xpos -1073
- ypos 3048
+ xpos -1045
+ ypos 3112
 }
-set Ndce7fa70 [stack 0]
+set N93a38a50 [stack 0]
 Dot {
  name Dot319
  note_font_size 41
  selected true
- xpos -1306
- ypos 3046
+ xpos -1278
+ ypos 3110
 }
 Dot {
  name Dot320
  note_font_size 41
  selected true
- xpos -1306
- ypos 3356
+ xpos -1278
+ ypos 3420
 }
-push $Ndaf65f00
+push $N914d1670
 NoOp {
  name Stamp41
  help "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019"
@@ -5389,8 +5395,8 @@ NoOp {
  note_font "Bitstream Vera Sans"
  note_font_size 20
  selected true
- xpos -403
- ypos 2802
+ xpos -375
+ ypos 2866
  hide_input true
  addUserKnob {20 wired_tab l "Wired Stamp"}
  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
@@ -5435,40 +5441,40 @@ Dot {
  name Dot3
  note_font_size 41
  selected true
- xpos -369
- ypos 2877
+ xpos -341
+ ypos 2941
 }
-set Ndce89170 [stack 0]
+set N93a4e120 [stack 0]
 Dot {
  name Dot4
  note_font_size 41
  selected true
- xpos -369
- ypos 3444
+ xpos -341
+ ypos 3508
 }
 Dot {
  name Dot20
  label BG
  note_font_size 101
  selected true
- xpos -974
- ypos 3444
+ xpos -946
+ ypos 3508
 }
-push $Ndce89170
+push $N93a4e120
 Dot {
  name Dot2
  note_font_size 41
  selected true
- xpos -767
- ypos 2877
+ xpos -739
+ ypos 2941
 }
 Dot {
  name Dot321
  label BG
  note_font_size 101
  selected true
- xpos -767
- ypos 2965
+ xpos -739
+ ypos 3029
 }
 Grade {
  blackpoint 0.008
@@ -5477,33 +5483,33 @@ Grade {
  name Grade6
  label "BG Prep"
  selected true
- xpos -801
- ypos 3044
+ xpos -773
+ ypos 3108
 }
 Dot {
  name Dot322
  selected true
- xpos -767
- ypos 3133
+ xpos -739
+ ypos 3197
 }
-push $Ndce7fa70
+push $N93a38a50
 Merge2 {
  inputs 2
  operation multiply
  name Merge36
  selected true
- xpos -1107
- ypos 3131
+ xpos -1079
+ ypos 3195
 }
 Shuffle {
  alpha black
  name Shuffle40
  label "\[value in]"
  selected true
- xpos -1107
- ypos 3204
+ xpos -1079
+ ypos 3268
 }
-push $Ndce7ba00
+push $N93a2c830
 Shuffle {
  green red
  blue red
@@ -5511,8 +5517,8 @@ Shuffle {
  name Shuffle41
  label "\[value in]"
  selected true
- xpos -1316
- ypos 2908
+ xpos -1288
+ ypos 2972
 }
 Grade {
  channels rgba
@@ -5521,18 +5527,18 @@ Grade {
  white_clamp true
  name Grade7
  selected true
- xpos -1316
- ypos 2962
+ xpos -1288
+ ypos 3026
 }
-push $Ndce5cbe0
+push $N939f8230
 Remove {
  operation keep
  channels rgba
  channels2 GS_Plate
  name Remove6
  selected true
- xpos -1485
- ypos 2399
+ xpos -1457
+ ypos 2463
 }
 Saturation {
  inputs 1+1
@@ -5540,8 +5546,8 @@ Saturation {
  name Saturation3
  label "change if necessary"
  selected true
- xpos -1485
- ypos 2958
+ xpos -1457
+ ypos 3022
 }
 Merge2 {
  inputs 2
@@ -5550,8 +5556,8 @@ Merge2 {
  output {rgba.red rgba.green rgba.blue -rgba.alpha}
  name Merge49
  selected true
- xpos -1485
- ypos 3208
+ xpos -1457
+ ypos 3272
 }
 Group {
  inputs 3
@@ -5559,10 +5565,10 @@ Group {
  help "Choose a black point color or plug an image /constant you wish to be your blackpoint into BlackColor input.\n\nUse Mult Range to control how far above the blackpoint color to affect the lows\n\nUse the RollOff gamma to add fall off to the bottom of the curve\n\nTurn on the preview Plotscan and move the sampler over a region to see what your settings are doing to a linear 0-1 ramp.  This will help you see if you have weird curves, clamping or other funky problems as you adjust settings"
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"inputChange\":\n    nsd = nuke.toNode(\"SwitchDefault\")\n    n\[\"defaultBlack\"].setEnabled(nsd\[\"which\"].getValue()==1)\n\nif k.name() == \"previewPlotScan\":\n    p = n.knob(\"previewPlotScan\").value()\n    if p == True:\n        n.knob(\"plotscanSampler\").setVisible(True)\n    else:\n        n.knob(\"plotscanSampler\").setVisible(False)"
  tile_color 0x1c1c1cff
- note_font "Helvetica Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font "Helvetica Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
  selected true
- xpos -1485
- ypos 3441
+ xpos -1457
+ ypos 3505
  addUserKnob {20 BlacksMatch}
  addUserKnob {6 default_black_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 premultInput l "Premultiplied Input" +STARTLINE}
@@ -5581,6 +5587,7 @@ Group {
  addUserKnob {6 defaultBlack_panelDropped_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 defaultBlack_panelDropped_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 defaultBlack_panelDropped_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 defaultBlack_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {26 ""}
  addUserKnob {7 multBase l "Mult Low Range" t "This is the Multiplier for the top of the \"toe\" curve.  It is multiplying the BlackPoint color by this number and setting it as the highest point weird the curve will influence the midtones and the highlights" R 1.5 10}
  multBase 4
@@ -5665,7 +5672,7 @@ Group {
   xpos 356
   ypos -418
  }
-set Ndceec0f0 [stack 0]
+set N93aeb5f0 [stack 0]
  AddChannels {
   channels rgba
   color 1
@@ -5679,7 +5686,7 @@ set Ndceec0f0 [stack 0]
   xpos 356
   ypos -288
  }
-set Ndd020180 [stack 0]
+set N93af6a70 [stack 0]
  Grade {
   channels rgba
   white 0
@@ -5718,21 +5725,21 @@ set Ndd020180 [stack 0]
   xpos 1172
   ypos -151
  }
-set Ndd03f1c0 [stack 0]
+set N93b19980 [stack 0]
  Dot {
   name Dot36
   note_font_size 41
   xpos 1631
   ypos -151
  }
-set Ndd0430a0 [stack 0]
+set N93b1d860 [stack 0]
  Dot {
   name Dot16
   note_font_size 41
   xpos 2140
   ypos -151
  }
-set Ndd046f80 [stack 0]
+set N93b21740 [stack 0]
  Crop {
   box {{plotscanSampler.x-2} {plotscanSampler.y-2} {plotscanSampler.x+2} {plotscanSampler.x+2}}
   reformat true
@@ -5764,14 +5771,14 @@ set Ndd046f80 [stack 0]
   xpos 2466
   ypos -43
  }
-set Ndcf93090 [stack 0]
+set N93b3cb20 [stack 0]
  Dot {
   name Dot47
   note_font_size 41
   xpos 2917
   ypos -43
  }
-set Ndcf96e70 [stack 0]
+set N93b40a10 [stack 0]
  Dot {
   name Dot42
   label "Black Color"
@@ -5785,30 +5792,30 @@ set Ndcf96e70 [stack 0]
   xpos 2917
   ypos 366
  }
-set Ndcf9ec30 [stack 0]
+set N93b487d0 [stack 0]
  Dot {
   name Dot44
   note_font_size 41
   xpos 2917
   ypos 480
  }
-set Ndd108460 [stack 0]
+set N93b4c6b0 [stack 0]
  Dot {
   name Dot45
   note_font_size 41
   xpos 2917
   ypos 588
  }
-set Ndd10c4b0 [stack 0]
+set N93b50710 [stack 0]
  Dot {
   name Dot31
   note_font_size 41
   xpos 2917
   ypos 656
  }
-set Ndcfa2b10 [stack 0]
-push $Ndcfa2b10
-push $Ndcf96e70
+set N93b54530 [stack 0]
+push $N93b54530
+push $N93b40a10
  Dot {
   name Dot11
   label "Black Color"
@@ -5845,14 +5852,14 @@ push $Ndcf96e70
   xpos 2745
   ypos 154
  }
-set Ndd200a00 [stack 0]
+set N93726030 [stack 0]
  Dot {
   name Dot7
   note_font_size 41
   xpos 3138
   ypos 154
  }
-set Ndd204770 [stack 0]
+set N93843110 [stack 0]
  MergeExpression {
   inputs 2
   expr0 Br/Ar
@@ -5886,13 +5893,13 @@ set Ndd204770 [stack 0]
   xpos 3426
   ypos 366
  }
-set Ndd073ef0 [stack 0]
+set N93b8dc40 [stack 0]
  Dot {
   name Dot40
   xpos 3426
   ypos 480
  }
-set Ndd077c80 [stack 0]
+set N93b919d0 [stack 0]
  Dot {
   name Dot41
   xpos 3426
@@ -5908,8 +5915,8 @@ set Ndd077c80 [stack 0]
   xpos 3277
   ypos 581
  }
-push $Ndd10c4b0
-push $Ndd077c80
+push $N93b50710
+push $N93b919d0
  Shuffle {
   red green
   blue green
@@ -5920,8 +5927,8 @@ push $Ndd077c80
   xpos 3276
   ypos 473
  }
-push $Ndd108460
-push $Ndd073ef0
+push $N93b4c6b0
+push $N93b8dc40
  Shuffle {
   green red
   blue red
@@ -5932,8 +5939,8 @@ push $Ndd073ef0
   xpos 3270
   ypos 359
  }
-push $Ndcf9ec30
-push $Ndd204770
+push $N93b487d0
+push $N93843110
  Merge2 {
   inputs 2+1
   operation {{parent.Settings.mergeOpNum}}
@@ -5998,7 +6005,7 @@ push $Ndd204770
   xpos 2883
   ypos 739
  }
-push $Ndcf93090
+push $N93b3cb20
  Multiply {
   channels rgb
   value {{multBase}}
@@ -6016,7 +6023,7 @@ push $Ndcf93090
   ypos 95
   disable {{"mergeOp == 1 ? 0 : 1"}}
  }
-push $Ndd200a00
+push $N93726030
  MergeExpression {
   inputs 2
   expr0 Br/Ar
@@ -6050,13 +6057,13 @@ push $Ndd200a00
   xpos 2466
   ypos 366
  }
-set Ndd32a8e0 [stack 0]
+set N93c444b0 [stack 0]
  Dot {
   name Dot9
   xpos 2466
   ypos 480
  }
-set Ndd32e790 [stack 0]
+set N93c48360 [stack 0]
  Dot {
   name Dot10
   xpos 2466
@@ -6072,8 +6079,8 @@ set Ndd32e790 [stack 0]
   xpos 2511
   ypos 581
  }
-push $Ndd10c4b0
-push $Ndd32e790
+push $N93b50710
+push $N93c48360
  Shuffle {
   red green
   blue green
@@ -6084,8 +6091,8 @@ push $Ndd32e790
   xpos 2511
   ypos 473
  }
-push $Ndd108460
-push $Ndd32a8e0
+push $N93b4c6b0
+push $N93c444b0
  Shuffle {
   green red
   blue red
@@ -6096,8 +6103,8 @@ push $Ndd32a8e0
   xpos 2517
   ypos 359
  }
-push $Ndcf9ec30
-push $Ndd200a00
+push $N93b487d0
+push $N93726030
  Merge2 {
   inputs 2+1
   operation {{parent.Settings.mergeOpNum}}
@@ -6182,7 +6189,7 @@ push $Ndd200a00
    xpos -480
    ypos 62
   }
-set Ndd37ac70 [stack 0]
+set N93cb70a0 [stack 0]
   Expression {
    temp_name0 length
    temp_expr0 sqrt(r*r+g*g+b*b)
@@ -6203,7 +6210,7 @@ set Ndd37ac70 [stack 0]
    ypos 134
    disable {{1-parent.tonemap i}}
   }
-set Ndd38b050 [stack 0]
+set N93cc7470 [stack 0]
   Expression {
    temp_name0 rExpr
    temp_expr0 "min(max(0,\r\nceil(r(x,parent.p1.y)-((y/height+parent.lift)*parent.scale))),1)"
@@ -6220,7 +6227,7 @@ set Ndd38b050 [stack 0]
    ypos 193
    addUserKnob {20 User}
   }
-push $Ndd38b050
+push $N93cc7470
   Expression {
    temp_name0 rExpr
    temp_expr0 "min(max(0,\r\nceil(r((x/width)*(parent.p2.x-parent.p1.x)+parent.p1.x,(x/width)*(parent.p2.y-parent.p1.y)+parent.p1.y,parent.sa,parent.sa)-((y/height+parent.lift)*parent.scale))),1)"
@@ -6237,7 +6244,7 @@ push $Ndd38b050
    ypos 197
    addUserKnob {20 User}
   }
-push $Ndd38b050
+push $N93cc7470
   Expression {
    temp_name0 rExpr
    temp_expr0 "min(max(0,\r\nceil(r((x/width)*(parent.p2.x-parent.p1.x)+parent.p1.x,(x/width)*(parent.p2.y-parent.p1.y)+parent.p1.y)-((y/height+parent.lift)*parent.scale))),1)"
@@ -6284,8 +6291,8 @@ push $Ndd38b050
    xpos -480
    ypos 383
   }
-set Ndd12ec60 [stack 0]
-push $Ndd37ac70
+set N93d16c40 [stack 0]
+push $N93cb70a0
   Dot {
    name Dot1
    xpos -556
@@ -6310,7 +6317,7 @@ push $Ndd37ac70
    xpos -556
    ypos 433
   }
-push $Ndd12ec60
+push $N93d16c40
   Switch {
    inputs 2
    which {{parent.add2image i}}
@@ -6330,7 +6337,7 @@ push $Ndd12ec60
   xpos 2745
   ypos 857
  }
-set Ndd3d6400 [stack 0]
+set N93d4d480 [stack 0]
  Shuffle {
   red white
   green white
@@ -6358,7 +6365,7 @@ set Ndd3d6400 [stack 0]
   xpos 2821
   ypos 934
  }
-push $Ndd3d6400
+push $N93d4d480
  Merge2 {
   inputs 2
   name Merge9
@@ -6464,7 +6471,7 @@ push $Ndd3d6400
   xpos 898
   ypos 1015
  }
-push $Ndd0430a0
+push $N93b1d860
  Dot {
   name Dot33
   label "Black Color"
@@ -6478,30 +6485,30 @@ push $Ndd0430a0
   xpos 1631
   ypos 360
  }
-set Ndd41ad00 [stack 0]
+set N93dc4c70 [stack 0]
  Dot {
   name Dot34
   note_font_size 41
   xpos 1631
   ypos 474
  }
-set Ndd41ebe0 [stack 0]
+set N93dc8b50 [stack 0]
  Dot {
   name Dot35
   note_font_size 41
   xpos 1631
   ypos 582
  }
-set Ndd422ac0 [stack 0]
+set N93dcca30 [stack 0]
  Dot {
   name Dot13
   note_font_size 41
   xpos 1631
   ypos 674
  }
-set Ndd4269a0 [stack 0]
-push $Ndd4269a0
-push $Ndd046f80
+set N93dd0910 [stack 0]
+push $N93dd0910
+push $N93b21740
  Multiply {
   channels rgb
   value 2
@@ -6510,7 +6517,7 @@ push $Ndd046f80
   xpos 2106
   ypos 87
  }
-push $Ndd020180
+push $N93af6a70
  Unpremult {
   name Unpremult1
   xpos 322
@@ -6522,21 +6529,21 @@ push $Ndd020180
   xpos 356
   ypos 145
  }
-set Ndd43b470 [stack 0]
+set N93de53e0 [stack 0]
  Dot {
   name Dot22
   note_font_size 41
   xpos 1028
   ypos 145
  }
-set Ndd43f270 [stack 0]
+set N93de91e0 [stack 0]
  Dot {
   name Dot32
   note_font_size 41
   xpos 1852
   ypos 145
  }
-set Ndd443150 [stack 0]
+set N93ded0c0 [stack 0]
  MergeExpression {
   inputs 2
   expr0 Br/Ar
@@ -6570,13 +6577,13 @@ set Ndd443150 [stack 0]
   xpos 2140
   ypos 360
  }
-set Ndd465030 [stack 0]
+set N93e1f9d0 [stack 0]
  Dot {
   name Dot25
   xpos 2140
   ypos 474
  }
-set Ndd468dd0 [stack 0]
+set N93e23760 [stack 0]
  Dot {
   name Dot27
   xpos 2140
@@ -6592,8 +6599,8 @@ set Ndd468dd0 [stack 0]
   xpos 1990
   ypos 575
  }
-push $Ndd422ac0
-push $Ndd468dd0
+push $N93dcca30
+push $N93e23760
  Shuffle {
   red green
   blue green
@@ -6604,8 +6611,8 @@ push $Ndd468dd0
   xpos 1990
   ypos 467
  }
-push $Ndd41ebe0
-push $Ndd465030
+push $N93dc8b50
+push $N93e1f9d0
  Shuffle {
   green red
   blue red
@@ -6616,8 +6623,8 @@ push $Ndd465030
   xpos 1984
   ypos 353
  }
-push $Ndd41ad00
-push $Ndd443150
+push $N93dc4c70
+push $N93ded0c0
  Merge2 {
   inputs 2+1
   operation {{parent.Settings.mergeOpNum}}
@@ -6682,7 +6689,7 @@ push $Ndd443150
   xpos 1597
   ypos 757
  }
-push $Ndd03f1c0
+push $N93b19980
  Multiply {
   channels rgb
   value {{multBase}}
@@ -6700,7 +6707,7 @@ push $Ndd03f1c0
   ypos 84
   disable {{"mergeOp == 1 ? 0 : 1"}}
  }
-push $Ndd43f270
+push $N93de91e0
  MergeExpression {
   inputs 2
   expr0 Br/Ar
@@ -6734,13 +6741,13 @@ push $Ndd43f270
   xpos 1172
   ypos 364
  }
-set Ndd53d210 [stack 0]
+set N93e96c10 [stack 0]
  Dot {
   name Dot20
   xpos 1172
   ypos 478
  }
-set Ndd541040 [stack 0]
+set N93e9ab40 [stack 0]
  Dot {
   name Dot21
   xpos 1172
@@ -6756,7 +6763,7 @@ set Ndd541040 [stack 0]
   xpos 1022
   ypos 579
  }
-push $Ndd03f1c0
+push $N93b19980
  Dot {
   name Dot23
   xpos 706
@@ -6769,21 +6776,21 @@ push $Ndd03f1c0
   xpos 706
   ypos 293
  }
-set Ndd2b3540 [stack 0]
+set N93eb3e10 [stack 0]
  Dot {
   name Dot2
   note_font_size 41
   xpos 706
   ypos 404
  }
-set Ndd2b7430 [stack 0]
+set N93eb7cf0 [stack 0]
  Dot {
   name Dot3
   note_font_size 41
   xpos 706
   ypos 523
  }
-push $Ndd541040
+push $N93e9ab40
  Shuffle {
   red green
   blue green
@@ -6794,8 +6801,8 @@ push $Ndd541040
   xpos 1022
   ypos 471
  }
-push $Ndd2b7430
-push $Ndd53d210
+push $N93eb7cf0
+push $N93e96c10
  Shuffle {
   green red
   blue red
@@ -6806,8 +6813,8 @@ push $Ndd53d210
   xpos 1016
   ypos 357
  }
-push $Ndd2b3540
-push $Ndd43b470
+push $N93eb3e10
+push $N93de53e0
  Merge2 {
   inputs 2+1
   operation {{parent.Settings.mergeOpNum}}
@@ -6865,7 +6872,7 @@ push $Ndd43b470
   ypos 881
   disable {{"! premultInput"}}
  }
-push $Ndceec0f0
+push $N93aeb5f0
  Dot {
   name Dot28
   xpos -146
@@ -6916,8 +6923,8 @@ end_group
 Premult {
  name Premult2
  selected true
- xpos -1485
- ypos 3885
+ xpos -1457
+ ypos 3949
 }
 Group {
  inputs 2
@@ -6925,11 +6932,11 @@ Group {
  help "Adds exponentially blurred lightwrap\n\nAdds a bright highlight wrap and an overall wrap"
  tile_color 0x1e252eff
  label "(\[value outputView])"
- note_font "DejaVu Sans Bold Bold Bold Bold Bold"
+ note_font "DejaVu Sans Bold Bold Bold Bold Bold Bold"
  note_font_color 0xb7e6ffff
  selected true
- xpos -1485
- ypos 4337
+ xpos -1457
+ ypos 4401
  disable true
  mapsize {0.15 0.15}
  addUserKnob {20 LightWrapPro}
@@ -7030,7 +7037,7 @@ Group {
   xpos -379
   ypos 375
  }
-set Ndd66c320 [stack 0]
+set N938b49e0 [stack 0]
  Dot {
   name Dot7
   xpos -825
@@ -7041,34 +7048,34 @@ set Ndd66c320 [stack 0]
   xpos -825
   ypos 3104
  }
-set Ndd482400 [stack 0]
+set N938bc6a0 [stack 0]
  Dot {
   name Dot15
   xpos 915
   ypos 3107
  }
-set Ndd485ce0 [stack 0]
+set N938c0580 [stack 0]
  Dot {
   name Dot26
   note_font_size 41
   xpos 915
   ypos 3224
  }
-set Ndd489c40 [stack 0]
+set N938c44e0 [stack 0]
  Dot {
   name Dot32
   note_font_size 41
   xpos 915
   ypos 3277
  }
-push $Ndd66c320
+push $N938b49e0
  Dot {
   name Dot8
   note_font_size 41
   xpos 717
   ypos 378
  }
-set Ndd491a00 [stack 0]
+set N938cc260 [stack 0]
  Dot {
   name Dot11
   note_font_size 41
@@ -7101,7 +7108,7 @@ set Ndd491a00 [stack 0]
   xpos 1736
   ypos 177
  }
-set Ndd670150 [stack 0]
+set N938e6830 [stack 0]
  Keyer {
   operation "luminance key"
   range {{parent.blackPt} {parent.whitePt} {range.B} {range.B}}
@@ -7115,7 +7122,7 @@ set Ndd670150 [stack 0]
   xpos 1736
   ypos 397
  }
-set Ndd67d340 [stack 0]
+set N938f34d0 [stack 0]
  Premult {
   name Premult1
   xpos 1702
@@ -7142,7 +7149,7 @@ set Ndd67d340 [stack 0]
   knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n\n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n\nelif k.name() == \"steps\":\n\n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        m1    = nuke.toNode(\"Multiply1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n\n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n\n        m1x   = m1.xpos()\n        m1y   = m1.ypos()\n        m1n   = m1.name()\n\n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('exp').getValue()\n\n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, m1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            m = nuke.nodes.Multiply()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"all\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression( \"((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(\{\}**2))\".format(str(i+1)), 0 )\n            b\[\"size\"].setExpression( \"((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(\{\}**2))\".format(str(i+1)), 1 )\n            b\[\"label\"].setValue('')\n            blurAbove = b.name()\n\n            m.setXYpos(m1x+i*100,m1y)\n            m.setInput(0, nuke.toNode(blurAbove))\n            m\[\"channels\"].setValue(\"all\")\n            m\[\"value\"].setValue(1,1,1,1)\n            j = 1-(i/steps)\n            m\[\"value\"].setExpression('falloffType == 0 ? \{\} :falloffType == 1 ? pow(\{\}, 3) : falloffType == 2 ? \{\}*\{\}*(3-2*\{\}) : falloffType == 3 ? \{\}*\{\}*(2 - \{\}) : falloffType == 4 ? \{\}*(1 + \{\}*(1 - \{\})) : 0'.format(j,j,j,j,j,j,j,j,j,j,j))\n            m\[\"mix\"].setExpression(\"falloff\")\n            m\[\"label\"].setValue('')\n\n            merge.setInput(i if i<2 else i+1, m)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n\n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n\nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n\n"
   tile_color 0xcc804eff
   label "(\[value output2])"
-  note_font "Verdana Bold Bold Bold Bold Bold Bold"
+  note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 1700
   ypos 1012
@@ -7214,7 +7221,7 @@ set Ndd67d340 [stack 0]
    xpos -187
    ypos -1062
   }
-set Ndd6b06e0 [stack 0]
+set N94026840 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
@@ -7242,14 +7249,14 @@ set Ndd6b06e0 [stack 0]
    xpos 461
    ypos -853
   }
-set Ndd573070 [stack 0]
+set N9403a1d0 [stack 0]
   Invert {
    name Invert1
    xpos 864
    ypos -860
    disable {{"parent.size < 0 ? 0 : 1"}}
   }
-set Ndd576fd0 [stack 0]
+set N9403e130 [stack 0]
   Dot {
    name Dot4
    note_font_size 41
@@ -7267,13 +7274,13 @@ set Ndd576fd0 [stack 0]
    xpos 540
    ypos 100
   }
-push $Ndd576fd0
+push $N9403e130
   NoOp {
    name Start
    xpos 864
    ypos -706
   }
-set Ndd58cd10 [stack 0]
+set N94053e30 [stack 0]
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(6**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(6**2))}}
    crop false
@@ -7288,7 +7295,7 @@ set Ndd58cd10 [stack 0]
    xpos 1364
    ypos -477
   }
-push $Ndd58cd10
+push $N94053e30
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(5**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(5**2))}}
    crop false
@@ -7303,7 +7310,7 @@ push $Ndd58cd10
    xpos 1264
    ypos -477
   }
-push $Ndd58cd10
+push $N94053e30
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(4**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(4**2))}}
    crop false
@@ -7318,7 +7325,7 @@ push $Ndd58cd10
    xpos 1164
    ypos -477
   }
-push $Ndd58cd10
+push $N94053e30
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(3**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(3**2))}}
    crop false
@@ -7334,7 +7341,7 @@ push $Ndd58cd10
    ypos -477
   }
 push 0
-push $Ndd58cd10
+push $N94053e30
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(2**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(2**2))}}
    crop false
@@ -7349,7 +7356,7 @@ push $Ndd58cd10
    xpos 964
    ypos -477
   }
-push $Ndd58cd10
+push $N94053e30
   Blur {
    size {{(width/100*parent.size*(aspectCalc.aspect.w/100))} {(height/100*parent.size*(aspectCalc.aspect.h/100))}}
    crop false
@@ -7410,7 +7417,7 @@ push $Ndd58cd10
    ypos 283
    disable {{"parent.size < 0 ? 0 : 1"}}
   }
-push $Ndd573070
+push $N9403a1d0
   Switch {
    inputs 2
    which {{"parent.size == 0 ? 0 : 1"}}
@@ -7436,7 +7443,7 @@ push $Ndd573070
    xpos 96
    ypos -891
   }
-push $Ndd6b06e0
+push $N94026840
   Merge2 {
    inputs 2
    name Merge3
@@ -7444,13 +7451,13 @@ push $Ndd6b06e0
    xpos -60
    ypos -891
   }
-set Ndd761b40 [stack 0]
+set N9412b060 [stack 0]
   Group {
    name BBoxToFormat
    onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
    knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"overscanType\":\n    if n.knob(\"overscanType\").getValue() == 1:\n        n.knob(\"overscanPercent\").setVisible(True)\n        n.knob(\"overscan\").setVisible(False)\n    else:\n        n.knob(\"overscanPercent\").setVisible(False)\n        n.knob(\"overscan\").setVisible(True)"
    tile_color 0xa57aaaff
-   note_font "Verdana Bold Bold Bold Bold Bold Bold"
+   note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
    note_font_color 0xffffffff
    xpos 29
    ypos -812
@@ -7490,15 +7497,15 @@ set Ndd761b40 [stack 0]
     xpos 295
     ypos 462
    }
-set Ndd77df80 [stack 0]
+set N941474b0 [stack 0]
    Dot {
     name Dot1
     note_font_size 41
     xpos -160
     ypos 462
    }
-set Ndd781ea0 [stack 0]
-push $Ndd77df80
+set N9414b3d0 [stack 0]
+push $N941474b0
    Crop {
     box {{curve} {curve} {input.width} {input.height}}
     crop {{parent.blackOutside}}
@@ -7508,7 +7515,7 @@ push $Ndd77df80
     addUserKnob {20 User}
     addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
    }
-set Ndd785d80 [stack 0]
+set N9414f2b0 [stack 0]
    Remove {
     operation keep
     channels none
@@ -7516,7 +7523,7 @@ set Ndd785d80 [stack 0]
     xpos 120
     ypos 504
    }
-set Ndd78f570 [stack 0]
+set N94158aa0 [stack 0]
    Transform {
     scale {{parent.overscanPercent} {parent.overscanPercent}}
     center {{input.bbox.r/2} {input.bbox.t/2}}
@@ -7525,7 +7532,7 @@ set Ndd78f570 [stack 0]
     xpos 120
     ypos 555
    }
-push $Ndd78f570
+push $N94158aa0
    AdjBBox {
     numpixels {{parent.overscan} {parent.overscan}}
     name AdjBBox1
@@ -7551,7 +7558,7 @@ push $Ndd78f570
     ypos 647
     disable {{!parent.Crop6.intersect}}
    }
-push $Ndd781ea0
+push $N9414b3d0
    CopyBBox {
     inputs 2
     name CopyBBox1
@@ -7570,7 +7577,7 @@ push $Ndd781ea0
     xpos -160
     ypos 769
    }
-push $Ndd785d80
+push $N9414f2b0
    Switch {
     inputs 2
     which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -7579,13 +7586,13 @@ push $Ndd785d80
     xpos 261
     ypos 759
    }
-set Ndd17bb40 [stack 0]
+set N94196ca0 [stack 0]
    Output {
     name Output1
     xpos 261
     ypos 921
    }
-push $Ndd17bb40
+push $N94196ca0
    NoOp {
     name OutputBBox1
     selected true
@@ -7598,7 +7605,7 @@ push $Ndd17bb40
     outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
    }
   end_group
-push $Ndd761b40
+push $N9412b060
   Merge2 {
    inputs 2
    name Merge4
@@ -7606,7 +7613,7 @@ push $Ndd761b40
    xpos -60
    ypos -748
   }
-push $Ndd6b06e0
+push $N94026840
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -7645,7 +7652,7 @@ push $Ndd6b06e0
    xpos -187
    ypos 805
   }
-push $Ndd6b06e0
+push $N94026840
   Dot {
    name Dot2
    note_font_size 41
@@ -7713,16 +7720,16 @@ push $Ndd6b06e0
   xpos 1736
   ypos 1801
  }
-set Ndd812b60 [stack 0]
+set N9420f030 [stack 0]
  Dot {
   name Dot31
   note_font_size 41
   xpos 1738
   ypos 2915
  }
-set Ndd816a10 [stack 0]
-push $Ndd491a00
-push $Ndd670150
+set N94212ee0 [stack 0]
+push $N938cc260
+push $N938e6830
  Dot {
   name Dot20
   xpos 1059
@@ -7751,7 +7758,7 @@ push $Ndd670150
   xpos 1059
   ypos 725
  }
-set Ndd835b90 [stack 0]
+set N94232060 [stack 0]
  Dot {
   name Dot28
   note_font_size 41
@@ -7764,7 +7771,7 @@ set Ndd835b90 [stack 0]
   xpos 1309
   ypos 823
  }
-push $Ndd835b90
+push $N94232060
  Colorspace {
   colorspace_out CIE-Yxy
   name Colorspace4
@@ -7789,7 +7796,7 @@ push $Ndd835b90
   xpos 1188
   ypos 867
  }
-push $Ndd835b90
+push $N94232060
  Switch {
   inputs 2
   which {{removeHighlights}}
@@ -7803,7 +7810,7 @@ push $Ndd835b90
   knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n\n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n\nelif k.name() == \"steps\":\n\n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        m1    = nuke.toNode(\"Multiply1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n\n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n\n        m1x   = m1.xpos()\n        m1y   = m1.ypos()\n        m1n   = m1.name()\n\n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('exp').getValue()\n\n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, m1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            m = nuke.nodes.Multiply()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"all\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression( \"((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(\{\}**2))\".format(str(i+1)), 0 )\n            b\[\"size\"].setExpression( \"((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(\{\}**2))\".format(str(i+1)), 1 )\n            b\[\"label\"].setValue('')\n            blurAbove = b.name()\n\n            m.setXYpos(m1x+i*100,m1y)\n            m.setInput(0, nuke.toNode(blurAbove))\n            m\[\"channels\"].setValue(\"all\")\n            m\[\"value\"].setValue(1,1,1,1)\n            j = 1-(i/steps)\n            m\[\"value\"].setExpression('falloffType == 0 ? \{\} :falloffType == 1 ? pow(\{\}, 3) : falloffType == 2 ? \{\}*\{\}*(3-2*\{\}) : falloffType == 3 ? \{\}*\{\}*(2 - \{\}) : falloffType == 4 ? \{\}*(1 + \{\}*(1 - \{\})) : 0'.format(j,j,j,j,j,j,j,j,j,j,j))\n            m\[\"mix\"].setExpression(\"falloff\")\n            m\[\"label\"].setValue('')\n\n            merge.setInput(i if i<2 else i+1, m)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n\n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n\nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n\n"
   tile_color 0xcc804eff
   label "(\[value output2])"
-  note_font "Verdana Bold Bold Bold Bold Bold Bold"
+  note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 1025
   ypos 995
@@ -7875,7 +7882,7 @@ push $Ndd835b90
    xpos -187
    ypos -1062
   }
-set Ndd6ec080 [stack 0]
+set N93767490 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
@@ -7903,14 +7910,14 @@ set Ndd6ec080 [stack 0]
    xpos 461
    ypos -853
   }
-set Ndd87b8a0 [stack 0]
+set N9377adc0 [stack 0]
   Invert {
    name Invert1
    xpos 864
    ypos -860
    disable {{"parent.size < 0 ? 0 : 1"}}
   }
-set Ndd87f800 [stack 0]
+set N9377ed20 [stack 0]
   Dot {
    name Dot4
    note_font_size 41
@@ -7928,13 +7935,13 @@ set Ndd87f800 [stack 0]
    xpos 540
    ypos 100
   }
-push $Ndd87f800
+push $N9377ed20
   NoOp {
    name Start
    xpos 864
    ypos -706
   }
-set Ndd6f7da0 [stack 0]
+set N93794a20 [stack 0]
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(8**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(8**2))}}
    crop false
@@ -7949,7 +7956,7 @@ set Ndd6f7da0 [stack 0]
    xpos 1564
    ypos -477
   }
-push $Ndd6f7da0
+push $N93794a20
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(7**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(7**2))}}
    crop false
@@ -7964,7 +7971,7 @@ push $Ndd6f7da0
    xpos 1464
    ypos -477
   }
-push $Ndd6f7da0
+push $N93794a20
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(6**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(6**2))}}
    crop false
@@ -7979,7 +7986,7 @@ push $Ndd6f7da0
    xpos 1364
    ypos -477
   }
-push $Ndd6f7da0
+push $N93794a20
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(5**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(5**2))}}
    crop false
@@ -7994,7 +8001,7 @@ push $Ndd6f7da0
    xpos 1264
    ypos -477
   }
-push $Ndd6f7da0
+push $N93794a20
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(4**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(4**2))}}
    crop false
@@ -8009,7 +8016,7 @@ push $Ndd6f7da0
    xpos 1164
    ypos -477
   }
-push $Ndd6f7da0
+push $N93794a20
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(3**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(3**2))}}
    crop false
@@ -8025,7 +8032,7 @@ push $Ndd6f7da0
    ypos -477
   }
 push 0
-push $Ndd6f7da0
+push $N93794a20
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(2**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(2**2))}}
    crop false
@@ -8040,7 +8047,7 @@ push $Ndd6f7da0
    xpos 964
    ypos -477
   }
-push $Ndd6f7da0
+push $N93794a20
   Blur {
    size {{(width/100*parent.size*(aspectCalc.aspect.w/100))} {(height/100*parent.size*(aspectCalc.aspect.h/100))}}
    crop false
@@ -8100,7 +8107,7 @@ push $Ndd6f7da0
    ypos 283
    disable {{"parent.size < 0 ? 0 : 1"}}
   }
-push $Ndd87b8a0
+push $N9377adc0
   Switch {
    inputs 2
    which {{"parent.size == 0 ? 0 : 1"}}
@@ -8126,7 +8133,7 @@ push $Ndd87b8a0
    xpos 96
    ypos -891
   }
-push $Ndd6ec080
+push $N93767490
   Merge2 {
    inputs 2
    name Merge3
@@ -8134,13 +8141,13 @@ push $Ndd6ec080
    xpos -60
    ypos -891
   }
-set Ndd9831f0 [stack 0]
+set N93f29f80 [stack 0]
   Group {
    name BBoxToFormat
    onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
    knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"overscanType\":\n    if n.knob(\"overscanType\").getValue() == 1:\n        n.knob(\"overscanPercent\").setVisible(True)\n        n.knob(\"overscan\").setVisible(False)\n    else:\n        n.knob(\"overscanPercent\").setVisible(False)\n        n.knob(\"overscan\").setVisible(True)"
    tile_color 0xa57aaaff
-   note_font "Verdana Bold Bold Bold Bold Bold Bold"
+   note_font "Verdana Bold Bold Bold Bold Bold Bold Bold"
    note_font_color 0xffffffff
    xpos 29
    ypos -812
@@ -8180,15 +8187,15 @@ set Ndd9831f0 [stack 0]
     xpos 295
     ypos 462
    }
-set Ndda304f0 [stack 0]
+set N93265d70 [stack 0]
    Dot {
     name Dot1
     note_font_size 41
     xpos -160
     ypos 462
    }
-set Ndd99f6b0 [stack 0]
-push $Ndda304f0
+set N93269c90 [stack 0]
+push $N93265d70
    Crop {
     box {{curve} {curve} {input.width} {input.height}}
     crop {{parent.blackOutside}}
@@ -8198,7 +8205,7 @@ push $Ndda304f0
     addUserKnob {20 User}
     addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
    }
-set Ndd9a35e0 [stack 0]
+set N9326db70 [stack 0]
    Remove {
     operation keep
     channels none
@@ -8206,7 +8213,7 @@ set Ndd9a35e0 [stack 0]
     xpos 120
     ypos 504
    }
-set Ndd9acde0 [stack 0]
+set N93277360 [stack 0]
    Transform {
     scale {{parent.overscanPercent} {parent.overscanPercent}}
     center {{input.bbox.r/2} {input.bbox.t/2}}
@@ -8215,7 +8222,7 @@ set Ndd9acde0 [stack 0]
     xpos 120
     ypos 555
    }
-push $Ndd9acde0
+push $N93277360
    AdjBBox {
     numpixels {{parent.overscan} {parent.overscan}}
     name AdjBBox1
@@ -8241,7 +8248,7 @@ push $Ndd9acde0
     ypos 647
     disable {{!parent.Crop6.intersect}}
    }
-push $Ndd99f6b0
+push $N93269c90
    CopyBBox {
     inputs 2
     name CopyBBox1
@@ -8260,7 +8267,7 @@ push $Ndd99f6b0
     xpos -160
     ypos 769
    }
-push $Ndd9a35e0
+push $N9326db70
    Switch {
     inputs 2
     which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -8269,13 +8276,13 @@ push $Ndd9a35e0
     xpos 261
     ypos 759
    }
-set Ndd89fe70 [stack 0]
+set N932b5560 [stack 0]
    Output {
     name Output1
     xpos 261
     ypos 921
    }
-push $Ndd89fe70
+push $N932b5560
    NoOp {
     name OutputBBox1
     selected true
@@ -8288,7 +8295,7 @@ push $Ndd89fe70
     outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
    }
   end_group
-push $Ndd9831f0
+push $N93f29f80
   Merge2 {
    inputs 2
    name Merge4
@@ -8296,7 +8303,7 @@ push $Ndd9831f0
    xpos -60
    ypos -748
   }
-push $Ndd6ec080
+push $N93767490
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -8335,7 +8342,7 @@ push $Ndd6ec080
    xpos -187
    ypos 805
   }
-push $Ndd6ec080
+push $N93767490
   Dot {
    name Dot2
    note_font_size 41
@@ -8387,7 +8394,7 @@ push $Ndd6ec080
   xpos 1059
   ypos 1277
  }
-set Nddb02170 [stack 0]
+set N937f0610 [stack 0]
  Grade {
   channels all
   white {{wrapAllAmount/10}}
@@ -8410,14 +8417,14 @@ set Nddb02170 [stack 0]
   xpos 1059
   ypos 1692
  }
-set Nddb18140 [stack 0]
+set N9437dcc0 [stack 0]
  Dot {
   name Dot27
   note_font_size 41
   xpos 1059
   ypos 3062
  }
-set Nddb1bff0 [stack 0]
+set N94381b70 [stack 0]
  Merge2 {
   inputs 2
   name Merge1
@@ -8439,8 +8446,8 @@ set Nddb1bff0 [stack 0]
   xpos 1530
   ypos 3274
  }
-push $Ndd489c40
-push $Nddb1bff0
+push $N938c44e0
+push $N94381b70
  Shuffle {
   alpha white
   name Shuffle2
@@ -8456,8 +8463,8 @@ push $Nddb1bff0
   xpos 1025
   ypos 3221
  }
-push $Ndd485ce0
-push $Ndd816a10
+push $N938c0580
+push $N94212ee0
  Shuffle {
   alpha white
   name Shuffle4
@@ -8473,7 +8480,7 @@ push $Ndd816a10
   xpos 1708
   ypos 3104
  }
-push $Ndd67d340
+push $N938f34d0
  Dot {
   name Dot21
   xpos 2349
@@ -8496,14 +8503,14 @@ push $Ndd67d340
   xpos 2349
   ypos 3399
  }
-push $Nddb02170
+push $N937f0610
  Dot {
   name Dot29
   note_font_size 41
   xpos 757
   ypos 1277
  }
-set Nddb48630 [stack 0]
+set N943f7fa0 [stack 0]
  Grade {
   channels rgba
   gamma {{parent.bleedColorFalloff_2}}
@@ -8526,21 +8533,21 @@ set Nddb48630 [stack 0]
   xpos 297
   ypos 2828
  }
-push $Ndd835b90
+push $N94232060
  Dot {
   name Dot38
   note_font_size 41
   xpos 438
   ypos 725
  }
-set Nddb66690 [stack 0]
+set N94419f70 [stack 0]
  Dot {
   name Dot2
   note_font_size 41
   xpos 439
   ypos 802
  }
-set Nddb6a540 [stack 0]
+set N9441de20 [stack 0]
  Dot {
   name Dot17
   note_font_size 41
@@ -8553,7 +8560,7 @@ set Nddb6a540 [stack 0]
   xpos 334
   ypos 1201
  }
-push $Nddb6a540
+push $N9441de20
  Blur {
   size {{(width/13*parent.bleedColorSize*16*(ExponGlowWrapAll.aspectCalc.aspect.w/100))} {(height/13*parent.bleedColorSize*16*(ExponGlowWrapAll.aspectCalc.aspect.h/100))}}
   crop false
@@ -8561,7 +8568,7 @@ push $Nddb6a540
   xpos 856
   ypos 874
  }
-push $Nddb6a540
+push $N9441de20
  Blur {
   size {{(width/13*parent.bleedColorSize*8*(ExponGlowWrapAll.aspectCalc.aspect.w/100))} {(height/13*parent.bleedColorSize*8*(ExponGlowWrapAll.aspectCalc.aspect.h/100))}}
   crop false
@@ -8569,7 +8576,7 @@ push $Nddb6a540
   xpos 743
   ypos 873
  }
-push $Nddb6a540
+push $N9441de20
  Blur {
   size {{(width/15*parent.bleedColorSize*4*(ExponGlowWrapAll.aspectCalc.aspect.w/100))} {(height/15*parent.bleedColorSize*4*(ExponGlowWrapAll.aspectCalc.aspect.h/100))}}
   crop false
@@ -8577,7 +8584,7 @@ push $Nddb6a540
   xpos 627
   ypos 874
  }
-push $Nddb6a540
+push $N9441de20
  Blur {
   size {{(width/20*parent.bleedColorSize*2*(ExponGlowWrapAll.aspectCalc.aspect.w/100))} {(height/20*parent.bleedColorSize*2*(ExponGlowWrapAll.aspectCalc.aspect.h/100))}}
   crop false
@@ -8585,7 +8592,7 @@ push $Nddb6a540
   xpos 515
   ypos 872
  }
-push $Nddb6a540
+push $N9441de20
  Blur {
   size {{(width/25*parent.bleedColorSize*(ExponGlowWrapAll.aspectCalc.aspect.w/100))} {(height/25*parent.bleedColorSize*(ExponGlowWrapAll.aspectCalc.aspect.h/100))}}
   crop false
@@ -8666,9 +8673,9 @@ push $Nddb6a540
   xpos 404
   ypos 2532
  }
-push $Ndd812b60
-push $Nddb18140
-push $Nddb66690
+push $N9420f030
+push $N9437dcc0
+push $N94419f70
  Dot {
   name Dot10
   xpos 201
@@ -8694,7 +8701,7 @@ push $Nddb66690
   xpos 19
   ypos 1507
  }
-push $Nddb48630
+push $N943f7fa0
  Colorspace {
   channels all
   colorspace_out HSV
@@ -8709,7 +8716,7 @@ push $Nddb48630
   xpos -123
   ypos 1262
  }
-push $Ndd66c320
+push $N938b49e0
  Remove {
   operation keep
   channels rgba
@@ -8724,7 +8731,7 @@ push $Ndd66c320
   ypos 1094
   disable {{premultiplied*-1+1 x1 1}}
  }
-set Nddcd3e50 [stack 0]
+set N94515860 [stack 0]
  Dot {
   name Dot12
   xpos -226
@@ -8770,14 +8777,14 @@ set Nddcd3e50 [stack 0]
   xpos -226
   ypos 1408
  }
-push $Nddcd3e50
+push $N94515860
  Dot {
   name Dot18
   note_font_size 41
   xpos -373
   ypos 1514
  }
-set Nddb8e0e0 [stack 0]
+set N9455eaf0 [stack 0]
  Merge2 {
   inputs 2+1
   operation copy
@@ -8797,7 +8804,7 @@ set Nddb8e0e0 [stack 0]
   xpos -226
   ypos 1588
  }
-push $Nddb8e0e0
+push $N9455eaf0
  Switch {
   inputs 2
   which {{"blendEdgesAmount == 0 ? 0 : 1"}}
@@ -8833,7 +8840,7 @@ push $Nddb8e0e0
   xpos -373
   ypos 2417
  }
-set Ndda6f1c0 [stack 0]
+set N932ec7a0 [stack 0]
  Colorspace {
   channels all
   colorspace_out HSV
@@ -8867,7 +8874,7 @@ set Ndda6f1c0 [stack 0]
   xpos -81
   ypos 2606
  }
-push $Nddcd3e50
+push $N94515860
  Dot {
   name Dot13
   xpos -579
@@ -8878,7 +8885,7 @@ push $Nddcd3e50
   xpos -579
   ypos 2559
  }
-push $Ndda6f1c0
+push $N932ec7a0
  Copy {
   inputs 2
   from0 rgba.alpha
@@ -8893,7 +8900,7 @@ push $Ndda6f1c0
   xpos -373
   ypos 2649
  }
-set Nddd6cd40 [stack 0]
+set N93f9cc00 [stack 0]
  Merge2 {
   inputs 2+1
   operation copy
@@ -8904,7 +8911,7 @@ set Nddd6cd40 [stack 0]
   xpos -81
   ypos 2828
  }
-push $Nddd6cd40
+push $N93f9cc00
  Switch {
   inputs 2
   which {{"parent.bleedColorAmount== 0 ? 0 : 1"}}
@@ -8930,7 +8937,7 @@ push $Nddd6cd40
   xpos 1708
   ypos 3395
  }
-push $Ndd482400
+push $N938bc6a0
  Dot {
   name Dot5
   note_font_size 41
@@ -8955,162 +8962,56 @@ end_group
 Dot {
  name Dot323
  selected true
- xpos -1451
- ypos 5128
+ xpos -1423
+ ypos 5192
 }
 Dot {
  name Dot324
  note_font_size 41
  selected true
- xpos 5433
- ypos 5128
+ xpos 5461
+ ypos 5192
 }
-set Ndda748c0 [stack 0]
+set N94579930 [stack 0]
 Remove {
  operation keep
  channels rgba
  name Remove7
  selected true
- xpos 5543
- ypos 5124
+ xpos 5571
+ ypos 5188
 }
-push $Ndce64a40
+push $N93a04010
 Dot {
  name Dot121
  note_font_size 41
  selected true
- xpos -837
- ypos 2308
+ xpos -809
+ ypos 2372
 }
-set Ndda7fc80 [stack 0]
-Shuffle {
- in cleanplate
- name Shuffle1
- label "\[value in]"
- selected true
- xpos -871
- ypos 2352
-}
-Remove {
- operation keep
- channels rgba
- name Remove3
- selected true
- xpos -871
- ypos 2390
-}
-NoOp {
- name Anchor_3d5fc4c58e
- help "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019"
- onCreate "if nuke.GUI:\n    try:\n        import stamps; stamps.anchorOnCreate()\n    except:\n        pass"
- knobChanged stamps.anchorKnobChanged()
- autolabel "nuke.thisNode().knob(\"title\").value()"
- tile_color 0xffffff01
- note_font_size 20
- selected true
- xpos -871
- ypos 2442
- addUserKnob {20 anchor_tab l "Anchor Stamp"}
- addUserKnob {26 identifier -STARTLINE +HIDDEN T anchor}
- addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
- title "GS cleanplate"
- addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T cleanplate}
- addUserKnob {26 prev_name l "" +STARTLINE +HIDDEN T Anchor_3d5fc4c58e}
- addUserKnob {3 showing l "" +STARTLINE +HIDDEN}
- addUserKnob {1 tags l Tags t "Comma-separated tags you can define for each Anchor, that will help you find it when invoking the Stamp Selector by pressing the Stamps shortkey with nothing selected."}
- tags 2D,
- addUserKnob {26 line1 l "" +STARTLINE}
- addUserKnob {26 stamps_label l Stamps: T " "}
- addUserKnob {22 createStamp l new t "Create a new Stamp for this Anchor." -STARTLINE T stamps.stampCreateWired(nuke.thisNode())}
- addUserKnob {22 selectStamps l select t "Reconnect all of this Anchor's Stamps." -STARTLINE T stamps.wiredSelectSimilar(nuke.thisNode().name())}
- addUserKnob {22 reconnectStamps l reconnect -STARTLINE T stamps.anchorReconnectWired()}
- addUserKnob {22 zoomNext l "zoom next" t "Navigate to this Anchor's next Stamp on the Node Graph." -STARTLINE T stamps.wiredZoomNext(nuke.thisNode().name())}
- addUserKnob {26 line2 l "" +STARTLINE}
- addUserKnob {22 buttonHelp l Help -STARTLINE T stamps.showHelp()}
- addUserKnob {26 version l " " t "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019." -STARTLINE T "<a href=\"http://www.nukepedia.com/gizmos/other/stamps\" style=\"color:#666;text-decoration: none;\"><span style=\"color:#666\"> <big>Stamps v1.0</big></b></a>"}
-}
-NoOp {
- name Stamp33
- help "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019"
- onCreate "if nuke.GUI:\n    try:\n        import stamps; stamps.wiredOnCreate()\n    except:\n        pass\n"
- knobChanged "import stamps; stamps.wiredKnobChanged()"
- autolabel "nuke.thisNode().knob(\"title\").value()"
- tile_color 0x1000001
- note_font "Bitstream Vera Sans"
- note_font_size 20
- selected true
- xpos 5485
- ypos 4692
- hide_input true
- addUserKnob {20 wired_tab l "Wired Stamp"}
- addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
- addUserKnob {3 lockCallbacks l "" +STARTLINE +HIDDEN}
- addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
- addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
- title "GS cleanplate"
- addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T "GS cleanplate"}
- addUserKnob {26 tags l Tags: t "Tags of this stamp's Anchor, for information purpose only.\nClick \"show anchor\" to change them." T <i>2D</i>}
- addUserKnob {26 backdrops l Backdrops: t "Labels of backdrop nodes which contain this stamp's Anchor." T "<i>Advanced Keying Template</i>"}
- addUserKnob {26 line1 l "" +STARTLINE}
- addUserKnob {26 anchor_label l Anchor: T " "}
- addUserKnob {22 show_anchor l " show anchor " t "Show the properties panel for this Stamp's Anchor." -STARTLINE T stamps.wiredShowAnchor()}
- addUserKnob {22 zoom_anchor l "zoom anchor" t "Navigate to this Stamp's Anchor on the Node Graph." -STARTLINE T stamps.wiredZoomAnchor()}
- addUserKnob {26 stamps_label l Stamps: T " "}
- addUserKnob {22 zoomNext l " zoom next " t "Navigate to this Stamp's next sibling on the Node Graph." -STARTLINE T stamps.wiredZoomNext()}
- addUserKnob {22 selectSimilar l " select similar " t "Select all similar Stamps to this one on the Node Graph." -STARTLINE T stamps.wiredSelectSimilar()}
- addUserKnob {26 space_1 l "" +STARTLINE T " "}
- addUserKnob {26 reconnect_label l Reconnect: t "Reconnect by the stored Anchor name." T " "}
- addUserKnob {22 reconnect_this l this t "Reconnect this Stamp to its Anchor, by its stored Anchor name." -STARTLINE T "n = nuke.thisNode()\ntry:\n    n.setInput(0,nuke.toNode(n.knob(\"anchor\").value()))\nexcept:\n    nuke.message(\"Unable to reconnect.\")\ntry:\n    import stamps\n    stamps.wiredGetStyle(n)\nexcept:\n    pass\n"}
- addUserKnob {22 reconnect_similar l similar t "Reconnect this Stamp and similar ones to their Anchor, by their stored anchor name." -STARTLINE T stamps.wiredReconnectSimilar()}
- addUserKnob {22 reconnect_all l all t "Reconnect all the Stamps to their Anchors, by their stored anchor names." -STARTLINE T stamps.wiredReconnectAll()}
- addUserKnob {26 space_2 l "" +STARTLINE T " "}
- addUserKnob {20 advanced_reconnection l "Advanced Reconnection" n 2}
- addUserKnob {26 reconnect_by_title_label l "<font color=gold>By Title:" t "Reconnect by searching for a matching title." T " "}
- addUserKnob {22 reconnect_by_title_this l this t "Look for an Anchor that shares this Stamp's title, and connect this Stamp to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitle()}
- addUserKnob {22 reconnect_by_title_similar l similar t "Look for an Anchor that shares this Stamp's title, and connect this Stamp and similar ones to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitleSimilar()}
- addUserKnob {22 reconnect_by_title_selected l selected t "For each Stamp selected, look for an Anchor that shares its title, and connect to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitleSelected()}
- addUserKnob {26 reconnect_by_selection_label l "<font color=orangered>By Selection:" t "Force reconnect to a selected Anchor." T " "}
- addUserKnob {22 reconnect_by_selection_this l this t "Force reconnect this Stamp to a selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelection()}
- addUserKnob {22 reconnect_by_selection_similar l similar t "Force reconnect this Stamp and similar ones to a selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelectionSimilar()}
- addUserKnob {22 reconnect_by_selection_selected l selected t "Force reconnect all selected Stamps to an also selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelectionSelected()}
- addUserKnob {1 anchor l Anchor}
- anchor Anchor_3d5fc4c58e
- addUserKnob {6 auto_reconnect_by_title l "<font color=#ED9977>&nbsp; auto-reconnect by title" t "When creating this stamp again (like on copy-paste), auto-reconnect it by title instead of doing it by the saved anchor's name, and auto-turn this off immediately.\nIMPORTANT: Should be off by default. Only use this for setting up templates." +STARTLINE}
- addUserKnob {20 advanced_reconnection_1 l "Advanced Reconnection" +INVISIBLE n -1}
- addUserKnob {26 line2 l "" +STARTLINE}
- addUserKnob {22 buttonHelp l Help -STARTLINE T stamps.showHelp()}
- addUserKnob {26 version l " " t "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019." -STARTLINE T "<a href=\"http://www.nukepedia.com/gizmos/other/stamps\" style=\"color:#666;text-decoration: none;\"><span style=\"color:#666\"> <big>Stamps v1.0</big></b></a>"}
-}
-Dot {
- name Dot328
- note_font_size 41
- selected true
- xpos 5519
- ypos 4811
-}
-push $Ndda7fc80
+set N945822f0 [stack 0]
 Dot {
  name Dot124
  note_font_size 41
  selected true
- xpos -689
- ypos 2308
+ xpos -661
+ ypos 2372
 }
 Shuffle {
  in GS_Plate
  name Shuffle25
  label "\[value in]"
  selected true
- xpos -723
- ypos 2351
+ xpos -695
+ ypos 2415
 }
 Remove {
  operation keep
  channels rgba
  name Remove4
  selected true
- xpos -723
- ypos 2389
+ xpos -695
+ ypos 2453
 }
 NoOp {
  name Anchor_2bcb55a0c8
@@ -9121,8 +9022,8 @@ NoOp {
  tile_color 0xffffff01
  note_font_size 20
  selected true
- xpos -723
- ypos 2445
+ xpos -695
+ ypos 2509
  addUserKnob {20 anchor_tab l "Anchor Stamp"}
  addUserKnob {26 identifier -STARTLINE +HIDDEN T anchor}
  addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
@@ -9152,8 +9053,8 @@ NoOp {
  note_font "Bitstream Vera Sans"
  note_font_size 20
  selected true
- xpos 5611
- ypos 4691
+ xpos 5639
+ ypos 4755
  hide_input true
  addUserKnob {20 wired_tab l "Wired Stamp"}
  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
@@ -9198,26 +9099,132 @@ Dot {
  name Dot325
  note_font_size 41
  selected true
- xpos 5645
- ypos 4764
+ xpos 5673
+ ypos 4828
 }
-push $Ndaf54da0
+push $N945822f0
+Shuffle {
+ in cleanplate
+ name Shuffle1
+ label "\[value in]"
+ selected true
+ xpos -843
+ ypos 2416
+}
+Remove {
+ operation keep
+ channels rgba
+ name Remove3
+ selected true
+ xpos -843
+ ypos 2454
+}
+NoOp {
+ name Anchor_3d5fc4c58e
+ help "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019"
+ onCreate "if nuke.GUI:\n    try:\n        import stamps; stamps.anchorOnCreate()\n    except:\n        pass"
+ knobChanged stamps.anchorKnobChanged()
+ autolabel "nuke.thisNode().knob(\"title\").value()"
+ tile_color 0xffffff01
+ note_font_size 20
+ selected true
+ xpos -843
+ ypos 2506
+ addUserKnob {20 anchor_tab l "Anchor Stamp"}
+ addUserKnob {26 identifier -STARTLINE +HIDDEN T anchor}
+ addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
+ title "GS cleanplate"
+ addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T cleanplate}
+ addUserKnob {26 prev_name l "" +STARTLINE +HIDDEN T Anchor_3d5fc4c58e}
+ addUserKnob {3 showing l "" +STARTLINE +HIDDEN}
+ addUserKnob {1 tags l Tags t "Comma-separated tags you can define for each Anchor, that will help you find it when invoking the Stamp Selector by pressing the Stamps shortkey with nothing selected."}
+ tags 2D,
+ addUserKnob {26 line1 l "" +STARTLINE}
+ addUserKnob {26 stamps_label l Stamps: T " "}
+ addUserKnob {22 createStamp l new t "Create a new Stamp for this Anchor." -STARTLINE T stamps.stampCreateWired(nuke.thisNode())}
+ addUserKnob {22 selectStamps l select t "Reconnect all of this Anchor's Stamps." -STARTLINE T stamps.wiredSelectSimilar(nuke.thisNode().name())}
+ addUserKnob {22 reconnectStamps l reconnect -STARTLINE T stamps.anchorReconnectWired()}
+ addUserKnob {22 zoomNext l "zoom next" t "Navigate to this Anchor's next Stamp on the Node Graph." -STARTLINE T stamps.wiredZoomNext(nuke.thisNode().name())}
+ addUserKnob {26 line2 l "" +STARTLINE}
+ addUserKnob {22 buttonHelp l Help -STARTLINE T stamps.showHelp()}
+ addUserKnob {26 version l " " t "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019." -STARTLINE T "<a href=\"http://www.nukepedia.com/gizmos/other/stamps\" style=\"color:#666;text-decoration: none;\"><span style=\"color:#666\"> <big>Stamps v1.0</big></b></a>"}
+}
+NoOp {
+ name Stamp33
+ help "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019"
+ onCreate "if nuke.GUI:\n    try:\n        import stamps; stamps.wiredOnCreate()\n    except:\n        pass\n"
+ knobChanged "import stamps; stamps.wiredKnobChanged()"
+ autolabel "nuke.thisNode().knob(\"title\").value()"
+ tile_color 0x1000001
+ note_font "Bitstream Vera Sans"
+ note_font_size 20
+ selected true
+ xpos 5513
+ ypos 4756
+ hide_input true
+ addUserKnob {20 wired_tab l "Wired Stamp"}
+ addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+ addUserKnob {3 lockCallbacks l "" +STARTLINE +HIDDEN}
+ addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+ addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
+ title "GS cleanplate"
+ addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T "GS cleanplate"}
+ addUserKnob {26 tags l Tags: t "Tags of this stamp's Anchor, for information purpose only.\nClick \"show anchor\" to change them." T <i>2D</i>}
+ addUserKnob {26 backdrops l Backdrops: t "Labels of backdrop nodes which contain this stamp's Anchor." T "<i>Advanced Keying Template</i>"}
+ addUserKnob {26 line1 l "" +STARTLINE}
+ addUserKnob {26 anchor_label l Anchor: T " "}
+ addUserKnob {22 show_anchor l " show anchor " t "Show the properties panel for this Stamp's Anchor." -STARTLINE T stamps.wiredShowAnchor()}
+ addUserKnob {22 zoom_anchor l "zoom anchor" t "Navigate to this Stamp's Anchor on the Node Graph." -STARTLINE T stamps.wiredZoomAnchor()}
+ addUserKnob {26 stamps_label l Stamps: T " "}
+ addUserKnob {22 zoomNext l " zoom next " t "Navigate to this Stamp's next sibling on the Node Graph." -STARTLINE T stamps.wiredZoomNext()}
+ addUserKnob {22 selectSimilar l " select similar " t "Select all similar Stamps to this one on the Node Graph." -STARTLINE T stamps.wiredSelectSimilar()}
+ addUserKnob {26 space_1 l "" +STARTLINE T " "}
+ addUserKnob {26 reconnect_label l Reconnect: t "Reconnect by the stored Anchor name." T " "}
+ addUserKnob {22 reconnect_this l this t "Reconnect this Stamp to its Anchor, by its stored Anchor name." -STARTLINE T "n = nuke.thisNode()\ntry:\n    n.setInput(0,nuke.toNode(n.knob(\"anchor\").value()))\nexcept:\n    nuke.message(\"Unable to reconnect.\")\ntry:\n    import stamps\n    stamps.wiredGetStyle(n)\nexcept:\n    pass\n"}
+ addUserKnob {22 reconnect_similar l similar t "Reconnect this Stamp and similar ones to their Anchor, by their stored anchor name." -STARTLINE T stamps.wiredReconnectSimilar()}
+ addUserKnob {22 reconnect_all l all t "Reconnect all the Stamps to their Anchors, by their stored anchor names." -STARTLINE T stamps.wiredReconnectAll()}
+ addUserKnob {26 space_2 l "" +STARTLINE T " "}
+ addUserKnob {20 advanced_reconnection l "Advanced Reconnection" n 2}
+ addUserKnob {26 reconnect_by_title_label l "<font color=gold>By Title:" t "Reconnect by searching for a matching title." T " "}
+ addUserKnob {22 reconnect_by_title_this l this t "Look for an Anchor that shares this Stamp's title, and connect this Stamp to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitle()}
+ addUserKnob {22 reconnect_by_title_similar l similar t "Look for an Anchor that shares this Stamp's title, and connect this Stamp and similar ones to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitleSimilar()}
+ addUserKnob {22 reconnect_by_title_selected l selected t "For each Stamp selected, look for an Anchor that shares its title, and connect to it.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectByTitleSelected()}
+ addUserKnob {26 reconnect_by_selection_label l "<font color=orangered>By Selection:" t "Force reconnect to a selected Anchor." T " "}
+ addUserKnob {22 reconnect_by_selection_this l this t "Force reconnect this Stamp to a selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelection()}
+ addUserKnob {22 reconnect_by_selection_similar l similar t "Force reconnect this Stamp and similar ones to a selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelectionSimilar()}
+ addUserKnob {22 reconnect_by_selection_selected l selected t "Force reconnect all selected Stamps to an also selected Anchor, whatever its name or title.\nIMPORTANT: Use this carefully, and only when the normal reconnection doesn't work." -STARTLINE T stamps.wiredReconnectBySelectionSelected()}
+ addUserKnob {1 anchor l Anchor}
+ anchor Anchor_3d5fc4c58e
+ addUserKnob {6 auto_reconnect_by_title l "<font color=#ED9977>&nbsp; auto-reconnect by title" t "When creating this stamp again (like on copy-paste), auto-reconnect it by title instead of doing it by the saved anchor's name, and auto-turn this off immediately.\nIMPORTANT: Should be off by default. Only use this for setting up templates." +STARTLINE}
+ addUserKnob {20 advanced_reconnection_1 l "Advanced Reconnection" +INVISIBLE n -1}
+ addUserKnob {26 line2 l "" +STARTLINE}
+ addUserKnob {22 buttonHelp l Help -STARTLINE T stamps.showHelp()}
+ addUserKnob {26 version l " " t "Stamps by Adrian Pueyo and Alexey Kuchinski.\nUpdated Sep 27 2019." -STARTLINE T "<a href=\"http://www.nukepedia.com/gizmos/other/stamps\" style=\"color:#666;text-decoration: none;\"><span style=\"color:#666\"> <big>Stamps v1.0</big></b></a>"}
+}
+Dot {
+ name Dot328
+ note_font_size 41
+ selected true
+ xpos 5547
+ ypos 4875
+}
+push $N914af150
 Dot {
  name Dot331
  note_font_size 41
  selected true
- xpos 5759
- ypos 4637
+ xpos 5787
+ ypos 4701
 }
 Group {
  inputs 3
  name AdditiveKeyerPro
  tile_color 0x5200ff
- note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font "Verdana Bold Bold"
  note_font_color 0xffffffff
  selected true
- xpos 5725
- ypos 4808
+ xpos 5753
+ ypos 4872
  disable true
  addUserKnob {20 AdditiveKeyer}
  addUserKnob {6 useSC l "Use Screen Color as CleanPlate" +STARTLINE}
@@ -9225,7 +9232,7 @@ Group {
  addUserKnob {6 despillSat l "Despill Screen Color from Saturation?" +STARTLINE}
  despillSat true
  addUserKnob {26 ""}
- addUserKnob {7 DarkValue l "Dark Value" R 0 10}
+ addUserKnob {7 DarkValue l "Dark Value" R 0 5}
  DarkValue 1
  addUserKnob {7 satDarks l "Saturate Darks"}
  satDarks 0.2
@@ -9233,12 +9240,9 @@ Group {
  darkTint 1
  addUserKnob {6 darkTint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 darkTint_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 darkTint_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 darkTint_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 darkTint_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {26 ""}
  addUserKnob {6 lightTint_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
- addUserKnob {7 ExtraLightValue l "Light Value Plus"}
+ addUserKnob {7 ExtraLightValue l "Light Value Plus" R 0 2}
  ExtraLightValue 1
  addUserKnob {7 satLights l "Saturate Lights"}
  satLights 0.2
@@ -9246,10 +9250,7 @@ Group {
  lightTint 1
  addUserKnob {6 lightTint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 lightTint_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 lightTint_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 lightTint_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 lightTint_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {7 LightValue l "Light Value BG Mult" R 0 10}
+ addUserKnob {7 LightValue l "Light Value BG Mult" R 0 5}
  LightValue 0.25
  addUserKnob {26 ""}
  addUserKnob {6 darkTint_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" +HIDDEN +STARTLINE}
@@ -9313,7 +9314,7 @@ Group {
   xpos -466
   ypos 5
  }
-set Nddaa7a80 [stack 0]
+set N94c8aae0 [stack 0]
  OFXuk.co.thefoundry.keylight.keylight_v201 {
   show "Final Result"
   unPreMultiply false
@@ -9359,8 +9360,8 @@ set Nddaa7a80 [stack 0]
   xpos -500
   ypos 73
  }
-set Nda2e3c20 [stack 0]
-push $Nddaa7a80
+set N94ceb950 [stack 0]
+push $N94c8aae0
  Dot {
   name Dot27
   note_font_size 41
@@ -9387,7 +9388,7 @@ push $Nddaa7a80
   xpos -390
   ypos 125
  }
-push $Nda2e3c20
+push $N94ceb950
  Merge2 {
   inputs 2
   operation plus
@@ -9396,7 +9397,7 @@ push $Nda2e3c20
   xpos -500
   ypos 125
  }
-push $Nddaa7a80
+push $N94c8aae0
  Dot {
   name Dot30
   note_font_size 41
@@ -9422,7 +9423,7 @@ push $Nddaa7a80
   xpos -466
   ypos 373
  }
-set Ndd1ea580 [stack 0]
+set N94cd70a0 [stack 0]
  Input {
   inputs 0
   name clean
@@ -9457,11 +9458,11 @@ set Ndd1ea580 [stack 0]
   xpos 160
   ypos 50
  }
-set Nddea6040 [stack 0]
+set N95bc0010 [stack 0]
  OFXuk.co.thefoundry.keylight.keylight_v201 {
   show "Final Result"
   unPreMultiply false
-  screenColour {{parent.Keylight1.screenColour x1001 0.2000732422} {parent.Keylight1.screenColour x1001 0.3078613281} {parent.Keylight1.screenColour x1001 0.08349609375}}
+  screenColour {{parent.Keylight1.screenColour x1 0} {parent.Keylight1.screenColour x1 0} {parent.Keylight1.screenColour x1 0}}
   screenGain 1
   screenBalance 0.5
   alphaBias {0.5 0.5 0.5}
@@ -9503,8 +9504,8 @@ set Nddea6040 [stack 0]
   xpos 126
   ypos 118
  }
-set Nddea9f20 [stack 0]
-push $Nddea6040
+set N95bc3f50 [stack 0]
+push $N95bc0010
  Dot {
   name Dot29
   note_font_size 41
@@ -9531,7 +9532,7 @@ push $Nddea6040
   xpos 236
   ypos 170
  }
-push $Nddea9f20
+push $N95bc3f50
  Merge2 {
   inputs 2
   operation plus
@@ -9540,7 +9541,7 @@ push $Nddea9f20
   xpos 126
   ypos 170
  }
-push $Nddea6040
+push $N95bc0010
  Dot {
   name Dot33
   note_font_size 41
@@ -9567,7 +9568,7 @@ push $Nddea6040
   xpos 160
   ypos 320
  }
-set Nddde0880 [stack 0]
+set N9585f1d0 [stack 0]
  Dot {
   name Dot6
   xpos 412
@@ -9614,7 +9615,7 @@ set Nddde0880 [stack 0]
    xpos 558
    ypos -668
   }
-set Nde077800 [stack 0]
+set N95880300 [stack 0]
   Shuffle {
    green red
    blue red
@@ -9630,7 +9631,7 @@ set Nde077800 [stack 0]
    xpos 386
    ypos -492
   }
-push $Nde077800
+push $N95880300
   Shuffle {
    red green
    blue green
@@ -9653,8 +9654,8 @@ push $Nde077800
    xpos 411
    ypos -428
   }
-  set Cde13abc0 [stack 0]
-push $Nde077800
+  set C958c0cc0 [stack 0]
+push $N95880300
   Shuffle {
    red blue
    green blue
@@ -9670,13 +9671,13 @@ push $Nde077800
    xpos 610
    ypos -494
   }
-clone $Cde13abc0 {
+clone $C958c0cc0 {
    inputs 2
    xpos 486
    ypos -369
    selected false
   }
-push $Nde077800
+push $N95880300
   Shuffle {
    red alpha
    green alpha
@@ -9693,7 +9694,7 @@ push $Nde077800
    xpos 725
    ypos -494
   }
-clone $Cde13abc0 {
+clone $C958c0cc0 {
    inputs 2
    xpos 580
    ypos -307
@@ -9735,29 +9736,29 @@ clone $Cde13abc0 {
   xpos -811
   ypos 1449
  }
-set Ndddedc40 [stack 0]
+set N95e73a00 [stack 0]
  Dot {
   name Dot13
   note_font_size 41
   xpos -811
   ypos 1688
  }
-set Ndddf1b30 [stack 0]
-push $Ndd1ea580
+set N95e778e0 [stack 0]
+push $N94cd70a0
  Dot {
   name Dot2
   note_font_size 41
   xpos -466
   ypos 421
  }
-set Ndddf5a10 [stack 0]
+set N95e7b7b0 [stack 0]
  Saturation {
   saturation {{parent.satDarks}}
   name Saturation9
   xpos -378
   ypos 418
  }
-push $Nddde0880
+push $N9585f1d0
  Saturation {
   saturation {{parent.satDarks}}
   name Saturation8
@@ -9800,19 +9801,26 @@ push $Nddde0880
   xpos -215
   ypos 892
  }
- Multiply {
-  channels rgba
-  value {{parent.darkTint} {parent.darkTint} {parent.darkTint} {parent.darkTint}}
+ Grade {
+  multiply {{parent.darkTint} {parent.darkTint} {parent.darkTint} {parent.darkTint}}
+  reverse true
+  black_clamp false
   name DARK_TINT
   xpos -215
-  ypos 934
+  ypos 931
  }
  Add {
   channels rgba
   value 1
   name Add4
   xpos -215
-  ypos 1002
+  ypos 988
+ }
+ Clamp {
+  channels rgb
+  name Clamp5
+  xpos -215
+  ypos 1065
  }
  Dot {
   name Dot39
@@ -9820,7 +9828,7 @@ push $Nddde0880
   xpos -181
   ypos 1257
  }
-push $Ndddf5a10
+push $N95e7b7b0
  Dot {
   name Dot36
   note_font_size 41
@@ -9833,15 +9841,15 @@ push $Ndddf5a10
   xpos -101
   ypos 574
  }
-set Nde231ee0 [stack 0]
-push $Nddde0880
+set N95eee1c0 [stack 0]
+push $N9585f1d0
  Saturation {
   saturation {{parent.satLights}}
   name Saturation6
   xpos 126
   ypos 500
  }
-set Nde099d30 [stack 0]
+set N95fb7810 [stack 0]
  Merge2 {
   inputs 2
   operation divide
@@ -9903,7 +9911,7 @@ set Nde099d30 [stack 0]
   xpos 162
   ypos 1354
  }
-set Nde0d4ce0 [stack 0]
+set N94822220 [stack 0]
  Dot {
   name Dot3
   xpos -8
@@ -9915,14 +9923,14 @@ set Nde0d4ce0 [stack 0]
   xpos -8
   ypos 1611
  }
-push $Nde099d30
+push $N95fb7810
  Dot {
   name Dot7
   note_font_size 41
   xpos 310
   ypos 503
  }
-push $Nde231ee0
+push $N95eee1c0
  Dot {
   name Dot5
   note_font_size 41
@@ -9965,14 +9973,14 @@ push $Nde231ee0
   xpos 310
   ypos 1513
  }
-push $Nde0d4ce0
+push $N94822220
  Dot {
   name Dot1
   note_font_size 41
   xpos 162
   ypos 1449
  }
-push $Ndddedc40
+push $N95e73a00
  Merge2 {
   inputs 2
   operation multiply
@@ -9989,7 +9997,6 @@ push $Ndddedc40
   output rgb
   name Merge2
   label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
-  selected true
   xpos 128
   ypos 1510
  }
@@ -10026,7 +10033,7 @@ push $Ndddedc40
   xpos 162
   ypos 1910
  }
-push $Ndddf1b30
+push $N95e778e0
  Dot {
   name Dot18
   label B
@@ -10063,50 +10070,50 @@ Merge2 {
  bbox B
  name Merge51
  selected true
- xpos 5725
- ypos 5124
+ xpos 5753
+ ypos 5188
 }
 Dot {
  name Dot332
  selected true
- xpos 5759
- ypos 5648
+ xpos 5787
+ ypos 5712
 }
-push $Ndcdd6230
-push $Ndcf4a1f0
+push $N9399f500
+push $N939a7290
 Merge2 {
  inputs 2
  operation plus
  name Merge52
  label "test lunimance match"
  selected true
- xpos -1183
- ypos -1870
+ xpos -1155
+ ypos -1806
 }
 Dot {
  name Dot336
  label test
  note_font_size 31
  selected true
- xpos -1149
- ypos -1741
+ xpos -1121
+ ypos -1677
 }
-push $Ndce60b10
+push $N93a000b0
 Shuffle {
  in despill_RGB
  name Shuffle27
  label "\[value in]"
  selected true
- xpos -1221
- ypos 2352
+ xpos -1193
+ ypos 2416
 }
 Remove {
  operation keep
  channels rgba
  name Remove5
  selected true
- xpos -1221
- ypos 2390
+ xpos -1193
+ ypos 2454
 }
 NoOp {
  name Anchor_35df505785
@@ -10117,8 +10124,8 @@ NoOp {
  tile_color 0xffffff01
  note_font_size 20
  selected true
- xpos -1221
- ypos 2445
+ xpos -1193
+ ypos 2509
  addUserKnob {20 anchor_tab l "Anchor Stamp"}
  addUserKnob {26 identifier -STARTLINE +HIDDEN T anchor}
  addUserKnob {1 title l Title: t "Displayed name on the Node Graph for this Stamp and its Anchor.\nIMPORTANT: This is only for display purposes, and is different from the real/internal name of the Stamps."}
@@ -10146,8 +10153,8 @@ StickyNote {
  note_font_size 41
  note_font_color 0xffffffff
  selected true
- xpos 3149
- ypos -2085
+ xpos 3177
+ ypos -2021
 }
 StickyNote {
  inputs 0
@@ -10157,37 +10164,37 @@ StickyNote {
  note_font_size 41
  note_font_color 0xffffffff
  selected true
- xpos -679
- ypos 3033
+ xpos -651
+ ypos 3097
 }
-push $Ndda748c0
+push $N94579930
 Shuffle {
  in GS_Plate
  name Shuffle28
  label "\[value in]"
  selected true
- xpos 5399
- ypos 5333
+ xpos 5427
+ ypos 5397
 }
-push $Ndaeebb90
+push $N919add90
 Dot {
  name Dot334
  selected true
- xpos 3099
- ypos -3063
+ xpos 3127
+ ypos -2999
 }
 Remove {
  operation keep
  channels rgb
  name Remove38
  selected true
- xpos 3065
- ypos -2935
+ xpos 3093
+ ypos -2871
 }
 Dot {
  name Dot335
  note_font_size 41
  selected true
- xpos 3099
- ypos -2587
+ xpos 3127
+ ypos -2523
 }

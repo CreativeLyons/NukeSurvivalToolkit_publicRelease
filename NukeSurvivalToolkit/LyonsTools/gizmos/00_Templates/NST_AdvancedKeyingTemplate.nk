@@ -7,8 +7,8 @@ BackdropNode {
  note_font_size 200
  note_font_color 0xffffffff
  selected true
- xpos -11826
- ypos -5592
+ xpos -6592
+ ypos -5899
  bdwidth 8480
  bdheight 9896
  z_order -2
@@ -21,8 +21,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -11077
- ypos -3875
+ xpos -5843
+ ypos -4182
  bdwidth 595
  bdheight 3417
  z_order -1
@@ -35,8 +35,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -1259
- ypos -4644
+ xpos 3975
+ ypos -4951
  bdwidth 507
  bdheight 401
 }
@@ -47,8 +47,8 @@ BackdropNode {
  label "Green\nScreen Footage"
  note_font_size 112
  selected true
- xpos -8747
- ypos -5244
+ xpos -3513
+ ypos -5551
  bdwidth 1252
  bdheight 795
 }
@@ -60,8 +60,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -5947
- ypos -3492
+ xpos -713
+ ypos -3799
  bdwidth 1346
  bdheight 1554
 }
@@ -73,8 +73,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -4478
- ypos -3489
+ xpos 756
+ ypos -3796
  bdwidth 864
  bdheight 1018
 }
@@ -86,8 +86,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -8309
- ypos -526
+ xpos -3075
+ ypos -833
  bdwidth 514
  bdheight 240
 }
@@ -99,8 +99,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -8311
- ypos -230
+ xpos -3077
+ ypos -537
  bdwidth 511
  bdheight 299
 }
@@ -111,8 +111,8 @@ BackdropNode {
  label "optional,\ngenerally \nuseful"
  note_font_size 42
  selected true
- xpos -7353
- ypos -1624
+ xpos -2119
+ ypos -1931
  bdwidth 310
  bdheight 295
 }
@@ -124,8 +124,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -8375
- ypos 627
+ xpos -3141
+ ypos 320
  bdwidth 433
  bdheight 480
 }
@@ -137,8 +137,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -8354
- ypos 2955
+ xpos -3120
+ ypos 2648
  bdwidth 541
  bdheight 312
 }
@@ -150,8 +150,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -1494
- ypos 3033
+ xpos 3740
+ ypos 2726
  bdwidth 770
  bdheight 433
 }
@@ -163,8 +163,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -8742
- ypos -826
+ xpos -3508
+ ypos -1133
  bdwidth 666
  bdheight 245
 }
@@ -176,8 +176,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -8695
- ypos -1657
+ xpos -3461
+ ypos -1964
  bdwidth 998
  bdheight 509
 }
@@ -189,8 +189,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -8275
- ypos 2660
+ xpos -3041
+ ypos 2353
  bdwidth 160
  bdheight 160
 }
@@ -202,8 +202,8 @@ BackdropNode {
  note_font_size 62
  note_font_color 0xffffffff
  selected true
- xpos -8512
- ypos 1852
+ xpos -3278
+ ypos 1545
  bdwidth 1211
  bdheight 711
 }
@@ -215,8 +215,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -10068
- ypos -3415
+ xpos -4834
+ ypos -3722
  bdwidth 1205
  bdheight 1295
 }
@@ -228,8 +228,8 @@ BackdropNode {
  note_font_size 42
  note_font_color 0xffffffff
  selected true
- xpos -8422
- ypos -4319
+ xpos -3188
+ ypos -4626
  bdwidth 566
  bdheight 331
 }
@@ -241,8 +241,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -8424
- ypos 1226
+ xpos -3190
+ ypos 919
  bdwidth 478
  bdheight 481
 }
@@ -254,8 +254,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -7120
- ypos -3476
+ xpos -1886
+ ypos -3783
  bdwidth 1097
  bdheight 1475
 }
@@ -267,8 +267,8 @@ BackdropNode {
  note_font_size 60
  note_font_color 0xffffffff
  selected true
- xpos -8709
- ypos -3436
+ xpos -3475
+ ypos -3743
  bdwidth 1482
  bdheight 1258
 }
@@ -278,49 +278,49 @@ Dot {
  label BG_ELEMENT
  note_font_size 41
  selected true
- xpos -991
- ypos -4356
+ xpos 4243
+ ypos -4663
 }
 Dot {
  name Dot4
  label BG
  note_font_size 71
  selected true
- xpos -991
- ypos 2072
+ xpos 4243
+ ypos 1765
 }
-set Ne6fbd300 [stack 0]
+set N95f7f190 [stack 0]
 Dot {
  name Dot6
  note_font_size 41
  selected true
- xpos -7471
- ypos 2072
+ xpos -2237
+ ypos 1765
 }
-set Ne6fc1170 [stack 0]
+set N9680d780 [stack 0]
 Dot {
  name Dot7
  label BG
  note_font_size 101
  selected true
- xpos -7471
- ypos 2467
+ xpos -2237
+ ypos 2160
 }
 Dot {
  name Dot8
  label BG
  note_font_size 101
  selected true
- xpos -7471
- ypos 3106
+ xpos -2237
+ ypos 2799
 }
 Dot {
  name Dot9
  label "BG input\n for lightwrap"
  note_font_size 60
  selected true
- xpos -8024
- ypos 3106
+ xpos -2790
+ ypos 2799
 }
 Dot {
  inputs 0
@@ -328,21 +328,21 @@ Dot {
  label GS_DenoisePlate
  note_font_size 41
  selected true
- xpos -8201
- ypos -4848
+ xpos -2967
+ ypos -5155
 }
 AddChannels {
  channels rgba
  name AddChannels3
  selected true
- xpos -8235
- ypos -4779
+ xpos -3001
+ ypos -5086
 }
 Dot {
  name Dot26
  selected true
- xpos -8201
- ypos -4202
+ xpos -2967
+ ypos -4509
 }
 add_layer {GS GS.red GS.green GS.blue GS.alpha}
 Shuffle {
@@ -354,83 +354,83 @@ Shuffle {
  name Shuffle33
  label "\[value in] --> \[value out2]"
  selected true
- xpos -8235
- ypos -4109
+ xpos -3001
+ ypos -4416
 }
 Dot {
  name Dot34
  selected true
- xpos -8201
- ypos -3697
+ xpos -2967
+ ypos -4004
 }
-set Ne6e1e750 [stack 0]
+set N96837240 [stack 0]
 Dot {
  name Dot38
  selected true
- xpos -6613
- ypos -3697
+ xpos -1379
+ ypos -4004
 }
-set Ne80e0050 [stack 0]
+set N9683b040 [stack 0]
 Dot {
  name Dot46
  selected true
- xpos -5349
- ypos -3697
+ xpos -115
+ ypos -4004
 }
-set Ne80e3d90 [stack 0]
+set N95cb1e90 [stack 0]
 Remove {
  operation keep
  channels rgb
  name Remove30
  selected true
- xpos -5383
- ypos -3576
+ xpos -149
+ ypos -3883
 }
 Dot {
  name Dot47
  note_font_size 41
  selected true
- xpos -5349
- ypos -3291
+ xpos -115
+ ypos -3598
 }
-set Ne6fe4540 [stack 0]
+set N95cbd2d0 [stack 0]
 IBKColourV3 {
  name IBKColourV3_1
  selected true
- xpos -5223
- ypos -3294
+ xpos 11
+ ypos -3601
 }
 Dot {
  name Dot48
  note_font_size 41
  selected true
- xpos -5189
- ypos -3156
+ xpos 45
+ ypos -3463
 }
-set Ne824dc20 [stack 0]
+set N95d95140 [stack 0]
 Dot {
  name Dot49
  label Cleanplate
  note_font_size 60
  selected true
- xpos -3971
- ypos -3156
+ xpos 1263
+ ypos -3463
 }
 Dot {
  name Dot51
  label Cleanplate
  note_font_size 60
  selected true
- xpos -3971
- ypos -1502
+ xpos 1263
+ ypos -1809
 }
 Dot {
  name Dot53
  label Cleanplate
  note_font_size 60
  selected true
- xpos -3971
- ypos -23
+ xpos 1263
+ ypos -330
 }
 add_layer {cleanplate cleanplate.red cleanplate.green cleanplate.blue cleanplate.alpha}
 Shuffle {
@@ -442,17 +442,17 @@ Shuffle {
  name Shuffle34
  label "\[value in] → \[value out2]"
  selected true
- xpos -7999
- ypos -33
+ xpos -2765
+ ypos -340
 }
-push $Ne80e0050
+push $N9683b040
 Remove {
  operation keep
  channels rgb
  name Remove31
  selected true
- xpos -6647
- ypos -3576
+ xpos -1413
+ ypos -3883
 }
 Primatte3 {
  data { 5
@@ -909,8 +909,8 @@ Primatte3 {
  "Fine Tuning" 0
  name Primatte4
  selected true
- xpos -6647
- ypos -3138
+ xpos -1413
+ ypos -3445
 }
 Shuffle {
  red alpha
@@ -919,38 +919,38 @@ Shuffle {
  name Shuffle35
  tile_color 0xffffffff
  selected true
- xpos -6647
- ypos -2887
+ xpos -1413
+ ypos -3194
 }
 Dot {
  name Dot54
  label "Core\nMatte"
  note_font_size 60
  selected true
- xpos -6613
- ypos -1768
+ xpos -1379
+ ypos -2075
 }
 Dot {
  name Dot57
  selected true
- xpos -6613
- ypos -1675
+ xpos -1379
+ ypos -1982
 }
-set Ne8279420 [stack 0]
+set N94e1af50 [stack 0]
 Dot {
  name Dot58
  note_font_size 41
  selected true
- xpos -6613
- ypos -1215
+ xpos -1379
+ ypos -1522
 }
-push $Ne824dc20
-push $Ne6fe4540
+push $N95d95140
+push $N95cbd2d0
 IBKGizmoV3 {
  inputs 2
  name IBKGizmoV3_1
- xpos -5383
- ypos -3159
+ xpos -149
+ ypos -3466
 }
 Shuffle {
  red alpha
@@ -959,16 +959,16 @@ Shuffle {
  name Shuffle36
  tile_color 0xffffffff
  selected true
- xpos -5383
- ypos -2894
+ xpos -149
+ ypos -3201
 }
 Dot {
  name Dot59
  label "Edge\nMatte"
  note_font_size 60
  selected true
- xpos -5349
- ypos -1448
+ xpos -115
+ ypos -1755
 }
 Merge2 {
  inputs 2
@@ -976,8 +976,8 @@ Merge2 {
  bbox B
  name Merge2
  selected true
- xpos -5383
- ypos -1219
+ xpos -149
+ ypos -1526
  disable true
 }
 Dot {
@@ -985,85 +985,85 @@ Dot {
  label "Combined\nMatte"
  note_font_size 60
  selected true
- xpos -5349
- ypos -385
+ xpos -115
+ ypos -692
 }
 Dot {
  name Dot61
  label "Combined\nMatte"
  note_font_size 60
  selected true
- xpos -7901
- ypos -385
+ xpos -2667
+ ypos -692
 }
-push $Ne6e1e750
+push $N96837240
 Dot {
  name Dot67
  selected true
- xpos -9849
- ypos -3697
+ xpos -4615
+ ypos -4004
 }
-set Ne82974a0 [stack 0]
+set N9780eca0 [stack 0]
 Dot {
  name Dot123
  note_font_size 41
  selected true
- xpos -10898
- ypos -3698
+ xpos -5664
+ ypos -4005
 }
 Dot {
  name Dot283
  label "Keep \nChannels"
  note_font_size 60
  selected true
- xpos -10898
- ypos -3390
+ xpos -5664
+ ypos -3697
 }
 Dot {
  name Dot284
  note_font_size 41
  selected true
- xpos -10898
- ypos -697
+ xpos -5664
+ ypos -1004
 }
 Dot {
  name Dot285
  label "Keep \nChannels"
  note_font_size 60
  selected true
- xpos -10660
- ypos -697
+ xpos -5426
+ ypos -1004
 }
 Remove {
  channels rgba
  name Remove32
  selected true
- xpos -8595
- ypos -700
+ xpos -3361
+ ypos -1007
 }
 Dot {
  name Dot286
  note_font_size 41
  selected true
- xpos -8370
- ypos -696
+ xpos -3136
+ ypos -1003
 }
-set Ne8300e10 [stack 0]
+set N97873570 [stack 0]
 Dot {
  name Dot287
  note_font_size 41
  selected true
- xpos -8370
- ypos -639
+ xpos -3136
+ ypos -946
 }
-push $Ne8300e10
-push $Ne8279420
+push $N97873570
+push $N94e1af50
 Dot {
  name Dot288
  note_font_size 41
  selected true
- xpos -7163
- ypos -1675
+ xpos -1929
+ ypos -1982
 }
 Group {
  name ExponBlurSimple
@@ -1071,11 +1071,11 @@ Group {
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n        \n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n        \nelif k.name() == \"steps\":\n    \n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n        \n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n        \n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('mult').getValue()\n        \n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, b1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"all\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression(\"(Blur1.size)*(mult)**%s\"%(i))\n            b\[\"label\"].setValue(\"\[value size]\")\n            merge.setInput(i if i<2 else i+1, b)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n            \n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n            \nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n        \nelif k.name() == \"safeBBox\":\n    if n.knob(\"safeBBox\").getValue() == 0:\n        n.knob('safeBBoxText').setVisible(False)\n        n.knob('safetyBBoxMethod').setVisible(False)\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(False)\n        \n    elif n.knob(\"safeBBox\").getValue() == 1:\n        n.knob('safetyBBoxMethod').setVisible(True)\n        n.knob('safeBBoxText').setVisible(True)\n        if n.knob('safetyBBoxMethod').value() == \"pixels\":\n            n.knob('safeBBoxPixels').setVisible(True)\n            n.knob('safeBBoxPercent').setVisible(False)\n        elif n.knob('safetyBBoxMethod').value() == \"percent\":\n            n.knob('safeBBoxPixels').setVisible(False)\n            n.knob('safeBBoxPercent').setVisible(True)\n            \nelif k.name() == \"safetyBBoxMethod\":\n    if n.knob(\"safetyBBoxMethod\").value() == \"pixels\":\n        n.knob('safeBBoxPixels').setVisible(True)\n        n.knob('safeBBoxPercent').setVisible(False)\n    elif n.knob(\"safetyBBoxMethod\").value() == \"percent\":\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(True)\n        \nelif k.name() == \"adjustBBoxExtra\":\n    if n.knob(\"adjustBBoxExtra\").value() == \"pixels\":\n        n.knob('adjustBBoxPixels').setVisible(True)\n        n.knob('adjustBBoxPercent').setVisible(False)\n    elif n.knob(\"adjustBBoxExtra\").value() == \"percent\":\n        n.knob('adjustBBoxPixels').setVisible(False)\n        n.knob('adjustBBoxPercent').setVisible(True)\n"
  tile_color 0xcc804eff
  label "(\[value output2])"
- note_font "Verdana Bold Bold Bold"
+ note_font "Verdana Bold Bold Bold Bold"
  note_font_color 0xffffffff
  selected true
- xpos -7197
- ypos -1424
+ xpos -1963
+ ypos -1731
  addUserKnob {20 ExponBlurSimple}
  addUserKnob {41 channels T Remove1.channels}
  addUserKnob {41 maskChannelMask_1 l area T Multiply1.maskChannelMask}
@@ -1152,7 +1152,7 @@ Group {
   xpos 34
   ypos -802
  }
-set Ne83152a0 [stack 0]
+set N95cd3be0 [stack 0]
  Dot {
   name Dot2
   note_font_size 41
@@ -1172,14 +1172,14 @@ set Ne83152a0 [stack 0]
   xpos -367
   ypos 623
  }
-set Ne8320f90 [stack 0]
+set N95cdf8d0 [stack 0]
  Dot {
   name Dot3
   note_font_size 41
   xpos -367
   ypos 675
  }
-set Ne8324f10 [stack 0]
+set N95ce37d0 [stack 0]
  Dot {
   name Dot8
   note_font_size 41
@@ -1192,7 +1192,7 @@ set Ne8324f10 [stack 0]
   xpos -463
   ypos 831
  }
-push $Ne83152a0
+push $N95cd3be0
  Dot {
   name Dot1
   note_font_size 41
@@ -1212,14 +1212,14 @@ push $Ne83152a0
   xpos 461
   ypos -597
  }
-set Ne833bf40 [stack 0]
+set N94866cb0 [stack 0]
  Invert {
   name Invert1
   xpos 695
   ypos -604
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-set Ne82abea0 [stack 0]
+set N94f5db20 [stack 0]
  Dot {
   name Dot4
   note_font_size 41
@@ -1231,7 +1231,7 @@ set Ne82abea0 [stack 0]
   xpos 506
   ypos -327
  }
-set Ne8341eb0 [stack 0]
+set N94f37740 [stack 0]
  Dot {
   name Dot5
   note_font_size 41
@@ -1255,7 +1255,7 @@ set Ne8341eb0 [stack 0]
   xpos 210
   ypos -724
  }
-push $Ne83152a0
+push $N95cd3be0
  Merge2 {
   inputs 2
   name Merge3
@@ -1271,7 +1271,7 @@ push $Ne83152a0
   addUserKnob {15 bbox}
   bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
  }
-push $Ne8341eb0
+push $N94f37740
  Input {
   inputs 0
   name Inputarea
@@ -1292,7 +1292,7 @@ push $Ne8341eb0
   xpos 289
   ypos -503
  }
-push $Ne82abea0
+push $N94f5db20
  Multiply {
   inputs 1+1
   value 0
@@ -1306,7 +1306,7 @@ push $Ne82abea0
   xpos 695
   ypos -450
  }
-set Ne6e47150 [stack 0]
+set N94fce200 [stack 0]
  Blur {
   size {{(Blur1.size)*(mult)**3} {(Blur1.size)*(mult)**3}}
   crop false
@@ -1315,7 +1315,7 @@ set Ne6e47150 [stack 0]
   xpos 995
   ypos -370
  }
-push $Ne6e47150
+push $N94fce200
  Blur {
   size {{(Blur1.size)*(mult)**2} {(Blur1.size)*(mult)**2}}
   crop false
@@ -1325,7 +1325,7 @@ push $Ne6e47150
   ypos -370
  }
 push 0
-push $Ne6e47150
+push $N94fce200
  Blur {
   size {{(Blur1.size)*(mult)**1} {(Blur1.size)*(mult)**1}}
   crop false
@@ -1334,7 +1334,7 @@ push $Ne6e47150
   xpos 795
   ypos -370
  }
-push $Ne6e47150
+push $N94fce200
  Blur {
   size {{parent.size.w} {parent.size.h}}
   name Blur1
@@ -1356,7 +1356,7 @@ push $Ne6e47150
   xpos 695
   ypos -230
  }
-set Ne8392650 [stack 0]
+set N949d9830 [stack 0]
  CopyBBox {
   inputs 2
   name CopyBBox1
@@ -1367,7 +1367,7 @@ set Ne8392650 [stack 0]
   name BBoxToFormat
   onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
   tile_color 0xa57aaaff
-  note_font "Verdana Bold Bold Bold Bold"
+  note_font "Verdana Bold Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 585
   ypos -151
@@ -1408,15 +1408,15 @@ set Ne8392650 [stack 0]
    xpos 295
    ypos 462
   }
-set Ne82f0350 [stack 0]
+set N949f3560 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
    xpos -160
    ypos 462
   }
-set Ne82f4270 [stack 0]
-push $Ne82f0350
+set N949f7480 [stack 0]
+push $N949f3560
   Crop {
    box {{parent.inputBBox} {parent.inputBBox} {parent.inputBBox} {parent.inputBBox}}
    crop {{parent.blackOutside}}
@@ -1426,7 +1426,7 @@ push $Ne82f0350
    addUserKnob {20 User}
    addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
   }
-set Ne6e47500 [stack 0]
+set N949fb360 [stack 0]
   Remove {
    operation keep
    channels none
@@ -1434,7 +1434,7 @@ set Ne6e47500 [stack 0]
    xpos 120
    ypos 504
   }
-set Ne83a2fa0 [stack 0]
+set N959300f0 [stack 0]
   Transform {
    scale {{parent.overscanPercent} {parent.overscanPercent}}
    center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -1444,7 +1444,7 @@ set Ne83a2fa0 [stack 0]
    xpos 120
    ypos 553
   }
-push $Ne83a2fa0
+push $N959300f0
   AdjBBox {
    numpixels {{parent.overscan} {parent.overscan}}
    name AdjBBox1
@@ -1470,7 +1470,7 @@ push $Ne83a2fa0
    ypos 647
    disable {{!parent.Crop6.intersect}}
   }
-push $Ne82f4270
+push $N949f7480
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -1489,7 +1489,7 @@ push $Ne82f4270
    xpos -160
    ypos 769
   }
-push $Ne6e47500
+push $N949fb360
   Switch {
    inputs 2
    which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -1498,13 +1498,13 @@ push $Ne6e47500
    xpos 261
    ypos 759
   }
-set Ne8513880 [stack 0]
+set N95f93ca0 [stack 0]
   Output {
    name Output1
    xpos 261
    ypos 921
   }
-push $Ne8513880
+push $N95f93ca0
   NoOp {
    name OutputBBox1
    xpos 378
@@ -1516,7 +1516,7 @@ push $Ne8513880
    outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
   }
  end_group
-push $Ne8392650
+push $N949d9830
  Merge2 {
   inputs 2
   bbox intersection
@@ -1525,14 +1525,14 @@ push $Ne8392650
   xpos 585
   ypos -127
  }
-push $Ne8392650
+push $N949d9830
  CopyBBox {
   inputs 2
   name CopyBBox2
   xpos 585
   ypos -101
  }
-push $Ne8392650
+push $N949d9830
  Switch {
   inputs 2
   which {{"parent.safeBBox && ((BBoxResult.bbox.x < BBoxInput.bbox.x || BBoxResult.bbox.y < BBoxInput.bbox.y || BBoxResult.bbox.r > BBoxInput.bbox.r || BBoxResult.bbox.t > BBoxInput.bbox.t))"}}
@@ -1580,7 +1580,7 @@ push $Ne8392650
   ypos 144
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-push $Ne833bf40
+push $N94866cb0
  Switch {
   inputs 2
   which {{"parent.size == 0 ? 0 : 1"}}
@@ -1602,7 +1602,7 @@ push $Ne833bf40
   xpos 34
   ypos 579
  }
-set Ne8602080 [stack 0]
+set N94e557a0 [stack 0]
  Dot {
   name Dot12
   note_font_size 41
@@ -1615,7 +1615,7 @@ set Ne8602080 [stack 0]
   xpos -260
   ypos 799
  }
-push $Ne8320f90
+push $N95cdf8d0
  Input {
   inputs 0
   name Inputmask
@@ -1630,14 +1630,14 @@ push $Ne8320f90
   xpos 546
   ypos 435
  }
-set Ne854a1b0 [stack 0]
+set N94e652a0 [stack 0]
  Dot {
   name Dot20
   note_font_size 41
   xpos 436
   ypos 435
  }
-push $Ne8602080
+push $N94e557a0
  Merge2 {
   inputs 2
   bbox intersection
@@ -1667,15 +1667,15 @@ push $Ne8602080
   xpos 436
   ypos 770
  }
-push $Ne854a1b0
+push $N94e652a0
  Dot {
   name Dot10
   note_font_size 41
   xpos 546
   ypos 672
  }
-push $Ne8602080
-push $Ne8324f10
+push $N94e557a0
+push $N95ce37d0
  Merge2 {
   inputs 2+1
   operation copy
@@ -1693,8 +1693,8 @@ push $Ne8324f10
   xpos 34
   ypos 747
  }
-set Ne8581f90 [stack 0]
-push $Ne8324f10
+set N95d27470 [stack 0]
+push $N95ce37d0
  CopyBBox {
   inputs 2
   name CopyBBoxUnion
@@ -1733,7 +1733,7 @@ push $Ne8324f10
   addUserKnob {20 User}
   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
  }
-set Ne8621330 [stack 0]
+set N96b1c1d0 [stack 0]
  Transform {
   scale {{parent.adjustBBoxPercent} {parent.adjustBBoxPercent}}
   center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -1743,7 +1743,7 @@ set Ne8621330 [stack 0]
   xpos -516
   ypos 898
  }
-push $Ne8621330
+push $N96b1c1d0
  AdjBBox {
   numpixels {{parent.adjustBBoxPixels} {parent.adjustBBoxPixels}}
   name AdjBBoxPixels
@@ -1763,7 +1763,7 @@ push $Ne8621330
   xpos -367
   ypos 993
  }
-push $Ne8581f90
+push $N95d27470
  CopyBBox {
   inputs 2
   name CopyBBox
@@ -1790,7 +1790,7 @@ push $Ne8581f90
   addUserKnob {3 mergeNumber}
   mergeNumber {{"output2 == 0 ? 25 : output2 == 1 ? 24 : output2 == 2 ? 22 : output2 == 3 ? 13 : output2 == 4 ? 24 : output2 == 5 ? 17 : 18"}}
  }
-push $Ne8392650
+push $N949d9830
  NoOp {
   name BBoxResult
   xpos 585
@@ -1804,48 +1804,48 @@ Dot {
  name Dot289
  note_font_size 41
  selected true
- xpos -7163
- ypos -1268
+ xpos -1929
+ ypos -1575
 }
 Dot {
  name Dot290
  label "Core\nMatte"
  note_font_size 60
  selected true
- xpos -7861
- ypos -1268
+ xpos -2627
+ ypos -1575
 }
 Dot {
  name Dot291
  note_font_size 41
  selected true
- xpos -7971
- ypos -1268
+ xpos -2737
+ ypos -1575
 }
-set Ne6e49f30 [stack 0]
-push $Ne82974a0
+set N95af3ff0 [stack 0]
+push $N9780eca0
 Remove {
  operation keep
  channels rgb
  name Remove33
  selected true
- xpos -9883
- ypos -3576
+ xpos -4649
+ ypos -3883
 }
 Dot {
  name Dot292
  selected true
- xpos -9849
- ypos -3264
+ xpos -4615
+ ypos -3571
 }
-set Ne863eec0 [stack 0]
+set N95b033b0 [stack 0]
 Dot {
  name Dot293
  selected true
- xpos -9267
- ypos -3264
+ xpos -4033
+ ypos -3571
 }
-push $Ne863eec0
+push $N95b033b0
 OFXuk.co.thefoundry.keylight.keylight_v201 {
  show "Final Result"
  unPreMultiply false
@@ -1889,108 +1889,108 @@ OFXuk.co.thefoundry.keylight.keylight_v201 {
  cacheBreaker true
  name Keylight4
  selected true
- xpos -9883
- ypos -3137
+ xpos -4649
+ ypos -3444
 }
 Dot {
  name Dot294
  selected true
- xpos -9849
- ypos -2746
+ xpos -4615
+ ypos -3053
 }
-set Ne87596d0 [stack 0]
+set N96ca65b0 [stack 0]
 Merge2 {
  inputs 2
  operation minus
  name Merge3
  selected true
- xpos -9301
- ypos -2750
+ xpos -4067
+ ypos -3057
 }
 Saturation {
  saturation 0
  name Saturation1
  selected true
- xpos -9301
- ypos -2708
+ xpos -4067
+ ypos -3015
 }
 Dot {
  name Dot295
  selected true
- xpos -9267
- ypos -2645
+ xpos -4033
+ ypos -2952
 }
 Dot {
  name Dot296
  label "Restore Lum"
  note_font_size 41
  selected true
- xpos -9722
- ypos -2645
+ xpos -4488
+ ypos -2952
 }
-push $Ne87596d0
+push $N96ca65b0
 Merge2 {
  inputs 2
  operation plus
  output {rgba.red rgba.green rgba.blue -rgba.alpha}
  name Merge5
  selected true
- xpos -9883
- ypos -2649
+ xpos -4649
+ ypos -2956
 }
 Dot {
  name Dot297
  label "core \ndespill"
  note_font_size 60
  selected true
- xpos -9849
- ypos -2289
+ xpos -4615
+ ypos -2596
 }
 Dot {
  name Dot298
  selected true
- xpos -9849
- ypos -1268
+ xpos -4615
+ ypos -1575
 }
 Dot {
  name Dot299
  label "core \ndespill"
  note_font_size 60
  selected true
- xpos -8500
- ypos -1268
+ xpos -3266
+ ypos -1575
 }
-push $Ne6e49f30
+push $N95af3ff0
 Dot {
  name Dot300
  note_font_size 41
  selected true
- xpos -7971
- ypos -1391
+ xpos -2737
+ ypos -1698
 }
-push $Ne6e1e750
+push $N96837240
 Remove {
  operation keep
  channels rgb
  name Remove34
  selected true
- xpos -8235
- ypos -3576
+ xpos -3001
+ ypos -3883
 }
 Dot {
  name Dot301
  selected true
- xpos -8201
- ypos -3311
+ xpos -2967
+ ypos -3618
 }
-set Ne876d790 [stack 0]
+set N96cee310 [stack 0]
 Dot {
  name Dot302
  selected true
- xpos -7444
- ypos -3311
+ xpos -2210
+ ypos -3618
 }
-push $Ne876d790
+push $N96cee310
 OFXuk.co.thefoundry.keylight.keylight_v201 {
  show "Final Result"
  unPreMultiply false
@@ -2034,64 +2034,64 @@ OFXuk.co.thefoundry.keylight.keylight_v201 {
  cacheBreaker true
  name Keylight5
  selected true
- xpos -8235
- ypos -3143
+ xpos -3001
+ ypos -3450
 }
 Dot {
  name Dot303
  selected true
- xpos -8201
- ypos -2697
+ xpos -2967
+ ypos -3004
 }
-set Ne86b5620 [stack 0]
+set N96be3cd0 [stack 0]
 Merge2 {
  inputs 2
  operation minus
  name Merge10
  selected true
- xpos -7478
- ypos -2701
+ xpos -2244
+ ypos -3008
 }
 Saturation {
  saturation 0
  name Saturation2
  selected true
- xpos -7478
- ypos -2652
+ xpos -2244
+ ypos -2959
 }
 Clamp {
  channels rgba
  maximum_enable false
  name Clamp3
  selected true
- xpos -7478
- ypos -2626
+ xpos -2244
+ ypos -2933
 }
 Dot {
  name Dot304
  label "despill\nmatte"
  note_font_size 60
  selected true
- xpos -7444
- ypos -2534
+ xpos -2210
+ ypos -2841
 }
-set Ne86d8230 [stack 0]
+set N94dc52f0 [stack 0]
 Dot {
  name Dot305
  label "despill\nMatte"
  note_font_size 60
  selected true
- xpos -7444
- ypos -2337
+ xpos -2210
+ ypos -2644
 }
-push $Ne86b5620
+push $N96be3cd0
 Dot {
  name Dot306
  selected true
- xpos -8201
- ypos -2534
+ xpos -2967
+ ypos -2841
 }
-set Ne86de4f0 [stack 0]
+set N94d07a10 [stack 0]
 add_layer {despill despill.red}
 Copy {
  inputs 2
@@ -2099,16 +2099,16 @@ Copy {
  to0 despill.red
  name Copy7
  selected true
- xpos -8235
- ypos -2347
+ xpos -3001
+ ypos -2654
 }
 Dot {
  name Dot307
  label "edge\ndespill"
  note_font_size 60
  selected true
- xpos -8201
- ypos -1545
+ xpos -2967
+ ypos -1852
 }
 Multiply {
  inputs 1+1
@@ -2117,16 +2117,16 @@ Multiply {
  name Multiply2
  label "\[value value]"
  selected true
- xpos -8235
- ypos -1403
+ xpos -3001
+ ypos -1710
 }
 Keymix {
  inputs 3
  channels rgb
  name Keymix3
  selected true
- xpos -8235
- ypos -1272
+ xpos -3001
+ ypos -1579
 }
 Copy {
  inputs 2
@@ -2134,15 +2134,15 @@ Copy {
  bbox A
  name Copy12
  selected true
- xpos -8235
- ypos -708
+ xpos -3001
+ ypos -1015
 }
 CopyBBox {
  inputs 2
  name CopyBBox3
  selected true
- xpos -8235
- ypos -643
+ xpos -3001
+ ypos -950
 }
 Copy {
  inputs 2
@@ -2151,8 +2151,8 @@ Copy {
  bbox B
  name Copy14
  selected true
- xpos -8235
- ypos -392
+ xpos -3001
+ ypos -699
 }
 Copy {
  inputs 2
@@ -2160,133 +2160,133 @@ Copy {
  bbox B
  name Copy15
  selected true
- xpos -8235
- ypos -37
+ xpos -3001
+ ypos -344
 }
 Dot {
  name Dot313
  note_font_size 41
  selected true
- xpos -8201
- ypos 710
+ xpos -2967
+ ypos 403
 }
 Dot {
  name Dot314
  note_font_size 41
  selected true
- xpos -8201
- ypos 1171
+ xpos -2967
+ ypos 864
 }
 Dot {
  name Dot315
  note_font_size 41
  selected true
- xpos -8201
- ypos 1445
+ xpos -2967
+ ypos 1138
 }
 Dot {
  name Dot316
  note_font_size 41
  selected true
- xpos -8201
- ypos 1746
+ xpos -2967
+ ypos 1439
 }
 Dot {
  name Dot317
  selected true
- xpos -8201
- ypos 1992
+ xpos -2967
+ ypos 1685
 }
-set Ne8814c20 [stack 0]
+set N968f6be0 [stack 0]
 Shuffle {
  in despill
  name Shuffle39
  label "\[value in]"
  selected true
- xpos -7923
- ypos 1983
+ xpos -2689
+ ypos 1676
 }
 Remove {
  operation keep
  channels rgba
  name Remove35
  selected true
- xpos -7923
- ypos 2033
+ xpos -2689
+ ypos 1726
 }
 Grade {
  channels rgba
  black_clamp false
  name Grade4
  selected true
- xpos -7923
- ypos 2073
+ xpos -2689
+ ypos 1766
 }
-set Ne87bc330 [stack 0]
+set N9499f520 [stack 0]
 Dot {
  name Dot318
  label "despill\nmatte"
  note_font_size 41
  selected true
- xpos -7889
- ypos 2209
+ xpos -2655
+ ypos 1902
 }
-set Ne87c85f0 [stack 0]
+set N949ab640 [stack 0]
 Dot {
  name Dot319
  note_font_size 41
  selected true
- xpos -8056
- ypos 2209
+ xpos -2822
+ ypos 1902
 }
 Dot {
  name Dot320
  note_font_size 41
  selected true
- xpos -8056
- ypos 2451
+ xpos -2822
+ ypos 2144
 }
-push $Ne6fc1170
+push $N9680d780
 Dot {
  name Dot321
  label BG
  note_font_size 101
  selected true
- xpos -7675
- ypos 2072
+ xpos -2441
+ ypos 1765
 }
 Grade {
  black_clamp false
  name Grade6
  label "BG Prep"
  selected true
- xpos -7709
- ypos 2142
+ xpos -2475
+ ypos 1835
 }
 Dot {
  name Dot322
  selected true
- xpos -7675
- ypos 2296
+ xpos -2441
+ ypos 1989
 }
-push $Ne87c85f0
+push $N949ab640
 Merge2 {
  inputs 2
  operation multiply
  name Merge36
  selected true
- xpos -7923
- ypos 2292
+ xpos -2689
+ ypos 1985
 }
 Shuffle {
  alpha black
  name Shuffle40
  label "\[value in]"
  selected true
- xpos -7923
- ypos 2337
+ xpos -2689
+ ypos 2030
 }
-push $Ne87bc330
+push $N9499f520
 Shuffle {
  green red
  blue red
@@ -2294,8 +2294,8 @@ Shuffle {
  name Shuffle41
  label "\[value in]"
  selected true
- xpos -8066
- ypos 2069
+ xpos -2832
+ ypos 1762
 }
 Grade {
  channels rgba
@@ -2303,17 +2303,17 @@ Grade {
  black_clamp false
  name Grade7
  selected true
- xpos -8066
- ypos 2123
+ xpos -2832
+ ypos 1816
 }
-push $Ne8814c20
+push $N968f6be0
 Saturation {
  inputs 1+1
  name Saturation3
  label "change if necessary"
  selected true
- xpos -8235
- ypos 2119
+ xpos -3001
+ ypos 1812
 }
 Merge2 {
  inputs 2
@@ -2322,8 +2322,8 @@ Merge2 {
  output {rgba.red rgba.green rgba.blue -rgba.alpha}
  name Merge49
  selected true
- xpos -8235
- ypos 2343
+ xpos -3001
+ ypos 2036
 }
 Group {
  inputs 2
@@ -2331,10 +2331,10 @@ Group {
  help "Choose a black point color or plug an image /constant you wish to be your blackpoint into BlackColor input.\n\nUse Mult Range to control how far above the blackpoint color to affect the lows\n\nUse the RollOff gamma to add fall off to the bottom of the curve\n\nTurn on the preview Plotscan and move the sampler over a region to see what your settings are doing to a linear 0-1 ramp.  This will help you see if you have weird curves, clamping or other funky problems as you adjust settings"
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"inputChange\":\n    nsd = nuke.toNode(\"SwitchDefault\")\n    n\[\"defaultBlack\"].setEnabled(nsd\[\"which\"].getValue()==1)\n\nif k.name() == \"previewPlotScan\":\n    p = n.knob(\"previewPlotScan\").value()\n    if p == True:\n        n.knob(\"plotscanSampler\").setVisible(True)\n    else:\n        n.knob(\"plotscanSampler\").setVisible(False)"
  tile_color 0x1c1c1cff
- note_font "Helvetica Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font "Helvetica Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
  selected true
- xpos -8235
- ypos 2448
+ xpos -3001
+ ypos 2141
  addUserKnob {20 BlacksMatch}
  addUserKnob {6 default_black_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 premultInput l "Premultiplied Input" +STARTLINE}
@@ -2344,6 +2344,7 @@ Group {
  addUserKnob {6 defaultBlack_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 defaultBlack_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 defaultBlack_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 defaultBlack_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {26 ""}
  addUserKnob {7 multBase l "Mult Low Range" t "This is the Multiplier for the top of the \"toe\" curve.  It is multiplying the BlackPoint color by this number and setting it as the highest point weird the curve will influence the midtones and the highlights" R 1.5 10}
  multBase 4
@@ -2428,7 +2429,7 @@ Group {
   xpos 356
   ypos -418
  }
-set Nea916290 [stack 0]
+set N948771b0 [stack 0]
  AddChannels {
   channels rgba
   color 1
@@ -2442,7 +2443,7 @@ set Nea916290 [stack 0]
   xpos 356
   ypos -288
  }
-set Nea9217a0 [stack 0]
+set N948826b0 [stack 0]
  Grade {
   channels rgba
   white 0
@@ -2481,21 +2482,21 @@ set Nea9217a0 [stack 0]
   xpos 1172
   ypos -151
  }
-set Nea940e90 [stack 0]
+set N948a1640 [stack 0]
  Dot {
   name Dot36
   note_font_size 41
   xpos 1631
   ypos -151
  }
-set Nea944d70 [stack 0]
+set N948a5520 [stack 0]
  Dot {
   name Dot16
   note_font_size 41
   xpos 2140
   ypos -151
  }
-set Nea735370 [stack 0]
+set N95f75ad0 [stack 0]
  Crop {
   box {{plotscanSampler.x-2} {plotscanSampler.y-2} {plotscanSampler.x+2} {plotscanSampler.x+2}}
   reformat true
@@ -2527,14 +2528,14 @@ set Nea735370 [stack 0]
   xpos 2466
   ypos -43
  }
-set Nea951a50 [stack 0]
+set N95c0a4d0 [stack 0]
  Dot {
   name Dot47
   note_font_size 41
   xpos 2917
   ypos -43
  }
-set Nea955870 [stack 0]
+set N95c0e260 [stack 0]
  Dot {
   name Dot42
   label "Black Color"
@@ -2548,30 +2549,30 @@ set Nea955870 [stack 0]
   xpos 2917
   ypos 366
  }
-set Ne9b1ad10 [stack 0]
+set N95c16020 [stack 0]
  Dot {
   name Dot44
   note_font_size 41
   xpos 2917
   ypos 480
  }
-set Ne9b1b4d0 [stack 0]
+set N95c19f00 [stack 0]
  Dot {
   name Dot45
   note_font_size 41
   xpos 2917
   ypos 588
  }
-set Nea5dd5f0 [stack 0]
+set N95c1df60 [stack 0]
  Dot {
   name Dot31
   note_font_size 41
   xpos 2917
   ypos 656
  }
-set Nea5e14d0 [stack 0]
-push $Nea5e14d0
-push $Nea955870
+set N95c21d80 [stack 0]
+push $N95c21d80
+push $N95c0e260
  Dot {
   name Dot11
   label "Black Color"
@@ -2608,14 +2609,14 @@ push $Nea955870
   xpos 2745
   ypos 154
  }
-set Nea7450c0 [stack 0]
+set N95c4b280 [stack 0]
  Dot {
   name Dot7
   note_font_size 41
   xpos 3138
   ypos 154
  }
-set Nea748e60 [stack 0]
+set N95c4f010 [stack 0]
  MergeExpression {
   inputs 2
   expr0 Br/Ar
@@ -2649,13 +2650,13 @@ set Nea748e60 [stack 0]
   xpos 3426
   ypos 366
  }
-set Nea4d27e0 [stack 0]
+set N95c7daa0 [stack 0]
  Dot {
   name Dot40
   xpos 3426
   ypos 480
  }
-set Nea4af400 [stack 0]
+set N95c81830 [stack 0]
  Dot {
   name Dot41
   xpos 3426
@@ -2671,8 +2672,8 @@ set Nea4af400 [stack 0]
   xpos 3277
   ypos 581
  }
-push $Nea5dd5f0
-push $Nea4af400
+push $N95c1df60
+push $N95c81830
  Shuffle {
   red green
   blue green
@@ -2683,8 +2684,8 @@ push $Nea4af400
   xpos 3276
   ypos 473
  }
-push $Ne9b1b4d0
-push $Nea4d27e0
+push $N95c19f00
+push $N95c7daa0
  Shuffle {
   green red
   blue red
@@ -2695,8 +2696,8 @@ push $Nea4d27e0
   xpos 3270
   ypos 359
  }
-push $Ne9b1ad10
-push $Nea748e60
+push $N95c16020
+push $N95c4f010
  Merge2 {
   inputs 2+1
   operation {{parent.Settings.mergeOpNum}}
@@ -2761,7 +2762,7 @@ push $Nea748e60
   xpos 2883
   ypos 739
  }
-push $Nea951a50
+push $N95c0a4d0
  Multiply {
   channels rgb
   value {{multBase}}
@@ -2779,7 +2780,7 @@ push $Nea951a50
   ypos 95
   disable {{"mergeOp == 1 ? 0 : 1"}}
  }
-push $Nea7450c0
+push $N95c4b280
  MergeExpression {
   inputs 2
   expr0 Br/Ar
@@ -2813,13 +2814,13 @@ push $Nea7450c0
   xpos 2466
   ypos 366
  }
-set Ne8aaa930 [stack 0]
+set N96e4f6c0 [stack 0]
  Dot {
   name Dot9
   xpos 2466
   ypos 480
  }
-set Ne8aae8a0 [stack 0]
+set N96e53630 [stack 0]
  Dot {
   name Dot10
   xpos 2466
@@ -2835,8 +2836,8 @@ set Ne8aae8a0 [stack 0]
   xpos 2511
   ypos 581
  }
-push $Nea5dd5f0
-push $Ne8aae8a0
+push $N95c1df60
+push $N96e53630
  Shuffle {
   red green
   blue green
@@ -2847,8 +2848,8 @@ push $Ne8aae8a0
   xpos 2511
   ypos 473
  }
-push $Ne9b1b4d0
-push $Ne8aaa930
+push $N95c19f00
+push $N96e4f6c0
  Shuffle {
   green red
   blue red
@@ -2859,8 +2860,8 @@ push $Ne8aaa930
   xpos 2517
   ypos 359
  }
-push $Ne9b1ad10
-push $Nea7450c0
+push $N95c16020
+push $N95c4b280
  Merge2 {
   inputs 2+1
   operation {{parent.Settings.mergeOpNum}}
@@ -2945,7 +2946,7 @@ push $Nea7450c0
    xpos -480
    ypos 62
   }
-set Nea5f6040 [stack 0]
+set N95990dc0 [stack 0]
   Expression {
    temp_name0 length
    temp_expr0 sqrt(r*r+g*g+b*b)
@@ -2966,7 +2967,7 @@ set Nea5f6040 [stack 0]
    ypos 134
    disable {{1-parent.tonemap i}}
   }
-set Ne9b65190 [stack 0]
+set N959a1140 [stack 0]
   Expression {
    temp_name0 rExpr
    temp_expr0 "min(max(0,\r\nceil(r(x,parent.p1.y)-((y/height+parent.lift)*parent.scale))),1)"
@@ -2983,7 +2984,7 @@ set Ne9b65190 [stack 0]
    ypos 193
    addUserKnob {20 User}
   }
-push $Ne9b65190
+push $N959a1140
   Expression {
    temp_name0 rExpr
    temp_expr0 "min(max(0,\r\nceil(r((x/width)*(parent.p2.x-parent.p1.x)+parent.p1.x,(x/width)*(parent.p2.y-parent.p1.y)+parent.p1.y,parent.sa,parent.sa)-((y/height+parent.lift)*parent.scale))),1)"
@@ -3000,7 +3001,7 @@ push $Ne9b65190
    ypos 197
    addUserKnob {20 User}
   }
-push $Ne9b65190
+push $N959a1140
   Expression {
    temp_name0 rExpr
    temp_expr0 "min(max(0,\r\nceil(r((x/width)*(parent.p2.x-parent.p1.x)+parent.p1.x,(x/width)*(parent.p2.y-parent.p1.y)+parent.p1.y)-((y/height+parent.lift)*parent.scale))),1)"
@@ -3047,8 +3048,8 @@ push $Ne9b65190
    xpos -480
    ypos 383
   }
-set Nea621320 [stack 0]
-push $Nea5f6040
+set N96e9e8d0 [stack 0]
+push $N95990dc0
   Dot {
    name Dot1
    xpos -556
@@ -3073,7 +3074,7 @@ push $Nea5f6040
    xpos -556
    ypos 433
   }
-push $Nea621320
+push $N96e9e8d0
   Switch {
    inputs 2
    which {{parent.add2image i}}
@@ -3093,7 +3094,7 @@ push $Nea621320
   xpos 2745
   ypos 857
  }
-set Nea657b10 [stack 0]
+set N96ed5110 [stack 0]
  Shuffle {
   red white
   green white
@@ -3121,7 +3122,7 @@ set Nea657b10 [stack 0]
   xpos 2821
   ypos 934
  }
-push $Nea657b10
+push $N96ed5110
  Merge2 {
   inputs 2
   name Merge9
@@ -3227,7 +3228,7 @@ push $Nea657b10
   xpos 898
   ypos 1015
  }
-push $Nea944d70
+push $N948a5520
  Dot {
   name Dot33
   label "Black Color"
@@ -3241,30 +3242,30 @@ push $Nea944d70
   xpos 1631
   ypos 360
  }
-set Nea6ec150 [stack 0]
+set N947a4230 [stack 0]
  Dot {
   name Dot34
   note_font_size 41
   xpos 1631
   ypos 474
  }
-set Nea6f0030 [stack 0]
+set N947a8110 [stack 0]
  Dot {
   name Dot35
   note_font_size 41
   xpos 1631
   ypos 582
  }
-set Nea6f3f10 [stack 0]
+set N947abff0 [stack 0]
  Dot {
   name Dot13
   note_font_size 41
   xpos 1631
   ypos 674
  }
-set Nea6f7df0 [stack 0]
-push $Nea6f7df0
-push $Nea735370
+set N9470b670 [stack 0]
+push $N9470b670
+push $N95f75ad0
  Multiply {
   channels rgb
   value 2
@@ -3273,7 +3274,7 @@ push $Nea735370
   xpos 2106
   ypos 87
  }
-push $Nea9217a0
+push $N948826b0
  Unpremult {
   name Unpremult1
   xpos 322
@@ -3285,21 +3286,21 @@ push $Nea9217a0
   xpos 356
   ypos 145
  }
-set Nea3322c0 [stack 0]
+set N94d7beb0 [stack 0]
  Dot {
   name Dot22
   note_font_size 41
   xpos 1028
   ypos 145
  }
-set Nea320f10 [stack 0]
+set N94da7bc0 [stack 0]
  Dot {
   name Dot32
   note_font_size 41
   xpos 1852
   ypos 145
  }
-set Ne9a7c030 [stack 0]
+set N94d840c0 [stack 0]
  MergeExpression {
   inputs 2
   expr0 Br/Ar
@@ -3333,13 +3334,13 @@ set Ne9a7c030 [stack 0]
   xpos 2140
   ypos 360
  }
-set Nea383220 [stack 0]
+set N94d6c980 [stack 0]
  Dot {
   name Dot25
   xpos 2140
   ypos 474
  }
-set Nea386fb0 [stack 0]
+set N94d70710 [stack 0]
  Dot {
   name Dot27
   xpos 2140
@@ -3355,8 +3356,8 @@ set Nea386fb0 [stack 0]
   xpos 1990
   ypos 575
  }
-push $Nea6f3f10
-push $Nea386fb0
+push $N947abff0
+push $N94d70710
  Shuffle {
   red green
   blue green
@@ -3367,8 +3368,8 @@ push $Nea386fb0
   xpos 1990
   ypos 467
  }
-push $Nea6f0030
-push $Nea383220
+push $N947a8110
+push $N94d6c980
  Shuffle {
   green red
   blue red
@@ -3379,8 +3380,8 @@ push $Nea383220
   xpos 1984
   ypos 353
  }
-push $Nea6ec150
-push $Ne9a7c030
+push $N947a4230
+push $N94d840c0
  Merge2 {
   inputs 2+1
   operation {{parent.Settings.mergeOpNum}}
@@ -3445,7 +3446,7 @@ push $Ne9a7c030
   xpos 1597
   ypos 757
  }
-push $Nea940e90
+push $N948a1640
  Multiply {
   channels rgb
   value {{multBase}}
@@ -3463,7 +3464,7 @@ push $Nea940e90
   ypos 84
   disable {{"mergeOp == 1 ? 0 : 1"}}
  }
-push $Nea320f10
+push $N94da7bc0
  MergeExpression {
   inputs 2
   expr0 Br/Ar
@@ -3497,13 +3498,13 @@ push $Nea320f10
   xpos 1172
   ypos 364
  }
-set Nea3fa550 [stack 0]
+set N95a08d60 [stack 0]
  Dot {
   name Dot20
   xpos 1172
   ypos 478
  }
-set Nea702250 [stack 0]
+set N95a0ccd0 [stack 0]
  Dot {
   name Dot21
   xpos 1172
@@ -3519,7 +3520,7 @@ set Nea702250 [stack 0]
   xpos 1022
   ypos 579
  }
-push $Nea940e90
+push $N948a1640
  Dot {
   name Dot23
   xpos 706
@@ -3532,21 +3533,21 @@ push $Nea940e90
   xpos 706
   ypos 293
  }
-set Ne9aa89c0 [stack 0]
+set N95a25fa0 [stack 0]
  Dot {
   name Dot2
   note_font_size 41
   xpos 706
   ypos 404
  }
-set Ne9a8d350 [stack 0]
+set N95a29e80 [stack 0]
  Dot {
   name Dot3
   note_font_size 41
   xpos 706
   ypos 523
  }
-push $Nea702250
+push $N95a0ccd0
  Shuffle {
   red green
   blue green
@@ -3557,8 +3558,8 @@ push $Nea702250
   xpos 1022
   ypos 471
  }
-push $Ne9a8d350
-push $Nea3fa550
+push $N95a29e80
+push $N95a08d60
  Shuffle {
   green red
   blue red
@@ -3569,8 +3570,8 @@ push $Nea3fa550
   xpos 1016
   ypos 357
  }
-push $Ne9aa89c0
-push $Nea3322c0
+push $N95a25fa0
+push $N94d7beb0
  Merge2 {
   inputs 2+1
   operation {{parent.Settings.mergeOpNum}}
@@ -3628,7 +3629,7 @@ push $Nea3322c0
   ypos 881
   disable {{"! premultInput"}}
  }
-push $Nea916290
+push $N948771b0
  Dot {
   name Dot28
   xpos -146
@@ -3679,8 +3680,8 @@ end_group
 Premult {
  name Premult2
  selected true
- xpos -8235
- ypos 2760
+ xpos -3001
+ ypos 2453
 }
 Group {
  inputs 2
@@ -3688,11 +3689,11 @@ Group {
  help "Adds exponentially blurred lightwrap\n\nAdds a bright highlight wrap and an overall wrap"
  tile_color 0x1e252eff
  label "(\[value outputView])"
- note_font "DejaVu Sans Bold Bold"
+ note_font "DejaVu Sans Bold Bold Bold"
  note_font_color 0xb7e6ffff
  selected true
- xpos -8235
- ypos 3097
+ xpos -3001
+ ypos 2790
  disable true
  mapsize {0.15 0.15}
  addUserKnob {20 LightWrapPro}
@@ -3793,7 +3794,7 @@ Group {
   xpos -379
   ypos 375
  }
-set Ne97e95c0 [stack 0]
+set N96a494d0 [stack 0]
  Dot {
   name Dot7
   xpos -825
@@ -3804,34 +3805,34 @@ set Ne97e95c0 [stack 0]
   xpos -825
   ypos 3104
  }
-set Ne97f1260 [stack 0]
+set N96a51190 [stack 0]
  Dot {
   name Dot15
   xpos 915
   ypos 3107
  }
-set Ne940fc00 [stack 0]
+set N96a55070 [stack 0]
  Dot {
   name Dot26
   note_font_size 41
   xpos 915
   ypos 3224
  }
-set Ne9413210 [stack 0]
+set N96a58f50 [stack 0]
  Dot {
   name Dot32
   note_font_size 41
   xpos 915
   ypos 3277
  }
-push $Ne97e95c0
+push $N96a494d0
  Dot {
   name Dot8
   note_font_size 41
   xpos 717
   ypos 378
  }
-set Ne8afb0a0 [stack 0]
+set N96a60d50 [stack 0]
  Dot {
   name Dot11
   note_font_size 41
@@ -3864,7 +3865,7 @@ set Ne8afb0a0 [stack 0]
   xpos 1736
   ypos 177
  }
-set Ne94f1010 [stack 0]
+set N96a7b320 [stack 0]
  Keyer {
   operation "luminance key"
   range {{parent.blackPt} {parent.whitePt} {range.B} {range.B}}
@@ -3878,7 +3879,7 @@ set Ne94f1010 [stack 0]
   xpos 1736
   ypos 397
  }
-set Ne93ef530 [stack 0]
+set N96a88230 [stack 0]
  Premult {
   name Premult1
   xpos 1702
@@ -3905,7 +3906,7 @@ set Ne93ef530 [stack 0]
   knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n\n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n\nelif k.name() == \"steps\":\n\n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        m1    = nuke.toNode(\"Multiply1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n\n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n\n        m1x   = m1.xpos()\n        m1y   = m1.ypos()\n        m1n   = m1.name()\n\n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('exp').getValue()\n\n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, m1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            m = nuke.nodes.Multiply()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"all\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression( \"((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(\{\}**2))\".format(str(i+1)), 0 )\n            b\[\"size\"].setExpression( \"((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(\{\}**2))\".format(str(i+1)), 1 )\n            b\[\"label\"].setValue('')\n            blurAbove = b.name()\n\n            m.setXYpos(m1x+i*100,m1y)\n            m.setInput(0, nuke.toNode(blurAbove))\n            m\[\"channels\"].setValue(\"all\")\n            m\[\"value\"].setValue(1,1,1,1)\n            j = 1-(i/steps)\n            m\[\"value\"].setExpression('falloffType == 0 ? \{\} :falloffType == 1 ? pow(\{\}, 3) : falloffType == 2 ? \{\}*\{\}*(3-2*\{\}) : falloffType == 3 ? \{\}*\{\}*(2 - \{\}) : falloffType == 4 ? \{\}*(1 + \{\}*(1 - \{\})) : 0'.format(j,j,j,j,j,j,j,j,j,j,j))\n            m\[\"mix\"].setExpression(\"falloff\")\n            m\[\"label\"].setValue('')\n\n            merge.setInput(i if i<2 else i+1, m)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n\n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n\nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n\n"
   tile_color 0xcc804eff
   label "(\[value output2])"
-  note_font "Verdana Bold Bold Bold"
+  note_font "Verdana Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 1700
   ypos 1012
@@ -3977,7 +3978,7 @@ set Ne93ef530 [stack 0]
    xpos -187
    ypos -1062
   }
-set Ne9d26a80 [stack 0]
+set N969da970 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
@@ -4005,14 +4006,14 @@ set Ne9d26a80 [stack 0]
    xpos 461
    ypos -853
   }
-set Ne9d3a370 [stack 0]
+set N969ee270 [stack 0]
   Invert {
    name Invert1
    xpos 864
    ypos -860
    disable {{"parent.size < 0 ? 0 : 1"}}
   }
-set Ne9d3e2e0 [stack 0]
+set N969f21e0 [stack 0]
   Dot {
    name Dot4
    note_font_size 41
@@ -4030,13 +4031,13 @@ set Ne9d3e2e0 [stack 0]
    xpos 540
    ypos 100
   }
-push $Ne9d3e2e0
+push $N969f21e0
   NoOp {
    name Start
    xpos 864
    ypos -706
   }
-set Ne9d582a0 [stack 0]
+set N97a614d0 [stack 0]
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(6**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(6**2))}}
    crop false
@@ -4051,7 +4052,7 @@ set Ne9d582a0 [stack 0]
    xpos 1364
    ypos -477
   }
-push $Ne9d582a0
+push $N97a614d0
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(5**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(5**2))}}
    crop false
@@ -4066,7 +4067,7 @@ push $Ne9d582a0
    xpos 1264
    ypos -477
   }
-push $Ne9d582a0
+push $N97a614d0
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(4**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(4**2))}}
    crop false
@@ -4081,7 +4082,7 @@ push $Ne9d582a0
    xpos 1164
    ypos -477
   }
-push $Ne9d582a0
+push $N97a614d0
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(3**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(3**2))}}
    crop false
@@ -4097,7 +4098,7 @@ push $Ne9d582a0
    ypos -477
   }
 push 0
-push $Ne9d582a0
+push $N97a614d0
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(2**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(2**2))}}
    crop false
@@ -4112,7 +4113,7 @@ push $Ne9d582a0
    xpos 964
    ypos -477
   }
-push $Ne9d582a0
+push $N97a614d0
   Blur {
    size {{(width/100*parent.size*(aspectCalc.aspect.w/100))} {(height/100*parent.size*(aspectCalc.aspect.h/100))}}
    crop false
@@ -4173,7 +4174,7 @@ push $Ne9d582a0
    ypos 283
    disable {{"parent.size < 0 ? 0 : 1"}}
   }
-push $Ne9d3a370
+push $N969ee270
   Switch {
    inputs 2
    which {{"parent.size == 0 ? 0 : 1"}}
@@ -4199,7 +4200,7 @@ push $Ne9d3a370
    xpos 96
    ypos -891
   }
-push $Ne9d26a80
+push $N969da970
   Merge2 {
    inputs 2
    name Merge3
@@ -4207,13 +4208,13 @@ push $Ne9d26a80
    xpos -60
    ypos -891
   }
-set Ne9457fd0 [stack 0]
+set N95a55810 [stack 0]
   Group {
    name BBoxToFormat
    onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
    knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"overscanType\":\n    if n.knob(\"overscanType\").getValue() == 1:\n        n.knob(\"overscanPercent\").setVisible(True)\n        n.knob(\"overscan\").setVisible(False)\n    else:\n        n.knob(\"overscanPercent\").setVisible(False)\n        n.knob(\"overscan\").setVisible(True)"
    tile_color 0xa57aaaff
-   note_font "Verdana Bold Bold Bold"
+   note_font "Verdana Bold Bold Bold Bold"
    note_font_color 0xffffffff
    xpos 29
    ypos -812
@@ -4253,15 +4254,15 @@ set Ne9457fd0 [stack 0]
     xpos 295
     ypos 462
    }
-set Ne8cc52e0 [stack 0]
+set N95a71c40 [stack 0]
    Dot {
     name Dot1
     note_font_size 41
     xpos -160
     ypos 462
    }
-set Ne8cc91f0 [stack 0]
-push $Ne8cc52e0
+set N95a75b60 [stack 0]
+push $N95a71c40
    Crop {
     box {{curve} {curve} {input.width} {input.height}}
     crop {{parent.blackOutside}}
@@ -4271,7 +4272,7 @@ push $Ne8cc52e0
     addUserKnob {20 User}
     addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
    }
-set Ne8ccd0d0 [stack 0]
+set N95a79a40 [stack 0]
    Remove {
     operation keep
     channels none
@@ -4279,7 +4280,7 @@ set Ne8ccd0d0 [stack 0]
     xpos 120
     ypos 504
    }
-set Ne8cd6a50 [stack 0]
+set N95a83370 [stack 0]
    Transform {
     scale {{parent.overscanPercent} {parent.overscanPercent}}
     center {{input.bbox.r/2} {input.bbox.t/2}}
@@ -4288,7 +4289,7 @@ set Ne8cd6a50 [stack 0]
     xpos 120
     ypos 555
    }
-push $Ne8cd6a50
+push $N95a83370
    AdjBBox {
     numpixels {{parent.overscan} {parent.overscan}}
     name AdjBBox1
@@ -4314,7 +4315,7 @@ push $Ne8cd6a50
     ypos 647
     disable {{!parent.Crop6.intersect}}
    }
-push $Ne8cc91f0
+push $N95a75b60
    CopyBBox {
     inputs 2
     name CopyBBox1
@@ -4333,7 +4334,7 @@ push $Ne8cc91f0
     xpos -160
     ypos 769
    }
-push $Ne8ccd0d0
+push $N95a79a40
    Switch {
     inputs 2
     which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -4342,13 +4343,13 @@ push $Ne8ccd0d0
     xpos 261
     ypos 759
    }
-set Ne96f9aa0 [stack 0]
+set N96c17af0 [stack 0]
    Output {
     name Output1
     xpos 261
     ypos 921
    }
-push $Ne96f9aa0
+push $N96c17af0
    NoOp {
     name OutputBBox1
     selected true
@@ -4361,7 +4362,7 @@ push $Ne96f9aa0
     outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
    }
   end_group
-push $Ne9457fd0
+push $N95a55810
   Merge2 {
    inputs 2
    name Merge4
@@ -4369,7 +4370,7 @@ push $Ne9457fd0
    xpos -60
    ypos -748
   }
-push $Ne9d26a80
+push $N969da970
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -4408,7 +4409,7 @@ push $Ne9d26a80
    xpos -187
    ypos 805
   }
-push $Ne9d26a80
+push $N969da970
   Dot {
    name Dot2
    note_font_size 41
@@ -4476,16 +4477,16 @@ push $Ne9d26a80
   xpos 1736
   ypos 1801
  }
-set Ne9f196f0 [stack 0]
+set N94ec7d30 [stack 0]
  Dot {
   name Dot31
   note_font_size 41
   xpos 1738
   ypos 2915
  }
-set Ne9f1d5a0 [stack 0]
-push $Ne8afb0a0
-push $Ne94f1010
+set N94ecbca0 [stack 0]
+push $N96a60d50
+push $N96a7b320
  Dot {
   name Dot20
   xpos 1059
@@ -4514,7 +4515,7 @@ push $Ne94f1010
   xpos 1059
   ypos 725
  }
-set Ne9f3a300 [stack 0]
+set N94eeae20 [stack 0]
  Dot {
   name Dot28
   note_font_size 41
@@ -4527,7 +4528,7 @@ set Ne9f3a300 [stack 0]
   xpos 1309
   ypos 823
  }
-push $Ne9f3a300
+push $N94eeae20
  Colorspace {
   colorspace_out CIE-Yxy
   name Colorspace4
@@ -4552,7 +4553,7 @@ push $Ne9f3a300
   xpos 1188
   ypos 867
  }
-push $Ne9f3a300
+push $N94eeae20
  Switch {
   inputs 2
   which {{removeHighlights}}
@@ -4566,7 +4567,7 @@ push $Ne9f3a300
   knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n\n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n\nelif k.name() == \"steps\":\n\n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        m1    = nuke.toNode(\"Multiply1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n\n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n\n        m1x   = m1.xpos()\n        m1y   = m1.ypos()\n        m1n   = m1.name()\n\n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('exp').getValue()\n\n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, m1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            m = nuke.nodes.Multiply()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"all\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression( \"((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(\{\}**2))\".format(str(i+1)), 0 )\n            b\[\"size\"].setExpression( \"((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(\{\}**2))\".format(str(i+1)), 1 )\n            b\[\"label\"].setValue('')\n            blurAbove = b.name()\n\n            m.setXYpos(m1x+i*100,m1y)\n            m.setInput(0, nuke.toNode(blurAbove))\n            m\[\"channels\"].setValue(\"all\")\n            m\[\"value\"].setValue(1,1,1,1)\n            j = 1-(i/steps)\n            m\[\"value\"].setExpression('falloffType == 0 ? \{\} :falloffType == 1 ? pow(\{\}, 3) : falloffType == 2 ? \{\}*\{\}*(3-2*\{\}) : falloffType == 3 ? \{\}*\{\}*(2 - \{\}) : falloffType == 4 ? \{\}*(1 + \{\}*(1 - \{\})) : 0'.format(j,j,j,j,j,j,j,j,j,j,j))\n            m\[\"mix\"].setExpression(\"falloff\")\n            m\[\"label\"].setValue('')\n\n            merge.setInput(i if i<2 else i+1, m)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n\n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n\nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n\n"
   tile_color 0xcc804eff
   label "(\[value output2])"
-  note_font "Verdana Bold Bold Bold"
+  note_font "Verdana Bold Bold Bold Bold"
   note_font_color 0xffffffff
   xpos 1025
   ypos 995
@@ -4638,7 +4639,7 @@ push $Ne9f3a300
    xpos -187
    ypos -1062
   }
-set Ne9f9bce0 [stack 0]
+set N95b59000 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
@@ -4666,14 +4667,14 @@ set Ne9f9bce0 [stack 0]
    xpos 461
    ypos -853
   }
-set Ne9faf660 [stack 0]
+set N95b6c900 [stack 0]
   Invert {
    name Invert1
    xpos 864
    ypos -860
    disable {{"parent.size < 0 ? 0 : 1"}}
   }
-set Ne9fb35c0 [stack 0]
+set N95b70870 [stack 0]
   Dot {
    name Dot4
    note_font_size 41
@@ -4691,13 +4692,13 @@ set Ne9fb35c0 [stack 0]
    xpos 540
    ypos 100
   }
-push $Ne9fb35c0
+push $N95b70870
   NoOp {
    name Start
    xpos 864
    ypos -706
   }
-set Ne9fc92b0 [stack 0]
+set N95b865f0 [stack 0]
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(8**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(8**2))}}
    crop false
@@ -4712,7 +4713,7 @@ set Ne9fc92b0 [stack 0]
    xpos 1564
    ypos -477
   }
-push $Ne9fc92b0
+push $N95b865f0
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(7**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(7**2))}}
    crop false
@@ -4727,7 +4728,7 @@ push $Ne9fc92b0
    xpos 1464
    ypos -477
   }
-push $Ne9fc92b0
+push $N95b865f0
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(6**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(6**2))}}
    crop false
@@ -4742,7 +4743,7 @@ push $Ne9fc92b0
    xpos 1364
    ypos -477
   }
-push $Ne9fc92b0
+push $N95b865f0
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(5**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(5**2))}}
    crop false
@@ -4757,7 +4758,7 @@ push $Ne9fc92b0
    xpos 1264
    ypos -477
   }
-push $Ne9fc92b0
+push $N95b865f0
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(4**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(4**2))}}
    crop false
@@ -4772,7 +4773,7 @@ push $Ne9fc92b0
    xpos 1164
    ypos -477
   }
-push $Ne9fc92b0
+push $N95b865f0
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(3**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(3**2))}}
    crop false
@@ -4788,7 +4789,7 @@ push $Ne9fc92b0
    ypos -477
   }
 push 0
-push $Ne9fc92b0
+push $N95b865f0
   Blur {
    size {{((width/100*parent.size.w)*(aspectCalc.aspect.w/100)*(2**2))} {((height/100*parent.size.h)*(aspectCalc.aspect.h/100)*(2**2))}}
    crop false
@@ -4803,7 +4804,7 @@ push $Ne9fc92b0
    xpos 964
    ypos -477
   }
-push $Ne9fc92b0
+push $N95b865f0
   Blur {
    size {{(width/100*parent.size*(aspectCalc.aspect.w/100))} {(height/100*parent.size*(aspectCalc.aspect.h/100))}}
    crop false
@@ -4863,7 +4864,7 @@ push $Ne9fc92b0
    ypos 283
    disable {{"parent.size < 0 ? 0 : 1"}}
   }
-push $Ne9faf660
+push $N95b6c900
   Switch {
    inputs 2
    which {{"parent.size == 0 ? 0 : 1"}}
@@ -4889,7 +4890,7 @@ push $Ne9faf660
    xpos 96
    ypos -891
   }
-push $Ne9f9bce0
+push $N95b59000
   Merge2 {
    inputs 2
    name Merge3
@@ -4897,13 +4898,13 @@ push $Ne9f9bce0
    xpos -60
    ypos -891
   }
-set Ne8a38500 [stack 0]
+set N96fda100 [stack 0]
   Group {
    name BBoxToFormat
    onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
    knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"overscanType\":\n    if n.knob(\"overscanType\").getValue() == 1:\n        n.knob(\"overscanPercent\").setVisible(True)\n        n.knob(\"overscan\").setVisible(False)\n    else:\n        n.knob(\"overscanPercent\").setVisible(False)\n        n.knob(\"overscan\").setVisible(True)"
    tile_color 0xa57aaaff
-   note_font "Verdana Bold Bold Bold"
+   note_font "Verdana Bold Bold Bold Bold"
    note_font_color 0xffffffff
    xpos 29
    ypos -812
@@ -4943,15 +4944,15 @@ set Ne8a38500 [stack 0]
     xpos 295
     ypos 462
    }
-set Nea114d20 [stack 0]
+set N96ff6530 [stack 0]
    Dot {
     name Dot1
     note_font_size 41
     xpos -160
     ypos 462
    }
-set Nea118bb0 [stack 0]
-push $Nea114d20
+set N96ffa450 [stack 0]
+push $N96ff6530
    Crop {
     box {{curve} {curve} {input.width} {input.height}}
     crop {{parent.blackOutside}}
@@ -4961,7 +4962,7 @@ push $Nea114d20
     addUserKnob {20 User}
     addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
    }
-set Nea11ca90 [stack 0]
+set N979022b0 [stack 0]
    Remove {
     operation keep
     channels none
@@ -4969,7 +4970,7 @@ set Nea11ca90 [stack 0]
     xpos 120
     ypos 504
    }
-set Nea126300 [stack 0]
+set N9790baa0 [stack 0]
    Transform {
     scale {{parent.overscanPercent} {parent.overscanPercent}}
     center {{input.bbox.r/2} {input.bbox.t/2}}
@@ -4978,7 +4979,7 @@ set Nea126300 [stack 0]
     xpos 120
     ypos 555
    }
-push $Nea126300
+push $N9790baa0
    AdjBBox {
     numpixels {{parent.overscan} {parent.overscan}}
     name AdjBBox1
@@ -5004,7 +5005,7 @@ push $Nea126300
     ypos 647
     disable {{!parent.Crop6.intersect}}
    }
-push $Nea118bb0
+push $N96ffa450
    CopyBBox {
     inputs 2
     name CopyBBox1
@@ -5023,7 +5024,7 @@ push $Nea118bb0
     xpos -160
     ypos 769
    }
-push $Nea11ca90
+push $N979022b0
    Switch {
     inputs 2
     which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -5032,13 +5033,13 @@ push $Nea11ca90
     xpos 261
     ypos 759
    }
-set Nea1644c0 [stack 0]
+set N97949ca0 [stack 0]
    Output {
     name Output1
     xpos 261
     ypos 921
    }
-push $Nea1644c0
+push $N97949ca0
    NoOp {
     name OutputBBox1
     selected true
@@ -5051,7 +5052,7 @@ push $Nea1644c0
     outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
    }
   end_group
-push $Ne8a38500
+push $N96fda100
   Merge2 {
    inputs 2
    name Merge4
@@ -5059,7 +5060,7 @@ push $Ne8a38500
    xpos -60
    ypos -748
   }
-push $Ne9f9bce0
+push $N95b59000
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -5098,7 +5099,7 @@ push $Ne9f9bce0
    xpos -187
    ypos 805
   }
-push $Ne9f9bce0
+push $N95b59000
   Dot {
    name Dot2
    note_font_size 41
@@ -5150,7 +5151,7 @@ push $Ne9f9bce0
   xpos 1059
   ypos 1277
  }
-set Nea1838b0 [stack 0]
+set N979a7e40 [stack 0]
  Grade {
   channels all
   white {{wrapAllAmount/10}}
@@ -5173,14 +5174,14 @@ set Nea1838b0 [stack 0]
   xpos 1059
   ypos 1692
  }
-set Nea19d940 [stack 0]
+set N979c1ed0 [stack 0]
  Dot {
   name Dot27
   note_font_size 41
   xpos 1059
   ypos 3062
  }
-set Nea1a17f0 [stack 0]
+set N979c5d80 [stack 0]
  Merge2 {
   inputs 2
   name Merge1
@@ -5202,8 +5203,8 @@ set Nea1a17f0 [stack 0]
   xpos 1530
   ypos 3274
  }
-push $Ne9413210
-push $Nea1a17f0
+push $N96a58f50
+push $N979c5d80
  Shuffle {
   alpha white
   name Shuffle2
@@ -5219,8 +5220,8 @@ push $Nea1a17f0
   xpos 1025
   ypos 3221
  }
-push $Ne940fc00
-push $Ne9f1d5a0
+push $N96a55070
+push $N94ecbca0
  Shuffle {
   alpha white
   name Shuffle4
@@ -5236,7 +5237,7 @@ push $Ne9f1d5a0
   xpos 1708
   ypos 3104
  }
-push $Ne93ef530
+push $N96a88230
  Dot {
   name Dot21
   xpos 2349
@@ -5259,14 +5260,14 @@ push $Ne93ef530
   xpos 2349
   ypos 3399
  }
-push $Nea1838b0
+push $N979a7e40
  Dot {
   name Dot29
   note_font_size 41
   xpos 757
   ypos 1277
  }
-set Nea09de60 [stack 0]
+set N969baf30 [stack 0]
  Grade {
   channels rgba
   gamma {{parent.bleedColorFalloff_2}}
@@ -5289,21 +5290,21 @@ set Nea09de60 [stack 0]
   xpos 297
   ypos 2828
  }
-push $Ne9f3a300
+push $N94eeae20
  Dot {
   name Dot38
   note_font_size 41
   xpos 438
   ypos 725
  }
-set Nea0bbeb0 [stack 0]
+set N9692b6d0 [stack 0]
  Dot {
   name Dot2
   note_font_size 41
   xpos 439
   ypos 802
  }
-set Nea1d07f0 [stack 0]
+set N9692f600 [stack 0]
  Dot {
   name Dot17
   note_font_size 41
@@ -5316,7 +5317,7 @@ set Nea1d07f0 [stack 0]
   xpos 334
   ypos 1201
  }
-push $Nea1d07f0
+push $N9692f600
  Blur {
   size {{(width/13*parent.bleedColorSize*16*(ExponGlowWrapAll.aspectCalc.aspect.w/100))} {(height/13*parent.bleedColorSize*16*(ExponGlowWrapAll.aspectCalc.aspect.h/100))}}
   crop false
@@ -5324,7 +5325,7 @@ push $Nea1d07f0
   xpos 856
   ypos 874
  }
-push $Nea1d07f0
+push $N9692f600
  Blur {
   size {{(width/13*parent.bleedColorSize*8*(ExponGlowWrapAll.aspectCalc.aspect.w/100))} {(height/13*parent.bleedColorSize*8*(ExponGlowWrapAll.aspectCalc.aspect.h/100))}}
   crop false
@@ -5332,7 +5333,7 @@ push $Nea1d07f0
   xpos 743
   ypos 873
  }
-push $Nea1d07f0
+push $N9692f600
  Blur {
   size {{(width/15*parent.bleedColorSize*4*(ExponGlowWrapAll.aspectCalc.aspect.w/100))} {(height/15*parent.bleedColorSize*4*(ExponGlowWrapAll.aspectCalc.aspect.h/100))}}
   crop false
@@ -5340,7 +5341,7 @@ push $Nea1d07f0
   xpos 627
   ypos 874
  }
-push $Nea1d07f0
+push $N9692f600
  Blur {
   size {{(width/20*parent.bleedColorSize*2*(ExponGlowWrapAll.aspectCalc.aspect.w/100))} {(height/20*parent.bleedColorSize*2*(ExponGlowWrapAll.aspectCalc.aspect.h/100))}}
   crop false
@@ -5348,7 +5349,7 @@ push $Nea1d07f0
   xpos 515
   ypos 872
  }
-push $Nea1d07f0
+push $N9692f600
  Blur {
   size {{(width/25*parent.bleedColorSize*(ExponGlowWrapAll.aspectCalc.aspect.w/100))} {(height/25*parent.bleedColorSize*(ExponGlowWrapAll.aspectCalc.aspect.h/100))}}
   crop false
@@ -5429,9 +5430,9 @@ push $Nea1d07f0
   xpos 404
   ypos 2532
  }
-push $Ne9f196f0
-push $Nea19d940
-push $Nea0bbeb0
+push $N94ec7d30
+push $N979c1ed0
+push $N9692b6d0
  Dot {
   name Dot10
   xpos 201
@@ -5457,7 +5458,7 @@ push $Nea0bbeb0
   xpos 19
   ypos 1507
  }
-push $Nea09de60
+push $N969baf30
  Colorspace {
   channels all
   colorspace_out HSV
@@ -5472,7 +5473,7 @@ push $Nea09de60
   xpos -123
   ypos 1262
  }
-push $Ne97e95c0
+push $N96a494d0
  Remove {
   operation keep
   channels rgba
@@ -5487,7 +5488,7 @@ push $Ne97e95c0
   ypos 1094
   disable {{premultiplied*-1+1 x1 1}}
  }
-set Nea2c8480 [stack 0]
+set N97c7e910 [stack 0]
  Dot {
   name Dot12
   xpos -226
@@ -5533,14 +5534,14 @@ set Nea2c8480 [stack 0]
   xpos -226
   ypos 1408
  }
-push $Nea2c8480
+push $N97c7e910
  Dot {
   name Dot18
   note_font_size 41
   xpos -373
   ypos 1514
  }
-set Nea0e1be0 [stack 0]
+set N97cc7ba0 [stack 0]
  Merge2 {
   inputs 2+1
   operation copy
@@ -5560,7 +5561,7 @@ set Nea0e1be0 [stack 0]
   xpos -226
   ypos 1588
  }
-push $Nea0e1be0
+push $N97cc7ba0
  Switch {
   inputs 2
   which {{"blendEdgesAmount == 0 ? 0 : 1"}}
@@ -5596,7 +5597,7 @@ push $Nea0e1be0
   xpos -373
   ypos 2417
  }
-set Nea40d710 [stack 0]
+set N97d02370 [stack 0]
  Colorspace {
   channels all
   colorspace_out HSV
@@ -5630,7 +5631,7 @@ set Nea40d710 [stack 0]
   xpos -81
   ypos 2606
  }
-push $Nea2c8480
+push $N97c7e910
  Dot {
   name Dot13
   xpos -579
@@ -5641,7 +5642,7 @@ push $Nea2c8480
   xpos -579
   ypos 2559
  }
-push $Nea40d710
+push $N97d02370
  Copy {
   inputs 2
   from0 rgba.alpha
@@ -5656,7 +5657,7 @@ push $Nea40d710
   xpos -373
   ypos 2649
  }
-set Nea45f730 [stack 0]
+set N97d543a0 [stack 0]
  Merge2 {
   inputs 2+1
   operation copy
@@ -5667,7 +5668,7 @@ set Nea45f730 [stack 0]
   xpos -81
   ypos 2828
  }
-push $Nea45f730
+push $N97d543a0
  Switch {
   inputs 2
   which {{"parent.bleedColorAmount== 0 ? 0 : 1"}}
@@ -5693,7 +5694,7 @@ push $Nea45f730
   xpos 1708
   ypos 3395
  }
-push $Ne97f1260
+push $N96a51190
  Dot {
   name Dot5
   note_font_size 41
@@ -5718,95 +5719,95 @@ end_group
 Dot {
  name Dot323
  selected true
- xpos -8201
- ypos 3646
+ xpos -2967
+ ypos 3339
 }
 Dot {
  name Dot324
  note_font_size 41
  selected true
- xpos -1412
- ypos 3646
+ xpos 3822
+ ypos 3339
 }
-set Ne8c58490 [stack 0]
+set N97d9eaf0 [stack 0]
 Remove {
  operation keep
  channels rgba
  name Remove37
  selected true
- xpos -1302
- ypos 3643
+ xpos 3932
+ ypos 3336
 }
-push $Ne8c58490
+push $N97d9eaf0
 Dot {
  name Dot326
  note_font_size 41
  selected true
- xpos -1412
- ypos 3133
+ xpos 3822
+ ypos 2826
 }
 Dot {
  name Dot327
  note_font_size 41
  selected true
- xpos -1242
- ypos 3133
+ xpos 3992
+ ypos 2826
 }
-set Ne8e3c240 [stack 0]
+set N97dadd10 [stack 0]
 Shuffle {
  in cleanplate
  name Shuffle42
  label "\[value in]"
  selected true
- xpos -1276
- ypos 3192
+ xpos 3958
+ ypos 2885
 }
 Dot {
  name Dot328
  note_font_size 41
  selected true
- xpos -1242
- ypos 3329
+ xpos 3992
+ ypos 3022
 }
-push $Ne8e3c240
+push $N97dadd10
 Dot {
  name Dot329
  note_font_size 41
  selected true
- xpos -1112
- ypos 3133
+ xpos 4122
+ ypos 2826
 }
 Shuffle {
  in GS
  name Shuffle43
  label "\[value in]"
  selected true
- xpos -1146
- ypos 3193
+ xpos 4088
+ ypos 2886
 }
-push $Ne6fbd300
+push $N95f7f190
 Dot {
  name Dot330
  selected true
- xpos -991
- ypos 2776
+ xpos 4243
+ ypos 2469
 }
 Dot {
  name Dot331
  note_font_size 41
  selected true
- xpos -991
- ypos 3155
+ xpos 4243
+ ypos 2848
 }
 Group {
  inputs 3
  name AdditiveKeyerPro
  tile_color 0x5200ff
- note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font "Verdana Bold Bold"
  note_font_color 0xffffffff
  selected true
- xpos -1025
- ypos 3326
+ xpos 4209
+ ypos 3019
  disable true
  addUserKnob {20 AdditiveKeyer}
  addUserKnob {6 useSC l "Use Screen Color as CleanPlate" +STARTLINE}
@@ -5814,7 +5815,7 @@ Group {
  addUserKnob {6 despillSat l "Despill Screen Color from Saturation?" +STARTLINE}
  despillSat true
  addUserKnob {26 ""}
- addUserKnob {7 DarkValue l "Dark Value" R 0 10}
+ addUserKnob {7 DarkValue l "Dark Value" R 0 5}
  DarkValue 1
  addUserKnob {7 satDarks l "Saturate Darks"}
  satDarks 0.2
@@ -5824,7 +5825,7 @@ Group {
  addUserKnob {6 darkTint_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {26 ""}
  addUserKnob {6 lightTint_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
- addUserKnob {7 ExtraLightValue l "Light Value Plus"}
+ addUserKnob {7 ExtraLightValue l "Light Value Plus" R 0 2}
  ExtraLightValue 1
  addUserKnob {7 satLights l "Saturate Lights"}
  satLights 0.2
@@ -5832,7 +5833,7 @@ Group {
  lightTint 1
  addUserKnob {6 lightTint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 lightTint_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {7 LightValue l "Light Value BG Mult" R 0 10}
+ addUserKnob {7 LightValue l "Light Value BG Mult" R 0 5}
  LightValue 0.25
  addUserKnob {26 ""}
  addUserKnob {6 darkTint_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" +HIDDEN +STARTLINE}
@@ -5896,7 +5897,7 @@ Group {
   xpos -466
   ypos 5
  }
-set Ne8ea5c20 [stack 0]
+set N98653ff0 [stack 0]
  OFXuk.co.thefoundry.keylight.keylight_v201 {
   show "Final Result"
   unPreMultiply false
@@ -5942,8 +5943,8 @@ set Ne8ea5c20 [stack 0]
   xpos -500
   ypos 73
  }
-set Ne8ea99d0 [stack 0]
-push $Ne8ea5c20
+set N98657da0 [stack 0]
+push $N98653ff0
  Dot {
   name Dot27
   note_font_size 41
@@ -5970,7 +5971,7 @@ push $Ne8ea5c20
   xpos -390
   ypos 125
  }
-push $Ne8ea99d0
+push $N98657da0
  Merge2 {
   inputs 2
   operation plus
@@ -5979,7 +5980,7 @@ push $Ne8ea99d0
   xpos -500
   ypos 125
  }
-push $Ne8ea5c20
+push $N98653ff0
  Dot {
   name Dot30
   note_font_size 41
@@ -6005,7 +6006,7 @@ push $Ne8ea5c20
   xpos -466
   ypos 373
  }
-set Ne84c5930 [stack 0]
+set N986f71d0 [stack 0]
  Input {
   inputs 0
   name clean
@@ -6040,11 +6041,11 @@ set Ne84c5930 [stack 0]
   xpos 160
   ypos 50
  }
-set Ne9603870 [stack 0]
+set N98b170d0 [stack 0]
  OFXuk.co.thefoundry.keylight.keylight_v201 {
   show "Final Result"
   unPreMultiply false
-  screenColour {{parent.Keylight1.screenColour x1001 0.2000732422} {parent.Keylight1.screenColour x1001 0.3078613281} {parent.Keylight1.screenColour x1001 0.08349609375}}
+  screenColour {{parent.Keylight1.screenColour x1 0} {parent.Keylight1.screenColour x1 0} {parent.Keylight1.screenColour x1 0}}
   screenGain 1
   screenBalance 0.5
   alphaBias {0.5 0.5 0.5}
@@ -6086,8 +6087,8 @@ set Ne9603870 [stack 0]
   xpos 126
   ypos 118
  }
-set Ne96077b0 [stack 0]
-push $Ne9603870
+set N98b1afc0 [stack 0]
+push $N98b170d0
  Dot {
   name Dot29
   note_font_size 41
@@ -6114,7 +6115,7 @@ push $Ne9603870
   xpos 236
   ypos 170
  }
-push $Ne96077b0
+push $N98b1afc0
  Merge2 {
   inputs 2
   operation plus
@@ -6123,7 +6124,7 @@ push $Ne96077b0
   xpos 126
   ypos 170
  }
-push $Ne9603870
+push $N98b170d0
  Dot {
   name Dot33
   note_font_size 41
@@ -6150,7 +6151,7 @@ push $Ne9603870
   xpos 160
   ypos 320
  }
-set Ne94cafa0 [stack 0]
+set N98be4950 [stack 0]
  Dot {
   name Dot6
   xpos 412
@@ -6197,7 +6198,7 @@ set Ne94cafa0 [stack 0]
    xpos 558
    ypos -668
   }
-set Ne8cb5120 [stack 0]
+set N98c089b0 [stack 0]
   Shuffle {
    green red
    blue red
@@ -6213,7 +6214,7 @@ set Ne8cb5120 [stack 0]
    xpos 386
    ypos -492
   }
-push $Ne8cb5120
+push $N98c089b0
   Shuffle {
    red green
    blue green
@@ -6236,8 +6237,8 @@ push $Ne8cb5120
    xpos 411
    ypos -428
   }
-  set Ce9906800 [stack 0]
-push $Ne8cb5120
+  set C98c493b0 [stack 0]
+push $N98c089b0
   Shuffle {
    red blue
    green blue
@@ -6253,13 +6254,13 @@ push $Ne8cb5120
    xpos 610
    ypos -494
   }
-clone $Ce9906800 {
+clone $C98c493b0 {
    inputs 2
    xpos 486
    ypos -369
    selected false
   }
-push $Ne8cb5120
+push $N98c089b0
   Shuffle {
    red alpha
    green alpha
@@ -6276,7 +6277,7 @@ push $Ne8cb5120
    xpos 725
    ypos -494
   }
-clone $Ce9906800 {
+clone $C98c493b0 {
    inputs 2
    xpos 580
    ypos -307
@@ -6318,29 +6319,29 @@ clone $Ce9906800 {
   xpos -811
   ypos 1449
  }
-set Ne9845980 [stack 0]
+set N98cbb5f0 [stack 0]
  Dot {
   name Dot13
   note_font_size 41
   xpos -811
   ypos 1688
  }
-set Ne9849860 [stack 0]
-push $Ne84c5930
+set N98cbf4d0 [stack 0]
+push $N986f71d0
  Dot {
   name Dot2
   note_font_size 41
   xpos -466
   ypos 421
  }
-set Ne984d730 [stack 0]
+set N98cc33a0 [stack 0]
  Saturation {
   saturation {{parent.satDarks}}
   name Saturation9
   xpos -378
   ypos 418
  }
-push $Ne94cafa0
+push $N98be4950
  Saturation {
   saturation {{parent.satDarks}}
   name Saturation8
@@ -6383,19 +6384,26 @@ push $Ne94cafa0
   xpos -215
   ypos 892
  }
- Multiply {
-  channels rgba
-  value {{parent.darkTint} {parent.darkTint} {parent.darkTint} {parent.darkTint}}
+ Grade {
+  multiply {{parent.darkTint} {parent.darkTint} {parent.darkTint} {parent.darkTint}}
+  reverse true
+  black_clamp false
   name DARK_TINT
   xpos -215
-  ypos 934
+  ypos 931
  }
  Add {
   channels rgba
   value 1
   name Add4
   xpos -215
-  ypos 1002
+  ypos 988
+ }
+ Clamp {
+  channels rgb
+  name Clamp5
+  xpos -215
+  ypos 1065
  }
  Dot {
   name Dot39
@@ -6403,7 +6411,7 @@ push $Ne94cafa0
   xpos -181
   ypos 1257
  }
-push $Ne984d730
+push $N98cc33a0
  Dot {
   name Dot36
   note_font_size 41
@@ -6416,15 +6424,15 @@ push $Ne984d730
   xpos -101
   ypos 574
  }
-set Ne99479f0 [stack 0]
-push $Ne94cafa0
+set N9856b6f0 [stack 0]
+push $N98be4950
  Saturation {
   saturation {{parent.satLights}}
   name Saturation6
   xpos 126
   ypos 500
  }
-set Ne9951f80 [stack 0]
+set N98575c80 [stack 0]
  Merge2 {
   inputs 2
   operation divide
@@ -6486,7 +6494,7 @@ set Ne9951f80 [stack 0]
   xpos 162
   ypos 1354
  }
-set Ne99aa010 [stack 0]
+set N985d4310 [stack 0]
  Dot {
   name Dot3
   xpos -8
@@ -6498,14 +6506,14 @@ set Ne99aa010 [stack 0]
   xpos -8
   ypos 1611
  }
-push $Ne9951f80
+push $N98575c80
  Dot {
   name Dot7
   note_font_size 41
   xpos 310
   ypos 503
  }
-push $Ne99479f0
+push $N9856b6f0
  Dot {
   name Dot5
   note_font_size 41
@@ -6548,14 +6556,14 @@ push $Ne99479f0
   xpos 310
   ypos 1513
  }
-push $Ne99aa010
+push $N985d4310
  Dot {
   name Dot1
   note_font_size 41
   xpos 162
   ypos 1449
  }
-push $Ne9845980
+push $N98cbb5f0
  Merge2 {
   inputs 2
   operation multiply
@@ -6572,7 +6580,6 @@ push $Ne9845980
   output rgb
   name Merge2
   label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
-  selected true
   xpos 128
   ypos 1510
  }
@@ -6609,7 +6616,7 @@ push $Ne9845980
   xpos 162
   ypos 1910
  }
-push $Ne9849860
+push $N98cbf4d0
  Dot {
   name Dot18
   label B
@@ -6646,70 +6653,70 @@ Merge2 {
  bbox B
  name Merge51
  selected true
- xpos -1025
- ypos 3643
+ xpos 4209
+ ypos 3336
 }
 Dot {
  name Dot332
  selected true
- xpos -991
- ypos 4166
+ xpos 4243
+ ypos 3859
 }
-push $Ne8c58490
+push $N97d9eaf0
 Shuffle {
  in GS
  name Shuffle44
  label "\[value in]"
  selected true
- xpos -1446
- ypos 3859
+ xpos 3788
+ ypos 3552
 }
 Dot {
  name Dot333
  label "Key\nQC "
  note_font_size 100
  selected true
- xpos -1412
- ypos 4004
+ xpos 3822
+ ypos 3697
 }
-push $Ne80e3d90
+push $N95cb1e90
 Dot {
  name Dot334
  selected true
- xpos -3971
- ypos -3697
+ xpos 1263
+ ypos -4004
 }
 Remove {
  operation keep
  channels rgb
  name Remove38
  selected true
- xpos -4005
- ypos -3569
+ xpos 1229
+ ypos -3876
 }
 Dot {
  name Dot335
  note_font_size 41
  selected true
- xpos -3971
- ypos -3352
+ xpos 1263
+ ypos -3659
 }
-push $Ne86d8230
-push $Ne86de4f0
+push $N94dc52f0
+push $N94d07a10
 Merge2 {
  inputs 2
  operation plus
  name Merge52
  label "test lunimance match"
  selected true
- xpos -7880
- ypos -2541
+ xpos -2646
+ ypos -2848
 }
 Dot {
  name Dot336
  label test
  note_font_size 41
  selected true
- xpos -7846
- ypos -2459
+ xpos -2612
+ ypos -2766
 }
