@@ -9,12 +9,14 @@ import nuke
 import sys
 import os
 import webbrowser
+import NST_helper
 
 # This is the prefix being used to customize the gizmo's in this toolkit
 prefixNST = "NST_"
 
 # Store the location of this menu.py to help with nuke.nodePaste() which requires a filepath to paste
 NST_FolderPath = os.path.dirname(__file__)
+NST_helper.NST_FolderPath = NST_FolderPath
 
 # give the name of the help doc .pdf in main folder
 NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v1.0.0.pdf"
@@ -23,21 +25,6 @@ NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v1.0.0.pdf"
 NST_helpDoc_os_path = os.path.join(NST_FolderPath, NST_helpDoc)
 NST_helpDocPath = "file:///{}".format(NST_helpDoc_os_path)
 
-# Define function to replace filepaths on tools importing files on creation
-def filepathCreateNode(gizmoName, paste=False):
-    if paste == True:
-        nukescripts.clear_selection_recursive()
-        nuke.nodePaste(nukeScriptName)
-        fileNodes = nuke.selectedNodes()
-    else:
-        newGizmo = nuke.createNode(gizmoName)
-        fileNodes = newGizmo.nodes()
-    for i in fileNodes:
-        if i.Class() == "Read" or i.Class() == "ReadGeo2" or i.Class() == "Camera2"  or  i.Class() == "Axis2":
-            filepath = i.knob("file").getValue()
-            if "<<<replace>>>" in filepath:
-                newFilepath = filepath.replace("<<<replace>>>", NST_FolderPath)
-                i.knob("file").setValue(newFilepath)
 
 ############################################################################################################
 ############################################################################################################
@@ -64,7 +51,6 @@ m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png")
 imageMenu = m.addMenu('Image', icon = 'ToolbarImage.png', index = 10)
 
 imageMenu.addCommand('LabelFromRead TL', "nuke.createNode('{}LabelFromRead')".format(prefixNST), icon="LabelFromRead.png")
-
 ############################################################################################################
 ############################################################################################################
 
@@ -98,7 +84,7 @@ drawMenu.addSeparator()
 
 drawMenu.addCommand('SpotFlare MHD', "nuke.createNode('{}SpotFlare')".format(prefixNST), icon="Flare.png")
 drawMenu.addCommand('FlareSuperStar NKPD', "nuke.createNode('{}FlareSuperStar')".format(prefixNST), icon="nukepedia_icon.png")
-drawMenu.addCommand('AutoFlare NKPD', "filepathCreateNode('{}AutoFlare2')".format(prefixNST), icon="Flare.png")
+drawMenu.addCommand('AutoFlare NKPD', "NST_helper.filepathCreateNode('{}AutoFlare2')".format(prefixNST), icon="Flare.png")
 
 ############################################################################################################
 ############################################################################################################
@@ -113,6 +99,7 @@ timeMenu.addSeparator()
 timeMenu.addCommand('Looper NKPD', "nuke.createNode('{}Looper')".format(prefixNST), icon="nukepedia_icon.png")
 timeMenu.addCommand('FrameMedian MHD', "nuke.createNode('{}FrameMedian')".format(prefixNST), icon="FrameBlend.png")
 timeMenu.addCommand('TimeMachine NKPD', "nuke.createNode('{}TimeMachine')".format(prefixNST), icon="nukepedia_icon.png")
+timeMenu.addCommand('FrameFiller MJT', "nuke.createNode('{}FrameFiller')".format(prefixNST), icon="FrameFiller.png")
 
 ############################################################################################################
 ############################################################################################################
@@ -173,7 +160,7 @@ glowMenu = filterMenu.addMenu("Glows", icon="Glow.png")
 glowMenu.addCommand('apGlow AP', 'nuke.createNode("{}apeGlow")'.format(prefixNST), icon='apGlow.png')
 glowMenu.addCommand('ExponGlow TL', 'nuke.createNode("{}ExponGlow")'.format(prefixNST), icon='Glow.png')
 glowMenu.addCommand('Glow_Exponential SPIN', 'nuke.createNode("{}Glow_Exponential")'.format(prefixNST), icon="spin_tools.png")
-glowMenu.addCommand('OpticalGlow BM', "nuke.createNode('{}OpticalGlow')".format(prefixNST), icon='bm_OpticalGlow_icon.png')
+glowMenu.addCommand('bm_OpticalGlow BM', "nuke.createNode('{}bm_OpticalGlow')".format(prefixNST), icon='bm_OpticalGlow_icon.png')
 
 filterMenu.addSeparator()
 
@@ -267,7 +254,7 @@ keyerMenu.addCommand('apScreenGrow AP', 'nuke.createNode("{}apeScreenGrow")'.for
 
 keyerMenu.addSeparator()
 
-keyerMenu.addCommand('KeyChew NKPD', "nuke.createNode('{}KeyChew')".format(prefixNST), icon="Gamma.png")
+keyerMenu.addCommand('KeyChew NKPD', "nuke.createNode('{}KeyChew')".format(prefixNST), icon="Keyer.png")
 keyerMenu.addCommand('LumaKeyer DR', "nuke.createNode('{}LumaKeyer')".format(prefixNST), icon="Keyer.png")
 
 ############################################################################################################
@@ -341,8 +328,7 @@ transformMenu.addCommand('RotoCentroid NKPD', "nuke.createNode('{}RotoCentroid')
 transformMenu.addCommand('STmapInverse NKPD', "nuke.createNode('{}STmapInverse')".format(prefixNST), icon="nukepedia_icon.png")
 transformMenu.addCommand('TransformMix NKPD', "nuke.createNode('{}TransformMix')".format(prefixNST), icon="nukepedia_icon.png")
 transformMenu.addCommand('PlanarProjection NKPD', "nuke.createNode('{}PlanarProjection')".format(prefixNST), icon="nukepedia_icon.png")
-
-
+transformMenu.addCommand('Reconcile3DFast DR', "nuke.createNode('{}Reconcile3DFast')".format(prefixNST), icon="Reconcile3D.png")
 
 
 ############################################################################################################
@@ -477,6 +463,7 @@ cgMenu.addSeparator()
 cgMenu.addCommand('aPmatte AP', 'nuke.createNode("{}aPMatte_v2")'.format(prefixNST), icon='aPmatte.png')
 cgMenu.addCommand('P_Ramp NKPD', "nuke.createNode('{}F_P_Ramp')".format(prefixNST), icon="F_pramp.png")
 cgMenu.addCommand('P_Project NKPD', "nuke.createNode('{}F_P_Project')".format(prefixNST), icon="F_pproject.png")
+cgMenu.addCommand('Glue_P NKPD', "nuke.createNode('{}GlueP')".format(prefixNST), icon="PosProjection_MJ.png")
 cgMenu.addCommand('P_Noise_Advanced NKPD', "nuke.createNode('{}P_Noise_Advanced')".format(prefixNST), icon="Noise.png")
 
 ############################################################################################################
@@ -540,7 +527,7 @@ templatesMenu.addSeparator()
 
 gizmoDemoMenu = templatesMenu.addMenu("Gizmo Demo Scripts", icon='Group.png')
 
-gizmoDemoMenu.addCommand('WaterLens Demo MJT', "nuke.nodePaste('{}/MJT_Labs/Draw/WaterLens_11/demo_script/{}WaterLens_sampleScript.nk')".format(NST_FolderPath, prefixNST), icon="WaterLens.png")
+gizmoDemoMenu.addCommand('WaterLens Demo MJT', "NST_helper.filepathCreateNode('{}/MJT_Labs/Draw/WaterLens_11/demo_script/{}WaterLens_sampleScript.nk')".format(NST_FolderPath, prefixNST), icon="WaterLens.png")
 gizmoDemoMenu.addCommand('SSMesh Demo MJT', "nuke.nodePaste('{}/MJT_Labs/3D/SSMesh_v13/demo_script/{}SSMesh_demo.nk')".format(NST_FolderPath, prefixNST), icon="SSMesh.png")
 gizmoDemoMenu.addCommand('UVEditor Demo MJT', "nuke.nodePaste('{}/MJT_Labs/3D/UVEditor_v14/demo_script/{}UVEditor_demo_clean.nk')".format(NST_FolderPath, prefixNST), icon="UVEditor.png")
 gizmoDemoMenu.addCommand('Sparky Demo DB', "nuke.nodePaste('{}/NukepediaTools/11_Particles/DB_Sparky_v1.5/ExampleScene/{}SparkyExampleScene.nk')".format(NST_FolderPath, prefixNST), icon="Sparky.png")

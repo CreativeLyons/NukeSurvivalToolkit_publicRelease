@@ -1,0 +1,151 @@
+Group {
+ name Ls_GlueP
+ help "GlueP - glues an image to a position pass, by projecting on it.\n\nInputs:\n  Image to project\n  P, the position pass\n  N, an optional normals pass for front/back facing selection\n  Projector, the Camera to project from\n  CGCamera, optionally the original camera from the CG render\n\nThe second camera input can be used to convert P and N from camera space to world space - many renderers output camera space P and N by default, but we need world space to do this.  Even better is a \"world position at frame 1\" or \"P0\" or \"Rest position\" pass, which sticks properly to the surface of animated meshes.\n\nA good way to check that a position pass is suitable to project on is to plug it into a PositionToPoints node along with the beauty pass and check in the 3D view that the points lie within the camera frustrum and are laid out in space like the 3D scene was.  For gory details on how to make a good P pass, see the second half of this video about the Flame version: https://www.youtube.com/watch?v=YkgHAMwtmpw\n\nIt works best with 32-bit float P and N passes, rather than 16-bit half."
+ selected true
+ addUserKnob {20 Ls_GlueP}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" t "There's not much point turning this on, it's just as fast on the CPU" T BlinkScript1.useGPUIfAvailable}
+ addUserKnob {26 gap l "" +STARTLINE}
+ addUserKnob {3 freezeat l "Freeze projector at frame" t "This takes the projector values from a particular frame, to avoid having to hit No Animation on the Camera node"}
+ freezeat 1
+ addUserKnob {22 freezehere l Current -STARTLINE T "nuke.thisNode().knob('freezeat').setValue(nuke.frame());"}
+ addUserKnob {26 gap3 l "" -STARTLINE T "\n\n"}
+ addUserKnob {41 Ls_GlueP_ConvertPpassfromcameraspace l "Convert P from camera space" T BlinkScript1.Ls_GlueP_ConvertPpassfromcameraspace}
+ addUserKnob {41 Ls_GlueP_ConvertNpassfromcameraspace l "Convert N from camera space" -STARTLINE T BlinkScript1.Ls_GlueP_ConvertNpassfromcameraspace}
+ addUserKnob {4 outputselect l Output M {"Glued projection" "Glued ST map" "NDC coords" "Clip space coords" "View space coords" "P converted from camera space" "N converted from camera space" "Facing ratio" ""}}
+ addUserKnob {26 gap2 l "" -STARTLINE T "\n\n"}
+ addUserKnob {41 filter l Filter -STARTLINE T STMap1.filter}
+ addUserKnob {41 Ls_GlueP_Projectonfrontfaces l "Front faces" t "Project on faces which face the projector position.  This requires the N input connected." T BlinkScript1.Ls_GlueP_Projectonfrontfaces}
+ addUserKnob {41 Ls_GlueP_Projectonbackfaces l "Back faces" t "Project on faces which face away from the projector position.  This requires the N input connected." -STARTLINE T BlinkScript1.Ls_GlueP_Projectonbackfaces}
+ addUserKnob {41 Ls_GlueP_Depthclip l "Clip to projector's near/far" t "Adjust the near/far knobs on the Camera node attached to the Projector input to clip the result in depth" T BlinkScript1.Ls_GlueP_Depthclip}
+ addUserKnob {26 credit l "" +STARTLINE T "\n\nlewis@lewissaunders.com"}
+}
+ Input {
+  inputs 0
+  name InputCgCamera
+  xpos 180
+  ypos 159
+  number 4
+ }
+ Input {
+  inputs 0
+  name InputProjector
+  xpos 70
+  ypos 159
+  number 3
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "this crop stops it crashing... idk"
+  note_font "Verdana Italic Italic Italic Italic Italic"
+  xpos -52
+  ypos 332
+ }
+ Input {
+  inputs 0
+  name InputP
+  xpos -150
+  ypos 159
+  number 1
+ }
+set Nee730100 [stack 0]
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 8
+  ypos 386
+ }
+ Input {
+  inputs 0
+  name InputN
+  xpos -40
+  ypos 159
+  number 2
+ }
+ Crop {
+  box {{Crop1.box.x} {Crop1.box.y} {Crop1.box.r} {Crop1.box.t}}
+  name Crop2
+  xpos -40
+  ypos 221
+ }
+push $Nee730100
+ Input {
+  inputs 0
+  name InputImage
+  xpos -260
+  ypos 159
+ }
+set Nee7eba90 [stack 0]
+ BlinkScript {
+  inputs 3
+  kernelSourceFile /works/blinks/blinks/Ls_GlueP.blink
+  ProgramGroup 1
+  KernelDescription "2 \"Ls_GlueP\" iterate pixelWise 139beda4c8afdcbfbb8184dd1b6236759be6f3e522fd5ae922fb4788f211299a 4 \"src\" Read Random \"position\" Read Point \"normals\" Read Point \"dst\" Write Point 22 \"ConvertPpassfromcameraspace\" Bool 1 AA== \"ConvertNpassfromcameraspace\" Bool 1 AA== \"OutputconvertedP\" Bool 1 AA== \"OutputconvertedN\" Bool 1 AA== \"OriginalCGcameraposition\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"OriginalCGcamerarotation\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"Projectorposition\" Float 3 AAAAAAAAAAAAAMjCAAAAAA== \"Projectorrotation\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"Projectorfocallength\" Float 1 AABIQg== \"Projectorhorizontalaperture\" Float 1 exS+QQ== \"Projectonfrontfaces\" Bool 1 AQ== \"Projectonbackfaces\" Bool 1 AQ== \"Depthclip\" Bool 1 AA== \"Depthclipnear\" Float 1 AAAAAA== \"Depthclipfar\" Float 1 8CN0SQ== \"Outputviewspace\" Bool 1 AA== \"Outputclipspace\" Bool 1 AA== \"OutputNDCspace\" Bool 1 AA== \"OutputUVs\" Bool 1 AA== \"OutputFacingRatio\" Bool 1 AA== \"Srcwidth\" Int 1 gAcAAA== \"Srcheight\" Int 1 OAQAAA== 22 \"convertp\" 1 1 \"convertn\" 1 1 \"outputp\" 1 1 \"outputn\" 1 1 \"worldcam_position\" 3 1 \"worldcam_rotation\" 3 1 \"projector_position\" 3 1 \"projector_rotation\" 3 1 \"projector_focal\" 1 1 \"projector_haperture\" 1 1 \"frontface\" 1 1 \"backface\" 1 1 \"zclip\" 1 1 \"znear\" 1 1 \"zfar\" 1 1 \"outputviewspace\" 1 1 \"outputclipspace\" 1 1 \"outputndc\" 1 1 \"outputuv\" 1 1 \"outputfacingratio\" 1 1 \"srcwidth\" 1 1 \"srcheight\" 1 1 4 \"aspect\" Float 1 1 AAAAAA== \"vaperture\" Float 1 1 AAAAAA== \"fovy\" Float 1 1 AAAAAA== \"fovx\" Float 1 1 AAAAAA=="
+  kernelSource "// GlueP: project onto a position pass\n// lewis@lewissaunders.com\n// TODO:\n//  o rearrange the output selection logic, translating\n//    the return statements into setting a flag was stupid\n//  o I wonder what happens when inputs are different sizes\n\nkernel Ls_GlueP : ImageComputationKernel<ePixelWise> \{\n  Image<eRead, eAccessRandom, eEdgeClamped> src;\n  Image<eRead, eAccessPoint, eEdgeClamped> position;\n  Image<eRead, eAccessPoint, eEdgeClamped> normals;\n  Image<eWrite> dst;\n\n  param:\n    bool convertp, convertn, outputp, outputn;\n    float3 worldcam_position, worldcam_rotation;\n    float3 projector_position, projector_rotation;\n    float projector_focal, projector_haperture;\n    bool frontface, backface, zclip;\n    float znear, zfar;\n    bool outputviewspace, outputclipspace, outputndc, outputuv, outputfacingratio;\n    int srcwidth, srcheight;\n\n  local:\n    float aspect, vaperture, fovy, fovx;\n\n  void define() \{\n    defineParam(convertp, \"ConvertPpassfromcameraspace\", false);\n    defineParam(convertn, \"ConvertNpassfromcameraspace\", false);\n    defineParam(outputp, \"OutputconvertedP\", false);\n    defineParam(outputn, \"OutputconvertedN\", false);\n    defineParam(worldcam_position, \"OriginalCGcameraposition\", float3(0.0, 0.0, 0.0));\n    defineParam(worldcam_rotation, \"OriginalCGcamerarotation\", float3(0.0, 0.0, 0.0));\n    defineParam(projector_position, \"Projectorposition\", float3(0.0, 0.0, -100.0));\n    defineParam(projector_rotation, \"Projectorrotation\", float3(0.0, 0.0, 0.0));\n    defineParam(projector_focal, \"Projectorfocallength\", 50.0f);\n    defineParam(projector_haperture, \"Projectorhorizontalaperture\", 23.76f);\n    defineParam(zclip, \"Depthclip\", false);\n    defineParam(frontface, \"Projectonfrontfaces\", true);\n    defineParam(backface, \"Projectonbackfaces\", true);\n    defineParam(znear, \"Depthclipnear\", 0.0f);\n    defineParam(zfar, \"Depthclipfar\", 999999.0f);\n    defineParam(outputviewspace, \"Outputviewspace\", false);\n    defineParam(outputclipspace, \"Outputclipspace\", false);\n    defineParam(outputndc, \"OutputNDCspace\", false);\n    defineParam(outputuv, \"OutputUVs\", false);\n    defineParam(outputfacingratio, \"OutputFacingRatio\", false);\n    defineParam(srcwidth, \"Srcwidth\", 1920);\n    defineParam(srcheight, \"Srcheight\", 1080);\n  \}\n\n  void init() \{\n    aspect = max(float(srcwidth), 1.0f) / max(float(srcheight), 1.0f);\n    vaperture = projector_haperture / aspect;\n    fovy = 2.0f * atan(vaperture / (2.0f * projector_focal));\n    fovx = 2.0f * atan(projector_haperture / (2.0f * projector_focal));\n  \}\n\n  float deg2rad(float angle) \{\n    return(angle/(180.0f/PI));\n  \}\n\n  // Rotates about the origin in ZXY order\n  float3 rotate(float3 p, float3 angles) \{\n    float x = deg2rad(angles.x);\n    float y = deg2rad(angles.y);\n    float z = deg2rad(angles.z);\n\n    float3x3 rx, ry, rz;\n    float rxd\[] = \{1.0, 0.0, 0.0, 0.0, cos(x), -sin(x), 0.0, sin(x), cos(x)\};\n    float ryd\[] = \{cos(y), 0.0, sin(y), 0.0, 1.0, 0.0, -sin(y), 0.0, cos(y)\};\n    float rzd\[] = \{cos(z), -sin(z), 0.0, sin(z), cos(z), 0.0, 0.0, 0.0, 1.0\};\n    rx.setArray(rxd);\n    ry.setArray(ryd);\n    rz.setArray(rzd);\n\n    float3x3 r = rz * rx * ry;\n    return(r * p);\n  \}\n\n  // Un-rotates about the origin in ZXY order\n  float3 unrotate(float3 p, float3 angles) \{\n    float x = deg2rad(angles.x);\n    float y = deg2rad(angles.y);\n    float z = deg2rad(angles.z);\n\n    float3x3 rx, ry, rz;\n    float rxd\[] = \{1.0f, 0.0f, 0.0f, 0.0f, cos(x), sin(x), 0.0f, -sin(x), cos(x)\};\n    float ryd\[] = \{cos(y), 0.0f, -sin(y), 0.0f, 1.0f, 0.0f, sin(y), 0.0f, cos(y)\};\n    float rzd\[] = \{cos(z), sin(z), 0.0f, -sin(z), cos(z), 0.0f, 0.0f, 0.0f, 1.0f\};\n    rx.setArray(rxd);\n    ry.setArray(ryd);\n    rz.setArray(rzd);\n\n    float3x3 r = ry * rx * rz;\n    return(r * p);\n  \}\n\n  void process(int2 pos) \{\n    SampleType(position) prgba = position();\n    float3 p = float3(prgba.x, prgba.y, prgba.z);\n\n    SampleType(normals) nrgba = normals();\n    float3 n = float3(nrgba.x, nrgba.y, nrgba.z);\n\n    bool outputready = false;\n    float3 o;\n\n    // Optionally, convert P and N passes from camera space to world space\n    if(convertp) \{\n      p.z *= -1.0f;\n      p = unrotate(p, -worldcam_rotation);\n      p += worldcam_position;\n    \}\n    if(convertn) \{\n      n.z *= -1.0f;\n      n = unrotate(n, -worldcam_rotation);\n    \}\n    if(outputp && !outputready) \{\n      o = p;\n      outputready = true;\t\t\n    \}\n    if(outputn && !outputready) \{\n      o = n;\n      outputready = true;\t\t\n    \}\n\n    // Keep world space p for later, we need it for facing calc\n    float3 worldp = p;\n\n    // World space to view space\n    p -= projector_position;\n    p = rotate(p, -projector_rotation);\n    if(outputviewspace && !outputready) \{\n       o = p;\n       outputready = true;\n    \}\n\n    // Optional clipping\n    if(zclip) \{\n      if(-p.z < znear || -p.z > zfar) \{\n        o = float3(0.0f);\n        outputready = true;\n      \}\n    \}\n\n    // Clip behind projector\n    if(p.z > 0.0f) \{\n        o = float3(0.0f);\n        outputready = true;\n    \}\n\n    // Facing\n    float3 v = normalize(projector_position - worldp);\n    float facingratio = dot(n, v);\n    if(outputfacingratio && !outputready) \{\n        o = float3(facingratio);\n        outputready = true;\n    \}\n    if((facingratio > 0.0f && !frontface) || (facingratio < 0.0f && !backface)) \{\n        o = float3(0.0f);\n        outputready = true;\n    \}\n\n    // View space to clip space\n    float4x4 projection_matrix;\n    float pmd\[] = \{1.0f/tan(fovx/2.0f), 0.0f, 0.0f, 0.0f,\n\t\t0.0f, 1.0f/tan(fovy/2.0f), 0.0f, 0.0f,\n\t\t0.0f, 0.0f, 1.0f, 1.0f,\n\t\t0.0f, 0.0f, 1.0f, 0.0f\};\n    projection_matrix.setArray(pmd);\n    float4 p4 = float4(p.x, p.y, p.z, 0.0f);\n    p4 = projection_matrix * p4;\n    if(outputclipspace && !outputready) \{\n       o.x = p4.x;\n       o.y = p4.y;\n       o.z = p4.z;\n       outputready = true;\n    \}\n\n    // Clip space to NDC\n    p4 /= p4.w;\n    if(outputndc && !outputready) \{\n       o.x = p4.x;\n       o.y = p4.y;\n       o.z = p4.z;\n       outputready = true;\n    \}\n\n    // NDC to window\n    p4 /= -2.0f;\n    p4 += 0.5f;\n    if(outputuv && !outputready) \{\n       o.x = p4.x;\n       o.y = p4.y;\n       o.z = 0.0f;\n       outputready = true;\n    \}\n\n    // Sample\n    if(!outputready) \{\n      SampleType(src) s = bilinear(src, p4.x*srcwidth, p4.y*srcheight);\n      o.x = s.x;\n      o.y = s.y;\n      o.z = s.z;\n    \}\n\n    // Output\n    SampleType(dst) d;\n    d.x = o.x;\n    d.y = o.y;\n    d.z = o.z;\n    dst() = d;\n  \}\n\};\n"
+  useGPUIfAvailable false
+  rebuild ""
+  Ls_GlueP_OutputconvertedP {{"parent.outputselect == 5"}}
+  Ls_GlueP_OutputconvertedN {{"parent.outputselect == 6"}}
+  Ls_GlueP_OriginalCGcameraposition {{"\[exists parent.input4] ? parent.input4.translate.x : 0.0"} {"\[exists parent.input4] ? parent.input4.translate.y : 0.0"} {"\[exists parent.input4] ? parent.input4.translate.z : 0.0"}}
+  Ls_GlueP_OriginalCGcamerarotation {{"\[exists parent.input4] ? parent.input4.rotate.x : 0.0"} {"\[exists parent.input4] ? parent.input4.rotate.y : 0.0"} {"\[exists parent.input4] ? parent.input4.rotate.z : 0.0"}}
+  Ls_GlueP_Projectorposition {{parent.input3.translate.x(parent.freezeat)} {parent.input3.translate.y(parent.freezeat)} {parent.input3.translate.z(parent.freezeat)}}
+  Ls_GlueP_Projectorrotation {{parent.input3.rotate.x(parent.freezeat)} {parent.input3.rotate.y(parent.freezeat)} {parent.input3.rotate.z(parent.freezeat)}}
+  Ls_GlueP_Projectorfocallength {{parent.input3.focal(parent.freezeat)}}
+  Ls_GlueP_Projectorhorizontalaperture {{parent.input3.haperture(parent.freezeat)}}
+  Ls_GlueP_Depthclipnear {{parent.input3.near(parent.freezeat)}}
+  Ls_GlueP_Depthclipfar {{parent.input3.far(parent.freezeat)}}
+  Ls_GlueP_Outputviewspace {{"parent.outputselect == 4"}}
+  Ls_GlueP_Outputclipspace {{"parent.outputselect == 3"}}
+  Ls_GlueP_OutputNDCspace {{"parent.outputselect == 2"}}
+  Ls_GlueP_OutputUVs {{"parent.outputselect == 0 | parent.outputselect == 1"}}
+  Ls_GlueP_OutputFacingRatio {{"parent.outputselect == 7"}}
+  Ls_GlueP_Srcwidth {{width}}
+  Ls_GlueP_Srcheight {{height}}
+  rebuild_finalise ""
+  name BlinkScript1
+  xpos -150
+  ypos 278
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  crop false
+  name Crop1
+  xpos -150
+  ypos 334
+ }
+ Transform {
+  translate {-0.5 -0.5}
+  center {1024 778}
+  name Transform1
+  xpos -150
+  ypos 358
+ }
+set N14f97310 [stack 0]
+push $Nee7eba90
+ STMap {
+  inputs 2
+  uv rgb
+  name STMap1
+  xpos -260
+  ypos 396
+ }
+push $N14f97310
+ Switch {
+  inputs 2
+  which {{"parent.outputselect == 0 ? 1 : 0"}}
+  name Switch1
+  xpos -150
+  ypos 460
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -150
+  ypos 510
+ }
+ Output {
+  name Output1
+  xpos -150
+  ypos 570
+ }
+end_group
