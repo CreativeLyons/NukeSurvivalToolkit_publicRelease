@@ -1,0 +1,272 @@
+Group {
+ name GradientEditor
+ tile_color 0x4b19ffff
+ selected true
+ addUserKnob {20 User l Gradient}
+ addUserKnob {26 headline l "" +STARTLINE T "<font size=\"6\">GradientEditor</font><font size=\"4\">v0.9</font>\n"}
+ addUserKnob {26 headline2 l "" +STARTLINE T "by Mads Hagbarth Damsbo - 2016"}
+ addUserKnob {26 devider_header l "<b><font color=#00E0E0>INPUT MAPPING</font><b>"}
+ addUserKnob {4 Type M {Input Generator}}
+ Type Generator
+ addUserKnob {4 sample_type l Sample -STARTLINE M {Magnitude Maximum Average Red Green Blue Alpha "" "" ""}}
+ sample_type Average
+ addUserKnob {41 in l From -STARTLINE T Shuffle1.in}
+ addUserKnob {6 Invert l Reverse -STARTLINE}
+ addUserKnob {26 deviderMain l "<b><font color=#00E0E0>GRADIENT</font><b>"}
+ addUserKnob {52 ui l "" +STARTLINE T ColorGradientUi.ColorWheelKnob_GRADIENT() +STARTLINE}
+ addUserKnob {7 input_valueLow l Interval R -1 1}
+ addUserKnob {4 lowCont l "" -STARTLINE M {Hold Loop Bounce}}
+ lowCont Bounce
+ addUserKnob {7 input_valueHigh l "" -STARTLINE R 0 2}
+ input_valueHigh 1
+ addUserKnob {4 highCont l "" -STARTLINE M {Hold Loop Bounce ""}}
+ highCont Bounce
+ addUserKnob {4 Interpolation l INVISIBLE +INVISIBLE M {Constant Linead Smooth Catmull-Rom Cubic Horizontal ""}}
+ Interpolation Smooth
+ addUserKnob {6 PreserceLuma l "Preserve Luma" +STARTLINE}
+ addUserKnob {26 devider_phasing l "<b><font color=#00E0E0>PHASING</font><b>"}
+ addUserKnob {7 Phase R 0 10}
+ addUserKnob {7 Frequency R 0 10}
+ Frequency 1
+ addUserKnob {26 devider_Input l "<b><font color=#00E0E0>PREMULT</font><b>"}
+ addUserKnob {41 colorspace_in l " colorspace " T Colorspace2.colorspace_in}
+ addUserKnob {41 alpha l "Unpremult by" T Unpremult1.alpha}
+ addUserKnob {6 Premult -STARTLINE}
+ addUserKnob {20 responsecurve_tab l "Response Curve"}
+ addUserKnob {26 CurveInfo l "" +STARTLINE T "Use the master curve to control the response curve"}
+ addUserKnob {26 ""}
+ addUserKnob {41 lut l "" +STARTLINE T ColorLookup2.lut}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -3
+  ypos -76
+ }
+set N1c010300 [stack 0]
+ Dot {
+  name Dot1
+  xpos 351
+  ypos -73
+ }
+ Dot {
+  name Dot2
+  xpos 351
+  ypos 642
+ }
+push $N1c010300
+ Expression {
+  expr0 x/width
+  expr1 x/width
+  expr2 x/width
+  expr3 1
+  name Expression1
+  xpos 112
+  ypos -25
+ }
+push $N1c010300
+ Shuffle {
+  name Shuffle1
+  xpos -3
+  ypos -43
+ }
+ Unpremult {
+  alpha -rgba.alpha
+  name Unpremult1
+  xpos -3
+  ypos -19
+ }
+ Switch {
+  inputs 2
+  which {{parent.Type}}
+  name Switch1
+  xpos -3
+  ypos 20
+ }
+set N1c02a840 [stack 0]
+ Dot {
+  name Dot3
+  xpos -225
+  ypos 88
+ }
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace1
+  xpos -467
+  ypos 135
+ }
+push $N1c02a840
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle5
+  xpos 260
+  ypos 149
+ }
+push $N1c02a840
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name Shuffle4
+  xpos 174
+  ypos 150
+ }
+push $N1c02a840
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name Shuffle3
+  xpos 85
+  ypos 148
+ }
+push $N1c02a840
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle2
+  xpos -3
+  ypos 148
+ }
+push $N1c02a840
+ Saturation {
+  saturation 0
+  mode Average
+  name Saturation2
+  xpos -113
+  ypos 145
+ }
+push $N1c02a840
+ Saturation {
+  saturation 0
+  mode Maximum
+  name Saturation1
+  xpos -232
+  ypos 147
+ }
+push $N1c02a840
+ Expression {
+  temp_name3 VectorLength_3D
+  temp_expr3 sqrt(Red*Red+Green*Green+Blue*Blue)
+  expr0 VectorLength_3D
+  expr1 VectorLength_3D
+  expr2 VectorLength_3D
+  name Vector_Length3D
+  xpos -336
+  ypos 148
+ }
+ Switch {
+  inputs 7
+  which {{parent.sample_type}}
+  name Switch3
+  selected true
+  xpos -3
+  ypos 367
+ }
+ Grade {
+  blackpoint {{parent.input_valueLow}}
+  whitepoint {{parent.input_valueHigh}}
+  multiply {{parent.Frequency}}
+  add {{parent.Phase}}
+  black_clamp false
+  name Grade1
+  xpos -3
+  ypos 391
+ }
+ Invert {
+  name Invert1
+  xpos -3
+  ypos 415
+  disable {{!parent.Invert}}
+ }
+ Expression {
+  temp_name0 antR
+  temp_expr0 (floor(r/2)-(floor((r+1)/2)-1))
+  temp_name1 antG
+  temp_expr1 (floor(g/2)-(floor((g+1)/2)-1))
+  temp_name2 antB
+  temp_expr2 (floor(b/2)-(floor((b+1)/2)-1))
+  expr0 r<=parent.input_valueLow?parent.lowCont==0?r:parent.lowCont==1?r-floor(r):((1-(r-floor(r)))*(1-antR))+(((r-floor(r)))*(antR)):parent.highCont==0?r:parent.highCont==1?r-floor(r):((1-(r-floor(r)))*(1-antR))+(((r-floor(r)))*(antR))
+  expr1 g<=parent.input_valueLow?parent.lowCont==0?g:parent.lowCont==1?g-floor(g):((1-(g-floor(g)))*(1-antG))+(((g-floor(g)))*(antG)):parent.highCont==0?g:parent.highCont==1?g-floor(g):((1-(g-floor(g)))*(1-antG))+(((g-floor(g)))*(antG))
+  expr2 b<=parent.input_valueLow?parent.lowCont==0?b:parent.lowCont==1?b-floor(b):((1-(b-floor(b)))*(1-antB))+(((b-floor(b)))*(antB)):parent.highCont==0?b:parent.highCont==1?b-floor(b):((1-(b-floor(b)))*(1-antB))+(((b-floor(b)))*(antB))
+  name Expression2
+  xpos -3
+  ypos 491
+ }
+ ColorLookup {
+  lut {master {curve 0 1}
+    red {}
+    green {}
+    blue {}
+    alpha {}}
+  name ColorLookup2
+  xpos -3
+  ypos 562
+ }
+ ColorLookup {
+  lut {master {}
+    red {curve 0 x0.1587301642 0.275288014 x0.1859410405 0.9960784314 x0.297052145 0.9960784314 x0.6575963497 0.58954757 L x1 0}
+    green {curve 0 x0.1587301642 0.1388876173 x0.1859410405 0.2344090944 x0.297052145 0.7500419623 x0.6575963497 0.7201953155 L x1 0.2081483177}
+    blue {curve 0 x0.1587301642 0.124711986 x0.1859410405 0 x0.297052145 0 x0.6575963497 0.7437857633 L x1 0.368627451}
+    alpha {curve 1 x0.1587301642 1 x0.1859410405 1 x0.297052145 1 x0.6575963497 1 L x1 1}}
+  name ColorLookup1
+  xpos -2
+  ypos 586
+  addUserKnob {20 User}
+  addUserKnob {22 chek +STARTLINE}
+ }
+ Colorspace {
+  colorspace_in sRGB
+  name Colorspace2
+  xpos -2
+  ypos 669
+ }
+set N1c077f10 [stack 0]
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace8
+  xpos -334
+  ypos 669
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  name ShuffleCopy2
+  xpos -467
+  ypos 669
+ }
+ Colorspace {
+  colorspace_in YCbCr
+  name Colorspace9
+  xpos -467
+  ypos 708
+ }
+push $N1c077f10
+ Switch {
+  inputs 2
+  which {{parent.PreserceLuma}}
+  name Switch2
+  xpos -2
+  ypos 708
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy1
+  xpos -2
+  ypos 788
+ }
+ Premult {
+  name Premult1
+  xpos -2
+  ypos 812
+  disable {{!parent.Premult}}
+ }
+ Output {
+  name Output1
+  xpos -2
+  ypos 866
+ }
+end_group

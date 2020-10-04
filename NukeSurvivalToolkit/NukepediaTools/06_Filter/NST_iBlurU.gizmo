@@ -1,7 +1,5 @@
-set cut_paste_input [stack 0]
-push $cut_paste_input
 Group {
-name iBlur_UU
+name iBlurU
 help "iBlur v1.0\n\nThis gizmo should work like the iBlur from Shake. I'm still missing a ramped blur in nuke, especially for technical stuff, where a zBlur is just not the right thing (and also too slow)."
 tile_color 0xcc804eff
 selected true

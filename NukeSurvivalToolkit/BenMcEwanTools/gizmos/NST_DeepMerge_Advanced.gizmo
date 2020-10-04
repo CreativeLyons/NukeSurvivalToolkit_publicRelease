@@ -1,0 +1,131 @@
+Group {
+ name DeepMergeAdvanced
+ help "- Merges all channels from A and B in deep. - Fixes issue with DeepMerge's holdout operation which exists in Nuke 11."
+ tile_color 0x60ff
+ selected true
+ addUserKnob {20 DeepMerge_Advanced}
+ addUserKnob {26 ""}
+ addUserKnob {4 operation M {combine holdout "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {7 blurAmt l Blur R 0 100}
+ blurAmt 1
+ addUserKnob {26 ""}
+ addUserKnob {4 output_data l "Output Data" M {Deep 2D ""}}
+ addUserKnob {26 ""}
+ addUserKnob {20 Info}
+ addUserKnob {26 version_info l "" +STARTLINE T "\nCreated by Ben McEwan\nwww.benmcewan.com\n\nVersion 0.2.0\nLast Updated: September 10th, 2019\n"}
+ addUserKnob {1 Scriplet_Info +DISABLED +INVISIBLE}
+ Scriplet_Info central
+}
+ Input {
+  inputs 0
+  name A
+  xpos 242
+  ypos -499
+  number 1
+ }
+ DeepExpression {
+  temp_name0 blur
+  temp_expr0 "\[value blurAmt]/2"
+  chans1 deep
+  rgba.alpha "alpha * 0.999999"
+  deep.back "deep.back + blur"
+  name DeepExpression2
+  xpos 393
+  ypos -499
+ }
+set N4282660 [stack 0]
+ Dot {
+  name Dot1
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 427
+  ypos -434
+ }
+ Input {
+  inputs 0
+  name B
+  xpos 551
+  ypos -654
+ }
+ DeepExpression {
+  temp_name0 blur
+  temp_expr0 "\[value blurAmt]/2"
+  chans1 deep
+  rgba.alpha "alpha * 0.999999"
+  deep.back "deep.back + blur"
+  name DeepExpression1
+  xpos 551
+  ypos -585
+ }
+set N5a8fac0 [stack 0]
+ Dot {
+  name Dot2
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 788
+  ypos -581
+ }
+set N4ce1390 [stack 0]
+ DeepHoldout2 {
+  inputs 2
+  name DeepHoldout2
+  xpos 754
+  ypos -438
+ }
+push $N4ce1390
+ Dot {
+  name Dot3
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 895
+  ypos -532
+ }
+ Dot {
+  name Dot4
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 895
+  ypos -395
+ }
+ DeepRecolor {
+  inputs 2
+  channels all
+  targetInputAlpha true
+  name DeepRecolor2
+  xpos 754
+  ypos -361
+ }
+push $N4282660
+push $N5a8fac0
+ DeepMerge {
+  inputs 2
+  drop_hidden true
+  name DeepMerge2
+  xpos 551
+  ypos -499
+ }
+ Switch {
+  inputs 2
+  which {{operation}}
+  name Switch1
+  xpos 551
+  ypos -356
+ }
+ DeepToImage {
+  name DeepToImage1
+  selected true
+  xpos 551
+  ypos -279
+  disable {{!output_data}}
+ }
+ Output {
+  name Output1
+  xpos 551
+  ypos -199
+ }
+end_group

@@ -1,0 +1,107 @@
+Group {
+ name FrameFiller
+ onCreate "\nthisGRP = nuke.thisGroup()\nlogKnobs = \['vectorDetailLocal','smoothnessLocal','vectorDetailReg','strengthReg']\nfor knob in logKnobs :\n    thisGRP\[knob].setFlag(0x00000004)\n"
+ tile_color 0x7f6a3fff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {6 use_gpu l "Use GPU if available" t "Select this to render on the <b>Local GPU</b>, if available.\n\nYou can select this even if no GPU is currently available on your machine. The GPU will then be used whenever the script is opened on a machine which does have a GPU available. You should also select this if you wish to render from the command line with the <b>--gpu</b> option.\n\nIf this node requires full frames from its inputs, and is therefore unable to reduce its memory overhead, it will fall back to the CPU if an attempt to render a frame on the GPU fails due to lack of memory. When this occurs, a warning message will be printed to the console." +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 channels l Channels t "The effect is applied only to these channels" T menu02.retimedChannels}
+ addUserKnob {1 fixframes l "frame(s) to fix" t "Fill in the frame(s) need to be generate. Support single frame, multiply frames, and multiply frames in a row.\n\nWritten format :\nseparate multiply frames with ',' or join multiply frames with '-'\n<i>e.g. 1010,1012,1013,1014,1020\ne.g. 1010,1012-1014,1020</i>\neither format work."}
+ addUserKnob {22 detect_from_read l "Detect from Read" t "Detect missing frame from the file path provided from Read node and auto fill in 'frame(s) to fix' knob.\n\nThis function will check the file system, and only works when Read node connect directly. Any nodes in between this node and Read node will not work." -STARTLINE T "thisGRP = nuke.thisGroup()\ngoStore = nuke.toNode('store')\ngoStore\['fn'].execute()\n\nif thisGRP.dependencies()\[0].Class() == 'Read' :\n\tfilepath = nuke.os.path.split( thisGRP.dependencies()\[0]\['file'].value() )\n\tfileformat = \[ filepath\[1].split('%0')\[0] , filepath\[1].split('%0')\[1]\[2:] ]\n\n\tavailframes = \[]\n\tfor file in nuke.os.listdir( filepath\[0] ) :\n\t\tif file\[:len(fileformat\[0])] == fileformat\[0] and file\[-len(fileformat\[1]):] == fileformat\[1] :\n\t\t\tavailframes.append( int(file\[len(fileformat\[0]) : -len(fileformat\[1]):]) )\n\tavailframes.sort()\n\n\tmissingframes = \[]\n\n\tfor frame in xrange( availframes\[0], availframes\[-1:]\[0] + 1 , 1 ) :\n\t\tif frame not in availframes :\n\t\t\tmissingframes.append( str(frame) )\n\n\tstage01 = dataReconcile( missingframes )\n\tstage02 = seqConvert( stage01\[1] )\n\tmissingData = \[str(i) for i in stage01\[0]]\n\n\tfor key,value in stage02.items() :\n\t\tmissingData.append( '\{0\}-\{1\}'.format(str(key),str(key+value-1)) )\n\tmissingData.sort()\n\t\n\tthisGRP\['fixframes'].setValue( ','.join( missingData ) )\nelse :\n\tnuke.message('This function only works with Read node connect to FrameFiller directly.')"}
+ addUserKnob {22 generate l Generate t "Generate the frame interpolation setup inside this tool. 'frame(s) to fix' define which frame(s) need to be generate.\n\nAfter that, 'frame(s) to fix' will be locked. Hit 'Reset' to clean up internal generated setup and unlock 'frame(s) to fix' knob." T "thisGRP = nuke.thisGroup()\ngoStore = nuke.toNode('store')\ngoStore\['fn'].execute()\n\n##########\n\nfframes = thisGRP\['fixframes'].value().replace(' ','').split(',')\n\nif len(fframes\[0]) :\n\tstage01 = dataReconcile( fframes )\n\tsingleFrame = stage01\[0]\n\tmultData = seqConvert( stage01\[1] )\n\n\tlastNode = gen(singleFrame , 1 , nuke.toNode('dot_start'))\n\tfor key,value in multData.items() :\n\t\tlastNode = gen( \[key] , value , lastNode)\n\n\tnuke.toNode('dot_end').setInput(0, lastNode)\n\n\tthisGRP\['fixframes'].setEnabled(False)\n\tthisGRP\['detect_from_read'].setEnabled(False)\nelse :\n\tnuke.message(\"No frame provided.<br><br>Access denied...\")" +STARTLINE}
+ addUserKnob {22 reset l Reset t "Remove all internal setup and unlock 'frame(s) to fix' knob." -STARTLINE T "base = \['menu02', 'menu01', 'Output1', 'dot_end', 'dot_start', 'input', 'BackdropNode2', 'BackdropNode1','store']\nfor node in nuke.allNodes() :\n\tif node.name() not in base :\n\t\tnuke.delete( node )\nnuke.thisGroup()\['fixframes'].setEnabled(True)\nnuke.thisGroup()\['detect_from_read'].setEnabled(True)"}
+ addUserKnob {26 ""}
+ addUserKnob {7 subframeBias l "subframe(s) bias" t "Balance pre-frame and post frame ratio.\n\n0.5 is the averge of 2 existing frames\n0.0 bias to pre-frame\n1.0 bias to post-frame\n\nThis value clamp to 0-1"}
+ subframeBias 0.5
+ addUserKnob {41 motionEstimation l Motion t "Choose the motion estimation method.\n\n\nRegularized - calculates motion in a semi-global way, providing more consistent regions in the vector fields.\nLocal - calculates motion by performing local block matching. This can sometimes lead to fragmentation in the vector fields. This is the legacy method used by previous versions of Kronos." T menu01.motionEstimation}
+ addUserKnob {7 vectorDetailLocal l "Vector Detail" t "Use this to adjust the density of the calculated motion vector field. Higher detail picks up finer movement but will take longer to calculate." +HIDDEN R 0.01 1}
+ vectorDetailLocal 0.2
+ addUserKnob {7 smoothnessLocal l Smoothness t "A high smoothness will miss local detail, but is less likely to create spurious vectors." +HIDDEN R 0.01 1}
+ smoothnessLocal 0.5
+ addUserKnob {7 vectorDetailReg l "Vector Detail" t "Use this to adjust the density of the calculated motion vector field. Higher detail picks up finer movement but will take longer to calculate." R 0.01 1}
+ vectorDetailReg 0.3
+ addUserKnob {7 strengthReg l Strength t "Match strength." R 0 5}
+ strengthReg 1.5
+ addUserKnob {4 resampleType l Filter t "Choose the image resampling type." M {Bilinear Lanczos4 Lanczos6 ""}}
+ addUserKnob {20 grp_shutter l Shutter n 1}
+ grp_shutter 0
+ addUserKnob {3 shutterSamples l "Shutter Samples" t "How many in-between images to average together for the motion blur."}
+ shutterSamples 1
+ addUserKnob {7 shutterTime l "Shutter Time" t "Sets the equivalent shutter time of the retimed sequence." R 0 10}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.0}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-09-28}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.0<br>-&nbsp;framefiller&nbsp;to&nbsp;fill&nbsp;up&nbsp;missing&nbsp;frame&nbsp;with&nbsp;frame&nbsp;interpolation&nbsp;method<br>-&nbsp;support&nbsp;multiply&nbsp;frames<br>-&nbsp;support&nbsp;more&nbsp;than&nbsp;one&nbsp;broken&nbsp;frames&nbsp;in&nbsp;a&nbsp;row\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -648
+  ypos 15
+  bdwidth 234
+  bdheight 160
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x4c4c4cff
+  label bin
+  note_font_size 42
+  xpos -370
+  ypos 18
+  bdwidth 181
+  bdheight 242
+ }
+ Input {
+  inputs 0
+  name input
+  xpos 14
+  ypos 2
+ }
+ Dot {
+  name dot_start
+  tile_color 0xff00ff
+  xpos 48
+  ypos 93
+ }
+ Dot {
+  name dot_end
+  tile_color 0xff0000ff
+  xpos 48
+  ypos 434
+ }
+ Output {
+  name Output1
+  xpos 14
+  ypos 522
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nknobs = \['vectorDetailLocal','smoothnessLocal','vectorDetailReg','strengthReg']\nmotionBool = False\nif thisGRP\['motionEstimation'].value() == 'Local' :\n   motionBool = True \nfor i in range(len(knobs)) :\n    if i<2 :\n        thisGRP\[knobs\[i]].setVisible( motionBool )\n    else :\n        thisGRP\[knobs\[i]].setVisible( not motionBool )\n"
+  xpos -568
+  ypos 99
+  addUserKnob {20 User}
+  addUserKnob {4 motionEstimation l Motion t "Choose the motion estimation method.\n\n\nRegularized - calculates motion in a semi-global way, providing more consistent regions in the vector fields.\nLocal - calculates motion by performing local block matching. This can sometimes lead to fragmentation in the vector fields. This is the legacy method used by previous versions of Kronos. " M {Regularized Local}}
+ }
+ OFlow2 {
+  inputs 0
+  useGPUIfAvailable false
+  name menu02
+  xpos -314
+  ypos 103
+ }
+ NoOp {
+  inputs 0
+  name store
+  xpos -313
+  ypos 178
+  addUserKnob {20 User}
+  addUserKnob {22 fn T "def dataReconcile( _listOfSTR ) :\n\tsingleFrame = \[]\n\tmultFrames = \[]\n\tinputErrorDetect = False\n\n\tfor i in _listOfSTR :\n\t\tif i.find('-') > 0 :\n\t\t\tif int(i.split('-')\[1]) < int(i.split('-')\[0]) :\n\t\t\t\tinputErrorDetect = True\n\t\t\telse :\n\t\t\t\tfor j in xrange( int(i.split('-')\[0]) , int(i.split('-')\[1])+1 , 1 ) :\n\t\t\t\t\tmultFrames.append( j )\n\t\telse :\n\t\t\ttry :\n\t\t\t\ti = int(i)\n\t\t\t\tcheck = 0\n\t\t\t\tcount = 1\n\t\t\t\tmultDetect = False\n\t\t\t\twhile check < 1 :\n\t\t\t\t\tif str(i+count) in _listOfSTR :\n\t\t\t\t\t\tmultDetect = True\n\t\t\t\t\t\tif (i+count-1) not in multFrames :\n\t\t\t\t\t\t\tmultFrames.append( i+count-1 )\n\t\t\t\t\telse :\n\t\t\t\t\t\tif multDetect == True :\n\t\t\t\t\t\t\tif (i+count-1) not in multFrames :\n\t\t\t\t\t\t\t\tmultFrames.append( i+count-1 )\n\t\t\t\t\t\telse :\n\t\t\t\t\t\t\tif  i not in multFrames :\n\t\t\t\t\t\t\t\tsingleFrame.append( i )\n\t\t\t\t\t\tcheck = 10\n\t\t\t\t\tcount += 1\n\t\t\texcept :\n\t\t\t\tpass\n\n\tsingleFrame.sort()\n\tmultFrames.sort()\n\n\treturn ( singleFrame , multFrames )\n\n##########\n\ndef seqConvert( _multFList ) :\n\tdump = \[]\n\tmultData = \{\}\n\tif len(_multFList) :\n\t\tfor i in _multFList :\n\t\t\tcheck = 0\n\t\t\tcount = 0\n\t\t\ttemp = \[]\n\t\t\twhile check < 1 :\n\t\t\t\tif i+count in _multFList :\n\t\t\t\t\tif i+count not in dump :\n\t\t\t\t\t\ttemp.append( i+count )\n\t\t\t\t\t\tdump .append( i+count )\n\t\t\t\telse :\n\t\t\t\t\tcheck = 10\n\t\t\t\tcount += 1\n\t\t\tif len(temp) :\n\t\t\t\tmultData\[temp\[0]] = len(temp)\n\n\treturn multData\n\n##########\n\ndef gen( _list , _steps , _stNode ) :\n\tstart = _stNode\n\n\tfor i in range(len(_list)) :\n\t\tsuffix = str(_list\[i])\n\n\t\tdot = nuke.nodes.Dot( name='dot_\{0\}'.format(suffix) , inputs=\[start] )\n\n\t\ttw = nuke.nodes.TimeWarp( name='tw_\{0\}'.format(suffix) , inputs=\[dot] )\n\t\ttw\['lookup'].clearAnimated()\n\t\ttw\['lookup'].setExpression( 'frame>=\{0\} ? frame+\{1\} : frame'.format(suffix,_steps) )\n\n\t\tkro = nuke.nodes.Kronos( name='kro_\{0\}'.format(suffix) , \n\t\t\t\t\t\t\t\t interpolation='Motion' ,\n\t\t\t\t\t\t\t\t timing2='Frame' ,\n\t\t\t\t\t\t\t\t inputs=\[tw] )\n\t\tkro\['useGPUIfAvailable'].setExpression( 'parent.use_gpu' )\n\t\tkro\['retimedChannels'].setExpression( 'menu02.retimedChannels' )\n\t\tkro\['timingFrame2'].setExpression( '\{0\}-1+1/(\{1\}+1)*(frame-(\{0\}-1))*(parent.subframeBias/0.5)'.format(suffix,_steps) )\n\t\tkro\['motionEstimation'].setExpression( 'parent.motionEstimation' )\n\t\tkro\['vectorDetailLocal'].setExpression( 'parent.vectorDetailLocal' )\n\t\tkro\['smoothnessLocal'].setExpression( 'parent.smoothnessLocal' )\n\t\tkro\['vectorDetailReg'].setExpression( 'parent.vectorDetailReg' )\n\t\tkro\['strengthReg'].setExpression( 'parent.strengthReg' )\n\t\tkro\['resampleType'].setExpression( 'parent.resampleType' )\n\t\tkro\['shutterSamples'].setExpression( 'parent.shutterSamples' )\n\t\tkro\['shutterTime'].setExpression( 'parent.shutterTime' )\n\n\t\tsw = nuke.nodes.Switch( name='sw_\{0\}'.format(suffix) , inputs=\[dot, kro] )\n\t\tif _steps == 1 :\n\t\t\tsw\['which'].setExpression( 'frame==\{0\} ? 1 : 0'.format(suffix) )\n\t\telse :\n\t\t\tsw\['which'].setExpression( 'frame>=\{0\}&&frame<\{0\}+\{1\} ? 1 : 0'.format(suffix,_steps) )\n\n\t\tstart = sw\n\n\treturn sw\n\n##########" +STARTLINE}
+ }
+end_group

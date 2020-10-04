@@ -1,0 +1,353 @@
+Group {
+ name ParticleLights
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {26 info1 l "" +STARTLINE T "Particle Lights v1.1"}
+ addUserKnob {26 info2 l "" +STARTLINE T "by Mads Hagbarth Lund"}
+ addUserKnob {26 ""}
+ addUserKnob {41 "blinnShader_Diffuse Multiplier" l "Diffuse Multiplier" T "BlinkScript8.blinnShader_Diffuse Multiplier"}
+ addUserKnob {41 "blinnShader_Specular Power" l "Specular Power" T "BlinkScript8.blinnShader_Specular Power"}
+ addUserKnob {41 "blinnShader_Specular Hardness" l "Specular Hardness" T "BlinkScript8.blinnShader_Specular Hardness"}
+ addUserKnob {41 "blinnShader_Half Lambert" l "Half Lambert" T "BlinkScript8.blinnShader_Half Lambert"}
+}
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "A bug in the blink node means that the input size must be atleast 2x2. \nSo we fake this by adding 2 null particles."
+  xpos -847
+  ypos 354
+ }
+ Group {
+  inputs 0
+  name Light2
+  xpos -679
+  ypos 487
+  addUserKnob {20 User}
+  addUserKnob {41 color T Point.color}
+  addUserKnob {41 intensity T Point.intensity}
+  addUserKnob {41 translate T Point.translate}
+ }
+  StickyNote {
+   inputs 0
+   name StickyNote1
+   label "Ensure that we can use axis nodes\nto modify the position of the light."
+   xpos -183
+   ypos -299
+  }
+  StickyNote {
+   inputs 0
+   name StickyNote2
+   label "Dummy object to make it look like a regular light"
+   xpos -188
+   ypos -235
+  }
+  StickyNote {
+   inputs 0
+   name StickyNote4
+   label "Link positions via the world matrix to get exact position"
+   xpos -300
+   ypos -55
+  }
+  StickyNote {
+   inputs 0
+   name StickyNote3
+   label "Link RGB to color and Alpha to Intensity"
+   xpos -300
+   ypos -131
+  }
+  Constant {
+   inputs 0
+   color {{parent.Point.color} {parent.Point.color} {parent.Point.color} {parent.Point.intensity/10}}
+   format "1 1 0 0 1 1 1 hg_light"
+   name Constant2
+   xpos -399
+   ypos -148
+  }
+  Sphere {
+   display off
+   render_mode off
+   rows 1
+   columns 1
+   translate {{parent.Point.world_matrix.3 x1 11.42000103 x8 -18.5 2.000001907} {parent.Point.world_matrix.7 x1 1.620000005 x8 46.30000305 44.20000076} {parent.Point.world_matrix.11 x1 0.3999999762 x8 -50.79999924 -50.79999924}}
+   uniform_scale 0.022
+   name Lightx
+   xpos -399
+   ypos -52
+  }
+push 0
+  ParticleEmitter {
+   inputs 2
+   display off
+   render_mode off
+   start_frame -5
+   emit_channels {b}
+   emit_from bbox
+   emit_order uniformly
+   randomize_type "randomize outwards"
+   rate 4
+   lifetime 1
+   velocity 0
+   size 1
+   size_channel rgba.alpha
+   color_from_texture true
+   name ParticleEmitter1
+   xpos -399
+   ypos 46
+  }
+  Output {
+   name Output1
+   xpos -399
+   ypos 150
+  }
+  Input {
+   inputs 0
+   name Input1
+   xpos -276
+   ypos -296
+  }
+  Light {
+   color {0 0 0}
+   intensity 0
+   depthmap_slope_bias 0.01
+   name Point
+   xpos -266
+   ypos -216
+  }
+ end_group
+ Group {
+  inputs 0
+  name Light1
+  xpos -684
+  ypos 428
+  addUserKnob {20 User}
+  addUserKnob {41 color T Point.color}
+  addUserKnob {41 intensity T Point.intensity}
+  addUserKnob {41 translate T Point.translate}
+ }
+  StickyNote {
+   inputs 0
+   name StickyNote1
+   label "Ensure that we can use axis nodes\nto modify the position of the light."
+   xpos -183
+   ypos -299
+  }
+  StickyNote {
+   inputs 0
+   name StickyNote2
+   label "Dummy object to make it look like a regular light"
+   xpos -188
+   ypos -235
+  }
+  StickyNote {
+   inputs 0
+   name StickyNote4
+   label "Link positions via the world matrix to get exact position"
+   xpos -300
+   ypos -55
+  }
+  StickyNote {
+   inputs 0
+   name StickyNote3
+   label "Link RGB to color and Alpha to Intensity"
+   xpos -300
+   ypos -131
+  }
+  Constant {
+   inputs 0
+   color {{parent.Point.color} {parent.Point.color} {parent.Point.color} {parent.Point.intensity/10}}
+   format "1 1 0 0 1 1 1 hg_light"
+   name Constant2
+   xpos -399
+   ypos -148
+  }
+  Sphere {
+   display off
+   render_mode off
+   rows 1
+   columns 1
+   translate {{parent.Point.world_matrix.3 x1 11.42000103 x8 -18.5 2.000001907} {parent.Point.world_matrix.7 x1 1.620000005 x8 46.30000305 44.20000076} {parent.Point.world_matrix.11 x1 0.3999999762 x8 -50.79999924 -50.79999924}}
+   uniform_scale 0.022
+   name Lightx
+   xpos -399
+   ypos -52
+  }
+push 0
+  ParticleEmitter {
+   inputs 2
+   display off
+   render_mode off
+   start_frame -5
+   emit_channels {b}
+   emit_from bbox
+   emit_order uniformly
+   randomize_type "randomize outwards"
+   rate 4
+   lifetime 1
+   velocity 0
+   size 1
+   size_channel rgba.alpha
+   color_from_texture true
+   name ParticleEmitter1
+   xpos -399
+   ypos 46
+  }
+  Output {
+   name Output1
+   xpos -399
+   ypos 150
+  }
+  Input {
+   inputs 0
+   name Input1
+   xpos -276
+   ypos -296
+  }
+  Light {
+   color {0 0 0}
+   intensity 0
+   depthmap_slope_bias 0.01
+   name Point
+   xpos -266
+   ypos -216
+  }
+ end_group
+push 0
+ Input {
+  inputs 0
+  name Particles
+  xpos -452
+  ypos 324
+ }
+ ParticleMerge {
+  inputs 4
+  name ParticleMerge1
+  xpos -452
+  ypos 428
+ }
+add_layer {hag_pos hag_pos.red hag_pos.green hag_pos.blue hag_pos.alpha}
+add_layer {hag_active hag_active.a}
+ ParticleToImage {
+  pos hag_pos
+  active hag_active.a
+  name ParticleToImage1
+  xpos -452
+  ypos 511
+ }
+set N4d0e2420 [stack 0]
+ Shuffle {
+  in hag_pos
+  name light_pos
+  xpos -329
+  ypos 511
+ }
+ Dot {
+  name Dot2
+  xpos -295
+  ypos 559
+ }
+push $N4d0e2420
+ Shuffle {
+  in rgb
+  in2 hag_active
+  alpha red2
+  name light_color
+  xpos -452
+  ypos 581
+ }
+ Input {
+  inputs 0
+  name Camera
+  xpos -149
+  ypos 282
+  number 1
+ }
+ Camera2 {
+  name Camera1
+  xpos -136
+  ypos 320
+ }
+ Dot {
+  name Dot1
+  xpos -112
+  ypos 396
+ }
+ Input {
+  inputs 0
+  name Scene3D
+  xpos -275
+  ypos 323
+  number 2
+ }
+push 0
+add_layer {P P.red P.green P.blue P.alpha}
+add_layer {N N.red N.green N.blue N.alpha}
+ ScanlineRender {
+  inputs 3
+  max_tessellation 2
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel P
+  N_channel N
+  name ScanlineRender2
+  xpos -275
+  ypos 393
+ }
+ Dot {
+  name Dot10
+  xpos -241
+  ypos 421
+ }
+set N4e0a23c0 [stack 0]
+ Dot {
+  name Dot3
+  xpos -152
+  ypos 421
+ }
+ Shuffle {
+  in N
+  in2 rgba
+  alpha alpha2
+  name NormalSplit
+  xpos -186
+  ypos 472
+ }
+push $N4e0a23c0
+ Shuffle {
+  in P
+  in2 rgba
+  alpha alpha2
+  name PointPosSplit
+  xpos -275
+  ypos 472
+ }
+ BlinkScript {
+  inputs 4
+  ProgramGroup 1
+  KernelDescription "1 \"blinnShader\" iterate pixelWise 4b6604ba5b4299095f03f9edf77da6dbf1f946c319dc7f6e6962ca67a375f9f8 5 \"pointPos\" Read Point \"normal\" Read Point \"light_color\" Read Random \"light_pos\" Read Random \"dst\" Write Point 5 \"Camera Position\" Float 3 AACAPwAAgD8AAIA/AAAAAA== \"Diffuse Multiplier\" Float 1 AACAPw== \"Specular Power\" Float 1 AAAgQQ== \"Specular Hardness\" Float 1 AADIQg== \"Half Lambert\" Bool 1 AQ=="
+  kernelSource "kernel blinnShader : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> pointPos;  //the input image\n  Image<eRead, eAccessPoint, eEdgeClamped> normal;  //the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> light_color;  //the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> light_pos;  //the input image\n\n  Image<eWrite> dst;  //the output image\n\n  param:\n    float3 cameraPosition;\n    float diffuseMultiplier;\n    float specularPower;\n    float specularHardness;\n    bool halfLambert;\n\n  local:\n    float3 lightDir;\n    float3 viewDir;\n\n  void define() \{\n    defineParam(halfLambert,\"Half Lambert\",bool(1));\n    defineParam(cameraPosition, \"Camera Position\", float3(1.0f,1.0f,1.0f));\n    defineParam(diffuseMultiplier,\"Diffuse Multiplier\",float(1.0f));\n    defineParam(specularPower,\"Specular Power\",float(10.0f));\n    defineParam(specularHardness,\"Specular Hardness\",float(100.0f));\n  \}\n\n  void init() \{\n  \}\n\n  void process() \{\n\n    SampleType(dst) sampleBase(0.0f);\n\n    float newVal = 0;\n    for(int j = 0; j < light_pos.bounds.y2; j++) \{\n      for(int i = 0; i < light_pos.bounds.x2; i++) \{\n        if (light_color(i,j).w == 1) \{        \n\n        lightDir = (float3(light_pos(i,j).x,light_pos(i,j).y,light_pos(i,j).z)-float3(pointPos(0),pointPos(1),pointPos(2)));\n        float distance = length(lightDir);\n        lightDir = normalize(lightDir);\n        distance = distance * distance;\n\n        viewDir = (cameraPosition-float3(pointPos(0),pointPos(1),pointPos(2)));\n        viewDir = normalize(viewDir);\n\n\n        //Calculating Diffuse\n        float NdotL = dot(float3(normal(0),normal(1),normal(2)),lightDir);\n        if (halfLambert) \{      \n           NdotL = NdotL * 0.5 + 0.5; //Added option for half lambert\n         \}\n        else\n        \{\n        NdotL = min(1.0f,max(0.0f,NdotL));\n        \}\n\n        float diffuse = NdotL * (light_pos(i,j).w*diffuseMultiplier) / distance;\n\n\n        //Calculating Specular\n        float3 H = normalize(lightDir+viewDir);\n        float NdotH = dot(float3(normal(0),normal(1),normal(2)),H);\n        float intensity = pow(NdotH,specularHardness);\n        float specular = intensity * specularPower / distance;\n\n\n        SampleType(dst) sample(0.0f);\n        sample.x = max(0.0f,(diffuse+specular) * light_color(i,j).x);\n        sample.y =  max(0.0f,(diffuse+specular) * light_color(i,j).y);\n        sample.z =  max(0.0f, (diffuse+specular) * light_color(i,j).z);\n        sampleBase += sample;\n        \}\n      \}\n    \}\n\n    dst() = sampleBase+float4(0,0,0,pointPos(3)); //Reaplying Alpha\n   \}\n\};"
+  useGPUIfAvailable false
+  vectorize false
+  rebuild ""
+  "blinnShader_Camera Position" {{parent.Camera1.world_matrix.3} {parent.Camera1.world_matrix.7} {parent.Camera1.world_matrix.11}}
+  "blinnShader_Diffuse Multiplier" 4
+  "blinnShader_Specular Power" 0.45
+  "blinnShader_Specular Hardness" 200
+  "blinnShader_Half Lambert" false
+  rebuild_finalise ""
+  name BlinkScript8
+  xpos -186
+  ypos 575
+ }
+set N4e0c4f40 [stack 0]
+ Premult {
+  name Premult1
+  xpos -186
+  ypos 718
+ }
+ Output {
+  name Output1
+  xpos -186
+  ypos 785
+ }
+push $N4e0c4f40
+end_group

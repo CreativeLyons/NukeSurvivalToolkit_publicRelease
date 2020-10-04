@@ -5,9 +5,9 @@
 
 [Intro and Installation Video](https://youtu.be/MQq9GH3SekA)
 
-For full documentation and tool index, visit:
+For full online documentation and tool index, visit:
 
-[Nuke Survival Toolkit Documentation](https://docs.google.com/document/d/1s9KoiO7MpaLZfKsgIhVnzzpSrdVpTuUhpf-DaOWHWq0/edit?usp=sharing)
+[Nuke Survival Toolkit Documentation](https://docs.google.com/document/d/1J5NzIaX5W3s8ge-k1WJ_-0JrRDJdCJWjvWJLbOK7HHs/edit?usp=sharing)
 
 The Nuke Survival Toolkit is a portable tool menu for the Foundry’s Nuke with a hand-picked selection of nuke gizmos collected from all over the web, organized into 1 easy to install toolbar.
 
@@ -15,7 +15,7 @@ Here’s how to install and use the Nuke Survival Toolkit:
 
 1.) Download the .zip folder from the Nuke Survival Toolkit github website.  
 
-https://github.com/CreativeLyons/NukeSurvivalToolkit_publicRelease/releases/
+https://github.com/CreativeLyons/NukeSurvivalToolkit_publicRelease/releases/latest
 
 This github will have all of the up to date changes, bug fixes, tweaks, additions, etc. So feel free to watch or star the github, and check back regularly if you’d like to stay up to date.
 

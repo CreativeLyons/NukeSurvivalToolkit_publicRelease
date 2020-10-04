@@ -1,5 +1,3 @@
-set cut_paste_input [stack 0]
-push $cut_paste_input
 Group {
  name PerspectiveGuide_BB
  tile_color 0x566d6dff
@@ -16,17 +14,16 @@ Group {
  addUserKnob {18 lineColour}
  lineColour {1 1 1}
  addUserKnob {6 lineColour_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 lineColour_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {20 horizonGrp l horizon n 1}
  addUserKnob {6 horizon +STARTLINE}
  horizon true
  addUserKnob {18 horizonColour}
  horizonColour {1 0 0}
  addUserKnob {6 horizonColour_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {6 horizonColour_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {7 lineOpacity}
  lineOpacity 1
  addUserKnob {20 endGroup n -1}
+ addUserKnob {22 resetPoints l "Reset Points" T "def setPerspectivePointValues():\n    w = int (nuke.thisNode().width())\n    h = int (nuke.thisNode().height())\n    wHalf = int (w/2)\n    hHalf = int (h/2)\n\n    persp = nuke.thisNode()\n    persp\[ 'origin' ].setValue( \[wHalf, hHalf] )\n    persp\[ 'point1' ].setValue( \[0, h] )\n    persp\[ 'point2' ].setValue( \[wHalf+1, h] )\n    persp\[ 'point3' ].setValue( \[w, h] )\n    persp\[ 'point4' ].setValue( \[0, hHalf+1] )\n    persp\[ 'point5' ].setValue( \[w, hHalf+1] )\n    persp\[ 'point6' ].setValue( \[0, 0] )\n    persp\[ 'point7' ].setValue( \[wHalf+1, 0] )\n    persp\[ 'point8' ].setValue( \[w, 0] )\n\nsetPerspectivePointValues()" +STARTLINE}
  addUserKnob {12 origin l Origin}
  origin {960 540}
  addUserKnob {12 point1 l Point1}
@@ -155,7 +152,7 @@ Group {
   xpos -806
   ypos -89
  }
-set N59fcadf0 [stack 0]
+set Nec3247a0 [stack 0]
  Grade {
   channels rgba
   whitepoint 0
@@ -745,7 +742,7 @@ set N59fcadf0 [stack 0]
   xpos -590
   ypos -138
  }
-set N5d6b7110 [stack 0]
+set Nec27c3a0 [stack 0]
  Grade {
   multiply {{lineColour.r i} {lineColour.g i} {lineColour.b i} {1 i}}
   white_clamp true
@@ -771,14 +768,14 @@ set N5d6b7110 [stack 0]
   xpos -590
   ypos 62
  }
-set N5d7f1a40 [stack 0]
+set Nec1c19e0 [stack 0]
  Dot {
   name Dot3
   xpos -556
   ypos 114
  }
-push $N59fcadf0
-push $N5d6b7110
+push $Nec3247a0
+push $Nec27c3a0
  Merge2 {
   inputs 2
   operation max
@@ -794,13 +791,13 @@ push $N5d6b7110
   xpos -370
   ypos -611
  }
-set N5f005f40 [stack 0]
+set Nec251570 [stack 0]
  Dot {
   name Dot2
   xpos -226
   ypos -606
  }
-set N5f008410 [stack 0]
+set Nec22c640 [stack 0]
  Dot {
   name Dot1
   xpos -6
@@ -829,7 +826,7 @@ set N5f008410 [stack 0]
   xpos -40
   ypos 61
  }
-push $N5f008410
+push $Nec22c640
  Merge2 {
   inputs 2
   name Merge3
@@ -849,8 +846,8 @@ push $N5f008410
   xpos -226
   ypos 186
  }
-push $N5d7f1a40
-push $N5f005f40
+push $Nec1c19e0
+push $Nec251570
  Merge2 {
   inputs 2
   operation plus

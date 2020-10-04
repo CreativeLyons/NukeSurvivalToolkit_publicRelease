@@ -128,7 +128,7 @@ RotoPaint {
 Read {
  inputs 0
  file_type jpeg
- file /WaterDroplet_11/_MG_7478.jpg
+ file <<<replace>>>/MJT_Labs/Draw/WaterLens_11/demo_script/waterLensExampleBG.jpg
  format "1280 720 0 0 1280 720 1 HD_720"
  origset true
  name Read5
@@ -2625,7 +2625,7 @@ RotoPaint {
 Read {
  inputs 0
  file_type jpeg
- file /WaterDroplet_11/_MG_7478.jpg
+ file <<<replace>>>/MJT_Labs/Draw/WaterLens_11/demo_script/waterLensExampleBG.jpg
  format "1280 720 0 0 1280 720 1 HD_720"
  origset true
  name Read2
@@ -3249,7 +3249,7 @@ RotoPaint {
 Read {
  inputs 0
  file_type jpeg
- file /WaterDroplet_11/_MG_7478.jpg
+ file <<<replace>>>/MJT_Labs/Draw/WaterLens_11/demo_script/waterLensExampleBG.jpg
  format "1280 720 0 0 1280 720 1 HD_720"
  origset true
  name Read1
@@ -5718,7 +5718,7 @@ RotoPaint {
 Read {
  inputs 0
  file_type jpeg
- file /WaterDroplet_11/_MG_7478.jpg
+ file <<<replace>>>/MJT_Labs/Draw/WaterLens_11/demo_script/waterLensExampleBG.jpg
  format "1280 720 0 0 1280 720 1 HD_720"
  origset true
  name Read4
@@ -8132,7 +8132,7 @@ Dot {
 Read {
  inputs 0
  file_type jpeg
- file /WaterDroplet_11/_MG_7478.jpg
+ file <<<replace>>>/MJT_Labs/Draw/WaterLens_11/demo_script/waterLensExampleBG.jpg
  format "1280 720 0 0 1280 720 1 HD_720"
  origset true
  name Read3

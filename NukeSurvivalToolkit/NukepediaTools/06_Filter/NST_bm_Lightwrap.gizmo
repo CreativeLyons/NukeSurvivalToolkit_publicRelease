@@ -1,0 +1,793 @@
+Group {
+name bm_Lightwrap
+ inputs 2
+ knobChanged "n1 = nuke.thisNode()\nk1 = nuke.thisKnob()\nif k1.name() == \"effectOnly\":\n    if k1.value() == 1:\n        n1\[\"mergeType\"].setEnabled(False)\n    else:\n        n1\[\"mergeType\"].setEnabled(True) \n\n\nn2 = nuke.thisNode()\nk2 = nuke.thisKnob()\nif k2.name() == \"useThresholdCheckbox\":\n    if k2.value() == 1:\n        n2\[\"viewRange\"].setEnabled(True)\n    else:\n        n2\[\"viewRange\"].setEnabled(False)"
+ tile_color 0x222222ff
+ addUserKnob {20 Options}
+ addUserKnob {4 mergeType l "Merge Operation" M {Max Over Plus Screen ""}}
+ mergeType Plus
+ addUserKnob {26 spacer_01 l "" -STARTLINE T "      "}
+ addUserKnob {6 effectOnly l " Effect Only" -STARTLINE}
+ addUserKnob {4 glowType l "Glow Math" M {Double Fibonacci "" ""}}
+ glowType Fibonacci
+ addUserKnob {26 spacer_02 l "" -STARTLINE T "   "}
+ addUserKnob {6 useThresholdCheckbox l "Use Luminance-based wrap" -STARTLINE}
+ useThresholdCheckbox true
+ addUserKnob {26 spacer_05 l "" +STARTLINE T "                                                 "}
+ addUserKnob {6 viewRange l "View Range" -STARTLINE}
+ addUserKnob {41 size l "Pre-blur BG" T Blur11.size}
+ addUserKnob {26 ""}
+ addUserKnob {20 tGrp l "Luminance Selector" n 1}
+ tGrp 0
+ addUserKnob {26 spacer_03 l "" +STARTLINE T " "}
+ addUserKnob {41 range l "" +STARTLINE T Keyer1.range}
+ addUserKnob {26 spacer_04 l "" +STARTLINE T " "}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {7 glowSize l Size R 0 500}
+ glowSize 100
+ addUserKnob {7 glowAspect l Aspect R 0.5 2}
+ glowAspect 1
+ addUserKnob {7 glowBrightness l Brightness R 0 3}
+ glowBrightness 1
+ addUserKnob {18 glowGamma l Gamma R 0 2}
+ glowGamma 1
+ addUserKnob {6 glowGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 glowSaturation l Saturation R 0 3}
+ glowSaturation 1
+ addUserKnob {6 glowSaturation_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {4 alphaChoice l "Use Alpha From" M {None FG BG "FG & BG" "Glow Only" "" ""}}
+ alphaChoice FG
+ addUserKnob {7 glowMix l Mix}
+ glowMix 1
+ addUserKnob {26 ""}
+ addUserKnob {20 versionInfo l Info}
+ addUserKnob {26 ""}
+ addUserKnob {26 versionInfo_1 l "" +STARTLINE T "\nCreated by Ben McEwan\nwww.benmcewan.com\n\nVersion 3.0\nLast Updated: January 26th, 2018\n"}
+ addUserKnob {26 ""}
+}
+ Input {
+  inputs 0
+  name BG
+  xpos -1294
+  ypos -1111
+  number 1
+ }
+ Expression {
+  expr3 a==0?0:a
+  name Expression1
+  label "Alpha Error Fix"
+  xpos -1294
+  ypos -1041
+ }
+ Dot {
+  name Dot1
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -1260
+  ypos -918
+ }
+set Ncb0c8500 [stack 0]
+ Blur {
+  channels rgba
+  name Blur11
+  xpos -1159
+  ypos -921
+ }
+ Transform {
+  scale {{glowAspect} 1}
+  center {1024 778}
+  invert_matrix true
+  shutteroffset centred
+  name Transform1
+  xpos -889
+  ypos -921
+ }
+set N66151670 [stack 0]
+ Keyer {
+  operation "luminance key"
+  name Keyer1
+  xpos -732
+  ypos -927
+ }
+set N66161270 [stack 0]
+ Transform {
+  scale {{glowAspect} 1}
+  center {1024 778}
+  shutteroffset centred
+  name Transform3
+  xpos -576
+  ypos -921
+ }
+ Dot {
+  name Dot27
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 554
+  ypos -918
+ }
+ Shuffle {
+  in alpha
+  red alpha
+  name Shuffle2
+  tile_color 0xffffff01
+  label "\[value alpha] > \[value out]"
+  xpos 520
+  ypos 983
+ }
+ Input {
+  inputs 0
+  name FG
+  xpos -1155
+  ypos -848
+ }
+ Expression {
+  expr3 a==0?0:a
+  name Expression2
+  label "Alpha Error Fix"
+  xpos -1155
+  ypos -784
+ }
+set N672648c0 [stack 0]
+ Dot {
+  name Dot26
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -1121
+  ypos 21
+ }
+set N68352420 [stack 0]
+ Dot {
+  name Dot28
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -1121
+  ypos 104
+ }
+set N68356ff0 [stack 0]
+ Dot {
+  name Dot35
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -943
+  ypos 140
+ }
+ Dot {
+  name Dot32
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -943
+  ypos 210
+ }
+set N68360750 [stack 0]
+ Dot {
+  name Dot33
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -1053
+  ypos 210
+ }
+ Dot {
+  name Dot34
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -1053
+  ypos 923
+ }
+push $N68352420
+push $N672648c0
+push $N66161270
+ Premult {
+  name Premult1
+  xpos -732
+  ypos -891
+ }
+push $N66151670
+ Dot {
+  name Dot31
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -855
+  ypos -807
+ }
+ Switch {
+  inputs 2
+  which {{useThresholdCheckbox}}
+  name Switch3
+  xpos -732
+  ypos -810
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  bbox A
+  name Merge14
+  xpos -732
+  ypos -778
+ }
+ Dot {
+  name Dot2
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -698
+  ypos -754
+ }
+set Ncb25a090 [stack 0]
+ Dot {
+  name Dot11
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -578
+  ypos -754
+ }
+set Ncb25eec0 [stack 0]
+ Dot {
+  name Dot10
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -444
+  ypos -754
+ }
+set Ncb263850 [stack 0]
+ Dot {
+  name Dot9
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -314
+  ypos -754
+ }
+set Ncb268220 [stack 0]
+ Dot {
+  name Dot8
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -185
+  ypos -754
+ }
+set Ncb26cac0 [stack 0]
+ Dot {
+  name Dot7
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -75
+  ypos -754
+ }
+set Ncb2716a0 [stack 0]
+ Dot {
+  name Dot6
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 47
+  ypos -754
+ }
+set Ncb276070 [stack 0]
+ Dot {
+  name Dot5
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 179
+  ypos -754
+ }
+set Ncb27a8c0 [stack 0]
+ Dot {
+  name Dot4
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 301
+  ypos -754
+ }
+set Ncb27f7f0 [stack 0]
+ Dot {
+  name Dot3
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 421
+  ypos -754
+ }
+ Blur {
+  size {{glowType==0?(glowSize*25.6):(glowSize*5.5)}}
+  name Blur10
+  xpos 387
+  ypos -714
+ }
+ Multiply {
+  channels rgb
+  value {{glowType==0?(glowBrightness/512):(glowBrightness/50)}}
+  name Multiply10
+  xpos 387
+  ypos -678
+ }
+ Dot {
+  name Dot13
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 421
+  ypos -92
+ }
+push $Ncb27f7f0
+ Blur {
+  size {{glowType==0?(glowSize*12.8):(glowSize*3.4)}}
+  name Blur9
+  xpos 267
+  ypos -712
+ }
+ Multiply {
+  channels rgb
+  value {{glowType==0?(glowBrightness/256):(glowBrightness/33)}}
+  name Multiply9
+  xpos 267
+  ypos -676
+ }
+ Dot {
+  name Dot14
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 301
+  ypos -156
+ }
+push $Ncb27a8c0
+ Blur {
+  size {{glowType==0?(glowSize*6.4):(glowSize*2.1)}}
+  name Blur8
+  xpos 145
+  ypos -716
+ }
+ Multiply {
+  channels rgb
+  value {{glowType==0?(glowBrightness/128):(glowBrightness/20)}}
+  name Multiply8
+  xpos 145
+  ypos -680
+ }
+ Dot {
+  name Dot15
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 179
+  ypos -221
+ }
+push $Ncb276070
+ Blur {
+  size {{glowType==0?(glowSize*3.2):(glowSize*1.3)}}
+  name Blur7
+  xpos 13
+  ypos -717
+ }
+ Multiply {
+  channels rgb
+  value {{glowType==0?(glowBrightness/64):(glowBrightness/12.5)}}
+  name Multiply7
+  xpos 13
+  ypos -681
+ }
+ Dot {
+  name Dot16
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 47
+  ypos -285
+ }
+push $Ncb2716a0
+ Blur {
+  size {{glowType==0?(glowSize*1.6):(glowSize/1.25)}}
+  name Blur6
+  xpos -109
+  ypos -716
+ }
+ Multiply {
+  channels rgb
+  value {{glowType==0?(glowBrightness/32):(glowBrightness/7.68)}}
+  name Multiply6
+  xpos -109
+  ypos -680
+ }
+ Dot {
+  name Dot17
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -75
+  ypos -354
+ }
+push $Ncb26cac0
+ Blur {
+  size {{glowType==0?(glowSize/12.5):(glowSize/2)}}
+  name Blur5
+  xpos -219
+  ypos -719
+ }
+ Multiply {
+  channels rgb
+  value {{glowType==0?(glowBrightness/16):(glowBrightness/4.75)}}
+  name Multiply5
+  xpos -219
+  ypos -683
+ }
+ Dot {
+  name Dot18
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -185
+  ypos -421
+ }
+push $Ncb268220
+ Blur {
+  size {{glowType==0?(glowSize/2.5):(glowSize/3.3333)}}
+  name Blur4
+  xpos -348
+  ypos -721
+ }
+ Multiply {
+  channels rgb
+  value {{glowType==0?(glowBrightness/8):(glowBrightness/2.94)}}
+  name Multiply4
+  xpos -348
+  ypos -685
+ }
+ Dot {
+  name Dot19
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -314
+  ypos -479
+ }
+push $Ncb263850
+ Blur {
+  size {{glowSize/5}}
+  name Blur3
+  xpos -478
+  ypos -723
+ }
+ Multiply {
+  channels rgb
+  value {{glowType==0?(glowBrightness/4):(glowBrightness/1.815)}}
+  name Multiply3
+  xpos -478
+  ypos -687
+ }
+ Dot {
+  name Dot20
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -444
+  ypos -535
+ }
+push $Ncb25eec0
+ Blur {
+  size {{glowSize/10}}
+  name Blur2
+  xpos -612
+  ypos -723
+ }
+ Multiply {
+  channels rgb
+  value {{glowType==0?(glowBrightness/2):(glowBrightness/1.124)}}
+  name Multiply2
+  xpos -612
+  ypos -687
+ }
+ Dot {
+  name Dot12
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -578
+  ypos -592
+ }
+push $Ncb25a090
+ Blur {
+  size {{glowSize/50}}
+  name Blur1
+  xpos -732
+  ypos -722
+ }
+ Multiply {
+  channels rgb
+  value {{glowBrightness}}
+  name Multiply1
+  xpos -732
+  ypos -686
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge1
+  xpos -732
+  ypos -595
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge2
+  xpos -732
+  ypos -538
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge3
+  xpos -732
+  ypos -482
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge4
+  xpos -732
+  ypos -424
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge5
+  xpos -732
+  ypos -357
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge6
+  xpos -732
+  ypos -288
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge7
+  xpos -732
+  ypos -224
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge8
+  xpos -732
+  ypos -159
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge9
+  xpos -732
+  ypos -95
+ }
+ Multiply {
+  channels alpha
+  value 0.1
+  name Multiply22
+  xpos -732
+  ypos -57
+ }
+ ColorCorrect {
+  saturation {{glowSaturation} {glowSaturation} {glowSaturation} 1}
+  gamma {{glowGamma} {glowGamma} {glowGamma} 1}
+  name ColorCorrect1
+  xpos -732
+  ypos -21
+ }
+ Multiply {
+  value {{glowType==0?(glowMix):(glowMix/2.5)}}
+  name Multiply11
+  xpos -732
+  ypos 3
+ }
+ Transform {
+  scale {{glowAspect} 1}
+  center {1024 778}
+  shutteroffset centred
+  name Transform2
+  xpos -732
+  ypos 58
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox A
+  name Merge15
+  xpos -732
+  ypos 107
+ }
+set N160c42c0 [stack 0]
+ Dot {
+  name Dot22
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -472
+  ypos 296
+ }
+ Dot {
+  name Dot23
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -472
+  ypos 520
+ }
+set N160d9180 [stack 0]
+push $N160d9180
+push $N160c42c0
+ Dot {
+  name Dot24
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -698
+  ypos 218
+ }
+set N160dd310 [stack 0]
+push $N68360750
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge13
+  xpos -644
+  ypos 356
+ }
+push $N160dd310
+push $N68360750
+ Merge2 {
+  inputs 2
+  operation screen
+  name Merge12
+  xpos -752
+  ypos 355
+ }
+push $N160dd310
+push $N68360750
+ Merge2 {
+  inputs 2
+  name Merge11
+  xpos -859
+  ypos 359
+ }
+push $N160dd310
+push $N68360750
+ Merge2 {
+  inputs 2
+  operation max
+  name Merge10
+  xpos -977
+  ypos 358
+ }
+ Switch {
+  inputs 4
+  which {{mergeType}}
+  name Switch1
+  xpos -819
+  ypos 440
+ }
+ Switch {
+  inputs 2
+  which {{effectOnly}}
+  name Switch2
+  xpos -819
+  ypos 516
+ }
+set N15fa8ef0 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy4
+  xpos -506
+  ypos 728
+ }
+ Dot {
+  name Dot30
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -472
+  ypos 821
+ }
+push $N68356ff0
+ Dot {
+  name Dot29
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -1121
+  ypos 682
+ }
+push $N15fa8ef0
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos -819
+  ypos 673
+ }
+set N15fc7cc0 [stack 0]
+push $Ncb0c8500
+ Dot {
+  name Dot25
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -1260
+  ypos 561
+ }
+push $N15fa8ef0
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos -691
+  ypos 669
+ }
+set N15fda2e0 [stack 0]
+ ChannelMerge {
+  inputs 2
+  name ChannelMerge1
+  xpos -691
+  ypos 764
+ }
+push $N15fda2e0
+push $N15fc7cc0
+push $N15fa8ef0
+ Shuffle {
+  in alpha
+  red black
+  out alpha
+  name Shuffle1
+  tile_color 0xff000000
+  label "Alpha = 0"
+  xpos -947
+  ypos 736
+ }
+ Switch {
+  inputs 5
+  which {{alphaChoice}}
+  name Switch4
+  xpos -819
+  ypos 818
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -819
+  ypos 920
+ }
+ Switch {
+  inputs 2
+  which {{viewRange x1 0}}
+  name Switch5
+  xpos -819
+  ypos 989
+ }
+ Output {
+  name Output1
+  xpos -819
+  ypos 1193
+ }
+end_group

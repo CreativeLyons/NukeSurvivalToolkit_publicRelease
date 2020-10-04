@@ -6,14 +6,14 @@ import os
 import nuke
 
 # var that points to the folder that this init file lives in
-script_folder = os.path.dirname(__file__)
+NST_FolderPath = os.path.dirname(__file__)
 
 whiteList = []
 
 # add Folder name to list to prevent it from loading
 blackList = []
 
-for root, dirs, files in os.walk(script_folder):
+for root, dirs, files in os.walk(NST_FolderPath):
     # remove blacklist items
     for i in blackList:
         if i in dirs:
@@ -29,7 +29,7 @@ print ("""
 #################################################################
 #################################################################
 #################################################################
-Adding {} plugin Directories from {}:""".format( len(whiteList)-1, os.path.basename(script_folder) ) )
+Adding {} plugin Directories from {}:""".format( len(whiteList)-1, os.path.basename(NST_FolderPath) ) )
 for item in sorted(whiteList):
     nuke.pluginAddPath(str(item))
     print(item)

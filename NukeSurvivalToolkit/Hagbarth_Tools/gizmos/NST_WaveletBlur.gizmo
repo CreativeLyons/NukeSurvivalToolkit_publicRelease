@@ -1,0 +1,252 @@
+Group {
+ name WaveletBlur
+ tile_color 0x1f00ffff
+ selected true
+ addUserKnob {20 User l General}
+ addUserKnob {26 info_header l "" +STARTLINE T "Wavelet Blur \nby Mads Hagbarth Lund 2015 - www.hagbarth.net"}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T BlinkScript3.useGPUIfAvailable}
+ addUserKnob {26 ""}
+ addUserKnob {41 range l "Frequency Range" T Controller.range}
+ addUserKnob {26 ""}
+ addUserKnob {4 Algorithm M {"Edge Preserving" Gaussian}}
+ addUserKnob {7 BlurSize l "Blur Size"}
+ BlurSize 0.84
+ addUserKnob {7 EdgeThreshold l "Edge Threshold"}
+ EdgeThreshold 0.08
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xf3f3f3ff
+  xpos 599
+  ypos 601
+  bdwidth 122
+  bdheight 147
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0xf3f3f3ff
+  xpos 472
+  ypos 602
+  bdwidth 125
+  bdheight 388
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0xf3f3f3ff
+  xpos 358
+  ypos 741
+  bdwidth 125
+  bdheight 388
+ }
+ Input {
+  inputs 0
+  name InputMask
+  xpos 583
+  ypos 1317
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 427
+  ypos 340
+ }
+ Dot {
+  name Dot3
+  xpos 461
+  ypos 438
+ }
+set N276573a0 [stack 0]
+ Grade {
+  gamma 5
+  black_clamp false
+  name Grade7
+  xpos 427
+  ypos 517
+ }
+ Dot {
+  name Dot15
+  xpos 461
+  ypos 595
+ }
+set N2753f720 [stack 0]
+ Dot {
+  name Dot20
+  xpos 461
+  ypos 734
+ }
+set N27543a40 [stack 0]
+ Dot {
+  name Dot21
+  xpos 351
+  ypos 734
+ }
+push $N27543a40
+ Blur {
+  size {{parent.Controller.range.A*100}}
+  name Blur5
+  xpos 427
+  ypos 823
+ }
+ set C2754c110 [stack 0]
+set N2754c110 [stack 0]
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge9
+  xpos 317
+  ypos 829
+ }
+ Dot {
+  name Dot16
+  xpos 351
+  ypos 1125
+ }
+push $N2753f720
+ Dot {
+  name Dot19
+  xpos 593
+  ypos 595
+ }
+set N23ab64e0 [stack 0]
+ Dot {
+  name Dot23
+  xpos 718
+  ypos 595
+ }
+ Blur {
+  size {{parent.BlurSize*50}}
+  name Blur7
+  xpos 684
+  ypos 661
+ }
+ Dot {
+  name Dot27
+  xpos 718
+  ypos 743
+ }
+push $N23ab64e0
+ BlinkScript {
+  recompileCount 3
+  ProgramGroup 1
+  KernelDescription "2 \"SaturationKernel\" iterate pixelWise 395e3a3b2514398fbe769be874921fe9db9395d0bc5cc92a7bd3c6ab150f5430 2 \"src\" Read Random \"dst\" Write Point 3 \"FilterSize\" Int 1 DwAAAA== \"PositionalSigma\" Float 1 AAAgQQ== \"ColorSigma\" Float 1 zczMPQ== 3 \"MSIZE\" 1 1 \"SIGMA\" 1 1 \"BSIGMA\" 1 1 1 \"coefficients\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "//Port of mrharicot's bilateral implamentation.\n\nkernel SaturationKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src; // the input image\n  Image<eWrite> dst; // the output image\n\n  param:\n    int MSIZE; // This parameter is made available to the user.\n    float SIGMA;\n    float BSIGMA;\n\n  local:\n    float3 coefficients;  // This local variable is not exposed to the user.\n\n  // In define(), parameters can be given labels and default values.\n  void define() \{\n    defineParam(MSIZE, \"FilterSize\", 15);\n    defineParam(SIGMA, \"PositionalSigma\", 10.0f);\n    defineParam(BSIGMA, \"ColorSigma\", 0.1f);    \n  \}\n\nfloat normpdf(float x, float sigma)\n\{\n  return 0.39894f*exp(-0.5f*x*x/(sigma*sigma))/sigma;\n\}\n\nfloat normpdf3(float3 v, float sigma)\n\{\n  return 0.39894f*exp(-0.5f*dot(v,v)/(sigma*sigma))/sigma;\n\}\n\n  void process(int2 pos) \{\n  float4 ss = src(pos.x,pos.y);\n  float3 c = float3(ss.x,ss.y,ss.z);\n   \n\n    const int kSize = (MSIZE-1)/2;\n\n    float kernelB\[100];\n    float3 final_colour = float3(0.0);\n    \n\n    float Z = 0.0;\n    for (int j = 0; j <= kSize; ++j)\n    \{\n      kernelB\[kSize+j] = kernelB\[kSize-j] = normpdf(float(j), SIGMA);\n    \}\n    \n    \n    float3 cc;\n    float factor;\n    float bZ = 1.0f/normpdf(0.0f, BSIGMA);\n    for (int i=-kSize; i <= kSize; ++i)\n    \{\n      for (int j=-kSize; j <= kSize; ++j)\n      \{\n        ss = src(pos.x+i,pos.y+j);\n        cc = float3(ss.x,ss.y,ss.z);\n        factor = normpdf3(cc-c, BSIGMA)*bZ*kernelB\[kSize+j]*kernelB\[kSize+i];\n        Z += factor;\n        final_colour += factor*cc;\n\n      \}\n    \}    \n    final_colour = final_colour/Z;\n    dst() = float4(final_colour.x,final_colour.y,final_colour.z, 1.0f);\n  \}\n\};\n"
+  rebuild ""
+  SaturationKernel_FilterSize {{parent.BlurSize*50}}
+  SaturationKernel_ColorSigma {{(parent.EdgeThreshold/2)+0.00000000001}}
+  rebuild_finalise ""
+  name BlinkScript3
+  selected true
+  xpos 559
+  ypos 647
+ }
+ Switch {
+  inputs 2
+  which {{parent.Algorithm}}
+  name Switch2
+  xpos 559
+  ypos 739
+ }
+clone $C2754c110 {
+  xpos 559
+  ypos 823
+  selected false
+ }
+ Dot {
+  name Dot24
+  xpos 593
+  ypos 909
+ }
+set N2706ae00 [stack 0]
+ Dot {
+  name Dot25
+  xpos 733
+  ypos 909
+ }
+push $N2706ae00
+ Blur {
+  size {{(parent.Controller.range.B*100)-(parent.Controller.range.A*100)}}
+  name Blur6
+  xpos 559
+  ypos 975
+ }
+ set C27076150 [stack 0]
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge14
+  xpos 699
+  ypos 981
+ }
+ Dot {
+  name Dot22
+  xpos 733
+  ypos 1053
+ }
+push $N2754c110
+ Dot {
+  name Dot17
+  xpos 461
+  ypos 907
+ }
+clone $C27076150 {
+  xpos 427
+  ypos 973
+  selected false
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge12
+  xpos 427
+  ypos 1049
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge13
+  xpos 427
+  ypos 1121
+ }
+ Grade {
+  gamma {{1/parent.Grade7.gamma}}
+  black_clamp false
+  name Grade8
+  xpos 427
+  ypos 1193
+ }
+push $N276573a0
+ Dot {
+  name Dot2
+  xpos 120
+  ypos 438
+ }
+ Dot {
+  name Dot1
+  xpos 120
+  ypos 1321
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge1
+  xpos 427
+  ypos 1317
+ }
+ Output {
+  name Output1
+  xpos 427
+  ypos 1427
+ }
+ Keyer {
+  inputs 0
+  operation "luminance key"
+  range {0.03182369132 0.8689237646 1 1}
+  name Controller
+  xpos 183
+  ypos 819
+ }
+end_group
