@@ -19,7 +19,7 @@ NST_FolderPath = os.path.dirname(__file__)
 NST_helper.NST_FolderPath = NST_FolderPath
 
 # give the name of the help doc .pdf in main folder
-NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v1.0.0.pdf"
+NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v1.1.0.pdf"
 
 # creating full filepath to the help doc
 NST_helpDoc_os_path = os.path.join(NST_FolderPath, NST_helpDoc)
@@ -464,7 +464,7 @@ cgMenu.addSeparator()
 cgMenu.addCommand('aPmatte AP', 'nuke.createNode("{}aPMatte_v2")'.format(prefixNST), icon='aPmatte.png')
 cgMenu.addCommand('P_Ramp NKPD', "nuke.createNode('{}F_P_Ramp')".format(prefixNST), icon="F_pramp.png")
 cgMenu.addCommand('P_Project NKPD', "nuke.createNode('{}F_P_Project')".format(prefixNST), icon="F_pproject.png")
-cgMenu.addCommand('Glue_P NKPD', "nuke.createNode('{}GlueP')".format(prefixNST), icon="PosProjection_MJ.png")
+cgMenu.addCommand('Glue_P LS', "nuke.createNode('{}GlueP')".format(prefixNST), icon="PosProjection_MJ.png")
 cgMenu.addCommand('P_Noise_Advanced NKPD', "nuke.createNode('{}P_Noise_Advanced')".format(prefixNST), icon="Noise.png")
 
 ############################################################################################################
