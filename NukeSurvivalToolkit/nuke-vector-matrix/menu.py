@@ -7,7 +7,6 @@ All subdirectories are added to the nuke.pluginPath() (see init.py)
 import os
 import re
 import nuke
-import matrix_utils
 try:
     import scandir as walk_module
 except ImportError:
@@ -85,16 +84,11 @@ def natural_sort(values, case_sensitive=False):
 
 
 # Nodes Menu
-toolbar = nuke.toolbar("Nodes")
-toolbar_math_tools = toolbar.addMenu("NukeSurvivalToolkit/Transform/Math Tools MT", icon=find_icon("Math"), index=000)
-
-nuke_dir = os.path.join(CWD, 'nuke')
-
-populate_menu_recursive(nuke_dir, toolbar_math_tools)
-
-# Utilities Menu
-# By default in the main Nuke menu, change the next line to have the menu somewhere else.
-#target_menu = nuke.menu('Nuke')
-#transform_menu = target_menu.addMenu("Transform Utils", icon="transforms.png")
-#transform_menu.addCommand("Convert Node Matrix", matrix_utils.run_convert_matrix)
-#transform_menu.addCommand("Merge Transforms", matrix_utils.run_merge_transforms)
+try:
+    toolbar = nuke.toolbar("Nodes")
+    toolbarNST_Transform = toolbar.findItem("NukeSurvivalToolkit/Transform")
+    toolbar_math_tools = toolbarNST_Transform.addMenu("Math Tools MT", icon=find_icon("Math"), index=000)
+    nuke_dir = os.path.join(CWD, 'nuke')
+    populate_menu_recursive(nuke_dir, toolbar_math_tools)
+except:
+    print "Could not load nuke-vector-matrix menu"

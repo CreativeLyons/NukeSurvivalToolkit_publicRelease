@@ -12,6 +12,7 @@ import webbrowser
 import NST_helper
 
 # This is the prefix being used to customize the gizmo's in this toolkit
+global prefixNST
 prefixNST = "NST_"
 
 # Store the location of this menu.py to help with nuke.nodePaste() which requires a filepath to paste
