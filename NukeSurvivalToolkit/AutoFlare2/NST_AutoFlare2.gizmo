@@ -1458,7 +1458,7 @@ set N66a55920 [stack 0]
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/polygons/dodecagon.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/polygons/dodecagon.png
   format "512 512 0 0 512 512 1 square_512"
   origset true
   name Read19
@@ -1478,7 +1478,7 @@ set N4a2244b0 [stack 0]
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/polygons/undecagon.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/polygons/undecagon.png
   format "512 512 0 0 512 512 1 square_512"
   origset true
   name Read26
@@ -1498,7 +1498,7 @@ set N4a638510 [stack 0]
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/polygons/decagon.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/polygons/decagon.png
   format "512 512 0 0 512 512 1 square_512"
   origset true
   name Read3
@@ -1518,7 +1518,7 @@ set N6703bbe0 [stack 0]
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/polygons/nonagon.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/polygons/nonagon.png
   format "512 512 0 0 512 512 1 square_512"
   origset true
   name Read22
@@ -1538,7 +1538,7 @@ set N4993c8b0 [stack 0]
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/polygons/octogon.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/polygons/octogon.png
   format "512 512 0 0 512 512 1 square_512"
   origset true
   name Read23
@@ -1558,7 +1558,7 @@ set N4a1d10d0 [stack 0]
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/polygons/heptagon.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/polygons/heptagon.png
   format "512 512 0 0 512 512 1 square_512"
   origset true
   name Read20
@@ -1578,7 +1578,7 @@ set N4a055400 [stack 0]
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/polygons/hexagon.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/polygons/hexagon.png
   format "512 512 0 0 512 512 1 square_512"
   origset true
   name Read21
@@ -1598,7 +1598,7 @@ set N4a07d0f0 [stack 0]
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/polygons/pentagon.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/polygons/pentagon.png
   format "512 512 0 0 512 512 1 square_512"
   origset true
   name Read24
@@ -1656,7 +1656,7 @@ set N49b24150 [stack 0]
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/twoCircle2.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/twoCircle2.png
   format "256 256 0 0 256 256 1 square_256"
   origset true
   name Read12
@@ -1964,7 +1964,7 @@ push $N49b24150
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/circleNoise1.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/circleNoise1.png
   format "256 256 0 0 256 256 1 square_256"
   origset true
   name Read7
@@ -2149,7 +2149,7 @@ push $N49b24150
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/circleHard1.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/circleHard1.png
   format "256 256 0 0 256 256 1 square_256"
   origset true
   name Read14
@@ -2357,7 +2357,7 @@ push $N49b24150
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/circleBlur1.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/circleBlur1.png
   format "256 256 0 0 256 256 1 square_256"
   origset true
   name Read9
@@ -3190,7 +3190,7 @@ push $N49b24150
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/twoCircle1.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/twoCircle1.png
   format "256 256 0 0 256 256 1 square_256"
   origset true
   name Read11
@@ -3682,7 +3682,7 @@ push $N49b24150
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/circleHard3.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/circleHard3.png
   format "256 256 0 0 256 256 1 square_256"
   origset true
   name Read6
@@ -3843,7 +3843,7 @@ push $N49b24150
  Read {
   inputs 0
   file_type png
-  file /Users/tonylyons/Dropbox/Public/GitHub/NukeSurvivalToolkit_publicRelease/NukeSurvivalToolkit/AutoFlare2/BOKEHS/circleHard2.png
+  file <<<replace>>>/AutoFlare2/BOKEHS/circleHard2.png
   format "256 256 0 0 256 256 1 square_256"
   origset true
   name Read5
