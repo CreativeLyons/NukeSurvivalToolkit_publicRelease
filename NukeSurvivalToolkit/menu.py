@@ -42,7 +42,7 @@ m = toolbar.addMenu('NukeSurvivalToolkit', icon = "SurvivalToolkit.png")
 def openNSTDocumentation():
     webbrowser.open(NST_helpDocPath)
 
-m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png")
+m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png", index= 00)
 
 ############################################################################################################
 ############################################################################################################
@@ -52,19 +52,31 @@ m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png")
 imageMenu = m.addMenu('Image', icon = 'ToolbarImage.png', index = 10)
 
 imageMenu.addCommand('LabelFromRead TL', "nuke.createNode('{}LabelFromRead')".format(prefixNST), icon="LabelFromRead.png")
+
 ############################################################################################################
 ############################################################################################################
 
 # Create Draw Menu
 drawMenu = m.addMenu('Draw', icon = 'ToolbarDraw.png', index = 20)
 
+
 drawMenu.addCommand('GradMagic TL', "nuke.createNode('{}GradMagic')".format(prefixNST), icon="GradMagic.png")
 drawMenu.addCommand('NoiseAdvanced TL', "nuke.createNode('{}NoiseAdvanced')".format(prefixNST), icon="Noise.png")
 drawMenu.addCommand('RadialAdvanced TL', "nuke.createNode('{}RadialAdvanced')".format(prefixNST), icon="Radial.png")
+drawMenu.addCommand('UV Map AG', "nuke.createNode('{}UV_Map')".format(prefixNST), icon="AG_UVMap.png")
 
 drawMenu.addSeparator()
 
 drawMenu.addCommand('WaterLens MJT', "nuke.createNode('{}WaterLens')".format(prefixNST), icon="WaterLens.png")
+drawMenu.addCommand("Silk MHD", "nuke.createNode('{}h_silk')".format(prefixNST), icon="h_silk.png")
+
+# Try to add GradientEditor
+try:
+    import ColorGradientUi
+    drawMenu.addCommand("GradientEditor MHD", "nuke.createNode('{}h_gradienteditor')".format(prefixNST), icon="h_gradienteditor.png")
+except:
+    print "Could not load ColorGradientUi from HagbarthTools folder"
+    pass
 
 drawMenu.addSeparator()
 
@@ -83,6 +95,7 @@ drawMenu.addCommand('Grain_Advanced SPIN', "nuke.createNode('{}Grain_Advanced')"
 
 drawMenu.addSeparator()
 
+drawMenu.addCommand("X_Tesla XM", "nuke.createNode('{}X_Tesla')".format(prefixNST), icon="X_Tesla.png")
 drawMenu.addCommand('SpotFlare MHD', "nuke.createNode('{}SpotFlare')".format(prefixNST), icon="Flare.png")
 drawMenu.addCommand('FlareSuperStar NKPD', "nuke.createNode('{}FlareSuperStar')".format(prefixNST), icon="nukepedia_icon.png")
 drawMenu.addCommand('AutoFlare NKPD', "NST_helper.filepathCreateNode('{}AutoFlare2')".format(prefixNST), icon="Flare.png")
@@ -155,9 +168,7 @@ colorMenu.addCommand('HSL_Tool NKPD', "nuke.createNode('{}HSL_Tool')".format(pre
 
 filterMenu = m.addMenu('Filter', icon = 'ToolbarFilter.png', index = 60)
 
-
 glowMenu = filterMenu.addMenu("Glows", icon="Glow.png")
-
 glowMenu.addCommand('apGlow AP', 'nuke.createNode("{}apeGlow")'.format(prefixNST), icon='apGlow.png')
 glowMenu.addCommand('ExponGlow TL', 'nuke.createNode("{}ExponGlow")'.format(prefixNST), icon='Glow.png')
 glowMenu.addCommand('Glow_Exponential SPIN', 'nuke.createNode("{}Glow_Exponential")'.format(prefixNST), icon="spin_tools.png")
@@ -166,26 +177,22 @@ glowMenu.addCommand('bm_OpticalGlow BM', "nuke.createNode('{}bm_OpticalGlow')".f
 filterMenu.addSeparator()
 
 BlurMenu = filterMenu.addMenu("Blurs", icon="Median.png")
-
 BlurMenu.addCommand('ExponBlurSimple TL', "nuke.createNode('{}ExponBlurSimple')".format(prefixNST), icon="Glow.png")
 BlurMenu.addCommand('DirectionalBlur TL', "nuke.createNode('{}DirectionalBlur')".format(prefixNST), icon="DirBlur.png")
 BlurMenu.addCommand('iBlur NKPD', "nuke.createNode('{}iBlurU')".format(prefixNST), icon="Blur.png")
+BlurMenu.addCommand("WaveletBlur MHD", "nuke.createNode('{}WaveletBlur')".format(prefixNST), icon="h_tools.png")
 
 filterMenu.addSeparator()
 
 EdgesMenu = filterMenu.addMenu("Edges", icon="FilterErode.png")
-
 EdgesMenu.addCommand('apEdgePush AP', 'nuke.createNode("{}apEdgePush")'.format(prefixNST), icon='apEdgePush.png')
 EdgesMenu.addCommand('EdgeDetectAlias TL', "nuke.createNode('{}EdgeDetectAlias')".format(prefixNST), icon="FilterErod.png")
 EdgesMenu.addCommand('AntiAliasingFilter AG', "nuke.createNode('{}AntiAliasingFilter')".format(prefixNST), icon="nukepedia_icon.png")
 EdgesMenu.addCommand('ErodeSmooth TL', "nuke.createNode('{}ErodeSmooth')".format(prefixNST), icon="FilterErode.png")
-
 EdgesMenu.addCommand('Edge_RimLight AG', "nuke.createNode('{}Edge_RimLight')".format(prefixNST), icon="nukepedia_icon.png")
 EdgesMenu.addCommand('EdgeDetectPRO AG', "nuke.createNode('{}EdgeDetectPRO')".format(prefixNST), icon="nukepedia_icon.png")
-
 EdgesMenu.addCommand('Erode_Fine SPIN', "nuke.createNode('{}Erode_Fine')".format(prefixNST), icon="spin_tools.png")
 EdgesMenu.addCommand('Edge_Expand SPIN', "nuke.createNode('{}Edge_Expand')".format(prefixNST), icon="spin_tools.png")
-
 EdgesMenu.addCommand('Edge RB', "nuke.createNode('{}Edge')".format(prefixNST), icon="nukepedia_icon.png")
 EdgesMenu.addCommand('KillOutline NKPD', "nuke.createNode('{}KillOutline')".format(prefixNST), icon="nukepedia_icon.png")
 EdgesMenu.addCommand('ColorSmear NKPD', "nuke.createNode('{}ColorSmear')".format(prefixNST), icon="nukepedia_icon.png")
@@ -197,9 +204,17 @@ EdgesMenu.addCommand('FractalBlur NKPD', "nuke.createNode('{}FractalBlur')".form
 filterMenu.addSeparator()
 
 distortMenu = filterMenu.addMenu("Distortions", icon="IDistort.png")
-
 distortMenu.addCommand('Glass FR', "nuke.createNode('{}Glass')".format(prefixNST), icon="nukepedia_icon.png")
 distortMenu.addCommand('HeatWave NKPD', "nuke.createNode('{}HeatWave')".format(prefixNST), icon="HeatWave_Icon.png")
+distortMenu.addCommand("X_Distort XM", "nuke.createNode(\"{}X_Distort\")".format(prefixNST), icon="X_Distort.png")
+
+filterMenu.addSeparator()
+
+X_ToolsMenu = filterMenu.addMenu("X_Tools XM", icon="X_Tools.png")
+X_ToolsMenu.addCommand("X_Aton_Volumetrics XM", "nuke.createNode(\"{}X_Aton_Volumetrics\")".format(prefixNST), icon="X_Aton.png")
+X_ToolsMenu.addCommand("X_Denoise XM", "nuke.createNode(\"{}X_Denoise\")".format(prefixNST), icon="X_Denoise.png")
+X_ToolsMenu.addCommand("X_Sharpen XM", "nuke.createNode(\"{}X_Sharpen\")".format(prefixNST), icon="X_Sharpen.png")
+X_ToolsMenu.addCommand("X_Soften XM", "nuke.createNode(\"{}X_Soften\")".format(prefixNST), icon="X_Soften.png")
 
 filterMenu.addSeparator()
 
@@ -287,12 +302,13 @@ transformMenu.addCommand('Vectors_to_Degrees EL', "nuke.createNode('{}Vectors_to
 # Add VectorTracker python file
 try:
     nuke.load('{}VectorTracker.py'.format(prefixNST))
+    transformMenu.addCommand('VectorTracker NKPD', "nuke.createNode('{}VectorTracker.gizmo')".format(prefixNST), icon = 'vectorTools.png')
 except:
     print "Could not load VectorTracker.py"
     pass
-transformMenu.addCommand('VectorTracker NKPD', "nuke.createNode('{}VectorTracker.gizmo')".format(prefixNST), icon = 'vectorTools.png')
 
 transformMenu.addSeparator()
+
 
 transformMenu.addCommand('AutoCropTool TL', "nuke.createNode('{}AutoCropTool')".format(prefixNST), icon="AutoCrop.png")
 transformMenu.addCommand('BBoxToFormat TL', "nuke.createNode('{}BBoxToFormat')".format(prefixNST), icon="Rectangle.png")
@@ -314,7 +330,7 @@ transformMenu.addCommand('CardToTrack AK', "nuke.createNode('{}CardToTrack')".fo
 transformMenu.addCommand('CProject AK', "nuke.createNode('{}CProject')".format(prefixNST), icon='CornerPin.png')
 transformMenu.addCommand('TProject AK', "nuke.createNode('{}TProject')".format(prefixNST), icon='Transform.png')
 
-
+transformMenu.addCommand("StickIt MHD", "nuke.createNode('{}h_stickit')".format(prefixNST), icon="h_stickit.png")
 transformMenu.addSeparator()
 
 transformMenu.addCommand('TransformMatrix AG', "nuke.createNode('{}TransformMatrix')".format(prefixNST), icon="Transform.png")
@@ -534,5 +550,5 @@ gizmoDemoMenu.addCommand('SSMesh Demo MJT', "nuke.nodePaste('{}/MJT_Labs/3D/SSMe
 gizmoDemoMenu.addCommand('UVEditor Demo MJT', "nuke.nodePaste('{}/MJT_Labs/3D/UVEditor_v14/demo_script/{}UVEditor_demo_clean.nk')".format(NST_FolderPath, prefixNST), icon="UVEditor.png")
 gizmoDemoMenu.addCommand('Sparky Demo DB', "nuke.nodePaste('{}/NukepediaTools/11_Particles/DB_Sparky_v1.5/ExampleScene/{}SparkyExampleScene.nk')".format(NST_FolderPath, prefixNST), icon="Sparky.png")
 gizmoDemoMenu.addCommand('ParticleLights Demo MHD', "nuke.nodePaste('{}/Hagbarth_Tools/{}ParticleLights_ExampleScript.nk')".format(NST_FolderPath, prefixNST), icon="ToolbarParticles.png")
-
+gizmoDemoMenu.addCommand("X_Aton Volumetric Demo XM", "nuke.nodePaste('{}/X_Tools/tools/{}X_Aton_Examples.nk')".format(NST_FolderPath, prefixNST), icon="X_Aton.png")
 

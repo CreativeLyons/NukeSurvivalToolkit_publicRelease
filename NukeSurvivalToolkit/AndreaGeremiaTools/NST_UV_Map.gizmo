@@ -1,15 +1,16 @@
 Group {
  name UV_Map
  help "Create an uvmap from the input format or the selected format that can be used for example for baking transformations and applying them through a STmap node.\nUse the overscan to create values outside of the viewing window and the 0-1 range."
+ tile_color 0x578100ff
  note_font "Bitstream Vera Sans"
+ note_font_color 0xffffffff
  selected true
- xpos 520
- ypos 579
  mapsize {0.15 0.15}
  addUserKnob {20 tab l "UV Map"}
  addUserKnob {41 format T Constant1.format}
  addUserKnob {41 scale l overscan T Reformat1.scale}
  addUserKnob {6 alpha l "alpha 1" +STARTLINE}
+ addUserKnob {41 black_outside l "black outside" -STARTLINE T Reformat2.black_outside}
 }
  Input {
   inputs 0
@@ -37,11 +38,10 @@ Group {
   which {{"\[exists parent.input0]"}}
   name Switch1
   xpos 620
-  ypos -191
+  ypos -190
  }
  Reformat {
   type scale
-  black_outside true
   pbb true
   name Reformat1
   xpos 620

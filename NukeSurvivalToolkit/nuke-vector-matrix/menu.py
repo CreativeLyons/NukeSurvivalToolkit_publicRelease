@@ -14,7 +14,7 @@ except ImportError:
 
 CWD = os.path.dirname((os.path.abspath(__file__)))
 
-#prefixNST = "NST_"
+prefixNST = "NST_"
 
 # Functions
 def find_icon(name):
@@ -84,11 +84,14 @@ def natural_sort(values, case_sensitive=False):
 
 
 # Nodes Menu
+toolbar = nuke.toolbar("Nodes")
 try:
-    toolbar = nuke.toolbar("Nodes")
-    toolbarNST_Transform = toolbar.findItem("NukeSurvivalToolkit/Transform")
-    toolbar_math_tools = toolbarNST_Transform.addMenu("Math Tools MT", icon=find_icon("Math"), index=000)
-    nuke_dir = os.path.join(CWD, 'nuke')
-    populate_menu_recursive(nuke_dir, toolbar_math_tools)
+    NST_TransformMenu = toolbar.menu("NukeSurvivalToolkit").menu("Transform")
+    #print "Found NST/Transform Menu for Vector Tools"
 except:
-    print "Could not load nuke-vector-matrix menu"
+    NST_menu = toolbar.addMenu('NukeSurvivalToolkit', icon = "SurvivalToolkit.png")
+    NST_TransformMenu = NST_menu.addMenu('Transform', icon = 'ToolbarTransform.png', index = 90)
+    #print "Did not find NST/Transform Menu for Vector Tools"
+toolbar_math_tools = NST_TransformMenu.addMenu("Math Tools MT", icon=find_icon("Math"), index=000)
+nuke_dir = os.path.join(CWD, 'nuke')
+populate_menu_recursive(nuke_dir, toolbar_math_tools)
