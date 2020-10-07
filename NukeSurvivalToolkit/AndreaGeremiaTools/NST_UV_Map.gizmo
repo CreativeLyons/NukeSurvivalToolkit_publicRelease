@@ -14,7 +14,7 @@ Group {
 }
  Input {
   inputs 0
-  name Input1
+  name Input
   xpos 620
   ypos -370
  }
