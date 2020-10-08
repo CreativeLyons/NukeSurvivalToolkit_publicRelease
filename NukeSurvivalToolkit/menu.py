@@ -42,7 +42,7 @@ m = toolbar.addMenu('NukeSurvivalToolkit', icon = "SurvivalToolkit.png")
 def openNSTDocumentation():
     webbrowser.open(NST_helpDocPath)
 
-m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png", index= 00)
+m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png", index = 00)
 
 ############################################################################################################
 ############################################################################################################
