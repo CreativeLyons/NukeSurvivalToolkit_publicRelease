@@ -129,7 +129,7 @@ push $N9dbc2f0
  }
  Grade {
   multiply 0
-  add {{parent.greyAmt_2} {parent.greyAmt_2} {parent.greyAmt_2} 0}
+  add {{parent.greyAmt} {parent.greyAmt} {parent.greyAmt} 0}
   name Grade1
   xpos 169
   ypos -431

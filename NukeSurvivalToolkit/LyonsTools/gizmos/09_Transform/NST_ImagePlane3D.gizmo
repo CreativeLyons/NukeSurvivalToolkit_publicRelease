@@ -556,9 +556,10 @@ push $N809989f0
  }
  Crop {
   inputs 0
-  box {0 0 {input.format.r} {input.format.t}}
+  box {0 0 {"\[exists parent.input0] ? input.format.r : format.r"} {"\[exists parent.input0] ? input.format.t : format.t"}}
+  crop false
   name Crop1
-  xpos 602
+  xpos 603
   ypos 733
   addUserKnob {20 User}
   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}

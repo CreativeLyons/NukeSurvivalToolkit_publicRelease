@@ -185,7 +185,6 @@ push $N1d26e70
   name CopyBBox1
   xpos 0
   ypos 251
-  disable {{!parent.cropBBox}}
  }
  Dot {
   name Dot17
