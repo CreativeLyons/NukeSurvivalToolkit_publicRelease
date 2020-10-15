@@ -586,7 +586,7 @@ push $N809989f0
  }
  Switch {
   inputs 4
-  which {{"result == 2 && \[python \{nuke.executing()\}] == 1 ? 0 : result"}}
+  which {{"result == 2 && !\$gui == 1 ? 0 : result"}}
   name Switch1
   xpos 442
   ypos 1277
