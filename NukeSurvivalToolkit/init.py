@@ -24,13 +24,16 @@ for root, dirs, files in os.walk(NST_FolderPath):
     for dir in dirs:
         whiteList.append( os.path.join(root, dir) )
 
+'''
 # add plugin paths
 print ("""
 #################################################################
 #################################################################
 #################################################################
 Adding {} plugin Directories from {}:""".format( len(whiteList)-1, os.path.basename(NST_FolderPath) ) )
+'''
+
 for item in sorted(whiteList):
     nuke.pluginAddPath(str(item))
-    print(item)
+    # print(item)
 
