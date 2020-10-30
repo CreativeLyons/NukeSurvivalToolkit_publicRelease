@@ -9,6 +9,15 @@ import nuke
 import sys
 import os
 import webbrowser
+
+# Add PluginPaths to tools and icons
+nuke.pluginAddPath('./gizmos')
+nuke.pluginAddPath('./python')
+nuke.pluginAddPath('./icons')
+nuke.pluginAddPath('./images')
+nuke.pluginAddPath('./nk_files')
+
+# Import some helpful functions for the NST
 import NST_helper
 
 # This is the prefix being used to customize the gizmo's in this toolkit
@@ -59,6 +68,88 @@ imageMenu.addCommand('LabelFromRead TL', "nuke.createNode('{}LabelFromRead')".fo
 # Create Draw Menu
 drawMenu = m.addMenu('Draw', icon = 'ToolbarDraw.png', index = 20)
 
+expressionMenu = drawMenu.addMenu("Expression Nodes AG", icon = os.path.join(NST_FolderPath, "icons/expr.png"), index=000 )
+expressionMenu.addMenu( 'Creations', icon = os.path.join(NST_FolderPath, "icons/expr_01.png") )
+expressionMenu.addMenu( 'Alpha', icon = os.path.join(NST_FolderPath, "icons/expr_02.png") )
+expressionMenu.addMenu( 'Pixel', icon = os.path.join(NST_FolderPath, "icons/expr_03.png") )
+expressionMenu.addMenu( 'Keying and Despill', icon = os.path.join(NST_FolderPath, "icons/expr_04.png") )
+expressionMenu.addMenu( 'Transform', icon = os.path.join(NST_FolderPath, "icons/expr_05.png") )
+expressionMenu.addMenu( '3D and Deep', icon = os.path.join(NST_FolderPath, "icons/expr_06.png") )
+
+#CREATIONS
+expressionMenu.addCommand('Creations/Random/Random Colors', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Random_colors.nk") + "\")")
+expressionMenu.addCommand('Creations/Random/Random every Frame', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Random_every_frame.nk") + "\")")
+expressionMenu.addCommand('Creations/Random/Random every Pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Random_every_pixel.nk") + "\")")
+expressionMenu.addCommand('Creations/Noise/Noise', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Noise.nk") + "\")")
+expressionMenu.addCommand('Creations/Noise/fBm', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/fBexpressionMenu.nk") + "\")")
+expressionMenu.addCommand('Creations/Noise/Turbulence', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/turbulence.nk") + "\")")
+expressionMenu.addCommand('Creations/lines vertical', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Vertical.nk") + "\")")
+expressionMenu.addCommand('Creations/lines horizontal', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Horizontal.nk") + "\")")
+expressionMenu.addCommand('Creations/lines vertical animated', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Vertical_Animated.nk") + "\")")
+expressionMenu.addCommand('Creations/lines horizontal animated', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Horizontal_Animated.nk") + "\")")
+expressionMenu.addCommand('Creations/circles', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/circles.nk") + "\")")
+expressionMenu.addCommand('Creations/circles user', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/circles_user.nk") + "\")")
+expressionMenu.addCommand('Creations/points', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/points.nk") + "\")")
+expressionMenu.addCommand('Creations/points advanced', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/points_advanced.nk") + "\")")
+expressionMenu.addCommand('Creations/bricks', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/bricks.nk") + "\")")
+expressionMenu.addCommand('Creations/gradient horizontal', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_horizontal.nk") + "\")")
+expressionMenu.addCommand('Creations/gradient horizontal invert', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_horizontal_invert.nk") + "\")")
+expressionMenu.addCommand('Creations/gradient vertical', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_vertical.nk") + "\")")
+expressionMenu.addCommand('Creations/gradient vertical invert', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_vertical_invert.nk") + "\")")
+expressionMenu.addCommand('Creations/gradient 4 corners', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/GradientCorner.nk") + "\")")
+expressionMenu.addCommand('Creations/radial', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/radial.nk") + "\")")
+expressionMenu.addCommand('Creations/radial gradient', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/radial_gradient.nk") + "\")")
+expressionMenu.addCommand('Creations/radial rays', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/radial_rays.nk") + "\")")
+expressionMenu.addCommand('Creations/Trunc', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Trunc.nk") + "\")")
+
+#ALPHA
+expressionMenu.addCommand('Alpha/alpha binary', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_binary.nk") + "\")")
+expressionMenu.addCommand('Alpha/alpha comparison', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_comparison.nk") + "\")")
+expressionMenu.addCommand('Alpha/alpha exists?', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_exists.nk") + "\")")
+expressionMenu.addCommand('Alpha/alpha sum', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_suexpressionMenu.nk") + "\")")
+
+#PIXEL
+expressionMenu.addCommand('Pixel/absolute value', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/abs.nk") + "\")")
+expressionMenu.addCommand('Pixel/check negative', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/check_negative.nk") + "\")")
+expressionMenu.addCommand('Pixel/check nan inf pixels', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/check_nan_inf.nk") + "\")")
+expressionMenu.addCommand('Pixel/create nan pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/create_nan.nk") + "\")")
+expressionMenu.addCommand('Pixel/kill nan pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/kill_nan.nk") + "\")")
+expressionMenu.addCommand('Pixel/create inf pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/create_inf.nk") + "\")")
+expressionMenu.addCommand('Pixel/kill inf pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/kill_inf.nk") + "\")")
+
+#TRANSFORM
+expressionMenu.addCommand('Transform/Coordinates', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/coordinates.nk") + "\")")
+expressionMenu.addCommand('Transform/UV Map', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/UV_map.nk") + "\")")
+expressionMenu.addCommand('Transform/UV to Vector', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/UV_to_Vector.nk") + "\")")
+expressionMenu.addCommand('Transform/Vector to UV', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Vector_to_UV.nk") + "\")")
+expressionMenu.addCommand('Transform/transform', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/transforexpressionMenu.nk") + "\")")
+expressionMenu.addCommand('Transform/transform advanced', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/transform_advanced.nk") + "\")")
+expressionMenu.addCommand('Transform/twist', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/twist.nk") + "\")")
+expressionMenu.addCommand('Transform/STMap_invert', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/STMap_invert.nk") + "\")")
+
+#3D and DEEP
+expressionMenu.addCommand('3D and Deep/Normal Pass - Relight', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/normalPass_relight.nk") + "\")")
+expressionMenu.addCommand('3D and Deep/C4x4', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/C4x4.nk") + "\")")
+expressionMenu.addCommand('3D and Deep/Deep Thickness', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/deepThickness.nk") + "\")")
+expressionMenu.addCommand('3D and Deep/Deep to Depth', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/deepToDepth.nk") + "\")")
+expressionMenu.addCommand('3D and Deep/Deep from Depth', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/deepFromDepth.nk") + "\")")
+expressionMenu.addCommand('3D and Deep/Depth normalize', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/depth_normalize.nk") + "\")")
+
+#KEYING and DESPILL
+expressionMenu.addCommand('Keying and Despill/despill green', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_green.nk") + "\")")
+expressionMenu.addCommand('Keying and Despill/despill green list', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_green_list.nk") + "\")")
+expressionMenu.addCommand('Keying and Despill/despill blue', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_blue.nk") + "\")")
+expressionMenu.addCommand('Keying and Despill/despill blue list', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_blue_list.nk") + "\")")
+expressionMenu.addCommand('Keying and Despill/keying', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/keying.nk") + "\")")
+expressionMenu.addCommand('Keying and Despill/differenceKey', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/differenceKey.nk") + "\")")
+expressionMenu.addCommand('Keying and Despill/IBKGizmo_Expression', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/IBKGizmo_Expression.nk") + "\")")
+
+expressionMenu.addSeparator()
+
+#INFO
+expressionMenu.addCommand('Info e Tutorial', "nuke.tcl('start', 'http://www.andreageremia.it/tutorial_expression_node.html')", icon = os.path.join(NST_FolderPath, "icons/question_mark.png"))
+
+drawMenu.addSeparator()
 
 drawMenu.addCommand('GradMagic TL', "nuke.createNode('{}GradMagic')".format(prefixNST), icon="GradMagic.png")
 drawMenu.addCommand('NoiseAdvanced TL', "nuke.createNode('{}NoiseAdvanced')".format(prefixNST), icon="Noise.png")
@@ -295,6 +386,51 @@ mergeMenu.addCommand('MergeAll AP', "nuke.createNode('{}MergeAll')".format(prefi
 # Create Transform Menu
 transformMenu = m.addMenu('Transform', icon = 'ToolbarTransform.png', index = 90)
 
+# Add Vector Tools SubMenu
+VMTmenu = transformMenu.addMenu('Vector Math Tools VM', icon = 'Math.png')
+
+VMT_mathMenu = VMTmenu.addMenu('Math', icon = 'Math.png')
+VMT_mathAxisMenu = VMT_mathMenu.addMenu('Axis', icon = 'Axis.png')
+VMT_mathMatrixFourMenu = VMT_mathMenu.addMenu('Matrix4', icon = 'Matrix4.png')
+VMT_mathVectorTwoMenu = VMT_mathMenu.addMenu('Vector2', icon = 'Vector2.png')
+VMT_mathVectorThreeMenu = VMT_mathMenu.addMenu('Vector3', icon = 'Vector3.png')
+
+VMT_mathAxisMenu.addCommand('Invert Axis', "nuke.createNode('{}InvertAxis')".format(prefixNST), icon = 'Axis.png')
+VMT_mathAxisMenu.addCommand('Zero Axis', "nuke.createNode('{}ZeroAxis')".format(prefixNST), icon = 'Axis.png')
+
+VMT_mathMatrixFourMenu.addCommand('Invert Matrix4', "nuke.createNode('{}InvertMatrix4')".format(prefixNST), icon = 'InvertMatrix4.png')
+VMT_mathMatrixFourMenu.addCommand('Product Matrix4', "nuke.createNode('{}ProductMatrix4')".format(prefixNST), icon = 'ProductMatrix4.png')
+VMT_mathMatrixFourMenu.addCommand('Rotate Matrix4', "nuke.createNode('{}RotateMatrix4')".format(prefixNST), icon = 'RotateMatrix4.png')
+VMT_mathMatrixFourMenu.addCommand('Scale Matrix4', "nuke.createNode('{}ScaleMatrix4')".format(prefixNST), icon = 'ScaleMatrix4.png')
+VMT_mathMatrixFourMenu.addCommand('Transform Matrix4', "nuke.createNode('{}TransformMatrix4')".format(prefixNST), icon = 'TransformMatrix4.png')
+VMT_mathMatrixFourMenu.addCommand('Translate Matrix4', "nuke.createNode('{}TranslateMatrix4')".format(prefixNST), icon = 'TranslateMatrix4.png')
+VMT_mathMatrixFourMenu.addCommand('Transpose Matrix4', "nuke.createNode('{}TransposeMatrix4')".format(prefixNST), icon = 'TransposeMatrix4.png')
+
+VMT_mathVectorTwoMenu.addCommand('Cross Product Vector2', "nuke.createNode('{}CrossProductVector2')".format(prefixNST), icon = 'CrossProductVector3.png')
+VMT_mathVectorTwoMenu.addCommand('Dot Product Vector2', "nuke.createNode('{}DotProductVector2')".format(prefixNST), icon = 'DotProductVector3.png')
+VMT_mathVectorTwoMenu.addCommand('Magnitude Vector2', "nuke.createNode('{}MagnitudeVector2')".format(prefixNST), icon = 'MagnitudeVector3.png')
+VMT_mathVectorTwoMenu.addCommand('Normalize Vector2', "nuke.createNode('{}NormalizeVector2')".format(prefixNST), icon = 'NormalizeVector3.png')
+VMT_mathVectorTwoMenu.addCommand('Rotate Vector2', "nuke.createNode('{}RotateVector2')".format(prefixNST), icon = 'RotateVector3.png')
+VMT_mathVectorTwoMenu.addCommand('Transform Vector2', "nuke.createNode('{}TransformVector2')".format(prefixNST), icon = 'TransformVector3.png')
+
+VMT_mathVectorThreeMenu.addCommand('Cross Product Vector3', "nuke.createNode('{}CrossProductVector3')".format(prefixNST), icon = 'CrossProductVector3.png')
+VMT_mathVectorThreeMenu.addCommand('Dot Product Vector3', "nuke.createNode('{}DotProductVector3')".format(prefixNST), icon = 'DotProductVector3.png')
+VMT_mathVectorThreeMenu.addCommand('Magnitude Vector3', "nuke.createNode('{}MagnitudeVector3')".format(prefixNST), icon = 'MagnitudeVector3.png')
+VMT_mathVectorThreeMenu.addCommand('Multiply Vector3 Matrix3', "nuke.createNode('{}MultiplyVector3Matrix3')".format(prefixNST), icon = 'ProductVector3.png')
+VMT_mathVectorThreeMenu.addCommand('Normalize Vector3', "nuke.createNode('{}NormalizeVector3')".format(prefixNST), icon = 'NormalizeVector3.png')
+VMT_mathVectorThreeMenu.addCommand('Rotate Vector3', "nuke.createNode('{}RotateVector3')".format(prefixNST), icon = 'RotateVector3.png')
+VMT_mathVectorThreeMenu.addCommand('Transform Vector3', "nuke.createNode('{}TransformVector3')".format(prefixNST), icon = 'TransformVector3.png')
+
+VMT_generateMenu = VMTmenu.addMenu('Generate', icon = 'IdentityMatrix4.png')
+VMT_generateMenu.addCommand('Generate Matrix4', "nuke.createNode('{}GenerateMatrix4')".format(prefixNST), icon = 'IdentityMatrix4.png')
+VMT_generateMenu.addCommand('Generate STMap', "nuke.createNode('{}GenerateSTMap')".format(prefixNST), icon = 'AG_UVMap.png')
+
+VMT_convertMenu = VMTmenu.addMenu('Convert', icon = 'ProductVector3.png')
+VMT_convertMenu.addCommand('Luma To Vector3', "nuke.createNode('{}LumaToVector3')".format(prefixNST), icon = 'vectorToolsBW.png')
+VMT_convertMenu.addCommand('STMap To Vector2', "nuke.createNode('{}STMapToVector2')".format(prefixNST), icon = 'Vector2.png')
+VMT_convertMenu.addCommand('Vector2 To STMap', "nuke.createNode('{}Vector2ToSTMap')".format(prefixNST), icon = 'AG_UVMap.png')
+VMT_convertMenu.addCommand('Vector3 To Matrix4', "nuke.createNode('{}Vector3ToMatrix4)".format(prefixNST), icon = 'ProductVector3.png')
+
 transformMenu.addCommand('vector3DMathExpression EL', "nuke.createNode('{}vector3DMathExpression')".format(prefixNST), icon = 'vectorTools.png')
 transformMenu.addCommand('Vectors_Direction EL', "nuke.createNode('{}Vectors_Direction')".format(prefixNST), icon = 'vectorTools.png')
 transformMenu.addCommand('Vectors_to_Degrees EL', "nuke.createNode('{}Vectors_to_Degrees')".format(prefixNST), icon = 'vectorTools.png')
@@ -458,7 +594,7 @@ PosToolkit.addCommand('PosProjection MJT', 'nuke.createNode("{}PosProjection_MJ"
 cgMenu.addSeparator()
 
 cgMenu.addCommand('Noise_3D SPIN', 'nuke.createNode("{}Noise3D_spin")'.format(prefixNST), icon='spin_tools.png')
-cgMenu.addCommand('Noise4D MHD', 'nuke.nodePaste("{}/NukepediaTools/13_CG/{}Noise4D.nk")'.format(NST_FolderPath, prefixNST), icon='Noise.png')
+cgMenu.addCommand('Noise4D MHD', 'nuke.nodePaste("{}/nk_files/{}Noise4D.nk")'.format(NST_FolderPath, prefixNST), icon='Noise.png')
 cgMenu.addCommand('Relight_Simple SPIN', 'nuke.createNode("{}Relight_Simple")'.format(prefixNST), icon='spin_tools.png')
 cgMenu.addCommand('ReProject_3D SPIN', 'nuke.createNode("{}ReProject_3D")'.format(prefixNST), icon='spin_tools.png')
 
@@ -537,18 +673,18 @@ utilitiesMenu.addCommand('Pyclopedia MJT', 'nuke.createNode("{}Pyclopedia")'.for
 
 templatesMenu = m.addMenu('Templates', icon = 'PointsTo3D.png', index = 200)
 
-templatesMenu.addCommand('Advanced Keying Template Stamps TL', "nuke.nodePaste('{}/LyonsTools/gizmos/00_Templates/{}AdvancedKeyingTemplate_Stamps.nk')".format(NST_FolderPath, prefixNST), icon="Keyer.png")
-templatesMenu.addCommand('Advanced Keying Template TL', "nuke.nodePaste('{}/LyonsTools/gizmos/00_Templates/{}AdvancedKeyingTemplate.nk')".format(NST_FolderPath, prefixNST), icon="Keyer.png")
-templatesMenu.addCommand('STMap Keyer Setup EL', "nuke.nodePaste('{}/NukepediaTools/00_Templates/{}STMap_Keying_Setup.nk')".format(NST_FolderPath, prefixNST), icon="HueKeyer.png")
+templatesMenu.addCommand('Advanced Keying Template Stamps TL', "nuke.nodePaste('{}/nk_files/{}AdvancedKeyingTemplate_Stamps.nk')".format(NST_FolderPath, prefixNST), icon="Keyer.png")
+templatesMenu.addCommand('Advanced Keying Template TL', "nuke.nodePaste('{}/nk_files/{}AdvancedKeyingTemplate.nk')".format(NST_FolderPath, prefixNST), icon="Keyer.png")
+templatesMenu.addCommand('STMap Keyer Setup EL', "nuke.nodePaste('{}/nk_files/{}STMap_Keying_Setup.nk')".format(NST_FolderPath, prefixNST), icon="HueKeyer.png")
 
 templatesMenu.addSeparator()
 
 gizmoDemoMenu = templatesMenu.addMenu("Gizmo Demo Scripts", icon='Group.png')
 
-gizmoDemoMenu.addCommand('WaterLens Demo MJT', "NST_helper.filepathCreateNode('{}/MJT_Labs/Draw/WaterLens_11/demo_script/{}WaterLens_sampleScript.nk')".format(NST_FolderPath, prefixNST), icon="WaterLens.png")
-gizmoDemoMenu.addCommand('SSMesh Demo MJT', "nuke.nodePaste('{}/MJT_Labs/3D/SSMesh_v13/demo_script/{}SSMesh_demo.nk')".format(NST_FolderPath, prefixNST), icon="SSMesh.png")
-gizmoDemoMenu.addCommand('UVEditor Demo MJT', "nuke.nodePaste('{}/MJT_Labs/3D/UVEditor_v14/demo_script/{}UVEditor_demo_clean.nk')".format(NST_FolderPath, prefixNST), icon="UVEditor.png")
-gizmoDemoMenu.addCommand('Sparky Demo DB', "nuke.nodePaste('{}/NukepediaTools/11_Particles/DB_Sparky_v1.5/ExampleScene/{}SparkyExampleScene.nk')".format(NST_FolderPath, prefixNST), icon="Sparky.png")
-gizmoDemoMenu.addCommand('ParticleLights Demo MHD', "nuke.nodePaste('{}/Hagbarth_Tools/{}ParticleLights_ExampleScript.nk')".format(NST_FolderPath, prefixNST), icon="ToolbarParticles.png")
-gizmoDemoMenu.addCommand("X_Aton Volumetric Demo XM", "nuke.nodePaste('{}/X_Tools/tools/{}X_Aton_Examples.nk')".format(NST_FolderPath, prefixNST), icon="X_Aton.png")
+gizmoDemoMenu.addCommand('WaterLens Demo MJT', "NST_helper.filepathCreateNode('{}/nk_files/{}WaterLens_sampleScript.nk')".format(NST_FolderPath, prefixNST), icon="WaterLens.png")
+gizmoDemoMenu.addCommand('SSMesh Demo MJT', "nuke.nodePaste('{}/nk_files/{}SSMesh_demo.nk')".format(NST_FolderPath, prefixNST), icon="SSMesh.png")
+gizmoDemoMenu.addCommand('UVEditor Demo MJT', "nuke.nodePaste('{}/nk_files/{}UVEditor_demo_clean.nk')".format(NST_FolderPath, prefixNST), icon="UVEditor.png")
+gizmoDemoMenu.addCommand('Sparky Demo DB', "nuke.nodePaste('{}/nk_files/{}SparkyExampleScene.nk')".format(NST_FolderPath, prefixNST), icon="Sparky.png")
+gizmoDemoMenu.addCommand('ParticleLights Demo MHD', "nuke.nodePaste('{}/nk_files/{}ParticleLights_ExampleScript.nk')".format(NST_FolderPath, prefixNST), icon="ToolbarParticles.png")
+gizmoDemoMenu.addCommand("X_Aton Volumetric Demo XM", "nuke.nodePaste('{}/nk_files/{}X_Aton_Examples.nk')".format(NST_FolderPath, prefixNST), icon="X_Aton.png")
 

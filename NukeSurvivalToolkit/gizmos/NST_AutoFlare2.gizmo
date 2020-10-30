@@ -1,0 +1,5156 @@
+Group {
+ name AutoFlare
+ selected true
+ lock_connections true
+ addUserKnob {20 User l Controls}
+ addUserKnob {41 effectOnly l "effect only" T _INPUT_CTRL.effectOnly}
+ addUserKnob {41 viewSelectedHighlights l "view highlights selection" T _INPUT_CTRL.viewSelectedHighlights}
+ addUserKnob {41 brightspot T _INPUT_CTRL.brightspot}
+ addUserKnob {41 threshold T _INPUT_CTRL.threshold}
+ addUserKnob {41 gamma T _INPUT_CTRL.gamma}
+ addUserKnob {41 clampBright l "clamp to brightspot" T _INPUT_CTRL.clampBright}
+ addUserKnob {41 quality T _INPUT_CTRL.quality}
+ addUserKnob {26 ""}
+ addUserKnob {41 overallMult l "overall mult" T _INPUT_CTRL.overallMult}
+ addUserKnob {41 overallLensScale l "overall lens scale" T _INPUT_CTRL.overallLensScale}
+ addUserKnob {41 overallLensDistance l "overall lens distance" T _INPUT_CTRL.overallLensDistance}
+ addUserKnob {41 overallSaturation l "overall saturation" T _INPUT_CTRL.overallSaturation}
+ addUserKnob {41 sourceCol l "source color" T _INPUT_CTRL.sourceCol}
+ addUserKnob {41 sourceSat l "source sat" T _INPUT_CTRL.sourceSat}
+ addUserKnob {26 ""}
+ addUserKnob {41 overallGrainOpacity l "overall grain opacity" T _INPUT_CTRL.overallGrainOpacity}
+ addUserKnob {41 overallGrainSizeMult l "grain size mult" T _INPUT_CTRL.overallGrainSizeMult}
+ addUserKnob {41 overallGrainGainMult l "grain gain mult" T _INPUT_CTRL.overallGrainGainMult}
+ addUserKnob {26 ""}
+ addUserKnob {41 reflectionsOpacity l "reflections opacity" T _INPUT_CTRL.reflectionsOpacity}
+ addUserKnob {41 reflectionsRotOffset l "reflections rot offset" T _INPUT_CTRL.reflectionsRotOffset}
+ addUserKnob {41 reflectionsBlurAdd l "reflections add blur" T _INPUT_CTRL.reflectionsBlurAdd}
+ addUserKnob {41 reflectionsWhitepointMult l "refl whitepoint mult" T _INPUT_CTRL.reflectionsWhitepointMult}
+ addUserKnob {41 reflectionsGammaMult l "refl gamma mult" T _INPUT_CTRL.reflectionsGammaMult}
+ addUserKnob {26 ""}
+ addUserKnob {41 vignetteActive l "vignette source" T _INPUT_CTRL.vignetteActive}
+ addUserKnob {41 vignetteScale l scale T _INPUT_CTRL.vignetteScale}
+ addUserKnob {41 vignetteDarkness l darkness T _INPUT_CTRL.vignetteDarkness}
+ addUserKnob {20 Presets}
+ addUserKnob {41 preset_01 l "Pink on Blue" T _INPUT_CTRL.preset_01}
+ addUserKnob {41 preset_02 l "Fat Orange" T _INPUT_CTRL.preset_02}
+ addUserKnob {41 preset_03 l "Classic Orange Blue" T _INPUT_CTRL.preset_03}
+ addUserKnob {41 preset_04 l "Giant Colorful" T _INPUT_CTRL.preset_04}
+ addUserKnob {41 preset_05 l "Thin and Wide" T _INPUT_CTRL.preset_05}
+ addUserKnob {41 preset_06 l "Hexa Green Orange" T _INPUT_CTRL.preset_06}
+ addUserKnob {20 Lenses}
+ addUserKnob {41 showNumbers l "show numbers on lenses" T _INPUT_CTRL.showNumbers}
+ addUserKnob {26 ""}
+ addUserKnob {20 Lens1GRP l "lens 01" n 1}
+ Lens1GRP 0
+ addUserKnob {41 lens1Active l active T _INPUT_CTRL.lens1Active}
+ addUserKnob {41 lens1Size l size T _INPUT_CTRL.lens1Size}
+ addUserKnob {41 lens1Col l color T _INPUT_CTRL.lens1Col}
+ addUserKnob {41 lens1Blur l blur T _INPUT_CTRL.lens1Blur}
+ addUserKnob {41 lens1AxisPos l "axis pos" T _INPUT_CTRL.lens1AxisPos}
+ addUserKnob {41 lens1Polygon l polygon T _INPUT_CTRL.lens1Polygon}
+ addUserKnob {41 lens1Diaphragm l diaphragm T _INPUT_CTRL.lens1Diaphragm}
+ addUserKnob {41 lens1DiaphRot l "diaph rotation" T _INPUT_CTRL.lens1DiaphRot}
+ addUserKnob {41 lens1grainOpacity l "grain opacity" T _INPUT_CTRL.lens1grainOpacity}
+ addUserKnob {41 lens1grainSize l "grain size" T _INPUT_CTRL.lens1grainSize}
+ addUserKnob {41 lens1grainGain l "grain gain" T _INPUT_CTRL.lens1grainGain}
+ addUserKnob {41 lens1reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens1reflectionOpacity}
+ addUserKnob {41 lens1reflectionRotation l "refl rotation" T _INPUT_CTRL.lens1reflectionRotation}
+ addUserKnob {41 lens1reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens1reflWhitepoint}
+ addUserKnob {41 lens1reflectionGamma l "refl gamma" T _INPUT_CTRL.lens1reflectionGamma}
+ addUserKnob {41 lens1reflectionBlur l "refl blur" T _INPUT_CTRL.lens1reflectionBlur}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens2GRP l "lens 02" n 1}
+ lens2GRP 0
+ addUserKnob {41 lens2Active l active T _INPUT_CTRL.lens2Active}
+ addUserKnob {41 lens2Size l size T _INPUT_CTRL.lens2Size}
+ addUserKnob {41 lens2Col l color T _INPUT_CTRL.lens2Col}
+ addUserKnob {41 lens2Blur l blur T _INPUT_CTRL.lens2Blur}
+ addUserKnob {41 lens2AxisPos l "axis pos" T _INPUT_CTRL.lens2AxisPos}
+ addUserKnob {41 lens2Polygon l polygon T _INPUT_CTRL.lens2Polygon}
+ addUserKnob {41 lens2Diaphragm l diaphragm T _INPUT_CTRL.lens2Diaphragm}
+ addUserKnob {41 lens2DiaphRot l "diaph rotation" T _INPUT_CTRL.lens2DiaphRot}
+ addUserKnob {41 lens2grainOpacity l "grain opacity" T _INPUT_CTRL.lens2grainOpacity}
+ addUserKnob {41 lens2grainSize l "grain size" T _INPUT_CTRL.lens2grainSize}
+ addUserKnob {41 lens2grainGain l "grain gain" T _INPUT_CTRL.lens2grainGain}
+ addUserKnob {41 lens2reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens2reflectionOpacity}
+ addUserKnob {41 lens2reflectionRotation l "refl rotation" T _INPUT_CTRL.lens2reflectionRotation}
+ addUserKnob {41 lens2reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens2reflWhitepoint}
+ addUserKnob {41 lens2reflectionGamma l "refl gamma" T _INPUT_CTRL.lens2reflectionGamma}
+ addUserKnob {41 lens2reflectionBlur l "refl blur" T _INPUT_CTRL.lens2reflectionBlur}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens3GRP l "lens 03" n 1}
+ lens3GRP 0
+ addUserKnob {41 lens3Active l active T _INPUT_CTRL.lens3Active}
+ addUserKnob {41 lens3Size l size T _INPUT_CTRL.lens3Size}
+ addUserKnob {41 lens3Col l color T _INPUT_CTRL.lens3Col}
+ addUserKnob {41 lens3Blur l blur T _INPUT_CTRL.lens3Blur}
+ addUserKnob {41 lens3AxisPos l "axis pos" T _INPUT_CTRL.lens3AxisPos}
+ addUserKnob {41 lens3Polygon l polygon T _INPUT_CTRL.lens3Polygon}
+ addUserKnob {41 lens3Diaphragm l diaphragm T _INPUT_CTRL.lens3Diaphragm}
+ addUserKnob {41 lens3DiaphRot l "diaph rotation" T _INPUT_CTRL.lens3DiaphRot}
+ addUserKnob {41 lens3grainOpacity l "grain opacity" T _INPUT_CTRL.lens3grainOpacity}
+ addUserKnob {41 lens3grainSize l "grain size" T _INPUT_CTRL.lens3grainSize}
+ addUserKnob {41 lens3grainGain l "grain gain" T _INPUT_CTRL.lens3grainGain}
+ addUserKnob {41 lens3reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens3reflectionOpacity}
+ addUserKnob {41 lens3reflectionRotation l "refl rotation" T _INPUT_CTRL.lens3reflectionRotation}
+ addUserKnob {41 lens3reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens3reflWhitepoint}
+ addUserKnob {41 lens3reflectionGamma l "refl gamma" T _INPUT_CTRL.lens3reflectionGamma}
+ addUserKnob {41 lens3reflectionBlur l "refl blur" T _INPUT_CTRL.lens3reflectionBlur}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens4GRP l "lens 04" n 1}
+ lens4GRP 0
+ addUserKnob {41 lens4Active l active T _INPUT_CTRL.lens4Active}
+ addUserKnob {41 lens4Size l size T _INPUT_CTRL.lens4Size}
+ addUserKnob {41 lens4Col l color T _INPUT_CTRL.lens4Col}
+ addUserKnob {41 lens4Blur l blur T _INPUT_CTRL.lens4Blur}
+ addUserKnob {41 lens4AxisPos l "axis pos" T _INPUT_CTRL.lens4AxisPos}
+ addUserKnob {41 lens4Polygon l polygon T _INPUT_CTRL.lens4Polygon}
+ addUserKnob {41 lens4Diaphragm l diaphragm T _INPUT_CTRL.lens4Diaphragm}
+ addUserKnob {41 lens4DiaphRot l "diaph rotation" T _INPUT_CTRL.lens4DiaphRot}
+ addUserKnob {41 lens4grainOpacity l "grain opacity" T _INPUT_CTRL.lens4grainOpacity}
+ addUserKnob {41 lens4grainSize l "grain size" T _INPUT_CTRL.lens4grainSize}
+ addUserKnob {41 lens4grainGain l "grain gain" T _INPUT_CTRL.lens4grainGain}
+ addUserKnob {41 lens4reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens4reflectionOpacity}
+ addUserKnob {41 lens4reflectionRotation l "refl rotation" T _INPUT_CTRL.lens4reflectionRotation}
+ addUserKnob {41 lens4reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens4reflWhitepoint}
+ addUserKnob {41 lens4reflectionGamma l "refl gamma" T _INPUT_CTRL.lens4reflectionGamma}
+ addUserKnob {41 lens4reflectionBlur l "refl blur" T _INPUT_CTRL.lens4reflectionBlur}
+ addUserKnob {20 endGroup_3 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens5GRP l "lens 05" n 1}
+ lens5GRP 0
+ addUserKnob {41 lens5Active l active T _INPUT_CTRL.lens5Active}
+ addUserKnob {41 lens5Size l size T _INPUT_CTRL.lens5Size}
+ addUserKnob {41 lens5Col l color T _INPUT_CTRL.lens5Col}
+ addUserKnob {41 lens5Blur l blur T _INPUT_CTRL.lens5Blur}
+ addUserKnob {41 lens5AxisPos l "axis pos" T _INPUT_CTRL.lens5AxisPos}
+ addUserKnob {41 lens5Polygon l polygon T _INPUT_CTRL.lens5Polygon}
+ addUserKnob {41 lens5Diaphragm l diaphragm T _INPUT_CTRL.lens5Diaphragm}
+ addUserKnob {41 lens5DiaphRot l "diaph rotation" T _INPUT_CTRL.lens5DiaphRot}
+ addUserKnob {41 lens5grainOpacity l "grain opacity" T _INPUT_CTRL.lens5grainOpacity}
+ addUserKnob {41 lens5grainSize l "grain size" T _INPUT_CTRL.lens5grainSize}
+ addUserKnob {41 lens5grainGain l "grain gain" T _INPUT_CTRL.lens5grainGain}
+ addUserKnob {41 lens5reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens5reflectionOpacity}
+ addUserKnob {41 lens5reflectionRotation l "refl rotation" T _INPUT_CTRL.lens5reflectionRotation}
+ addUserKnob {41 lens5reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens5reflWhitepoint}
+ addUserKnob {41 lens5reflectionGamma l "refl gamma" T _INPUT_CTRL.lens5reflectionGamma}
+ addUserKnob {41 lens5reflectionBlur l "refl blur" T _INPUT_CTRL.lens5reflectionBlur}
+ addUserKnob {20 endGroup_4 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens6GRP l "lens 06" n 1}
+ lens6GRP 0
+ addUserKnob {41 lens6Active l active T _INPUT_CTRL.lens6Active}
+ addUserKnob {41 lens6Size l size T _INPUT_CTRL.lens6Size}
+ addUserKnob {41 lens6Col l color T _INPUT_CTRL.lens6Col}
+ addUserKnob {41 lens6Blur l blur T _INPUT_CTRL.lens6Blur}
+ addUserKnob {41 lens6AxisPos l "axis pos" T _INPUT_CTRL.lens6AxisPos}
+ addUserKnob {41 lens6Polygon l polygon T _INPUT_CTRL.lens6Polygon}
+ addUserKnob {41 lens6Diaphragm l diaphragm T _INPUT_CTRL.lens6Diaphragm}
+ addUserKnob {41 lens6DiaphRot l "diaph rotation" T _INPUT_CTRL.lens6DiaphRot}
+ addUserKnob {41 lens6grainOpacity l "grain opacity" T _INPUT_CTRL.lens6grainOpacity}
+ addUserKnob {41 lens6grainSize l "grain size" T _INPUT_CTRL.lens6grainSize}
+ addUserKnob {41 lens6grainGain l "grain gain" T _INPUT_CTRL.lens6grainGain}
+ addUserKnob {41 lens6reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens6reflectionOpacity}
+ addUserKnob {41 lens6reflectionRotation l "refl rotation" T _INPUT_CTRL.lens6reflectionRotation}
+ addUserKnob {41 lens6reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens6reflWhitepoint}
+ addUserKnob {41 lens6reflectionGamma l "refl gamma" T _INPUT_CTRL.lens6reflectionGamma}
+ addUserKnob {41 lens6reflectionBlur l "refl blur" T _INPUT_CTRL.lens6reflectionBlur}
+ addUserKnob {20 endGroup_5 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens7GRP l "lens 07" n 1}
+ lens7GRP 0
+ addUserKnob {41 lens7Active l active T _INPUT_CTRL.lens7Active}
+ addUserKnob {41 lens7Size l size T _INPUT_CTRL.lens7Size}
+ addUserKnob {41 lens7Col l color T _INPUT_CTRL.lens7Col}
+ addUserKnob {41 lens7Blur l blur T _INPUT_CTRL.lens7Blur}
+ addUserKnob {41 lens7AxisPos l "axis pos" T _INPUT_CTRL.lens7AxisPos}
+ addUserKnob {41 lens7Polygon l polygon T _INPUT_CTRL.lens7Polygon}
+ addUserKnob {41 lens7Diaphragm l diaphragm T _INPUT_CTRL.lens7Diaphragm}
+ addUserKnob {41 lens7DiaphRot l "diaph rotation" T _INPUT_CTRL.lens7DiaphRot}
+ addUserKnob {41 lens7grainOpacity l "grain opacity" T _INPUT_CTRL.lens7grainOpacity}
+ addUserKnob {41 lens7grainSize l "grain size" T _INPUT_CTRL.lens7grainSize}
+ addUserKnob {41 lens7grainGain l "grain gain" T _INPUT_CTRL.lens7grainGain}
+ addUserKnob {41 lens7reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens7reflectionOpacity}
+ addUserKnob {41 lens7reflectionRotation l "refl rotation" T _INPUT_CTRL.lens7reflectionRotation}
+ addUserKnob {41 lens7reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens7reflWhitepoint}
+ addUserKnob {41 lens7reflectionGamma l "refl gamma" T _INPUT_CTRL.lens7reflectionGamma}
+ addUserKnob {41 lens7reflectionBlur l "refl blur" T _INPUT_CTRL.lens7reflectionBlur}
+ addUserKnob {20 endGroup_6 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens8GRP l "lens 08" n 1}
+ lens8GRP 0
+ addUserKnob {41 lens8Active l active T _INPUT_CTRL.lens8Active}
+ addUserKnob {41 lens8Size l size T _INPUT_CTRL.lens8Size}
+ addUserKnob {41 lens8Col l color T _INPUT_CTRL.lens8Col}
+ addUserKnob {41 lens8Blur l blur T _INPUT_CTRL.lens8Blur}
+ addUserKnob {41 lens8AxisPos l "axis pos" T _INPUT_CTRL.lens8AxisPos}
+ addUserKnob {41 lens8Polygon l polygon T _INPUT_CTRL.lens8Polygon}
+ addUserKnob {41 lens8Diaphragm l diaphragm T _INPUT_CTRL.lens8Diaphragm}
+ addUserKnob {41 lens8DiaphRot l "diaph rotation" T _INPUT_CTRL.lens8DiaphRot}
+ addUserKnob {41 lens8grainOpacity l "grain opacity" T _INPUT_CTRL.lens8grainOpacity}
+ addUserKnob {41 lens8grainSize l "grain size" T _INPUT_CTRL.lens8grainSize}
+ addUserKnob {41 lens8grainGain l "grain gain" T _INPUT_CTRL.lens8grainGain}
+ addUserKnob {41 lens8reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens8reflectionOpacity}
+ addUserKnob {41 lens8reflectionRotation l "refl rotation" T _INPUT_CTRL.lens8reflectionRotation}
+ addUserKnob {41 lens8reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens8reflWhitepoint}
+ addUserKnob {41 lens8reflectionGamma l "refl gamma" T _INPUT_CTRL.lens8reflectionGamma}
+ addUserKnob {41 lens8reflectionBlur l "refl blur" T _INPUT_CTRL.lens8reflectionBlur}
+ addUserKnob {20 endGroup_7 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens9GRP l "lens 09" n 1}
+ lens9GRP 0
+ addUserKnob {41 lens9Active l active T _INPUT_CTRL.lens9Active}
+ addUserKnob {41 lens9Size l size T _INPUT_CTRL.lens9Size}
+ addUserKnob {41 lens9Col l color T _INPUT_CTRL.lens9Col}
+ addUserKnob {41 lens9Blur l blur T _INPUT_CTRL.lens9Blur}
+ addUserKnob {41 lens9AxisPos l "axis pos" T _INPUT_CTRL.lens9AxisPos}
+ addUserKnob {41 lens9Polygon l polygon T _INPUT_CTRL.lens9Polygon}
+ addUserKnob {41 lens9Diaphragm l diaphragm T _INPUT_CTRL.lens9Diaphragm}
+ addUserKnob {41 lens9DiaphRot l "diaph rotation" T _INPUT_CTRL.lens9DiaphRot}
+ addUserKnob {41 lens9grainOpacity l "grain opacity" T _INPUT_CTRL.lens9grainOpacity}
+ addUserKnob {41 lens9grainSize l "grain size" T _INPUT_CTRL.lens9grainSize}
+ addUserKnob {41 lens9grainGain l "grain gain" T _INPUT_CTRL.lens9grainGain}
+ addUserKnob {41 lens9reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens9reflectionOpacity}
+ addUserKnob {41 lens9reflectionRotation l "refl rotation" T _INPUT_CTRL.lens9reflectionRotation}
+ addUserKnob {41 lens9reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens9reflWhitepoint}
+ addUserKnob {41 lens9reflectionGamma l "refl gamma" T _INPUT_CTRL.lens9reflectionGamma}
+ addUserKnob {41 lens9reflectionBlur l "refl blur" T _INPUT_CTRL.lens9reflectionBlur}
+ addUserKnob {20 endGroup_8 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens10GRP l "lens 10" n 1}
+ lens10GRP 0
+ addUserKnob {41 lens10Active l active T _INPUT_CTRL.lens10Active}
+ addUserKnob {41 lens10Size l size T _INPUT_CTRL.lens10Size}
+ addUserKnob {41 lens10Col l color T _INPUT_CTRL.lens10Col}
+ addUserKnob {41 lens10Blur l blur T _INPUT_CTRL.lens10Blur}
+ addUserKnob {41 lens10AxisPos l "axis pos" T _INPUT_CTRL.lens10AxisPos}
+ addUserKnob {41 lens10Polygon l polygon T _INPUT_CTRL.lens10Polygon}
+ addUserKnob {41 lens10Diaphragm l diaphragm T _INPUT_CTRL.lens10Diaphragm}
+ addUserKnob {41 lens10DiaphRot l "diaph rotation" T _INPUT_CTRL.lens10DiaphRot}
+ addUserKnob {41 lens10grainOpacity l "grain opacity" T _INPUT_CTRL.lens10grainOpacity}
+ addUserKnob {41 lens10grainSize l "grain size" T _INPUT_CTRL.lens10grainSize}
+ addUserKnob {41 lens10grainGain l "grain gain" T _INPUT_CTRL.lens10grainGain}
+ addUserKnob {41 lens10reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens10reflectionOpacity}
+ addUserKnob {41 lens10reflectionRotation l "refl rotation" T _INPUT_CTRL.lens10reflectionRotation}
+ addUserKnob {41 lens10reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens10reflWhitepoint}
+ addUserKnob {41 lens10reflectionGamma l "refl gamma" T _INPUT_CTRL.lens10reflectionGamma}
+ addUserKnob {41 lens10reflectionBlur l "refl blur" T _INPUT_CTRL.lens10reflectionBlur}
+ addUserKnob {20 endGroup_9 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens11GRP l "lens 11" n 1}
+ lens11GRP 0
+ addUserKnob {41 lens11Active l active T _INPUT_CTRL.lens11Active}
+ addUserKnob {41 lens11Size l size T _INPUT_CTRL.lens11Size}
+ addUserKnob {41 lens11Col l color T _INPUT_CTRL.lens11Col}
+ addUserKnob {41 lens11Blur l blur T _INPUT_CTRL.lens11Blur}
+ addUserKnob {41 lens11AxisPos l "axis pos" T _INPUT_CTRL.lens11AxisPos}
+ addUserKnob {41 lens11Polygon l polygon T _INPUT_CTRL.lens11Polygon}
+ addUserKnob {41 lens11Diaphragm l diaphragm T _INPUT_CTRL.lens11Diaphragm}
+ addUserKnob {41 lens11DiaphRot l "diaph rotation" T _INPUT_CTRL.lens11DiaphRot}
+ addUserKnob {41 lens11grainOpacity l "grain opacity" T _INPUT_CTRL.lens11grainOpacity}
+ addUserKnob {41 lens11grainSize l "grain size" T _INPUT_CTRL.lens11grainSize}
+ addUserKnob {41 lens11grainGain l "grain gain" T _INPUT_CTRL.lens11grainGain}
+ addUserKnob {41 lens11reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens11reflectionOpacity}
+ addUserKnob {41 lens11reflectionRotation l "refl rotation" T _INPUT_CTRL.lens11reflectionRotation}
+ addUserKnob {41 lens11reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens11reflWhitepoint}
+ addUserKnob {41 lens11reflectionGamma l "refl gamma" T _INPUT_CTRL.lens11reflectionGamma}
+ addUserKnob {41 lens11reflectionBlur l "refl blur" T _INPUT_CTRL.lens11reflectionBlur}
+ addUserKnob {20 endGroup_10 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens12GRP l "lens 12" n 1}
+ lens12GRP 0
+ addUserKnob {41 lens12Active l active T _INPUT_CTRL.lens12Active}
+ addUserKnob {41 lens12Size l size T _INPUT_CTRL.lens12Size}
+ addUserKnob {41 lens12Col l color T _INPUT_CTRL.lens12Col}
+ addUserKnob {41 lens12Blur l blur T _INPUT_CTRL.lens12Blur}
+ addUserKnob {41 lens12AxisPos l "axis pos" T _INPUT_CTRL.lens12AxisPos}
+ addUserKnob {41 lens12Polygon l polygon T _INPUT_CTRL.lens12Polygon}
+ addUserKnob {41 lens12Diaphragm l diaphragm T _INPUT_CTRL.lens12Diaphragm}
+ addUserKnob {41 lens12DiaphRot l "diaph rotation" T _INPUT_CTRL.lens12DiaphRot}
+ addUserKnob {41 lens12grainOpacity l "grain opacity" T _INPUT_CTRL.lens12grainOpacity}
+ addUserKnob {41 lens12grainSize l "grain size" T _INPUT_CTRL.lens12grainSize}
+ addUserKnob {41 lens12grainGain l "grain gain" T _INPUT_CTRL.lens12grainGain}
+ addUserKnob {41 lens12reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens12reflectionOpacity}
+ addUserKnob {41 lens12reflectionRotation l "refl rotation" T _INPUT_CTRL.lens12reflectionRotation}
+ addUserKnob {41 lens12reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens12reflWhitepoint}
+ addUserKnob {41 lens12reflectionGamma l "refl gamma" T _INPUT_CTRL.lens12reflectionGamma}
+ addUserKnob {41 lens12reflectionBlur l "refl blur" T _INPUT_CTRL.lens12reflectionBlur}
+ addUserKnob {20 endGroup_11 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 len13GRP l "lens 13" n 1}
+ len13GRP 0
+ addUserKnob {41 lens13Active l active T _INPUT_CTRL.lens13Active}
+ addUserKnob {41 lens13Size l size T _INPUT_CTRL.lens13Size}
+ addUserKnob {41 lens13Col l color T _INPUT_CTRL.lens13Col}
+ addUserKnob {41 lens13Blur l blur T _INPUT_CTRL.lens13Blur}
+ addUserKnob {41 lens13AxisPos l "axis pos" T _INPUT_CTRL.lens13AxisPos}
+ addUserKnob {41 lens13Polygon l polygon T _INPUT_CTRL.lens13Polygon}
+ addUserKnob {41 lens13Diaphragm l diaphragm T _INPUT_CTRL.lens13Diaphragm}
+ addUserKnob {41 lens13DiaphRot l "diaph rotation" T _INPUT_CTRL.lens13DiaphRot}
+ addUserKnob {41 lens13grainOpacity l "grain opacity" T _INPUT_CTRL.lens13grainOpacity}
+ addUserKnob {41 lens13grainSize l "grain size" T _INPUT_CTRL.lens13grainSize}
+ addUserKnob {41 lens13grainGain l "grain gain" T _INPUT_CTRL.lens13grainGain}
+ addUserKnob {41 lens13reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens13reflectionOpacity}
+ addUserKnob {41 lens13reflectionRotation l "refl rotation" T _INPUT_CTRL.lens13reflectionRotation}
+ addUserKnob {41 lens13reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens13reflWhitepoint}
+ addUserKnob {41 lens13reflectionGamma l "refl gamma" T _INPUT_CTRL.lens13reflectionGamma}
+ addUserKnob {41 lens13reflectionBlur l "refl blur" T _INPUT_CTRL.lens13reflectionBlur}
+ addUserKnob {20 endGroup_12 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens14GRP l "lens 14" n 1}
+ lens14GRP 0
+ addUserKnob {41 lens14Active l active T _INPUT_CTRL.lens14Active}
+ addUserKnob {41 lens14Size l size T _INPUT_CTRL.lens14Size}
+ addUserKnob {41 lens14Col l color T _INPUT_CTRL.lens14Col}
+ addUserKnob {41 lens14Blur l blur T _INPUT_CTRL.lens14Blur}
+ addUserKnob {41 lens14AxisPos l "axis pos" T _INPUT_CTRL.lens14AxisPos}
+ addUserKnob {41 lens14Polygon l polygon T _INPUT_CTRL.lens14Polygon}
+ addUserKnob {41 lens14Diaphragm l diaphragm T _INPUT_CTRL.lens14Diaphragm}
+ addUserKnob {41 lens14DiaphRot l "diaph rotation" T _INPUT_CTRL.lens14DiaphRot}
+ addUserKnob {41 lens14grainOpacity l "grain opacity" T _INPUT_CTRL.lens14grainOpacity}
+ addUserKnob {41 lens14grainSize l "grain size" T _INPUT_CTRL.lens14grainSize}
+ addUserKnob {41 lens14grainGain l "grain gain" T _INPUT_CTRL.lens14grainGain}
+ addUserKnob {41 lens14reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens14reflectionOpacity}
+ addUserKnob {41 lens14reflectionRotation l "refl rotation" T _INPUT_CTRL.lens14reflectionRotation}
+ addUserKnob {41 lens14reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens14reflWhitepoint}
+ addUserKnob {41 lens14reflectionGamma l "refl gamma" T _INPUT_CTRL.lens14reflectionGamma}
+ addUserKnob {41 lens14reflectionBlur l "refl blur" T _INPUT_CTRL.lens14reflectionBlur}
+ addUserKnob {20 endGroup_13 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens15GRP l "lens 15" n 1}
+ lens15GRP 0
+ addUserKnob {41 lens15Active l active T _INPUT_CTRL.lens15Active}
+ addUserKnob {41 lens15Size l size T _INPUT_CTRL.lens15Size}
+ addUserKnob {41 lens15Col l color T _INPUT_CTRL.lens15Col}
+ addUserKnob {41 lens15Blur l blur T _INPUT_CTRL.lens15Blur}
+ addUserKnob {41 lens15AxisPos l "axis pos" T _INPUT_CTRL.lens15AxisPos}
+ addUserKnob {41 lens15Polygon l polygon T _INPUT_CTRL.lens15Polygon}
+ addUserKnob {41 lens15Diaphragm l diaphragm T _INPUT_CTRL.lens15Diaphragm}
+ addUserKnob {41 lens15DiaphRot l "diaph rotation" T _INPUT_CTRL.lens15DiaphRot}
+ addUserKnob {41 lens15grainOpacity l "grain opacity" T _INPUT_CTRL.lens15grainOpacity}
+ addUserKnob {41 lens15grainSize l "grain size" T _INPUT_CTRL.lens15grainSize}
+ addUserKnob {41 lens15grainGain l "grain gain" T _INPUT_CTRL.lens15grainGain}
+ addUserKnob {41 lens15reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens15reflectionOpacity}
+ addUserKnob {41 lens15reflectionRotation l "refl rotation" T _INPUT_CTRL.lens15reflectionRotation}
+ addUserKnob {41 lens15reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens15reflWhitepoint}
+ addUserKnob {41 lens15reflectionGamma l "refl gamma" T _INPUT_CTRL.lens15reflectionGamma}
+ addUserKnob {41 lens15reflectionBlur l "refl blur" T _INPUT_CTRL.lens15reflectionBlur}
+ addUserKnob {20 endGroup_14 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens16GRP l "lens 16" n 1}
+ lens16GRP 0
+ addUserKnob {41 lens16Active l active T _INPUT_CTRL.lens16Active}
+ addUserKnob {41 lens16Size l size T _INPUT_CTRL.lens16Size}
+ addUserKnob {41 lens16Col l color T _INPUT_CTRL.lens16Col}
+ addUserKnob {41 lens16Blur l blur T _INPUT_CTRL.lens16Blur}
+ addUserKnob {41 lens16AxisPos l "axis pos" T _INPUT_CTRL.lens16AxisPos}
+ addUserKnob {41 lens16Polygon l polygon T _INPUT_CTRL.lens16Polygon}
+ addUserKnob {41 lens16Diaphragm l diaphragm T _INPUT_CTRL.lens16Diaphragm}
+ addUserKnob {41 lens16DiaphRot l "diaph rotation" T _INPUT_CTRL.lens16DiaphRot}
+ addUserKnob {41 lens16grainOpacity l "grain opacity" T _INPUT_CTRL.lens16grainOpacity}
+ addUserKnob {41 lens16grainSize l "grain size" T _INPUT_CTRL.lens16grainSize}
+ addUserKnob {41 lens16grainGain l "grain gain" T _INPUT_CTRL.lens16grainGain}
+ addUserKnob {41 lens16reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens16reflectionOpacity}
+ addUserKnob {41 lens16reflectionRotation l "refl rotation" T _INPUT_CTRL.lens16reflectionRotation}
+ addUserKnob {41 lens16reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens16reflWhitepoint}
+ addUserKnob {41 lens16reflectionGamma l "refl gamma" T _INPUT_CTRL.lens16reflectionGamma}
+ addUserKnob {41 lens16reflectionBlur l "refl blur" T _INPUT_CTRL.lens16reflectionBlur}
+ addUserKnob {20 endGroup_15 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens17GRP l "lens 17" n 1}
+ lens17GRP 0
+ addUserKnob {41 lens17Active l active T _INPUT_CTRL.lens17Active}
+ addUserKnob {41 lens17Size l size T _INPUT_CTRL.lens17Size}
+ addUserKnob {41 lens17Col l color T _INPUT_CTRL.lens17Col}
+ addUserKnob {41 lens17Blur l blur T _INPUT_CTRL.lens17Blur}
+ addUserKnob {41 lens17AxisPos l "axis pos" T _INPUT_CTRL.lens17AxisPos}
+ addUserKnob {41 lens17Polygon l polygon T _INPUT_CTRL.lens17Polygon}
+ addUserKnob {41 lens17Diaphragm l diaphragm T _INPUT_CTRL.lens17Diaphragm}
+ addUserKnob {41 lens17DiaphRot l "diaph rotation" T _INPUT_CTRL.lens17DiaphRot}
+ addUserKnob {41 lens17grainOpacity l "grain opacity" T _INPUT_CTRL.lens17grainOpacity}
+ addUserKnob {41 lens17grainSize l "grain size" T _INPUT_CTRL.lens17grainSize}
+ addUserKnob {41 lens17grainGain l "grain gain" T _INPUT_CTRL.lens17grainGain}
+ addUserKnob {41 lens17reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens17reflectionOpacity}
+ addUserKnob {41 lens17reflectionRotation l "refl rotation" T _INPUT_CTRL.lens17reflectionRotation}
+ addUserKnob {41 lens17reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens17reflWhitepoint}
+ addUserKnob {41 lens17reflectionGamma l "refl gamma" T _INPUT_CTRL.lens17reflectionGamma}
+ addUserKnob {41 lens17reflectionBlur l "refl blur" T _INPUT_CTRL.lens17reflectionBlur}
+ addUserKnob {20 endGroup_16 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens18GRP l "lens 18" n 1}
+ lens18GRP 0
+ addUserKnob {41 lens18Active l active T _INPUT_CTRL.lens18Active}
+ addUserKnob {41 lens18Size l size T _INPUT_CTRL.lens18Size}
+ addUserKnob {41 lens18Col l color T _INPUT_CTRL.lens18Col}
+ addUserKnob {41 lens18Blur l blur T _INPUT_CTRL.lens18Blur}
+ addUserKnob {41 lens18AxisPos l "axis pos" T _INPUT_CTRL.lens18AxisPos}
+ addUserKnob {41 lens18Polygon l polygon T _INPUT_CTRL.lens18Polygon}
+ addUserKnob {41 lens18Diaphragm l diaphragm T _INPUT_CTRL.lens18Diaphragm}
+ addUserKnob {41 lens18DiaphRot l "diaph rotation" T _INPUT_CTRL.lens18DiaphRot}
+ addUserKnob {41 lens18grainOpacity l "grain opacity" T _INPUT_CTRL.lens18grainOpacity}
+ addUserKnob {41 lens18grainSize l "grain size" T _INPUT_CTRL.lens18grainSize}
+ addUserKnob {41 lens18grainGain l "grain gain" T _INPUT_CTRL.lens18grainGain}
+ addUserKnob {41 lens18reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens18reflectionOpacity}
+ addUserKnob {41 lens18reflectionRotation l "refl rotation" T _INPUT_CTRL.lens18reflectionRotation}
+ addUserKnob {41 lens18reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens18reflWhitepoint}
+ addUserKnob {41 lens18reflectionGamma l "refl gamma" T _INPUT_CTRL.lens18reflectionGamma}
+ addUserKnob {41 lens18reflectionBlur l "refl blur" T _INPUT_CTRL.lens18reflectionBlur}
+ addUserKnob {20 endGroup_17 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens19GRP l "lens 19" n 1}
+ lens19GRP 0
+ addUserKnob {41 lens19Active l active T _INPUT_CTRL.lens19Active}
+ addUserKnob {41 lens19Size l size T _INPUT_CTRL.lens19Size}
+ addUserKnob {41 lens19Col l color T _INPUT_CTRL.lens19Col}
+ addUserKnob {41 lens19Blur l blur T _INPUT_CTRL.lens19Blur}
+ addUserKnob {41 lens19AxisPos l "axis pos" T _INPUT_CTRL.lens19AxisPos}
+ addUserKnob {41 lens19Polygon l polygon T _INPUT_CTRL.lens19Polygon}
+ addUserKnob {41 lens19Diaphragm l diaphragm T _INPUT_CTRL.lens19Diaphragm}
+ addUserKnob {41 lens19DiaphRot l "diaph rotation" T _INPUT_CTRL.lens19DiaphRot}
+ addUserKnob {41 lens19grainOpacity l "grain opacity" T _INPUT_CTRL.lens19grainOpacity}
+ addUserKnob {41 lens19grainSize l "grain size" T _INPUT_CTRL.lens19grainSize}
+ addUserKnob {41 lens19grainGain l "grain gain" T _INPUT_CTRL.lens19grainGain}
+ addUserKnob {41 lens19reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens19reflectionOpacity}
+ addUserKnob {41 lens19reflectionRotation l "refl rotation" T _INPUT_CTRL.lens19reflectionRotation}
+ addUserKnob {41 lens19reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens19reflWhitepoint}
+ addUserKnob {41 lens19reflectionGamma l "refl gamma" T _INPUT_CTRL.lens19reflectionGamma}
+ addUserKnob {41 lens19reflectionBlur l "refl blur" T _INPUT_CTRL.lens19reflectionBlur}
+ addUserKnob {20 endGroup_18 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 lens20GRP l "lens 20" n 1}
+ lens20GRP 0
+ addUserKnob {41 lens20Active l active T _INPUT_CTRL.lens20Active}
+ addUserKnob {41 lens20Size l size T _INPUT_CTRL.lens20Size}
+ addUserKnob {41 lens20Col l color T _INPUT_CTRL.lens20Col}
+ addUserKnob {41 lens20Blur l blur T _INPUT_CTRL.lens20Blur}
+ addUserKnob {41 lens20AxisPos l "axis pos" T _INPUT_CTRL.lens20AxisPos}
+ addUserKnob {41 lens20Polygon l polygon T _INPUT_CTRL.lens20Polygon}
+ addUserKnob {41 lens20Diaphragm l diaphragm T _INPUT_CTRL.lens20Diaphragm}
+ addUserKnob {41 lens20DiaphRot l "diaph rotation" T _INPUT_CTRL.lens20DiaphRot}
+ addUserKnob {41 lens20grainOpacity l "grain opacity" T _INPUT_CTRL.lens20grainOpacity}
+ addUserKnob {41 lens20grainSize l "grain size" T _INPUT_CTRL.lens20grainSize}
+ addUserKnob {41 lens20grainGain l "grain gain" T _INPUT_CTRL.lens20grainGain}
+ addUserKnob {41 lens20reflectionOpacity l "refl opacity" T _INPUT_CTRL.lens20reflectionOpacity}
+ addUserKnob {41 lens20reflectionRotation l "refl rotation" T _INPUT_CTRL.lens20reflectionRotation}
+ addUserKnob {41 lens20reflWhitepoint l "refl whitepoint" T _INPUT_CTRL.lens20reflWhitepoint}
+ addUserKnob {41 lens20reflectionGamma l "refl gamma" T _INPUT_CTRL.lens20reflectionGamma}
+ addUserKnob {41 lens20reflectionBlur l "refl blur" T _INPUT_CTRL.lens20reflectionBlur}
+ addUserKnob {20 endGroup_19 l endGroup n -1}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 153
+  ypos 416
+ }
+ NoOp {
+  name _INPUT_
+  xpos 153
+  ypos 456
+ }
+set N49d16e70 [stack 0]
+ NoOp {
+  name _SOURCE
+  xpos -72
+  ypos 456
+ }
+ Multiply {
+  value 0
+  name _compOnSource
+  xpos -72
+  ypos 10508
+  disable {{1-_INPUT_CTRL.effectOnly i}}
+ }
+push $N49d16e70
+ Reformat {
+  type scale
+  scale {{_INPUT_CTRL.quality i}}
+  name _reformatQuality
+  xpos 153
+  ypos 485
+ }
+ NoOp {
+  name _INPUT_CTRL
+  xpos 153
+  ypos 523
+  addUserKnob {20 Controls}
+  addUserKnob {6 effectOnly l "effect only" +STARTLINE}
+  addUserKnob {6 viewSelectedHighlights l "view highlights selection" +STARTLINE}
+  addUserKnob {7 brightspot R 0.9 15}
+  brightspot 2
+  addUserKnob {7 threshold}
+  threshold 1
+  addUserKnob {7 gamma t "Value for the gamma function applied between threshold value and brightspot value.\n" R 0 3}
+  gamma 2.2
+  addUserKnob {6 clampBright l "clamp to brightspot" t "Clamp the maximum values to the brightspot value." +STARTLINE}
+  clampBright true
+  addUserKnob {7 quality}
+  quality 0.5
+  addUserKnob {26 ""}
+  addUserKnob {7 overallMult l "overall mult" R 0 2}
+  overallMult 1
+  addUserKnob {7 overallLensScale l "overall lens scale" R 0 2}
+  overallLensScale 1
+  addUserKnob {7 overallLensDistance l "overall lens distance" R 0 2}
+  overallLensDistance 1
+  addUserKnob {7 overallSaturation l "overall saturation" R 0 2}
+  overallSaturation 1
+  addUserKnob {7 sourceCol l "source color" t "Mix with source color"}
+  sourceCol 1
+  addUserKnob {7 sourceSat l "source sat" R 0 3}
+  sourceSat 1
+  addUserKnob {26 ""}
+  addUserKnob {7 overallGrainOpacity l "overall grain opacity"}
+  addUserKnob {7 overallGrainSizeMult l "grain size mult" R 0 10}
+  overallGrainSizeMult 1
+  addUserKnob {7 overallGrainGainMult l "grain gain mult" R 0 5}
+  overallGrainGainMult 1
+  addUserKnob {26 ""}
+  addUserKnob {7 reflectionsOpacity l "reflections opacity"}
+  addUserKnob {7 reflectionsRotOffset l "reflections rot offset" R 0 360}
+  addUserKnob {7 reflectionsBlurAdd l "reflections add blur" R 0 50}
+  addUserKnob {18 reflectionsWhitepointMult l "refl whitepoint mult" R 0 2}
+  reflectionsWhitepointMult 1
+  addUserKnob {6 reflectionsWhitepointMult_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 reflectionsWhitepointMult_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 reflectionsWhitepointMult_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 reflectionsGammaMult l "refl gamma mult" R 0 5}
+  reflectionsGammaMult 1
+  addUserKnob {6 reflectionsGammaMult_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 reflectionsGammaMult_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 reflectionsGammaMult_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {26 ""}
+  addUserKnob {6 vignetteActive l "vignette source" +STARTLINE}
+  vignetteActive true
+  addUserKnob {7 vignetteScale l scale}
+  vignetteScale 0.7
+  addUserKnob {7 vignetteDarkness l darkness}
+  vignetteDarkness 1
+  addUserKnob {20 Presets}
+  addUserKnob {22 preset_01 l "Pink on Blue" T "n=nuke.toNode('_INPUT_CTRL')\n\nn.knob('lens1Active').setValue(True)\nn.knob('lens1Size').setValue(230)\nn.knob('lens1Col').setValue(2.48,0)\nn.knob('lens1Col').setValue(2.86,1)\nn.knob('lens1Col').setValue(16.6,2)\nn.knob('lens1Blur').setValue(17)\nn.knob('lens1AxisPos').setValue(-1.18)\nn.knob('lens1Polygon').setValue(0)\nn.knob('lens1Diaphragm').setValue(1)\nn.knob('lens1DiaphRot').setValue(0)\n\nn.knob('lens2Active').setValue(True)\nn.knob('lens2Size').setValue(50)\nn.knob('lens2Col').setValue(0.0027,0)\nn.knob('lens2Col').setValue(0.0095,1)\nn.knob('lens2Col').setValue(0.3,2)\nn.knob('lens2Blur').setValue(0)\nn.knob('lens2AxisPos').setValue(1.86)\nn.knob('lens2Polygon').setValue(0)\nn.knob('lens2Diaphragm').setValue(1)\nn.knob('lens2DiaphRot').setValue(0)\n\nn.knob('lens3Active').setValue(True)\nn.knob('lens3Size').setValue(200)\nn.knob('lens3Col').setValue(7,0)\nn.knob('lens3Col').setValue(6.02,1)\nn.knob('lens3Col').setValue(2.79,2)\nn.knob('lens3Blur').setValue(0)\nn.knob('lens3AxisPos').setValue(-1.18)\nn.knob('lens3Polygon').setValue(0)\nn.knob('lens3Diaphragm').setValue(1)\nn.knob('lens3DiaphRot').setValue(0)\n\nn.knob('lens4Active').setValue(True)\nn.knob('lens4Size').setValue(900)\nn.knob('lens4Col').setValue(26,0)\nn.knob('lens4Col').setValue(5.88,1)\nn.knob('lens4Col').setValue(10.64,2)\nn.knob('lens4Blur').setValue(0)\nn.knob('lens4AxisPos').setValue(-2.2)\nn.knob('lens4Polygon').setValue(0)\nn.knob('lens4Diaphragm').setValue(1)\nn.knob('lens4DiaphRot').setValue(0)\n\nn.knob('lens5Active').setValue(True)\nn.knob('lens5Size').setValue(540)\nn.knob('lens5Col').setValue(0.6,0)\nn.knob('lens5Col').setValue(0.34,1)\nn.knob('lens5Col').setValue(0.4,2)\nn.knob('lens5Blur').setValue(0)\nn.knob('lens5AxisPos').setValue(1)\nn.knob('lens5Polygon').setValue(0)\nn.knob('lens5Diaphragm').setValue(1)\nn.knob('lens5DiaphRot').setValue(0)\n\nn.knob('lens6Active').setValue(True)\nn.knob('lens6Size').setValue(430)\nn.knob('lens6Col').setValue(1.29,0)\nn.knob('lens6Col').setValue(0.19,1)\nn.knob('lens6Col').setValue(1.17,2)\nn.knob('lens6Blur').setValue(0)\nn.knob('lens6AxisPos').setValue(2.2)\nn.knob('lens6Polygon').setValue(0)\nn.knob('lens6Diaphragm').setValue(1)\nn.knob('lens6DiaphRot').setValue(0)\n\nn.knob('lens7Active').setValue(True)\nn.knob('lens7Size').setValue(400)\nn.knob('lens7Col').setValue(0,0)\nn.knob('lens7Col').setValue(674.66,1)\nn.knob('lens7Col').setValue(720,2)\nn.knob('lens7Blur').setValue(0)\nn.knob('lens7AxisPos').setValue(0.1)\nn.knob('lens7Polygon').setValue(0)\nn.knob('lens7Diaphragm').setValue(1)\nn.knob('lens7DiaphRot').setValue(0)\n\nn.knob('lens8Active').setValue(True)\nn.knob('lens8Size').setValue(950)\nn.knob('lens8Col').setValue(5,0)\nn.knob('lens8Col').setValue(13.21,1)\nn.knob('lens8Col').setValue(20,2)\nn.knob('lens8Blur').setValue(40)\nn.knob('lens8AxisPos').setValue(-2.16)\nn.knob('lens8Polygon').setValue(0)\nn.knob('lens8Diaphragm').setValue(1)\nn.knob('lens8DiaphRot').setValue(0)\n\nn.knob('lens9Active').setValue(True)\nn.knob('lens9Size').setValue(130)\nn.knob('lens9Col').setValue(0.07,0)\nn.knob('lens9Col').setValue(0.23,1)\nn.knob('lens9Col').setValue(4.8,2)\nn.knob('lens9Blur').setValue(5.6)\nn.knob('lens9AxisPos').setValue(0.7)\nn.knob('lens9Polygon').setValue(0)\nn.knob('lens9Diaphragm').setValue(1)\nn.knob('lens9DiaphRot').setValue(0)\n\nn.knob('lens10Active').setValue(True)\nn.knob('lens10Size').setValue(350)\nn.knob('lens10Col').setValue(1.549,0)\nn.knob('lens10Col').setValue(1,1)\nn.knob('lens10Col').setValue(0.85,2)\nn.knob('lens10Blur').setValue(0)\nn.knob('lens10AxisPos').setValue(-1.8)\nn.knob('lens10Polygon').setValue(0)\nn.knob('lens10Diaphragm').setValue(1)\nn.knob('lens10DiaphRot').setValue(0)\n\nn.knob('lens11Active').setValue(True)\nn.knob('lens11Size').setValue(10)\nn.knob('lens11Col').setValue(0.1,0)\nn.knob('lens11Col').setValue(0.032,1)\nn.knob('lens11Col').setValue(0.087,2)\nn.knob('lens11Blur').setValue(3.8)\nn.knob('lens11AxisPos').setValue(-0.6)\nn.knob('lens11Polygon').setValue(0)\nn.knob('lens11Diaphragm').setValue(1)\nn.knob('lens11DiaphRot').setValue(0)\n\nn.knob('lens12Active').setValue(True)\nn.knob('lens12Size').setValue(390)\nn.knob('lens12Col').setValue(0.11,0)\nn.knob('lens12Col').setValue(0.053,1)\nn.knob('lens12Col').setValue(0.036,2)\nn.knob('lens12Blur').setValue(2.1)\nn.knob('lens12AxisPos').setValue(-1.8)\nn.knob('lens12Polygon').setValue(0)\nn.knob('lens12Diaphragm').setValue(1)\nn.knob('lens12DiaphRot').setValue(0)\n\nn.knob('lens13Active').setValue(True)\nn.knob('lens13Size').setValue(140)\nn.knob('lens13Col').setValue(0.5,0)\nn.knob('lens13Col').setValue(2.75,1)\nn.knob('lens13Col').setValue(5,2)\nn.knob('lens13Blur').setValue(140)\nn.knob('lens13AxisPos').setValue(2)\nn.knob('lens13Polygon').setValue(0)\nn.knob('lens13Diaphragm').setValue(1)\nn.knob('lens13DiaphRot').setValue(0)\n\nn.knob('lens14Active').setValue(True)\nn.knob('lens14Size').setValue(420)\nn.knob('lens14Col').setValue(509.29,0)\nn.knob('lens14Col').setValue(-50.93,1)\nn.knob('lens14Col').setValue(500.3,2)\nn.knob('lens14Blur').setValue(20)\nn.knob('lens14AxisPos').setValue(0.08)\nn.knob('lens14Polygon').setValue(0)\nn.knob('lens14Diaphragm').setValue(1)\nn.knob('lens14DiaphRot').setValue(0)\n\nn.knob('lens15Active').setValue(True)\nn.knob('lens15Size').setValue(590)\nn.knob('lens15Col').setValue(1120,0)\nn.knob('lens15Col').setValue(-55.99,1)\nn.knob('lens15Col').setValue(946.47,2)\nn.knob('lens15Blur').setValue(0)\nn.knob('lens15AxisPos').setValue(-0.1)\nn.knob('lens15Polygon').setValue(0)\nn.knob('lens15Diaphragm').setValue(1)\nn.knob('lens15DiaphRot').setValue(0)\n\nn.knob('lens16Active').setValue(True)\nn.knob('lens16Size').setValue(130)\nn.knob('lens16Col').setValue(0.8,0)\nn.knob('lens16Col').setValue(0.74,1)\nn.knob('lens16Col').setValue(0.119,2)\nn.knob('lens16Blur').setValue(5.8)\nn.knob('lens16AxisPos').setValue(-0.51)\nn.knob('lens16Polygon').setValue(0)\nn.knob('lens16Diaphragm').setValue(1)\nn.knob('lens16DiaphRot').setValue(0)\n\nn.knob('lens17Active').setValue(True)\nn.knob('lens17Size').setValue(210)\nn.knob('lens17Col').setValue(0.4911,0)\nn.knob('lens17Col').setValue(1.01,1)\nn.knob('lens17Col').setValue(2.59,2)\nn.knob('lens17Blur').setValue(0)\nn.knob('lens17AxisPos').setValue(1.2)\nn.knob('lens17Polygon').setValue(0)\nn.knob('lens17Diaphragm').setValue(1)\nn.knob('lens17DiaphRot').setValue(0)\n\nn.knob('lens18Active').setValue(True)\nn.knob('lens18Size').setValue(50)\nn.knob('lens18Col').setValue(0.26,0)\nn.knob('lens18Col').setValue(0.039,1)\nn.knob('lens18Col').setValue(-0.624,2)\nn.knob('lens18Blur').setValue(0)\nn.knob('lens18AxisPos').setValue(-0.83)\nn.knob('lens18Polygon').setValue(0)\nn.knob('lens18Diaphragm').setValue(1)\nn.knob('lens18DiaphRot').setValue(0)\n\nn.knob('lens19Active').setValue(True)\nn.knob('lens19Size').setValue(410)\nn.knob('lens19Col').setValue(4.4,0)\nn.knob('lens19Col').setValue(2.7,1)\nn.knob('lens19Col').setValue(2.04,2)\nn.knob('lens19Blur').setValue(0)\nn.knob('lens19AxisPos').setValue(-0.95)\nn.knob('lens19Polygon').setValue(0)\nn.knob('lens19Diaphragm').setValue(1)\nn.knob('lens19DiaphRot').setValue(0)\n\nn.knob('lens20Active').setValue(True)\nn.knob('lens20Size').setValue(700)\nn.knob('lens20Col').setValue(2.32,0)\nn.knob('lens20Col').setValue(0,1)\nn.knob('lens20Col').setValue(104,2)\nn.knob('lens20Blur').setValue(0)\nn.knob('lens20AxisPos').setValue(0.6)\nn.knob('lens20Polygon').setValue(0)\nn.knob('lens20Diaphragm').setValue(1)\nn.knob('lens20DiaphRot').setValue(0)\n\n\n" +STARTLINE}
+  addUserKnob {22 preset_02 l "Fat Orange" T "n=nuke.toNode('_INPUT_CTRL')\n\nn.knob('lens1Active').setValue(True)\nn.knob('lens1Size').setValue(7)\nn.knob('lens1Col').setValue(0.0074,0)\nn.knob('lens1Col').setValue(0,1)\nn.knob('lens1Col').setValue(0.07,2)\nn.knob('lens1Blur').setValue(17)\nn.knob('lens1AxisPos').setValue(-1.3)\nn.knob('lens1Polygon').setValue(0)\nn.knob('lens1Diaphragm').setValue(1)\nn.knob('lens1DiaphRot').setValue(0)\n\nn.knob('lens2Active').setValue(True)\nn.knob('lens2Size').setValue(130)\nn.knob('lens2Col').setValue(0.11,0)\nn.knob('lens2Col').setValue(0.055,1)\nn.knob('lens2Col').setValue(0.0709,2)\nn.knob('lens2Blur').setValue(9.5)\nn.knob('lens2AxisPos').setValue(-1.66)\nn.knob('lens2Polygon').setValue(0)\nn.knob('lens2Diaphragm').setValue(1)\nn.knob('lens2DiaphRot').setValue(0)\n\nn.knob('lens3Active').setValue(True)\nn.knob('lens3Size').setValue(340)\nn.knob('lens3Col').setValue(3.9,0)\nn.knob('lens3Col').setValue(1.125,1)\nn.knob('lens3Col').setValue(0.195,2)\nn.knob('lens3Blur').setValue(0)\nn.knob('lens3AxisPos').setValue(-0.32)\nn.knob('lens3Polygon').setValue(0)\nn.knob('lens3Diaphragm').setValue(1)\nn.knob('lens3DiaphRot').setValue(0)\n\nn.knob('lens4Active').setValue(True)\nn.knob('lens4Size').setValue(160)\nn.knob('lens4Col').setValue(2.59,0)\nn.knob('lens4Col').setValue(0.13,1)\nn.knob('lens4Col').setValue(0.228,2)\nn.knob('lens4Blur').setValue(0)\nn.knob('lens4AxisPos').setValue(-0.24)\nn.knob('lens4Polygon').setValue(0)\nn.knob('lens4Diaphragm').setValue(1)\nn.knob('lens4DiaphRot').setValue(0)\n\nn.knob('lens5Active').setValue(True)\nn.knob('lens5Size').setValue(350)\nn.knob('lens5Col').setValue(0.6,0)\nn.knob('lens5Col').setValue(0.135,1)\nn.knob('lens5Col').setValue(0,2)\nn.knob('lens5Blur').setValue(0)\nn.knob('lens5AxisPos').setValue(-0.78)\nn.knob('lens5Polygon').setValue(0)\nn.knob('lens5Diaphragm').setValue(1)\nn.knob('lens5DiaphRot').setValue(0)\n\nn.knob('lens6Active').setValue(True)\nn.knob('lens6Size').setValue(30)\nn.knob('lens6Col').setValue(0.11,0)\nn.knob('lens6Col').setValue(0.053,1)\nn.knob('lens6Col').setValue(0.0000012,2)\nn.knob('lens6Blur').setValue(4)\nn.knob('lens6AxisPos').setValue(-0.75)\nn.knob('lens6Polygon').setValue(0)\nn.knob('lens6Diaphragm').setValue(1)\nn.knob('lens6DiaphRot').setValue(0)\n\nn.knob('lens7Active').setValue(True)\nn.knob('lens7Size').setValue(1000)\nn.knob('lens7Col').setValue(190,0)\nn.knob('lens7Col').setValue(24.27,1)\nn.knob('lens7Col').setValue(0,2)\nn.knob('lens7Blur').setValue(0)\nn.knob('lens7AxisPos').setValue(-0.04)\nn.knob('lens7Polygon').setValue(0)\nn.knob('lens7Diaphragm').setValue(1)\nn.knob('lens7DiaphRot').setValue(0)\n\nn.knob('lens8Active').setValue(True)\nn.knob('lens8Size').setValue(350)\nn.knob('lens8Col').setValue(0.6,0)\nn.knob('lens8Col').setValue(0.233,1)\nn.knob('lens8Col').setValue(0.089,2)\nn.knob('lens8Blur').setValue(100)\nn.knob('lens8AxisPos').setValue(-1.9)\nn.knob('lens8Polygon').setValue(0)\nn.knob('lens8Diaphragm').setValue(1)\nn.knob('lens8DiaphRot').setValue(0)\n\nn.knob('lens9Active').setValue(True)\nn.knob('lens9Size').setValue(200)\nn.knob('lens9Col').setValue(0.949,0)\nn.knob('lens9Col').setValue(0.05,1)\nn.knob('lens9Col').setValue(0,2)\nn.knob('lens9Blur').setValue(30)\nn.knob('lens9AxisPos').setValue(-0.76)\nn.knob('lens9Polygon').setValue(0)\nn.knob('lens9Diaphragm').setValue(1)\nn.knob('lens9DiaphRot').setValue(0)\n\nn.knob('lens10Active').setValue(True)\nn.knob('lens10Size').setValue(270)\nn.knob('lens10Col').setValue(5,0)\nn.knob('lens10Col').setValue(1.78,1)\nn.knob('lens10Col').setValue(0.87,2)\nn.knob('lens10Blur').setValue(0)\nn.knob('lens10AxisPos').setValue(0.18)\nn.knob('lens10Polygon').setValue(0)\nn.knob('lens10Diaphragm').setValue(1)\nn.knob('lens10DiaphRot').setValue(0)\n\nn.knob('lens11Active').setValue(True)\nn.knob('lens11Size').setValue(20)\nn.knob('lens11Col').setValue(0.03,0)\nn.knob('lens11Col').setValue(0.0093,1)\nn.knob('lens11Col').setValue(0,2)\nn.knob('lens11Blur').setValue(3.5)\nn.knob('lens11AxisPos').setValue(-0.6)\nn.knob('lens11Polygon').setValue(0)\nn.knob('lens11Diaphragm').setValue(1)\nn.knob('lens11DiaphRot').setValue(0)\n\nn.knob('lens12Active').setValue(True)\nn.knob('lens12Size').setValue(700)\nn.knob('lens12Col').setValue(0.04,0)\nn.knob('lens12Col').setValue(0,1)\nn.knob('lens12Col').setValue(0.0058,2)\nn.knob('lens12Blur').setValue(10)\nn.knob('lens12AxisPos').setValue(-2.2)\nn.knob('lens12Polygon').setValue(0)\nn.knob('lens12Diaphragm').setValue(1)\nn.knob('lens12DiaphRot').setValue(0)\n\nn.knob('lens13Active').setValue(True)\nn.knob('lens13Size').setValue(100)\nn.knob('lens13Col').setValue(0.12,0)\nn.knob('lens13Col').setValue(0,1)\nn.knob('lens13Col').setValue(0.0178,2)\nn.knob('lens13Blur').setValue(200)\nn.knob('lens13AxisPos').setValue(2)\nn.knob('lens13Polygon').setValue(0)\nn.knob('lens13Diaphragm').setValue(1)\nn.knob('lens13DiaphRot').setValue(0)\n\nn.knob('lens14Active').setValue(True)\nn.knob('lens14Size').setValue(80)\nn.knob('lens14Col').setValue(0.28,0)\nn.knob('lens14Col').setValue(0.0419,1)\nn.knob('lens14Col').setValue(0.101,2)\nn.knob('lens14Blur').setValue(0)\nn.knob('lens14AxisPos').setValue(0.38)\nn.knob('lens14Polygon').setValue(0)\nn.knob('lens14Diaphragm').setValue(1)\nn.knob('lens14DiaphRot').setValue(0)\n\nn.knob('lens15Active').setValue(True)\nn.knob('lens15Size').setValue(500)\nn.knob('lens15Col').setValue(1,0)\nn.knob('lens15Col').setValue(0.2428,1)\nn.knob('lens15Col').setValue(0.1,2)\nn.knob('lens15Blur').setValue(0)\nn.knob('lens15AxisPos').setValue(-0.5)\nn.knob('lens15Polygon').setValue(0)\nn.knob('lens15Diaphragm').setValue(1)\nn.knob('lens15DiaphRot').setValue(0)\n\nn.knob('lens16Active').setValue(True)\nn.knob('lens16Size').setValue(130)\nn.knob('lens16Col').setValue(0.449,0)\nn.knob('lens16Col').setValue(0.146,1)\nn.knob('lens16Col').setValue(0.0225,2)\nn.knob('lens16Blur').setValue(0)\nn.knob('lens16AxisPos').setValue(1.4)\nn.knob('lens16Polygon').setValue(0)\nn.knob('lens16Diaphragm').setValue(1)\nn.knob('lens16DiaphRot').setValue(0)\n\nn.knob('lens17Active').setValue(True)\nn.knob('lens17Size').setValue(210)\nn.knob('lens17Col').setValue(0.09,0)\nn.knob('lens17Col').setValue(0.009,1)\nn.knob('lens17Col').setValue(0.056,2)\nn.knob('lens17Blur').setValue(0)\nn.knob('lens17AxisPos').setValue(1.2)\nn.knob('lens17Polygon').setValue(0)\nn.knob('lens17Diaphragm').setValue(1)\nn.knob('lens17DiaphRot').setValue(0)\n\nn.knob('lens18Active').setValue(True)\nn.knob('lens18Size').setValue(100)\nn.knob('lens18Col').setValue(0.06,0)\nn.knob('lens18Col').setValue(0.009,1)\nn.knob('lens18Col').setValue(0.0579,2)\nn.knob('lens18Blur').setValue(120)\nn.knob('lens18AxisPos').setValue(2.5)\nn.knob('lens18Polygon').setValue(0)\nn.knob('lens18Diaphragm').setValue(1)\nn.knob('lens18DiaphRot').setValue(0)\n\nn.knob('lens19Active').setValue(True)\nn.knob('lens19Size').setValue(150)\nn.knob('lens19Col').setValue(0.2,0)\nn.knob('lens19Col').setValue(0.0708,1)\nn.knob('lens19Col').setValue(0.1219,2)\nn.knob('lens19Blur').setValue(9)\nn.knob('lens19AxisPos').setValue(0.8)\nn.knob('lens19Polygon').setValue(0)\nn.knob('lens19Diaphragm').setValue(1)\nn.knob('lens19DiaphRot').setValue(0)\n\nn.knob('lens20Active').setValue(True)\nn.knob('lens20Size').setValue(1100)\nn.knob('lens20Col').setValue(0.8,0)\nn.knob('lens20Col').setValue(0.178,1)\nn.knob('lens20Col').setValue(0.119,2)\nn.knob('lens20Blur').setValue(0)\nn.knob('lens20AxisPos').setValue(0.95)\nn.knob('lens20Polygon').setValue(0)\nn.knob('lens20Diaphragm').setValue(1)\nn.knob('lens20DiaphRot').setValue(0)\n\n\n" +STARTLINE}
+  addUserKnob {22 preset_03 l "Classic Orange Blue" T "n=nuke.toNode('_INPUT_CTRL')\n\nn.knob('lens1Active').setValue(True)\nn.knob('lens1Size').setValue(650)\nn.knob('lens1Col').setValue(35.59,0)\nn.knob('lens1Col').setValue(19.95,1)\nn.knob('lens1Col').setValue(5.27,2)\nn.knob('lens1Blur').setValue(17)\nn.knob('lens1AxisPos').setValue(0.98)\nn.knob('lens1Polygon').setValue(0)\nn.knob('lens1Diaphragm').setValue(1)\nn.knob('lens1DiaphRot').setValue(0)\n\nn.knob('lens2Active').setValue(True)\nn.knob('lens2Size').setValue(20)\nn.knob('lens2Col').setValue(0.649,0)\nn.knob('lens2Col').setValue(0.34,1)\nn.knob('lens2Col').setValue(0.137,2)\nn.knob('lens2Blur').setValue(7)\nn.knob('lens2AxisPos').setValue(0.77)\nn.knob('lens2Polygon').setValue(0)\nn.knob('lens2Diaphragm').setValue(1)\nn.knob('lens2DiaphRot').setValue(0)\n\nn.knob('lens3Active').setValue(True)\nn.knob('lens3Size').setValue(520)\nn.knob('lens3Col').setValue(446,0)\nn.knob('lens3Col').setValue(249.31,1)\nn.knob('lens3Col').setValue(44.6,2)\nn.knob('lens3Blur').setValue(9.4)\nn.knob('lens3AxisPos').setValue(-0.43)\nn.knob('lens3Polygon').setValue(0)\nn.knob('lens3Diaphragm').setValue(1)\nn.knob('lens3DiaphRot').setValue(0)\n\nn.knob('lens4Active').setValue(True)\nn.knob('lens4Size').setValue(60)\nn.knob('lens4Col').setValue(26,0)\nn.knob('lens4Col').setValue(22.8,1)\nn.knob('lens4Col').setValue(14,2)\nn.knob('lens4Blur').setValue(7)\nn.knob('lens4AxisPos').setValue(0.7)\nn.knob('lens4Polygon').setValue(0)\nn.knob('lens4Diaphragm').setValue(1)\nn.knob('lens4DiaphRot').setValue(0)\n\nn.knob('lens5Active').setValue(True)\nn.knob('lens5Size').setValue(220)\nn.knob('lens5Col').setValue(30,0)\nn.knob('lens5Col').setValue(11.46,1)\nn.knob('lens5Col').setValue(0,2)\nn.knob('lens5Blur').setValue(4.4)\nn.knob('lens5AxisPos').setValue(0.66)\nn.knob('lens5Polygon').setValue(0)\nn.knob('lens5Diaphragm').setValue(1)\nn.knob('lens5DiaphRot').setValue(0)\n\nn.knob('lens6Active').setValue(True)\nn.knob('lens6Size').setValue(130)\nn.knob('lens6Col').setValue(0.134,0)\nn.knob('lens6Col').setValue(17.49,1)\nn.knob('lens6Col').setValue(40,2)\nn.knob('lens6Blur').setValue(0)\nn.knob('lens6AxisPos').setValue(0.23)\nn.knob('lens6Polygon').setValue(0)\nn.knob('lens6Diaphragm').setValue(1)\nn.knob('lens6DiaphRot').setValue(0)\n\nn.knob('lens7Active').setValue(True)\nn.knob('lens7Size').setValue(200)\nn.knob('lens7Col').setValue(50,0)\nn.knob('lens7Col').setValue(47.767,1)\nn.knob('lens7Col').setValue(31.44,2)\nn.knob('lens7Blur').setValue(0)\nn.knob('lens7AxisPos').setValue(0.203)\nn.knob('lens7Polygon').setValue(0)\nn.knob('lens7Diaphragm').setValue(1)\nn.knob('lens7DiaphRot').setValue(0)\n\nn.knob('lens8Active').setValue(True)\nn.knob('lens8Size').setValue(850)\nn.knob('lens8Col').setValue(130,0)\nn.knob('lens8Col').setValue(61.45,1)\nn.knob('lens8Col').setValue(1.76,2)\nn.knob('lens8Blur').setValue(40)\nn.knob('lens8AxisPos').setValue(-0.96)\nn.knob('lens8Polygon').setValue(0)\nn.knob('lens8Diaphragm').setValue(1)\nn.knob('lens8DiaphRot').setValue(0)\n\nn.knob('lens9Active').setValue(True)\nn.knob('lens9Size').setValue(10)\nn.knob('lens9Col').setValue(1.25,0)\nn.knob('lens9Col').setValue(0.249,1)\nn.knob('lens9Col').setValue(0.756,2)\nn.knob('lens9Blur').setValue(0)\nn.knob('lens9AxisPos').setValue(0.53)\nn.knob('lens9Polygon').setValue(0)\nn.knob('lens9Diaphragm').setValue(1)\nn.knob('lens9DiaphRot').setValue(0)\n\nn.knob('lens10Active').setValue(True)\nn.knob('lens10Size').setValue(65)\nn.knob('lens10Col').setValue(20,0)\nn.knob('lens10Col').setValue(9.2,1)\nn.knob('lens10Col').setValue(5.5,2)\nn.knob('lens10Blur').setValue(4.8)\nn.knob('lens10AxisPos').setValue(0.18)\nn.knob('lens10Polygon').setValue(0)\nn.knob('lens10Diaphragm').setValue(1)\nn.knob('lens10DiaphRot').setValue(0)\n\nn.knob('lens11Active').setValue(True)\nn.knob('lens11Size').setValue(30)\nn.knob('lens11Col').setValue(4.5,0)\nn.knob('lens11Col').setValue(8.26,1)\nn.knob('lens11Col').setValue(10,2)\nn.knob('lens11Blur').setValue(0)\nn.knob('lens11AxisPos').setValue(-0.2)\nn.knob('lens11Polygon').setValue(0)\nn.knob('lens11Diaphragm').setValue(1)\nn.knob('lens11DiaphRot').setValue(0)\n\nn.knob('lens12Active').setValue(True)\nn.knob('lens12Size').setValue(1090)\nn.knob('lens12Col').setValue(0.11,0)\nn.knob('lens12Col').setValue(0.053,1)\nn.knob('lens12Col').setValue(0.036,2)\nn.knob('lens12Blur').setValue(2.1)\nn.knob('lens12AxisPos').setValue(-0.8)\nn.knob('lens12Polygon').setValue(0)\nn.knob('lens12Diaphragm').setValue(1)\nn.knob('lens12DiaphRot').setValue(0)\n\nn.knob('lens13Active').setValue(True)\nn.knob('lens13Size').setValue(32)\nn.knob('lens13Col').setValue(10,0)\nn.knob('lens13Col').setValue(9.7,1)\nn.knob('lens13Col').setValue(6.26,2)\nn.knob('lens13Blur').setValue(19.6)\nn.knob('lens13AxisPos').setValue(0.68)\nn.knob('lens13Polygon').setValue(0)\nn.knob('lens13Diaphragm').setValue(1)\nn.knob('lens13DiaphRot').setValue(0)\n\nn.knob('lens14Active').setValue(True)\nn.knob('lens14Size').setValue(320)\nn.knob('lens14Col').setValue(2509,0)\nn.knob('lens14Col').setValue(1171,1)\nn.knob('lens14Col').setValue(1256,2)\nn.knob('lens14Blur').setValue(0)\nn.knob('lens14AxisPos').setValue(-0.04)\nn.knob('lens14Polygon').setValue(0)\nn.knob('lens14Diaphragm').setValue(1)\nn.knob('lens14DiaphRot').setValue(0)\n\nn.knob('lens15Active').setValue(True)\nn.knob('lens15Size').setValue(590)\nn.knob('lens15Col').setValue(1120,0)\nn.knob('lens15Col').setValue(506,1)\nn.knob('lens15Col').setValue(456,2)\nn.knob('lens15Blur').setValue(0)\nn.knob('lens15AxisPos').setValue(-0.1)\nn.knob('lens15Polygon').setValue(0)\nn.knob('lens15Diaphragm').setValue(1)\nn.knob('lens15DiaphRot').setValue(0)\n\nn.knob('lens16Active').setValue(True)\nn.knob('lens16Size').setValue(60)\nn.knob('lens16Col').setValue(18,0)\nn.knob('lens16Col').setValue(4.51,1)\nn.knob('lens16Col').setValue(1.8,2)\nn.knob('lens16Blur').setValue(5.8)\nn.knob('lens16AxisPos').setValue(-0.27)\nn.knob('lens16Polygon').setValue(0)\nn.knob('lens16Diaphragm').setValue(1)\nn.knob('lens16DiaphRot').setValue(0)\n\nn.knob('lens17Active').setValue(True)\nn.knob('lens17Size').setValue(70)\nn.knob('lens17Col').setValue(20,0)\nn.knob('lens17Col').setValue(13.74,1)\nn.knob('lens17Col').setValue(4.58,2)\nn.knob('lens17Blur').setValue(0)\nn.knob('lens17AxisPos').setValue(-0.24)\nn.knob('lens17Polygon').setValue(0)\nn.knob('lens17Diaphragm').setValue(1)\nn.knob('lens17DiaphRot').setValue(0)\n\nn.knob('lens18Active').setValue(True)\nn.knob('lens18Size').setValue(50)\nn.knob('lens18Col').setValue(30,0)\nn.knob('lens18Col').setValue(8.94,1)\nn.knob('lens18Col').setValue(-10.5,2)\nn.knob('lens18Blur').setValue(30)\nn.knob('lens18AxisPos').setValue(-0.32)\nn.knob('lens18Polygon').setValue(0)\nn.knob('lens18Diaphragm').setValue(1)\nn.knob('lens18DiaphRot').setValue(0)\n\nn.knob('lens19Active').setValue(True)\nn.knob('lens19Size').setValue(50)\nn.knob('lens19Col').setValue(1.97,0)\nn.knob('lens19Col').setValue(3.2,1)\nn.knob('lens19Col').setValue(0.32,2)\nn.knob('lens19Blur').setValue(4.4)\nn.knob('lens19AxisPos').setValue(-0.47)\nn.knob('lens19Polygon').setValue(0)\nn.knob('lens19Diaphragm').setValue(1)\nn.knob('lens19DiaphRot').setValue(0)\n\nn.knob('lens20Active').setValue(True)\nn.knob('lens20Size').setValue(80)\nn.knob('lens20Col').setValue(3.79,0)\nn.knob('lens20Col').setValue(3.11,1)\nn.knob('lens20Col').setValue(0.8,2)\nn.knob('lens20Blur').setValue(0)\nn.knob('lens20AxisPos').setValue(-0.15)\nn.knob('lens20Polygon').setValue(0)\nn.knob('lens20Diaphragm').setValue(1)\nn.knob('lens20DiaphRot').setValue(0)\n\n\n" +STARTLINE}
+  addUserKnob {22 preset_04 l "Giant Colorful" T "n=nuke.toNode('_INPUT_CTRL')\n\nn.knob('lens1Active').setValue(True)\nn.knob('lens1Size').setValue(6)\nn.knob('lens1Col').setValue(0.4,0)\nn.knob('lens1Col').setValue(0.664,1)\nn.knob('lens1Col').setValue(1.85,2)\nn.knob('lens1Blur').setValue(0)\nn.knob('lens1AxisPos').setValue(-0.16)\nn.knob('lens1Polygon').setValue(0)\nn.knob('lens1Diaphragm').setValue(1)\nn.knob('lens1DiaphRot').setValue(0)\n\nn.knob('lens2Active').setValue(True)\nn.knob('lens2Size').setValue(1.1)\nn.knob('lens2Col').setValue(2.67,0)\nn.knob('lens2Col').setValue(3.09,1)\nn.knob('lens2Col').setValue(0.68,2)\nn.knob('lens2Blur').setValue(0)\nn.knob('lens2AxisPos').setValue(0.05)\nn.knob('lens2Polygon').setValue(0)\nn.knob('lens2Diaphragm').setValue(1)\nn.knob('lens2DiaphRot').setValue(0)\n\nn.knob('lens3Active').setValue(True)\nn.knob('lens3Size').setValue(410)\nn.knob('lens3Col').setValue(14,0)\nn.knob('lens3Col').setValue(4.77,1)\nn.knob('lens3Col').setValue(0.76,2)\nn.knob('lens3Blur').setValue(0)\nn.knob('lens3AxisPos').setValue(1.1)\nn.knob('lens3Polygon').setValue(0)\nn.knob('lens3Diaphragm').setValue(1)\nn.knob('lens3DiaphRot').setValue(0)\n\nn.knob('lens4Active').setValue(True)\nn.knob('lens4Size').setValue(370)\nn.knob('lens4Col').setValue(12,0)\nn.knob('lens4Col').setValue(3.96,1)\nn.knob('lens4Col').setValue(10.37,2)\nn.knob('lens4Blur').setValue(7)\nn.knob('lens4AxisPos').setValue(0.95)\nn.knob('lens4Polygon').setValue(0)\nn.knob('lens4Diaphragm').setValue(1)\nn.knob('lens4DiaphRot').setValue(0)\n\nn.knob('lens5Active').setValue(True)\nn.knob('lens5Size').setValue(1120)\nn.knob('lens5Col').setValue(110,0)\nn.knob('lens5Col').setValue(48.46,1)\nn.knob('lens5Col').setValue(7.55,2)\nn.knob('lens5Blur').setValue(18.8)\nn.knob('lens5AxisPos').setValue(0.26)\nn.knob('lens5Polygon').setValue(0)\nn.knob('lens5Diaphragm').setValue(1)\nn.knob('lens5DiaphRot').setValue(0)\n\nn.knob('lens6Active').setValue(True)\nn.knob('lens6Size').setValue(330)\nn.knob('lens6Col').setValue(0.55,0)\nn.knob('lens6Col').setValue(0.329,1)\nn.knob('lens6Col').setValue(0.073,2)\nn.knob('lens6Blur').setValue(0)\nn.knob('lens6AxisPos').setValue(-1.43)\nn.knob('lens6Polygon').setValue(0)\nn.knob('lens6Diaphragm').setValue(1)\nn.knob('lens6DiaphRot').setValue(0)\n\nn.knob('lens7Active').setValue(True)\nn.knob('lens7Size').setValue(360)\nn.knob('lens7Col').setValue(5.69,0)\nn.knob('lens7Col').setValue(3.44,1)\nn.knob('lens7Col').setValue(0,2)\nn.knob('lens7Blur').setValue(0)\nn.knob('lens7AxisPos').setValue(-1.58)\nn.knob('lens7Polygon').setValue(0)\nn.knob('lens7Diaphragm').setValue(1)\nn.knob('lens7DiaphRot').setValue(0)\n\nn.knob('lens8Active').setValue(True)\nn.knob('lens8Size').setValue(8)\nn.knob('lens8Col').setValue(0.38,0)\nn.knob('lens8Col').setValue(1.5,1)\nn.knob('lens8Col').setValue(3.79,2)\nn.knob('lens8Blur').setValue(0)\nn.knob('lens8AxisPos').setValue(0.1)\nn.knob('lens8Polygon').setValue(0)\nn.knob('lens8Diaphragm').setValue(1)\nn.knob('lens8DiaphRot').setValue(0)\n\nn.knob('lens9Active').setValue(True)\nn.knob('lens9Size').setValue(46.5)\nn.knob('lens9Col').setValue(1.8,0)\nn.knob('lens9Col').setValue(1.88,1)\nn.knob('lens9Col').setValue(3.29,2)\nn.knob('lens9Blur').setValue(2.8)\nn.knob('lens9AxisPos').setValue(-0.22)\nn.knob('lens9Polygon').setValue(0)\nn.knob('lens9Diaphragm').setValue(1)\nn.knob('lens9DiaphRot').setValue(0)\n\nn.knob('lens10Active').setValue(True)\nn.knob('lens10Size').setValue(400)\nn.knob('lens10Col').setValue(14,0)\nn.knob('lens10Col').setValue(7.09,1)\nn.knob('lens10Col').setValue(12.38,2)\nn.knob('lens10Blur').setValue(0)\nn.knob('lens10AxisPos').setValue(0.44)\nn.knob('lens10Polygon').setValue(0)\nn.knob('lens10Diaphragm').setValue(1)\nn.knob('lens10DiaphRot').setValue(0)\n\nn.knob('lens11Active').setValue(True)\nn.knob('lens11Size').setValue(6.2)\nn.knob('lens11Col').setValue(0.14,0)\nn.knob('lens11Col').setValue(0.11,1)\nn.knob('lens11Col').setValue(0.014,2)\nn.knob('lens11Blur').setValue(10.8)\nn.knob('lens11AxisPos').setValue(-1.4)\nn.knob('lens11Polygon').setValue(0)\nn.knob('lens11Diaphragm').setValue(1)\nn.knob('lens11DiaphRot').setValue(0)\n\nn.knob('lens12Active').setValue(True)\nn.knob('lens12Size').setValue(10)\nn.knob('lens12Col').setValue(0.11,0)\nn.knob('lens12Col').setValue(0.05,1)\nn.knob('lens12Col').setValue(0.02,2)\nn.knob('lens12Blur').setValue(4.6)\nn.knob('lens12AxisPos').setValue(-1.42)\nn.knob('lens12Polygon').setValue(0)\nn.knob('lens12Diaphragm').setValue(1)\nn.knob('lens12DiaphRot').setValue(0)\n\nn.knob('lens13Active').setValue(True)\nn.knob('lens13Size').setValue(2.3)\nn.knob('lens13Col').setValue(0.14,0)\nn.knob('lens13Col').setValue(0.13,1)\nn.knob('lens13Col').setValue(0.04,2)\nn.knob('lens13Blur').setValue(3)\nn.knob('lens13AxisPos').setValue(-1.48)\nn.knob('lens13Polygon').setValue(0)\nn.knob('lens13Diaphragm').setValue(1)\nn.knob('lens13DiaphRot').setValue(0)\n\nn.knob('lens14Active').setValue(True)\nn.knob('lens14Size').setValue(1020)\nn.knob('lens14Col').setValue(260,0)\nn.knob('lens14Col').setValue(122,1)\nn.knob('lens14Col').setValue(12.6,2)\nn.knob('lens14Blur').setValue(0)\nn.knob('lens14AxisPos').setValue(0.5)\nn.knob('lens14Polygon').setValue(0)\nn.knob('lens14Diaphragm').setValue(1)\nn.knob('lens14DiaphRot').setValue(0)\n\nn.knob('lens15Active').setValue(True)\nn.knob('lens15Size').setValue(650)\nn.knob('lens15Col').setValue(80,0)\nn.knob('lens15Col').setValue(21.6,1)\nn.knob('lens15Col').setValue(47.88,2)\nn.knob('lens15Blur').setValue(0)\nn.knob('lens15AxisPos').setValue(0.4)\nn.knob('lens15Polygon').setValue(0)\nn.knob('lens15Diaphragm').setValue(1)\nn.knob('lens15DiaphRot').setValue(0)\n\nn.knob('lens16Active').setValue(True)\nn.knob('lens16Size').setValue(60)\nn.knob('lens16Col').setValue(2.04,0)\nn.knob('lens16Col').setValue(0.42,1)\nn.knob('lens16Col').setValue(0.10,2)\nn.knob('lens16Blur').setValue(0)\nn.knob('lens16AxisPos').setValue(0.4)\nn.knob('lens16Polygon').setValue(0)\nn.knob('lens16Diaphragm').setValue(1)\nn.knob('lens16DiaphRot').setValue(0)\n\nn.knob('lens17Active').setValue(True)\nn.knob('lens17Size').setValue(80)\nn.knob('lens17Col').setValue(1.2,0)\nn.knob('lens17Col').setValue(0.36,1)\nn.knob('lens17Col').setValue(0.388,2)\nn.knob('lens17Blur').setValue(70)\nn.knob('lens17AxisPos').setValue(-2.4)\nn.knob('lens17Polygon').setValue(0)\nn.knob('lens17Diaphragm').setValue(1)\nn.knob('lens17DiaphRot').setValue(0)\n\nn.knob('lens18Active').setValue(True)\nn.knob('lens18Size').setValue(60)\nn.knob('lens18Col').setValue(10,0)\nn.knob('lens18Col').setValue(4.42,1)\nn.knob('lens18Col').setValue(0,2)\nn.knob('lens18Blur').setValue(30)\nn.knob('lens18AxisPos').setValue(-0.54)\nn.knob('lens18Polygon').setValue(0)\nn.knob('lens18Diaphragm').setValue(1)\nn.knob('lens18DiaphRot').setValue(0)\n\nn.knob('lens19Active').setValue(True)\nn.knob('lens19Size').setValue(99)\nn.knob('lens19Col').setValue(1.54,0)\nn.knob('lens19Col').setValue(1.25,1)\nn.knob('lens19Col').setValue(0.24,2)\nn.knob('lens19Blur').setValue(50)\nn.knob('lens19AxisPos').setValue(1.8)\nn.knob('lens19Polygon').setValue(0)\nn.knob('lens19Diaphragm').setValue(1)\nn.knob('lens19DiaphRot').setValue(0)\n\nn.knob('lens20Active').setValue(True)\nn.knob('lens20Size').setValue(9.4)\nn.knob('lens20Col').setValue(0.239,0)\nn.knob('lens20Col').setValue(0.121,1)\nn.knob('lens20Col').setValue(0.065,2)\nn.knob('lens20Blur').setValue(4)\nn.knob('lens20AxisPos').setValue(0.58)\nn.knob('lens20Polygon').setValue(0)\nn.knob('lens20Diaphragm').setValue(1)\nn.knob('lens20DiaphRot').setValue(0)\n\n\n" +STARTLINE}
+  addUserKnob {22 preset_05 l "Thin and Wide" T "n=nuke.toNode('_INPUT_CTRL')\n\nn.knob('lens1Active').setValue(True)\nn.knob('lens1Size').setValue(25.2)\nn.knob('lens1Col').setValue(0.97,0)\nn.knob('lens1Col').setValue(2.927,1)\nn.knob('lens1Col').setValue(18,2)\nn.knob('lens1Blur').setValue(0)\nn.knob('lens1AxisPos').setValue(-0.11)\nn.knob('lens1Polygon').setValue(0)\nn.knob('lens1Diaphragm').setValue(0.8)\nn.knob('lens1DiaphRot').setValue(0)\n\nn.knob('lens2Active').setValue(True)\nn.knob('lens2Size').setValue(4.8)\nn.knob('lens2Col').setValue(-2.3,0)\nn.knob('lens2Col').setValue(6.32,1)\nn.knob('lens2Col').setValue(15.39,2)\nn.knob('lens2Blur').setValue(0)\nn.knob('lens2AxisPos').setValue(-0.082)\nn.knob('lens2Polygon').setValue(0)\nn.knob('lens2Diaphragm').setValue(1)\nn.knob('lens2DiaphRot').setValue(0)\n\nn.knob('lens3Active').setValue(True)\nn.knob('lens3Size').setValue(13.5)\nn.knob('lens3Col').setValue(1.17,0)\nn.knob('lens3Col').setValue(1.72,1)\nn.knob('lens3Col').setValue(26,2)\nn.knob('lens3Blur').setValue(0)\nn.knob('lens3AxisPos').setValue(-0.06)\nn.knob('lens3Polygon').setValue(0)\nn.knob('lens3Diaphragm').setValue(0.8)\nn.knob('lens3DiaphRot').setValue(0)\n\nn.knob('lens4Active').setValue(True)\nn.knob('lens4Size').setValue(2.05)\nn.knob('lens4Col').setValue(6.93,0)\nn.knob('lens4Col').setValue(32,1)\nn.knob('lens4Col').setValue(29.82,2)\nn.knob('lens4Blur').setValue(0)\nn.knob('lens4AxisPos').setValue(0.08)\nn.knob('lens4Polygon').setValue(0)\nn.knob('lens4Diaphragm').setValue(1)\nn.knob('lens4DiaphRot').setValue(0)\n\nn.knob('lens5Active').setValue(True)\nn.knob('lens5Size').setValue(200)\nn.knob('lens5Col').setValue(1.09,0)\nn.knob('lens5Col').setValue(1.14,1)\nn.knob('lens5Col').setValue(8,2)\nn.knob('lens5Blur').setValue(0)\nn.knob('lens5AxisPos').setValue(0.27)\nn.knob('lens5Polygon').setValue(0)\nn.knob('lens5Diaphragm').setValue(1)\nn.knob('lens5DiaphRot').setValue(0)\n\nn.knob('lens6Active').setValue(True)\nn.knob('lens6Size').setValue(1000)\nn.knob('lens6Col').setValue(50,0)\nn.knob('lens6Col').setValue(6.38,1)\nn.knob('lens6Col').setValue(0,2)\nn.knob('lens6Blur').setValue(0)\nn.knob('lens6AxisPos').setValue(-1.08)\nn.knob('lens6Polygon').setValue(0)\nn.knob('lens6Diaphragm').setValue(1)\nn.knob('lens6DiaphRot').setValue(0)\n\nn.knob('lens7Active').setValue(True)\nn.knob('lens7Size').setValue(460)\nn.knob('lens7Col').setValue(0,0)\nn.knob('lens7Col').setValue(0.99,1)\nn.knob('lens7Col').setValue(20,2)\nn.knob('lens7Blur').setValue(0)\nn.knob('lens7AxisPos').setValue(-0.88)\nn.knob('lens7Polygon').setValue(0)\nn.knob('lens7Diaphragm').setValue(1)\nn.knob('lens7DiaphRot').setValue(0)\n\nn.knob('lens8Active').setValue(True)\nn.knob('lens8Size').setValue(450)\nn.knob('lens8Col').setValue(12,0)\nn.knob('lens8Col').setValue(2.25,1)\nn.knob('lens8Col').setValue(10.04,2)\nn.knob('lens8Blur').setValue(9.9)\nn.knob('lens8AxisPos').setValue(-0.69)\nn.knob('lens8Polygon').setValue(0)\nn.knob('lens8Diaphragm').setValue(1)\nn.knob('lens8DiaphRot').setValue(0)\n\nn.knob('lens9Active').setValue(True)\nn.knob('lens9Size').setValue(50.4)\nn.knob('lens9Col').setValue(0.9,0)\nn.knob('lens9Col').setValue(1.012,1)\nn.knob('lens9Col').setValue(3,2)\nn.knob('lens9Blur').setValue(2.8)\nn.knob('lens9AxisPos').setValue(0.34)\nn.knob('lens9Polygon').setValue(0)\nn.knob('lens9Diaphragm').setValue(1)\nn.knob('lens9DiaphRot').setValue(0)\n\nn.knob('lens10Active').setValue(True)\nn.knob('lens10Size').setValue(85.6)\nn.knob('lens10Col').setValue(2.79,0)\nn.knob('lens10Col').setValue(1.537,1)\nn.knob('lens10Col').setValue(-2.6,2)\nn.knob('lens10Blur').setValue(4.6)\nn.knob('lens10AxisPos').setValue(0.37)\nn.knob('lens10Polygon').setValue(0)\nn.knob('lens10Diaphragm').setValue(1)\nn.knob('lens10DiaphRot').setValue(0)\n\nn.knob('lens11Active').setValue(True)\nn.knob('lens11Size').setValue(83.5)\nn.knob('lens11Col').setValue(0,0)\nn.knob('lens11Col').setValue(4.86,1)\nn.knob('lens11Col').setValue(30,2)\nn.knob('lens11Blur').setValue(0)\nn.knob('lens11AxisPos').setValue(0.15)\nn.knob('lens11Polygon').setValue(0)\nn.knob('lens11Diaphragm').setValue(1)\nn.knob('lens11DiaphRot').setValue(0)\n\nn.knob('lens12Active').setValue(True)\nn.knob('lens12Size').setValue(40)\nn.knob('lens12Col').setValue(10,0)\nn.knob('lens12Col').setValue(3.9,1)\nn.knob('lens12Col').setValue(7.98,2)\nn.knob('lens12Blur').setValue(4.6)\nn.knob('lens12AxisPos').setValue(0.44)\nn.knob('lens12Polygon').setValue(0)\nn.knob('lens12Diaphragm').setValue(1)\nn.knob('lens12DiaphRot').setValue(0)\n\nn.knob('lens13Active').setValue(True)\nn.knob('lens13Size').setValue(1.4)\nn.knob('lens13Col').setValue(3.29,0)\nn.knob('lens13Col').setValue(1.28,1)\nn.knob('lens13Col').setValue(2.6,2)\nn.knob('lens13Blur').setValue(5.6)\nn.knob('lens13AxisPos').setValue(0.45)\nn.knob('lens13Polygon').setValue(0)\nn.knob('lens13Diaphragm').setValue(1)\nn.knob('lens13DiaphRot').setValue(0)\n\nn.knob('lens14Active').setValue(True)\nn.knob('lens14Size').setValue(1)\nn.knob('lens14Col').setValue(1.64,0)\nn.knob('lens14Col').setValue(0.74,1)\nn.knob('lens14Col').setValue(1.3,2)\nn.knob('lens14Blur').setValue(2)\nn.knob('lens14AxisPos').setValue(0.458)\nn.knob('lens14Polygon').setValue(0)\nn.knob('lens14Diaphragm').setValue(1)\nn.knob('lens14DiaphRot').setValue(0)\n\nn.knob('lens15Active').setValue(True)\nn.knob('lens15Size').setValue(1050)\nn.knob('lens15Col').setValue(80,0)\nn.knob('lens15Col').setValue(24,1)\nn.knob('lens15Col').setValue(49.19,2)\nn.knob('lens15Blur').setValue(0)\nn.knob('lens15AxisPos').setValue(0.8)\nn.knob('lens15Polygon').setValue(0)\nn.knob('lens15Diaphragm').setValue(1)\nn.knob('lens15DiaphRot').setValue(0)\n\nn.knob('lens16Active').setValue(True)\nn.knob('lens16Size').setValue(600)\nn.knob('lens16Col').setValue(30,0)\nn.knob('lens16Col').setValue(7.29,1)\nn.knob('lens16Col').setValue(12.7,2)\nn.knob('lens16Blur').setValue(0)\nn.knob('lens16AxisPos').setValue(-0.42)\nn.knob('lens16Polygon').setValue(0)\nn.knob('lens16Diaphragm').setValue(1)\nn.knob('lens16DiaphRot').setValue(0)\n\nn.knob('lens17Active').setValue(True)\nn.knob('lens17Size').setValue(600)\nn.knob('lens17Col').setValue(25,0)\nn.knob('lens17Col').setValue(7.5,1)\nn.knob('lens17Col').setValue(8.08,2)\nn.knob('lens17Blur').setValue(50)\nn.knob('lens17AxisPos').setValue(0.7)\nn.knob('lens17Polygon').setValue(0)\nn.knob('lens17Diaphragm').setValue(1)\nn.knob('lens17DiaphRot').setValue(0)\n\nn.knob('lens18Active').setValue(True)\nn.knob('lens18Size').setValue(270)\nn.knob('lens18Col').setValue(6.4,0)\nn.knob('lens18Col').setValue(3.69,1)\nn.knob('lens18Col').setValue(0.73,2)\nn.knob('lens18Blur').setValue(0)\nn.knob('lens18AxisPos').setValue(-0.36)\nn.knob('lens18Polygon').setValue(0)\nn.knob('lens18Diaphragm').setValue(1)\nn.knob('lens18DiaphRot').setValue(0)\n\nn.knob('lens19Active').setValue(True)\nn.knob('lens19Size').setValue(99)\nn.knob('lens19Col').setValue(5.249,0)\nn.knob('lens19Col').setValue(7.51,1)\nn.knob('lens19Col').setValue(40,2)\nn.knob('lens19Blur').setValue(20)\nn.knob('lens19AxisPos').setValue(-0.16)\nn.knob('lens19Polygon').setValue(0)\nn.knob('lens19Diaphragm').setValue(1)\nn.knob('lens19DiaphRot').setValue(0)\n\nn.knob('lens20Active').setValue(True)\nn.knob('lens20Size').setValue(9.4)\nn.knob('lens20Col').setValue(0.03,0)\nn.knob('lens20Col').setValue(0.006,1)\nn.knob('lens20Col').setValue(0.015,2)\nn.knob('lens20Blur').setValue(4)\nn.knob('lens20AxisPos').setValue(0.5)\nn.knob('lens20Polygon').setValue(0)\nn.knob('lens20Diaphragm').setValue(1)\nn.knob('lens20DiaphRot').setValue(0)\n\n\n" +STARTLINE}
+  addUserKnob {22 preset_06 l "Hexa Green Orange" T "n=nuke.toNode('_INPUT_CTRL')\n\nn.knob('lens1Active').setValue(True)\nn.knob('lens1Size').setValue(140)\nn.knob('lens1Col').setValue(0.918,0)\nn.knob('lens1Col').setValue(6.62,1)\nn.knob('lens1Col').setValue(7,2)\nn.knob('lens1Blur').setValue(12.9)\nn.knob('lens1AxisPos').setValue(-0.426)\nn.knob('lens1Polygon').setValue(0)\nn.knob('lens1Diaphragm').setValue(0.722)\nn.knob('lens1DiaphRot').setValue(26)\n\nn.knob('lens2Active').setValue(True)\nn.knob('lens2Size').setValue(140)\nn.knob('lens2Col').setValue(10.72,0)\nn.knob('lens2Col').setValue(13,1)\nn.knob('lens2Col').setValue(1.63,2)\nn.knob('lens2Blur').setValue(9.5)\nn.knob('lens2AxisPos').setValue(-0.358)\nn.knob('lens2Polygon').setValue(0)\nn.knob('lens2Diaphragm').setValue(0.656)\nn.knob('lens2DiaphRot').setValue(26)\n\nn.knob('lens3Active').setValue(True)\nn.knob('lens3Size').setValue(82)\nn.knob('lens3Col').setValue(3,0)\nn.knob('lens3Col').setValue(1.72,1)\nn.knob('lens3Col').setValue(0,2)\nn.knob('lens3Blur').setValue(5.4)\nn.knob('lens3AxisPos').setValue(-0.346)\nn.knob('lens3Polygon').setValue(0)\nn.knob('lens3Diaphragm').setValue(0.792)\nn.knob('lens3DiaphRot').setValue(26)\n\nn.knob('lens4Active').setValue(True)\nn.knob('lens4Size').setValue(230)\nn.knob('lens4Col').setValue(152,0)\nn.knob('lens4Col').setValue(41.01,1)\nn.knob('lens4Col').setValue(0,2)\nn.knob('lens4Blur').setValue(6.1)\nn.knob('lens4AxisPos').setValue(-0.634)\nn.knob('lens4Polygon').setValue(0)\nn.knob('lens4Diaphragm').setValue(0.566)\nn.knob('lens4DiaphRot').setValue(26)\n\nn.knob('lens5Active').setValue(True)\nn.knob('lens5Size').setValue(250)\nn.knob('lens5Col').setValue(23,0)\nn.knob('lens5Col').setValue(19,1)\nn.knob('lens5Col').setValue(0,2)\nn.knob('lens5Blur').setValue(60)\nn.knob('lens5AxisPos').setValue(-0.66)\nn.knob('lens5Polygon').setValue(0)\nn.knob('lens5Diaphragm').setValue(1)\nn.knob('lens5DiaphRot').setValue(26)\n\nn.knob('lens6Active').setValue(True)\nn.knob('lens6Size').setValue(520)\nn.knob('lens6Col').setValue(12,0)\nn.knob('lens6Col').setValue(-2.54,1)\nn.knob('lens6Col').setValue(-4.8,2)\nn.knob('lens6Blur').setValue(21)\nn.knob('lens6AxisPos').setValue(-1.06)\nn.knob('lens6Polygon').setValue(0)\nn.knob('lens6Diaphragm').setValue(0.446)\nn.knob('lens6DiaphRot').setValue(26)\n\nn.knob('lens7Active').setValue(True)\nn.knob('lens7Size').setValue(460)\nn.knob('lens7Col').setValue(2.46,0)\nn.knob('lens7Col').setValue(9,1)\nn.knob('lens7Col').setValue(0.9,2)\nn.knob('lens7Blur').setValue(50)\nn.knob('lens7AxisPos').setValue(-1.04)\nn.knob('lens7Polygon').setValue(0)\nn.knob('lens7Diaphragm').setValue(0.536)\nn.knob('lens7DiaphRot').setValue(26)\n\nn.knob('lens8Active').setValue(True)\nn.knob('lens8Size').setValue(110)\nn.knob('lens8Col').setValue(4,0)\nn.knob('lens8Col').setValue(2.44,1)\nn.knob('lens8Col').setValue(0,2)\nn.knob('lens8Blur').setValue(4.5)\nn.knob('lens8AxisPos').setValue(0.414)\nn.knob('lens8Polygon').setValue(0)\nn.knob('lens8Diaphragm').setValue(0.754)\nn.knob('lens8DiaphRot').setValue(26)\n\nn.knob('lens9Active').setValue(True)\nn.knob('lens9Size').setValue(50)\nn.knob('lens9Col').setValue(7,0)\nn.knob('lens9Col').setValue(4.89,1)\nn.knob('lens9Col').setValue(2.45,2)\nn.knob('lens9Blur').setValue(2.8)\nn.knob('lens9AxisPos').setValue(0.19)\nn.knob('lens9Polygon').setValue(0)\nn.knob('lens9Diaphragm').setValue(0.726)\nn.knob('lens9DiaphRot').setValue(26)\n\nn.knob('lens10Active').setValue(True)\nn.knob('lens10Size').setValue(40)\nn.knob('lens10Col').setValue(-0.32,0)\nn.knob('lens10Col').setValue(10,1)\nn.knob('lens10Col').setValue(-5,2)\nn.knob('lens10Blur').setValue(12.1)\nn.knob('lens10AxisPos').setValue(0.234)\nn.knob('lens10Polygon').setValue(0)\nn.knob('lens10Diaphragm').setValue(0.836)\nn.knob('lens10DiaphRot').setValue(26)\n\nn.knob('lens11Active').setValue(True)\nn.knob('lens11Size').setValue(57)\nn.knob('lens11Col').setValue(5.3,0)\nn.knob('lens11Col').setValue(10,1)\nn.knob('lens11Col').setValue(6.13,2)\nn.knob('lens11Blur').setValue(3)\nn.knob('lens11AxisPos').setValue(0.3)\nn.knob('lens11Polygon').setValue(0)\nn.knob('lens11Diaphragm').setValue(0.732)\nn.knob('lens11DiaphRot').setValue(26)\n\nn.knob('lens12Active').setValue(True)\nn.knob('lens12Size').setValue(70)\nn.knob('lens12Col').setValue(-9,0)\nn.knob('lens12Col').setValue(16,1)\nn.knob('lens12Col').setValue(20,2)\nn.knob('lens12Blur').setValue(4.6)\nn.knob('lens12AxisPos').setValue(0.216)\nn.knob('lens12Polygon').setValue(0)\nn.knob('lens12Diaphragm').setValue(1)\nn.knob('lens12DiaphRot').setValue(26)\n\nn.knob('lens13Active').setValue(True)\nn.knob('lens13Size').setValue(120)\nn.knob('lens13Col').setValue(10,0)\nn.knob('lens13Col').setValue(8.51,1)\nn.knob('lens13Col').setValue(1.19,2)\nn.knob('lens13Blur').setValue(5.6)\nn.knob('lens13AxisPos').setValue(0.242)\nn.knob('lens13Polygon').setValue(0)\nn.knob('lens13Diaphragm').setValue(0.363)\nn.knob('lens13DiaphRot').setValue(26)\n\nn.knob('lens14Active').setValue(True)\nn.knob('lens14Size').setValue(20)\nn.knob('lens14Col').setValue(5.5,0)\nn.knob('lens14Col').setValue(3.02,1)\nn.knob('lens14Col').setValue(0,2)\nn.knob('lens14Blur').setValue(1.7)\nn.knob('lens14AxisPos').setValue(0.18)\nn.knob('lens14Polygon').setValue(0)\nn.knob('lens14Diaphragm').setValue(0.532)\nn.knob('lens14DiaphRot').setValue(26)\n\nn.knob('lens15Active').setValue(True)\nn.knob('lens15Size').setValue(500)\nn.knob('lens15Col').setValue(50,0)\nn.knob('lens15Col').setValue(21.61,1)\nn.knob('lens15Col').setValue(-7.5,2)\nn.knob('lens15Blur').setValue(500)\nn.knob('lens15AxisPos').setValue(1.2)\nn.knob('lens15Polygon').setValue(0)\nn.knob('lens15Diaphragm').setValue(1)\nn.knob('lens15DiaphRot').setValue(0)\n\nn.knob('lens16Active').setValue(True)\nn.knob('lens16Size').setValue(30)\nn.knob('lens16Col').setValue(20,0)\nn.knob('lens16Col').setValue(16.7,1)\nn.knob('lens16Col').setValue(5,2)\nn.knob('lens16Blur').setValue(5)\nn.knob('lens16AxisPos').setValue(0.7)\nn.knob('lens16Polygon').setValue(0)\nn.knob('lens16Diaphragm').setValue(0.496)\nn.knob('lens16DiaphRot').setValue(26)\n\nn.knob('lens17Active').setValue(True)\nn.knob('lens17Size').setValue(10)\nn.knob('lens17Col').setValue(5,0)\nn.knob('lens17Col').setValue(2.31,1)\nn.knob('lens17Col').setValue(0.26,2)\nn.knob('lens17Blur').setValue(3.7)\nn.knob('lens17AxisPos').setValue(0.67)\nn.knob('lens17Polygon').setValue(0)\nn.knob('lens17Diaphragm').setValue(0.468)\nn.knob('lens17DiaphRot').setValue(26)\n\nn.knob('lens18Active').setValue(True)\nn.knob('lens18Size').setValue(200)\nn.knob('lens18Col').setValue(6.4,0)\nn.knob('lens18Col').setValue(0.86,1)\nn.knob('lens18Col').setValue(-0.64,2)\nn.knob('lens18Blur').setValue(70)\nn.knob('lens18AxisPos').setValue(0.75)\nn.knob('lens18Polygon').setValue(0)\nn.knob('lens18Diaphragm').setValue(0.624)\nn.knob('lens18DiaphRot').setValue(26)\n\nn.knob('lens19Active').setValue(True)\nn.knob('lens19Size').setValue(9)\nn.knob('lens19Col').setValue(0.3,0)\nn.knob('lens19Col').setValue(0.1,1)\nn.knob('lens19Col').setValue(0.284,2)\nn.knob('lens19Blur').setValue(9.4)\nn.knob('lens19AxisPos').setValue(0.64)\nn.knob('lens19Polygon').setValue(0)\nn.knob('lens19Diaphragm').setValue(1)\nn.knob('lens19DiaphRot').setValue(0)\n\nn.knob('lens20Active').setValue(True)\nn.knob('lens20Size').setValue(500)\nn.knob('lens20Col').setValue(500,0)\nn.knob('lens20Col').setValue(100,1)\nn.knob('lens20Col').setValue(250,2)\nn.knob('lens20Blur').setValue(100)\nn.knob('lens20AxisPos').setValue(-0.1)\nn.knob('lens20Polygon').setValue(0)\nn.knob('lens20Diaphragm').setValue(1)\nn.knob('lens20DiaphRot').setValue(26)\n\n\n" +STARTLINE}
+  addUserKnob {20 Lenses}
+  addUserKnob {6 showNumbers l "show numbers on lenses" +STARTLINE}
+  addUserKnob {26 ""}
+  addUserKnob {20 Lens1GRP l "lens 01" n 1}
+  Lens1GRP 0
+  addUserKnob {6 lens1Active l active +STARTLINE}
+  lens1Active true
+  addUserKnob {14 lens1Size l size R 0 100}
+  lens1Size 25.2
+  addUserKnob {18 lens1Col l color R 0 10}
+  lens1Col {0.97 2.927 18}
+  addUserKnob {6 lens1Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens1Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens1Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens1Blur l blur R 0 50}
+  addUserKnob {7 lens1AxisPos l "axis pos" R -3 3}
+  lens1AxisPos -0.11
+  addUserKnob {4 lens1Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens1Diaphragm l diaphragm}
+  lens1Diaphragm 0.8
+  addUserKnob {7 lens1DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens1grainOpacity l "grain opacity"}
+  lens1grainOpacity 1
+  addUserKnob {7 lens1grainSize l "grain size" R 0 1000}
+  lens1grainSize 100
+  addUserKnob {7 lens1grainGain l "grain gain" R 0 3}
+  lens1grainGain 1
+  addUserKnob {7 lens1reflectionOpacity l "refl opacity"}
+  lens1reflectionOpacity 1
+  addUserKnob {7 lens1reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens1reflWhitepoint l "refl whitepoint" R 0 2}
+  lens1reflWhitepoint 1
+  addUserKnob {18 lens1reflectionGamma l "refl gamma" R 0 5}
+  lens1reflectionGamma 1
+  addUserKnob {6 lens1reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens1reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens1reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens1reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens2GRP l "lens 02" n 1}
+  lens2GRP 0
+  addUserKnob {6 lens2Active l active +STARTLINE}
+  lens2Active true
+  addUserKnob {14 lens2Size l size R 0 100}
+  lens2Size 4.8
+  addUserKnob {18 lens2Col l color R 0 10}
+  lens2Col {-2.3 6.32 15.39}
+  addUserKnob {6 lens2Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens2Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens2Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens2Blur l blur R 0 50}
+  addUserKnob {7 lens2AxisPos l "axis pos" R -3 3}
+  lens2AxisPos -0.082
+  addUserKnob {4 lens2Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens2Diaphragm l diaphragm}
+  lens2Diaphragm 1
+  addUserKnob {7 lens2DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens2grainOpacity l "grain opacity"}
+  lens2grainOpacity 1
+  addUserKnob {7 lens2grainSize l "grain size" R 0 1000}
+  lens2grainSize 100
+  addUserKnob {7 lens2grainGain l "grain gain" R 0 3}
+  lens2grainGain 1
+  addUserKnob {7 lens2reflectionOpacity l "refl opacity"}
+  lens2reflectionOpacity 1
+  addUserKnob {7 lens2reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens2reflWhitepoint l "refl whitepoint" R 0 2}
+  lens2reflWhitepoint 1
+  addUserKnob {18 lens2reflectionGamma l "refl gamma" R 0 5}
+  lens2reflectionGamma 1
+  addUserKnob {6 lens2reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens2reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens2reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens2reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_1 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens3GRP l "lens 03" n 1}
+  lens3GRP 0
+  addUserKnob {6 lens3Active l active +STARTLINE}
+  lens3Active true
+  addUserKnob {14 lens3Size l size R 0 100}
+  lens3Size 13.5
+  addUserKnob {18 lens3Col l color R 0 10}
+  lens3Col {1.17 1.72 26}
+  addUserKnob {6 lens3Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens3Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens3Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens3Blur l blur R 0 50}
+  addUserKnob {7 lens3AxisPos l "axis pos" R -3 3}
+  lens3AxisPos -0.06
+  addUserKnob {4 lens3Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens3Diaphragm l diaphragm}
+  lens3Diaphragm 0.8
+  addUserKnob {7 lens3DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens3grainOpacity l "grain opacity"}
+  lens3grainOpacity 1
+  addUserKnob {7 lens3grainSize l "grain size" t "\t" R 0 1000}
+  lens3grainSize 100
+  addUserKnob {7 lens3grainGain l "grain gain" R 0 3}
+  lens3grainGain 1
+  addUserKnob {7 lens3reflectionOpacity l "refl opacity"}
+  lens3reflectionOpacity 1
+  addUserKnob {7 lens3reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens3reflWhitepoint l "refl whitepoint" R 0 2}
+  lens3reflWhitepoint 1
+  addUserKnob {18 lens3reflectionGamma l "refl gamma" R 0 5}
+  lens3reflectionGamma 1
+  addUserKnob {6 lens3reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens3reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens3reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens3reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_2 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens4GRP l "lens 04" n 1}
+  lens4GRP 0
+  addUserKnob {6 lens4Active l active +STARTLINE}
+  lens4Active true
+  addUserKnob {14 lens4Size l size R 0 100}
+  lens4Size 2.05
+  addUserKnob {18 lens4Col l color R 0 10}
+  lens4Col {6.93 32 29.82}
+  addUserKnob {6 lens4Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens4Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens4Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens4Blur l blur R 0 50}
+  addUserKnob {7 lens4AxisPos l "axis pos" R -3 3}
+  lens4AxisPos 0.08
+  addUserKnob {4 lens4Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens4Diaphragm l diaphragm}
+  lens4Diaphragm 1
+  addUserKnob {7 lens4DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens4grainOpacity l "grain opacity"}
+  lens4grainOpacity 1
+  addUserKnob {7 lens4grainSize l "grain size" R 0 1000}
+  lens4grainSize 100
+  addUserKnob {7 lens4grainGain l "grain gain" R 0 3}
+  lens4grainGain 1
+  addUserKnob {7 lens4reflectionOpacity l "refl opacity"}
+  lens4reflectionOpacity 1
+  addUserKnob {7 lens4reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens4reflWhitepoint l "refl whitepoint" R 0 2}
+  lens4reflWhitepoint 1
+  addUserKnob {18 lens4reflectionGamma l "refl gamma" R 0 5}
+  lens4reflectionGamma 1
+  addUserKnob {6 lens4reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens4reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens4reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens4reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_3 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens5GRP l "lens 05" n 1}
+  lens5GRP 0
+  addUserKnob {6 lens5Active l active +STARTLINE}
+  lens5Active true
+  addUserKnob {14 lens5Size l size R 0 100}
+  lens5Size 200
+  addUserKnob {18 lens5Col l color R 0 10}
+  lens5Col {1.09 1.14 8}
+  addUserKnob {6 lens5Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens5Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens5Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens5Blur l blur R 0 50}
+  addUserKnob {7 lens5AxisPos l "axis pos" R -3 3}
+  lens5AxisPos 0.27
+  addUserKnob {4 lens5Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens5Diaphragm l diaphragm}
+  lens5Diaphragm 1
+  addUserKnob {7 lens5DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens5grainOpacity l "grain opacity"}
+  lens5grainOpacity 1
+  addUserKnob {7 lens5grainSize l "grain size" R 0 1000}
+  lens5grainSize 100
+  addUserKnob {7 lens5grainGain l "grain gain" R 0 3}
+  lens5grainGain 1
+  addUserKnob {7 lens5reflectionOpacity l "refl opacity"}
+  lens5reflectionOpacity 1
+  addUserKnob {7 lens5reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens5reflWhitepoint l "refl whitepoint" R 0 2}
+  lens5reflWhitepoint 1
+  addUserKnob {18 lens5reflectionGamma l "refl gamma" R 0 5}
+  lens5reflectionGamma 1
+  addUserKnob {6 lens5reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens5reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens5reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens5reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_4 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens6GRP l "lens 06" n 1}
+  lens6GRP 0
+  addUserKnob {6 lens6Active l active +STARTLINE}
+  lens6Active true
+  addUserKnob {14 lens6Size l size R 0 100}
+  lens6Size 1000
+  addUserKnob {18 lens6Col l color R 0 10}
+  lens6Col {50 6.38 0}
+  addUserKnob {6 lens6Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens6Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens6Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens6Blur l blur R 0 50}
+  addUserKnob {7 lens6AxisPos l "axis pos" R -3 3}
+  lens6AxisPos -1.08
+  addUserKnob {4 lens6Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens6Diaphragm l diaphragm}
+  lens6Diaphragm 1
+  addUserKnob {7 lens6DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens6grainOpacity l "grain opacity"}
+  lens6grainOpacity 1
+  addUserKnob {7 lens6grainSize l "grain size" R 0 1000}
+  lens6grainSize 100
+  addUserKnob {7 lens6grainGain l "grain gain" R 0 3}
+  lens6grainGain 1
+  addUserKnob {7 lens6reflectionOpacity l "refl opacity"}
+  lens6reflectionOpacity 1
+  addUserKnob {7 lens6reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens6reflWhitepoint l "refl whitepoint" R 0 2}
+  lens6reflWhitepoint 1
+  addUserKnob {18 lens6reflectionGamma l "refl gamma" R 0 5}
+  lens6reflectionGamma 1
+  addUserKnob {6 lens6reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens6reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens6reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens6reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_5 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens7GRP l "lens 07" n 1}
+  lens7GRP 0
+  addUserKnob {6 lens7Active l active +STARTLINE}
+  lens7Active true
+  addUserKnob {14 lens7Size l size R 0 100}
+  lens7Size 460
+  addUserKnob {18 lens7Col l color R 0 10}
+  lens7Col {0 3.959999084 80}
+  addUserKnob {6 lens7Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens7Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens7Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {16 lens7Blur l blur}
+  addUserKnob {7 lens7AxisPos l "axis pos" R -3 3}
+  lens7AxisPos -0.88
+  addUserKnob {4 lens7Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens7Diaphragm l diaphragm}
+  lens7Diaphragm 1
+  addUserKnob {7 lens7DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens7grainOpacity l "grain opacity"}
+  lens7grainOpacity 1
+  addUserKnob {7 lens7grainSize l "grain size" R 0 1000}
+  lens7grainSize 100
+  addUserKnob {7 lens7grainGain l "grain gain" R 0 3}
+  lens7grainGain 1
+  addUserKnob {7 lens7reflectionOpacity l "refl opacity"}
+  lens7reflectionOpacity 1
+  addUserKnob {7 lens7reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens7reflWhitepoint l "refl whitepoint" R 0 2}
+  lens7reflWhitepoint 1
+  addUserKnob {18 lens7reflectionGamma l "refl gamma" R 0 5}
+  lens7reflectionGamma 1
+  addUserKnob {6 lens7reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens7reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens7reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens7reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_6 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens8GRP l "lens 08" n 1}
+  lens8GRP 0
+  addUserKnob {6 lens8Active l active +STARTLINE}
+  lens8Active true
+  addUserKnob {14 lens8Size l size R 0 100}
+  lens8Size 450
+  addUserKnob {18 lens8Col l color R 0 10}
+  lens8Col {12 2.25 10.04}
+  addUserKnob {6 lens8Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens8Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens8Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens8Blur l blur R 0 10}
+  lens8Blur 9.9
+  addUserKnob {7 lens8AxisPos l "axis pos" R -3 3}
+  lens8AxisPos -0.69
+  addUserKnob {4 lens8Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens8Diaphragm l diaphragm}
+  lens8Diaphragm 1
+  addUserKnob {7 lens8DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens8grainOpacity l "grain opacity"}
+  lens8grainOpacity 1
+  addUserKnob {7 lens8grainSize l "grain size" R 0 1000}
+  lens8grainSize 100
+  addUserKnob {7 lens8grainGain l "grain gain" R 0 3}
+  lens8grainGain 1
+  addUserKnob {7 lens8reflectionOpacity l "refl opacity"}
+  lens8reflectionOpacity 1
+  addUserKnob {7 lens8reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens8reflWhitepoint l "refl whitepoint" R 0 2}
+  lens8reflWhitepoint 1
+  addUserKnob {18 lens8reflectionGamma l "refl gamma" R 0 5}
+  lens8reflectionGamma 1
+  addUserKnob {6 lens8reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens8reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens8reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens8reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_7 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens9GRP l "lens 09" n 1}
+  lens9GRP 0
+  addUserKnob {6 lens9Active l active +STARTLINE}
+  lens9Active true
+  addUserKnob {14 lens9Size l size R 0 100}
+  lens9Size 50.4
+  addUserKnob {18 lens9Col l color R 0 10}
+  lens9Col {0.9 1.012 3}
+  addUserKnob {6 lens9Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens9Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens9Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens9Blur l blur R 0 50}
+  lens9Blur 2.8
+  addUserKnob {7 lens9AxisPos l "axis pos" R -3 3}
+  lens9AxisPos 0.34
+  addUserKnob {4 lens9Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens9Diaphragm l diaphragm}
+  lens9Diaphragm 1
+  addUserKnob {7 lens9DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens9grainOpacity l "grain opacity"}
+  lens9grainOpacity 1
+  addUserKnob {7 lens9grainSize l "grain size" R 0 1000}
+  lens9grainSize 100
+  addUserKnob {7 lens9grainGain l "grain gain" R 0 3}
+  lens9grainGain 1
+  addUserKnob {7 lens9reflectionOpacity l "refl opacity"}
+  lens9reflectionOpacity 1
+  addUserKnob {7 lens9reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens9reflWhitepoint l "refl whitepoint" R 0 2}
+  lens9reflWhitepoint 1
+  addUserKnob {18 lens9reflectionGamma l "refl gamma" R 0 5}
+  lens9reflectionGamma 1
+  addUserKnob {6 lens9reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens9reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens9reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens9reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_8 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens10GRP l "lens 10" n 1}
+  lens10GRP 0
+  addUserKnob {6 lens10Active l active +STARTLINE}
+  lens10Active true
+  addUserKnob {14 lens10Size l size R 0 100}
+  lens10Size 85.6
+  addUserKnob {18 lens10Col l color R 0 10}
+  lens10Col {2.79 1.537 -2.6}
+  addUserKnob {6 lens10Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens10Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens10Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens10Blur l blur R 0 50}
+  lens10Blur 4.6
+  addUserKnob {7 lens10AxisPos l "axis pos" R -3 3}
+  lens10AxisPos 0.37
+  addUserKnob {4 lens10Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens10Diaphragm l diaphragm}
+  lens10Diaphragm 1
+  addUserKnob {7 lens10DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens10grainOpacity l "grain opacity"}
+  lens10grainOpacity 1
+  addUserKnob {7 lens10grainSize l "grain size" R 0 1000}
+  lens10grainSize 100
+  addUserKnob {7 lens10grainGain l "grain gain" R 0 3}
+  lens10grainGain 1
+  addUserKnob {7 lens10reflectionOpacity l "refl opacity"}
+  lens10reflectionOpacity 1
+  addUserKnob {7 lens10reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens10reflWhitepoint l "refl whitepoint" R 0 2}
+  lens10reflWhitepoint 1
+  addUserKnob {18 lens10reflectionGamma l "refl gamma" R 0 5}
+  lens10reflectionGamma 1
+  addUserKnob {6 lens10reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens10reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens10reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens10reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_9 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens11GRP l "lens 11" n 1}
+  lens11GRP 0
+  addUserKnob {6 lens11Active l active +STARTLINE}
+  lens11Active true
+  addUserKnob {14 lens11Size l size R 0 100}
+  lens11Size 83.5
+  addUserKnob {18 lens11Col l color R 0 10}
+  lens11Col {0 4.86 30}
+  addUserKnob {6 lens11Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens11Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens11Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens11Blur l blur R 0 50}
+  addUserKnob {7 lens11AxisPos l "axis pos" R -3 3}
+  lens11AxisPos 0.15
+  addUserKnob {4 lens11Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens11Diaphragm l diaphragm}
+  lens11Diaphragm 1
+  addUserKnob {7 lens11DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens11grainOpacity l "grain opacity"}
+  lens11grainOpacity 1
+  addUserKnob {7 lens11grainSize l "grain size" R 0 1000}
+  lens11grainSize 100
+  addUserKnob {7 lens11grainGain l "grain gain" R 0 3}
+  lens11grainGain 1
+  addUserKnob {7 lens11reflectionOpacity l "refl opacity"}
+  lens11reflectionOpacity 1
+  addUserKnob {7 lens11reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens11reflWhitepoint l "refl whitepoint" R 0 2}
+  lens11reflWhitepoint 1
+  addUserKnob {18 lens11reflectionGamma l "refl gamma" R 0 5}
+  lens11reflectionGamma 1
+  addUserKnob {6 lens11reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens11reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens11reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens11reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_10 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens12GRP l "lens 12" n 1}
+  lens12GRP 0
+  addUserKnob {6 lens12Active l active +STARTLINE}
+  lens12Active true
+  addUserKnob {14 lens12Size l size R 0 100}
+  lens12Size 40
+  addUserKnob {18 lens12Col l color R 0 10}
+  lens12Col {10 3.9 7.98}
+  addUserKnob {6 lens12Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens12Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens12Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens12Blur l blur R 0 10}
+  lens12Blur 4.6
+  addUserKnob {7 lens12AxisPos l "axis pos" R -3 3}
+  lens12AxisPos 0.44
+  addUserKnob {4 lens12Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon "" ""}}
+  addUserKnob {7 lens12Diaphragm l diaphragm}
+  lens12Diaphragm 1
+  addUserKnob {7 lens12DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens12grainOpacity l "grain opacity"}
+  lens12grainOpacity 1
+  addUserKnob {7 lens12grainSize l "grain size" R 0 1000}
+  lens12grainSize 100
+  addUserKnob {7 lens12grainGain l "grain gain" R 0 3}
+  lens12grainGain 1
+  addUserKnob {7 lens12reflectionOpacity l "refl opacity"}
+  lens12reflectionOpacity 1
+  addUserKnob {7 lens12reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens12reflWhitepoint l "refl whitepoint" R 0 2}
+  lens12reflWhitepoint 1
+  addUserKnob {18 lens12reflectionGamma l "refl gamma" R 0 5}
+  lens12reflectionGamma 1
+  addUserKnob {6 lens12reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens12reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens12reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens12reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_11 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 len13GRP l "lens 13" n 1}
+  len13GRP 0
+  addUserKnob {6 lens13Active l active +STARTLINE}
+  lens13Active true
+  addUserKnob {14 lens13Size l size R 0 100}
+  lens13Size 1.4
+  addUserKnob {18 lens13Col l color R 0 10}
+  lens13Col {3.29 1.28 2.6}
+  addUserKnob {6 lens13Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens13Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens13Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens13Blur l blur R 0 50}
+  lens13Blur 5.6
+  addUserKnob {7 lens13AxisPos l "axis pos" R -3 3}
+  lens13AxisPos 0.45
+  addUserKnob {4 lens13Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon}}
+  addUserKnob {7 lens13Diaphragm l diaphragm}
+  lens13Diaphragm 1
+  addUserKnob {7 lens13DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens13grainOpacity l "grain opacity"}
+  lens13grainOpacity 1
+  addUserKnob {7 lens13grainSize l "grain size" R 0 1000}
+  lens13grainSize 100
+  addUserKnob {7 lens13grainGain l "grain gain" R 0 3}
+  lens13grainGain 1
+  addUserKnob {7 lens13reflectionOpacity l "refl opacity"}
+  lens13reflectionOpacity 1
+  addUserKnob {7 lens13reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens13reflWhitepoint l "refl whitepoint" R 0 2}
+  lens13reflWhitepoint 1
+  addUserKnob {18 lens13reflectionGamma l "refl gamma" R 0 5}
+  lens13reflectionGamma 1
+  addUserKnob {6 lens13reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens13reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens13reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens13reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_12 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens14GRP l "lens 14" n 1}
+  lens14GRP 0
+  addUserKnob {6 lens14Active l active +STARTLINE}
+  lens14Active true
+  addUserKnob {14 lens14Size l size R 0 100}
+  lens14Size 1
+  addUserKnob {18 lens14Col l color R 0 10}
+  lens14Col {1.64 0.74 1.3}
+  addUserKnob {6 lens14Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens14Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens14Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens14Blur l blur R 0 50}
+  lens14Blur 2
+  addUserKnob {7 lens14AxisPos l "axis pos" R -3 3}
+  lens14AxisPos 0.458
+  addUserKnob {4 lens14Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens14Diaphragm l diaphragm}
+  lens14Diaphragm 1
+  addUserKnob {7 lens14DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens14grainOpacity l "grain opacity"}
+  lens14grainOpacity 1
+  addUserKnob {7 lens14grainSize l "grain size" R 0 1000}
+  lens14grainSize 100
+  addUserKnob {7 lens14grainGain l "grain gain" R 0 3}
+  lens14grainGain 1
+  addUserKnob {7 lens14reflectionOpacity l "refl opacity"}
+  lens14reflectionOpacity 1
+  addUserKnob {7 lens14reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens14reflWhitepoint l "refl whitepoint" R 0 2}
+  lens14reflWhitepoint 1
+  addUserKnob {18 lens14reflectionGamma l "refl gamma" R 0 5}
+  lens14reflectionGamma 1
+  addUserKnob {6 lens14reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens14reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens14reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens14reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_13 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens15GRP l "lens 15" n 1}
+  lens15GRP 0
+  addUserKnob {6 lens15Active l active +STARTLINE}
+  lens15Active true
+  addUserKnob {14 lens15Size l size R 0 100}
+  lens15Size 1050
+  addUserKnob {18 lens15Col l color R 0 10}
+  lens15Col {80 24 49.19}
+  addUserKnob {6 lens15Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens15Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens15Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens15Blur l blur R 0 50}
+  addUserKnob {7 lens15AxisPos l "axis pos" R -3 3}
+  lens15AxisPos 0.8
+  addUserKnob {4 lens15Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens15Diaphragm l diaphragm}
+  lens15Diaphragm 1
+  addUserKnob {7 lens15DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens15grainOpacity l "grain opacity"}
+  lens15grainOpacity 1
+  addUserKnob {7 lens15grainSize l "grain size" R 0 1000}
+  lens15grainSize 100
+  addUserKnob {7 lens15grainGain l "grain gain" R 0 3}
+  lens15grainGain 1
+  addUserKnob {7 lens15reflectionOpacity l "refl opacity"}
+  lens15reflectionOpacity 1
+  addUserKnob {7 lens15reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens15reflWhitepoint l "refl whitepoint" R 0 2}
+  lens15reflWhitepoint 1
+  addUserKnob {18 lens15reflectionGamma l "refl gamma" R 0 5}
+  lens15reflectionGamma 1
+  addUserKnob {6 lens15reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens15reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens15reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens15reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_14 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens16GRP l "lens 16" n 1}
+  lens16GRP 0
+  addUserKnob {6 lens16Active l active +STARTLINE}
+  lens16Active true
+  addUserKnob {14 lens16Size l size R 0 100}
+  lens16Size 600
+  addUserKnob {18 lens16Col l color R 0 10}
+  lens16Col {30 7.29 12.7}
+  addUserKnob {6 lens16Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens16Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens16Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens16Blur l blur R 0 50}
+  addUserKnob {7 lens16AxisPos l "axis pos" R -3 3}
+  lens16AxisPos -0.42
+  addUserKnob {4 lens16Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens16Diaphragm l diaphragm}
+  lens16Diaphragm 1
+  addUserKnob {7 lens16DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens16grainOpacity l "grain opacity"}
+  lens16grainOpacity 1
+  addUserKnob {7 lens16grainSize l "grain size" R 0 1000}
+  lens16grainSize 100
+  addUserKnob {7 lens16grainGain l "grain gain" R 0 3}
+  lens16grainGain 1
+  addUserKnob {7 lens16reflectionOpacity l "refl opacity"}
+  lens16reflectionOpacity 1
+  addUserKnob {7 lens16reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens16reflWhitepoint l "refl whitepoint" R 0 2}
+  lens16reflWhitepoint 1
+  addUserKnob {18 lens16reflectionGamma l "refl gamma" R 0 5}
+  lens16reflectionGamma 1
+  addUserKnob {6 lens16reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens16reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens16reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens16reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_15 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens17GRP l "lens 17" n 1}
+  lens17GRP 0
+  addUserKnob {6 lens17Active l active +STARTLINE}
+  lens17Active true
+  addUserKnob {14 lens17Size l size R 0 100}
+  lens17Size 600
+  addUserKnob {18 lens17Col l color R 0 10}
+  lens17Col {25 7.5 8.08}
+  addUserKnob {6 lens17Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens17Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens17Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens17Blur l blur R 0 50}
+  lens17Blur 50
+  addUserKnob {7 lens17AxisPos l "axis pos" R -3 3}
+  lens17AxisPos 0.7
+  addUserKnob {4 lens17Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens17Diaphragm l diaphragm}
+  lens17Diaphragm 1
+  addUserKnob {7 lens17DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens17grainOpacity l "grain opacity"}
+  lens17grainOpacity 1
+  addUserKnob {7 lens17grainSize l "grain size" R 0 1000}
+  lens17grainSize 100
+  addUserKnob {7 lens17grainGain l "grain gain" R 0 3}
+  lens17grainGain 1
+  addUserKnob {7 lens17reflectionOpacity l "refl opacity"}
+  lens17reflectionOpacity 1
+  addUserKnob {7 lens17reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens17reflWhitepoint l "refl whitepoint" R 0 2}
+  lens17reflWhitepoint 1
+  addUserKnob {18 lens17reflectionGamma l "refl gamma" R 0 5}
+  lens17reflectionGamma 1
+  addUserKnob {6 lens17reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens17reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens17reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens17reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_16 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens18GRP l "lens 18" n 1}
+  lens18GRP 0
+  addUserKnob {6 lens18Active l active +STARTLINE}
+  lens18Active true
+  addUserKnob {14 lens18Size l size R 0 100}
+  lens18Size 270
+  addUserKnob {18 lens18Col l color R 0 10}
+  lens18Col {6.4 3.69 0.73}
+  addUserKnob {6 lens18Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens18Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens18Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens18Blur l blur R 0 50}
+  addUserKnob {7 lens18AxisPos l "axis pos" R -3 3}
+  lens18AxisPos -0.36
+  addUserKnob {4 lens18Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens18Diaphragm l diaphragm}
+  lens18Diaphragm 1
+  addUserKnob {7 lens18DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens18grainOpacity l "grain opacity"}
+  lens18grainOpacity 1
+  addUserKnob {7 lens18grainSize l "grain size" R 0 1000}
+  lens18grainSize 100
+  addUserKnob {7 lens18grainGain l "grain gain" R 0 3}
+  lens18grainGain 1
+  addUserKnob {7 lens18reflectionOpacity l "refl opacity"}
+  lens18reflectionOpacity 1
+  addUserKnob {7 lens18reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens18reflWhitepoint l "refl whitepoint" R 0 2}
+  lens18reflWhitepoint 1
+  addUserKnob {18 lens18reflectionGamma l "refl gamma" R 0 5}
+  lens18reflectionGamma 1
+  addUserKnob {6 lens18reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens18reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens18reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens18reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_17 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens19GRP l "lens 19" n 1}
+  lens19GRP 0
+  addUserKnob {6 lens19Active l active +STARTLINE}
+  lens19Active true
+  addUserKnob {14 lens19Size l size R 0 100}
+  lens19Size 99
+  addUserKnob {18 lens19Col l color R 0 10}
+  lens19Col {5.249 7.51 40}
+  addUserKnob {6 lens19Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens19Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens19Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens19Blur l blur R 0 50}
+  lens19Blur 20
+  addUserKnob {7 lens19AxisPos l "axis pos" R -3 3}
+  lens19AxisPos -0.16
+  addUserKnob {4 lens19Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens19Diaphragm l diaphragm}
+  lens19Diaphragm 1
+  addUserKnob {7 lens19DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens19grainOpacity l "grain opacity"}
+  lens19grainOpacity 1
+  addUserKnob {7 lens19grainSize l "grain size" R 0 1000}
+  lens19grainSize 100
+  addUserKnob {7 lens19grainGain l "grain gain" R 0 3}
+  lens19grainGain 1
+  addUserKnob {7 lens19reflectionOpacity l "refl opacity"}
+  lens19reflectionOpacity 1
+  addUserKnob {7 lens19reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens19reflWhitepoint l "refl whitepoint" R 0 2}
+  lens19reflWhitepoint 1
+  addUserKnob {18 lens19reflectionGamma l "refl gamma" R 0 5}
+  lens19reflectionGamma 1
+  addUserKnob {6 lens19reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens19reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens19reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens19reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_18 l endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {20 lens20GRP l "lens 20" n 1}
+  lens20GRP 0
+  addUserKnob {6 lens20Active l active +STARTLINE}
+  lens20Active true
+  addUserKnob {14 lens20Size l size R 0 100}
+  lens20Size 9.4
+  addUserKnob {18 lens20Col l color R 0 10}
+  lens20Col {0.03 0.006 0.015}
+  addUserKnob {6 lens20Col_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens20Col_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens20Col_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens20Blur l blur R 0 50}
+  lens20Blur 4
+  addUserKnob {7 lens20AxisPos l "axis pos" R -3 3}
+  lens20AxisPos 0.5
+  addUserKnob {4 lens20Polygon l polygon M {Pentagon Hexagon Heptagon Octogon Nonagon Decagon Undecagon Dodecagon ""}}
+  addUserKnob {7 lens20Diaphragm l diaphragm}
+  lens20Diaphragm 1
+  addUserKnob {7 lens20DiaphRot l "diaph rotation" R -180 180}
+  addUserKnob {7 lens20grainOpacity l "grain opacity"}
+  lens20grainOpacity 1
+  addUserKnob {7 lens20grainSize l "grain size" R 0 1000}
+  lens20grainSize 100
+  addUserKnob {7 lens20grainGain l "grain gain" R 0 3}
+  lens20grainGain 1
+  addUserKnob {7 lens20reflectionOpacity l "refl opacity"}
+  lens20reflectionOpacity 1
+  addUserKnob {7 lens20reflectionRotation l "refl rotation" R 0 360}
+  addUserKnob {7 lens20reflWhitepoint l "refl whitepoint" R 0 2}
+  lens20reflWhitepoint 1
+  addUserKnob {18 lens20reflectionGamma l "refl gamma" R 0 5}
+  lens20reflectionGamma 1
+  addUserKnob {6 lens20reflectionGamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens20reflectionGamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 lens20reflectionGamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 lens20reflectionBlur l "refl blur" R 0 50}
+  addUserKnob {20 endGroup_19 l endGroup n -1}
+ }
+set N49978760 [stack 0]
+ Dot {
+  name Dot21
+  xpos 274
+  ypos 566
+ }
+ SphericalTransform {
+  fix true
+  name _SphericalTransformLensALL
+  xpos 240
+  ypos 960
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  resize distort
+  name _ReformatReflectionLensALL
+  xpos 240
+  ypos 1002
+ }
+ Shuffle {
+  alpha white
+  name _ShuffleCleanALensALL
+  xpos 240
+  ypos 1044
+ }
+ Dot {
+  name Dot26
+  xpos 274
+  ypos 1128
+ }
+set N474c77c0 [stack 0]
+ Dot {
+  name Dot22
+  xpos 274
+  ypos 1560
+ }
+set N3f716ff0 [stack 0]
+ Dot {
+  name Dot23
+  xpos 274
+  ypos 1992
+ }
+set N4a48a940 [stack 0]
+ Dot {
+  name Dot24
+  xpos 274
+  ypos 2428
+ }
+set N47423090 [stack 0]
+ Dot {
+  name Dot27
+  xpos 274
+  ypos 2889
+ }
+set N3f719100 [stack 0]
+ Dot {
+  name Dot28
+  xpos 274
+  ypos 3335
+ }
+set N4a6543b0 [stack 0]
+ Dot {
+  name Dot30
+  xpos 274
+  ypos 3791
+ }
+set N4a469eb0 [stack 0]
+ Dot {
+  name Dot31
+  xpos 274
+  ypos 4338
+ }
+set N676f4660 [stack 0]
+ Dot {
+  name Dot32
+  xpos 274
+  ypos 4811
+ }
+set N4a6df9c0 [stack 0]
+ Dot {
+  name Dot33
+  xpos 274
+  ypos 5253
+ }
+set N4a6925e0 [stack 0]
+ Dot {
+  name Dot29
+  xpos 274
+  ypos 5734
+ }
+set N6662b930 [stack 0]
+ Dot {
+  name Dot34
+  xpos 274
+  ypos 6211
+ }
+set N67043a20 [stack 0]
+ Dot {
+  name Dot35
+  xpos 274
+  ypos 6685
+ }
+set N6d8e0a10 [stack 0]
+ Dot {
+  name Dot36
+  xpos 274
+  ypos 7163
+ }
+set N4a2dc600 [stack 0]
+ Dot {
+  name Dot37
+  xpos 274
+  ypos 7632
+ }
+set N474278a0 [stack 0]
+ Dot {
+  name Dot38
+  xpos 274
+  ypos 8100
+ }
+set N4a542850 [stack 0]
+ Dot {
+  name Dot39
+  xpos 273
+  ypos 8578
+ }
+set N4a541e20 [stack 0]
+ Dot {
+  name Dot40
+  xpos 273
+  ypos 9052
+ }
+set N4a58cd50 [stack 0]
+ Dot {
+  name Dot41
+  xpos 273
+  ypos 9548
+ }
+set N66a55920 [stack 0]
+ Dot {
+  name Dot25
+  xpos 273
+  ypos 10031
+ }
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens20
+  xpos 402
+  ypos 10026
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens20
+  xpos 402
+  ypos 10054
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens20
+  xpos 402
+  ypos 10082
+ }
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/dodecagon.png
+  format "512 512 0 0 512 512 1 square_512"
+  origset true
+  name Read19
+  xpos 1735
+  ypos 632
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle1
+  note_font_color 0xffffffff
+  xpos 1735
+  ypos 712
+ }
+set N4a2244b0 [stack 0]
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/undecagon.png
+  format "512 512 0 0 512 512 1 square_512"
+  origset true
+  name Read26
+  xpos 1649
+  ypos 632
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle2
+  note_font_color 0xffffffff
+  xpos 1649
+  ypos 712
+ }
+set N4a638510 [stack 0]
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/decagon.png
+  format "512 512 0 0 512 512 1 square_512"
+  origset true
+  name Read3
+  xpos 1562
+  ypos 633
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle3
+  note_font_color 0xffffffff
+  xpos 1562
+  ypos 713
+ }
+set N6703bbe0 [stack 0]
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/nonagon.png
+  format "512 512 0 0 512 512 1 square_512"
+  origset true
+  name Read22
+  xpos 1475
+  ypos 632
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle4
+  note_font_color 0xffffffff
+  xpos 1475
+  ypos 712
+ }
+set N4993c8b0 [stack 0]
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/octogon.png
+  format "512 512 0 0 512 512 1 square_512"
+  origset true
+  name Read23
+  xpos 1388
+  ypos 632
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle5
+  note_font_color 0xffffffff
+  xpos 1388
+  ypos 712
+ }
+set N4a1d10d0 [stack 0]
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/heptagon.png
+  format "512 512 0 0 512 512 1 square_512"
+  origset true
+  name Read20
+  xpos 1301
+  ypos 632
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle8
+  note_font_color 0xffffffff
+  xpos 1301
+  ypos 712
+ }
+set N4a055400 [stack 0]
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/hexagon.png
+  format "512 512 0 0 512 512 1 square_512"
+  origset true
+  name Read21
+  xpos 1214
+  ypos 633
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle6
+  note_font_color 0xffffffff
+  xpos 1214
+  ypos 713
+ }
+set N4a07d0f0 [stack 0]
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/pentagon.png
+  format "512 512 0 0 512 512 1 square_512"
+  origset true
+  name Read24
+  xpos 1128
+  ypos 633
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle7
+  note_font_color 0xffffffff
+  xpos 1128
+  ypos 713
+ }
+set N49b24150 [stack 0]
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens20Polygon i}}
+  name _switchPolygon20
+  xpos 684
+  ypos 9983
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens20DiaphRot i}}
+  scale {{_INPUT_CTRL.lens20Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon20
+  xpos 684
+  ypos 10012
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens20
+  xpos 684
+  ypos 10040
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens20
+  xpos 684
+  ypos 10082
+ }
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/twoCircle2.png
+  format "256 256 0 0 256 256 1 square_256"
+  origset true
+  name Read12
+  xpos 893
+  ypos 3398
+ }
+set N49bb6c00 [stack 0]
+ Dot {
+  name Dot8
+  xpos 927
+  ypos 6783
+ }
+set N49b4e340 [stack 0]
+ Dot {
+  name Dot13
+  xpos 927
+  ypos 8198
+ }
+set N477b0ad0 [stack 0]
+ Dot {
+  name Dot16
+  xpos 927
+  ypos 10129
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon20
+  xpos 684
+  ypos 10124
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask20
+  xpos 684
+  ypos 10153
+ }
+ Bezier {
+  replace true
+  points {{
+{87.8 180.4}
+{107.6 179.9}
+{108.6 87.6}
+{87.4 86.8}
+{87.4 155.4}
+{73.1 143.4}
+{60.9 158.9}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number30
+  xpos 574
+  ypos 10160
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{123 89.3}
+{123 102.5}
+{161.3 104 7.1 0.64 14.9}
+{169.1 124.7}
+{127.3 123.1 15.2 2.59 16.7}
+{114.3 159.5 19.5 1.33 18.5}
+{170.4 176.6 19.5 -0.72 18.8}
+{183.7 141.3}
+{169.5 138}
+{157 167.5 16.1 2.79 15.4}
+{127.3 155.2 3.5 4.4 9.3}
+{135.5 135.8 11.8 5.78 11}
+{183.7 141.3}
+{172.6 95.5 17.6 4.01 19.1}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number31
+  xpos 574
+  ypos 10189
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens20Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens20Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize20
+  xpos 574
+  ypos 10218
+ }
+push $N49978760
+ Dot {
+  name Dot1
+  xpos 72
+  ypos 528
+ }
+ Multiply {
+  value 0
+  name _mkBlack
+  xpos 38
+  ypos 701
+ }
+set N49dbb260 [stack 0]
+ Dot {
+  name Dot12
+  xpos -149
+  ypos 713
+ }
+set N49b99050 [stack 0]
+ Dot {
+  name Dot11
+  xpos -259
+  ypos 713
+ }
+ Add {
+  value 1
+  name _mkWhite
+  xpos -293
+  ypos 772
+ }
+ Clamp {
+  name _vignetteClamp
+  xpos -293
+  ypos 815
+ }
+ Crop {
+  box {{_INPUT_CTRL.width-((_INPUT_CTRL.width/2)+((_INPUT_CTRL.vignetteScale/2+0.5))*(_INPUT_CTRL.width/2)) i} {_INPUT_CTRL.height-((_INPUT_CTRL.width/2)+((_INPUT_CTRL.vignetteScale/2+0.5))*(_INPUT_CTRL.width/2)-(_INPUT_CTRL.width-_INPUT_CTRL.height)) i} {(_INPUT_CTRL.width/2)+((_INPUT_CTRL.vignetteScale/2+0.5))*(_INPUT_CTRL.width/2) i} {(_INPUT_CTRL.width/2)+((_INPUT_CTRL.vignetteScale/2+0.5))*(_INPUT_CTRL.width/2)-(_INPUT_CTRL.width-_INPUT_CTRL.height) i}}
+  name _cropVignette
+  xpos -293
+  ypos 858
+ }
+push $N49b99050
+ Add {
+  value {{1-_INPUT_CTRL.vignetteDarkness i}}
+  name _vignetteDarkness
+  xpos -183
+  ypos 772
+ }
+ Merge2 {
+  inputs 2
+  name _compVignette
+  xpos -183
+  ypos 858
+ }
+ Blur {
+  size {{_cropVignette.box.x*0.8 i}}
+  name Blur2
+  xpos -183
+  ypos 887
+ }
+push $N49978760
+ Clamp {
+  name _clampCol
+  xpos 310
+  ypos 516
+ }
+ Saturation {
+  saturation {{_INPUT_CTRL.sourceSat i}}
+  name _sourceSaturation
+  xpos 310
+  ypos 617
+ }
+push $N49978760
+ Expression {
+  temp_name0 X
+  temp_expr0 (_INPUT_CTRL.brightspot/pow((_INPUT_CTRL.brightspot-_INPUT_CTRL.threshold),_INPUT_CTRL.gamma))*pow(((0.2126*r+0.7152*g+0.0722*b)-_INPUT_CTRL.threshold),(_INPUT_CTRL.gamma+0.000000001))
+  expr0 X
+  expr1 X
+  expr2 X
+  expr3 X
+  name _curvOp
+  xpos 153
+  ypos 610
+ }
+ Clamp {
+  minimum_enable false
+  maximum {{_INPUT_CTRL.brightspot i}}
+  MinClampTo_enable true
+  MaxClampTo {{_INPUT_CTRL.brightspot i}}
+  MaxClampTo_enable true
+  name _resultClamp
+  xpos 153
+  ypos 639
+  disable {{1-(_INPUT_CTRL.clampBright) i}}
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  mix {{_INPUT_CTRL.sourceCol i}}
+  name _multCol
+  xpos 310
+  ypos 646
+ }
+ NoOp {
+  name _GAMMA_RESULT
+  xpos 310
+  ypos 674
+ }
+set N499e6c00 [stack 0]
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multVignette
+  xpos 310
+  ypos 894
+  disable {{1-_INPUT_CTRL.vignetteActive i}}
+ }
+set N67220f40 [stack 0]
+ NoOp {
+  name _inputToBokeh20
+  xpos 473
+  ypos 10218
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens20AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource20
+  xpos 473
+  ypos 10247
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens20
+  xpos 574
+  ypos 10247
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens20Col.r i} {_INPUT_CTRL.lens20Col.g i} {_INPUT_CTRL.lens20Col.b i} 0}
+  name _colorLens20
+  xpos 574
+  ypos 10276
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens20Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens20
+  xpos 574
+  ypos 10319
+ }
+push $N66a55920
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens19
+  xpos 401
+  ypos 9543
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens19
+  xpos 401
+  ypos 9571
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens19
+  xpos 401
+  ypos 9599
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens19Polygon i}}
+  name _switchPolygon19
+  xpos 683
+  ypos 9500
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens19DiaphRot i}}
+  scale {{_INPUT_CTRL.lens19Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon19
+  xpos 683
+  ypos 9529
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens19
+  xpos 683
+  ypos 9557
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens19
+  xpos 683
+  ypos 9599
+ }
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/circleNoise1.png
+  format "256 256 0 0 256 256 1 square_256"
+  origset true
+  name Read7
+  xpos 1110
+  ypos 2055
+ }
+set N4996bc50 [stack 0]
+ Dot {
+  name Dot5
+  xpos 1144
+  ypos 5351
+ }
+set N4995abf0 [stack 0]
+ Dot {
+  name Dot15
+  xpos 1143
+  ypos 9646
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon19
+  xpos 683
+  ypos 9641
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask19
+  xpos 683
+  ypos 9670
+ }
+ Bezier {
+  replace true
+  points {{
+{87.8 180.4}
+{107.6 179.9}
+{108.6 87.6}
+{87.4 86.8}
+{87.4 155.4}
+{73.1 143.4}
+{60.9 158.9}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number28
+  xpos 573
+  ypos 9677
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{123 89.3}
+{123 102.5}
+{161.3 104 7.1 0.64 14.9}
+{169.1 124.7}
+{127.3 123.1 15.2 2.59 16.7}
+{114.3 159.5 19.5 1.33 18.5}
+{170.4 176.6 19.5 -0.72 18.8}
+{183.7 141.3}
+{169.5 138}
+{157 167.5 16.1 2.79 15.4}
+{127.3 155.2 3.5 4.4 9.3}
+{135.5 135.8 11.8 5.78 11}
+{183.7 141.3}
+{172.6 95.5 17.6 4.01 19.1}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number29
+  xpos 573
+  ypos 9706
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens19Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens19Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize19
+  xpos 573
+  ypos 9735
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh19
+  xpos 472
+  ypos 9735
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens19AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource19
+  xpos 472
+  ypos 9764
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens19
+  xpos 573
+  ypos 9764
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens19Col.r i} {_INPUT_CTRL.lens19Col.g i} {_INPUT_CTRL.lens19Col.b i} 0}
+  name _colorLens19
+  xpos 573
+  ypos 9793
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens19Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens19
+  xpos 573
+  ypos 9836
+ }
+push $N4a58cd50
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens18
+  xpos 401
+  ypos 9047
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens18
+  xpos 401
+  ypos 9075
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens18
+  xpos 401
+  ypos 9103
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens18Polygon i}}
+  name _switchPolygon18
+  xpos 683
+  ypos 9004
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens18DiaphRot i}}
+  scale {{_INPUT_CTRL.lens18Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon18
+  xpos 683
+  ypos 9033
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens18
+  xpos 683
+  ypos 9061
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens18
+  xpos 683
+  ypos 9103
+ }
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/circleHard1.png
+  format "256 256 0 0 256 256 1 square_256"
+  origset true
+  name Read14
+  xpos 817
+  ypos 3854
+ }
+set N4a1f2640 [stack 0]
+ Dot {
+  name Dot9
+  xpos 851
+  ypos 7261
+ }
+set N67230a50 [stack 0]
+ Dot {
+  name Dot10
+  xpos 851
+  ypos 7730
+ }
+set N4a1df840 [stack 0]
+ Dot {
+  name Dot2
+  xpos 850
+  ypos 9150
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon18
+  xpos 683
+  ypos 9145
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask18
+  xpos 683
+  ypos 9174
+ }
+ Bezier {
+  replace true
+  points {{
+{87.8 180.4}
+{107.6 179.9}
+{108.6 87.6}
+{87.4 86.8}
+{87.4 155.4}
+{73.1 143.4}
+{60.9 158.9}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number26
+  xpos 573
+  ypos 9181
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{159.8 178.7 1.4 -1.72 4.3 1.7 0 0 0 0 0 1.7}
+{159.4 167.3 4.7 -3.07 2.5 1.44 0 0 0 0 0 1.44}
+{144.1 152.3 8.9 -1.57 13.4}
+{157.2 136 6.1 0.68 2.9 -1.3 0 0 0 0 0 -1.3}
+{173.6 153.5 11.3 -4.79 14}
+{159.6 167.6 2.1 1.59 4.4 1.47 0 0 0 0 0 1.47}
+{159.8 178.7 8.6 -0.04 3.9 1.55 0 0 0 0 0 1.55}
+{185.7 152.5 18.1 -1.56 22.7}
+{156.8 123.6 3.2 2.78 1}
+{133.4 150.5 27.6 1.55 16.4}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number8
+  xpos 573
+  ypos 9210
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{161.2 78.4 1.3 1.48 4.3 1.7 0 0 0 0 0 1.7}
+{160.7 90.8 4.7 0.13 2.5 1.44 0 0 0 0 0 1.44}
+{177.5 108.8 8.8 1.63 13.3}
+{160.9 125.2 6 3.88 2.9 -1.3 0 0 0 0 0 -1.3}
+{144.7 105.3 11.2 -1.59 13.9}
+{160.5 90.5 2.1 4.79 4.4 1.47 0 0 0 0 0 1.47}
+{161.2 78.4 8.5 3.16 3.9 1.55 0 0 0 0 0 1.55}
+{132.7 105.7 18 1.64 22.6}
+{160.6 137.5 3.1 5.98 1}
+{188 111.1 27.4 4.75 16.3}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number8_2
+  xpos 574
+  ypos 9239
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens18Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens18Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize18
+  xpos 574
+  ypos 9268
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh18
+  xpos 473
+  ypos 9268
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens18AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource18
+  xpos 473
+  ypos 9297
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens18
+  xpos 574
+  ypos 9297
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens18Col.r i} {_INPUT_CTRL.lens18Col.g i} {_INPUT_CTRL.lens18Col.b i} 0}
+  name _colorLens18
+  xpos 574
+  ypos 9326
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens18Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens18
+  xpos 574
+  ypos 9369
+ }
+push $N4a541e20
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens17
+  xpos 403
+  ypos 8573
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens17
+  xpos 403
+  ypos 8601
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens17
+  xpos 403
+  ypos 8629
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens17Polygon i}}
+  name _switchPolygon17
+  xpos 685
+  ypos 8530
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens17DiaphRot i}}
+  scale {{_INPUT_CTRL.lens17Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon17
+  xpos 685
+  ypos 8559
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens17
+  xpos 685
+  ypos 8587
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens17
+  xpos 685
+  ypos 8629
+ }
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/circleBlur1.png
+  format "256 256 0 0 256 256 1 square_256"
+  origset true
+  name Read9
+  xpos 1035
+  ypos 2491
+ }
+set N4a5c4aa0 [stack 0]
+ Dot {
+  name Dot6
+  xpos 1069
+  ypos 5832
+ }
+set N4a5e2670 [stack 0]
+ Dot {
+  name Dot14
+  xpos 1069
+  ypos 8676
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon17
+  xpos 685
+  ypos 8671
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask17
+  xpos 685
+  ypos 8700
+ }
+ Bezier {
+  replace true
+  points {{
+{87.8 180.4}
+{107.6 179.9}
+{108.6 87.6}
+{87.4 86.8}
+{87.4 155.4}
+{73.1 143.4}
+{60.9 158.9}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number24
+  xpos 575
+  ypos 8707
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{120.4 178.9}
+{120 164.1}
+{166.3 164.8}
+{128.3 88.5}
+{147.1 87.9}
+{184.7 163.7}
+{185.5 180.2}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number25
+  xpos 575
+  ypos 8736
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens17Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens17Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize17
+  xpos 575
+  ypos 8765
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh17
+  xpos 474
+  ypos 8765
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens17AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource17
+  xpos 474
+  ypos 8794
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens17
+  xpos 575
+  ypos 8794
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens17Col.r i} {_INPUT_CTRL.lens17Col.g i} {_INPUT_CTRL.lens17Col.b i} 0}
+  name _colorLens17
+  xpos 575
+  ypos 8823
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens17Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens17
+  xpos 575
+  ypos 8866
+ }
+push $N4a542850
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens16
+  xpos 403
+  ypos 8095
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens16
+  xpos 403
+  ypos 8123
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens16
+  xpos 403
+  ypos 8151
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens16Polygon i}}
+  name _switchPolygon16
+  xpos 685
+  ypos 8052
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens16DiaphRot i}}
+  scale {{_INPUT_CTRL.lens16Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon16
+  xpos 685
+  ypos 8081
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens16
+  xpos 685
+  ypos 8109
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens16
+  xpos 685
+  ypos 8151
+ }
+push $N477b0ad0
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon16
+  xpos 685
+  ypos 8193
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask16
+  xpos 685
+  ypos 8222
+ }
+ Bezier {
+  replace true
+  points {{
+{90.2 180.4}
+{110 179.9}
+{111 87.6}
+{89.8 86.8}
+{89.8 155.4}
+{75.5 143.4}
+{63.3 158.9}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number22
+  xpos 575
+  ypos 8229
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{180.5 180.1}
+{180.5 166.6}
+{141.4 165.1 7.2 -2.5 15.2}
+{133.5 143.9}
+{176.1 145.6 15.6 -0.55 17}
+{189.7 108.4 15.6 -1.76 18.9}
+{130.8 90.1 19.9 -3.94 24.2}
+{118.7 126.8}
+{133.2 129.9}
+{145.8 100.2 16.4 -0.35 15.7}
+{176.1 112.8 3.6 1.34 3.6}
+{167.7 132.6 12.1 2.64 11.2}
+{118.7 126.5}
+{129.8 173.8 18 0.87 19.5}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number23
+  xpos 575
+  ypos 8258
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens16Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens16Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize16
+  xpos 575
+  ypos 8287
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh16
+  xpos 474
+  ypos 8287
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens16AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource16
+  xpos 474
+  ypos 8316
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens16
+  xpos 575
+  ypos 8316
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens16Col.r i} {_INPUT_CTRL.lens16Col.g i} {_INPUT_CTRL.lens16Col.b i} 0}
+  name _colorLens16
+  xpos 575
+  ypos 8345
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens16Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens16
+  xpos 575
+  ypos 8388
+ }
+push $N474278a0
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens15
+  xpos 403
+  ypos 7627
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens15
+  xpos 403
+  ypos 7655
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens15
+  xpos 403
+  ypos 7683
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens15Polygon i}}
+  name _switchPolygon15
+  xpos 685
+  ypos 7584
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens15DiaphRot i}}
+  scale {{_INPUT_CTRL.lens15Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon15
+  xpos 685
+  ypos 7613
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens15
+  xpos 685
+  ypos 7641
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens15
+  xpos 685
+  ypos 7683
+ }
+push $N4a1df840
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon15
+  xpos 685
+  ypos 7725
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask15
+  xpos 685
+  ypos 7754
+ }
+ Bezier {
+  replace true
+  points {{
+{87.8 180.4}
+{107.6 179.9}
+{108.6 87.6}
+{87.4 86.8}
+{87.4 155.4}
+{73.1 143.4}
+{60.9 158.9}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number20
+  xpos 575
+  ypos 7761
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{179.3 178.7}
+{179.3 164.8}
+{133.6 165.5}
+{134.1 146.6}
+{175.1 144.5 15 -0.55 16.4}
+{188.1 108.6 15 -1.76 18.3}
+{147.3 85.8 9.6 -3.39 14.2}
+{118.7 94.6}
+{123.3 109.8}
+{151.1 100.9 11 -0.02 10.3}
+{174.6 112.8 3.5 1.34 3.5}
+{167.6 133.1 11.6 2.64 10.8}
+{120.3 127}
+{120.3 179.4}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number21
+  xpos 575
+  ypos 7790
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens15Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens15Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize15
+  xpos 575
+  ypos 7819
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh15
+  xpos 474
+  ypos 7819
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens15AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource15
+  xpos 474
+  ypos 7848
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens15
+  xpos 575
+  ypos 7848
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens15Col.r i} {_INPUT_CTRL.lens15Col.g i} {_INPUT_CTRL.lens15Col.b i} 0}
+  name _colorLens15
+  xpos 575
+  ypos 7878
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens15Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens15
+  xpos 575
+  ypos 7920
+ }
+push $N4a2dc600
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens14
+  xpos 406
+  ypos 7158
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens14
+  xpos 406
+  ypos 7186
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens14
+  xpos 406
+  ypos 7214
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens14Polygon i}}
+  name _switchPolygon14
+  xpos 688
+  ypos 7115
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens14DiaphRot i}}
+  scale {{_INPUT_CTRL.lens14Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon14
+  xpos 688
+  ypos 7144
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens14
+  xpos 688
+  ypos 7172
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens14
+  xpos 688
+  ypos 7214
+ }
+push $N67230a50
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon14
+  xpos 688
+  ypos 7256
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask14
+  xpos 688
+  ypos 7285
+ }
+ Bezier {
+  replace true
+  points {{
+{87.8 180.4}
+{107.6 179.9}
+{108.6 87.6}
+{87.4 86.8}
+{87.4 155.4}
+{73.1 143.4}
+{60.9 158.9}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number18
+  xpos 578
+  ypos 7292
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{159.5 183}
+{118.6 121.8}
+{119.3 100.1}
+{153.8 102.3}
+{154 86.4}
+{169 89}
+{168.6 104.3}
+{181 105.2}
+{180.5 121.8}
+{168.1 120.3}
+{168.2 131.5}
+{153.8 130.8}
+{154.4 120.2}
+{137 119.2}
+{173.5 176.2}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number19
+  xpos 578
+  ypos 7321
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens14Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens14Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize14
+  xpos 578
+  ypos 7350
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh14
+  xpos 477
+  ypos 7350
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens14AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource14
+  xpos 477
+  ypos 7379
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens14
+  xpos 578
+  ypos 7379
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens14Col.r i} {_INPUT_CTRL.lens14Col.g i} {_INPUT_CTRL.lens14Col.b i} 0}
+  name _colorLens14
+  xpos 578
+  ypos 7408
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens14Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens14
+  xpos 578
+  ypos 7451
+ }
+push $N6d8e0a10
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens13
+  xpos 406
+  ypos 6680
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens13
+  xpos 406
+  ypos 6708
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens13
+  xpos 406
+  ypos 6736
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens13Polygon i}}
+  name _switchPolygon13
+  xpos 688
+  ypos 6637
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens13DiaphRot i}}
+  scale {{_INPUT_CTRL.lens13Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon13
+  xpos 688
+  ypos 6666
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens13
+  xpos 688
+  ypos 6694
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens13
+  xpos 688
+  ypos 6736
+ }
+push $N49b4e340
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon13
+  xpos 688
+  ypos 6778
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask13
+  xpos 688
+  ypos 6807
+ }
+ Bezier {
+  replace true
+  points {{
+{91.5 175.1}
+{109.1 174.7}
+{110 92.6}
+{91.1 91.9}
+{91.1 152.9}
+{78.4 142.2}
+{67.6 156}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number16
+  xpos 578
+  ypos 6814
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{125 172.8}
+{142.6 180.8 19.6 0.25 15.5}
+{173.4 150.2 14.3 -1.84 18.3}
+{155.4 134.4}
+{177.4 103.8 30.5 -1.76 27.9}
+{126.4 89}
+{126.6 103.8}
+{161.2 107.8 18.9 1.34 17.9}
+{135.6 126.4}
+{135.4 142.2}
+{159.8 155.8 23.6 1.72 6.8}
+{131.2 161.6}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number17
+  xpos 578
+  ypos 6843
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens13Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens13Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize13
+  xpos 578
+  ypos 6872
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh13
+  xpos 477
+  ypos 6872
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens13AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource13
+  xpos 477
+  ypos 6901
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens13
+  xpos 578
+  ypos 6901
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens13Col.r i} {_INPUT_CTRL.lens13Col.g i} {_INPUT_CTRL.lens13Col.b i} 0}
+  name _colorLens13
+  xpos 578
+  ypos 6930
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens13Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens13
+  xpos 578
+  ypos 6973
+ }
+push $N67043a20
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens12
+  xpos 406
+  ypos 6206
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens12
+  xpos 406
+  ypos 6234
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens12
+  xpos 406
+  ypos 6262
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens12Polygon i}}
+  name _switchPolygon12
+  xpos 688
+  ypos 6163
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens12DiaphRot i}}
+  scale {{_INPUT_CTRL.lens12Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon12
+  xpos 688
+  ypos 6192
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens12
+  xpos 688
+  ypos 6220
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens12
+  xpos 688
+  ypos 6262
+ }
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/twoCircle1.png
+  format "256 256 0 0 256 256 1 square_256"
+  origset true
+  name Read11
+  xpos 964
+  ypos 2952
+ }
+set N4a09bae0 [stack 0]
+ Dot {
+  name Dot7
+  xpos 998
+  ypos 6309
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon12
+  xpos 688
+  ypos 6304
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask12
+  xpos 688
+  ypos 6333
+ }
+ Bezier {
+  replace true
+  points {{
+{91.5 175.1}
+{109.1 174.7}
+{110 92.6}
+{91.1 91.9}
+{91.1 152.9}
+{78.4 142.2}
+{67.6 156}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number14
+  xpos 578
+  ypos 6340
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{115.9 160.7}
+{143.6 176.4 17.4 0.25 13.8}
+{172.7 149.4 18.4 -1.88 16.3}
+{143.2 111.5}
+{177.2 111.5}
+{177.7 93.2}
+{121.9 93.2}
+{122.5 112.2}
+{156.9 152.6 21 1.72 6}
+{123.2 147.1}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number15
+  xpos 578
+  ypos 6369
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens12Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens12Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize12
+  xpos 578
+  ypos 6398
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh12
+  xpos 477
+  ypos 6398
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens12AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource12
+  xpos 477
+  ypos 6427
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens12
+  xpos 578
+  ypos 6427
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens12Col.r i} {_INPUT_CTRL.lens12Col.g i} {_INPUT_CTRL.lens12Col.b i} 0}
+  name _colorLens12
+  xpos 578
+  ypos 6456
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens12Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens12
+  xpos 578
+  ypos 6499
+ }
+push $N6662b930
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens11
+  xpos 406
+  ypos 5729
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens11
+  xpos 406
+  ypos 5757
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens11
+  xpos 406
+  ypos 5785
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens11Polygon i}}
+  name _switchPolygon11
+  xpos 688
+  ypos 5686
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens11DiaphRot i}}
+  scale {{_INPUT_CTRL.lens11Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon11
+  xpos 688
+  ypos 5715
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens11
+  xpos 688
+  ypos 5743
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens11
+  xpos 688
+  ypos 5785
+ }
+push $N4a5e2670
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon11
+  xpos 688
+  ypos 5827
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask11
+  xpos 688
+  ypos 5856
+ }
+ Bezier {
+  replace true
+  points {{
+{103.8 170.6}
+{119.4 170.3}
+{120.2 97.4}
+{103.4 96.8}
+{103.4 150.9}
+{92.2 141.4}
+{82.6 153.7}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number13
+  xpos 578
+  ypos 5863
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{146.2 171.4}
+{161.8 171.1}
+{162.6 98.2}
+{145.8 97.6}
+{145.8 151.7}
+{134.6 142.2}
+{125 154.5}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number11
+  xpos 578
+  ypos 5892
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens11Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens11Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize11
+  xpos 578
+  ypos 5921
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh11
+  xpos 477
+  ypos 5921
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens11AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource11
+  xpos 477
+  ypos 5950
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens11
+  xpos 578
+  ypos 5950
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens11Col.r i} {_INPUT_CTRL.lens11Col.g i} {_INPUT_CTRL.lens11Col.b i} 0}
+  name _colorLens11
+  xpos 578
+  ypos 5979
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens11Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens11
+  xpos 578
+  ypos 6022
+ }
+push $N4a6925e0
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens10
+  xpos 402
+  ypos 5248
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens10
+  xpos 402
+  ypos 5276
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens10
+  xpos 402
+  ypos 5304
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens10Polygon i}}
+  name _switchPolygon10
+  xpos 684
+  ypos 5205
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens10DiaphRot i}}
+  scale {{_INPUT_CTRL.lens10Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon10
+  xpos 684
+  ypos 5234
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens10
+  xpos 684
+  ypos 5262
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens10
+  xpos 684
+  ypos 5304
+ }
+push $N4995abf0
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon10
+  xpos 684
+  ypos 5346
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask10
+  xpos 684
+  ypos 5375
+ }
+ Bezier {
+  replace true
+  points {{
+{150.9 171.1 34.4 3.15 26.2}
+{122.4 130.5}
+{134.9 131.3}
+{150 158.8 13.2 0 19.2}
+{165.4 133.6 8 -1.54 13}
+{150.4 111.4 13.8 -3.13 11.6}
+{134.9 131.3}
+{122.5 130.4}
+{151.3 97.6 24 0.01 26.9}
+{178 134.4 7.3 1.57 6.6}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number10
+  xpos 574
+  ypos 5382
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{98.8 171}
+{114.4 170.7}
+{115.2 97.8}
+{98.4 97.2}
+{98.4 151.3}
+{87.2 141.8}
+{77.6 154.1}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number12
+  xpos 574
+  ypos 5411
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens10Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens10Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize10
+  xpos 574
+  ypos 5440
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh10
+  xpos 473
+  ypos 5440
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens10AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource10
+  xpos 473
+  ypos 5469
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens10
+  xpos 574
+  ypos 5469
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens10Col.r i} {_INPUT_CTRL.lens10Col.g i} {_INPUT_CTRL.lens9Col.b i} 0}
+  name _colorLens10
+  xpos 574
+  ypos 5498
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens10Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens10
+  xpos 574
+  ypos 5541
+ }
+push $N4a6df9c0
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens9
+  xpos 417
+  ypos 4806
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens9
+  xpos 417
+  ypos 4834
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens9
+  xpos 417
+  ypos 4862
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens9Polygon i}}
+  name _switchPolygon9
+  xpos 684
+  ypos 4763
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens9DiaphRot i}}
+  scale {{_INPUT_CTRL.lens9Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon9
+  xpos 684
+  ypos 4792
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens9
+  xpos 684
+  ypos 4820
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens9
+  xpos 684
+  ypos 4862
+ }
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/circleHard3.png
+  format "256 256 0 0 256 256 1 square_256"
+  origset true
+  name Read6
+  xpos 1205
+  ypos 1623
+ }
+set N49f68da0 [stack 0]
+ Dot {
+  name Dot4
+  xpos 1217
+  ypos 4909
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon9
+  xpos 684
+  ypos 4904
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask9
+  xpos 684
+  ypos 4932
+ }
+ Bezier {
+  replace true
+  points {{
+{105 94.4}
+{105 105.6}
+{137.4 106.8 6 0.64 12.6}
+{144 124.4}
+{108.6 123 12.9 2.59 14.1}
+{97.6 153.8 16.5 1.33 15.7}
+{145.1 168.3 16.5 -0.72 15.9}
+{156.4 138.4}
+{144.4 135.6}
+{133.8 160.6 13.6 2.79 13}
+{108.6 150.2 3 4.4 7.9}
+{115.6 133.8 10 5.78 9.3}
+{156.4 138.4}
+{147 99.6 14.9 4.01 16.2}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number9
+  xpos 574
+  ypos 4939
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens9Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens9Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize9
+  xpos 574
+  ypos 4968
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh9
+  xpos 473
+  ypos 4968
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens9AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource9
+  xpos 473
+  ypos 4997
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens9
+  xpos 574
+  ypos 4997
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens9Col.r i} {_INPUT_CTRL.lens9Col.g i} {_INPUT_CTRL.lens9Col.b i} 0}
+  name _colorLens9
+  xpos 574
+  ypos 5026
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens9Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens9
+  xpos 574
+  ypos 5069
+ }
+push $N676f4660
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens8
+  xpos 401
+  ypos 4333
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens8
+  xpos 401
+  ypos 4361
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens8
+  xpos 401
+  ypos 4389
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens8Polygon i}}
+  name _switchPolygon8
+  xpos 683
+  ypos 4290
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens8DiaphRot i}}
+  scale {{_INPUT_CTRL.lens8Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon8
+  xpos 683
+  ypos 4319
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity i}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult i}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult i}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens8
+  xpos 683
+  ypos 4347
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens8
+  xpos 683
+  ypos 4389
+ }
+ Read {
+  inputs 0
+  file_type png
+  file <<<replace>>>/images/circleHard2.png
+  format "256 256 0 0 256 256 1 square_256"
+  origset true
+  name Read5
+  xpos 1264
+  ypos 1079
+ }
+set N67371ef0 [stack 0]
+ Dot {
+  name Dot3
+  xpos 1298
+  ypos 4436
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon8
+  xpos 683
+  ypos 4431
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask8
+  xpos 683
+  ypos 4460
+ }
+ Bezier {
+  replace true
+  points {{
+{125.5 178.3 1.2 -1.72 3.8 1.7 0 0 0 0 0 1.7}
+{125.3 167.2 4.2 -3.07 2.2 1.44 0 0 0 0 0 1.44}
+{109.3 152.1 7.9 -1.57 11.9}
+{123.2 136.5 5.4 0.68 2.6 -1.3 0 0 0 0 0 -1.3}
+{138.7 153.3 10 -4.79 12.4}
+{125.5 167.4 1.9 1.59 3.9 1.47 0 0 0 0 0 1.47}
+{125.5 178.3 7.6 -0.04 3.5 1.55 0 0 0 0 0 1.55}
+{149.5 152.4 16.1 -1.56 20.2}
+{122.8 125.5 2.8 2.78 0.9}
+{99.8 150.5 24.5 1.55 14.6}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number27
+  xpos 573
+  ypos 4467
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Bezier {
+  points {{
+{125 84.6 1.2 1.48 3.8 1.7 0 0 0 0 0 1.7}
+{124.6 95.7 4.2 0.13 2.2 1.44 0 0 0 0 0 1.44}
+{139.6 111.8 7.9 1.63 11.9}
+{124.7 126.5 5.4 3.88 2.6 -1.3 0 0 0 0 0 -1.3}
+{110.3 108.7 10 -1.59 12.4}
+{124.4 95.5 1.9 4.79 3.9 1.47 0 0 0 0 0 1.47}
+{125 84.6 7.6 3.16 3.5 1.55 0 0 0 0 0 1.55}
+{99.5 109 16.1 1.64 20.2}
+{124.5 137.5 2.8 5.98 0.9}
+{149 113.9 24.5 4.75 14.6}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number8_1
+  xpos 574
+  ypos 4496
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens8Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/247)+0.01 i} {(_INPUT_CTRL.lens8Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/247)+0.01 i}}
+  name _bokehSize8
+  xpos 574
+  ypos 4525
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh8
+  xpos 473
+  ypos 4525
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens8AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource8
+  xpos 473
+  ypos 4554
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens8
+  xpos 574
+  ypos 4554
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens8Col.r i} {_INPUT_CTRL.lens8Col.g i} {_INPUT_CTRL.lens8Col.b i} 0}
+  name _colorLens8
+  xpos 574
+  ypos 4583
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens8Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens8
+  xpos 574
+  ypos 4626
+ }
+push $N4a469eb0
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens7
+  xpos 397
+  ypos 3786
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens7
+  xpos 397
+  ypos 3814
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens7
+  xpos 397
+  ypos 3842
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens7Polygon i}}
+  name _switchPolygon7
+  xpos 679
+  ypos 3743
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens7DiaphRot i}}
+  scale {{_INPUT_CTRL.lens7Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon7
+  xpos 679
+  ypos 3772
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens7
+  xpos 679
+  ypos 3800
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens7
+  xpos 679
+  ypos 3842
+ }
+push $N4a1f2640
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon7
+  xpos 679
+  ypos 3884
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask7
+  xpos 679
+  ypos 4032
+ }
+ Bezier {
+  replace true
+  points {{
+{98.7 170.4}
+{98.3 156.4}
+{142.2 157}
+{106.2 84.6}
+{124 84.1}
+{159.7 156}
+{160.4 171.6}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number7
+  xpos 574
+  ypos 4039
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens7Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/246)+0.01 i} {(_INPUT_CTRL.lens7Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/246)+0.01 i}}
+  name _bokehSize7
+  xpos 574
+  ypos 4069
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh7
+  xpos 473
+  ypos 4068
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens7AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource7
+  xpos 473
+  ypos 4097
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens7
+  xpos 574
+  ypos 4097
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens7Col.r i} {_INPUT_CTRL.lens7Col.g i} {_INPUT_CTRL.lens7Col.b i} 0}
+  name _colorLens7
+  xpos 574
+  ypos 4126
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens7Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens7
+  xpos 574
+  ypos 4169
+ }
+push $N4a6543b0
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens6
+  xpos 403
+  ypos 3330
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens6
+  xpos 403
+  ypos 3358
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens6
+  xpos 403
+  ypos 3386
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens6Polygon}}
+  name _switchPolygon6
+  xpos 685
+  ypos 3287
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens6DiaphRot i}}
+  scale {{_INPUT_CTRL.lens6Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon6
+  xpos 685
+  ypos 3316
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens6
+  xpos 685
+  ypos 3344
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens6
+  xpos 685
+  ypos 3386
+ }
+push $N49bb6c00
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon6
+  xpos 684
+  ypos 3428
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask6
+  xpos 684
+  ypos 3457
+ }
+ Bezier {
+  replace true
+  points {{
+{148.6 169}
+{148.6 157.8}
+{116.2 156.6 6 -2.5 12.6}
+{109.6 139}
+{145 140.4 12.9 -0.55 14.1}
+{156.2 109.6 12.9 -1.76 15.7}
+{107.4 94.4 16.5 -3.94 20.1}
+{97.4 124.8}
+{109.4 127.4}
+{119.8 102.8 13.6 -0.35 13}
+{145 113.2 3 1.34 3}
+{138 129.6 10 2.64 9.3}
+{97.4 124.6}
+{106.6 163.8 14.9 0.87 16.2}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number6
+  xpos 574
+  ypos 3464
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens6Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i} {(_INPUT_CTRL.lens6Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/223)+0.01 i}}
+  name _bokehSize6
+  xpos 574
+  ypos 3493
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh6
+  xpos 473
+  ypos 3493
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens6AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource6
+  xpos 473
+  ypos 3522
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens6
+  xpos 574
+  ypos 3522
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens6Col.r i} {_INPUT_CTRL.lens6Col.g i} {_INPUT_CTRL.lens6Col.b i} 0}
+  name _colorLens6
+  xpos 574
+  ypos 3551
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens6Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens6
+  xpos 574
+  ypos 3594
+ }
+push $N3f719100
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens5
+  xpos 402
+  ypos 2884
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens5
+  xpos 402
+  ypos 2912
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens5
+  xpos 402
+  ypos 2940
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens5Polygon i}}
+  name _switchPolygon5
+  xpos 684
+  ypos 2842
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens5DiaphRot i}}
+  scale {{_INPUT_CTRL.lens5Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon5
+  xpos 684
+  ypos 2870
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens5
+  xpos 684
+  ypos 2898
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens5
+  xpos 684
+  ypos 2940
+ }
+push $N4a09bae0
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon5
+  xpos 684
+  ypos 2982
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask5
+  xpos 684
+  ypos 3011
+ }
+ Bezier {
+  replace true
+  points {{
+{154.4 168.4}
+{154.4 156.4}
+{115.2 157}
+{115.6 140.8}
+{150.8 139 12.9 -0.55 14.1}
+{162 108.2 12.9 -1.76 15.7}
+{127 88.6 8.2 -3.39 12.2}
+{102.4 96.2}
+{106.4 109.2}
+{130.2 101.6 9.4 -0.02 8.8}
+{150.4 111.8 3 1.34 3}
+{144.4 129.2 10 2.64 9.3}
+{103.8 124}
+{103.8 169}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number5
+  xpos 574
+  ypos 3018
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens5Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/240)+0.01 i} {(_INPUT_CTRL.lens5Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/240)+0.01 i}}
+  name _bokehSize5
+  xpos 574
+  ypos 3047
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh5
+  xpos 473
+  ypos 3047
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens5AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource5
+  xpos 473
+  ypos 3076
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens5
+  xpos 574
+  ypos 3076
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens5Col.r i} {_INPUT_CTRL.lens5Col.g i} {_INPUT_CTRL.lens5Col.b i} 0}
+  name _colorLens5
+  xpos 574
+  ypos 3105
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens5Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens5
+  xpos 574
+  ypos 3148
+ }
+push $N47423090
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens4
+  xpos 402
+  ypos 2423
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens4
+  xpos 402
+  ypos 2451
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens4
+  xpos 402
+  ypos 2479
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens4Polygon i}}
+  name _switchPolygon4
+  xpos 684
+  ypos 2380
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens4DiaphRot i}}
+  scale {{_INPUT_CTRL.lens4Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon4
+  xpos 684
+  ypos 2409
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens4
+  xpos 684
+  ypos 2437
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens4
+  xpos 684
+  ypos 2479
+ }
+push $N4a5c4aa0
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon4
+  xpos 684
+  ypos 2521
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask4
+  xpos 684
+  ypos 2550
+ }
+ Bezier {
+  replace true
+  points {{
+{132.9 186.8}
+{92 125.6}
+{92.7 103.9}
+{127.2 106.1}
+{127.4 90.2}
+{142.4 92.8}
+{142 108.1}
+{154.4 109}
+{153.9 125.6}
+{141.5 124.1}
+{141.6 135.3}
+{127.2 134.6}
+{127.8 124}
+{110.4 123}
+{146.9 180}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number4
+  xpos 574
+  ypos 2557
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens4Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/242)+0.01 i} {(_INPUT_CTRL.lens4Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/242)+0.01 i}}
+  name _bokehSize4
+  xpos 574
+  ypos 2586
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh4
+  xpos 473
+  ypos 2586
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens4AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource4
+  xpos 473
+  ypos 2615
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens4
+  xpos 574
+  ypos 2615
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens4Col.r i} {_INPUT_CTRL.lens4Col.g i} {_INPUT_CTRL.lens4Col.b i} 0}
+  name _colorLens4
+  xpos 574
+  ypos 2644
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens4Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens4
+  xpos 574
+  ypos 2687
+ }
+push $N4a48a940
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens3
+  xpos 402
+  ypos 1987
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens3
+  xpos 402
+  ypos 2015
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens3
+  xpos 402
+  ypos 2043
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens3Polygon}}
+  name _switchPolygon3
+  xpos 684
+  ypos 1877
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens3DiaphRot i}}
+  scale {{_INPUT_CTRL.lens3Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon3
+  xpos 684
+  ypos 1906
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens3
+  xpos 684
+  ypos 2001
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens3
+  xpos 684
+  ypos 2043
+ }
+push $N4996bc50
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon3
+  xpos 684
+  ypos 2085
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask3
+  xpos 684
+  ypos 2114
+ }
+ Bezier {
+  replace true
+  points {{
+{105.2 171.6}
+{122.8 179.6 19.6 0.25 15.5}
+{153.6 149 14.3 -1.84 18.3}
+{135.6 133.2}
+{157.6 102.6 30.5 -1.76 27.9}
+{106.6 87.8}
+{106.8 102.6}
+{141.4 106.6 18.9 1.34 17.9}
+{115.8 125.2}
+{115.6 141}
+{140 154.6 23.6 1.72 6.8}
+{111.4 160.4}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number3
+  xpos 574
+  ypos 2121
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens3Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/247)+0.01 i} {(_INPUT_CTRL.lens3Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/247)+0.01 i}}
+  name _bokehSize3
+  xpos 574
+  ypos 2149
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh3
+  xpos 473
+  ypos 2149
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens3AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource3
+  xpos 473
+  ypos 2178
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens3
+  xpos 574
+  ypos 2178
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens3Col.r i} {_INPUT_CTRL.lens3Col.g i} {_INPUT_CTRL.lens3Col.b i} 0}
+  name _colorLens3
+  xpos 574
+  ypos 2207
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens3Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens3
+  xpos 574
+  ypos 2250
+ }
+push $N3f716ff0
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens2
+  xpos 402
+  ypos 1555
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens2
+  xpos 402
+  ypos 1583
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd}}
+  name _BlurReflectionLens2
+  xpos 402
+  ypos 1611
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens2Polygon i}}
+  name _switchPolygon2
+  xpos 684
+  ypos 1512
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens2DiaphRot i}}
+  scale {{_INPUT_CTRL.lens2Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon2
+  xpos 684
+  ypos 1541
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens2
+  xpos 684
+  ypos 1569
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity}}
+  name _MergeReflectionLens2
+  xpos 684
+  ypos 1611
+ }
+push $N49f68da0
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon2
+  xpos 684
+  ypos 1653
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  name _reformatPolyMask2
+  xpos 684
+  ypos 1682
+ }
+ Bezier {
+  replace true
+  points {{
+{89.6 161.8 0 0.82}
+{120.8 179.4 19.6 0.25 15.5}
+{153.6 149 20.7 -1.88 18.3}
+{120.4 106.4 0 -1.39}
+{158.6 106.4 0 -0.49}
+{159.2 85.8 0 -2.82}
+{96.4 85.8}
+{97 107.2}
+{135.8 152.6 23.6 1.72 6.8}
+{97.8 146.4 0 3.14}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number2
+  xpos 574
+  ypos 1689
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens2Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/237)+0.01 i} {(_INPUT_CTRL.lens2Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/237)+0.01 i}}
+  name _bokehSize2
+  xpos 574
+  ypos 1718
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh2
+  xpos 473
+  ypos 1718
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens2AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource2
+  xpos 473
+  ypos 1747
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens2
+  xpos 574
+  ypos 1747
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens2Col.r i} {_INPUT_CTRL.lens2Col.g i} {_INPUT_CTRL.lens2Col.b i} 0}
+  name _colorLens2
+  xpos 574
+  ypos 1776
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens2Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens2
+  xpos 574
+  ypos 1819
+ }
+push $N474c77c0
+ Grade {
+  whitepoint {{_INPUT_CTRL.lens1reflWhitepoint*_INPUT_CTRL.reflectionsWhitepointMult i}}
+  gamma {{_INPUT_CTRL.lens1reflectionGamma*_INPUT_CTRL.reflectionsGammaMult i}}
+  name _GradeReflectionLens1
+  xpos 397
+  ypos 1123
+ }
+ Transform {
+  rotate {{_INPUT_CTRL.reflectionsRotOffset+_INPUT_CTRL.lens1reflectionRotation i}}
+  center {128 128}
+  name _TransformReflectionLens1
+  xpos 397
+  ypos 1151
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1reflectionBlur+_INPUT_CTRL.reflectionsBlurAdd i}}
+  name _BlurReflectionLens1
+  xpos 397
+  ypos 1179
+ }
+push $N4a2244b0
+push $N4a638510
+push $N6703bbe0
+push $N4993c8b0
+push $N4a1d10d0
+push $N4a055400
+push $N4a07d0f0
+push $N49b24150
+ Switch {
+  inputs 8
+  which {{_INPUT_CTRL.lens1Polygon i}}
+  name _switchPolygon1
+  xpos 679
+  ypos 1051
+ }
+ Transform {
+  translate {-128 -128}
+  rotate {{_INPUT_CTRL.lens1DiaphRot i}}
+  scale {{_INPUT_CTRL.lens1Diaphragm*0.65 i}}
+  center {256 256}
+  name _transformPolygon1
+  xpos 679
+  ypos 1081
+ }
+push $N67371ef0
+ Merge2 {
+  inputs 2
+  operation multiply
+  name _multPolygon1
+  xpos 679
+  ypos 1109
+ }
+ Noise {
+  opacity {{_INPUT_CTRL.lens7grainOpacity*_INPUT_CTRL.overallGrainOpacity i}}
+  maskChannelInput rgba.red
+  size {{_INPUT_CTRL.lens1grainSize*_INPUT_CTRL.overallGrainSizeMult i}}
+  octaves 4
+  lacunarity 5
+  gain {{_INPUT_CTRL.lens1grainGain*_INPUT_CTRL.overallGrainGainMult i}}
+  gamma 1
+  center {640 360}
+  name _NoiseLens1
+  xpos 679
+  ypos 1137
+ }
+ Merge2 {
+  inputs 2
+  output rgb
+  maskChannelInput rgba.red
+  mix {{_INPUT_CTRL.lens1reflectionOpacity*_INPUT_CTRL.reflectionsOpacity i}}
+  name _MergeReflectionLens1
+  xpos 679
+  ypos 1179
+ }
+ Reformat {
+  format "256 256 0 0 256 256 1 square_256"
+  box_width 256
+  name _reformatPolyMask1
+  xpos 679
+  ypos 1255
+ }
+ Bezier {
+  replace true
+  points {{
+{121.6 171.4}
+{138.8 171.1}
+{139.6 98.2}
+{121.2 97.6}
+{121.2 151.7}
+{110 142.2}
+{100.4 154.5}
+}}
+  shape {}
+  center {128 128}
+  color 10
+  name _number1
+  xpos 572
+  ypos 1262
+  disable {{1-_INPUT_CTRL.showNumbers i}}
+ }
+ Reformat {
+  type scale
+  scale {{(_INPUT_CTRL.lens1Size.w*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/247)+0.01 i} {(_INPUT_CTRL.lens1Size.h*_INPUT_CTRL.quality*_INPUT_CTRL.overallLensScale/247)+0.01 i}}
+  name _bokehSize1
+  xpos 572
+  ypos 1291
+ }
+push $N67220f40
+ NoOp {
+  name _inputToBokeh1
+  xpos 471
+  ypos 1291
+ }
+ Transform {
+  scale {{_INPUT_CTRL.lens1AxisPos*_INPUT_CTRL.overallLensDistance i}}
+  center {{_INPUT_CTRL.width/2 i} {_INPUT_CTRL.height/2 i}}
+  name _symSource1
+  xpos 471
+  ypos 1320
+ }
+ Convolve {
+  inputs 2
+  channels rgb
+  name _convolveLens1
+  xpos 572
+  ypos 1320
+ }
+ Multiply {
+  value {{_INPUT_CTRL.lens1Col.r i} {_INPUT_CTRL.lens1Col.g i} {_INPUT_CTRL.lens1Col.b i} 0}
+  name _colorLens1
+  xpos 572
+  ypos 1349
+ }
+ Blur {
+  size {{_INPUT_CTRL.lens1Blur*(1-_INPUT_CTRL.showNumbers) i}}
+  name _blurLens1
+  xpos 572
+  ypos 1392
+ }
+push $N49dbb260
+ Merge2 {
+  inputs 2
+  name _screenLens1
+  xpos 38
+  ypos 1399
+  disable {{1-_INPUT_CTRL.lens1Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens2
+  xpos 38
+  ypos 1826
+  disable {{1-_INPUT_CTRL.lens2Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens3
+  xpos 38
+  ypos 2257
+  disable {{1-_INPUT_CTRL.lens3Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens4
+  xpos 38
+  ypos 2694
+  disable {{1-_INPUT_CTRL.lens4Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens5
+  xpos 38
+  ypos 3155
+  disable {{1-_INPUT_CTRL.lens5Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens6
+  xpos 38
+  ypos 3601
+  disable {{1-_INPUT_CTRL.lens6Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens7
+  xpos 38
+  ypos 4176
+  disable {{1-_INPUT_CTRL.lens7Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens8
+  xpos 38
+  ypos 4633
+  disable {{1-_INPUT_CTRL.lens8Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens9
+  xpos 38
+  ypos 5076
+  disable {{1-_INPUT_CTRL.lens9Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens10
+  xpos 38
+  ypos 5548
+  disable {{1-_INPUT_CTRL.lens10Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens11
+  xpos 38
+  ypos 6029
+  disable {{1-_INPUT_CTRL.lens11Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens12
+  xpos 38
+  ypos 6506
+  disable {{1-_INPUT_CTRL.lens12Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens13
+  xpos 38
+  ypos 6980
+  disable {{1-_INPUT_CTRL.lens13Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens14
+  xpos 38
+  ypos 7458
+  disable {{1-_INPUT_CTRL.lens14Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens15
+  xpos 38
+  ypos 7927
+  disable {{1-_INPUT_CTRL.lens15Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens16
+  xpos 38
+  ypos 8395
+  disable {{1-_INPUT_CTRL.lens16Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens17
+  xpos 38
+  ypos 8873
+  disable {{1-_INPUT_CTRL.lens17Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens18
+  xpos 36
+  ypos 9376
+  disable {{1-_INPUT_CTRL.lens18Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens19
+  xpos 36
+  ypos 9843
+  disable {{1-_INPUT_CTRL.lens19Active i}}
+ }
+ Merge2 {
+  inputs 2
+  name _screenLens20
+  xpos 38
+  ypos 10330
+  disable {{1-_INPUT_CTRL.lens20Active i}}
+ }
+ Reformat {
+  type "to box"
+  box_width {{_INPUT_.width i}}
+  box_height {{_INPUT_.height i}}
+  box_fixed true
+  resize distort
+  filter Mitchell
+  name _reformatQualityOriginal
+  xpos 38
+  ypos 10393
+ }
+ Saturation {
+  saturation {{_INPUT_CTRL.overallSaturation i}}
+  mode Average
+  name _overallSaturation
+  xpos 38
+  ypos 10422
+ }
+ Multiply {
+  value {{_INPUT_CTRL.overallMult i}}
+  name _overallMult
+  xpos 38
+  ypos 10451
+ }
+ Merge2 {
+  inputs 2
+  operation screen
+  name Merge5
+  xpos 38
+  ypos 10515
+ }
+push $N499e6c00
+ Dot {
+  name Dot18
+  xpos 194
+  ypos 814
+ }
+ Dot {
+  name Dot17
+  xpos 194
+  ypos 10620
+ }
+ Switch {
+  inputs 2
+  which {{1-_INPUT_CTRL.viewSelectedHighlights i}}
+  name _switchSelectedHighlights
+  xpos 38
+  ypos 10615
+ }
+ NoOp {
+  name _OUTPUT
+  xpos 38
+  ypos 10643
+ }
+ Output {
+  name Output1
+  xpos 38
+  ypos 10702
+ }
+end_group
