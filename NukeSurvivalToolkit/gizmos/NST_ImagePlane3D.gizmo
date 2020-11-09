@@ -2,7 +2,7 @@ Group {
  name ImagePlane3D
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'inputChange':\n    n\['distanceAxis'].setVisible(n\[\"isOn\"].value())\n    n.knob('distance').setVisible(not n\[\"isOn\"].value())\n    \nif k.name() == 'result':\n    result = n.knob('result').getValue()\n    if result == 0:\n        n.knob('samples').setVisible(True)\n        n.knob('motionblur').setVisible(False)\n    elif result == 1 or result == 2 or result == 3 :\n        n.knob('samples').setVisible(False)\n        n.knob('motionblur').setVisible(True)\n"
  tile_color 0x634966ff
- note_font "Verdana Bold"
+ note_font "Verdana Bold Bold Bold"
  note_font_color 0xffffffff
  selected true
  addUserKnob {20 imagePlane3D l ImagePlane3D}
@@ -16,8 +16,8 @@ Group {
  distance 500
  addUserKnob {22 bakeFramerange l "Bake FrameRange" T "import time\nimport threading\n\nn = nuke.thisNode()\n#Define this node\n\nstatus = n.knob(\"status\")\nresult = n.knob('result')\n\nr1 = nuke.toNode(\"Reconcile3DTL\")\nr2 = nuke.toNode(\"Reconcile3DTR\")\nr3 = nuke.toNode(\"Reconcile3DBL\")\nr4 = nuke.toNode(\"Reconcile3DBR\")\nrL = \[r1,r2,r3,r4]\n# Define reconcile3D nodes\n\n#bcg = n.knob(\"bakeColors\")\n\ncps = nuke.toNode(\"CornerPin2DBakedStabilize\")\ncpm = nuke.toNode(\"CornerPin2DBakedMatchmove\")\n# Define cornerpin node\n\nfirst_frame = int(nuke.Root()\['first_frame'].getValue())\nlast_frame = int(nuke.Root()\['last_frame'].getValue())\n# Grab first and last frame from root\n\np = nuke.Panel(\"Execute on FrameRange\")\np.addSingleLineInput('First Frame', first_frame)\np.addSingleLineInput('Last Frame', last_frame)\np.addSingleLineInput('Increment', 1)\nif p.show():\n# Create user input panel\n    \n    ff = int(p.value(\"First Frame\"))\n    lf = int(p.value(\"Last Frame\"))\n    i = int(p.value(\"Increment\"))\n    # Define first, last, increment from user input panel\n    \n    #k = \"status\"\n    l = \"<b> <font color=lime> Is Baked on Frames:\" + \" \" + str(ff) + \"-\" + str(lf)\n    status.setValue(l)\n    # Change status of node\n    \n    result.setValue(3)\n    \n    with n:\n        r1\[\"calc_output\"].setValue(0)\n        r2\[\"calc_output\"].setValue(0)\n        r3\[\"calc_output\"].setValue(0)\n        r4\[\"calc_output\"].setValue(0)\n        # turn off live status of reconcile3Ds\n        \n        r1\[\"output\"].clearAnimated()\n        r1\[\"outputxyz\"].clearAnimated()\n        r2\[\"output\"].clearAnimated()\n        r2\[\"outputxyz\"].clearAnimated()\n        r3\[\"output\"].clearAnimated()\n        r3\[\"outputxyz\"].clearAnimated()\n        r4\[\"output\"].clearAnimated()\n        r4\[\"outputxyz\"].clearAnimated()\n        # Clear any data from all Reconcile3D nodes\n    \n        def execute(first,last,inc):\n            runMe = True\n            while runMe == True:\n                nuke.execute(r1,first,last,inc)  \n                nuke.execute(r2,first,last,inc)\n                nuke.execute(r3,first,last,inc)\n                nuke.execute(r4,first,last,inc)\n                stop_event.set()\n                runMe = False\n                print 'Reconcile3Ds done'\n                break\n            # Define Reconcile3D execution function\n    \n        global stop_event \n        stop_event = threading.Event()\n        threading.Thread(target=execute, kwargs=dict(first=ff,last=lf,inc=i) ).start() \n        while not stop_event.is_set():\n            time.sleep(0.1)\n        # run Reconcile3Ds with threading\n    \n        cps\[\"from4\"].copyAnimations(r1\[\"output\"].animations())\n        cps\[\"from3\"].copyAnimations(r2\[\"output\"].animations())\n        cps\[\"from1\"].copyAnimations(r3\[\"output\"].animations())\n        cps\[\"from2\"].copyAnimations(r4\[\"output\"].animations())\n        \n        cpm\[\"to4\"].copyAnimations(r1\[\"output\"].animations())\n        cpm\[\"to3\"].copyAnimations(r2\[\"output\"].animations())\n        cpm\[\"to1\"].copyAnimations(r3\[\"output\"].animations())\n        cpm\[\"to2\"].copyAnimations(r4\[\"output\"].animations())\n        # copy reconcile3D values over to cornerpins\n        \n        r1\[\"output\"].clearAnimated()\n        r1\[\"outputxyz\"].clearAnimated()\n        r2\[\"output\"].clearAnimated()\n        r2\[\"outputxyz\"].clearAnimated()\n        r3\[\"output\"].clearAnimated()\n        r3\[\"outputxyz\"].clearAnimated()\n        r4\[\"output\"].clearAnimated()\n        r4\[\"outputxyz\"].clearAnimated()\n        # clear animation from live reconcile3Ds\n        \n        r1\[\"calc_output\"].setValue(1)\n        r2\[\"calc_output\"].setValue(1)\n        r3\[\"calc_output\"].setValue(1)\n        r4\[\"calc_output\"].setValue(1)\n        # make reconcile3ds live again\n    " +STARTLINE}
  addUserKnob {22 clearBaked l "Clear Baked" -STARTLINE T "n = nuke.thisNode()\nw = n.width()\nh = n.height()\nresult = n.knob('result')\n\ncps = nuke.toNode(\"CornerPin2DBakedStabilize\")\ncpm = nuke.toNode(\"CornerPin2DBakedMatchmove\")\nstatus = n.knob(\"status\")\n\ncpsfrom1 = cps.knob(\"from1\")\ncpsfrom2 = cps.knob(\"from2\")\ncpsfrom3 = cps.knob(\"from3\")\ncpsfrom4 = cps.knob(\"from4\")\n\ncpmto1 = cpm.knob(\"to1\")\ncpmto2 = cpm.knob(\"to2\")\ncpmto3 = cpm.knob(\"to3\")\ncpmto4 = cpm.knob(\"to4\")\n\ncpsfrom1.clearAnimated()\ncpsfrom2.clearAnimated()\ncpsfrom3.clearAnimated()\ncpsfrom4.clearAnimated()\ncpmto1.clearAnimated()\ncpmto2.clearAnimated()\ncpmto3.clearAnimated()\ncpmto4.clearAnimated()\n\ncpsfrom1.setValue(0,0)\ncpsfrom1.setValue(0,1)\ncpsfrom2.setValue(w,0)\ncpsfrom2.setValue(0,1)\ncpsfrom3.setValue(w,0)\ncpsfrom3.setValue(h,1)\ncpsfrom4.setValue(0,0)\ncpsfrom4.setValue(h,1)\n\ncpmto1.setValue(0,0)\ncpmto1.setValue(0,1)\ncpmto2.setValue(w,0)\ncpmto2.setValue(0,1)\ncpmto3.setValue(w,0)\ncpmto3.setValue(h,1)\ncpmto4.setValue(0,0)\ncpmto4.setValue(h,1)\n\nstatus.setValue(\"<font color=salmon> Is NOT Baked\")\nresult.setValue(2)"}
- addUserKnob {22 exportBakedTrack l "Export Baked CornerPin" T "n = nuke.thisNode()\n\ncps = nuke.toNode(\"CornerPin2DBakedStabilize\")\ncpsName = str(n.name())\nrefFrame = int(n.knob(\"refFrame\").value())\n\ncpsfrom1 = cps.knob(\"from1\")\ncpsfrom2 = cps.knob(\"from2\")\ncpsfrom3 = cps.knob(\"from3\")\ncpsfrom4 = cps.knob(\"from4\")\n\nwith nuke.Root():\n    posX = n.knob(\"xpos\").value()\n    posY = n.knob(\"ypos\").value()\n    cpn = nuke.createNode('CornerPin2D')\n    cpn.setName(cpsName + \"_Tracker\")\n    cpn.knob('xpos').setValue(posX +80)\n    cpn.knob('ypos').setValue(posY +70)\n    cpn.autoplace()\n    cpn.setInput(0, None)\n    \n    cpnto1 = cpn.knob('to1')\n    cpnto2 = cpn.knob('to2')\n    cpnto3 = cpn.knob('to3')\n    cpnto4 = cpn.knob('to4')\n    \n    cpnfrom1 = cpn.knob('from1')\n    cpnfrom2 = cpn.knob('from2')\n    cpnfrom3 = cpn.knob('from3')\n    cpnfrom4 = cpn.knob('from4')\n    \n    cpnfrom1.copyAnimations(cpsfrom1.animations())\n    cpnfrom2.copyAnimations(cpsfrom2.animations())\n    cpnfrom3.copyAnimations(cpsfrom3.animations())\n    cpnfrom4.copyAnimations(cpsfrom4.animations())\n    \n    tab = nuke.Tab_Knob('settings', 'Settings')\n    \n    setCurrentFrameBtn = nuke.PyScript_Knob(\"setCurrentFrame\", \"Set to Current Frame\")\n    setCurrentFrameBtn.setCommand('n = nuke.thisNode()\\nrefFrame = n.knob(\"refFrame\")\\nrefFrame.setValue(nuke.frame())\\nrefFrame = refFrame.getValue()\\noutput = n.knob(\"output\")\\nto1 = n.knob(\"to1\")\\nto2 = n.knob(\"to2\")\\nto3 = n.knob(\"to3\")\\nto4 = n.knob(\"to4\")\\nfrom1 = n.knob(\"from1\")\\nfrom2 = n.knob(\"from2\")\\nfrom3 = n.knob(\"from3\")\\nfrom4 = n.knob(\"from4\")\\nif output.getValue() == 0:\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\nif output.getValue() == 1:\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))')\n    \n    setFrameBtn = nuke.PyScript_Knob('setFrame', 'Set Frame')\n    setFrameBtn.setCommand('n = nuke.thisNode()\\nrefFrame = n.knob(\\\"refFrame\\\").getValue()\\noutput = n.knob(\\\"output\\\")\\nto1 = n.knob(\\\"to1\\\")\\nto2 = n.knob(\\\"to2\\\")\\nto3 = n.knob(\\\"to3\\\")\\nto4 = n.knob(\\\"to4\\\")\\nfrom1 = n.knob(\\\"from1\\\")\\nfrom2 = n.knob(\\\"from2\\\")\\nfrom3 = n.knob(\\\"from3\\\")\\nfrom4 = n.knob(\\\"from4\\\")\\nif output.getValue() == 0:\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\nif output.getValue() == 1:\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))')\n    \n    StabBtn = nuke.PyScript_Knob(\"stabilize\", \"<font color=lime>Stabilize\")\n    StabBtn.setFlag(nuke.STARTLINE)\n    StabBtn.setCommand('n = nuke.thisNode()\\nstab = n.knob(\"stabilize\")\\nmatch = n.knob(\"matchmove\")\\noutput = n.knob(\"output\")\\nrefFrame = n.knob(\"refFrame\").getValue()\\nif output.getValue() == 1:\\n    stab.setLabel(\"<font color=lime>Stabilize\")\\n    match.setLabel(\"<font color=salmon>Matchmove\")\\n    to1 = n.knob(\"to1\")\\n    to2 = n.knob(\"to2\")\\n    to3 = n.knob(\"to3\")\\n    to4 = n.knob(\"to4\")\\n    from1 = n.knob(\"from1\")\\n    from2 = n.knob(\"from2\")\\n    from3 = n.knob(\"from3\")\\n    from4 = n.knob(\"from4\")\\n    from1.copyAnimations(to1.animations())\\n    from2.copyAnimations(to2.animations())\\n    from3.copyAnimations(to3.animations())\\n    from4.copyAnimations(to4.animations())\\n    to1.clearAnimated()\\n    to2.clearAnimated()\\n    to3.clearAnimated()\\n    to4.clearAnimated()\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\n    output.setValue(0)')\n    \n    MatchBtn = nuke.PyScript_Knob(\"matchmove\", \"<font color=salmon>Matchmove\")\n    MatchBtn.setCommand('n = nuke.thisNode()\\nstab = n.knob(\"stabilize\")\\nmatch = n.knob(\"matchmove\")\\noutput = n.knob(\"output\")\\nrefFrame = n.knob(\"refFrame\").getValue()\\nif output.getValue() == 0:\\n    stab.setLabel(\"<font color=salmon>Stabilize\")\\n    match.setLabel(\"<font color=lime>Matchmove\")\\n    to1 = n.knob(\"to1\")\\n    to2 = n.knob(\"to2\")\\n    to3 = n.knob(\"to3\")\\n    to4 = n.knob(\"to4\")\\n    from1 = n.knob(\"from1\")\\n    from2 = n.knob(\"from2\")\\n    from3 = n.knob(\"from3\")\\n    from4 = n.knob(\"from4\")\\n    to1.copyAnimations(from1.animations())\\n    to2.copyAnimations(from2.animations())\\n    to3.copyAnimations(from3.animations())\\n    to4.copyAnimations(from4.animations())\\n    from1.clearAnimated()\\n    from2.clearAnimated()\\n    from3.clearAnimated()\\n    from4.clearAnimated()\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))\\n    output.setValue(1)')\n\n    pulldownStatus = nuke.Enumeration_Knob('output', 'Output', \['Stabilized', 'Matchmoved'])\n    \n    intFrame = nuke.Int_Knob(\"refFrame\", \"Ref Frame\")\n    intFrame.setFlag(nuke.STARTLINE)\n    cpn.addKnob(tab)\n    \n    cpn.addKnob(setCurrentFrameBtn)\n    cpn.addKnob(intFrame)\n    cpn.knob(\"refFrame\").setValue(refFrame)\n    \n    cpn.addKnob(setFrameBtn)\n    \n    cpn.addKnob(StabBtn)\n    cpn.addKnob(MatchBtn)\n    \n    cpn.addKnob(pulldownStatus)\n    cpn.knob('output').setVisible(False)\n    \n    cpnto1.setValue(cpnfrom1.getValueAt(refFrame))\n    cpnto2.setValue(cpnfrom2.getValueAt(refFrame))\n    cpnto3.setValue(cpnfrom3.getValueAt(refFrame))\n    cpnto4.setValue(cpnfrom4.getValueAt(refFrame))" +STARTLINE}
- addUserKnob {22 exportLinkedTrack l "Export Linked CornerPin" -STARTLINE T "n = nuke.thisNode()\n\ncps = nuke.toNode(\"CornerPin2DBakedStabilize\")\nnName = str(n.name())\ncpsName = str(cps.name())\nrefFrame = int(n.knob(\"refFrame\").value())\n\ncpsfrom1 = cps.knob(\"from1\")\ncpsfrom2 = cps.knob(\"from2\")\ncpsfrom3 = cps.knob(\"from3\")\ncpsfrom4 = cps.knob(\"from4\")\n\nwith nuke.Root():\n    posX = n.knob(\"xpos\").value()\n    posY = n.knob(\"ypos\").value()\n    cpn = nuke.createNode('CornerPin2D')\n    cpn.setName(nName + \"_Tracker\")\n    cpn.knob('xpos').setValue(posX +80)\n    cpn.knob('ypos').setValue(posY +70)\n    cpn.autoplace()\n    cpn.setInput(0, None)\n    \n    cpnto1 = cpn.knob('to1')\n    cpnto2 = cpn.knob('to2')\n    cpnto3 = cpn.knob('to3')\n    cpnto4 = cpn.knob('to4')\n    \n    cpnfrom1 = cpn.knob('from1')\n    cpnfrom2 = cpn.knob('from2')\n    cpnfrom3 = cpn.knob('from3')\n    cpnfrom4 = cpn.knob('from4')\n    \n    cpnfrom1.setExpression(nName + \".\" + cpsName + \".\" + \"from1\")\n    cpnfrom2.setExpression(nName + \".\" + cpsName + \".\" + \"from2\")\n    cpnfrom3.setExpression(nName + \".\" + cpsName + \".\" + \"from3\")\n    cpnfrom4.setExpression(nName + \".\" + cpsName + \".\" + \"from4\")\n    \n    tab = nuke.Tab_Knob('settings', 'Settings')\n    \n    setCurrentFrameBtn = nuke.PyScript_Knob(\"setCurrentFrame\", \"Set to Current Frame\")\n    setCurrentFrameBtn.setCommand('n = nuke.thisNode()\\nrefFrame = n.knob(\"refFrame\")\\nrefFrame.setValue(nuke.frame())\\nrefFrame = refFrame.getValue()\\noutput = n.knob(\"output\")\\nto1 = n.knob(\"to1\")\\nto2 = n.knob(\"to2\")\\nto3 = n.knob(\"to3\")\\nto4 = n.knob(\"to4\")\\nfrom1 = n.knob(\"from1\")\\nfrom2 = n.knob(\"from2\")\\nfrom3 = n.knob(\"from3\")\\nfrom4 = n.knob(\"from4\")\\nif output.getValue() == 0:\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\nif output.getValue() == 1:\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))')\n    \n    setFrameBtn = nuke.PyScript_Knob('setFrame', 'Set Frame')\n    setFrameBtn.setCommand('n = nuke.thisNode()\\nrefFrame = n.knob(\\\"refFrame\\\").getValue()\\noutput = n.knob(\\\"output\\\")\\nto1 = n.knob(\\\"to1\\\")\\nto2 = n.knob(\\\"to2\\\")\\nto3 = n.knob(\\\"to3\\\")\\nto4 = n.knob(\\\"to4\\\")\\nfrom1 = n.knob(\\\"from1\\\")\\nfrom2 = n.knob(\\\"from2\\\")\\nfrom3 = n.knob(\\\"from3\\\")\\nfrom4 = n.knob(\\\"from4\\\")\\nif output.getValue() == 0:\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\nif output.getValue() == 1:\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))')\n    \n    StabBtn = nuke.PyScript_Knob(\"stabilize\", \"<font color=lime>Stabilize\")\n    StabBtn.setFlag(nuke.STARTLINE)\n    StabBtn.setCommand('n = nuke.thisNode()\\nstab = n.knob(\"stabilize\")\\nmatch = n.knob(\"matchmove\")\\noutput = n.knob(\"output\")\\nrefFrame = n.knob(\"refFrame\").getValue()\\nif output.getValue() == 1:\\n    stab.setLabel(\"<font color=lime>Stabilize\")\\n    match.setLabel(\"<font color=salmon>Matchmove\")\\n    to1 = n.knob(\"to1\")\\n    to2 = n.knob(\"to2\")\\n    to3 = n.knob(\"to3\")\\n    to4 = n.knob(\"to4\")\\n    from1 = n.knob(\"from1\")\\n    from2 = n.knob(\"from2\")\\n    from3 = n.knob(\"from3\")\\n    from4 = n.knob(\"from4\")\\n    from1.copyAnimations(to1.animations())\\n    from2.copyAnimations(to2.animations())\\n    from3.copyAnimations(to3.animations())\\n    from4.copyAnimations(to4.animations())\\n    to1.clearAnimated()\\n    to2.clearAnimated()\\n    to3.clearAnimated()\\n    to4.clearAnimated()\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\n    output.setValue(0)')\n    \n    MatchBtn = nuke.PyScript_Knob(\"matchmove\", \"<font color=salmon>Matchmove\")\n    MatchBtn.setCommand('n = nuke.thisNode()\\nstab = n.knob(\"stabilize\")\\nmatch = n.knob(\"matchmove\")\\noutput = n.knob(\"output\")\\nrefFrame = n.knob(\"refFrame\").getValue()\\nif output.getValue() == 0:\\n    stab.setLabel(\"<font color=salmon>Stabilize\")\\n    match.setLabel(\"<font color=lime>Matchmove\")\\n    to1 = n.knob(\"to1\")\\n    to2 = n.knob(\"to2\")\\n    to3 = n.knob(\"to3\")\\n    to4 = n.knob(\"to4\")\\n    from1 = n.knob(\"from1\")\\n    from2 = n.knob(\"from2\")\\n    from3 = n.knob(\"from3\")\\n    from4 = n.knob(\"from4\")\\n    to1.copyAnimations(from1.animations())\\n    to2.copyAnimations(from2.animations())\\n    to3.copyAnimations(from3.animations())\\n    to4.copyAnimations(from4.animations())\\n    from1.clearAnimated()\\n    from2.clearAnimated()\\n    from3.clearAnimated()\\n    from4.clearAnimated()\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))\\n    output.setValue(1)')\n\n    pulldownStatus = nuke.Enumeration_Knob('output', 'Output', \['Stabilized', 'Matchmoved'])\n    \n    intFrame = nuke.Int_Knob(\"refFrame\", \"Ref Frame\")\n    intFrame.setFlag(nuke.STARTLINE)\n    cpn.addKnob(tab)\n    \n    cpn.addKnob(setCurrentFrameBtn)\n    cpn.addKnob(intFrame)\n    cpn.knob(\"refFrame\").setValue(refFrame)\n    \n    cpn.addKnob(setFrameBtn)\n    \n    cpn.addKnob(StabBtn)\n    cpn.addKnob(MatchBtn)\n    \n    cpn.addKnob(pulldownStatus)\n    cpn.knob('output').setVisible(False)\n    \n    cpnto1.setValue(cpnfrom1.getValueAt(refFrame))\n    cpnto2.setValue(cpnfrom2.getValueAt(refFrame))\n    cpnto3.setValue(cpnfrom3.getValueAt(refFrame))\n    cpnto4.setValue(cpnfrom4.getValueAt(refFrame))"}
+ addUserKnob {22 exportBakedTrack l "Export Baked CornerPin" T "n = nuke.thisNode()\n\ncps = nuke.toNode(\"CornerPin2DBakedStabilize\")\ncpsName = str(n.name())\nrefFrame = int(n.knob(\"refFrame\").value())\ndist = n.knob(\"distance\").value()\n\ncpsfrom1 = cps.knob(\"from1\")\ncpsfrom2 = cps.knob(\"from2\")\ncpsfrom3 = cps.knob(\"from3\")\ncpsfrom4 = cps.knob(\"from4\")\n\nwith nuke.Root():\n    posX = n.knob(\"xpos\").value()\n    posY = n.knob(\"ypos\").value()\n    nukescripts.clear_selection_recursive()\n    cpn = nuke.createNode('CornerPin2D')\n    cpn.setName(cpsName + \"_CnrPin\")\n    cpn.knob('xpos').setValue(posX +100)\n    cpn.knob('ypos').setValue(posY +70)\n    cpn.autoplace()\n    cpn.setInput(0, None)\n    \n    cpnto1 = cpn.knob('to1')\n    cpnto2 = cpn.knob('to2')\n    cpnto3 = cpn.knob('to3')\n    cpnto4 = cpn.knob('to4')\n    \n    cpnfrom1 = cpn.knob('from1')\n    cpnfrom2 = cpn.knob('from2')\n    cpnfrom3 = cpn.knob('from3')\n    cpnfrom4 = cpn.knob('from4')\n    \n    cpnfrom1.copyAnimations(cpsfrom1.animations())\n    cpnfrom2.copyAnimations(cpsfrom2.animations())\n    cpnfrom3.copyAnimations(cpsfrom3.animations())\n    cpnfrom4.copyAnimations(cpsfrom4.animations())\n    \n    tab = nuke.Tab_Knob('settings', 'Settings')\n    \n    setCurrentFrameBtn = nuke.PyScript_Knob(\"setCurrentFrame\", \"Set to Current Frame\")\n    setCurrentFrameBtn.setCommand('n = nuke.thisNode()\\nrefFrame = n.knob(\"refFrame\")\\nrefFrame.setValue(nuke.frame())\\nrefFrame = refFrame.getValue()\\noutput = n.knob(\"output\")\\nto1 = n.knob(\"to1\")\\nto2 = n.knob(\"to2\")\\nto3 = n.knob(\"to3\")\\nto4 = n.knob(\"to4\")\\nfrom1 = n.knob(\"from1\")\\nfrom2 = n.knob(\"from2\")\\nfrom3 = n.knob(\"from3\")\\nfrom4 = n.knob(\"from4\")\\nif output.getValue() == 0:\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\nif output.getValue() == 1:\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))')\n    \n    setFrameBtn = nuke.PyScript_Knob('setFrame', 'Set Frame')\n    setFrameBtn.setCommand('n = nuke.thisNode()\\nrefFrame = n.knob(\\\"refFrame\\\").getValue()\\noutput = n.knob(\\\"output\\\")\\nto1 = n.knob(\\\"to1\\\")\\nto2 = n.knob(\\\"to2\\\")\\nto3 = n.knob(\\\"to3\\\")\\nto4 = n.knob(\\\"to4\\\")\\nfrom1 = n.knob(\\\"from1\\\")\\nfrom2 = n.knob(\\\"from2\\\")\\nfrom3 = n.knob(\\\"from3\\\")\\nfrom4 = n.knob(\\\"from4\\\")\\nif output.getValue() == 0:\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\nif output.getValue() == 1:\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))')\n    \n    StabBtn = nuke.PyScript_Knob(\"stabilize\", \"<font color=lime>Stabilize\")\n    StabBtn.setFlag(nuke.STARTLINE)\n    StabBtn.setCommand('n = nuke.thisNode()\\nstab = n.knob(\"stabilize\")\\nmatch = n.knob(\"matchmove\")\\noutput = n.knob(\"output\")\\nrefFrame = n.knob(\"refFrame\").getValue()\\nif output.getValue() == 1:\\n    stab.setLabel(\"<font color=lime>Stabilize\")\\n    match.setLabel(\"<font color=salmon>Matchmove\")\\n    to1 = n.knob(\"to1\")\\n    to2 = n.knob(\"to2\")\\n    to3 = n.knob(\"to3\")\\n    to4 = n.knob(\"to4\")\\n    from1 = n.knob(\"from1\")\\n    from2 = n.knob(\"from2\")\\n    from3 = n.knob(\"from3\")\\n    from4 = n.knob(\"from4\")\\n    from1.copyAnimations(to1.animations())\\n    from2.copyAnimations(to2.animations())\\n    from3.copyAnimations(to3.animations())\\n    from4.copyAnimations(to4.animations())\\n    to1.clearAnimated()\\n    to2.clearAnimated()\\n    to3.clearAnimated()\\n    to4.clearAnimated()\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\n    output.setValue(0)')\n    \n    MatchBtn = nuke.PyScript_Knob(\"matchmove\", \"<font color=salmon>Matchmove\")\n    MatchBtn.setCommand('n = nuke.thisNode()\\nstab = n.knob(\"stabilize\")\\nmatch = n.knob(\"matchmove\")\\noutput = n.knob(\"output\")\\nrefFrame = n.knob(\"refFrame\").getValue()\\nif output.getValue() == 0:\\n    stab.setLabel(\"<font color=salmon>Stabilize\")\\n    match.setLabel(\"<font color=lime>Matchmove\")\\n    to1 = n.knob(\"to1\")\\n    to2 = n.knob(\"to2\")\\n    to3 = n.knob(\"to3\")\\n    to4 = n.knob(\"to4\")\\n    from1 = n.knob(\"from1\")\\n    from2 = n.knob(\"from2\")\\n    from3 = n.knob(\"from3\")\\n    from4 = n.knob(\"from4\")\\n    to1.copyAnimations(from1.animations())\\n    to2.copyAnimations(from2.animations())\\n    to3.copyAnimations(from3.animations())\\n    to4.copyAnimations(from4.animations())\\n    from1.clearAnimated()\\n    from2.clearAnimated()\\n    from3.clearAnimated()\\n    from4.clearAnimated()\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))\\n    output.setValue(1)')\n\n    pulldownStatus = nuke.Enumeration_Knob('output', 'Output', \['Stabilized', 'Matchmoved'])\n    \n    intFrame = nuke.Int_Knob(\"refFrame\", \"Ref Frame\")\n    intFrame.setFlag(nuke.STARTLINE)\n    cpn.addKnob(tab)\n    \n    cpn.addKnob(setCurrentFrameBtn)\n    cpn.addKnob(intFrame)\n    cpn.knob(\"refFrame\").setValue(refFrame)\n    \n    cpn.addKnob(setFrameBtn)\n    \n    cpn.addKnob(StabBtn)\n    cpn.addKnob(MatchBtn)\n    \n    cpn.addKnob(pulldownStatus)\n    cpn.knob('output').setVisible(False)\n    \n    cpnto1.setValue(cpnfrom1.getValueAt(refFrame))\n    cpnto2.setValue(cpnfrom2.getValueAt(refFrame))\n    cpnto3.setValue(cpnfrom3.getValueAt(refFrame))\n    cpnto4.setValue(cpnfrom4.getValueAt(refFrame))\n    \n    cpn\['label'].setValue('rf: \[value refFrame] dist: \{\}'.format(dist))" +STARTLINE}
+ addUserKnob {22 exportLinkedTrack l "Export Linked CornerPin" -STARTLINE T "n = nuke.thisNode()\n\ncps = nuke.toNode(\"CornerPin2DBakedStabilize\")\nnName = str(n.name())\ncpsName = str(cps.name())\nrefFrame = int(n.knob(\"refFrame\").value())\ndist = n.knob(\"distance\").value()\n\ncpsfrom1 = cps.knob(\"from1\")\ncpsfrom2 = cps.knob(\"from2\")\ncpsfrom3 = cps.knob(\"from3\")\ncpsfrom4 = cps.knob(\"from4\")\n\nwith nuke.Root():\n    posX = n.knob(\"xpos\").value()\n    posY = n.knob(\"ypos\").value()\n    cpn = nuke.createNode('CornerPin2D')\n    cpn.setName(nName + \"_Tracker\")\n    cpn.knob('xpos').setValue(posX +100)\n    cpn.knob('ypos').setValue(posY +70)\n    cpn.autoplace()\n    cpn.setInput(0, None)\n    \n    cpnto1 = cpn.knob('to1')\n    cpnto2 = cpn.knob('to2')\n    cpnto3 = cpn.knob('to3')\n    cpnto4 = cpn.knob('to4')\n    \n    cpnfrom1 = cpn.knob('from1')\n    cpnfrom2 = cpn.knob('from2')\n    cpnfrom3 = cpn.knob('from3')\n    cpnfrom4 = cpn.knob('from4')\n    \n    cpnfrom1.setExpression(nName + \".\" + cpsName + \".\" + \"from1\")\n    cpnfrom2.setExpression(nName + \".\" + cpsName + \".\" + \"from2\")\n    cpnfrom3.setExpression(nName + \".\" + cpsName + \".\" + \"from3\")\n    cpnfrom4.setExpression(nName + \".\" + cpsName + \".\" + \"from4\")\n    \n    tab = nuke.Tab_Knob('settings', 'Settings')\n    \n    setCurrentFrameBtn = nuke.PyScript_Knob(\"setCurrentFrame\", \"Set to Current Frame\")\n    setCurrentFrameBtn.setCommand('n = nuke.thisNode()\\nrefFrame = n.knob(\"refFrame\")\\nrefFrame.setValue(nuke.frame())\\nrefFrame = refFrame.getValue()\\noutput = n.knob(\"output\")\\nto1 = n.knob(\"to1\")\\nto2 = n.knob(\"to2\")\\nto3 = n.knob(\"to3\")\\nto4 = n.knob(\"to4\")\\nfrom1 = n.knob(\"from1\")\\nfrom2 = n.knob(\"from2\")\\nfrom3 = n.knob(\"from3\")\\nfrom4 = n.knob(\"from4\")\\nif output.getValue() == 0:\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\nif output.getValue() == 1:\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))')\n    \n    setFrameBtn = nuke.PyScript_Knob('setFrame', 'Set Frame')\n    setFrameBtn.setCommand('n = nuke.thisNode()\\nrefFrame = n.knob(\\\"refFrame\\\").getValue()\\noutput = n.knob(\\\"output\\\")\\nto1 = n.knob(\\\"to1\\\")\\nto2 = n.knob(\\\"to2\\\")\\nto3 = n.knob(\\\"to3\\\")\\nto4 = n.knob(\\\"to4\\\")\\nfrom1 = n.knob(\\\"from1\\\")\\nfrom2 = n.knob(\\\"from2\\\")\\nfrom3 = n.knob(\\\"from3\\\")\\nfrom4 = n.knob(\\\"from4\\\")\\nif output.getValue() == 0:\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\nif output.getValue() == 1:\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))')\n    \n    StabBtn = nuke.PyScript_Knob(\"stabilize\", \"<font color=lime>Stabilize\")\n    StabBtn.setFlag(nuke.STARTLINE)\n    StabBtn.setCommand('n = nuke.thisNode()\\nstab = n.knob(\"stabilize\")\\nmatch = n.knob(\"matchmove\")\\noutput = n.knob(\"output\")\\nrefFrame = n.knob(\"refFrame\").getValue()\\nif output.getValue() == 1:\\n    stab.setLabel(\"<font color=lime>Stabilize\")\\n    match.setLabel(\"<font color=salmon>Matchmove\")\\n    to1 = n.knob(\"to1\")\\n    to2 = n.knob(\"to2\")\\n    to3 = n.knob(\"to3\")\\n    to4 = n.knob(\"to4\")\\n    from1 = n.knob(\"from1\")\\n    from2 = n.knob(\"from2\")\\n    from3 = n.knob(\"from3\")\\n    from4 = n.knob(\"from4\")\\n    from1.copyAnimations(to1.animations())\\n    from2.copyAnimations(to2.animations())\\n    from3.copyAnimations(to3.animations())\\n    from4.copyAnimations(to4.animations())\\n    to1.clearAnimated()\\n    to2.clearAnimated()\\n    to3.clearAnimated()\\n    to4.clearAnimated()\\n    to1.setValue(from1.getValueAt(refFrame))\\n    to2.setValue(from2.getValueAt(refFrame))\\n    to3.setValue(from3.getValueAt(refFrame))\\n    to4.setValue(from4.getValueAt(refFrame))\\n    output.setValue(0)')\n    \n    MatchBtn = nuke.PyScript_Knob(\"matchmove\", \"<font color=salmon>Matchmove\")\n    MatchBtn.setCommand('n = nuke.thisNode()\\nstab = n.knob(\"stabilize\")\\nmatch = n.knob(\"matchmove\")\\noutput = n.knob(\"output\")\\nrefFrame = n.knob(\"refFrame\").getValue()\\nif output.getValue() == 0:\\n    stab.setLabel(\"<font color=salmon>Stabilize\")\\n    match.setLabel(\"<font color=lime>Matchmove\")\\n    to1 = n.knob(\"to1\")\\n    to2 = n.knob(\"to2\")\\n    to3 = n.knob(\"to3\")\\n    to4 = n.knob(\"to4\")\\n    from1 = n.knob(\"from1\")\\n    from2 = n.knob(\"from2\")\\n    from3 = n.knob(\"from3\")\\n    from4 = n.knob(\"from4\")\\n    to1.copyAnimations(from1.animations())\\n    to2.copyAnimations(from2.animations())\\n    to3.copyAnimations(from3.animations())\\n    to4.copyAnimations(from4.animations())\\n    from1.clearAnimated()\\n    from2.clearAnimated()\\n    from3.clearAnimated()\\n    from4.clearAnimated()\\n    from1.setValue(to1.getValueAt(refFrame))\\n    from2.setValue(to2.getValueAt(refFrame))\\n    from3.setValue(to3.getValueAt(refFrame))\\n    from4.setValue(to4.getValueAt(refFrame))\\n    output.setValue(1)')\n\n    pulldownStatus = nuke.Enumeration_Knob('output', 'Output', \['Stabilized', 'Matchmoved'])\n    \n    intFrame = nuke.Int_Knob(\"refFrame\", \"Ref Frame\")\n    intFrame.setFlag(nuke.STARTLINE)\n    cpn.addKnob(tab)\n    \n    cpn.addKnob(setCurrentFrameBtn)\n    cpn.addKnob(intFrame)\n    cpn.knob(\"refFrame\").setValue(refFrame)\n    \n    cpn.addKnob(setFrameBtn)\n    \n    cpn.addKnob(StabBtn)\n    cpn.addKnob(MatchBtn)\n    \n    cpn.addKnob(pulldownStatus)\n    cpn.knob('output').setVisible(False)\n    \n    cpnto1.setValue(cpnfrom1.getValueAt(refFrame))\n    cpnto2.setValue(cpnfrom2.getValueAt(refFrame))\n    cpnto3.setValue(cpnfrom3.getValueAt(refFrame))\n    cpnto4.setValue(cpnfrom4.getValueAt(refFrame))\n    \n    cpn\['label'].setValue('rf: \[value refFrame] dist: \{\}'.format(dist))"}
  addUserKnob {41 isOn +INVISIBLE T isON.isOn}
  addUserKnob {7 distanceAxis l DistanceToAxis +HIDDEN R 0 1000}
  distanceAxis {{AxisDistance.NoOp1.distance}}
@@ -122,7 +122,7 @@ Group {
   ypos -300
   number 1
  }
-set N7f56e780 [stack 0]
+set N11b9b620 [stack 0]
  Camera {
   projection_mode {{"\[value the_cam]projection_mode"}}
   focal {{"\[value \[value the_cam]focal]"}}
@@ -170,7 +170,7 @@ set N7f56e780 [stack 0]
   xpos 993
   ypos -974
  }
-set N7f59a5e0 [stack 0]
+set N10af4310 [stack 0]
  Dot {
   name Dot23
   label cam
@@ -192,7 +192,7 @@ set N7f59a5e0 [stack 0]
   xpos 1293
   ypos -539
  }
-set N8095cc70 [stack 0]
+set N11a88670 [stack 0]
  Axis2 {
   scaling {1 {DummyCam.vaperture/parent.DummyCam.haperture} 1}
   name AspectRatioScaleY
@@ -206,22 +206,22 @@ set N8095cc70 [stack 0]
   xpos 2155
   ypos -419
  }
-set N80938f60 [stack 0]
+set N11a8f060 [stack 0]
  Card2 {
   inputs 0
   image_aspect false
   rows 4
   columns 4
-  control_points {3 3 3 6
+  control_points {3 3 3 6 
 
-1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
-1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
-1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
-1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
-1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
-1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
-1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
-1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0} 
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0} 
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0} 
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0} 
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0} 
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0} 
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0} 
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0} 
 1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
   name ProjectionPlane
   xpos 442
@@ -245,7 +245,7 @@ set N80938f60 [stack 0]
   xpos 476
   ypos -62
  }
-set N809989f0 [stack 0]
+set N11a89870 [stack 0]
  Dot {
   name Dot16
   note_font_size 41
@@ -271,7 +271,7 @@ set N809989f0 [stack 0]
   xpos 883
   ypos 333
  }
-set N809a85e0 [stack 0]
+set N10aa7d00 [stack 0]
  Dot {
   name Dot7
   label img
@@ -279,14 +279,14 @@ set N809a85e0 [stack 0]
   xpos 1686
   ypos 333
  }
-set N809ac4c0 [stack 0]
+set N10aedd30 [stack 0]
  Dot {
   name Dot14
   note_font_size 41
   xpos 1967
   ypos 334
  }
-set N809b0520 [stack 0]
+set N11be79a0 [stack 0]
  Dot {
   name Dot6
   label img
@@ -300,7 +300,7 @@ set N809b0520 [stack 0]
   xpos 2428
   ypos 482
  }
-set N809b8220 [stack 0]
+set N11a914e0 [stack 0]
  CornerPin2D {
   to1 {0 0}
   to2 {1920 0}
@@ -320,7 +320,7 @@ set N809b8220 [stack 0]
   addUserKnob {20 User}
   addUserKnob {22 "set reference frame" -STARTLINE T "import addOnCreateUU; addOnCreateUU.cornerPinZero()"}
  }
-push $N809b8220
+push $N11a914e0
  CornerPin2D {
   to1 {{from1(refFrame)} {from1(refFrame)}}
   to2 {{from2(refFrame)} {from2(refFrame)}}
@@ -353,14 +353,14 @@ push $N809b8220
   xpos 2428
   ypos 1281
  }
-push $N809b0520
+push $N11be79a0
  Dot {
   name Dot26
   note_font_size 41
   xpos 1967
   ypos 498
  }
-set N809e5c20 [stack 0]
+set N104e6870 [stack 0]
  CornerPin2D {
   to1 {{parent.Reconcile3DBL.output} {parent.Reconcile3DBL.output}}
   to2 {{parent.Reconcile3DBR.output} {parent.Reconcile3DBR.output}}
@@ -380,7 +380,7 @@ set N809e5c20 [stack 0]
   addUserKnob {20 User}
   addUserKnob {22 "set reference frame" -STARTLINE T "import addOnCreateUU; addOnCreateUU.cornerPinZero()"}
  }
-push $N809e5c20
+push $N104e6870
  CornerPin2D {
   to1 {{parent.Reconcile3DBL.output(refFrame)} {parent.Reconcile3DBL.output(refFrame)}}
   to2 {{parent.Reconcile3DBR.output(refFrame)} {parent.Reconcile3DBR.output(refFrame)}}
@@ -413,15 +413,15 @@ push $N809e5c20
   xpos 1967
   ypos 785
  }
-push $N8095cc70
+push $N11a88670
  Dot {
   name Dot19
   note_font_size 41
   xpos 1317
   ypos -361
  }
-set N80a19a10 [stack 0]
-push $N80a19a10
+set N11dfe380 [stack 0]
+push $N11dfe380
  FrameHold {
   first_frame {{parent.refFrame}}
   name FrameHold4
@@ -436,42 +436,42 @@ push $N80a19a10
   xpos 1283
   ypos -224
  }
-push $N7f56e780
+push $N11b9b620
  Dot {
   name Dot18
   note_font_size 41
   xpos -564
   ypos -54
  }
-set N80a2b400 [stack 0]
+set N11e13b10 [stack 0]
  Dot {
   name Dot4
   note_font_size 41
   xpos -564
   ypos 271
  }
-set N80a2f340 [stack 0]
+set N11e185e0 [stack 0]
  FrameHold {
   first_frame {{parent.refFrame}}
   name FrameHold2
   xpos -454
   ypos 264
  }
-set N807f7400 [stack 0]
+set N11e1d190 [stack 0]
  Dot {
   name Dot13
   note_font_size 41
   xpos -420
   ypos 536
  }
-push $N80a2f340
+push $N11e185e0
  Dot {
   name Dot11
   note_font_size 41
   xpos -564
   ypos 442
  }
-set N80a3e060 [stack 0]
+set N11e2a700 [stack 0]
  Switch {
   inputs 2
   which {{!output}}
@@ -486,8 +486,8 @@ set N80a3e060 [stack 0]
   xpos -564
   ypos 629
  }
-set N80a48af0 [stack 0]
-push $N809a85e0
+set N11e37510 [stack 0]
+push $N10aa7d00
  Card3D {
   inputs 3
   translate {0 0 0}
@@ -503,21 +503,21 @@ push $N809a85e0
   xpos 1317
   ypos 725
  }
-push $N80a48af0
+push $N11e37510
  Dot {
   name Dot5
   note_font_size 41
   xpos -564
   ypos 736
  }
-push $N807f7400
+push $N11e1d190
  Dot {
   name Dot24
   note_font_size 41
   xpos -282
   ypos 271
  }
-push $N80a3e060
+push $N11e2a700
  Switch {
   inputs 2
   which {{output}}
@@ -526,7 +526,7 @@ push $N80a3e060
   xpos -316
   ypos 435
  }
-push $N809a85e0
+push $N10aa7d00
  Dot {
   name Dot29
   label img
@@ -547,7 +547,7 @@ push $N809a85e0
   xpos 626
   ypos 520
  }
-push $N809989f0
+push $N11a89870
  ApplyMaterial {
   inputs 2
   name ApplyMaterial1
@@ -604,7 +604,7 @@ push $N809989f0
   xpos 442
   ypos 1423
  }
-push $N80938f60
+push $N11a8f060
  FrameHold {
   first_frame {{parent.refFrame}}
   name FrameHold3
@@ -617,15 +617,15 @@ push $N80938f60
   xpos 2155
   ypos -250
  }
-set N80ac0980 [stack 0]
+set N11ed0720 [stack 0]
  Axis2 {
   translate {0.5 0.5 0}
   name TopRight
   xpos 2043
   ypos -178
  }
-set N80ac4920 [stack 0]
-push $N7f59a5e0
+set N11ed5140 [stack 0]
+push $N10af4310
  Dot {
   name Dot20
   label cam
@@ -640,8 +640,8 @@ push $N7f59a5e0
   xpos 1837
   ypos 11
  }
-set N80ad6d50 [stack 0]
-push $N809ac4c0
+set N11eed2b0 [stack 0]
+push $N10aedd30
  Reconcile3D {
   inputs 3
   calc_output true
@@ -651,16 +651,16 @@ push $N809ac4c0
   xpos 2033
   ypos 103
  }
-push $N80ac0980
+push $N11ed0720
  Axis2 {
   translate {-0.5 -0.5 0}
   name BottomLeft
   xpos 2219
   ypos -178
  }
-set N80ae7840 [stack 0]
-push $N80ad6d50
-push $N809ac4c0
+set N11f00b40 [stack 0]
+push $N11eed2b0
+push $N10aedd30
  Reconcile3D {
   inputs 3
   calc_output true
@@ -670,16 +670,16 @@ push $N809ac4c0
   xpos 2209
   ypos 99
  }
-push $N80ac0980
+push $N11ed0720
  Axis2 {
   translate {0.5 -0.5 0}
   name BottomRight
   xpos 2358
   ypos -184
  }
-set N80b067f0 [stack 0]
-push $N80ad6d50
-push $N809ac4c0
+set N11f22c40 [stack 0]
+push $N11eed2b0
+push $N10aedd30
  Reconcile3D {
   inputs 3
   calc_output true
@@ -689,16 +689,16 @@ push $N809ac4c0
   xpos 2348
   ypos 101
  }
-push $N80ac0980
+push $N11ed0720
  Axis2 {
   translate {-0.5 0.5 0}
   name TopLeft
   xpos 1883
   ypos -180
  }
-set N80b21820 [stack 0]
-push $N80ad6d50
-push $N809ac4c0
+set N11f44d50 [stack 0]
+push $N11eed2b0
+push $N10aedd30
  Reconcile3D {
   inputs 3
   calc_output true
@@ -708,11 +708,11 @@ push $N809ac4c0
   xpos 1873
   ypos 99
  }
-push $N809989f0
-push $N80b067f0
-push $N80ae7840
-push $N80ac4920
-push $N80b21820
+push $N11a89870
+push $N11f22c40
+push $N11f00b40
+push $N11ed5140
+push $N11f44d50
  Scene {
   inputs 5
   name SceneTest
@@ -734,7 +734,7 @@ push $N80b21820
   addUserKnob {6 isOn +STARTLINE}
   isOn {{"\[exists input2]"}}
  }
-push $N80a2b400
+push $N11e13b10
  Group {
   inputs 2
   name AxisDistance
