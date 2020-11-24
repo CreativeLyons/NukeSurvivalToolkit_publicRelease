@@ -24,13 +24,10 @@ This github will have all of the up to date changes, bug fixes, tweaks, addition
 3.) Open your init.py file in your /.nuke/ folder into any text editor (or create a new init.py in your User/.nuke/ directory if one doesn’t already exist)
 
 4.) Copy the following code into your init.py file:
-
 ```
-nuke.pluginAddPath("Your/NukeSurvivalToolkit/FolderPath/Here")
+nuke.pluginAddPath("NukeSurvivalToolkit_publicRelease-master/NukeSurvivalToolkit")
 ```
-
-5.) Copy the filepath location of where you placed your NukeSurvivalToolkit.  Replace the
-Your/NukeSurvivalToolkit/FolderPath/Here text with your NukeSurvivalToolkit filepath location, making sure to keep quotation marks around the filepath.
+5.) If necessary, you can change the path to the NukeSurvivalToolkit folder. Replace "NukeSurvivalToolkit_publicRelease-master/NukeSurvivalToolkit" with your custom filepath location, making sure to keep quotation marks around the filepath, e.g. nuke.pluginAddPath("C:\Your/NukeSurvivalToolkit/"). You can find more information at [The Foundry.](https://learn.foundry.com/nuke/content/comp_environment/configuring_nuke/loading_gizmos_plugins_scripts.html)
 
 6.) Save your init.py file, and restart your Nuke session
 
