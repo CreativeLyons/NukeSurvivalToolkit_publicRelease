@@ -21,8 +21,8 @@ for root, dirs, files in os.walk(NST_FolderPath):
     # ignore any folder that states with these characters
     dirs[:] = [d for d in dirs if not d.startswith('.') and not d.startswith('_')]
     #create whiteList
-    for dir in dirs:
-        whiteList.append( os.path.join(root, dir) )
+    for dir_name in dirs:
+        whiteList.append( os.path.join(root, dir_name) )
 
 # add plugin paths
 print ("""
