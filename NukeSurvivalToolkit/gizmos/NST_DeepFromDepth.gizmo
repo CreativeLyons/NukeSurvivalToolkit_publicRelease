@@ -1,9 +1,7 @@
 Group {
- name deepFromDepth
+ name DeepFromDepth
  tile_color 0x66ff
  selected true
- xpos 477
- ypos -33
  addUserKnob {20 User}
  addUserKnob {41 in l z T Shuffle21.in}
  addUserKnob {41 in2 l alpha T Shuffle21.in2}

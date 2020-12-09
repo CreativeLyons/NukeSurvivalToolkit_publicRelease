@@ -3,7 +3,7 @@ Group {
  autolabel nuke.thisNode().name()
  tile_color 0xff6e00ff
  note_font "Verdana Bold Bold"
- note_font_size 12
+ note_font_size 11
  addUserKnob {20 RimLight}
  addUserKnob {41 channels T MatrixSUPER.channels}
  addUserKnob {41 which l rotate T Switch1.which}

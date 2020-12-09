@@ -81,7 +81,7 @@ expressionMenu.addCommand('Creations/Random/Random Colors', "nuke.nodePaste(\"" 
 expressionMenu.addCommand('Creations/Random/Random every Frame', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Random_every_frame.nk") + "\")")
 expressionMenu.addCommand('Creations/Random/Random every Pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Random_every_pixel.nk") + "\")")
 expressionMenu.addCommand('Creations/Noise/Noise', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Noise.nk") + "\")")
-expressionMenu.addCommand('Creations/Noise/fBm', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/fBexpressionMenu.nk") + "\")")
+expressionMenu.addCommand('Creations/Noise/fBm', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/fBm.nk") + "\")")
 expressionMenu.addCommand('Creations/Noise/Turbulence', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/turbulence.nk") + "\")")
 expressionMenu.addCommand('Creations/lines vertical', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Vertical.nk") + "\")")
 expressionMenu.addCommand('Creations/lines horizontal', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Horizontal.nk") + "\")")
@@ -106,7 +106,7 @@ expressionMenu.addCommand('Creations/Trunc', "nuke.nodePaste(\"" + os.path.join(
 expressionMenu.addCommand('Alpha/alpha binary', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_binary.nk") + "\")")
 expressionMenu.addCommand('Alpha/alpha comparison', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_comparison.nk") + "\")")
 expressionMenu.addCommand('Alpha/alpha exists?', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_exists.nk") + "\")")
-expressionMenu.addCommand('Alpha/alpha sum', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_suexpressionMenu.nk") + "\")")
+expressionMenu.addCommand('Alpha/alpha sum', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_sum.nk") + "\")")
 
 #PIXEL
 expressionMenu.addCommand('Pixel/absolute value', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/abs.nk") + "\")")
@@ -119,10 +119,9 @@ expressionMenu.addCommand('Pixel/kill inf pixel', "nuke.nodePaste(\"" + os.path.
 
 #TRANSFORM
 expressionMenu.addCommand('Transform/Coordinates', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/coordinates.nk") + "\")")
-expressionMenu.addCommand('Transform/UV Map', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/UV_map.nk") + "\")")
 expressionMenu.addCommand('Transform/UV to Vector', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/UV_to_Vector.nk") + "\")")
 expressionMenu.addCommand('Transform/Vector to UV', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Vector_to_UV.nk") + "\")")
-expressionMenu.addCommand('Transform/transform', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/transforexpressionMenu.nk") + "\")")
+expressionMenu.addCommand('Transform/transform', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/transform.nk") + "\")")
 expressionMenu.addCommand('Transform/transform advanced', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/transform_advanced.nk") + "\")")
 expressionMenu.addCommand('Transform/twist', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/twist.nk") + "\")")
 expressionMenu.addCommand('Transform/STMap_invert', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/STMap_invert.nk") + "\")")
@@ -132,7 +131,6 @@ expressionMenu.addCommand('3D and Deep/Normal Pass - Relight', "nuke.nodePaste(\
 expressionMenu.addCommand('3D and Deep/C4x4', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/C4x4.nk") + "\")")
 expressionMenu.addCommand('3D and Deep/Deep Thickness', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/deepThickness.nk") + "\")")
 expressionMenu.addCommand('3D and Deep/Deep to Depth', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/deepToDepth.nk") + "\")")
-expressionMenu.addCommand('3D and Deep/Deep from Depth', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/deepFromDepth.nk") + "\")")
 expressionMenu.addCommand('3D and Deep/Depth normalize', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/depth_normalize.nk") + "\")")
 
 #KEYING and DESPILL
@@ -429,7 +427,7 @@ VMT_convertMenu = VMTmenu.addMenu('Convert', icon = 'ProductVector3.png')
 VMT_convertMenu.addCommand('Luma To Vector3', "nuke.createNode('{}LumaToVector3')".format(prefixNST), icon = 'vectorToolsBW.png')
 VMT_convertMenu.addCommand('STMap To Vector2', "nuke.createNode('{}STMapToVector2')".format(prefixNST), icon = 'Vector2.png')
 VMT_convertMenu.addCommand('Vector2 To STMap', "nuke.createNode('{}Vector2ToSTMap')".format(prefixNST), icon = 'AG_UVMap.png')
-VMT_convertMenu.addCommand('Vector3 To Matrix4', "nuke.createNode('{}Vector3ToMatrix4)".format(prefixNST), icon = 'ProductVector3.png')
+VMT_convertMenu.addCommand('Vector3 To Matrix4', "nuke.createNode('{}Vector3ToMatrix4')".format(prefixNST), icon = 'ProductVector3.png')
 
 transformMenu.addCommand('vector3DMathExpression EL', "nuke.createNode('{}vector3DMathExpression')".format(prefixNST), icon = 'vectorTools.png')
 transformMenu.addCommand('Vectors_Direction EL', "nuke.createNode('{}Vectors_Direction')".format(prefixNST), icon = 'vectorTools.png')
@@ -555,6 +553,7 @@ deepMenu.addCommand('DeepSer MJT', "nuke.createNode('{}DeepSer')".format(prefixN
 
 deepMenu.addSeparator()
 
+deepMenu.addCommand('DeepFromDepth AG', "nuke.createNode('{}DeepFromDepth')".format(prefixNST), icon="DeepRecolor.png")
 deepMenu.addCommand('DeepToPosition TL', "nuke.createNode('{}DeepToPosition')".format(prefixNST), icon="Deep2VPosition.png")
 deepMenu.addCommand('DeepRecolorMatte TL', "nuke.createNode('{}DeepRecolorMatte')".format(prefixNST), icon="DeepRecolor.png")
 

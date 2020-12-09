@@ -1,7 +1,5 @@
-set cut_paste_input [stack 0]
-push $cut_paste_input
 Group {
- name EdgeAlias
+ name EdgeDetectAlias
  tile_color 0xcc804eff
  note_font "Bitstream Vera Sans Bold Bold"
  note_font_color 0xffffffff
