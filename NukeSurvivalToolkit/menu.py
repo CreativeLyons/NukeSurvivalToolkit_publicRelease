@@ -287,7 +287,7 @@ transformMenu.addCommand('Vectors_to_Degrees EL', "nuke.createNode('{}Vectors_to
 try:
     nuke.load('{}VectorTracker.py'.format(prefixNST))
 except:
-    print "Could not load VectorTracker.py"
+    print("Could not load VectorTracker.py")
     pass
 transformMenu.addCommand('VectorTracker NKPD', "nuke.createNode('{}VectorTracker.gizmo')".format(prefixNST), icon = 'vectorTools.png')
 

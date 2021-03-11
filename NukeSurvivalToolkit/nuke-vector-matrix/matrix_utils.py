@@ -292,7 +292,7 @@ def get_camera_projection_matrix(camera, frame, image_format):
 
     # Matrix to transform points into camera-relative coordinates.
     matrix_world = nuke.math.Matrix4()
-    for index in xrange(16):
+    for index in range(16):
         matrix_world[index] = camera['matrix'].getValueAt(frame, index)
     matrix_world.transpose()
     cam_transform = matrix_world.inverse()
@@ -425,7 +425,7 @@ def get_card_matrix(card, frame):
     # Handle card transformation
     values = card['matrix'].getValueAt(frame)
     matrix = nuke.math.Matrix4()
-    for i in xrange(len(values)):
+    for i in range(len(values)):
         matrix[i] = values[i]
     matrix.transpose()
 
@@ -472,7 +472,7 @@ def get_matrix_at_frame(node, frame):
         k = node.knob('transform_matrix')
         values = k.getValueAt(frame)
         extra_matrix = nuke.math.Matrix4()
-        for index in xrange(len(values)):
+        for index in range(len(values)):
             extra_matrix[index] = values[index]
         extra_matrix.transpose()
 
@@ -510,10 +510,10 @@ def matrix_to_corners(matrix, frame_width, frame_height):
 def print_matrix4(matrix):
     """ Print a matrix """
     row = '| ' + 4 * '{: .4f} ' + '|'
-    print row.format(matrix[0], matrix[4], matrix[8], matrix[12])
-    print row.format(matrix[1], matrix[5], matrix[9], matrix[13])
-    print row.format(matrix[2], matrix[6], matrix[10], matrix[14])
-    print row.format(matrix[3], matrix[7], matrix[11], matrix[15])
+    print(row.format(matrix[0], matrix[4], matrix[8], matrix[12]))
+    print(row.format(matrix[1], matrix[5], matrix[9], matrix[13]))
+    print(row.format(matrix[2], matrix[6], matrix[10], matrix[14]))
+    print(row.format(matrix[3], matrix[7], matrix[11], matrix[15]))
 
 
 def reconcile_card(card, camera, frame):
@@ -564,7 +564,7 @@ def set_value_on_tracker(tracker, point, point_index, frame, set_animated):
         count = 0
         while not tracks.fullyQualifiedName(count * columns).endswith('.tracks'):
             count += 1
-        print "Adding point", count, point_index
+        print("Adding point", count, point_index)
         tracker['add_track'].execute()
         point_index = count
 
@@ -654,7 +654,7 @@ def merge_transforms(transform_list, first, last, cornerpin=False, force_matrix=
 
     # We need the calculation for each frame
     try:
-        for frame in xrange(first, last + 1):
+        for frame in range(first, last + 1):
             if task.isCancelled():
                 break
             current_matrix = get_matrix_at_frame(transform_list[0], frame)
@@ -730,7 +730,7 @@ def do_matrix_conversion(old_node, new_class, first, last,
 
     # We need the calculation for each frame
     try:
-        for frame in xrange(first, last + 1):
+        for frame in range(first, last + 1):
             if task.isCancelled():
                 break
 

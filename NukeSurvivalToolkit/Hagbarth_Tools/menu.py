@@ -12,8 +12,8 @@ m.addCommand("Silk MHD", "nuke.createNode(\"{}h_silk\")".format(prefixNST), icon
 # Add GradientEditor
 try:
     import ColorGradientUi
-except:
-    print "Could not load ColorGradientUi from HagbarthTools"
+except Exception as err:
+    print("Could not load ColorGradientUi from HagbarthTools" + str(err))
     pass
 
 

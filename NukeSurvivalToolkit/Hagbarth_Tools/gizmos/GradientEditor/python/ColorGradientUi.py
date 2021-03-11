@@ -17,7 +17,10 @@ from nukescripts import panels
 import datetime
 import operator
 
-import ConfigParser
+try:
+	import ConfigParser
+except:
+	import configparser as ConfigParser
 PresetsFile = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),'presets/GradientPresets.cfg')
 config = ConfigParser.RawConfigParser()
 config.read(PresetsFile)
