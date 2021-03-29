@@ -1,0 +1,13 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr0 "sin(sqrt(x * x + y * y ))"
+ expr1 "sin(sqrt(x * x + y * y ))"
+ expr2 "sin(sqrt(x * x + y * y ))"
+ expr3 "sin(sqrt(x * x + y * y ))"
+ name Circles
+ selected true
+ xpos 1203
+ ypos 221
+}

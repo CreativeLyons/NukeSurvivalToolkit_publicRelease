@@ -1,0 +1,12 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ temp_name0 clamp
+ temp_expr0 1
+ expr3 "clamp==1 ? clamp(r+g+b) : r+g+b"
+ name r_plus_g_plus_b
+ selected true
+ xpos 267
+ ypos -9
+}

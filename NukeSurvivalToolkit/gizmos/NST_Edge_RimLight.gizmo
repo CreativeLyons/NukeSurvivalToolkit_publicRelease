@@ -1,0 +1,374 @@
+Group {
+ name Edge_RimLight
+ autolabel nuke.thisNode().name()
+ tile_color 0xff6e00ff
+ note_font "Verdana Bold Bold"
+ note_font_size 11
+ addUserKnob {20 RimLight}
+ addUserKnob {41 channels T MatrixSUPER.channels}
+ addUserKnob {41 which l rotate T Switch1.which}
+ addUserKnob {26 ""}
+ addUserKnob {20 matrix_1 l Matrix n 1}
+ addUserKnob {41 matrix T MatrixSUPER.matrix}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 parameters l Parameters n 1}
+ parameters 0
+ addUserKnob {41 size l innerEdgeErode T FilterErode_inner.size}
+ addUserKnob {41 filter -STARTLINE T FilterErode_inner.filter}
+ addUserKnob {41 size_1 l innerEdgeBlur T Blur_inner.size}
+ addUserKnob {26 ""}
+ addUserKnob {6 keep_alpha l "keep original alpha" +STARTLINE}
+ addUserKnob {41 size_2 l "alpha Erode" T FilterErode_alpha.size}
+ addUserKnob {41 filter_1 l filter -STARTLINE T FilterErode_alpha.filter}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 email l @}
+ addUserKnob {26 created l "" +STARTLINE T "Tool created by Andrea Geremia"}
+ addUserKnob {26 ""}
+ addUserKnob {26 website l "" +STARTLINE T "andrea.geremia89@gmail.com\nwww.andreageremia.it/tutorial.html"}
+}
+ Dot {
+  inputs 0
+  name Dot16
+  xpos 303
+  ypos -114
+ }
+set N19b730 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {-1 0 1}
+      {-1 -1 0}
+    }
+  name Matrix15
+  xpos 269
+  ypos -1
+ }
+push $N19b730
+ Dot {
+  name Dot1
+  xpos 170
+  ypos -114
+ }
+set N1a2700 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 1}
+      {-1 0 1}
+      {-1 -1 -1}
+    }
+  name Matrix14
+  xpos 136
+  ypos -2
+ }
+push $N1a2700
+ Dot {
+  name Dot14
+  xpos 40
+  ypos -114
+ }
+set N1a9f80 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 1}
+      {0 0 0}
+      {-1 -1 -1}
+    }
+  name Matrix13
+  xpos 6
+  ypos -2
+ }
+push $N1a9f80
+ Dot {
+  name Dot13
+  xpos -106
+  ypos -114
+ }
+set N1b1720 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 1}
+      {1 0 -1}
+      {-1 -1 -1}
+    }
+  name Matrix12
+  xpos -140
+ }
+push $N1b1720
+ Dot {
+  name Dot12
+  xpos -240
+  ypos -114
+ }
+set N1b8ec0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 0 -1}
+      {0 -1 -1}
+    }
+  name Matrix11
+  xpos -274
+  ypos -2
+ }
+push $N1b8ec0
+ Dot {
+  name Dot11
+  xpos -391
+  ypos -114
+ }
+set N1c0660 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 -1}
+      {0 0 0}
+      {1 -1 -1}
+    }
+  name Matrix10
+  xpos -425
+  ypos -2
+ }
+push $N1c0660
+ Dot {
+  name Dot10
+  xpos -523
+  ypos -114
+ }
+set N1c7e00 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 -1}
+      {1 0 -1}
+      {1 -1 -1}
+    }
+  name Matrix9
+  xpos -557
+  ypos -5
+ }
+push $N1c7e00
+ Dot {
+  name Dot9
+  xpos -672
+  ypos -114
+ }
+set N184e00 [stack 0]
+ Matrix {
+  matrix {
+      {1 0 -1}
+      {1 0 -1}
+      {1 0 -1}
+    }
+  name Matrix8
+  xpos -706
+  ypos -2
+ }
+push $N184e00
+ Dot {
+  name Dot8
+  xpos -812
+  ypos -114
+ }
+set N177c70 [stack 0]
+ Matrix {
+  matrix {
+      {1 -1 -1}
+      {1 0 -1}
+      {1 1 -1}
+    }
+  name Matrix7
+  xpos -846
+  ypos -2
+ }
+push $N177c70
+ Dot {
+  name Dot15
+  xpos -917
+  ypos -114
+ }
+set N118830 [stack 0]
+ Matrix {
+  matrix {
+      {0 -1 -1}
+      {1 0 -1}
+      {1 1 0}
+    }
+  name Matrix6
+  xpos -951
+  ypos -3
+ }
+push $N118830
+ Dot {
+  name Dot7
+  xpos -1023
+  ypos -114
+ }
+set N1d0b80 [stack 0]
+ Matrix {
+  matrix {
+      {-1 -1 -1}
+      {1 0 -1}
+      {1 1 1}
+    }
+  name Matrix5
+  xpos -1057
+  ypos -2
+ }
+push $N1d0b80
+ Dot {
+  name Dot6
+  xpos -1133
+  ypos -114
+ }
+set N1d81e0 [stack 0]
+ Matrix {
+  matrix {
+      {-1 -1 -1}
+      {0 0 0}
+      {1 1 1}
+    }
+  name Matrix4
+  xpos -1167
+  ypos -3
+ }
+push $N1d81e0
+ Dot {
+  name Dot5
+  xpos -1254
+  ypos -114
+ }
+set N1dfc00 [stack 0]
+ Matrix {
+  matrix {
+      {-1 -1 -1}
+      {-1 0 1}
+      {1 1 1}
+    }
+  name Matrix3
+  xpos -1288
+  ypos -3
+ }
+push $N1dfc00
+ Dot {
+  name Dot4
+  xpos -1375
+  ypos -114
+ }
+set N1eb2e0 [stack 0]
+ Matrix {
+  matrix {
+      {-1 -1 0}
+      {-1 0 1}
+      {0 1 1}
+    }
+  name Matrix2
+  xpos -1409
+  ypos -2
+ }
+push $N1eb2e0
+ Dot {
+  name Dot3
+  xpos -1491
+  ypos -114
+ }
+set N1688b0 [stack 0]
+ Matrix {
+  matrix {
+      {-1 -1 1}
+      {-1 0 1}
+      {-1 1 1}
+    }
+  name Matrix1
+  xpos -1525
+  ypos -2
+ }
+push $N1688b0
+ Dot {
+  name Dot2
+  xpos -1624
+  ypos -114
+ }
+ Matrix {
+  matrix {
+      {-1 0 1}
+      {-1 0 1}
+      {-1 0 1}
+    }
+  name Matrix0
+  xpos -1658
+  ypos -2
+ }
+ Switch {
+  inputs 16
+  name Switch1
+  xpos -706
+  ypos 288
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 332
+  ypos 170
+ }
+ Dot {
+  name Dot18
+  xpos 366
+  ypos 217
+ }
+set N1f7bf0 [stack 0]
+ Dot {
+  name Dot19
+  xpos 539
+  ypos 217
+ }
+ FilterErode {
+  channels all
+  size 0
+  name FilterErode_alpha
+  xpos 505
+  ypos 363
+ }
+ Dot {
+  name Dot17
+  xpos 539
+  ypos 554
+ }
+push $N1f7bf0
+ Matrix {
+  channels rgba
+  matrix {
+      {{"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(0,0)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(0,1)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(0,2)]"}}
+      {{"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(1,0)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(1,1)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(1,2)]"}}
+      {{"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(2,0)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(2,1)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(2,2)]"}}
+    }
+  name MatrixSUPER
+  selected true
+  xpos 332
+  ypos 274
+ }
+ FilterErode {
+  channels {{{parent.MatrixSUPER.channels}}}
+  size 0
+  name FilterErode_inner
+  xpos 332
+  ypos 391
+ }
+ Blur {
+  channels {{{parent.MatrixSUPER.channels}}}
+  quality 30
+  name Blur_inner
+  xpos 332
+  ypos 478
+ }
+ Merge2 {
+  inputs 2
+  operation in
+  name Merge2
+  xpos 332
+  ypos 551
+  disable {{!parent.keep_alpha}}
+ }
+ Output {
+  name Output1
+  xpos 332
+  ypos 690
+ }
+end_group

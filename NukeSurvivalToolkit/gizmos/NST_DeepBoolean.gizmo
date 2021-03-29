@@ -1,0 +1,630 @@
+Group {
+ name DeepBoolean
+ tile_color 0x597fff
+ label "mode : \[value mode]\n<font color=cyan>Deep Output</font>"
+ addUserKnob {20 tab_general l General}
+ addUserKnob {22 set_link l "link to selected camera" t "Deep data is all related to camera, so the tool required camera data as well. Select the camera and click this button, the tool will gather all the information that it needs from camera node.\n\nIt is fine if the camera connected some axis with transformation on it's upstream. It is because this button will collect world matrix for transformation.\n\nRequired data can be find under 'Camera Data'" T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\nroot = getLevel()\nthisGRP = nuke.thisGroup()\n\nmainKnobs = \['world_matrix','cam_focal','cam_haperture','cam_near','cam_far','cam_win_translate','cam_win_scale','cam_winroll']\ndefaultKnobs = \{\n\t\t\t'world matrix' : 'world_matrix',\n\t\t\t'focal length' : 'focal',\n\t\t\t'horiz aperture' : 'haperture',\n\t\t\t'near' : 'near',\n\t\t\t'far' : 'far',\n\t\t\t'window translate' : 'win_translate',\n\t\t\t'window scale' : 'win_scale',\n\t\t\t'window roll' : 'winroll'\n\t\t\t\}\nselNodeKnobs = \[]\nmissingKnob = \[]\n\ntry :\n\twith root :\n\t\tselNode = nuke.selectedNode()\n\n\tfor knob in selNode.knobs() :\n\t\tselNodeKnobs.append( knob )\n\n\tselNodeKnobs.sort()\n\n\tfor key,value in defaultKnobs.items() :\n\t\tif value not in selNodeKnobs :\n\t\t\tmissingKnob.append( key )\n\n\tif not len(missingKnob) :\n\t\twith root :\n\t\t\tfor knob in mainKnobs :\n\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\tCAMnode = selNode.name()\n\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.world_matrix'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.focal'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.haperture'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.near'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.far'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.win_translate'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[6]].setExpression('\{0\}.win_scale'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[7]].setExpression('\{0\}.winroll'.format(CAMnode))\n\telse :\n\t\tp = nuke.Panel('Select knobs :')\n\t\tp.addBooleanCheckBox( '<b>Unable to find the default knobs. Please use the pulldown menu below to define the knob manually.</b>' , False)\n\t\tfor rk in missingKnob :\n\t\t\tp.addEnumerationPulldown( rk, ' '.join( selNodeKnobs ) )\n\n\t\tif p.show() :\n\t\t\ttry :\n\t\t\t\tfor key,value in defaultKnobs.items() :\n\t\t\t\t\tif p.value( key ) != None :\n\t\t\t\t\t\tdefaultKnobs\[key] = p.value( key )\n\t\t\texcept :\n\t\t\t\tpass\n\n\t\t\twith root :\n\t\t\t\tfor knob in mainKnobs :\n\t\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\t\tCAMnode = selNode.name()\n\t\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['world matrix']))\n\t\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['focal length']))\n\t\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['horiz aperture']))\n\t\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['near']))\n\t\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['far']))\n\t\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window translate']))\n\t\t\t\tthisGRP\[mainKnobs\[6]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window scale']))\n\t\t\t\tthisGRP\[mainKnobs\[7]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window roll']))\nexcept :\n\tnuke.message('no node selected.')" +STARTLINE}
+ addUserKnob {22 remove_link l "remove linked expression" t "Remove the camera expression with this button. It will remain the current camera data in this node but not with animation." -STARTLINE T "thisGRP = nuke.thisGroup()\nmainKnobs = \['world_matrix','cam_focal','cam_haperture','cam_near','cam_far','cam_win_translate','cam_win_scale','cam_winroll']\n\nfor knob in thisGRP.knobs() :\n    if mainKnobs.count(knob) != 0 :\n        thisGRP\[knob].clearAnimated()"}
+ addUserKnob {22 bake_link l "bake expression link" T "thisGRP = nuke.thisGroup()\n\nframeST = nuke.root().firstFrame()\nframeED = nuke.root().lastFrame()\n\nallknobs = \['cam_focal','cam_haperture','cam_near','cam_far','cam_win_translate','cam_win_scale','cam_winroll','world_matrix']\nalldata = \{\}\n\nchknobs = 0\nfor knob in allknobs :\n\tif thisGRP\[knob].hasExpression() :\n\t\tchknobs = 1\n\nif chknobs :\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\ttry :\n\t\t\t\talldata\[knob].append( thisGRP\[knob].getValueAt(t) )\n\t\t\texcept :\n\t\t\t\talldata\[knob] = \[ thisGRP\[knob].getValueAt(t) ]\n\n\tfor knob in allknobs :\n\t\tthisGRP\[knob].clearAnimated()\n\t\tthisGRP\[knob].setAnimated()\n\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is float :\n\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST] , t )\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is list :\n\t\t\t\tfor i in range( len( alldata\[knob]\[t-frameST] ) ) :\n\t\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST]\[i] , t , i )\nelse :\n\tnuke.message('no expression link found.')" +STARTLINE}
+ addUserKnob {22 copy_data l "copy from selected camera" -STARTLINE T "thisGRP = nuke.thisGroup()\nthisGRP\['set_link'].execute()\nthisGRP\['bake_link'].execute()"}
+ addUserKnob {20 cam_data_grp l "CAMERA DATA" n 1}
+ cam_data_grp 0
+ addUserKnob {7 cam_focal l "focal length" t "focal length of the camera" R 5 100}
+ cam_focal 50
+ addUserKnob {7 cam_haperture l "horiz aperture" t "horiz aperture of the camera" R 0.1 50}
+ cam_haperture 24.576
+ addUserKnob {7 cam_near l near t "near clip value of the camera" R 0.1 10}
+ cam_near 0.1
+ addUserKnob {7 cam_far l far t "far clip value of the camera" R 11 10000}
+ cam_far 10000
+ addUserKnob {30 cam_win_translate l "window translate"}
+ addUserKnob {30 cam_win_scale l "window scale"}
+ cam_win_scale {1 1}
+ addUserKnob {7 cam_winroll l "window roll" R -45 45}
+ addUserKnob {41 world_matrix l "world matrix" t "world matrix of the camera" T cam_data.matrix}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 title_geomatte l "<b>GEO MATTE</a>"}
+ addUserKnob {4 mode t "<b>intersect</b>\nkeep the data overlap with the geo matte.\n\n<b>subtract</b>\nremove the data overlap with the geo matte.\n\nRemarks:\nsubtract is alike deepholdout function but support with geo matte extrude/erode in z and falloff." M {intersect subtract}}
+ addUserKnob {6 uv_fix l "create new UV for holdout geo" t "If the geo has no UV, extrude the holdout will break the setup. This option to fix a geo without UV." +STARTLINE}
+ addUserKnob {7 extrude t "extrude the geo faces by normal" R -4 4}
+ addUserKnob {78 erode_front l "deep erode front" t "erode the deep data clipped by geo matte in front data (closer from the camera)" n 1}
+ addUserKnob {78 erode_back l back t "erode the deep data clipped by geo matte in back data (further from the camera)" -STARTLINE n 1}
+ addUserKnob {7 falloff t "create a linear falloff matte from the geo."}
+ addUserKnob {7 falloff_scale l "falloff scale" R 0.01 1000}
+ falloff_scale 100
+ addUserKnob {78 bias t "This value for dev purposes. default value is 1.0" +INVISIBLE n 1}
+ bias 1
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.4}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-01-09}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.4<br>-&nbsp;support&nbsp;camera&nbsp;window&nbsp;transformation&nbsp;(re-rack)<br>-&nbsp;removed&nbsp;vert&nbsp;aperture&nbsp;(unnecessary)<br>-&nbsp;linked/bake/copy&nbsp;camera&nbsp;data&nbsp;has&nbsp;the&nbsp;same&nbsp;function&nbsp;as&nbsp;Deep2VP<br>&nbsp;&nbsp;support&nbsp;non&nbsp;'Camera'/'Camera2'&nbsp;node&nbsp;class<br>-&nbsp;capable&nbsp;with&nbsp;Deep2VP&nbsp;3.7+&nbsp;(able&nbsp;to&nbsp;combine&nbsp;with&nbsp;DVPmatte)<br><br>1.3<br>-&nbsp;download&nbsp;tool&nbsp;with&nbsp;demo&nbsp;script<br>-&nbsp;change&nbsp;label&nbsp;of&nbsp;the&nbsp;knob&nbsp;to<br>&nbsp;&nbsp;'deep&nbsp;erode&nbsp;front/back'<br>&nbsp;&nbsp;(&nbsp;function&nbsp;&&nbsp;knob&nbsp;name&nbsp;doesn't&nbsp;change&nbsp;)<br><br>1.2<br>-&nbsp;optimize&nbsp;the&nbsp;setup,&nbsp;get&nbsp;less<br>&nbsp;&nbsp;calculation<br>-&nbsp;added&nbsp;falloff&nbsp;scale\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ Camera {
+  inputs 0
+  display off
+  selectable false
+  useMatrix true
+  focal {{parent.cam_focal}}
+  haperture {{parent.cam_haperture}}
+  near {{parent.cam_near}}
+  far {{parent.cam_far}}
+  win_translate {{parent.cam_win_translate} {parent.cam_win_translate}}
+  win_scale {{parent.cam_win_scale} {parent.cam_win_scale}}
+  winroll {{parent.cam_winroll}}
+  name cam_data
+  xpos -140
+  ypos -350
+ }
+ Dot {
+  name Dot13
+  xpos -6
+  ypos -326
+ }
+set Nb8eb800 [stack 0]
+ Dot {
+  name Dot14
+  xpos -6
+  ypos -166
+ }
+push $Nb8eb800
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width 1
+  box_height 1
+  box_fixed true
+  resize none
+  filter Impulse
+  name Reformat1
+  xpos -40
+  ypos -569
+ }
+ Expression {
+  expr0 1
+  channel1 none
+  channel2 none
+  channel3 none
+  name Expression1
+  xpos -40
+  ypos -489
+ }
+ CheckerBoard2 {
+  inputs 0
+  name CheckerBoard1
+  xpos 180
+  ypos -673
+ }
+ Multiply {
+  channels alpha
+  value 0.5
+  name tranparency
+  xpos 180
+  ypos -573
+ }
+ Displacement {
+  inputs 2
+  displacement_channel red
+  scale {{parent.extrude}}
+  filter_size 0
+  filter Impulse
+  displacement_max_tessellation 0
+  displacement_mode uniform
+  name Displacement1
+  xpos 180
+  ypos -489
+ }
+ Input {
+  inputs 0
+  name geoMat
+  xpos 290
+  ypos -809
+ }
+ Dot {
+  name Dot1
+  xpos 324
+  ypos -406
+ }
+ ApplyMaterial {
+  inputs 2
+  display off
+  name ApplyMaterial1
+  xpos 180
+  ypos -409
+ }
+ UVProject {
+  inputs 2
+  selectable false
+  projection planar
+  name UVProject1
+  label "save the geo without uv"
+  xpos 180
+  ypos -333
+  disable {{!parent.uv_fix}}
+ }
+ Input {
+  inputs 0
+  name deep
+  xpos 840
+  ypos -809
+  number 1
+ }
+ Dot {
+  name Dot4
+  xpos 874
+  ypos -246
+ }
+set N2008b000 [stack 0]
+ DeepToImage {
+  name DeepToImage2
+  xpos 290
+  ypos -249
+ }
+ Remove {
+  name Remove1
+  xpos 290
+  ypos -173
+ }
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  filter Impulse
+  motion_vectors_type off
+  MB_channel none
+  output_shader_vectors true
+  N_channel rgba
+  name ScanlineRender1
+  xpos 180
+  ypos -169
+ }
+ DeepExpression {
+  chans0 alpha
+  chans1 none
+  rgba.alpha "alpha * 1/0.5"
+  name DeepExpression1
+  label "revert alpha"
+  xpos 180
+  ypos -98
+ }
+ DeepExpression {
+  temp_name0 nx
+  temp_expr0 red
+  temp_name1 ny
+  temp_expr1 green
+  temp_name2 nz
+  temp_expr2 blue
+  chans0 rgb
+  chans1 none
+  rgba.red 0
+  rgba.green 0
+  rgba.blue "nx * \[value inverseMatrix.invMatrix.6] + ny * \[value inverseMatrix.invMatrix.7] + nz * \[value inverseMatrix.invMatrix.8]"
+  name DeepExpression3
+  label "cam normal z"
+  xpos 180
+  ypos 67
+ }
+ Dot {
+  name Dot12
+  xpos 214
+  ypos 154
+ }
+set N200bd800 [stack 0]
+ Dot {
+  name Dot3
+  xpos 214
+  ypos 314
+ }
+set N200bd400 [stack 0]
+ Dot {
+  name Dot8
+  xpos -6
+  ypos 314
+ }
+set N200bd000 [stack 0]
+ Dot {
+  name Dot10
+  xpos -163
+  ypos 314
+ }
+ DeepToImage {
+  name DeepToImage6
+  xpos -197
+  ypos 764
+ }
+ Dot {
+  name Dot11
+  xpos -163
+  ypos 1274
+ }
+push $N200bd000
+ DeepExpression {
+  chans0 {-rgba.red rgba.green -rgba.blue none}
+  chans1 none
+  rgba.green "blue < \[value bias] ? deep.front : 0"
+  name DeepExpression6
+  label farD
+  xpos -40
+  ypos 387
+ }
+ DeepExpression {
+  chans0 none
+  chans1 deep
+  deep.front "green == 0 ? -1 : deep.front"
+  deep.back "green == 0 ? -1 : deep.back"
+  name DeepExpression7
+  label "throw data"
+  xpos -40
+  ypos 481
+ }
+ DeepCrop {
+  use_znear false
+  zfar 0
+  outside_zrange true
+  bbox {0 0 {input.width} {input.height}}
+  name DeepCrop2
+  label "clean trash"
+  xpos -40
+  ypos 575
+ }
+ DeepExpression {
+  chans1 deep
+  deep.front -deep.front
+  deep.back -deep.back
+  name DeepExpression14
+  label "swap the furthest deep value"
+  xpos -40
+  ypos 669
+ }
+ DeepToImage {
+  name DeepToImage4
+  xpos -40
+  ypos 763
+ }
+ Add {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  value {{parent.erode_back}}
+  name Add1
+  label "back erode"
+  xpos -40
+  ypos 881
+ }
+ Dot {
+  name Dot7
+  xpos -6
+  ypos 1149
+ }
+push $N200bd400
+ DeepExpression {
+  chans0 {rgba.red -rgba.green -rgba.blue none}
+  chans1 none
+  rgba.red "blue > -\[value parent.bias] ? deep.front : 0"
+  name DeepExpression4
+  label nearD
+  xpos 180
+  ypos 388
+ }
+ DeepExpression {
+  chans0 none
+  chans1 deep
+  deep.front "red == 0 ? -1 : deep.front"
+  deep.back "red == 0 ? -1 : deep.back"
+  name DeepExpression5
+  label "throw data"
+  xpos 180
+  ypos 482
+ }
+ DeepCrop {
+  use_znear false
+  zfar 0
+  outside_zrange true
+  bbox {0 0 {input.width} {input.height}}
+  name DeepCrop1
+  label "clean trash"
+  xpos 180
+  ypos 562
+ }
+ DeepToImage {
+  name DeepToImage3
+  xpos 180
+  ypos 763
+ }
+ Add {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  value {{-parent.erode_front}}
+  name Add2
+  label "front erode"
+  xpos 180
+  ypos 882
+ }
+ Dot {
+  name Dot6
+  xpos 214
+  ypos 1034
+ }
+push $N200bd800
+ DeepExpression {
+  chans1 none
+  rgba.red 0
+  rgba.green 0
+  rgba.blue 0
+  rgba.alpha 0
+  name DeepExpression13
+  xpos 400
+  ypos 151
+ }
+push $N2008b000
+ DeepMerge {
+  inputs 2
+  name DeepMerge1
+  xpos 840
+  ypos 151
+ }
+ Dot {
+  name Dot5
+  xpos 874
+  ypos 554
+ }
+set N20102400 [stack 0]
+ Dot {
+  name Dot17
+  xpos 434
+  ypos 554
+ }
+ DeepToImage {
+  name DeepToImage5
+  xpos 400
+  ypos 769
+ }
+ Remove {
+  name Remove2
+  xpos 400
+  ypos 885
+ }
+add_layer {deepGeoMat deepGeoMat.red deepGeoMat.green deepGeoMat.blue deepGeoMat.alpha}
+ ShuffleCopy {
+  inputs 2
+  in2 none
+  red red
+  green black
+  blue black
+  alpha alpha2
+  out deepGeoMat
+  name ShuffleCopy2
+  label "copy red"
+  xpos 400
+  ypos 1027
+ }
+ ShuffleCopy {
+  inputs 2
+  in2 deepGeoMat
+  green green
+  blue black
+  alpha black
+  out deepGeoMat
+  name ShuffleCopy3
+  label "copy green"
+  xpos 400
+  ypos 1142
+ }
+ ShuffleCopy {
+  inputs 2
+  in2 deepGeoMat
+  blue blue
+  alpha black
+  out deepGeoMat
+  name ShuffleCopy1
+  label "copy blue"
+  xpos 400
+  ypos 1267
+ }
+ Dot {
+  name Dot9
+  xpos 434
+  ypos 1354
+ }
+add_layer {deepRawColor deepRawColor.red deepRawColor.green deepRawColor.blue deepRawColor.alpha}
+ AddChannels {
+  inputs 0
+  channels deepRawColor
+  name AddChannels1
+  xpos 697
+  ypos 707
+ }
+push $N20102400
+ DeepRecolor {
+  inputs 2
+  channels {{{parent.AddChannels1.channels}}}
+  name DeepRecolor1
+  xpos 840
+  ypos 707
+ }
+ DeepExpression {
+  chans0 deepRawColor
+  chans1 none
+  deepRawColor.red red
+  deepRawColor.green green
+  deepRawColor.blue blue
+  deepRawColor.alpha alpha
+  name DeepExpression2
+  label "store color to deepRawColor"
+  xpos 840
+  ypos 867
+ }
+ DeepExpression {
+  chans0 alpha
+  chans1 none
+  rgba.alpha 1
+  name DeepExpression11
+  label "solid the alpha for data pass calculation"
+  xpos 840
+  ypos 947
+ }
+ DeepRecolor {
+  inputs 2
+  channels deepGeoMat
+  name DeepRecolor2
+  xpos 840
+  ypos 1347
+ }
+ DeepExpression {
+  chans0 {-deepGeoMat.red -deepGeoMat.green -deepGeoMat.blue deepGeoMat.alpha}
+  chans1 none
+  deepGeoMat.alpha "deep.front - deepGeoMat.red < \[value globalValue.falloff] ? clamp( ( deep.front - deepGeoMat.red ) / \[value globalValue.falloff] ) : 1"
+  name DeepExpression9
+  label "front falloff"
+  xpos 840
+  ypos 1435
+ }
+ DeepExpression {
+  chans0 {-deepGeoMat.red -deepGeoMat.green -deepGeoMat.blue deepGeoMat.alpha}
+  chans1 none
+  deepGeoMat.alpha "( deep.front - ( deepGeoMat.green - \[value globalValue.falloff] ) ) < \[value globalValue.falloff] ? ( 1 - clamp( ( deep.front - ( deepGeoMat.green - \[value globalValue.falloff] ) ) / \[value globalValue.falloff] ) ) * deepGeoMat.alpha : 0"
+  name DeepExpression16
+  label "back falloff"
+  xpos 840
+  ypos 1523
+ }
+ DeepExpression {
+  temp_name0 norSide
+  temp_expr0 "1- clamp( ( 1- clamp( deepGeoMat.blue ) ) * ( \[value globalValue.falloff] / 100 ) )"
+  chans0 {-deepGeoMat.red -deepGeoMat.green -deepGeoMat.blue deepGeoMat.alpha}
+  chans1 none
+  deepGeoMat.alpha "deepGeoMat.alpha * norSide"
+  name DeepExpression12
+  label "facing ratio"
+  xpos 840
+  ypos 1611
+ }
+ DeepExpression {
+  chans1 none
+  rgba.red "deepGeoMat.alpha * deepRawColor.red"
+  rgba.green "deepGeoMat.alpha * deepRawColor.green"
+  rgba.blue "deepGeoMat.alpha * deepRawColor.blue"
+  rgba.alpha "deepGeoMat.alpha * deepRawColor.alpha"
+  name DeepExpression15
+  label "premult color"
+  xpos 840
+  ypos 1699
+ }
+ Dot {
+  name Dot16
+  xpos 874
+  ypos 1774
+ }
+set N201f4000 [stack 0]
+ DeepExpression {
+  chans1 none
+  rgba.red "deepRawColor.red - red"
+  rgba.green "deepRawColor.green - green"
+  rgba.blue "deepRawColor.blue - blue"
+  rgba.alpha "deepRawColor.alpha - alpha"
+  name DeepExpression23
+  label subtract
+  xpos 950
+  ypos 1844
+ }
+push $N201f4000
+ Switch {
+  inputs 2
+  which {{parent.mode}}
+  name Switch1
+  xpos 840
+  ypos 1848
+ }
+ DeepExpression {
+  chans0 {-deepRawColor.red -deepRawColor.green -deepRawColor.blue deepRawColor.alpha}
+  chans1 none
+  deepRawColor.alpha 0
+  name DeepExpression8
+  xpos 840
+  ypos 1954
+ }
+ DeepExpression {
+  chans0 deep
+  chans1 none
+  deep.front "alpha <= 0 ? -1 : deep.front"
+  deep.back "alpha <= 0 ? -1 : deep.back"
+  name DeepExpression10
+  label "throw data from alpha"
+  xpos 840
+  ypos 2036
+ }
+ DeepCrop {
+  use_znear false
+  zfar 0
+  outside_zrange true
+  bbox {0 0 {input.width} {input.height}}
+  name DeepCrop3
+  label "clean trash data"
+  xpos 840
+  ypos 2116
+ }
+ Output {
+  name Output1
+  xpos 840
+  ypos 2201
+ }
+ Group {
+  inputs 0
+  name inverseMatrix
+  tile_color 0x337f4cff
+  xpos -81
+  ypos 67
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path cam_data.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   selected true
+   xpos 186
+   ypos 33
+  }
+ end_group
+ NoOp {
+  inputs 0
+  name globalValue
+  xpos 561
+  ypos 1493
+  addUserKnob {20 User}
+  addUserKnob {7 falloff}
+  falloff {{"parent.falloff * parent.falloff_scale"}}
+ }
+end_group

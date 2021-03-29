@@ -1,0 +1,1164 @@
+Group {
+ name UV_Mapper
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'enable':\n    if n.knob('enable').getValue() == 0:\n        n.knob('UDIMinput').setEnabled(False)\n        n.knob('selectUV').setEnabled(True)\n\n    else:\n        n.knob('UDIMinput').setEnabled(True)\n        n.knob('selectUV').setEnabled(False)\n    \n    \nif k.name() == 'UDIMinput': \n    UDIMinput = n.knob('UDIMinput')\n    selectUV = n.knob('selectUV')\n    \n    UDIMnum = int(UDIMinput.getValue())\n    \n    #print UDIMnum\n    \n    u = ((UDIMnum - 1000) % 10) - 1\n    v = (UDIMnum - 1000) // 10\n    \n    #print u\n    #print v\n    \n    selectUV.setValue(u, 0)\n    selectUV.setValue(v, 1)\n\n    \n    "
+ tile_color 0x7f7f26ff
+ label "UDIM: (\[value UDIMnumber])"
+ note_font "DejaVu Sans"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 UV_Mapper}
+ addUserKnob {26 UVs l "<font color=skyblue><b>UVs</b></font color=skyblue>" T " "}
+ addUserKnob {6 previewUVs l "preview selected UVs" -STARTLINE}
+ addUserKnob {41 operation l "Img Channels" T STMap1.channels}
+ addUserKnob {41 UVchannels l "UV Channel" T Shuffle1.in}
+ addUserKnob {3 UDIMinput l "UDIM number" +DISABLED}
+ UDIMinput 1001
+ addUserKnob {6 enable -STARTLINE}
+ addUserKnob {18 selectUV l "Select UV"}
+ selectUV {0 0 0}
+ addUserKnob {6 selectUV_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 selectUV_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 selectUV_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {30 uvCoord +INVISIBLE}
+ uvCoord {{Grade1.add.r} {Grade1.add.g}}
+ addUserKnob {3 UDIMnumber l "UDIM number" +DISABLED +INVISIBLE}
+ UDIMnumber {{"1000 + (10*uvCoord.v) + (1+ uvCoord.u)"}}
+ addUserKnob {6 killOutline l "Kill Outline" +STARTLINE}
+ killOutline true
+ addUserKnob {6 edgeExtendCheck l "Edge Extend" -STARTLINE}
+ addUserKnob {20 EdgeExtendOptions l "Edge Extend Options" n 1}
+ EdgeExtendOptions 0
+ addUserKnob {7 erodeSize l "Erode Size" R 0 10}
+ erodeSize 1
+ addUserKnob {41 expandsize l "Expand Size" T Expand.size}
+ addUserKnob {41 mode T Expand.mode}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 STmap l "<font color=skyblue><b>STmap</b></font color=skyblue>" T " "}
+ addUserKnob {41 filter T STMap1.filter}
+ addUserKnob {6 takeAlphaUVs l "Take Alpha From UVs" +STARTLINE}
+ addUserKnob {6 previewInverseSTMap l "Preview Inverse STMap" +STARTLINE}
+ addUserKnob {6 imgIsRenderBeauty l "img is Beauty render" -STARTLINE}
+ addUserKnob {20 SettingsInverseSTMAP l "Inverse STMap settings" n 1}
+ SettingsInverseSTMAP 0
+ addUserKnob {41 box_width l "UV size" T STMapInverse1.box_width}
+ addUserKnob {41 fill_gap l "Fill Gap" T STMapInverse1.fill_gap}
+ addUserKnob {41 size T STMapInverse1.size}
+ addUserKnob {41 detail l "point detail" T STMapInverse1.detail}
+ addUserKnob {41 pointSize l "point size" T STMapInverse1.pointSize}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 info}
+ addUserKnob {26 Creator l Creator: T "<big><b> Tony Lyons"}
+ addUserKnob {26 desc l Name: T UV_Mapper}
+ addUserKnob {26 ver l "Version: " T v02}
+}
+ Input {
+  inputs 0
+  name InputUVs
+  xpos -457
+  ypos 137
+ }
+ Shuffle {
+  name Shuffle1
+  label "\[value in]"
+  xpos -457
+  ypos 203
+ }
+ Grade {
+  multiply {1 1 0 1}
+  add {{floor(parent.selectUV.r)} {floor(parent.selectUV.g)} 0 0}
+  reverse true
+  black_clamp false
+  name Grade1
+  xpos -457
+  ypos 268
+ }
+ Expression {
+  expr0 "r<0 || r>1 || g<0 || g>1? 0:r"
+  expr1 "r<0 || r>1 || g<0 || g>1? 0:g"
+  expr3 "r<=0 || r>1 || g<=0 || g>1? 0:1"
+  name Expression4
+  xpos -457
+  ypos 320
+ }
+set Nf0657b50 [stack 0]
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos -299
+  ypos 324
+ }
+ Group {
+  name BinaryAlpha
+  tile_color 0x2a2a2aff
+  label "(\[value an] --> \[value output1])"
+  note_font Verdana
+  note_font_color 0xfffff9ff
+  xpos -333
+  ypos 364
+  addUserKnob {20 BinaryAlpha}
+  addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
+  addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
+  output1 alpha
+  addUserKnob {20 info l Info}
+  addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+  addUserKnob {26 desc l Description: t "Analyzes channel input and creates a binary result 0 or 1 and outputs it into output channel" T BinaryAlpha}
+  addUserKnob {26 ver l Version: T v03}
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos -398
+   ypos 275
+  }
+  Expression {
+   temp_name0 rgb_an
+   temp_expr0 "r !=0 || g!=0 || b!=0?1:0"
+   temp_name1 rgba_an
+   temp_expr1 "r!=0 || g!=0 || b!=0 || a!=0?1:0"
+   temp_name2 alpha_an
+   temp_expr2 a!=0?1:0
+   expr3 "parent.an == 0 ? rgb_an : parent.an == 1 ? rgba_an : alpha_an"
+   name Expression
+   xpos -398
+   ypos 341
+  }
+  Shuffle {
+   red alpha
+   green alpha
+   blue alpha
+   name Shuffle
+   label "\[value in]"
+   xpos -398
+   ypos 367
+   disable {{parent.output1}}
+  }
+  Output {
+   name Output1
+   xpos -398
+   ypos 456
+  }
+ end_group
+set Nefb41c00 [stack 0]
+ Dilate {
+  channels alpha
+  size {{-parent.Dilate2.size}}
+  name Dilate1
+  xpos -208
+  ypos 367
+ }
+ Dilate {
+  channels alpha
+  size 1
+  name Dilate2
+  xpos -208
+  ypos 405
+ }
+push $Nefb41c00
+ Switch {
+  inputs 2
+  which {{parent.killOutline}}
+  name Switch2
+  label "\[value which]"
+  xpos -333
+  ypos 405
+ }
+ Dilate {
+  channels rgba
+  size {{-erodeSize}}
+  name Dilate3
+  xpos -333
+  ypos 460
+  disable {{!parent.edgeExtendCheck}}
+ }
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos -299
+  ypos 514
+ }
+push $Nf0657b50
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox A
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -457
+  ypos 510
+ }
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos -423
+  ypos 584
+ }
+set Nf10416c0 [stack 0]
+ Group {
+  name Expand
+  xpos -334
+  ypos 581
+  addUserKnob {20 User}
+  addUserKnob {41 size t "Size of Blur" T Blur1.size}
+  addUserKnob {7 transparencyBlend t "Amount of original transparency retained when blending with the blurred version"}
+  transparencyBlend 0.33
+  addUserKnob {4 mode t "the mode how the blured version is combined with the original\n - : original\nMin: min blurred and original\nMax: max blurred and original\n(Min and Max may help with artifacts on the edges, best used on Z-Depth)" M {" - " Min Max "" ""}}
+  mode Min
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 0
+   ypos -57
+  }
+set Nf104ce80 [stack 0]
+push $Nf104ce80
+  Shuffle {
+   red alpha
+   green alpha
+   blue alpha
+   alpha black
+   name Shuffle1
+   xpos 0
+   ypos -11
+  }
+  Histogram {
+   in {0 1 {transparencyBlend i}}
+   name Histogram1
+   xpos 0
+   ypos 47
+  }
+push $Nf104ce80
+  Blur {
+   channels rgba
+   size 4
+   name Blur1
+   xpos -176
+   ypos 59
+  }
+  Unpremult {
+   name Unpremult1
+   xpos -176
+   ypos 109
+  }
+set Nf105e600 [stack 0]
+  Dot {
+   name Dot1
+   xpos 294
+   ypos 114
+  }
+set Nf1065260 [stack 0]
+push $Nf104ce80
+  Unpremult {
+   name Unpremult2
+   xpos 140
+   ypos -11
+  }
+set Nf10690a0 [stack 0]
+  Dot {
+   name Dot2
+   xpos 414
+   ypos 54
+  }
+  Merge2 {
+   inputs 2
+   operation max
+   name Max
+   xpos 338
+   ypos 139
+  }
+push $Nf1065260
+push $Nf10690a0
+  Merge2 {
+   inputs 2
+   operation min
+   name Min
+   xpos 200
+   ypos 139
+  }
+push $Nf10690a0
+  Switch {
+   inputs 3
+   which {{parent.mode i}}
+   name Switch1
+   xpos 125
+   ypos 199
+  }
+push $Nf105e600
+  Keymix {
+   inputs 3
+   channels rgb
+   maskChannel rgba.red
+   name Keymix1
+   xpos 0
+   ypos 229
+  }
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 rgba.alpha
+   name Copy1
+   xpos 70
+   ypos 312
+  }
+  Output {
+   name Output1
+   xpos 70
+   ypos 380
+  }
+ end_group
+ Group {
+  name BinaryAlpha1
+  tile_color 0x2a2a2aff
+  label "(\[value an] --> \[value output1])"
+  note_font Verdana
+  note_font_color 0xfffff9ff
+  xpos -334
+  ypos 620
+  addUserKnob {20 BinaryAlpha}
+  addUserKnob {4 an l Analyze: M {rgb rgba alpha "" "" ""}}
+  addUserKnob {4 output1 l Output: M {rgba alpha "" "" "" ""}}
+  output1 alpha
+  addUserKnob {20 info l Info}
+  addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+  addUserKnob {26 desc l Description: t "Analyzes channel input and creates a binary result 0 or 1 and outputs it into output channel" T BinaryAlpha}
+  addUserKnob {26 ver l Version: T v03}
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos -398
+   ypos 275
+  }
+  Expression {
+   temp_name0 rgb_an
+   temp_expr0 "r !=0 || g!=0 || b!=0?1:0"
+   temp_name1 rgba_an
+   temp_expr1 "r!=0 || g!=0 || b!=0 || a!=0?1:0"
+   temp_name2 alpha_an
+   temp_expr2 a!=0?1:0
+   expr3 "parent.an == 0 ? rgb_an : parent.an == 1 ? rgba_an : alpha_an"
+   name Expression
+   xpos -398
+   ypos 341
+  }
+  Shuffle {
+   red alpha
+   green alpha
+   blue alpha
+   name Shuffle
+   label "\[value in]"
+   xpos -398
+   ypos 367
+   disable {{parent.output1}}
+  }
+  Output {
+   name Output1
+   xpos -398
+   ypos 456
+  }
+ end_group
+push $Nf10416c0
+ Switch {
+  inputs 2
+  which {{edgeExtendCheck}}
+  name Switch1
+  label "\[value which]"
+  xpos -457
+  ypos 620
+ }
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos -423
+  ypos 764
+ }
+set Nf06bf9f0 [stack 0]
+push $Nf06bf9f0
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 132
+  ypos 764
+ }
+set Nf06c3a20 [stack 0]
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos 132
+  ypos 819
+ }
+set Nf06c7900 [stack 0]
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos 132
+  ypos 863
+ }
+push $Nf06c7900
+push $Nf06c3a20
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  resize none
+  center false
+  pbb true
+  name Reformat4
+  xpos -39
+  ypos -787
+ }
+set Nf06cf6c0 [stack 0]
+ Grid {
+  number 8
+  size 2
+  name Grid1
+  xpos -155
+  ypos -713
+ }
+ Grid {
+  opacity 0.5
+  number 64
+  name Grid2
+  xpos -155
+  ypos -670
+ }
+ Text2 {
+  font_size_toolbar 100
+  font_width_toolbar 100
+  font_height_toolbar 100
+  kerning_toolbar -0.04899999872
+  tracking_toolbar -0.007000000216
+  message " 1   2   3   4   5   6   7   8\n 8   1   2   3   4   5   6   7f\n 7   8   1   2   3   4   5   6\n 6   5   8   1   2   3   4   5\n 5   6   7   8   1   2   3   4\n 4   5   6   7   8   1   2   3\n 3   4   5   6   7   8   1   2\n 2   3   4   5   6   7   8   1"
+  old_message {{32 49 32 32 32 50 32 32 32 51 32 32 32 52 32 32 32 53 32 32 32 54 32 32 32 55 32 32 32 56 10 32 56 32 32 32 49 32 32 32 50 32 32 32 51 32 32 32 52 32 32 32 53 32 32 32 54 32 32 32 55 102 10 32 55 32 32 32 56 32 32 32 49 32 32 32 50 32 32 32 51 32 32 32 52 32 32 32 53 32 32 32 54 10 32 54 32 32 32 53 32 32 32 56 32 32 32 49 32 32 32 50 32 32 32 51 32 32 32 52 32 32 32 53 10 32 53 32 32 32 54 32 32 32 55 32 32 32 56 32 32 32 49 32 32 32 50 32 32 32 51 32 32 32 52 10 32 52 32 32 32 53 32 32 32 54 32 32 32 55 32 32 32 56 32 32 32 49 32 32 32 50 32 32 32 51 10 32 51 32 32 32 52 32 32 32 53 32 32 32 54 32 32 32 55 32 32 32 56 32 32 32 49 32 32 32 50 10 32 50 32 32 32 51 32 32 32 52 32 32 32 53 32 32 32 54 32 32 32 55 32 32 32 56 32 32 32 49}
+    }
+  box {7 0 1024 1007}
+  transforms {{0 2}
+    }
+  font_width_values {{0 100 1 100 2 100 3 100 4 100 5 100 6 100 7 100 8 100 9 100 10 100 11 100 12 100 13 100 14 100 15 100 16 100 17 100 18 100 19 100 20 100 21 100 22 100 23 100 24 100 25 100 26 100 27 100 28 100 29 100 30 100 31 100 33 100 34 100 35 100 37 100 38 100 39 100 41 100 42 100 43 100 45 100 46 100 47 100 49 100 50 100 51 100 53 100 54 100 55 100 57 100 58 100 59 100 0 96 1 96 2 96 3 96 4 96 5 96 6 96 7 96 8 96 9 96 10 96 11 96 12 96 13 96 14 96 15 96 16 96 17 96 18 96 19 96 20 96 21 96 22 96 23 96 24 96 25 96 26 96 27 96 28 96 29 96}
+    }
+  font_height_values {{0 100 1 100 2 100 3 100 4 100 5 100 6 100 7 100 8 100 9 100 10 100 11 100 12 100 13 100 14 100 15 100 16 100 17 100 18 100 19 100 20 100 21 100 22 100 23 100 24 100 25 100 26 100 27 100 28 100 29 100 30 100 31 100 33 100 34 100 35 100 37 100 38 100 39 100 41 100 42 100 43 100 45 100 46 100 47 100 49 100 50 100 51 100 53 100 54 100 55 100 57 100 58 100 59 100 0 100 1 100 2 100 3 100 4 100 5 100 6 100 7 100 8 100 9 100 10 100 11 100 12 100 13 100 14 100 15 100 16 100 17 100 18 100 19 100 20 100 21 100 22 100 23 100 24 100 25 100 26 100 27 100 28 100 29 100 30 100 31 100 33 100 34 100 35 100 37 100 38 100 39 100 41 100 42 100 43 100 45 100 46 100 47 100 49 100 50 100 51 100 53 100 54 100 55 100 57 100 58 100 59 100}
+    }
+  kern_values {{0 -0.049 1 -0.049 2 -0.049 3 -0.049 4 -0.049 5 -0.049 6 -0.049 7 -0.049 8 -0.049 9 -0.049 10 -0.049 11 -0.049 12 -0.049 13 -0.049 14 -0.049 15 -0.049 16 -0.049 17 -0.049 18 -0.049 19 -0.049 20 -0.049 21 -0.049 22 -0.049 23 -0.049 24 -0.049 25 -0.049 26 -0.049 27 -0.049 28 -0.049 29 -0.049 30 -0.049 31 -0.049 32 -0.04899999872 33 -0.049 34 -0.049 35 -0.049 36 -0.04899999872 37 -0.049 38 -0.049 39 -0.049 40 -0.04899999872 41 -0.049 42 -0.049 43 -0.049 44 -0.04899999872 45 -0.049 46 -0.049 47 -0.049 48 -0.04899999872 49 -0.049 50 -0.049 51 -0.049 52 -0.04899999872 53 -0.049 54 -0.049 55 -0.049 56 -0.04899999872 57 -0.049 58 -0.049 59 -0.049 60 -0.04899999872 61 -0.04899999872 62 -0.04899999872 63 -0.04899999872 64 -0.04899999872 65 -0.04899999872 66 -0.04899999872 67 -0.04899999872 68 -0.04899999872 69 -0.04899999872 70 -0.04899999872 71 -0.04899999872 72 -0.04899999872 73 -0.04899999872 74 -0.04899999872 75 -0.04899999872 76 -0.04899999872 77 -0.04899999872 78 -0.04899999872 79 -0.04899999872 80 -0.04899999872 81 -0.04899999872 82 -0.04899999872 83 -0.04899999872 84 -0.04899999872 85 -0.04899999872 86 -0.04899999872 87 -0.04899999872 88 -0.04899999872 89 -0.04899999872 90 -0.04899999872 91 -0.04899999872 92 -0.04899999872 93 -0.04899999872 94 -0.04899999872 95 -0.04899999872 96 -0.04899999872 97 -0.04899999872 98 -0.04899999872 99 -0.04899999872 100 -0.04899999872 101 -0.04899999872 102 -0.04899999872 103 -0.04899999872 104 -0.04899999872 105 -0.04899999872 106 -0.04899999872 107 -0.04899999872 108 -0.04899999872 109 -0.04899999872 110 -0.04899999872 111 -0.04899999872 112 -0.04899999872 113 -0.04899999872 114 -0.04899999872 115 -0.04899999872 116 -0.04899999872 117 -0.04899999872 118 -0.04899999872 119 -0.04899999872 120 -0.04899999872 121 -0.04899999872 122 -0.04899999872 123 -0.04899999872 124 -0.04899999872 125 -0.04899999872 126 -0.04899999872 127 -0.04899999872 128 -0.04899999872 129 -0.04899999872 130 -0.04899999872 131 -0.04899999872 132 -0.04899999872 133 -0.04899999872 134 -0.04899999872 135 -0.04899999872 136 -0.04899999872 137 -0.04899999872 138 -0.04899999872 139 -0.04899999872 140 -0.04899999872 141 -0.04899999872 142 -0.04899999872 143 -0.04899999872 144 -0.04899999872 145 -0.04899999872 146 -0.04899999872 147 -0.04899999872 148 -0.04899999872 149 -0.04899999872 150 -0.04899999872 151 -0.04899999872 152 -0.04899999872 153 -0.04899999872 154 -0.04899999872 155 -0.04899999872 156 -0.04899999872 157 -0.04899999872 158 -0.04899999872 159 -0.04899999872 160 -0.04899999872 161 -0.04899999872 162 -0.04899999872 163 -0.04899999872 164 -0.04899999872 165 -0.04899999872 166 -0.04899999872 167 -0.04899999872 168 -0.04899999872 169 -0.04899999872 170 -0.04899999872 171 -0.04899999872 172 -0.04899999872 173 -0.04899999872 174 -0.04899999872 175 -0.04899999872 176 -0.04899999872 177 -0.04899999872 178 -0.04899999872 179 -0.04899999872 180 -0.04899999872 181 -0.04899999872 182 -0.04899999872 183 -0.04899999872 184 -0.04899999872 185 -0.04899999872 186 -0.04899999872 187 -0.04899999872 188 -0.04899999872 189 -0.04899999872 190 -0.04899999872 191 -0.04899999872 192 -0.04899999872 193 -0.04899999872 194 -0.04899999872 195 -0.04899999872 196 -0.04899999872 197 -0.04899999872 198 -0.04899999872 199 -0.04899999872 200 -0.04899999872 201 -0.04899999872 202 -0.04899999872 203 -0.04899999872 204 -0.04899999872 205 -0.04899999872 206 -0.04899999872 207 -0.04899999872 208 -0.04899999872 209 -0.04899999872 210 -0.04899999872 211 -0.04899999872 212 -0.04899999872 213 -0.04899999872 214 -0.04899999872 215 -0.04899999872 216 -0.04899999872 217 -0.04899999872 218 -0.04899999872 219 -0.04899999872 220 -0.04899999872 221 -0.04899999872 222 -0.04899999872 223 -0.04899999872 224 -0.04899999872 225 -0.04899999872 226 -0.04899999872 227 -0.04899999872 228 -0.04899999872 229 -0.04899999872 230 -0.04899999872 231 -0.04899999872 232 -0.04899999872 233 -0.04899999872 234 -0.04899999872 235 -0.04899999872 236 -0.04899999872 237 -0.04899999872 238 -0.04899999872 239 -0.04899999872 240 -0.04899999872 241 -0.04899999872 242 -0.04899999872 243 -0.04899999872 244 -0.04899999872 245 -0.04899999872 246 -0.04899999872 247 -0.04899999872 0 0.012 1 0.012 2 0.012 3 0.012 4 0.012 5 0.012 6 0.012 7 0.012 8 0.012 9 0.012 10 0.012 11 0.012 12 0.012 13 0.012 14 0.012 15 0.012 16 0.012 17 0.012 18 0.012 19 0.012 20 0.012 21 0.012 22 0.012 23 0.012 24 0.012 25 0.012 26 0.012 27 0.012 28 0.012 29 0.012 30 0.012 31 0.012 33 0.012 34 0.012 35 0.012 37 0.012 38 0.012 39 0.012 41 0.012 42 0.012 43 0.012 45 0.012 46 0.012 47 0.012 49 0.012 50 0.012 51 0.012 53 0.012 54 0.012 55 0.012 57 0.012 58 0.012 59 0.012}
+    }
+  tracking_values {{1 -0.007 2 -0.007 3 -0.007 4 -0.007 5 -0.007 6 -0.007 7 -0.007 8 -0.007 9 -0.007 10 -0.007 11 -0.007 12 -0.007 13 -0.007 14 -0.007 15 -0.007 16 -0.007 17 -0.007 18 -0.007 19 -0.007 20 -0.007 21 -0.007 22 -0.007 23 -0.007 24 -0.007 25 -0.007 26 -0.007 27 -0.007 28 -0.007 29 -0.007 30 -0.007 31 -0.007 32 -0.007 33 -0.007 34 -0.007 35 -0.007 36 -0.007 37 -0.007 38 -0.007 39 -0.007 40 -0.007 41 -0.007 42 -0.007 43 -0.007 44 -0.007 45 -0.007 46 -0.007 47 -0.007 48 -0.007 49 -0.007 50 -0.007 51 -0.007 52 -0.007 53 -0.007 54 -0.007 55 -0.007 56 -0.007 57 -0.007 58 -0.007 59 -0.007 60 -0.007 61 -0.007000000216 62 -0.007 63 -0.007 64 -0.007 65 -0.007 66 -0.007 67 -0.007 68 -0.007 69 -0.007 70 -0.007 71 -0.007 72 -0.007 73 -0.007 74 -0.007 75 -0.007 76 -0.007 77 -0.007 78 -0.007 79 -0.007 80 -0.007 81 -0.007 82 -0.007 83 -0.007 84 -0.007 85 -0.007 86 -0.007 87 -0.007 88 -0.007 89 -0.007 90 -0.007 91 -0.007 92 -0.007 93 -0.007 94 -0.007 95 -0.007 96 -0.007 97 -0.007 98 -0.007 99 -0.007 100 -0.007 101 -0.007 102 -0.007 103 -0.007 104 -0.007 105 -0.007 106 -0.007 107 -0.007 108 -0.007 109 -0.007 110 -0.007 111 -0.007 112 -0.007 113 -0.007 114 -0.007 115 -0.007 116 -0.007 117 -0.007 118 -0.007 119 -0.007 120 -0.007 121 -0.007 122 -0.007 123 -0.007 124 -0.007 125 -0.007 126 -0.007 127 -0.007 128 -0.007 129 -0.007 130 -0.007 131 -0.007 132 -0.007 133 -0.007 134 -0.007 135 -0.007 136 -0.007 137 -0.007 138 -0.007 139 -0.007 140 -0.007 141 -0.007 142 -0.007 143 -0.007 144 -0.007 145 -0.007 146 -0.007 147 -0.007 148 -0.007 149 -0.007 150 -0.007 151 -0.007 152 -0.007 153 -0.007 154 -0.007 155 -0.007 156 -0.007 157 -0.007 158 -0.007 159 -0.007 160 -0.007 161 -0.007 162 -0.007 163 -0.007 164 -0.007 165 -0.007 166 -0.007 167 -0.007 168 -0.007 169 -0.007 170 -0.007 171 -0.007 172 -0.007 173 -0.007 174 -0.007 175 -0.007 176 -0.007 177 -0.007 178 -0.007 179 -0.007 180 -0.007 181 -0.007 182 -0.007 183 -0.007 184 -0.007 185 -0.007 186 -0.007 187 -0.007 188 -0.007 189 -0.007 190 -0.007 191 -0.007 192 -0.007 193 -0.007 194 -0.007 195 -0.007 196 -0.007 197 -0.007 198 -0.007 199 -0.007 200 -0.007 201 -0.007 202 -0.007 203 -0.007 204 -0.007 205 -0.007 206 -0.007 207 -0.007 208 -0.007 209 -0.007 210 -0.007 211 -0.007 212 -0.007 213 -0.007 214 -0.007 215 -0.007 216 -0.007 217 -0.007 218 -0.007 219 -0.007 220 -0.007 221 -0.007 222 -0.007 223 -0.007 224 -0.007 225 -0.007 226 -0.007 227 -0.007 228 -0.007 229 -0.007 230 -0.007 231 -0.007 232 -0.007 233 -0.007 234 -0.007 235 -0.007 236 -0.007 237 -0.007 238 -0.007 239 -0.007 240 -0.007 241 -0.007 242 -0.007 243 -0.007 244 -0.007 245 -0.007 246 -0.007 247 -0.007}
+    }
+  baseline_values {{0 0 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 21 0 22 0 23 0 24 0 25 0 26 0 27 0 28 0 29 0 30 0 31 0 32 0 33 0 34 0 35 0 36 0 37 0 38 0 39 0 40 0 41 0 42 0 43 0 44 0 45 0 46 0 47 0 48 0 49 0 50 0 51 0 52 0 53 0 54 0 55 0 56 0 57 0 58 0 59 0 60 0 62 0 63 0 64 0 65 0 66 0 67 0 68 0 69 0 70 0 71 0 72 0 73 0 74 0 75 0 76 0 77 0 78 0 79 0 80 0 81 0 82 0 83 0 84 0 85 0 86 0 87 0 88 0 89 0 90 0 91 0 92 0 93 0 94 0 95 0 96 0 97 0 98 0 99 0 100 0 101 0 102 0 103 0 104 0 105 0 106 0 107 0 108 0 109 0 110 0 111 0 112 0 113 0 114 0 115 0 116 0 117 0 118 0 119 0 120 0 121 0 122 0 123 0 124 0 125 0 126 0 127 0 128 0 129 0 130 0 131 0 132 0 133 0 134 0 135 0 136 0 137 0 138 0 139 0 140 0 141 0 142 0 143 0 144 0 145 0 146 0 147 0 148 0 149 0 150 0 151 0 152 0 153 0 154 0 155 0 156 0 157 0 158 0 159 0 160 0 161 0 162 0 163 0 164 0 165 0 166 0 167 0 168 0 169 0 170 0 171 0 172 0 173 0 174 0 175 0 176 0 177 0 178 0 179 0 180 0 181 0 182 0 183 0 184 0 185 0 186 0 187 0 188 0 189 0 190 0 191 0 192 0 193 0 194 0 195 0 196 0 197 0 198 0 199 0 200 0 201 0 202 0 203 0 204 0 205 0 206 0 207 0 208 0 209 0 210 0 211 0 212 0 213 0 214 0 215 0 216 0 217 0 218 0 219 0 220 0 221 0 222 0 223 0 224 0 225 0 226 0 227 0 228 0 229 0 230 0 231 0 232 0 233 0 234 0 235 0 236 0 237 0 238 0 239 0 240 0 241 0 242 0 243 0 244 0 245 0 246 0 247 0 0 1.7 1 1.7 2 1.7 3 1.7 4 1.7 5 1.7 6 1.7 7 1.7 8 1.7 9 1.7 10 1.7 11 1.7 12 1.7 13 1.7 14 1.7 15 1.7 16 1.7 17 1.7 18 1.7 19 1.7 20 1.7 21 1.7 22 1.7 23 1.7 24 1.7 25 1.7 26 1.7 27 1.7 28 1.7 29 1.7 30 1.7 31 1.7 33 1.7 34 1.7 35 1.7 37 1.7 38 1.7 39 1.7 41 1.7 42 1.7 43 1.7 45 1.7 46 1.7 47 1.7 49 1.7 50 1.7 51 1.7 53 1.7 54 1.7 55 1.7 57 1.7 58 1.7 59 1.7}
+    }
+  cursor_position 62
+  font {{ Arial : Regular : Arial.ttf : 0 }}
+  kerning -0.04899999872
+  tracking -0.007000000216
+  leading 0.28
+  center {960 540}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{496.7999878 690.000061}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+    }
+  name Text1
+  xpos -155
+  ypos 40
+ }
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos -121
+  ypos 127
+ }
+push $Nf06cf6c0
+ Roto {
+  output alpha
+  cliptype none
+  curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097152}
+    {t x44700000 x44070000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup RectangleCusped8 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {0 0}
+        {x447fbd8a x3f519c2c}
+        {0 0}
+        {0 0}
+        {x445fd6d3 x3f02d730}
+        {0 0}
+        {0 0}
+        {x445fd8e5 x43008e71}
+        {0 0}
+        {0 0}
+        {x447fc3c2 x4300830a}
+        {0 0}}}     idem}
+     {tx 1 x43efcccc x42020000}
+     {a osw x41200000 osf 0 str 1 spx x44700000 spy x44070000 sb 1 tt x41100000}}
+    {curvegroup RectangleCusped7 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {0 0}
+        {x445fdb6b x43007ee2}
+        {0 0}
+        {0 0}
+        {x443fe368 x43012090}
+        {0 0}
+        {0 0}
+        {x443fe630 x4380422d}
+        {0 0}
+        {0 0}
+        {x445fb9bc x438052df}
+        {0 0}}}     idem}
+     {tx 1 x43cf8ccd x42c1ffff}
+     {a osw x41200000 osf 0 str 1 spx x44700000 spy x44070000 sb 1 tt x41100000}}
+    {curvegroup RectangleCusped6 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {0 0}
+        {x443fe81f x438038b8}
+        {0 0}
+        {0 0}
+        {x44200149 x4380545b}
+        {0 0}
+        {0 0}
+        {x44200949 x43c02d5c}
+        {0 0}
+        {0 0}
+        {x443fef7b x43c00073}
+        {0 0}}}     idem}
+     {tx 1 x43af9334 x4320f333}
+     {a osw x41200000 osf 0 str 1 spx x44700000 spy x44070000 sb 1 tt x41100000}}
+    {curvegroup RectangleCusped5 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {0 0}
+        {x441fed7f x43bff524}
+        {0 0}
+        {0 0}
+        {x43fff86f x43c01d90}
+        {0 0}
+        {0 0}
+        {x4400106d x43ffd7fc}
+        {0 0}
+        {0 0}
+        {x441fe6c2 x43ffd7fc}
+        {0 0}}}     idem}
+     {tx 1 x438f999a x4360cccd}
+     {a osw x41200000 osf 0 str 1 spx x44700000 spy x44070000 sb 1 tt x41100000}}
+    {curvegroup RectangleCusped4 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {0 0}
+        {x43fffdc2 x44000265}
+        {0 0}
+        {0 0}
+        {x43c01e01 x44000265}
+        {0 0}
+        {0 0}
+        {x43c019f1 x441ff0f9}
+        {0 0}
+        {0 0}
+        {x43ffe698 x441fe76a}
+        {0 0}}}     idem}
+     {tx 1 x435f199a x43906000}
+     {a osw x41200000 osf 0 str 1 spx x44700000 spy x44070000 sb 1 tt x41100000}}
+    {curvegroup RectangleCusped3 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {0 0}
+        {x43c0478c x44200d48}
+        {0 0}
+        {0 0}
+        {x438034b2 x44200d48}
+        {0 0}
+        {0 0}
+        {x438038cf x443fe853}
+        {0 0}
+        {0 0}
+        {x43c0677c x4440015e}
+        {0 0}}}     idem}
+     {tx 1 x431f199a x43b04000}
+     {a osw x41200000 osf 0 str 1 spx x44700000 spy x44070000 sb 1 tt x41100000}}
+    {curvegroup RectangleCusped2 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {0 0}
+        {x4380377e x443fe6ee}
+        {0 0}
+        {0 0}
+        {x43007685 x443fdb75}
+        {0 0}
+        {0 0}
+        {x4300a521 x445fe8a2}
+        {0 0}
+        {0 0}
+        {x4380255a x445fdf8d}
+        {0 0}}}     idem}
+     {tx 1 x42be0000 x43d04ccd}
+     {a osw x41200000 osf 0 str 1 spx x44700000 spy x44070000 sb 1 tt x41100000}}
+    {curvegroup RectangleCusped1 512 bezier
+     {{cc
+       {f 8192}
+       {px 1
+        {0 0}
+        {x4300e014 x445ff174}
+        {0 0}
+        {0 0}
+        {x3cce8900 x445ff974}
+        {0 0}
+        {0 0}
+        {xbdb51ac0 x447ffe00}
+        {0 0}
+        {0 0}
+        {x4300a759 x447ffc8c}
+        {0 0}}}     idem}
+     {tx 1 x41fccccd x43f0199a}
+     {a osw x41200000 osf 0 str 1 spx x44700000 spy x44070000 sb 1 tt x41100000}}}}}}
+  toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 tt 9 }
+  { createOpenSpline str 1 ssx 1 ssy 1 sf 1 tt 10 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+  toolbar_brush_hardness 0.200000003
+  toolbar_source_transform_scale {1 1}
+  toolbar_source_transform_center {320 240}
+  colorOverlay {0 0 0 0}
+  lifetime_type "all frames"
+  motionblur_shutter_offset_type centred
+  source_black_outside true
+  name Roto1
+  xpos -39
+  ypos -712
+ }
+set Nf11144b0 [stack 0]
+ Transform {
+  translate {-128 0}
+  center {960 540}
+  name Transform1
+  xpos -39
+  ypos -647
+ }
+set Nf111b840 [stack 0]
+ Transform {
+  translate {-128 0}
+  center {960 540}
+  name Transform2
+  xpos -39
+  ypos -529
+ }
+set Nf11bddd0 [stack 0]
+ Transform {
+  translate {-128 0}
+  center {960 540}
+  name Transform3
+  xpos -39
+  ypos -428
+ }
+set Nf11c83c0 [stack 0]
+ Transform {
+  translate {-128 0}
+  center {960 540}
+  name Transform4
+  xpos -39
+  ypos -332
+ }
+set Nf11d2c00 [stack 0]
+ Transform {
+  translate {-128 0}
+  center {960 540}
+  name Transform5
+  xpos -39
+  ypos -234
+ }
+set Nf11dd440 [stack 0]
+ Transform {
+  translate {-128 0}
+  center {960 540}
+  name Transform6
+  xpos -39
+  ypos -137
+ }
+set Nf11e7c80 [stack 0]
+ Transform {
+  translate {-128 0}
+  center {960 540}
+  name Transform7
+  xpos -39
+  ypos -29
+ }
+set Nf11f24c0 [stack 0]
+ Transform {
+  translate {1024 0}
+  center {960 540}
+  name Transform8
+  xpos 71
+  ypos -29
+ }
+push $Nf11f24c0
+ Merge2 {
+  inputs 2
+  name Merge3
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 71
+  ypos 13
+ }
+push $Nf11e7c80
+ Transform {
+  translate {1024 0}
+  center {960 540}
+  name Transform9
+  xpos 71
+  ypos -137
+ }
+push $Nf11e7c80
+ Merge2 {
+  inputs 2
+  name Merge4
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 71
+  ypos -99
+ }
+push $Nf11dd440
+ Transform {
+  translate {1024 0}
+  center {960 540}
+  name Transform10
+  xpos 69
+  ypos -234
+ }
+push $Nf11dd440
+ Merge2 {
+  inputs 2
+  name Merge5
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 69
+  ypos -189
+ }
+push $Nf11d2c00
+ Transform {
+  translate {1024 0}
+  center {960 540}
+  name Transform11
+  xpos 71
+  ypos -332
+ }
+push $Nf11d2c00
+ Merge2 {
+  inputs 2
+  name Merge6
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 71
+  ypos -291
+ }
+push $Nf11c83c0
+ Transform {
+  translate {1024 0}
+  center {960 540}
+  name Transform12
+  xpos 71
+  ypos -428
+ }
+push $Nf11c83c0
+ Merge2 {
+  inputs 2
+  name Merge7
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 71
+  ypos -387
+ }
+push $Nf11bddd0
+ Transform {
+  translate {1024 0}
+  center {960 540}
+  name Transform13
+  xpos 71
+  ypos -529
+ }
+push $Nf11bddd0
+ Merge2 {
+  inputs 2
+  name Merge8
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 71
+  ypos -488
+ }
+push $Nf111b840
+ Transform {
+  translate {1025 0}
+  center {960 540}
+  name Transform14
+  xpos 82
+  ypos -647
+ }
+push $Nf111b840
+ Merge2 {
+  inputs 2
+  name Merge9
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 82
+  ypos -606
+ }
+push $Nf11144b0
+ Constant {
+  inputs 0
+  channels rgb
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Constant1
+  xpos 208
+  ypos -809
+ }
+ Grade {
+  inputs 1+1
+  add {0.7728846669 0.02618077211 0.03455101326 0}
+  name Grade3
+  xpos 208
+  ypos -708
+ }
+ Grade {
+  inputs 1+1
+  add {0.9673250318 0.3451221585 0.1646387577 0}
+  name Grade4
+  xpos 208
+  ypos -606
+ }
+ Grade {
+  inputs 1+1
+  add {0.2409069538 0.218536064 0.5103886724 0}
+  name Grade5
+  xpos 208
+  ypos -488
+ }
+ Grade {
+  inputs 1+1
+  add {0.9280357361 0.3130359054 0.5264387727 0}
+  name Grade6
+  xpos 208
+  ypos -387
+ }
+ Grade {
+  inputs 1+1
+  add {0.2122023106 0.0433825478 0.4666024148 0}
+  name Grade7
+  xpos 208
+  ypos -291
+ }
+ Grade {
+  inputs 1+1
+  add {0.001658143476 0.9821226597 0.9885434508 0}
+  name Grade8
+  xpos 208
+  ypos -189
+ }
+ Grade {
+  inputs 1+1
+  add {0.04277442023 0.4779824018 0.1838312 0}
+  name Grade9
+  xpos 208
+  ypos -99
+ }
+ Grade {
+  inputs 1+1
+  add {0.9810473323 0.9179739952 0.1378139406 0}
+  name Grade10
+  xpos 208
+  ypos 13
+ }
+ Grade {
+  inputs 1+1
+  multiply 0
+  name Grade11
+  xpos 208
+  ypos 124
+ }
+ Shuffle {
+  alpha white
+  name Shuffle2
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+  note_font_size 21
+  note_font_color 0xffffffff
+  xpos 208
+  ypos 148
+ }
+ Input {
+  inputs 0
+  name InputImg
+  xpos 413
+  ypos 496
+  number 1
+ }
+set Nf132cc40 [stack 0]
+ Shuffle {
+  alpha white
+  name Shuffle3
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+  note_font_size 21
+  note_font_color 0xffffffff
+  xpos 495
+  ypos 565
+ }
+push $Nf132cc40
+ Switch {
+  inputs 2
+  which {{previewInverseSTMap}}
+  name Switch5
+  xpos 363
+  ypos 579
+ }
+set Nf133e100 [stack 0]
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input1]"}}
+  name SwitchDefault
+  xpos 208
+  ypos 579
+ }
+ STMap {
+  inputs 2
+  uv rgba
+  name STMap1
+  xpos 208
+  ypos 754
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox A
+  name Merge2
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 208
+  ypos 815
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 208
+  ypos 853
+  disable {{!parent.takeAlphaUVs}}
+ }
+set Nf1362460 [stack 0]
+push $Nf133e100
+ Dot {
+  name Dot10
+  note_font_size 41
+  xpos 397
+  ypos 886
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge10
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 363
+  ypos 934
+ }
+push $Nf1362460
+ Switch {
+  inputs 2
+  which {{imgIsRenderBeauty}}
+  name Switch6
+  xpos 43
+  ypos 977
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 forward.u
+  from1 rgba.green
+  to1 forward.v
+  name Copy2
+  xpos -37
+  ypos 1042
+ }
+ Group {
+  name STMapInverse1
+  tile_color 0x196654ff
+  xpos -37
+  ypos 1174
+  addUserKnob {20 InverseSTMap}
+  addUserKnob {41 in l channels T Shuffle1.in}
+  addUserKnob {41 in2 l "UV channels" T Shuffle1.in2}
+  addUserKnob {41 box_width l "UV size" T Reformat1.box_width}
+  addUserKnob {6 fill_gap l "Fill Gap" +STARTLINE}
+  fill_gap true
+  addUserKnob {41 size -STARTLINE T Blur1.size}
+  addUserKnob {26 ""}
+  addUserKnob {41 detail l "point detail" T PositionToPoints1.detail}
+  addUserKnob {41 pointSize l "point size" T PositionToPoints1.pointSize}
+  addUserKnob {26 ""}
+  addUserKnob {32 Lookin T "start http://www.lookinvfx.com/tools/" +STARTLINE}
+  addUserKnob {26 text l "" -STARTLINE T "   in_inverseSTMap v1.0 | Luca Mignardi | 2014"}
+ }
+  Camera2 {
+   inputs 0
+   translate {0.5 0.5 1}
+   projection_mode orthographic
+   focal 25
+   haperture 25
+   vaperture 25
+   near 0.5
+   far 1.5
+   name Camera1
+   xpos 93
+   ypos 157
+  }
+  Input {
+   inputs 0
+   name Input1
+   xpos -58
+   ypos -118
+  }
+  Shuffle {
+   in2 forward
+   red red2
+   green green2
+   black red
+   white green
+   red2 blue
+   green2 alpha
+   out forward
+   out2 rgba
+   name Shuffle1
+   xpos -58
+   ypos -64
+  }
+  Unpremult {
+   name Unpremult2
+   xpos -58
+   ypos -12
+  }
+  Unpremult {
+   channels forward
+   name Unpremult3
+   xpos -58
+   ypos 37
+  }
+set Nf13c3ee0 [stack 0]
+push $Nf13c3ee0
+  Shuffle {
+   in forward
+   blue black
+   alpha black
+   name Shuffle2
+   label "\[value in]"
+   xpos 64
+   ypos 37
+  }
+  PositionToPoints {
+   inputs 2
+   render_mode textured
+   detail 1
+   pointSize 1.1
+   name PositionToPoints1
+   xpos -58
+   ypos 108
+  }
+  Reformat {
+   inputs 0
+   type "to box"
+   format "1024 1024 0 0 1024 1024 1 square_1K"
+   box_width 512
+   box_height {{box_width i}}
+   box_fixed true
+   name Reformat1
+   xpos -196
+   ypos 177
+  }
+  ScanlineRender {
+   inputs 3
+   max_tessellation 1
+   motion_vectors_type off
+   MB_channel none
+   name ScanlineRender1
+   xpos -58
+   ypos 177
+  }
+  Premult {
+   name Premult1
+   xpos -58
+   ypos 220
+  }
+  Dot {
+   name Dot1
+   xpos -24
+   ypos 276
+  }
+set Nf10c3530 [stack 0]
+  Blur {
+   size 1
+   name Blur1
+   xpos 49
+   ypos 266
+  }
+  Unpremult {
+   name Unpremult1
+   xpos 49
+   ypos 316
+  }
+push $Nf10c3530
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge1
+   xpos -58
+   ypos 316
+   disable {{1-fill_gap}}
+  }
+  Output {
+   name Output1
+   xpos -58
+   ypos 375
+  }
+ end_group
+push $Nf06bf9f0
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos -423
+  ypos 1103
+ }
+push $Nf1362460
+ Switch {
+  inputs 2
+  which {{parent.previewUVs}}
+  name Switch3
+  label "\[value which]"
+  xpos 208
+  ypos 1096
+ }
+ Switch {
+  inputs 2
+  which {{previewInverseSTMap}}
+  name Switch4
+  xpos 208
+  ypos 1174
+ }
+ Output {
+  name Output1
+  xpos 208
+  ypos 1326
+ }
+end_group

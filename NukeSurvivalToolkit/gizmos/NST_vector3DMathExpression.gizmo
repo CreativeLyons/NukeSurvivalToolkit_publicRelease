@@ -1,0 +1,13 @@
+NoOp {
+ name vector3DMathExpression
+ help "Can be used to calculate a vector between 2 points in 3D space.\nAlso the distance between these points.\nCan be used along reconcile3d nodes."
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {13 v1 l "Vector 1" t Point1}
+ addUserKnob {13 v2 l "Vector 2" t Point2}
+ addUserKnob {26 ""}
+ addUserKnob {13 v4 l "v4 = v1 - v2"}
+ v4 {{v1-v2} {v1-v2} {v1-v2}}
+ addUserKnob {7 mag_v4 l Magnitude_v4 R 0 100}
+ mag_v4 {{sqrt(pow(v4.x,2)+pow(v4.y,2)+pow(v4.z,2))}}
+}

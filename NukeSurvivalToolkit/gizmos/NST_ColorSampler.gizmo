@@ -1,0 +1,424 @@
+Group {
+name apColorSampler
+help "ColorSampler BETA v0.7 by Adrian Pueyo\n\nTool to calculate the average color of a target input (or the src image if there's no target input), weighted through the area input (or the whole frame if there's no area input). It can also calculate the maximum or minimum value over the area. Additionally, you can directly remove color flickering to an image, or apply it from a target.\n\nYou can think of ColorSampler as a live version of CurveTool with some additional features using the power of Blinkscript, where instead of being limited to a rectangle you can plug a roto to use for the sampling area... or a key... :)\n\nadrianpueyo.com, 2016-2018"
+knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nom = n\[\"out_mode\"].getValue()\nn\[\"max_min_math\"].setVisible(om==1 or om==2)\nn\[\"calculate_alpha\"].setVisible(om!=1 and om!=2)\nn\[\"reference_frame\"].setEnabled(om>2)\nn\[\"set_to_current\"].setEnabled(om>2)\n\nif k.name() == \"out_mode\":\n    kv = int(k.getValue())\n    kb = n.knob(\"use_baked\")\n    if kv == 1:\n        ctname = \"CurveToolMax\"\n    elif kv == 2:\n        ctname = \"CurveToolMin\"\n    else:\n        ctname = \"CurveToolAvg\"\n    if not nuke.toNode(ctname).knob(\"intensitydata\").isAnimated():\n        kb.setValue(False)\n        kb.setEnabled(False)\n    else:\n        kb.setEnabled(True)"
+tile_color 0x8b8b8bff
+addUserKnob {20 ColorSampler}
+addUserKnob {4 out_mode l mode t "Note 1: \"target\" input will be sampled if there's something plugged. Otherwise, src will be sampled.\n\nNote 2: If there is an area input, the sampling will be limited and weighted to that area. If there is nothing plugged in, the whole frame will be sampled.\n\nNote 3: For max and min calculations, any value above 0 on the area input will be sampled." M {Average Maximum Minimum "Deflicker src (mult)" "Flicker src (mult)" "Deflicker src (add)" "Flicker src (add)"}}
+addUserKnob {6 calculate_alpha l "calculate alpha" t "Also apply the tool to the alpha channel. If disabled outputs the original alpha." -STARTLINE}
+addUserKnob {4 max_min_math l math +HIDDEN M {"Rec 709" "Ccir 601" Average Max/Min Per-Channel "" "" "" ""}}
+addUserKnob {3 reference_frame l "ref frame" t "Please specify the frame that will have no effect on the color match or stabilization." +DISABLED}
+reference_frame 1001
+addUserKnob {22 set_to_current l "set to current frame" -STARTLINE +DISABLED T "nuke.thisNode()\[\"reference_frame\"].setValue(nuke.frame())"}
+addUserKnob {26 space l "" +STARTLINE T " "}
+addUserKnob {26 bake_title l "<b>Bake "}
+addUserKnob {22 bake l Bake T "n = nuke.thisNode()\nnmode = int(n.knob(\"out_mode\").getValue())\ntry:\n    if nmode == 1:\n        nuke.toNode(\"CurveToolMax\").knob(\"go\").execute()\n    elif nmode == 2:\n        nuke.toNode(\"CurveToolMin\").knob(\"go\").execute()\n    else:\n        nuke.toNode(\"CurveToolAvg\").knob(\"go\").execute()\n    n.knob(\"use_baked\").setValue(1)\n    n.knob(\"use_baked\").setEnabled(True)\nexcept:\n    nuke.message(\"Error sampling.\")" +STARTLINE}
+addUserKnob {22 resetBakes l " Reset Bakes " -STARTLINE T "n = nuke.thisNode()\nfor ctn in \[\"CurveToolAvg\",\"CurveToolMin\",\"CurveToolMax\"]:\n    ck = nuke.toNode(ctn).knob(\"intensitydata\")\n    ck.clearAnimated()\n    ck.setValue(0)\nn.knob(\"use_baked\").setValue(0)\nn.knob(\"use_baked\").setEnabled(False)"}
+addUserKnob {26 h_sep l "" -STARTLINE T " "}
+addUserKnob {6 use_baked l "use baked" -STARTLINE +DISABLED}
+addUserKnob {26 export_title l "<b>Export "}
+addUserKnob {4 exportOptions l " " M {Average Maximum Minimum "Deflicker src (mult) (Current frame)" "Deflicker src (mult) (Ref frame)" "Flicker src (mult) (Current frame)" "Flicker src (mult) (Ref frame)" "Deflicker src (add) (Current frame)" "Deflicker src (add) (Ref frame)" "Flicker src (add) (Current frame)" "Flicker src (add) (Ref frame)"}}
+addUserKnob {6 linked -STARTLINE}
+addUserKnob {22 createGrade l create -STARTLINE T "n = nuke.thisNode()\nnm = n.name()\no = int(n.knob(\"exportOptions\").getValue())\nl = n.knob(\"linked\").value()\nprint l\nif o in \[3,5,7,9]:\n    t = nuke.frame()\nelse:\n    t = int(n.knob(\"reference_frame\").value())\n\n# Check if baked\nif o == 1:\n    ctname = \"CurveToolMax\"\n    ctk = \"go_max\"\nelif o == 2:\n    ctname = \"CurveToolMin\"\n    ctk = \"go_min\"\nelse:\n    ctname = \"CurveToolAvg\"\n    ctk = \"go_avg\"\nabortExport = False\nif not nuke.toNode(ctname).knob(\"intensitydata\").isAnimated():\n    if nuke.ask(\"Looks like the you need to analyze it first. Proceed?\"):\n        nuke.knob(ctk).execute()\n    else:\n        if not nuke.ask(\"But still you want to export it???\\nWon't have any animation.\"):\n            abortExport = True\n\nif not abortExport:\n    multVal = \[0,0,0,0]\n    offsetVal = \[0,0,0,0]\n    multExp = \"\"\n    offsetExp = \"\"\n    reverse = 0\n    label = \"\"\n    \n    pasteOn = \"\"\n    copied = \"\"\n    \n    if o==0: # Average\n        multVal = 0\n        if l:\n            offsetExp = nm + \".CurveToolAvg.intensitydata\"\n        else:\n            pasteOn = \"add\"\n            copied = nuke.toNode(\"CurveToolAvg\")\[\"intensitydata\"].toScript()\n            offsetExp = \"curve\"\n        label = \"Average\"\n    elif o==1: # Max\n        multVal = 0\n        if l:\n            offsetExp = nm + \".CurveToolMax.intensitydata\"\n        else:\n            pasteOn = \"add\"\n            copied = nuke.toNode(\"CurveToolMax\")\[\"intensitydata\"].toScript()\n            offsetExp = \"curve\"\n        label = \"Maximum\"\n    elif o==2: # Min\n        multVal = 0\n        if l:\n            offsetExp = nm + \".CurveToolMin.intensitydata\"\n        else:\n            pasteOn = \"add\"\n            copied = nuke.toNode(\"CurveToolMin\")\[\"intensitydata\"].toScript()\n            offsetExp = \"curve\"\n        label = \"Minimum\"\n    elif o in \[3,4,5,6]: # Mult de/flicker\n        offsetVal = 0\n        if l:\n            multExp = nm + \".CurveToolAvg.intensitydata(\" + str(t) + \")/\"+nm+\".CurveToolAvg.intensitydata\"\n        else:\n            pasteOn = \"multiply\"\n            copied = nuke.toNode(\"CurveToolAvg\")\[\"intensitydata\"].toScript()\n            if not l or o in \[3,5,7,9]:\n                multExp = \"curve(\" + str(t) + \")/curve\"\n            else:\n                multExp = \"curve(\" + nm + \".reference_frame)/curve\"\n        if o in \[3,4]:\n            label = \"Deflicker \"\n        else:\n            label = \"Flicker \"\n        if not l or o in \[3,5,7,9]:\n            label += \"(mult)(\"+str(t)+\")\"\n        else:\n            label += \"(mult)(\[value \"+ nm + \".reference_frame])\"\n    elif o in \[7,8,9,10]: # Add de/flicker\n        multVal = 1\n        if l:\n            offsetExp = nm + \".CurveToolAvg.intensitydata(\" + str(t) + \")/\"+nm+\".CurveToolAvg.intensitydata\"\n        else:\n            pasteOn = \"multiply\"\n            copied = nuke.toNode(\"CurveToolAvg\")\[\"intensitydata\"].toScript()\n            if not l or o in \[3,5,7,9]:\n                offsetExp = \"curve(\" + str(t) + \")/curve\"\n            else:\n                offsetExp = \"curve(\" + nm + \".reference_frame)/curve\"\n        if o in \[7,8]:\n            label = \"Deflicker \"\n        else:\n            label = \"Flicker \"\n        if not l or o in \[3,5,7,9]:\n            label += \"(add)(\"+str(t)+\")\"\n        else:\n            label += \"(add)(\[value \"+ nm + \".reference_frame])\"\n    \n    if o in \[5,6,9,10]:\n        reverse = 1\n        \n    with nuke.Root():\n        gn = nuke.nodes.Grade()\n        gn.setXYpos(n.xpos()+150,n.ypos()+50)\n        gn\[\"multiply\"].setValue(multVal)\n        gn\[\"add\"].setValue(offsetVal)\n        if multExp != \"\":\n            if not l:\n                gn\[\"multiply\"].fromScript(copied)\n            gn\[\"multiply\"].setExpression(multExp)\n                \n        if offsetExp != \"\":\n            if not l:\n                gn\[\"add\"].fromScript(copied)\n            gn\[\"add\"].setExpression(offsetExp)\n        gn\[\"reverse\"].setValue(reverse)\n        gn\[\"label\"].setValue(label)\n        gn\[\"channels\"].setValue(\"rgba\")\n        for i in \[\"black_clamp\",\"white_clamp\"]:\n            gn\[i].setValue(False)\n    om = n.knob(\"exportOptions\")\n    omv = int(om.getValue())\n    if o==omv==1 or o==omv==2 or (o not in \[1,2] and omv not in \[1,2]):\n        n.knob(\"use_baked\").setEnabled(True)\n        "}
+addUserKnob {26 ""}
+addUserKnob {41 areaChannelMask l "area " -STARTLINE T ExpressionMask.maskChannelMask}
+addUserKnob {41 inject_area l inject -STARTLINE T ExpressionMask.inject}
+addUserKnob {41 invert_area l invert -STARTLINE T ExpressionMask.invert_mask}
+addUserKnob {41 area_fringe l fringe -STARTLINE T ExpressionMask.fringe}
+addUserKnob {41 maskChannelMask l mask T Merge.maskChannelMask}
+addUserKnob {41 invert_mask l invert -STARTLINE T Merge.invert_mask}
+addUserKnob {41 inject -STARTLINE T Merge.inject}
+addUserKnob {41 fringe -STARTLINE T Merge.fringe}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {41 mix T Merge.mix}
+addUserKnob {26 version_author l " " t "ColorSampler BETA v0.7\n2016-2019" T "<span style=\"color:#666\"><br/><b>ColorSampler BETA v0.7</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2016-2019</span>"}
+}
+Input {
+ inputs 0
+ name Inputmask
+ xpos -230
+ ypos 705
+ number 3
+}
+Input {
+ inputs 0
+ name Inputarea
+ xpos 656
+ ypos 70
+ number 1
+}
+Shuffle {
+ name ShuffleAreaRGBA
+ xpos 656
+ ypos 94
+}
+set Necea950 [stack 0]
+Input {
+ inputs 0
+ name Inputsrc
+ xpos -103
+ ypos 2
+}
+set Necd6850 [stack 0]
+Dot {
+ name Dot6
+ xpos -69
+ ypos 28
+}
+set Necd4230 [stack 0]
+Copy {
+ inputs 2
+ from0 rgba.alpha
+ to0 rgba.alpha
+ mix 0
+ name CopyAreaUI
+ xpos -103
+ ypos 91
+}
+Dot {
+ name Dot2
+ xpos -69
+ ypos 173
+}
+set N1223d340 [stack 0]
+Dot {
+ name Dot7
+ xpos 178
+ ypos 173
+}
+set N12236e50 [stack 0]
+Dot {
+ name Dot9
+ xpos 732
+ ypos 173
+}
+Grade {
+ multiply 0
+ add {{CurveToolAvg.intensitydata} {CurveToolAvg.intensitydata} {CurveToolAvg.intensitydata} {CurveToolAvg.intensitydata}}
+ black_clamp false
+ name GradeBakedAvg
+ xpos 698
+ ypos 462
+ disable {{parent.out_mode>=3}}
+}
+Grade {
+ multiply {{(parent.out_mode==3||parent.out_mode==4)?CurveToolAvg.intensitydata(parent.reference_frame)/CurveToolAvg.intensitydata:1} {(parent.out_mode==3||parent.out_mode==4)?CurveToolAvg.intensitydata(parent.reference_frame)/CurveToolAvg.intensitydata:1} {(parent.out_mode==3||parent.out_mode==4)?CurveToolAvg.intensitydata(parent.reference_frame)/CurveToolAvg.intensitydata:1} {(parent.out_mode==3||parent.out_mode==4)?CurveToolAvg.intensitydata(parent.reference_frame)/CurveToolAvg.intensitydata:1}}
+ add {{(parent.out_mode==5||parent.out_mode==6)?CurveToolAvg.intensitydata(parent.reference_frame)-CurveToolAvg.intensitydata:0} {(parent.out_mode==5||parent.out_mode==6)?CurveToolAvg.intensitydata(parent.reference_frame)-CurveToolAvg.intensitydata:0} {(parent.out_mode==5||parent.out_mode==6)?CurveToolAvg.intensitydata(parent.reference_frame)-CurveToolAvg.intensitydata:0} {(parent.out_mode==5||parent.out_mode==6)?CurveToolAvg.intensitydata(parent.reference_frame)-CurveToolAvg.intensitydata:0}}
+ reverse {{parent.out_mode==4||parent.out_mode==6}}
+ black_clamp false
+ name GradeBakedMult
+ xpos 698
+ ypos 488
+ disable {{!(parent.out_mode>=3)}}
+}
+Grade {
+ multiply 0
+ add {{CurveToolMax.intensitydata} {CurveToolMax.intensitydata} {CurveToolMax.intensitydata} {CurveToolMax.intensitydata}}
+ black_clamp false
+ name GradeBakedMax
+ xpos 698
+ ypos 514
+ disable {{parent.out_mode!=1}}
+}
+Grade {
+ multiply 0
+ add {{CurveToolMin.intensitydata} {CurveToolMin.intensitydata} {CurveToolMin.intensitydata} {CurveToolMin.intensitydata}}
+ black_clamp false
+ name GradeBakedMin
+ xpos 698
+ ypos 540
+ disable {{parent.out_mode!=2}}
+}
+Dot {
+ name Dot11
+ label " Baked"
+ note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ xpos 732
+ ypos 622
+}
+push $Necea950
+Dot {
+ name Dot1
+ xpos 690
+ ypos 121
+}
+Input {
+ inputs 0
+ name Inputtarget
+ xpos 294
+ ypos -21
+ number 2
+}
+push $Necd4230
+Switch {
+ inputs 2
+ which {{"\[exists parent.input2]"}}
+ name SwitchTarget
+ xpos 294
+ ypos 23
+}
+set N1235ec80 [stack 0]
+Remove {
+ name RemoveAll
+ xpos 504
+ ypos 17
+}
+Expression {
+ inputs 1+1
+ channel0 rgba
+ expr0 1
+ name ExpressionMask
+ xpos 504
+ ypos 118
+ disable {{"!\[exists parent.input1]"}}
+}
+Shuffle {
+ red white
+ green white
+ blue white
+ alpha white
+ name ShuffleWhite
+ xpos 504
+ ypos 229
+ disable {{"\[exists parent.input1]"}}
+}
+set N1236ea80 [stack 0]
+Dot {
+ name Dot4
+ xpos 538
+ ypos 327
+}
+push $N1235ec80
+Shuffle {
+ name ShuffleImgRGBA
+ xpos 294
+ ypos 71
+}
+set N12379340 [stack 0]
+Dot {
+ name Dot3
+ xpos 435
+ ypos 74
+}
+BlinkScript {
+ inputs 2
+ recompileCount 19
+ ProgramGroup 1
+ KernelDescription "2 \"apMaxMinKernel\" iterate pixelWise 7e64c00f3b124d2af614668b30d0f630f4c316e304755f67345f11bb557d5feb 3 \"img\" Read Random \"area\" Read Random \"dst\" Write Point 2 \"useArea\" Int 1 AAAAAA== \"math\" Int 1 AAAAAA== 2 \"useArea\" 1 1 \"math\" 1 1 0"
+ kernelSource "//---------------------------------------------------------\n// apMaxMinKernel v0.1 by Adrian Pueyo\n//\n// Calculates the maximum and minimum value of an input img,\n// through the positive values of an area.\n//\n// adrianpueyo.com, 2017\n// ---------------------------------------------------------\n\nstatic inline float y_convert_ccir601(const float4 in)\{\n  return in.x * 0.299f + in.y * 0.587f + in.z * 0.114f;\n\}\nstatic inline float y_convert_rec709(const float4 in)\{\n  return in.x * 0.2125f + in.y * 0.7154f + in.z * 0.0721f;\n\}\nstatic inline float y_convert_avg(const float4 in)\{\n  return (in.x + in.y + in.z)/3.0f;\n\}\nstatic inline float y_convert_max(const float4 in)\{\n  return max(max(in.x,in.y),in.z);\n\}\nstatic inline float y_convert_min(const float4 in)\{\n  return min(min(in.x,in.y),in.z);\n\}\n\nkernel apMaxMinKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> img;\n  Image<eRead, eAccessRandom, eEdgeClamped> area;\n  Image<eWrite> dst;\n\n  param:\n    int useArea;\n    int math; //0=Rec709,1=Ccir601,2=Avg,3=MaxMin,4=PerChannel\n\n  void process(int2 pos) \{\n    float4 theMax=-1000000000.0f, theMin=1000000000.0f;\n    for(int j=img.bounds.y1; j<img.bounds.y2; j++)\{\n      for(int i=img.bounds.x1; i<img.bounds.x2; i++)\{\n        if(useArea==0 || area(i,j,0)>0.0f)\{\n          if(math==0)\{ //Rec709\n            if(pos.x==0)\{ //Max\n              if(y_convert_rec709(img(i,j))>y_convert_rec709(theMax))\{\n                theMax = img(i,j);\n              \}\n            \}else\{//Min\n              if(y_convert_rec709(img(i,j))<y_convert_rec709(theMin))\{\n                theMin = img(i,j);\n              \}\n            \}\n          \}else if(math==1)\{ //Ccir601\n            if(pos.x==0)\{ //Max\n              if(y_convert_ccir601(img(i,j))>y_convert_ccir601(theMax))\{\n                theMax = img(i,j);\n              \}\n            \}else\{//Min\n              if(y_convert_ccir601(img(i,j))<y_convert_ccir601(theMin))\{\n                theMin = img(i,j);\n              \}\n            \}\n          \}else if(math==2)\{ //Avg\n            if(pos.x==0)\{ //Max\n              if(y_convert_avg(img(i,j))>y_convert_avg(theMax))\{\n                theMax = img(i,j);\n              \}\n            \}else\{//Min\n              if(y_convert_avg(img(i,j))<y_convert_avg(theMin))\{\n                theMin = img(i,j);\n              \}\n            \}\n          \}else if(math==3)\{ //MaxMin\n            if(pos.x==0)\{ //Max\n              if(y_convert_max(img(i,j))>y_convert_max(theMax))\{\n                theMax = img(i,j);\n              \}\n            \}else\{//Min\n              if(y_convert_min(img(i,j))<y_convert_min(theMin))\{\n                theMin = img(i,j);\n              \}\n            \}\n          \}else if(math==4)\{ //PerChannel\n            if(pos.x==0)\{ //Max\n              for (int ch = 0; ch < dst.kComps; ch++)\{\n                if(img(i,j,ch)>theMax\[ch])\n                  theMax\[ch] = img(i,j,ch);\n              \}\n            \}else\{//Min\n              for (int ch = 0; ch < dst.kComps; ch++)\{\n                if(img(i,j,ch)<theMin\[ch])\n                  theMin\[ch] = img(i,j,ch);\n              \}\n            \}\n          \}\n        \}\n      \}\n    \}\n\n    if(pos.x==0)\{ //Max\n      dst() = theMax;\n    \}else\{ //Min\n      dst() = theMin;\n    \}\n  \}\n\};"
+ useGPUIfAvailable false
+ vectorize false
+ rebuild ""
+ apMaxMinKernel_useArea {{"\[exists parent.input1]"}}
+ apMaxMinKernel_math {{parent.max_min_math}}
+ format "2 1 0 0 2 1 1 TwoPixels"
+ specifiedFormat true
+ rebuild_finalise ""
+ name apMaxMinKernel
+ xpos 401
+ ypos 317
+}
+set N12383a10 [stack 0]
+push $N1236ea80
+push $N12379340
+BlinkScript {
+ inputs 2
+ recompileCount 11
+ ProgramGroup 1
+ KernelDescription "2 \"apWeightedAvgKernel\" iterate componentWise 0c211582dc38cbfc25d707d178ea6319b43a475a57d08b6c8f98b11596f90a7f 3 \"img\" Read Random \"area\" Read Random \"dst\" Write Point 1 \"useArea\" Int 1 AAAAAA== 1 \"useArea\" 1 1 0"
+ kernelSource "//---------------------------------------------------------\n// apWeightedAvg v0.3 by Adrian Pueyo\n//\n// Calculates the per-channel average color of an input img,\n// weighted through a second rgba input (area).\n//\n// adrianpueyo.com, 2017\n// ---------------------------------------------------------\n\nkernel apWeightedAvgKernel : ImageComputationKernel<eComponentWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> img;\n  Image<eRead, eAccessRandom, eEdgeClamped> area;\n  Image<eWrite> dst;\n\n  param:\n    int useArea;\n\n  void process(int2 pos) \{\n    float vSum=0.0f, fSum=0.0f;\n    for(int j=img.bounds.y1; j<img.bounds.y2; j++)\{\n      for(int i=img.bounds.x1; i<img.bounds.x2; i++)\{\n        if(useArea==0)\{\n          vSum += img(i,j);\n          fSum += 1.0f;\n        \}else\{\n          vSum += img(i,j)*area(i,j);\n          fSum += area(i,j);\n        \}\n      \}\n    \}\n    dst() = vSum==0.0f?0.0f:vSum/fSum;\n  \}\n\};"
+ useGPUIfAvailable false
+ vectorize false
+ rebuild ""
+ apWeightedAvgKernel_useArea {{"\[exists parent.input1]"}}
+ format "1 1 0 0 1 1 1 One_pixel"
+ specifiedFormat true
+ rebuild_finalise ""
+ name apWeightedAvg
+ xpos 294
+ ypos 223
+}
+Remove {
+ operation keep
+ channels rgba
+ name KeepRGBA
+ xpos 294
+ ypos 261
+}
+set N1262a090 [stack 0]
+FrameHold {
+ first_frame {{parent.reference_frame}}
+ name FrameHoldRef
+ xpos 294
+ ypos 285
+}
+push $N1262a090
+push $N12236e50
+MergeExpression {
+ inputs 2
+ expr0 parent.out_mode==0?Ar:parent.out_mode==3?Br/Ar(0,0):parent.out_mode==4?Br*Ar(0,0):parent.out_mode==5?Br-Ar(0,0):Br+Ar(0,0)
+ expr1 parent.out_mode==0?Ag:parent.out_mode==3?Bg/Ag(0,0):parent.out_mode==4?Bg*Ag(0,0):parent.out_mode==5?Bg-Ag(0,0):Bg+Ag(0,0)
+ expr2 parent.out_mode==0?Ab:parent.out_mode==3?Bb/Ab(0,0):parent.out_mode==4?Bb*Ab(0,0):parent.out_mode==5?Bb-Ab(0,0):Bb+Ab(0,0)
+ expr3 parent.calculate_alpha==0?Ba:parent.out_mode==0?Aa:parent.out_mode==3?Ba/Aa(0,0):parent.out_mode==4?Ba*Aa(0,0):parent.out_mode==5?Ba-Aa(0,0):Ba+Aa(0,0)
+ name MergeExpressionIn
+ xpos 144
+ ypos 261
+}
+MergeExpression {
+ inputs 2
+ expr0 parent.out_mode==0?Ar:parent.out_mode==3?Br*Ar(0,0):parent.out_mode==4?Br/Ar(0,0):parent.out_mode==5?Br+Ar(0,0):Br-Ar(0,0)
+ expr1 parent.out_mode==0?Ag:parent.out_mode==3?Bg*Ag(0,0):parent.out_mode==4?Bg/Ag(0,0):parent.out_mode==5?Bg+Ag(0,0):Bg-Ag(0,0)
+ expr2 parent.out_mode==0?Ab:parent.out_mode==3?Bb*Ab(0,0):parent.out_mode==4?Bb/Ab(0,0):parent.out_mode==5?Bb+Ab(0,0):Bb-Ab(0,0)
+ expr3 parent.calculate_alpha==0?Ba:parent.out_mode==0?Aa:parent.out_mode==3?Ba*Aa(0,0):parent.out_mode==4?Ba/Aa(0,0):parent.out_mode==5?Ba+Aa(0,0):Ba-Aa(0,0)
+ name MergeExpressionOut
+ xpos 144
+ ypos 291
+ disable {{parent.out_mode==0}}
+}
+MergeExpression {
+ inputs 2
+ expr0 (parent.out_mode==1)?Ar(0,0):(parent.out_mode==2)?Ar(1,0):Br
+ expr1 (parent.out_mode==1)?Ag(0,0):(parent.out_mode==2)?Ag(1,0):Bg
+ expr2 (parent.out_mode==1)?Ab(0,0):(parent.out_mode==2)?Ab(1,0):Bb
+ name MergeExpression1
+ label MaxMin
+ xpos 144
+ ypos 317
+}
+Dot {
+ name Dot10
+ label " Non baked"
+ note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ xpos 178
+ ypos 379
+}
+Switch {
+ inputs 2
+ which 1
+ name SwitchBaked
+ label "\[value which]"
+ xpos 144
+ ypos 612
+ disable {{!parent.use_baked}}
+}
+Dot {
+ name Dot8
+ xpos 178
+ ypos 711
+}
+push $N1223d340
+Merge2 {
+ inputs 2+1
+ operation copy
+ bbox B
+ name Merge
+ xpos -103
+ ypos 707
+}
+Output {
+ name Output
+ xpos -103
+ ypos 805
+}
+push $N12383a10
+Dot {
+ name Dot13
+ xpos 435
+ ypos 388
+}
+set N12654920 [stack 0]
+Dot {
+ name Dot15
+ xpos 435
+ ypos 423
+}
+push $N1262a090
+Dot {
+ name Dot14
+ xpos 891
+ ypos 265
+}
+set N126592a0 [stack 0]
+MergeExpression {
+ inputs 2
+ expr0 Ar(1,0)
+ expr1 Ag(1,0)
+ expr2 Ab(1,0)
+ expr3 Aa(1,0)
+ name MergeExpressionIn3
+ label min
+ xpos 857
+ ypos 413
+}
+CurveTool {
+ ROI {0 0 64 64}
+ autocropdata {64 64 192 192}
+ name CurveToolMin
+ xpos 857
+ ypos 451
+}
+push $N12654920
+push $N126592a0
+Dot {
+ name Dot12
+ xpos 1046
+ ypos 265
+}
+set N120dcf60 [stack 0]
+MergeExpression {
+ inputs 2
+ expr0 Ar(0,0)
+ expr1 Ag(0,0)
+ expr2 Ab(0,0)
+ expr3 Aa(0,0)
+ name MergeExpressionIn2
+ label max
+ xpos 1012
+ ypos 378
+}
+CurveTool {
+ ROI {0 0 64 64}
+ autocropdata {64 64 192 192}
+ name CurveToolMax
+ xpos 1012
+ ypos 416
+}
+push $N120dcf60
+push $Necd6850
+Dot {
+ name Dot5
+ xpos 1186
+ ypos 5
+}
+Remove {
+ name RemoveAll1
+ xpos 1152
+ ypos 23
+}
+Reformat {
+ format "64 64 0 0 64 64 1 square_64"
+ resize none
+ center false
+ name Reformat1
+ xpos 1152
+ ypos 61
+}
+MergeExpression {
+ inputs 2
+ expr0 Ar(0,0)
+ expr1 Ag(0,0)
+ expr2 Ab(0,0)
+ expr3 Aa(0,0)
+ name MergeExpressionIn1
+ label avg
+ xpos 1152
+ ypos 255
+}
+CurveTool {
+ ROI {0 0 64 64}
+ autocropdata {64 64 192 192}
+ name CurveToolAvg
+ xpos 1152
+ ypos 293
+}
+end_group

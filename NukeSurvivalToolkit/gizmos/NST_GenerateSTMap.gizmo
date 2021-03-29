@@ -1,0 +1,40 @@
+Group {
+ inputs 0
+ name GenerateSTMap
+ postage_stamp true
+ addUserKnob {20 STMap l "ST Map"}
+ addUserKnob {41 format l Format T Reformat1.format}
+ addUserKnob {26 ""}
+ addUserKnob {7 overscan l "Overscan (%)" t "Add overscan to your ST map" R 0 100}
+ overscan 10
+ addUserKnob {6 reformat l "Reformat to Overscan" t "Reformats the image to overscan size" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+}
+ Reformat {
+  inputs 0
+  name Reformat1
+  xpos 555
+  ypos 395
+ }
+ Crop {
+  box {{-width*(parent.overscan/100)/2} {-height*(parent.overscan/100)/2} {width+(width*(parent.overscan/100)/2)} {height+(height*(parent.overscan/100)/2)}}
+  reformat {{parent.reformat}}
+  crop false
+  name Crop1
+  xpos 555
+  ypos 446
+ }
+ Expression {
+  expr0 (x+0.5)/width
+  expr1 (y+.5)/height
+  name Expression1
+  xpos 555
+  ypos 497
+ }
+ Output {
+  name Output1
+  xpos 555
+  ypos 583
+ }
+end_group

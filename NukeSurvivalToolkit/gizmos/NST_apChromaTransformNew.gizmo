@@ -1,0 +1,396 @@
+add_layer {apChroma apChroma.red apChroma.green apChroma.blue apChroma.alpha}
+Group {
+ name apChromaTransform
+ help "apChromaBlur v0.1\nadrianpueyo.com, 2019"
+ knobChanged "n=nuke.thisNode()\nk=nuke.thisKnob()\nkn=k.name()\n\nif kn == \"scale_x\" and n\[\"scale_linked\"].value():\n    n\[\"scale_y\"].setValue(k.value())\nelif kn == \"scale_y\" and n\[\"scale_linked\"].value():\n    n\[\"scale_x\"].setValue(k.value())\nelif kn == \"scale_linked\" and k.value():\n    n\[\"scale_y\"].setValue(n\[\"scale_x\"].value())\n    "
+ tile_color 0x736efdff
+ selected true
+ addUserKnob {20 apChromaTransform}
+ addUserKnob {41 channels T MergeRGBA.also_merge}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {19 translate_x l "translate x" R -100 100}
+ translate_x 0
+ addUserKnob {19 translate_y l "translate y" R -100 100}
+ translate_y 0
+ addUserKnob {19 rotate R -180 180}
+ rotate 0
+ addUserKnob {19 scale_x l "scale x" R 0 4}
+ scale_x 1
+ addUserKnob {19 scale_y l "scale y" R 0 4}
+ scale_y 1
+ addUserKnob {6 scale_linked l linked +STARTLINE}
+ scale_linked true
+ addUserKnob {19 skewX l "skew X" R -1 1}
+ skewX 0
+ addUserKnob {19 skewY l "skew Y" R -1 1}
+ skewY 0
+ addUserKnob {19 chroma_mix l mix}
+ chroma_mix 1
+ addUserKnob {41 skew_order l "skew order" T TransformR.skew_order}
+ addUserKnob {41 center T TransformR.center}
+ addUserKnob {41 invert_matrix l invert T TransformR.invert_matrix}
+ addUserKnob {26 ""}
+ addUserKnob {41 chroma l "<b><font color=#9292d2>multi-alpha" T MergeCopyChroma.output}
+ addUserKnob {6 process_multi_alpha l "process multi-alpha" +STARTLINE}
+ process_multi_alpha true
+ addUserKnob {26 ""}
+ addUserKnob {41 filter T TransformR.filter}
+ addUserKnob {41 clamp -STARTLINE T TransformR.clamp}
+ addUserKnob {41 black_outside l "black outside" -STARTLINE T TransformR.black_outside}
+ addUserKnob {41 motionblur T TransformR.motionblur}
+ addUserKnob {41 shutter T TransformR.shutter}
+ addUserKnob {41 shutteroffset l "shutter offset" T TransformR.shutteroffset}
+ addUserKnob {41 shuttercustomoffset l "" -STARTLINE T TransformR.shuttercustomoffset}
+ addUserKnob {41 maskChannelMask l "mask " T MergeRGBA.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T MergeRGBA.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T MergeRGBA.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T MergeRGBA.fringe}
+ addUserKnob {41 mix T MergeRGBA.mix}
+ addUserKnob {26 version_author l "" t "apChromaTransform v0.1\n2019" +STARTLINE T "<span style=\"color:#666\"><br/><b>apChromaTransform v0.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019</span>"}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 190
+  ypos 809
+  number 1
+ }
+set N4e27e610 [stack 0]
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos 224
+  ypos 853
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos 319
+  ypos 249
+ }
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos 353
+  ypos 299
+ }
+set N7c366390 [stack 0]
+ Dot {
+  name Dot10
+  note_font_size 41
+  xpos 463
+  ypos 299
+ }
+ Dot {
+  name Dot14
+  note_font_size 41
+  xpos 573
+  ypos 299
+ }
+set N8cfb7bd0 [stack 0]
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos 683
+  ypos 299
+ }
+set N72e18190 [stack 0]
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 683
+  ypos 359
+ }
+push $N72e18190
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 755
+  ypos 299
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  label "\[value in]"
+  xpos 721
+  ypos 317
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Achannels {{{parent.MergeCopyChroma.output}}}
+  Bchannels none
+  name MergeGetChroma
+  xpos 721
+  ypos 355
+  disable {{"\[\nif \{ \[lsearch -exact \[channels \[input this 1]] \[lindex \[channels MergeChosen] 0]] >= 0\} \{\n    return 0\n\} else \{\n    return 1\n\}\n]"}}
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 755
+  ypos 401
+ }
+set N7721fd10 [stack 0]
+ Dot {
+  name Dot16
+  note_font_size 41
+  xpos 755
+  ypos 436
+ }
+push $N8cfb7bd0
+ Merge2 {
+  inputs 2
+  operation copy
+  Bchannels none
+  output {{{parent.MergeCopyChroma.output}}}
+  name MergeCopyChromaFull1
+  xpos 539
+  ypos 426
+  disable {{!parent.process_multi_alpha}}
+ }
+ Dot {
+  name Dot27
+  note_font_size 41
+  xpos 573
+  ypos 498
+ }
+set N86a36f50 [stack 0]
+ Dot {
+  name Dot11
+  note_font_size 41
+  xpos 677
+  ypos 498
+ }
+set N479b7910 [stack 0]
+ Dot {
+  name Dot12
+  note_font_size 41
+  xpos 782
+  ypos 498
+ }
+set N53968e70 [stack 0]
+ Dot {
+  name Dot15
+  note_font_size 41
+  xpos 884
+  ypos 498
+ }
+ Multiply {
+  value {0 0 0 1}
+  name MultiplyKeepA
+  label "\[value value]"
+  xpos 850
+  ypos 539
+ }
+ Transform {
+  translate {{parent.translate_x.a} {parent.translate_y.a}}
+  rotate {{parent.rotate.a}}
+  scale {{parent.scale_x.a} {parent.scale_y.a}}
+  skewX {{parent.skewX.a}}
+  skewY {{parent.skewY.a}}
+  skew_order {{parent.TransformR.skew_order}}
+  center {{parent.TransformR.center} {parent.TransformR.center}}
+  invert_matrix {{parent.TransformR.invert_matrix}}
+  filter {{parent.TransformR.filter}}
+  clamp {{parent.TransformR.clamp}}
+  black_outside {{parent.TransformR.black_outside}}
+  motionblur {{parent.TransformR.motionblur}}
+  shutter {{parent.TransformR.shutter}}
+  shutteroffset {{parent.TransformR.shutteroffset}}
+  shuttercustomoffset {{parent.TransformR.shuttercustomoffset}}
+  name TransformA
+  xpos 850
+  ypos 631
+ }
+ Dot {
+  name Dot18
+  note_font_size 41
+  xpos 884
+  ypos 749
+ }
+push $N53968e70
+ Multiply {
+  value {0 0 1 0}
+  name MultiplyKeepB
+  label "\[value value]"
+  xpos 748
+  ypos 539
+ }
+ Transform {
+  translate {{parent.translate_x.b} {parent.translate_y.b}}
+  rotate {{parent.rotate.b}}
+  scale {{parent.scale_x.b} {parent.scale_y.b}}
+  skewX {{parent.skewX.b}}
+  skewY {{parent.skewY.b}}
+  skew_order {{parent.TransformR.skew_order}}
+  center {{parent.TransformR.center} {parent.TransformR.center}}
+  invert_matrix {{parent.TransformR.invert_matrix}}
+  filter {{parent.TransformR.filter}}
+  clamp {{parent.TransformR.clamp}}
+  black_outside {{parent.TransformR.black_outside}}
+  motionblur {{parent.TransformR.motionblur}}
+  shutter {{parent.TransformR.shutter}}
+  shutteroffset {{parent.TransformR.shutteroffset}}
+  shuttercustomoffset {{parent.TransformR.shuttercustomoffset}}
+  name TransformB
+  xpos 748
+  ypos 631
+ }
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 782
+  ypos 723
+ }
+push $N479b7910
+ Multiply {
+  value {0 1 0 0}
+  name MultiplyKeepG
+  label "\[value value]"
+  xpos 643
+  ypos 539
+ }
+ Transform {
+  translate {{parent.translate_x.g} {parent.translate_y.g}}
+  rotate {{parent.rotate.g}}
+  scale {{parent.scale_x.g} {parent.scale_y.g}}
+  skewX {{parent.skewX.g}}
+  skewY {{parent.skewY.g}}
+  skew_order {{parent.TransformR.skew_order}}
+  center {{parent.TransformR.center} {parent.TransformR.center}}
+  invert_matrix {{parent.TransformR.invert_matrix}}
+  filter {{parent.TransformR.filter}}
+  clamp {{parent.TransformR.clamp}}
+  black_outside {{parent.TransformR.black_outside}}
+  motionblur {{parent.TransformR.motionblur}}
+  shutter {{parent.TransformR.shutter}}
+  shutteroffset {{parent.TransformR.shutteroffset}}
+  shuttercustomoffset {{parent.TransformR.shuttercustomoffset}}
+  name TransformG
+  xpos 643
+  ypos 631
+ }
+ Dot {
+  name Dot17
+  note_font_size 41
+  xpos 677
+  ypos 697
+ }
+push $N86a36f50
+ Multiply {
+  value {1 0 0 0}
+  name MultiplyKeepR
+  label "\[value value]"
+  xpos 539
+  ypos 538
+ }
+ Transform {
+  translate {{parent.translate_x.r} {parent.translate_y.r}}
+  rotate {{parent.rotate.r}}
+  scale {{parent.scale_x.r} {parent.scale_y.r}}
+  skewX {{parent.skewX.r}}
+  skewY {{parent.skewY.r}}
+  center {1024 576}
+  shutteroffset centred
+  name TransformR
+  xpos 539
+  ypos 631
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  also_merge all
+  name Merge1
+  xpos 539
+  ypos 693
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  also_merge all
+  name Merge2
+  xpos 539
+  ypos 719
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  also_merge all
+  name Merge3
+  xpos 539
+  ypos 745
+ }
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos 573
+  ypos 813
+ }
+set N7a967a30 [stack 0]
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos 573
+  ypos 853
+ }
+push $N4e27e610
+push $N7a967a30
+push $N7721fd10
+push $N7c366390
+ Merge2 {
+  inputs 2
+  operation copy
+  Bchannels none
+  output {{{parent.MergeCopyChroma.output}}}
+  name MergeCopyChromaFull
+  xpos 319
+  ypos 391
+  disable {{!parent.process_multi_alpha}}
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  Achannels none
+  Bchannels none
+  output none
+  also_merge rgba
+  name MergeRGBA
+  xpos 319
+  ypos 803
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  Achannels {{{output}}}
+  Bchannels none
+  output apChroma
+  maskChannelMask {{{parent.MergeRGBA.maskChannelMask}}}
+  inject {{parent.MergeRGBA.inject}}
+  invert_mask {{parent.MergeRGBA.invert_mask}}
+  fringe {{parent.MergeRGBA.fringe}}
+  mix {{parent.MergeRGBA.mix}}
+  name MergeCopyChroma
+  xpos 319
+  ypos 843
+  disable {{!parent.process_multi_alpha}}
+ }
+ Output {
+  name Output1
+  xpos 319
+  ypos 911
+ }
+ Merge2 {
+  inputs 0
+  operation copy
+  Achannels {{{parent.MergeCopyChroma.output}}}
+  Bchannels none
+  output {{{parent.MergeCopyChroma.output}}}
+  name MergeChosen
+  xpos 840
+  ypos 347
+  hide_input true
+ }
+end_group

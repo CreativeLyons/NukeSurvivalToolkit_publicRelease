@@ -1,0 +1,569 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+push 0
+Group {
+ inputs 2
+ name ColorCopy
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"output\":\n    method = n.knob('output').value()\n    if method == 'HSV' or method == 'HSL':\n        n.knob('colorMix').setVisible(False)\n        n.knob('lumaMix').setVisible(True)\n        n.knob('hue').setVisible(True)\n        n.knob('sat').setVisible(True)\n        \n    else:\n        n.knob('colorMix').setVisible(True)\n        n.knob('lumaMix').setVisible(True)\n        n.knob('hue').setVisible(False)\n        n.knob('sat').setVisible(False)\n    \n    if method == 'HSV':\n        n.knob('lumaMix').setLabel('Value Mix')\n        \n    else:\n        n.knob('lumaMix').setLabel('Luminance Mix')\n\n    "
+ tile_color 0x4c7bd1ff
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 ColorCopy}
+ addUserKnob {41 channels T Merge5.also_merge}
+ addUserKnob {4 output l method M {HSV HSL "Rec 709" "Ccir 601" Average Maximum ""}}
+ addUserKnob {6 opInLog l "Operations in Log" -STARTLINE}
+ addUserKnob {7 colorMix l "Color Mix" +HIDDEN}
+ colorMix 1
+ addUserKnob {7 hue l "Hue Mix"}
+ hue 1
+ addUserKnob {7 sat l "Saturation Mix"}
+ sat 1
+ addUserKnob {7 lumaMix l "Value Mix"}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge5.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge5.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge5.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge5.fringe}
+ addUserKnob {41 mix T Merge5.mix}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -12
+  ypos 1290
+  number 2
+ }
+ Input {
+  inputs 0
+  name InputA
+  xpos 327
+  ypos -107
+  number 1
+ }
+ Dot {
+  name Dot2
+  label A
+  note_font_size 41
+  xpos 361
+  ypos -41
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp2
+  xpos 327
+  ypos 145
+  disable {{!parent.opInLog}}
+ }
+ Log2Lin {
+  channels all
+  operation lin2log
+  name Log2Lin1
+  xpos 327
+  ypos 208
+  disable {{!parent.opInLog}}
+ }
+ Dot {
+  name Dot12
+  note_font_size 41
+  xpos 361
+  ypos 325
+ }
+set N42f8f030 [stack 0]
+ Dot {
+  name Dot13
+  note_font_size 41
+  xpos 1439
+  ypos 325
+ }
+ Dot {
+  name Dot25
+  note_font_size 41
+  xpos 1439
+  ypos 376
+ }
+set N42fa0000 [stack 0]
+ Colorspace {
+  channels all
+  colorspace_out HSL
+  name Colorspace5
+  xpos 1525
+  ypos 506
+ }
+push $N42fa0000
+ Colorspace {
+  channels all
+  colorspace_out HSV
+  name Colorspace2
+  xpos 1405
+  ypos 503
+ }
+ Switch {
+  inputs 2
+  which {{"output == 1 ? 1 : 0"}}
+  name Switch5
+  xpos 1405
+  ypos 587
+ }
+ Dot {
+  name Dot16
+  note_font_size 41
+  xpos 1439
+  ypos 749
+ }
+set N42fb3f10 [stack 0]
+ Dot {
+  name Dot17
+  note_font_size 41
+  xpos 1439
+  ypos 821
+ }
+set N42f3de80 [stack 0]
+ Dot {
+  name Dot18
+  note_font_size 41
+  xpos 1439
+  ypos 879
+ }
+ Multiply {
+  value {0 0 1 0}
+  name Multiply3
+  label "\[value value]"
+  xpos 1274
+  ypos 867
+ }
+ Input {
+  inputs 0
+  name InputB
+  xpos -174
+  ypos -93
+ }
+ Dot {
+  name Dot1
+  label B
+  note_font_size 41
+  xpos -140
+  ypos -32
+ }
+ Dot {
+  name Dot11
+  note_font_size 41
+  xpos -140
+  ypos 36
+ }
+set N43400220 [stack 0]
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos -174
+  ypos 157
+  disable {{!parent.opInLog}}
+ }
+ Log2Lin {
+  channels all
+  operation lin2log
+  name Log2Lin2
+  selected true
+  xpos -174
+  ypos 213
+  disable {{!parent.opInLog}}
+ }
+ Dot {
+  name Dot14
+  note_font_size 41
+  xpos -140
+  ypos 394
+ }
+set N4340edf0 [stack 0]
+ Dot {
+  name Dot15
+  note_font_size 41
+  xpos 778
+  ypos 394
+ }
+set N43412a20 [stack 0]
+ Colorspace {
+  channels all
+  colorspace_out HSL
+  name Colorspace4
+  xpos 862
+  ypos 504
+ }
+push $N43412a20
+ Colorspace {
+  channels all
+  colorspace_out HSV
+  name Colorspace1
+  xpos 744
+  ypos 508
+ }
+ Switch {
+  inputs 2
+  which {{"output == 1 ? 1 : 0"}}
+  name Switch2
+  xpos 744
+  ypos 564
+ }
+ Dot {
+  name Dot20
+  note_font_size 41
+  xpos 778
+  ypos 621
+ }
+set N42fca4d0 [stack 0]
+ Dot {
+  name Dot21
+  note_font_size 41
+  xpos 942
+  ypos 621
+ }
+set N42fc8ee0 [stack 0]
+ Dot {
+  name Dot22
+  note_font_size 41
+  xpos 1052
+  ypos 621
+ }
+set N42f03800 [stack 0]
+ Dot {
+  name Dot23
+  note_font_size 41
+  xpos 1162
+  ypos 621
+ }
+ Multiply {
+  value {0 0 1 0}
+  name Multiply7
+  label "\[value value]"
+  xpos 1128
+  ypos 676
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  mix {{parent.lumaMix}}
+  name Merge10
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 1128
+  ypos 867
+ }
+push $N42f3de80
+ Multiply {
+  value {0 1 0 0}
+  name Multiply2
+  label "\[value value]"
+  xpos 1279
+  ypos 809
+ }
+push $N42f03800
+ Multiply {
+  value {0 1 0 0}
+  name Multiply6
+  label "\[value value]"
+  xpos 1018
+  ypos 676
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  mix {{parent.sat}}
+  name Merge8
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 1018
+  ypos 814
+ }
+push $N42fb3f10
+ Multiply {
+  value {1 0 0 0}
+  name Multiply1
+  label "\[value value]"
+  xpos 1276
+  ypos 737
+ }
+push $N42fc8ee0
+ Multiply {
+  value {1 0 0 0}
+  name Multiply4
+  label "\[value value]"
+  xpos 908
+  ypos 676
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  mix {{parent.hue}}
+  name Merge6
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 908
+  ypos 742
+ }
+push $N42fca4d0
+ Multiply {
+  value {0 0 0 1}
+  name Multiply5
+  label "\[value value]"
+  xpos 744
+  ypos 672
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  name Merge7
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 744
+  ypos 742
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  name Merge9
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 744
+  ypos 814
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  name Merge11
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 744
+  ypos 872
+ }
+ Dot {
+  name Dot26
+  note_font_size 41
+  xpos 778
+  ypos 937
+ }
+set N43460e20 [stack 0]
+ Colorspace {
+  channels all
+  colorspace_in HSL
+  name Colorspace6
+  xpos 857
+  ypos 985
+ }
+push $N43460e20
+ Colorspace {
+  channels all
+  colorspace_in HSV
+  name Colorspace3
+  xpos 744
+  ypos 983
+ }
+ Switch {
+  inputs 2
+  which {{"output == 1 ? 1 : 0"}}
+  name Switch3
+  xpos 744
+  ypos 1040
+ }
+ Dot {
+  name Dot19
+  note_font_size 41
+  xpos 778
+  ypos 1088
+ }
+push $N42f8f030
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos 361
+  ypos 545
+ }
+set N43492d80 [stack 0]
+ Toe2 {
+  channels all
+  lift 0.0001
+  name Toe2
+  xpos 327
+  ypos 599
+ }
+push $N43492d80
+ Saturation {
+  channels all
+  saturation 0
+  mode {{"output == 0 || output == 1 ? 0 : parent.output - 2"}}
+  name Saturation3
+  xpos 485
+  ypos 538
+ }
+ Dot {
+  name Dot24
+  note_font_size 41
+  xpos 519
+  ypos 753
+ }
+set N434aae90 [stack 0]
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos 519
+  ypos 834
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  name Merge4
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 327
+  ypos 827
+ }
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 361
+  ypos 885
+ }
+push $N4340edf0
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos -140
+  ypos 542
+ }
+set N434c40a0 [stack 0]
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos 29
+  ypos 542
+ }
+ Toe2 {
+  channels all
+  lift 0.0001
+  name Toe1
+  xpos -5
+  ypos 596
+ }
+push $N434c40a0
+ Saturation {
+  channels all
+  saturation 0
+  mode {{"output == 0 || output == 1 ? 0 : parent.output - 2" x1 0}}
+  name Saturation2
+  xpos -174
+  ypos 666
+ }
+set N434d5c10 [stack 0]
+ Merge2 {
+  inputs 2
+  operation divide
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  name Merge2
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -5
+  ypos 666
+ }
+ Dissolve {
+  inputs 2
+  which {{parent.colorMix}}
+  name Dissolve1
+  xpos -5
+  ypos 878
+ }
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 29
+  ypos 957
+ }
+push $N434aae90
+push $N434d5c10
+ Dissolve {
+  inputs 2
+  which {{parent.lumaMix}}
+  name Dissolve2
+  xpos -174
+  ypos 750
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  name Merge3
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -174
+  ypos 950
+ }
+ Switch {
+  inputs 2
+  which {{"output == 0 || output == 1 ? 1 : 0"}}
+  name Switch1
+  xpos -174
+  ypos 1085
+ }
+ Log2Lin {
+  channels all
+  name Log2Lin4
+  xpos -174
+  ypos 1150
+  disable {{!parent.opInLog}}
+ }
+push $N43400220
+ Dot {
+  name Dot10
+  note_font_size 41
+  xpos -380
+  ypos 36
+ }
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos -380
+  ypos 1293
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  Achannels none
+  Bchannels none
+  output none
+  also_merge rgb
+  maskChannelInput -rgba.alpha
+  name Merge5
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -174
+  ypos 1286
+ }
+ Output {
+  name Output1
+  xpos -174
+  ypos 1386
+ }
+end_group

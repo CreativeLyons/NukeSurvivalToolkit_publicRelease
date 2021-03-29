@@ -1,0 +1,28 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+Constant {
+ inputs 0
+ color 1
+ name Constant1
+ selected true
+ xpos 924
+ ypos -187
+}
+Remove {
+ channels alpha
+ name Remove1
+ selected true
+ xpos 924
+ ypos -89
+ disable true
+}
+Expression {
+ name Alpha_channel_Exist
+ selected true
+ xpos 924
+ ypos -30
+ addUserKnob {20 Exist l Exist_alpha?}
+ addUserKnob {26 message l "" +STARTLINE T "0: if alpha channel doesn't exist\n1: if alpha channel exists"}
+ addUserKnob {3 alpha_exist l exist_alpha?}
+ alpha_exist {{"\[string first \".a\" \[channels \[input this 0]]]>-1"}}
+}

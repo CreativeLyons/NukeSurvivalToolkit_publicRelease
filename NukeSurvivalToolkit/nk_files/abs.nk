@@ -1,0 +1,49 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+BackdropNode {
+ inputs 0
+ name BackdropNode3
+ tile_color 0x7171c600
+ label ABS
+ note_font_size 42
+ selected true
+ xpos 1234
+ ypos -326
+ bdwidth 274
+ bdheight 394
+}
+StickyNote {
+ inputs 0
+ name StickyNote1
+ label "Return the Absolute value (always positive values)"
+ selected true
+ xpos 1255
+ ypos 24
+}
+Constant {
+ inputs 0
+ color 1
+ name Constant2
+ selected true
+ xpos 1327
+ ypos -217
+}
+Multiply {
+ channels rgba
+ value -1
+ name Multiply1
+ label -1
+ selected true
+ xpos 1327
+ ypos -104
+}
+Expression {
+ expr0 abs(r)
+ expr1 abs(g)
+ expr2 abs(b)
+ expr3 abs(a)
+ name ABS
+ selected true
+ xpos 1327
+ ypos -27
+}

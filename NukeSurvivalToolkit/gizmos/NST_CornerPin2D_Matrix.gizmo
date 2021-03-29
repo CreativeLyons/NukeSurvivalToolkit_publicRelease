@@ -1,0 +1,77 @@
+Group {
+ name CornerPin2D_Matrix
+ tile_color 0xa57aaa00
+ selected true
+ addUserKnob {20 CornerPin2D}
+ addUserKnob {26 ""}
+ addUserKnob {41 to1 T CornerPin2D1.to1}
+ addUserKnob {41 enable1 -STARTLINE T CornerPin2D1.enable1}
+ addUserKnob {41 to2 T CornerPin2D1.to2}
+ addUserKnob {41 enable2 -STARTLINE T CornerPin2D1.enable2}
+ addUserKnob {41 to3 T CornerPin2D1.to3}
+ addUserKnob {41 enable3 -STARTLINE T CornerPin2D1.enable3}
+ addUserKnob {41 to4 T CornerPin2D1.to4}
+ addUserKnob {41 enable4 -STARTLINE T CornerPin2D1.enable4}
+ addUserKnob {22 copy_from l "Copy 'from'" T "n = nuke.thisNode()\nknob_from1 = n\['from1'].getValue()\nknob_from2 = n\['from2'].getValue()\nknob_from3 = n\['from3'].getValue()\nknob_from4 = n\['from4'].getValue()\n\n\nn\['to1'].setValue(knob_from1)\nn\['to2'].setValue(knob_from2)\nn\['to3'].setValue(knob_from3)\nn\['to4'].setValue(knob_from4)" +STARTLINE}
+ addUserKnob {20 "extra matrix" n 2}
+ addUserKnob {41 transform_matrix l "" -STARTLINE T CornerPin2D1.transform_matrix}
+ addUserKnob {20 "" n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 message l "" +STARTLINE T "<i>This is just a visualization. Can't modify directly this matrix"}
+ addUserKnob {41 matrix T Matrix1.matrix}
+ addUserKnob {41 inverse -STARTLINE T CornerPin2D1.inverse}
+ addUserKnob {20 from l From}
+ addUserKnob {41 from1 T CornerPin2D1.from1}
+ addUserKnob {41 from2 T CornerPin2D1.from2}
+ addUserKnob {41 from3 T CornerPin2D1.from3}
+ addUserKnob {41 from4 T CornerPin2D1.from4}
+ addUserKnob {41 set_to_input l "Set to input" T CornerPin2D1.set_to_input}
+ addUserKnob {41 copy_from_to l "Copy 'to'" -STARTLINE T CornerPin2D1.copy_from_to}
+ addUserKnob {20 email l @}
+ addUserKnob {22 tutorial l Tutorial t http://www.andreageremia.it/tutorial_matrix_transform.html T "nuke.tcl('start', 'http://www.andreageremia.it/tutorial_matrix_transform.html')\n" +STARTLINE}
+ addUserKnob {26 tool l "" +STARTLINE T "Tool created by Andrea Geremia\n\nandrea.geremia89@gmail.com\nwww.andreageremia.it\n\nFrom the Julik's code: https://gist.github.com/julik/1164618"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 269
+  ypos -141
+ }
+ CornerPin2D {
+  to1 {0 0}
+  to2 {2048 0}
+  to3 {2048 1556}
+  to4 {0 1556}
+  invert false
+  motionblur 1
+  from1 {0 0}
+  from2 {2048 0}
+  from3 {2048 1556}
+  from4 {0 1556}
+  name CornerPin2D1
+  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\n\ndef getTheCornerpinAsMatrix():\n    projectionMatrixTo = nuke.math.Matrix4()\n    projectionMatrixFrom = nuke.math.Matrix4()\n    \n    theCornerpinNode = n\n    imageWidth = float(theCornerpinNode.width())\n    imageHeight = float(theCornerpinNode.height())\n    \n    \n    to1x, to1y = theCornerpinNode\['to1'].value()\n    to2x, to2y = theCornerpinNode\['to2'].value()\n    to3x, to3y = theCornerpinNode\['to3'].value()\n    to4x, to4y = theCornerpinNode\['to4'].value()\n    \n    from1x, from1y = theCornerpinNode\['from1'].value()\n    from2x, from2y = theCornerpinNode\['from2'].value()\n    from3x, from3y = theCornerpinNode\['from3'].value()\n    from4x, from4y = theCornerpinNode\['from4'].value()\n    \n    \n    projectionMatrixTo.mapUnitSquareToQuad(to1x,to1y,to2x,to2y,to3x,to3y,to4x,to4y)\n    projectionMatrixFrom.mapUnitSquareToQuad(from1x,from1y,from2x,from2y,from3x,from3y,from4x,from4y)\n    \n\n    theCornerpinAsMatrix = projectionMatrixTo*projectionMatrixFrom.inverse()\n    \n    theCornerpinAsMatrix.transpose()\n    \n        \n    if(n\['inverse'].getValue()==1):\n        inv = theCornerpinAsMatrix.inverse()\n        theCornerpinAsMatrix = inv\n\n    \n    return theCornerpinAsMatrix\n\nmatrix = getTheCornerpinAsMatrix()\n\nnuke.toNode(\"Matrix1\")\['matrix'].setValue(matrix)"
+  selected true
+  xpos 269
+  ypos -66
+  addUserKnob {20 User}
+  addUserKnob {6 inverse +STARTLINE}
+  addUserKnob {22 "set reference frame" -STARTLINE T cornerPinZero()}
+ }
+ Output {
+  name Output1
+  xpos 269
+  ypos -1
+ }
+ Matrix {
+  inputs 0
+  matrix {
+      {1 0 0 0}
+      {0 1 0 0}
+      {0 0 1 0}
+      {0 0 0 1}
+    }
+  name Matrix1
+  xpos 442
+  ypos -93
+ }
+end_group

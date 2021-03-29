@@ -1,0 +1,111 @@
+Group {
+ name AntiAliasingFilter
+ autolabel "nuke.thisNode().name() + \"\\n\" + '(' + str(nuke.thisNode()\['operation'].value()) + ')' "
+ tile_color 0xc17a4aff
+ label "\[value operation]"
+ note_font "Verdana Bold Bold Bold"
+ selected true
+ addUserKnob {20 Antialiasing l Filter}
+ addUserKnob {41 channels T Matrix3.channels}
+ addUserKnob {26 ""}
+ addUserKnob {4 operation M {increase reduce "" "" "" ""}}
+ operation reduce
+ addUserKnob {7 filter l size R 0 10}
+ addUserKnob {20 tuning l TUNING n 1}
+ tuning 0
+ addUserKnob {41 gamma T Grade1.gamma}
+ addUserKnob {20 endGroup n -1}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -588
+  ypos -288
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 1 0}
+      {0 0 0}
+    }
+  name Matrix3
+  xpos -588
+  ypos -244
+ }
+ Dot {
+  name Dot3
+  xpos -554
+  ypos -180
+ }
+set N433b7fc0 [stack 0]
+ Dot {
+  name Dot5
+  xpos -487
+  ypos -180
+ }
+ Matrix {
+  channels {{{Matrix3.channels}}}
+  matrix {
+      {0 {"( parent.filter) == 0\n? \n0\n: \n-1\n\n"} 0}
+      {{"( parent.filter) == 0\n? \n0\n: \n-1"} {"( parent.filter) == 0\n? \n1\n: \n(15- parent.filter)"} {"( parent.filter) == 0\n? \n0\n: \n-1"}}
+      {0 {"( parent.filter) == 0\n? \n0\n: \n-1"} 0}
+    }
+  normalize true
+  name Matrix2
+  xpos -521
+  ypos -41
+  addUserKnob {20 User}
+  addUserKnob {7 antialiasing R 0 4}
+  antialiasing -0.9
+ }
+ Dot {
+  name Dot7
+  xpos -487
+  ypos 92
+ }
+push $N433b7fc0
+ Dot {
+  name Dot4
+  xpos -625
+  ypos -180
+ }
+ Matrix {
+  channels {{{Matrix3.channels}}}
+  matrix {
+      {{"parent.filter <= 1 ? 0 : parent.filter-1"} {parent.filter} {"parent.filter <= 1 ? 0 : parent.filter-1"}}
+      {{parent.filter} {"( parent.filter) >= 1 \n? \n( parent.filter * 2 ) \n: \n( parent.filter + 1 ) \n\n"} {parent.filter}}
+      {{"parent.filter <= 1 ? 0 : parent.filter-1"} {parent.filter} {"parent.filter <= 1 ? 0 : parent.filter-1"}}
+    }
+  normalize true
+  name Matrix1
+  xpos -659
+  ypos -41
+  addUserKnob {20 User}
+  addUserKnob {7 antialiasing R 0 4}
+  antialiasing -0.9
+ }
+ Dot {
+  name Dot6
+  xpos -625
+  ypos 92
+ }
+ Switch {
+  inputs 2
+  which {{parent.operation}}
+  name Switch1
+  xpos -587
+  ypos 88
+ }
+ Grade {
+  channels {{{Matrix3.channels}}}
+  white_clamp true
+  name Grade1
+  xpos -587
+  ypos 157
+ }
+ Output {
+  name Output1
+  xpos -587
+  ypos 279
+ }
+end_group

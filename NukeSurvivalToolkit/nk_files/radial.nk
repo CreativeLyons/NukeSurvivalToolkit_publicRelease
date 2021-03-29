@@ -1,0 +1,15 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ temp_name0 size
+ temp_expr0 600
+ expr0 "size - sqrt(x * x + y * y )"
+ expr1 "\nsize - sqrt(x * x + y * y )"
+ expr2 "\nsize - sqrt(x * x + y * y )"
+ expr3 "\nsize - sqrt(x * x + y * y )"
+ name Radial
+ selected true
+ xpos 923
+ ypos 541
+}

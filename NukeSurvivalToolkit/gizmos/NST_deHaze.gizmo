@@ -1,0 +1,319 @@
+Group {
+ name deHaze
+ tile_color 0x55ffbfff
+ selected true
+ addUserKnob {20 Controls}
+ addUserKnob {7 dehaze t "Sets the overall intensity of the dehaze operation."}
+ dehaze 1
+ addUserKnob {7 topGamma l "highlight protection" t "This helps to prevent funky effects in the brightest of areas (e.g. the sky)." R 1 10}
+ topGamma 3
+ addUserKnob {7 offsetHaze l offset t "Lets you set the point where the dehaze starts.\nNeeds highlight protection greater than 1 to work." R -1 1}
+ addUserKnob {26 sep00_1 l "  "}
+ addUserKnob {26 sep00 l "colour correct" T ""}
+ addUserKnob {18 gainHaze l gain t "Adjusts the gain of dehazed areas to tackle colour shifts."}
+ gainHaze {1 1 1}
+ addUserKnob {6 gainHaze_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 gammaHaze l gamma t "Adjusts the gamma of dehazed areas to tackle colour shifts."}
+ gammaHaze {1 1 1}
+ addUserKnob {7 satHaze l saturation t "Adjusts the saturation of dehazed areas to tackle colour shifts."}
+ satHaze 1
+ addUserKnob {26 sep02_1 l "  "}
+ addUserKnob {6 shuffleMap l "shuffle haze to alpha" t "Shuffles the result of the affected hazy areas into the alpha channel.\nNote: this is not the haze map that is generated to affect the haze in the image." +STARTLINE}
+ addUserKnob {20 finetune l "fine tune"}
+ addUserKnob {6 prevBil l "preview haze matte" t "Lets you preview you the generated haze map. This is helpful to properly set it up for your shot, to fix holes and take care of edges." +STARTLINE}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" -STARTLINE T C_Bilateral1.useGPUIfAvailable}
+ addUserKnob {26 sep02 l "  " T ""}
+ addUserKnob {7 erodeMap l erode t "Erodes darkened areas from your haze map. If you experience holes (e.g. in the sky), try to increase the value." R 0 30}
+ erodeMap 10
+ addUserKnob {26 sep03 l "  " T ""}
+ addUserKnob {3 sizeBil l "bilateral size" t "Sets the general size of the bilateral operation."}
+ sizeBil 20
+ addUserKnob {41 positionalSigma l "bilaterial positional Σ" T C_Bilateral1.positionalSigma}
+ addUserKnob {41 colourSigma l "bilateral colour Σ" T C_Bilateral1.colourSigma}
+ addUserKnob {26 credit t "lp_deHaze v1.0\n(c)2020 lucas pfaff\nbased on a tutorial by Mads Hagbarth Damsbo: https://vimeo.com/377653826" +INVISIBLE T "lp_deHaze v1.0\n(c)2020 lucas pfaff\nbased on a tutorial by Mads Hagbarth Damsbo: https://vimeo.com/377653826"}
+}
+ Input {
+  inputs 0
+  name img
+  xpos 829
+  ypos 99
+ }
+ Dot {
+  name Dot3
+  xpos 863
+  ypos 215
+ }
+set N6c6de000 [stack 0]
+ Dot {
+  name Dot1
+  xpos 863
+  ypos 572
+ }
+set N6c84bc00 [stack 0]
+push 0
+push $N6c6de000
+ Dot {
+  name Dot2
+  xpos 398
+  ypos 215
+ }
+ Grade {
+  white {{dehaze}}
+  black_clamp false
+  name Grade4
+  label intensity
+  xpos 364
+  ypos 275
+ }
+ Invert {
+  channels rgb
+  name Invert1
+  xpos 364
+  ypos 360
+ }
+ Saturation {
+  saturation 0
+  mode Maximum
+  name Saturation1
+  xpos 364
+  ypos 384
+ }
+ FilterErode {
+  channels rgb
+  size {{erodeMap*-1}}
+  name FilterErode1
+  xpos 364
+  ypos 474
+ }
+ FilterErode {
+  channels rgb
+  size {{FilterErode1.size*-1}}
+  filter {{FilterErode1.filter x26 1}}
+  name FilterErode2
+  xpos 364
+  ypos 498
+ }
+ C_Bilateral2_1 {
+  inputs 2+1
+  size {{sizeBil}}
+  positionalSigma 40
+  colourSigma 0.1
+  name C_Bilateral1
+  xpos 364
+  ypos 565
+ }
+ Dot {
+  name Dot5
+  xpos 398
+  ypos 657
+ }
+set N6c875800 [stack 0]
+ Dot {
+  name Dot4
+  xpos 276
+  ypos 657
+ }
+ Grade {
+  add 1
+  white_clamp true
+  name Grade1
+  label "\[value channels]"
+  xpos 242
+  ypos 711
+ }
+ Dot {
+  name Dot6
+  xpos 276
+  ypos 786
+ }
+push $N6c875800
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge2
+  xpos 364
+  ypos 783
+ }
+ Dot {
+  name Dot16
+  xpos 398
+  ypos 845
+ }
+set N6c895c00 [stack 0]
+ Dot {
+  name Dot9
+  xpos 198
+  ypos 845
+ }
+ Keyer {
+  operation "luminance key"
+  range {1 1.06 2 2}
+  name Keyer3
+  xpos 164
+  ypos 982
+ }
+ Dot {
+  name Dot7
+  xpos 198
+  ypos 1096
+ }
+push $N6c895c00
+ Grade {
+  add {{offsetHaze}}
+  black_clamp false
+  name Grade8
+  label "\[value channels]"
+  xpos 364
+  ypos 898
+ }
+ Dot {
+  name Dot10
+  xpos 398
+  ypos 971
+ }
+set N6c894400 [stack 0]
+ Dot {
+  name Dot11
+  xpos 529
+  ypos 971
+ }
+ Grade {
+  gamma {{topGamma}}
+  black_clamp false
+  name Grade5
+  label "\[value channels]"
+  xpos 495
+  ypos 1025
+ }
+ Dot {
+  name Dot12
+  xpos 529
+  ypos 1096
+ }
+push $N6c894400
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge3
+  xpos 364
+  ypos 1093
+ }
+ Grade {
+  add {{parent.Grade8.add*-1}}
+  black_clamp false
+  name Grade9
+  label "\[value channels]"
+  xpos 364
+  ypos 1184
+ }
+ Dot {
+  name Dot13
+  xpos 398
+  ypos 1418
+ }
+push $N6c84bc00
+ Dot {
+  name Dot18
+  xpos 863
+  ypos 1276
+ }
+set Nd6af1000 [stack 0]
+ Grade {
+  add -1
+  black_clamp false
+  name Grade2
+  label "\[value channels]"
+  xpos 829
+  ypos 1352
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge1
+  xpos 829
+  ypos 1415
+ }
+ Grade {
+  add 1
+  black_clamp false
+  name Grade3
+  label "\[value channels]"
+  xpos 829
+  ypos 1470
+ }
+set N6c8f1c00 [stack 0]
+push $Nd6af1000
+ Dot {
+  name Dot19
+  xpos 1087
+  ypos 1276
+ }
+ Merge2 {
+  inputs 2
+  operation difference
+  name Merge4
+  xpos 1053
+  ypos 1474
+ }
+ Keyer {
+  operation "luminance key"
+  name Keyer1
+  xpos 1053
+  ypos 1546
+ }
+ Dot {
+  name Dot17
+  xpos 1087
+  ypos 1661
+ }
+set Nd6af1400 [stack 0]
+ Dot {
+  name Dot8
+  xpos 1087
+  ypos 1824
+ }
+push $N6c875800
+ Dot {
+  name Dot15
+  xpos 667
+  ypos 657
+ }
+ Dot {
+  name Dot14
+  xpos 667
+  ypos 1755
+ }
+push $Nd6af1400
+push $N6c8f1c00
+ ColorCorrect {
+  inputs 1+1
+  saturation {{satHaze}}
+  gamma {{gammaHaze} {gammaHaze} {gammaHaze} {gammaHaze}}
+  gain {{gainHaze} {gainHaze} {gainHaze} {gainHaze}}
+  name ColorCorrect1
+  xpos 829
+  ypos 1658
+ }
+ Switch {
+  inputs 2
+  which {{prevBil}}
+  name Switch1
+  xpos 829
+  ypos 1752
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  selected true
+  xpos 829
+  ypos 1817
+ }
+ Output {
+  name Output1
+  xpos 829
+  ypos 1960
+ }
+end_group

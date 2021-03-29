@@ -1,0 +1,17 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ temp_name0 thickness
+ temp_expr0 1
+ temp_name1 wide
+ temp_expr1 3
+ expr0 "( sin(x / wide ) + thickness ) / 2"
+ expr1 "( sin(x / wide ) + thickness ) / 2"
+ expr2 "( sin(x / wide ) + thickness ) / 2"
+ expr3 "( sin(x / wide ) + thickness ) / 2"
+ name Lines_Vertical
+ selected true
+ xpos 140
+ ypos 34
+}

@@ -1,0 +1,512 @@
+Group {
+ name P_Noise_Advanced
+ knobChanged "\nn = nuke.thisNode()\ntype = n\['noisetype'].value()\nblock = n\['Trunc'].getValue()\nVis = \[]\nHide = \[]\nif type in ('fBm', 'turbulent'):\n    Vis.extend(\['octaves', 'lacunarity', 'gain', 'gamma'])\n    Hide.extend(\['rays', 'range', 'invert', 'ringsSeed', 'raysSeed', 'gammaNormalize'])   \nelif type == 'p_rings':\n    Vis.extend(\['ringsSeed', 'gammaNormalize'])\n    Hide.extend(\['rays', 'range', 'invert', 'octaves', 'lacunarity', 'gain', 'gamma', 'raysSeed'])\nelif type == 'p_rays':\n    Vis.extend(\['rays', 'raysSeed', 'gammaNormalize'])\n    Hide.extend(\['range', 'invert', 'octaves', 'lacunarity', 'gain', 'gamma', 'ringsSeed'])\nelif type in ('Euclidian', 'Voronoi', 'Manhattan', 'ChebyShev'):\n    Vis.extend(\['range', 'gammaNormalize'])\n    Hide.extend(\['rays', 'invert', 'octaves', 'lacunarity', 'gain', 'gamma', 'ringsSeed', 'raysSeed'])\nelif type == 'Worley':\n    Vis.extend(\['invert', 'gammaNormalize'])\n    Hide.extend(\['rays', 'range', 'octaves', 'lacunarity', 'gain', 'gamma', 'ringsSeed', 'raysSeed'])\nfor r in Vis: n\[r].setVisible(True)\nfor x in Hide: n\[x].setVisible(False)\n\nif block == True:\n    n\['truncSize'].setVisible(True)\nelse:\n    n\['truncSize'].setVisible(False)\n"
+ label "(\[value in])"
+ selected true
+ xpos 598
+ ypos 235
+ addUserKnob {20 User}
+ addUserKnob {41 in l "position data" T Shuffle_Input_Channels.in}
+ addUserKnob {6 unpremultiply +STARTLINE}
+ addUserKnob {6 useAlpha l "ignore outside alpha" -STARTLINE}
+ addUserKnob {6 useGPU l "use GPU if available" -STARTLINE}
+ useGPU true
+ addUserKnob {26 ""}
+ addUserKnob {4 noisetype M {fBm turbulent p_rings p_rays Euclidian Voronoi Manhattan Chebyslev Worley "" "" ""}}
+ addUserKnob {6 Trunc l "blocky (trunc)" -STARTLINE}
+ addUserKnob {41 Position2d T SampleXY.Position2d}
+ addUserKnob {41 rgbSample l center T Sample.rgbSample}
+ addUserKnob {6 useCenter -STARTLINE}
+ useCenter true
+ addUserKnob {26 ""}
+ addUserKnob {18 size R 1 100}
+ size 10
+ addUserKnob {6 size_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 seed}
+ seed {0 0 0}
+ addUserKnob {6 seed_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 truncSize l "blocky size" +HIDDEN R 0 2}
+ truncSize 0.5
+ addUserKnob {6 truncSize_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 rays +HIDDEN}
+ rays 30
+ addUserKnob {7 raysSeed l "rays seed" +HIDDEN R 0 10}
+ addUserKnob {7 ringsSeed l "rings seed" +HIDDEN R 0 10}
+ addUserKnob {7 range +HIDDEN R 0 6}
+ range 1
+ addUserKnob {6 invert +HIDDEN +STARTLINE}
+ addUserKnob {3 octaves}
+ octaves 10
+ addUserKnob {7 lacunarity R 1 10}
+ lacunarity 2
+ addUserKnob {7 gain R 0.1 1}
+ gain 0.5
+ addUserKnob {7 gamma}
+ gamma 0.5
+ addUserKnob {7 gammaNormalize l gamma +HIDDEN R 0 2}
+ gammaNormalize 1
+ addUserKnob {26 ""}
+ addUserKnob {26 INFO l "" +STARTLINE T "v1.02 (c) Riley Gray and Owen Bulka 2020\nBased on \"Cell Noise v1.1\" by Matthew Shaw     "}
+ addUserKnob {26 c44_version_author l "" +STARTLINE T "<span style=\"color:#666\"><br/><b>C44Kernel v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2018</span>"}
+ addUserKnob {20 Transform}
+ addUserKnob {41 rot_order l "rotation order" T Axis1.rot_order}
+ addUserKnob {41 translate T Axis1.translate}
+ addUserKnob {41 rotate T Axis1.rotate}
+ addUserKnob {41 scaling l scale T Axis1.scaling}
+ addUserKnob {41 uniform_scale l "uniform scale" T Axis1.uniform_scale}
+ addUserKnob {41 skew T Axis1.skew}
+ addUserKnob {41 pivot T Axis1.pivot}
+}
+ Input {
+  inputs 0
+  name img
+  xpos 0
+  ypos -116
+ }
+ AddChannels {
+  channels alpha
+  color 1
+  name AddChannels1
+  xpos 0
+  ypos -64
+ }
+ Shuffle {
+  alpha blue
+  out rgb
+  name Shuffle_Input_Channels
+  xpos 0
+  ypos -18
+ }
+ Unpremult {
+  name Unpremult1
+  xpos 0
+  ypos 16
+  disable {{!parent.unpremultiply i}}
+ }
+ Dot {
+  name Dot2
+  xpos 34
+  ypos 66
+ }
+set N92db82d0 [stack 0]
+ Dot {
+  name Dot4
+  xpos -130
+  ypos 66
+ }
+set N81ae9a60 [stack 0]
+ Dot {
+  name Dot3
+  xpos -292
+  ypos 66
+ }
+ Expression {
+  channel0 alpha
+  expr0 "a == 0 ? 1 :0"
+  channel1 none
+  channel2 none
+  channel3 {none none none -rgba.alpha}
+  name Expression1
+  xpos -326
+  ypos 751
+ }
+ Axis2 {
+  inputs 0
+  name Axis1
+  xpos 265
+  ypos 200
+ }
+push $N92db82d0
+ Add {
+  channels rgb
+  value {{parent.Sample.rgbSample/-1} {parent.Sample.rgbSample/-1} {parent.Sample.rgbSample/-1} 0}
+  name center
+  xpos 0
+  ypos 141
+  disable {{1-parent.useCenter}}
+ }
+ Group {
+  inputs 2
+  name C44Kernel
+  help "C44Kernel v1.0 by Adrian Pueyo\n\nMultiply the rgb or rgba colors by an arbitrary 4x4 Matrix. Useful for transforming a Position pass.\n\nYou can plug in an Axis or Camera node into the axis input, to also apply its transformations.\n\nadrianpueyo.com, 2017"
+  tile_color 0xe88543ff
+  xpos 0
+  ypos 221
+  lock_connections true
+  addUserKnob {20 C44Kernel}
+  addUserKnob {41 channels T MergeIn.Achannels}
+  addUserKnob {41 matrix T Axis1.matrix}
+  addUserKnob {6 invert -STARTLINE}
+  addUserKnob {6 alpha_masking l "alpha masking" t "Apply only where rgba.alpha>0" +STARTLINE}
+  addUserKnob {20 advanced l Advanced n 1}
+  advanced 0
+  addUserKnob {6 transpose +STARTLINE}
+  addUserKnob {6 w_divide +STARTLINE}
+  addUserKnob {6 rgba_mode l "apply on Vector4" t "Usually you'll want to apply the matrix on the RGB only, which uses a white alpha. Enable this to use the full Vector4 (RGBA)." +STARTLINE}
+  addUserKnob {20 endGroup n -1}
+  addUserKnob {26 ""}
+  addUserKnob {41 mix T MergeOut.mix}
+  addUserKnob {26 version_author l "" t "C44Kernel v1.0\n23 June, 2018" +STARTLINE T "<span style=\"color:#666\"><br/><b>C44Kernel v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2018</span>"}
+  addUserKnob {20 GPU_Settings l "GPU Settings"}
+ }
+  Input {
+   inputs 0
+   name Inputaxis
+   xpos 133
+   ypos -181
+   number 1
+  }
+  Axis2 {
+   useMatrix true
+   name Axis1
+   xpos 143
+   ypos -133
+  }
+  Input {
+   inputs 0
+   name Inputimg
+   xpos -110
+   ypos -192
+  }
+set N87975480 [stack 0]
+  Dot {
+   name Dot1
+   xpos -76
+   ypos -161
+  }
+set N87971510 [stack 0]
+  Expression {
+   expr3 a>0
+   name ExpressionA
+   xpos -220
+   ypos -164
+  }
+  Switch {
+   which {{!parent.alpha_masking}}
+   name SwitchMasking
+   xpos -220
+   ypos -112
+  }
+push $N87971510
+push $N87975480
+  Remove {
+   name RemoveAll
+   xpos 34
+   ypos -196
+  }
+  Merge2 {
+   inputs 2
+   operation copy
+   Bchannels none
+   name MergeIn
+   xpos 34
+   ypos -164
+  }
+  Shuffle {
+   alpha white
+   name ShuffleWhiteA
+   xpos 34
+   ypos -140
+   disable {{parent.rgba_mode}}
+  }
+  BlinkScript {
+   recompileCount 147
+   ProgramGroup 1
+   KernelDescription "2 \"C44MatrixKernel\" iterate pixelWise 10f1841ce0aee43165aca4445fb9ce0126826eedd71da6339f12b8f8de8e52eb 2 \"src\" Read Point \"dst\" Write Point 4 \"m\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"invert\" Int 1 AAAAAA== \"transpose\" Int 1 AAAAAA== \"w_divide\" Int 1 AAAAAA== 4 \"m\" 16 1 \"invert\" 1 1 \"transpose\" 1 1 \"w_divide\" 1 1 0"
+   kernelSource "kernel C44MatrixKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;\n  Image<eWrite> dst;\n\n  param:\n    float4x4 m;\n    int invert;\n    int transpose;\n    int w_divide;\n\n  void process(int2 pos) \{\n    SampleType(src) p = src();\n    float4 result = 1.0f;\n    float4x4 mi = m;\n    mi = invert?mi.invert():mi;\n    mi = transpose?mi.transpose():mi;\n    for(int c = 0; c<dst.kComps; c++)\{\n      result\[c] = mi\[c]\[0]*p.x + mi\[c]\[1]*p.y + mi\[c]\[2]*p.z + mi\[c]\[3]*p.w;\n    \}\n    dst() = w_divide?result/result.w:result;\n  \}\n\};\n"
+   rebuild ""
+   C44MatrixKernel_m {
+       {{Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix}}
+       {{Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix}}
+       {{Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix}}
+       {{Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix} {Axis1.world_matrix}}
+     }
+   C44MatrixKernel_invert {{parent.invert}}
+   C44MatrixKernel_transpose {{parent.transpose}}
+   C44MatrixKernel_w_divide {{parent.w_divide}}
+   rebuild_finalise ""
+   name C44MatrixKernel
+   xpos 34
+   ypos -116
+  }
+push $N87971510
+  Merge2 {
+   inputs 2+1
+   operation copy
+   Bchannels {{{parent.MergeIn.Achannels}}}
+   output {{{parent.MergeIn.Achannels}}}
+   name MergeOut
+   xpos -110
+   ypos -112
+  }
+  Output {
+   name Output1
+   xpos -110
+   ypos -88
+  }
+ end_group
+ Add {
+  channels rgb
+  value {{parent.seed} {parent.seed} {parent.seed} {parent.seed}}
+  name Seed
+  xpos 0
+  ypos 279
+ }
+ Multiply {
+  channels rgb
+  value {{10/parent.size} {10/parent.size} {10/parent.size} {10/parent.size}}
+  name size
+  xpos 0
+  ypos 327
+ }
+ Expression {
+  expr0 trunc(r*truncScale.r)/truncScale.r/.95
+  expr1 trunc(g*truncScale.g)/truncScale.g/.95
+  expr2 trunc(b*truncScale.b)/truncScale.b/.95
+  name Trunc
+  xpos 0
+  ypos 391
+  disable {{1-parent.Trunc}}
+  addUserKnob {20 User}
+  addUserKnob {18 truncScale R 0.1 10}
+  truncScale {{1/parent.truncSize} {1/parent.truncSize} {1/parent.truncSize}}
+ }
+ Dot {
+  name Dot1
+  xpos 34
+  ypos 469
+ }
+set N81e232f0 [stack 0]
+ BlinkScript {
+  recompileCount 5
+  ProgramGroup 1
+  KernelDescription "2 \"Worley\" iterate pixelWise 438e1f780c47470c5df359606fb43213aedb3c954840151838b0bafe69a5cec8 2 \"position_pass\" Read Point \"dst\" Write Point 1 \"Invert\" Bool 1 AA== 1 \"invert\" 1 1 0"
+  kernelSource "// https://aftbit.com/cell-noise-2/\n\n// C++11\nconst uint rand_multiplier = 48271;\nconst uint rand_increment  = 0;\nconst uint rand_modulus    = 2147483647;\n\nstatic int lcgRandom(int seed)\n\{\n  return abs((seed * rand_multiplier + rand_increment) % rand_modulus);\n\}\n\n// FNV Hash\nconst uint OFFSET_BASIS = 2166136261;\nconst uint FNV_PRIME = 16777619;\n\nstatic uint hash(uint i, uint j, uint k)\n\{\n  return ((((((OFFSET_BASIS ^ i) * FNV_PRIME) ^ j) * FNV_PRIME) ^ k) * FNV_PRIME);\n\}\n\n// Poisson Distribution\nconst uint one   =  393325350;\nconst uint two   = 1022645910;\nconst uint three = 1861739990;\nconst uint four  = 2700834071;\nconst uint five  = 3372109335;\nconst uint six   = 3819626178;\nconst uint seven = 4075350088;\nconst uint eight = 4203212043;\n\nstatic uint probLookup(uint value)\n\{\n  if (value < one) return 1;\n  if (value < two) return 2;\n  if (value < three) return 3;\n  if (value < four) return 4;\n  if (value < five) return 5;\n  if (value < six) return 6;\n  if (value < seven) return 7;\n  if (value < eight) return 8;\n  return 9;\n\}\n\n// Distance Functions\nstatic float EuclidianDistanceFunc(float3 p1, float3 p2)\n\{\n  return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y) + (p1.z - p2.z) * (p1.z - p2.z);\n\}\n\nstatic float ManhattanDistanceFunc(float3 p1, float3 p2)\n\{\n  return fabs(p1.x - p2.x) + fabs(p1.y - p2.y) + fabs(p1.z - p2.z);\n\}\n\nstatic float ChebyshevDistanceFunc(float3 p1, float3 p2)\n\{\n  float3 diff = p1 - p2;\n  return max(max(fabs(diff.x), fabs(diff.y)), fabs(diff.z));\n\}\n\n\n// Blink Kernel\nkernel Worley : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint> position_pass;\n  Image<eWrite> dst;\n\n  param:\n    bool invert;\n\n  void define()\n  \{\n    defineParam(invert, \"Invert\", false);\n  \}\n\n  void process()\n  \{\n\n    //Declare some values for later use\n    int lastRandom, numberFeaturePoints;\n    float distance = 6666.0f;\n    float3 randomDiff, featurePoint;\n    int cubeX, cubeY, cubeZ;\n\n    float4 position = position_pass();\n    float3 input = float3(position.x, position.y, position.z);\n\n    // Determine which cube the evaluation point is in\n    int evalCubeX = floor(input.x);\n    int evalCubeY = floor(input.y);\n    int evalCubeZ = floor(input.z);\n\n    for (int i = -1; i < 2; ++i)\n    \{\n      for (int j = -1; j < 2; ++j)\n      \{\n        for (int k = -1; k < 2; ++k)\n        \{\n            cubeX = evalCubeX + i;\n            cubeY = evalCubeY + j;\n            cubeZ = evalCubeZ + k;\n\n            // Generate a reproducible random number generator for the cube\n            lastRandom = lcgRandom(hash(cubeX, cubeY, cubeZ));\n            // Determine how many feature points are in the cube\n            numberFeaturePoints = probLookup(lastRandom);\n            // Check each feature point\n            for (uint l = 0; l < numberFeaturePoints; ++l)\n            \{\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.x = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.y = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.z = float(lastRandom) / rand_modulus;\n\n              featurePoint = float3(randomDiff.x + float(cubeX), randomDiff.y + float(cubeY), randomDiff.z + float(cubeZ));\n\n              distance = min(distance, dot(input - featurePoint, input - featurePoint));\n            \}\n        \}\n      \}\n    \}\n\n    distance = sqrt(distance);\n    if (invert)\n      distance = 1.0f - distance;\n    dst() = distance;\n\n  \}\n\n\};"
+  useGPUIfAvailable {{parent.useGPU}}
+  rebuild ""
+  Worley_Invert {{parent.invert}}
+  rebuild_finalise ""
+  name WorleyNoise
+  xpos 990
+  ypos 579
+ }
+ Gamma {
+  channels rgba
+  value {{parent.gammaNormalize}}
+  name Gamma2
+  xpos 990
+  ypos 615
+ }
+push $N81e232f0
+ BlinkScript {
+  recompileCount 4
+  ProgramGroup 1
+  KernelDescription "2 \"ChebyshevNoise\" iterate pixelWise 517a1358a56b1248ee4a1cc426f04457776dbd1836be53c12b3ff4f236c7ecd9 2 \"position_pass\" Read Point \"dst\" Write Point 1 \"Range\" Float 1 AABAQA== 1 \"range\" 1 1 2 \"fRange\" Float 1 1 AAAAAA== \"iRange\" Int 1 1 AAAAAA=="
+  kernelSource "// https://aftbit.com/cell-noise-2/\n\n# define MAX_DISTANCE_ARRAY 12\n\n// C++11\nconst uint rand_multiplier = 48271;\nconst uint rand_increment  = 0;\nconst uint rand_modulus    = 2147483647;\n\nstatic int lcgRandom(int seed)\n\{\n  return abs((seed * rand_multiplier + rand_increment) % rand_modulus);\n\}\n\n// FNV Hash\nconst uint OFFSET_BASIS = 2166136261;\nconst uint FNV_PRIME = 16777619;\n\nstatic uint hash(uint i, uint j, uint k)\n\{\n  return ((((((OFFSET_BASIS ^ i) * FNV_PRIME) ^ j) * FNV_PRIME) ^ k) * FNV_PRIME);\n\}\n\n// Poisson Distribution\nconst uint one   =  393325350;\nconst uint two   = 1022645910;\nconst uint three = 1861739990;\nconst uint four  = 2700834071;\nconst uint five  = 3372109335;\nconst uint six   = 3819626178;\nconst uint seven = 4075350088;\nconst uint eight = 4203212043;\n\nstatic uint probLookup(uint value)\n\{\n  if (value < one) return 1;\n  if (value < two) return 2;\n  if (value < three) return 3;\n  if (value < four) return 4;\n  if (value < five) return 5;\n  if (value < six) return 6;\n  if (value < seven) return 7;\n  if (value < eight) return 8;\n  return 9;\n\}\n\n// Distance Function\nstatic float ChebyshevDistanceFunc(float3 p1, float3 p2)\n\{\n  float3 diff = p1 - p2;\n  return max(max(fabs(diff.x), fabs(diff.y)), fabs(diff.z));\n\}\n\n// Insertion Array\nstatic void insert(float arr\[], float value)\n\{\n  float temp;\n  for (int i = MAX_DISTANCE_ARRAY - 1; i >= 0; i--)\n  \{\n    if (value > arr\[i])\n      break;\n    temp = arr\[i];\n    arr\[i] = value;\n    if (i + 1 < MAX_DISTANCE_ARRAY)\n    \{\n      arr\[i + 1] = temp;\n    \}\n  \}\n\}\n\n\n// Blink Kernel\nkernel ChebyshevNoise : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint> position_pass;\n  Image<eWrite> dst;\n\n  param:\n    float range;\n\n  local:\n    float fRange;\n    int iRange;\n\n  void define()\n  \{\n    defineParam(range, \"Range\", 3.0f);\n  \}\n\n  void init()\n  \{\n    fRange = clamp(range, 0.0f, float(MAX_DISTANCE_ARRAY - 2));\n    iRange = int(fRange);\n  \}\n\n  void process()\n  \{\n\n    //Declare some values for later use\n    int lastRandom, numberFeaturePoints;\n    float3 randomDiff, featurePoint;\n    int cubeX, cubeY, cubeZ;\n\n    float distanceArray\[MAX_DISTANCE_ARRAY];\n\n    // Initialize values in distance array to large values\n    for (int i = 0; i < MAX_DISTANCE_ARRAY; i++)\n        distanceArray\[i] = 6666;\n\n    float4 position = position_pass();\n    float3 input = float3(position.x, position.y, position.z);\n\n    // Determine which cube the evaluation point is in\n    int evalCubeX = floor(input.x);\n    int evalCubeY = floor(input.y);\n    int evalCubeZ = floor(input.z);\n\n    for (int i = -1; i < 2; ++i)\n    \{\n      for (int j = -1; j < 2; ++j)\n      \{\n        for (int k = -1; k < 2; ++k)\n        \{\n            cubeX = evalCubeX + i;\n            cubeY = evalCubeY + j;\n            cubeZ = evalCubeZ + k;\n\n            // Generate a reproducible random number generator for the cube\n            lastRandom = lcgRandom(hash(cubeX, cubeY, cubeZ));\n            // Determine how many feature points are in the cube\n            numberFeaturePoints = probLookup(lastRandom);\n            // Check each feature point\n            for (uint l = 0; l < numberFeaturePoints; ++l)\n            \{\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.x = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.y = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.z = float(lastRandom) / rand_modulus;\n\n              featurePoint = float3(randomDiff.x + float(cubeX), randomDiff.y + float(cubeY), randomDiff.z + float(cubeZ));\n\n              insert(distanceArray, ChebyshevDistanceFunc(input, featurePoint));\n            \}\n        \}\n      \}\n    \}\n\n    float color = (distanceArray\[ iRange + 2 ] - distanceArray\[ iRange + 1 ]) * fmod(fRange, 1.0f) + distanceArray\[ iRange + 1] - distanceArray\[0];\n    dst() = color;\n\n  \}\n\n\};"
+  useGPUIfAvailable {{parent.useGPU}}
+  rebuild ""
+  ChebyshevNoise_Range 1
+  format {{{WorleyNoise.format}}}
+  rebuild_finalise ""
+  name ChebyShevNoise
+  xpos 880
+  ypos 578
+ }
+ Gamma {
+  channels rgba
+  value {{parent.gammaNormalize}}
+  name Gamma3
+  xpos 880
+  ypos 614
+ }
+push $N81e232f0
+ BlinkScript {
+  recompileCount 15
+  ProgramGroup 1
+  KernelDescription "2 \"ManhattanNoise\" iterate pixelWise 8f4d3375bd506ca9e28dc8e57d643af6a2e1e4628d082801994f4dfea81563d1 2 \"position_pass\" Read Point \"dst\" Write Point 1 \"Range\" Float 1 AABAQA== 1 \"range\" 1 1 2 \"fRange\" Float 1 1 AAAAAA== \"iRange\" Int 1 1 AAAAAA=="
+  kernelSource "// https://aftbit.com/cell-noise-2/\n\n# define MAX_DISTANCE_ARRAY 12\n\n// C++11\nconst uint rand_multiplier = 48271;\nconst uint rand_increment  = 0;\nconst uint rand_modulus    = 2147483647;\n\nstatic int lcgRandom(int seed)\n\{\n  return abs((seed * rand_multiplier + rand_increment) % rand_modulus);\n\}\n\n// FNV Hash\nconst uint OFFSET_BASIS = 2166136261;\nconst uint FNV_PRIME = 16777619;\n\nstatic uint hash(uint i, uint j, uint k)\n\{\n  return ((((((OFFSET_BASIS ^ i) * FNV_PRIME) ^ j) * FNV_PRIME) ^ k) * FNV_PRIME);\n\}\n\n// Poisson Distribution\nconst uint one   =  393325350;\nconst uint two   = 1022645910;\nconst uint three = 1861739990;\nconst uint four  = 2700834071;\nconst uint five  = 3372109335;\nconst uint six   = 3819626178;\nconst uint seven = 4075350088;\nconst uint eight = 4203212043;\n\nstatic uint probLookup(uint value)\n\{\n  if (value < one) return 1;\n  if (value < two) return 2;\n  if (value < three) return 3;\n  if (value < four) return 4;\n  if (value < five) return 5;\n  if (value < six) return 6;\n  if (value < seven) return 7;\n  if (value < eight) return 8;\n  return 9;\n\}\n\n// Distance Function\nstatic float ManhattanDistanceFunc(float3 p1, float3 p2)\n\{\n  return fabs(p1.x - p2.x) + fabs(p1.y - p2.y) + fabs(p1.z - p2.z);\n\}\n\n// Insertion Array\nstatic void insert(float arr\[], float value)\n\{\n  float temp;\n  for (int i = MAX_DISTANCE_ARRAY - 1; i >= 0; i--)\n  \{\n    if (value > arr\[i])\n      break;\n    temp = arr\[i];\n    arr\[i] = value;\n    if (i + 1 < MAX_DISTANCE_ARRAY)\n    \{\n      arr\[i + 1] = temp;\n    \}\n  \}\n\}\n\n// Blink Kernel\nkernel ManhattanNoise : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint> position_pass;\n  Image<eWrite> dst;\n\n  param:\n    float range;\n\n  local:\n    float fRange;\n    int iRange;\n\n  void define()\n  \{\n    defineParam(range, \"Range\", 3.0f);\n  \}\n\n  void init()\n  \{\n    fRange = clamp(range, 0.0f, float(MAX_DISTANCE_ARRAY - 2));\n    iRange = int(fRange);\n  \}\n\n  void process()\n  \{\n\n    //Declare some values for later use\n    int lastRandom, numberFeaturePoints;\n    float3 randomDiff, featurePoint;\n    int cubeX, cubeY, cubeZ;\n\n    float distanceArray\[MAX_DISTANCE_ARRAY];\n\n    // Initialize values in distance array to large values\n    for (int i = 0; i < MAX_DISTANCE_ARRAY; i++)\n        distanceArray\[i] = 6666;\n\n    float4 position = position_pass();\n    float3 input = float3(position.x, position.y, position.z);\n\n    // Determine which cube the evaluation point is in\n    int evalCubeX = floor(input.x);\n    int evalCubeY = floor(input.y);\n    int evalCubeZ = floor(input.z);\n\n    for (int i = -1; i < 2; ++i)\n    \{\n      for (int j = -1; j < 2; ++j)\n      \{\n        for (int k = -1; k < 2; ++k)\n        \{\n            cubeX = evalCubeX + i;\n            cubeY = evalCubeY + j;\n            cubeZ = evalCubeZ + k;\n\n            // Generate a reproducible random number generator for the cube\n            lastRandom = lcgRandom(hash(cubeX, cubeY, cubeZ));\n            // Determine how many feature points are in the cube\n            numberFeaturePoints = probLookup(lastRandom);\n            // Check each feature point\n            for (uint l = 0; l < numberFeaturePoints; ++l)\n            \{\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.x = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.y = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.z = float(lastRandom) / rand_modulus;\n\n              featurePoint = float3(randomDiff.x + float(cubeX), randomDiff.y + float(cubeY), randomDiff.z + float(cubeZ));\n\n              insert(distanceArray, ManhattanDistanceFunc(input, featurePoint));\n            \}\n        \}\n      \}\n    \}\n\n    float color = (distanceArray\[ iRange + 2 ] - distanceArray\[ iRange + 1 ]) * fmod(fRange, 1.0f) + distanceArray\[ iRange + 1] - distanceArray\[0];\n    dst() = color;\n\n  \}\n\n\};"
+  useGPUIfAvailable {{parent.useGPU}}
+  rebuild ""
+  ManhattanNoise_Range 1
+  format {{{WorleyNoise.format}}}
+  rebuild_finalise ""
+  name ManhattanNoise
+  xpos 770
+  ypos 577
+ }
+ Gamma {
+  channels rgba
+  value {{parent.gammaNormalize}}
+  name Gamma4
+  xpos 770
+  ypos 613
+ }
+push $N81e232f0
+ BlinkScript {
+  recompileCount 15
+  ProgramGroup 1
+  KernelDescription "2 \"VoronoiNoise\" iterate pixelWise 67095f19952c7fb522e989b2d6691d9d342affbd2c266bc258f83435f13f21f7 2 \"position_pass\" Read Point \"dst\" Write Point 1 \"Range\" Float 1 AABAQA== 1 \"range\" 1 1 2 \"fRange\" Float 1 1 AAAAAA== \"iRange\" Int 1 1 AAAAAA=="
+  kernelSource "// https://aftbit.com/cell-noise-2/\n\n# define MAX_DISTANCE_ARRAY 12\n\n// C++11\nconst uint rand_multiplier = 48271;\nconst uint rand_increment  = 0;\nconst uint rand_modulus    = 2147483647;\n\nstatic int lcgRandom(int seed)\n\{\n  return abs((seed * rand_multiplier + rand_increment) % rand_modulus);\n\}\n\n// FNV Hash\nconst uint OFFSET_BASIS = 2166136261;\nconst uint FNV_PRIME = 16777619;\n\nstatic uint hash(uint i, uint j, uint k)\n\{\n  return ((((((OFFSET_BASIS ^ i) * FNV_PRIME) ^ j) * FNV_PRIME) ^ k) * FNV_PRIME);\n\}\n\n// Poisson Distribution\nconst uint one   =  393325350;\nconst uint two   = 1022645910;\nconst uint three = 1861739990;\nconst uint four  = 2700834071;\nconst uint five  = 3372109335;\nconst uint six   = 3819626178;\nconst uint seven = 4075350088;\nconst uint eight = 4203212043;\n\nstatic uint probLookup(uint value)\n\{\n  if (value < one) return 1;\n  if (value < two) return 2;\n  if (value < three) return 3;\n  if (value < four) return 4;\n  if (value < five) return 5;\n  if (value < six) return 6;\n  if (value < seven) return 7;\n  if (value < eight) return 8;\n  return 9;\n\}\n\n// Insertion Array\nstatic void insert(float arr\[], int idArr\[], float value, int id)\n\{\n  float temp;\n  int tempID;\n  for (int i = MAX_DISTANCE_ARRAY - 1; i >= 0; i--)\n  \{\n    if (value > arr\[i])\n      break;\n    temp = arr\[i];\n    tempID = idArr\[i];\n    arr\[i] = value;\n    idArr\[i] = id;\n    if (i + 1 < MAX_DISTANCE_ARRAY)\n    \{\n      arr\[i + 1] = temp;\n      idArr\[i + 1] = tempID;\n    \}\n  \}\n\}\n\n\n// Blink Kernel\nkernel VoronoiNoise : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint> position_pass;\n  Image<eWrite> dst;\n\n  param:\n    float range;\n    \n  local:\n    float fRange;\n    int iRange;\n\n  void define()\n  \{\n    defineParam(range, \"Range\", 3.0f);\n  \}\n\n  void init()\n  \{\n    fRange = clamp(range, 0.0f, float(MAX_DISTANCE_ARRAY - 2));\n    iRange = int(fRange);\n  \}\n\n  void process()\n  \{\n\n    //Declare some values for later use\n    int lastRandom, id, numberFeaturePoints;\n    float3 randomDiff, featurePoint;\n    int cubeX, cubeY, cubeZ;\n\n    float distanceArray\[MAX_DISTANCE_ARRAY];\n    int idArray\[MAX_DISTANCE_ARRAY];\n\n    // Initialize values in distance array to large values\n    for (int i = 0; i < MAX_DISTANCE_ARRAY; i++)\n        distanceArray\[i] = 6666;\n\n    float4 position = position_pass();\n    float3 input = float3(position.x, position.y, position.z);\n\n    // Determine which cube the evaluation point is in\n    int evalCubeX = floor(input.x);\n    int evalCubeY = floor(input.y);\n    int evalCubeZ = floor(input.z);\n\n    for (int i = -1; i < 2; ++i)\n    \{\n      for (int j = -1; j < 2; ++j)\n      \{\n        for (int k = -1; k < 2; ++k)\n        \{\n            cubeX = evalCubeX + i;\n            cubeY = evalCubeY + j;\n            cubeZ = evalCubeZ + k;\n\n            // Generate a reproducible random number generator for the cube\n            lastRandom = lcgRandom(hash(cubeX, cubeY, cubeZ));\n            id = lastRandom;\n            // Determine how many feature points are in the cube\n            numberFeaturePoints = probLookup(lastRandom);\n            // Check each feature point\n            for (uint l = 0; l < numberFeaturePoints; ++l)\n            \{\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.x = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.y = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.z = float(lastRandom) / rand_modulus;\n\n              featurePoint = float3(randomDiff.x + float(cubeX), randomDiff.y + float(cubeY), randomDiff.z + float(cubeZ));\n\n              insert(distanceArray, idArray, length(input - featurePoint), id+l);\n            \}\n        \}\n      \}\n    \}\n\n    float3 col = float3(float(idArray\[iRange]) / rand_modulus, 0.0f, 0.0f);\n    lastRandom = lcgRandom(idArray\[iRange]);\n    col.y = float(lastRandom) / rand_modulus;\n    lastRandom = lcgRandom(lastRandom);\n    col.z = float(lastRandom) / rand_modulus;\n\n    for(int component = 0; component < 3; component++)\n      dst(component) = col\[component];\n    dst(3) = 1.0f;\n  \}\n\n\};"
+  useGPUIfAvailable {{parent.useGPU}}
+  rebuild ""
+  VoronoiNoise_Range 1
+  format {{{WorleyNoise.format}}}
+  rebuild_finalise ""
+  name VoronoiNoise
+  xpos 658
+  ypos 579
+ }
+ Gamma {
+  channels rgba
+  value {{parent.gammaNormalize}}
+  name Gamma5
+  xpos 658
+  ypos 615
+ }
+push $N81e232f0
+ BlinkScript {
+  recompileCount 3
+  ProgramGroup 1
+  KernelDescription "2 \"EuclidianNoise\" iterate pixelWise b78f7b94022701a0fe7a0b3d8a219cf673ea1032aea12739f59fb3562a78ed42 2 \"position_pass\" Read Point \"dst\" Write Point 1 \"Range\" Float 1 AABAQA== 1 \"range\" 1 1 2 \"fRange\" Float 1 1 AAAAAA== \"iRange\" Int 1 1 AAAAAA=="
+  kernelSource "// https://aftbit.com/cell-noise-2/\n\n# define MAX_DISTANCE_ARRAY 12\n\n// C++11\nconst uint rand_multiplier = 48271;\nconst uint rand_increment  = 0;\nconst uint rand_modulus    = 2147483647;\n\nstatic int lcgRandom(int seed)\n\{\n  return abs((seed * rand_multiplier + rand_increment) % rand_modulus);\n\}\n\n// FNV Hash\nconst uint OFFSET_BASIS = 2166136261;\nconst uint FNV_PRIME = 16777619;\n\nstatic uint hash(uint i, uint j, uint k)\n\{\n  return ((((((OFFSET_BASIS ^ i) * FNV_PRIME) ^ j) * FNV_PRIME) ^ k) * FNV_PRIME);\n\}\n\n// Poisson Distribution\nconst uint one   =  393325350;\nconst uint two   = 1022645910;\nconst uint three = 1861739990;\nconst uint four  = 2700834071;\nconst uint five  = 3372109335;\nconst uint six   = 3819626178;\nconst uint seven = 4075350088;\nconst uint eight = 4203212043;\n\nstatic uint probLookup(uint value)\n\{\n  if (value < one) return 1;\n  if (value < two) return 2;\n  if (value < three) return 3;\n  if (value < four) return 4;\n  if (value < five) return 5;\n  if (value < six) return 6;\n  if (value < seven) return 7;\n  if (value < eight) return 8;\n  return 9;\n\}\n\n// Distance Functions\nstatic float EuclidianDistanceFunc(float3 p1, float3 p2)\n\{\n  return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y) + (p1.z - p2.z) * (p1.z - p2.z);\n\}\n\n\n// Insertion Array\nstatic void insert(float arr\[], float value)\n\{\n  float temp;\n  for (int i = MAX_DISTANCE_ARRAY - 1; i >= 0; i--)\n  \{\n    if (value > arr\[i])\n      break;\n    temp = arr\[i];\n    arr\[i] = value;\n    if (i + 1 < MAX_DISTANCE_ARRAY)\n    \{\n      arr\[i + 1] = temp;\n    \}\n  \}\n\}\n\n\n// Blink Kernel\nkernel EuclidianNoise : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint> position_pass;\n  Image<eWrite> dst;\n\n  param:\n    float range;\n\n  local:\n    float fRange;\n    int iRange;\n\n  void define()\n  \{\n    defineParam(range, \"Range\", 3.0f);\n  \}\n\n  void init()\n  \{\n    fRange = clamp(range, 0.0f, float(MAX_DISTANCE_ARRAY - 2));\n    iRange = int(fRange);\n  \}\n\n  void process()\n  \{\n\n    //Declare some values for later use\n    int lastRandom, numberFeaturePoints;\n    float3 randomDiff, featurePoint;\n    int cubeX, cubeY, cubeZ;\n\n    float distanceArray\[MAX_DISTANCE_ARRAY];\n\n    // Initialize values in distance array to large values\n    for (int i = 0; i < MAX_DISTANCE_ARRAY; i++)\n        distanceArray\[i] = 6666;\n\n    float4 position = position_pass();\n    float3 input = float3(position.x, position.y, position.z);\n\n    // Determine which cube the evaluation point is in\n    int evalCubeX = floor(input.x);\n    int evalCubeY = floor(input.y);\n    int evalCubeZ = floor(input.z);\n\n    for (int i = -1; i < 2; ++i)\n    \{\n      for (int j = -1; j < 2; ++j)\n      \{\n        for (int k = -1; k < 2; ++k)\n        \{\n            cubeX = evalCubeX + i;\n            cubeY = evalCubeY + j;\n            cubeZ = evalCubeZ + k;\n\n            // Generate a reproducible random number generator for the cube\n            lastRandom = lcgRandom(hash(cubeX, cubeY, cubeZ));\n            // Determine how many feature points are in the cube\n            numberFeaturePoints = probLookup(lastRandom);\n            // Check each feature point\n            for (uint l = 0; l < numberFeaturePoints; ++l)\n            \{\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.x = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.y = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.z = float(lastRandom) / rand_modulus;\n\n              featurePoint = float3(randomDiff.x + float(cubeX), randomDiff.y + float(cubeY), randomDiff.z + float(cubeZ));\n\n              insert(distanceArray, EuclidianDistanceFunc(input, featurePoint));\n            \}\n        \}\n      \}\n    \}\n\n\n    float color = (distanceArray\[ iRange + 2 ] - distanceArray\[ iRange + 1 ]) * fmod(fRange, 1.0f) + distanceArray\[ iRange + 1] - distanceArray\[0];\n    dst() = color;\n\n  \}\n\n\};"
+  useGPUIfAvailable {{parent.useGPU}}
+  rebuild ""
+  EuclidianNoise_Range 1
+  format {{{WorleyNoise.format}}}
+  rebuild_finalise ""
+  name EuclidianNoise
+  xpos 550
+  ypos 579
+ }
+ Gamma {
+  channels rgba
+  value {{parent.gammaNormalize}}
+  name Gamma6
+  xpos 550
+  ypos 615
+ }
+push $N81e232f0
+ Expression {
+  channel0 rgba
+  expr0 "sin( atan(r, g) *rays+rays_seed)"
+  channel1 none
+  channel2 none
+  name rays
+  xpos 400
+  ypos 582
+  addUserKnob {20 User}
+  addUserKnob {7 rays}
+  rays {{parent.rays}}
+  addUserKnob {7 rays_seed l "rays seed"}
+  rays_seed {{parent.raysSeed}}
+ }
+ Gamma {
+  channels rgba
+  value {{parent.gammaNormalize}}
+  name Gamma7
+  xpos 400
+  ypos 606
+ }
+push $N81e232f0
+ Expression {
+  channel0 rgba
+  expr0 "sin(sqrt( r*r + g*g + b*b)+rings_seed)"
+  channel1 none
+  channel2 none
+  name rings
+  xpos 259
+  ypos 581
+  addUserKnob {20 User}
+  addUserKnob {7 rings_seed l "rings seed"}
+  rings_seed {{parent.ringsSeed}}
+ }
+ Gamma {
+  channels rgba
+  value {{parent.gammaNormalize}}
+  name Gamma8
+  xpos 259
+  ypos 605
+ }
+push $N81e232f0
+ Expression {
+  channel0 rgba
+  expr0 "pow(turbulence (r, g, b, octaves, lacunarity, gain), 1/gamma)"
+  channel1 none
+  channel2 none
+  channel3 {none none none -rgba.alpha}
+  name Turb
+  xpos 128
+  ypos 579
+  addUserKnob {20 User}
+  addUserKnob {3 octaves}
+  octaves {{parent.octaves}}
+  addUserKnob {7 lacunarity R 1 10}
+  lacunarity {{parent.lacunarity}}
+  addUserKnob {7 gain R 0.1 1}
+  gain {{parent.gain}}
+  addUserKnob {7 gamma}
+  gamma {{parent.gamma}}
+ }
+push $N81e232f0
+ Expression {
+  channel0 rgba
+  expr0 "pow((fBm (r, g, b, octaves, lacunarity, gain) +1)/2, 1/gamma)"
+  channel1 none
+  channel2 none
+  channel3 {none none none -rgba.alpha}
+  name FBM
+  xpos 0
+  ypos 577
+  addUserKnob {20 User}
+  addUserKnob {3 octaves}
+  octaves {{parent.octaves}}
+  addUserKnob {7 lacunarity R 1 10}
+  lacunarity {{parent.lacunarity}}
+  addUserKnob {7 gain R 0.1 1}
+  gain {{parent.gain}}
+  addUserKnob {7 gamma}
+  gamma {{parent.gamma}}
+ }
+ Switch {
+  inputs 9
+  which {{noisetype}}
+  name Type
+  xpos 0
+  ypos 692
+ }
+ Multiply {
+  inputs 1+1
+  channels rgba
+  value 0
+  name Multiply1
+  xpos 0
+  ypos 751
+  disable {{1-parent.useAlpha}}
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 885
+ }
+push $N81ae9a60
+ NoOp {
+  name SampleXY
+  knobChanged "\nn = nuke.thisNode()\nrgbNode = nuke.toNode('Sample')\nposition = n.knob('Position2d').getValue()\npositionX = position\[0]\npositionY = position\[-1]\nrSample = n.sample(\"r\",positionX,positionY)\ngSample = n.sample(\"g\",positionX,positionY)\nbSample = n.sample(\"b\",positionX,positionY)\nrgbNode.knob('rgbSample').setValue(\[rSample, gSample, bSample])\n"
+  xpos -164
+  ypos 95
+  addUserKnob {20 User}
+  addUserKnob {12 Position2d}
+  Position2d {914 591}
+ }
+ NoOp {
+  inputs 0
+  name Sample
+  xpos -162
+  ypos 140
+  addUserKnob {20 User}
+  addUserKnob {18 rgbSample}
+  rgbSample {0 0 0}
+  addUserKnob {6 rgbSample_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+end_group

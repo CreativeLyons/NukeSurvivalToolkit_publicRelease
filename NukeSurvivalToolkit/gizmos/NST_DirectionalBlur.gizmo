@@ -1,0 +1,432 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name DirectionalBlur
+ tile_color 0xcc804eff
+ note_font "Lucida Grande Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 DirectionalBlur}
+ addUserKnob {41 channels T MergeKeymix.also_merge}
+ addUserKnob {26 ""}
+ addUserKnob {4 type l Type M {Blur Defocus}}
+ type Defocus
+ addUserKnob {4 filter -STARTLINE M {Impulse Cubic Keys Simon Rifman Mitchell Parzen Notch Lanczos4 Lancsos6 Sinc4 ""}}
+ filter Cubic
+ addUserKnob {6 clampNeg l "Clamp Negatives (if changing filters)" +STARTLINE}
+ addUserKnob {6 blackOutsideBefore l "Black Outside Before Rotation" +STARTLINE}
+ blackOutsideBefore true
+ addUserKnob {7 rotate l Rotate R -180 180}
+ addUserKnob {7 size l Size R 0 100}
+ size 25
+ addUserKnob {7 additionalBlur l "Perpendicular Blur" R 0 100}
+ addUserKnob {26 ""}
+ addUserKnob {4 bbox l "Set BBox to" M {Union "Mask Intersect" B "Input Format" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+ addUserKnob {14 adjustBBox l "Adjust BBox" R 0 100}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask T MergeKeymix.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T MergeKeymix.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T MergeKeymix.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T MergeKeymix.fringe}
+ addUserKnob {41 mix T MergeKeymix.mix}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Name: t "Add description and tooltip for gizmo" T DirectionalBlur}
+ addUserKnob {26 ver l Version: T v04}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x535e5a00
+  label "BBox Management"
+  note_font_size 30
+  note_font_color 0xffffffff
+  xpos -930
+  ypos 381
+  bdwidth 538
+  bdheight 628
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+  ypos -515
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 34
+  ypos -421
+ }
+set N1d135e0 [stack 0]
+ Dot {
+  name Dot20
+  note_font_size 41
+  xpos -135
+  ypos -421
+ }
+set N1d171a0 [stack 0]
+ Dot {
+  name Dot22
+  note_font_size 41
+  xpos -135
+  ypos 31
+ }
+set N1d1ae30 [stack 0]
+ AdjBBox {
+  numpixels {{ceil((parent.BBoxCalculator.widthResult*1.5)+(parent.BBoxCalculator.widthResult/4))} {ceil(parent.BBoxCalculator.heightResult*1.5)+(parent.BBoxCalculator.heightResult/4)}}
+  name AdjBBoxSizeRotated
+  xpos -169
+  ypos 87
+ }
+ AdjBBox {
+  numpixels {{ceil((parent.additionalBlurBBoxCalculator.widthResult*1.5)+(parent.additionalBlurBBoxCalculator.widthResult/4))} {ceil((parent.additionalBlurBBoxCalculator.heightResult*1.5)+(parent.additionalBlurBBoxCalculator.heightResult/4))}}
+  name AdjBBoxAdditionalBlurRotated
+  xpos -169
+  ypos 141
+ }
+ AdjBBox {
+  numpixels {{"ceil(max(input.format.w, input.format.h)*.0025)"}}
+  name AdjBBoxExtra
+  xpos -169
+  ypos 187
+ }
+ Dot {
+  name Dot21
+  note_font_size 41
+  xpos -135
+  ypos 254
+ }
+push $N1d1ae30
+push $N1d135e0
+ Transform {
+  rotate {{parent.rotate}}
+  center {{input.width/2} {input.height/2}}
+  filter {{parent.filter}}
+  black_outside {{parent.blackOutsideBefore}}
+  name Transform1
+  xpos 0
+  ypos -351
+ }
+ Dot {
+  name Dot125
+  xpos 34
+  ypos -293
+ }
+set N1d26e70 [stack 0]
+ Dot {
+  name Dot126
+  xpos 170
+  ypos -293
+ }
+ Defocus {
+  defocus {{parent.Blur28.size.w}}
+  scale {1 1e-05}
+  name Defocus6
+  xpos 136
+  ypos -256
+ }
+ Dot {
+  name Dot127
+  xpos 170
+  ypos -199
+ }
+push $N1d26e70
+ Blur {
+  size {{parent.size} 0}
+  crop false
+  name Blur28
+  label "\[value size]"
+  xpos 0
+  ypos -261
+ }
+ Switch {
+  inputs 2
+  which {{parent.type}}
+  name BlurType
+  xpos 0
+  ypos -202
+ }
+ Blur {
+  size {0 {parent.additionalBlur}}
+  crop false
+  name Blur1
+  label "\[value size]"
+  xpos 0
+  ypos -161
+ }
+ Transform {
+  rotate {{-parent.Transform1.rotate}}
+  center {{parent.Transform1.center} {parent.Transform1.center}}
+  filter {{parent.filter}}
+  black_outside false
+  name Transform2
+  xpos 0
+  ypos -99
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 0
+  ypos -39
+  disable {{!clampNeg}}
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch1
+  xpos 0
+  ypos 28
+  disable {{"size == 0 && additionalBlur == 0 ? 0 : 1"}}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 0
+  ypos 251
+ }
+ Dot {
+  name Dot17
+  label A
+  note_font_size 41
+  xpos 34
+  ypos 344
+ }
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 34
+  ypos 443
+ }
+set N1caf510 [stack 0]
+ Dot {
+  name Dot12
+  note_font_size 41
+  xpos -516
+  ypos 443
+ }
+ Crop {
+  box {{-adjustBBox.w} {-adjustBBox.h} {parent.width+adjustBBox.w} {parent.height+adjustBBox.h}}
+  intersect true
+  crop false
+  name CopyBBoxFormat
+  xpos -550
+  ypos 711
+ }
+ Dot {
+  name Dot16
+  note_font_size 41
+  xpos -516
+  ypos 759
+ }
+push $N1d171a0
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos -768
+  ypos -421
+ }
+ Dot {
+  name Dot18
+  label B
+  note_font_size 41
+  xpos -768
+  ypos 323
+ }
+ Dot {
+  name Dot11
+  note_font_size 41
+  xpos -768
+  ypos 512
+ }
+set N1d39c80 [stack 0]
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos -864
+  ypos 512
+ }
+ Dot {
+  name Dot15
+  note_font_size 41
+  xpos -864
+  ypos 711
+ }
+push $N1d39c80
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 346
+  ypos 202
+  number 1
+ }
+ Dot {
+  name Dot5
+  label Mask
+  note_font_size 41
+  xpos 380
+  ypos 332
+ }
+set N1d48d30 [stack 0]
+ Dot {
+  name Dot10
+  note_font_size 41
+  xpos 270
+  ypos 332
+ }
+push $N1caf510
+ Merge2 {
+  inputs 2
+  bbox intersection
+  Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  Bchannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  output {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  name MergeIntersection
+  xpos 236
+  ypos 436
+  disable {{"!\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  Bchannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  output {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  name MergeUnion
+  xpos 236
+  ypos 505
+  disable {{"!\[exists parent.input1]"}}
+ }
+ Dot {
+  name Dot6
+  label "intersection\nof (Mask and A) + B"
+  note_font_size 14
+  note_font_color 0xffffffff
+  xpos 270
+  ypos 669
+ }
+push $N1d48d30
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos 380
+  ypos 564
+ }
+push $N1caf510
+push $N1d39c80
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos -768
+  ypos 564
+ }
+set N1d650c0 [stack 0]
+ Merge2 {
+  inputs 2+1
+  operation copy
+  Achannels none
+  Bchannels none
+  output none
+  also_merge rgba
+  name MergeKeymix
+  xpos 0
+  ypos 557
+ }
+ Dot {
+  name Dot14
+  note_font_size 41
+  xpos 34
+  ypos 623
+ }
+set N1d75b30 [stack 0]
+push $N1d650c0
+ CopyBBox {
+  inputs 2
+  name CopyBBoxUnion
+  xpos -802
+  ypos 620
+  disable {{parent.bbox==0?0:1}}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBoxIntersection
+  xpos -802
+  ypos 666
+  disable {{"parent.bbox==1 ? 0 : 1"}}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBoxB
+  xpos -802
+  ypos 708
+  disable {{"parent.bbox==2 ? 0 : 1"}}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBoxFormatIntersect
+  xpos -802
+  ypos 756
+  disable {{"parent.bbox==3 ? 0 : 1"}}
+ }
+ AdjBBox {
+  numpixels {{parent.adjustBBox.w} {parent.adjustBBox.h}}
+  name AdjBBox
+  xpos -802
+  ypos 805
+  disable {{"parent.bbox==4 ? 1 : 0"}}
+ }
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos -768
+  ypos 910
+ }
+push $N1d75b30
+ CopyBBox {
+  inputs 2
+  name CopyBBox
+  xpos 0
+  ypos 906
+ }
+ BlackOutside {
+  name BlackOutside1
+  xpos 0
+  ypos 930
+  disable {{!parent.blackOutside}}
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 1029
+ }
+ NoOp {
+  inputs 0
+  name BBoxCalculator
+  xpos -310
+  ypos 85
+  addUserKnob {20 User}
+  addUserKnob {7 angle l Angle R -180 180}
+  angle {{parent.rotate}}
+  addUserKnob {7 length l Length R 0 100}
+  length {{parent.size}}
+  addUserKnob {7 widthResult l "Width Result"}
+  widthResult {{abs(cos(radians(angle))*length)}}
+  addUserKnob {7 heightResult l "Height Result"}
+  heightResult {{abs(sin(radians(angle))*length)}}
+ }
+ NoOp {
+  inputs 0
+  name additionalBlurBBoxCalculator
+  xpos -317
+  ypos 143
+  addUserKnob {20 User}
+  addUserKnob {7 angle l Angle R -180 180}
+  angle {{parent.rotate}}
+  addUserKnob {7 length l Length R 0 100}
+  length {{parent.additionalBlur}}
+  addUserKnob {7 widthResult l "Width Result"}
+  widthResult {{abs(sin(radians(angle))*length)}}
+  addUserKnob {7 heightResult l "Height Result"}
+  heightResult {{abs(cos(radians(angle))*length)}}
+ }
+end_group

@@ -1,0 +1,77 @@
+Group {
+ name NormalizeVector2_
+ help "Normalize the magnitude of a Vector2 (to be of magnitude 1)"
+ addUserKnob {20 main_tab l "Normalize Vector2"}
+ addUserKnob {41 in l "Vector B Layer" t "Layer containing the vector information for input B" T vector_layer.in}
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+}
+ Input {
+  inputs 0
+  name vectorB
+  xpos 0
+ }
+ Dot {
+  name Dot1
+  tile_color 0xcccccc00
+  xpos 34
+  ypos 108
+ }
+set N78cf630 [stack 0]
+ Shuffle {
+  name vector_layer
+  xpos 140
+  ypos 104
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos 140
+  ypos 130
+ }
+set N78e2f00 [stack 0]
+push $N78e2f00
+ Expression {
+  channel0 {rgba.red rgba.green -rgba.blue -rgba.alpha}
+  expr0 sqrt((r*r)+(g*g))
+  channel1 {-rgba.red -rgba.green rgba.blue rgba.alpha}
+  expr1 1
+  channel2 {-rgba.red -rgba.green -rgba.blue none}
+  channel3 {none none none -rgba.alpha}
+  name Mag2
+  xpos 289
+  ypos 216
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  bbox B
+  name Merge1
+  xpos 140
+  ypos 267
+ }
+ Dot {
+  name Dot2
+  tile_color 0x4b5ec600
+  xpos 174
+  ypos 364
+ }
+push $N78cf630
+ ShuffleCopy {
+  inputs 2
+  in2 none
+  red red
+  green green
+  blue blue
+  out {{{parent.vector_layer.in}}}
+  name ShuffleCopy1
+  xpos 0
+  ypos 360
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 506
+ }
+end_group

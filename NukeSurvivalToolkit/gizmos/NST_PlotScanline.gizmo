@@ -1,0 +1,176 @@
+Group {
+name PlotScanline
+tile_color 0x9c0000ff
+selected true
+addUserKnob {20 Controls}
+addUserKnob {4 mode l "Sampling method" M {"Slice Per Pixel (faster)" "Slice Area (slower)" "Full Scanline" "" "" ""}}
+mode "Full Scanline"
+addUserKnob {6 add2image l "Add to original" +STARTLINE}
+add2image true
+addUserKnob {6 Normalize -STARTLINE}
+addUserKnob {6 tonemap l "Tone Map (HDRI)" -STARTLINE}
+addUserKnob {6 curve l "Plot as curve" +STARTLINE}
+curve true
+addUserKnob {3 curveFat l "Curve Thickness" -STARTLINE}
+addUserKnob {3 sa l "Sample Area" t "Disabled when using pr pixel method."}
+sa 1
+addUserKnob {7 lift l Lift R -1 1}
+addUserKnob {7 scale l Scale R 0 5}
+scale 1
+addUserKnob {26 ""}
+addUserKnob {12 p1 l "Start Point"}
+p1 {376 418}
+addUserKnob {12 p2 l "End Point" -STARTLINE}
+p2 {428.5 425.5}
+addUserKnob {26 ""}
+addUserKnob {26 "" l "About " T "Plot Scanline v0.4 | theo@euqahuba.com\nUse P1 to select your scanline and/or you start slice."}
+}
+Input {
+inputs 0
+name Input1
+xpos -480
+ypos 62
+}
+set N29fc2280 [stack 0]
+Expression {
+temp_name0 length
+temp_expr0 sqrt(r*r+g*g+b*b)
+expr0 r/length
+expr1 g/length
+expr2 b/length
+name Normalize
+xpos -480
+ypos 108
+disable {{1-parent.Normalize i}}
+}
+Expression {
+expr0 r/(r+1)
+expr1 g/(g+1)
+expr2 b/(b+1)
+name tonamap
+xpos -480
+ypos 134
+disable {{1-parent.tonemap i}}
+}
+set N29c18730 [stack 0]
+Expression {
+temp_name0 rExpr
+temp_expr0 "min(max(0,\r\nceil(r(x,parent.p1.y)-((y/height+parent.lift)*parent.scale))),1)"
+temp_name1 gExpr
+temp_expr1 "min(max(0,\r\nceil(g(x,parent.p1.y)-((y/height+parent.lift)*parent.scale))),1)"
+temp_name2 bExpr
+temp_expr2 "min(max(0,\r\nceil(b(x,parent.p1.y)-((y/height+parent.lift)*parent.scale))),1)"
+expr0 rExpr
+expr1 gExpr
+expr2 bExpr
+expr3 0
+name scanline
+xpos -302
+ypos 193
+addUserKnob {20 User}
+}
+push $N29c18730
+Expression {
+temp_name0 rExpr
+temp_expr0 "min(max(0,\r\nceil(r((x/width)*(parent.p2.x-parent.p1.x)+parent.p1.x,(x/width)*(parent.p2.y-parent.p1.y)+parent.p1.y,parent.sa,parent.sa)-((y/height+parent.lift)*parent.scale))),1)"
+temp_name1 gExpr
+temp_expr1 "min(max(0,\r\nceil(g((x/width)*(parent.p2.x-parent.p1.x)+parent.p1.x,(x/width)*(parent.p2.y-parent.p1.y)+parent.p1.y,parent.sa,parent.sa)-((y/height+parent.lift)*parent.scale))),1)"
+temp_name2 bExpr
+temp_expr2 "min(max(0,\r\nceil(b((x/width)*(parent.p2.x-parent.p1.x)+parent.p1.x,(x/width)*(parent.p2.y-parent.p1.y)+parent.p1.y,parent.sa,parent.sa)-((y/height+parent.lift)*parent.scale))),1)"
+expr0 rExpr
+expr1 gExpr
+expr2 bExpr
+expr3 0
+name Expression_highQuality
+xpos -515
+ypos 197
+addUserKnob {20 User}
+}
+push $N29c18730
+Expression {
+temp_name0 rExpr
+temp_expr0 "min(max(0,\r\nceil(r((x/width)*(parent.p2.x-parent.p1.x)+parent.p1.x,(x/width)*(parent.p2.y-parent.p1.y)+parent.p1.y)-((y/height+parent.lift)*parent.scale))),1)"
+temp_name1 gExpr
+temp_expr1 "min(max(0,\r\nceil(g((x/width)*(parent.p2.x-parent.p1.x)+parent.p1.x,(x/width)*(parent.p2.y-parent.p1.y)+parent.p1.y)-((y/height+parent.lift)*parent.scale))),1)"
+temp_name2 bExpr
+temp_expr2 "min(max(0,\r\nceil(b((x/width)*(parent.p2.x-parent.p1.x)+parent.p1.x,(x/width)*(parent.p2.y-parent.p1.y)+parent.p1.y)-((y/height+parent.lift)*parent.scale))),1)"
+expr0 rExpr
+expr1 gExpr
+expr2 bExpr
+expr3 0
+name perPixel
+xpos -419
+ypos 201
+addUserKnob {20 User}
+}
+Switch {
+inputs 3
+which {{parent.mode i}}
+name Switch2
+xpos -480
+ypos 253
+}
+Matrix {
+matrix {
+    {0 1 0}
+    {1 -4 1}
+    {0 1 0}
+  }
+name Matrix2
+selected true
+xpos -480
+ypos 284
+disable {{-1+parent.curve i x70 1}}
+}
+Dilate {
+size {{parent.curveFat}}
+name Dilate1
+xpos -480
+ypos 326
+disable {{-1+parent.curve.main}}
+}
+Clamp {
+name Clamp1
+xpos -480
+ypos 383
+}
+set N2a7d6ae0 [stack 0]
+push $N29fc2280
+Dot {
+name Dot1
+xpos -556
+ypos 66
+}
+Clamp {
+maximum 331
+name Clamp2
+xpos -590
+ypos 352
+}
+Merge2 {
+inputs 2
+operation plus
+bbox intersection
+name Merge1
+xpos -590
+ypos 394
+}
+Dot {
+name Dot2
+xpos -556
+ypos 433
+}
+push $N2a7d6ae0
+Switch {
+inputs 2
+which {{parent.add2image i}}
+name Switch1
+xpos -480
+ypos 425
+}
+Output {
+name Output1
+xpos -480
+ypos 470
+}
+end_group

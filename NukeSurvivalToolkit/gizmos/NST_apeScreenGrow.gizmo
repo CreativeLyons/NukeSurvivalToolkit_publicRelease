@@ -1,0 +1,326 @@
+Group {
+ name apeScreenGrow
+ help "apeScreenGrow v0.4 - apEssentials by Adrian Pueyo\n\nErode the color of a screen to fill the insides of your subject, useful to generate cleanplates in a more controlled way than the IBKColour node. \n\napeScreenGrow is my own flavor of color extend nodes (EdgeExtend, ColorEdge, PxF_Filler, DilateRGB), taking what I like the most, taking out what I never use and adding some extra functionality to make it as straight-forward as possible.\n\nMatte input expects a hard alpha matte of the part you want to cover up.\n\napeScreenGrow v0.4 by Adrian Pueyo.\nadrianpueyo.com, 2015-2018."
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"steps\":\n    s = int(n\[\"steps\"].value())\n    nd = nuke.toNode(\"DP\")\n    ndX = nd.xpos()\n    ndY = nd.ypos()\n    s_prev = len(nuke.allNodes(\"Unpremult\"))\n    \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>ndX]\n    # Merge\n    nm = nuke.nodes.Merge2()\n    nm.setXYpos(ndX+40,ndY+340)\n    nm\[\"operation\"].setValue(\"over\")\n    nuke.toNode(\"TOut\").setInput(0,nm)\n    for i in range(s):\n        # Blur\n        nb = nuke.nodes.Blur()\n        nb.setXYpos(ndX+40+i*100,ndY+80)\n        nb.setInput(0,nd)\n        nb\[\"channels\"].setValue(\"all\")\n        nb\[\"filter\"].setValue(\"gaussian\")\n        nb\[\"size\"].setValue(\[0,0])\n        nb\[\"size\"].setExpression(\"DP.f(%s)\"%(i+1))\n        # Unpremult\n        nu = nuke.nodes.Unpremult()\n        nu.setXYpos(ndX+40+i*100,ndY+120)\n        nu.setInput(0,nb)\n        nu\[\"channels\"].setValue(\"rgba\")\n        nu\[\"alpha\"].setValue(\"mask.a\")\n        # FilterErode\n        nf = nuke.nodes.FilterErode()\n        nf.setXYpos(ndX+40+i*100,ndY+160)\n        nf.setInput(0,nu)\n        nf\[\"channels\"].setValue(\"alpha\")\n        nf\[\"filter\"].setValue(\"quadratic\")\n        nf\[\"size\"].setValue(\[0,0])\n        nf\[\"size\"].setExpression(\"DP.f(%s)/2\"%(i+1))\n        # Premult\n        np = nuke.nodes.Premult()\n        np.setXYpos(ndX+40+i*100,ndY+200)\n        np.setInput(0,nf)\n        # BlurInside\n        nbi = nuke.nodes.Blur()\n        nbi.setXYpos(ndX+40+i*100,ndY+240)\n        nbi.setInput(0,np)\n        nbi\[\"channels\"].setValue(\"all\")\n        nbi\[\"filter\"].setValue(\"quadratic\")\n        nbi\[\"size\"].setValue(\[0,0])\n        nbi\[\"size\"].setExpression(\"DP.f(%s)*parent.blur_inside/parent.size\"%(i+1))\n        nm.setInput(s-i-1 if (s-i)<3 else s-i, nbi)\n            "
+ tile_color 0x8c8c8cff
+ addUserKnob {20 apeScreenGrow}
+ addUserKnob {41 erode l "matte erode" t "Global erode on the matte before applying the edge grow effect." T Dilate1.size}
+ addUserKnob {14 size l "screen grow" t "Maximum pixel size of the screen grow effect." R 0 100}
+ size 20
+ addUserKnob {3 steps t "Number of blur iterations."}
+ steps 5
+ addUserKnob {26 ""}
+ addUserKnob {7 rotate t "Apply a rotation to the effect (e.g. when having diagonal lines on a greenscreen)." R -180 180}
+ addUserKnob {7 power t "Distribution of the blur size of the iterations. A higher power will concentrate more of them towards the edges, where the quality is more important." R 0 3}
+ power 2
+ addUserKnob {14 blur_inside l "blur inside" t "Incremental blur on the steps, so that the ones that collide get blended together." R 0 100}
+ addUserKnob {41 bg_color l "bg color" t "Background color to fill the inside." T Add1.value}
+ addUserKnob {26 ""}
+ addUserKnob {41 matte_channel l matte t "Matte channel to be used as the alpha for the effect. Works best with hard mattes." T Copy1.from0}
+ addUserKnob {41 invert -STARTLINE T InvertPre1.disable}
+ addUserKnob {26 version_author l "" t "apeScreenGrow v0.4\n2015-2018" +STARTLINE T "<span style=\"color:#666\"><br/><b>apeScreenGrow v0.4</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2015-2018</span>"}
+}
+ Input {
+  inputs 0
+  name Inputmatte
+  xpos 362
+  ypos -44
+  number 1
+ }
+ Shuffle {
+  name ShuffleAssert
+  xpos 362
+  ypos -20
+ }
+ Grade {
+  channels alpha
+  blackpoint 0.001
+  whitepoint 0.001
+  white 10000000
+  white_clamp true
+  name Grade1
+  xpos 362
+  ypos 4
+ }
+ Dilate {
+  name Dilate1
+  xpos 362
+  ypos 36
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos 211
+  ypos -17
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 211
+  ypos 36
+ }
+ Invert {
+  channels alpha
+  name InvertPre1
+  xpos 211
+  ypos 110
+ }
+ Premult {
+  name Premult1
+  xpos 211
+  ypos 151
+ }
+set Ne49a2fb0 [stack 0]
+ Dot {
+  name Dot1
+  xpos 527
+  ypos 154
+ }
+ Transform {
+  rotate {{parent.rotate}}
+  center {960 540}
+  name TIn
+  xpos 493
+  ypos 172
+ }
+ Shuffle {
+  red alpha
+  out mask
+  name Shuffle1
+  xpos 493
+  ypos 199
+ }
+ Dot {
+  name DP
+  xpos 527
+  ypos 252
+  addUserKnob {20 User}
+  addUserKnob {14 f R 0 100}
+  f {{pow((t/parent.steps),parent.power)*parent.size} {pow((t/parent.steps),parent.power)*parent.size}}
+ }
+set Ne4e13de0 [stack 0]
+ Blur {
+  size {{DP.f(1)} {DP.f(1)}}
+  name Blur1
+  xpos 567
+  ypos 332
+ }
+ Unpremult {
+  channels rgba
+  alpha mask.a
+  name Unpremult1
+  xpos 567
+  ypos 372
+ }
+ FilterErode {
+  channels alpha
+  size {{DP.f(1)/2} {DP.f(1)/2}}
+  filter quadratic
+  name FilterErode1
+  xpos 567
+  ypos 412
+ }
+ Premult {
+  name Premult2
+  xpos 567
+  ypos 452
+ }
+ Blur {
+  size {{DP.f(1)*parent.blur_inside/parent.size} {DP.f(1)*parent.blur_inside/parent.size}}
+  filter quadratic
+  name Blur2
+  xpos 567
+  ypos 492
+ }
+push $Ne4e13de0
+ Blur {
+  size {{DP.f(2)} {DP.f(2)}}
+  name Blur3
+  xpos 667
+  ypos 332
+ }
+ Unpremult {
+  channels rgba
+  alpha mask.a
+  name Unpremult2
+  xpos 667
+  ypos 372
+ }
+ FilterErode {
+  channels alpha
+  size {{DP.f(2)/2} {DP.f(2)/2}}
+  filter quadratic
+  name FilterErode2
+  selected true
+  xpos 667
+  ypos 412
+ }
+ Premult {
+  name Premult3
+  xpos 667
+  ypos 452
+ }
+ Blur {
+  size {{DP.f(2)*parent.blur_inside/parent.size} {DP.f(2)*parent.blur_inside/parent.size}}
+  filter quadratic
+  name Blur4
+  xpos 667
+  ypos 492
+ }
+push $Ne4e13de0
+ Blur {
+  size {{DP.f(3)} {DP.f(3)}}
+  name Blur5
+  xpos 767
+  ypos 332
+ }
+ Unpremult {
+  channels rgba
+  alpha mask.a
+  name Unpremult3
+  xpos 767
+  ypos 372
+ }
+ FilterErode {
+  channels alpha
+  size {{DP.f(3)/2} {DP.f(3)/2}}
+  filter quadratic
+  name FilterErode3
+  xpos 767
+  ypos 412
+ }
+ Premult {
+  name Premult4
+  xpos 767
+  ypos 452
+ }
+ Blur {
+  size {{DP.f(3)*parent.blur_inside/parent.size} {DP.f(3)*parent.blur_inside/parent.size}}
+  filter quadratic
+  name Blur6
+  xpos 767
+  ypos 492
+ }
+push 0
+push $Ne4e13de0
+ Blur {
+  size {{DP.f(4)} {DP.f(4)}}
+  name Blur7
+  xpos 867
+  ypos 332
+ }
+ Unpremult {
+  channels rgba
+  alpha mask.a
+  name Unpremult4
+  xpos 867
+  ypos 372
+ }
+ FilterErode {
+  channels alpha
+  size {{DP.f(4)/2} {DP.f(4)/2}}
+  filter quadratic
+  name FilterErode4
+  xpos 867
+  ypos 412
+ }
+ Premult {
+  name Premult5
+  xpos 867
+  ypos 452
+ }
+ Blur {
+  size {{DP.f(4)*parent.blur_inside/parent.size} {DP.f(4)*parent.blur_inside/parent.size}}
+  filter quadratic
+  name Blur8
+  xpos 867
+  ypos 492
+ }
+push $Ne4e13de0
+ Blur {
+  size {{DP.f(5)} {DP.f(5)}}
+  name Blur9
+  xpos 967
+  ypos 332
+ }
+ Unpremult {
+  channels rgba
+  alpha mask.a
+  name Unpremult5
+  xpos 967
+  ypos 372
+ }
+ FilterErode {
+  channels alpha
+  size {{DP.f(5)/2} {DP.f(5)/2}}
+  filter quadratic
+  name FilterErode5
+  xpos 967
+  ypos 412
+ }
+ Premult {
+  name Premult6
+  xpos 967
+  ypos 452
+ }
+ Blur {
+  size {{DP.f(5)*parent.blur_inside/parent.size} {DP.f(5)*parent.blur_inside/parent.size}}
+  filter quadratic
+  name Blur10
+  xpos 967
+  ypos 492
+ }
+ Merge2 {
+  inputs 5+1
+  name Merge1
+  xpos 567
+  ypos 592
+ }
+ Transform {
+  rotate {{-parent.rotate}}
+  center {960 540}
+  name TOut
+  xpos 321
+  ypos 671
+ }
+push $Ne49a2fb0
+ Merge2 {
+  inputs 2
+  operation under
+  bbox B
+  name MG
+  xpos 211
+  ypos 671
+ }
+set Ne48ae1d0 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle2
+  xpos 41
+  ypos 671
+ }
+ Add {
+  channels rgba
+  name Add1
+  xpos 41
+  ypos 722
+ }
+push $Ne48ae1d0
+ Merge2 {
+  inputs 2
+  operation under
+  name MG1
+  xpos 211
+  ypos 722
+ }
+ Output {
+  name Output1
+  xpos 211
+  ypos 834
+ }
+end_group

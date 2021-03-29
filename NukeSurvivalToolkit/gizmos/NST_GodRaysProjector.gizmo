@@ -1,0 +1,935 @@
+Group {
+ name GodRaysProjector
+ tile_color 0xcc804eff
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {41 "Local GPU: " T "GetGPUName.Local GPU: "}
+ addUserKnob {41 useGPUIfAvailable l "GPU Preview" -STARTLINE T BlinkScript1.useGPUIfAvailable}
+ addUserKnob {41 vectorize l "Vectorize on CPU" -STARTLINE T BlinkScript1.vectorize}
+ addUserKnob {26 ""}
+ addUserKnob {4 outputMode l "output mode" t "2D: just the RGBA projection\nDeep: RGBA projection, with deep data, output as a deep stream\nShadow: just the shadow mask" M {2D Deep Shadow "" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {20 _3 l Projection n 1}
+ _3 0
+ addUserKnob {41 scale l "input resolution scale" t "pre-scales the input image(s) and then performs an inverse scale to return the same format.\n\nthis will either speed up performance, or decrease the powderiness depending on increased or decreased resolution." T Reformat1.scale}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_iterations l steps t "the number of projected planes used to create the volume" T BlinkScript1.GodRaysProjectorVolumeKernel_iterations}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_depthMin l "project near" t "the closest plane used to create the volume" T BlinkScript1.GodRaysProjectorVolumeKernel_depthMin}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_depthMax l "project far" t "the farthest plane used to create the volume" T BlinkScript1.GodRaysProjectorVolumeKernel_depthMax}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_projDistSkew l "near/far weight" t "this skews the projection plane placement nearer or further from the first and last planes" T BlinkScript1.GodRaysProjectorVolumeKernel_projDistSkew}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 projectionNoise l "3D Noise" n 1}
+ projectionNoise 0
+ addUserKnob {41 GodRaysProjectorVolumeKernel_EnableNoise l "enable noise" T BlinkScript1.GodRaysProjectorVolumeKernel_EnableNoise}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_NoiseOctaves l octaves t "the complexity of the 4D noise" T BlinkScript1.GodRaysProjectorVolumeKernel_NoiseOctaves}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_NoisePersistence l persistence t "how much each level of complexity contributes to the final noise" T BlinkScript1.GodRaysProjectorVolumeKernel_NoisePersistence}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_NoiseScale l scale t "scaling the noise at generation level" T BlinkScript1.GodRaysProjectorVolumeKernel_NoiseScale}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_NoiseSeed l seed t "this is the 4th dimention of the 4D noise, this is relative to the scale of the postion data" T BlinkScript1.GodRaysProjectorVolumeKernel_NoiseSeed}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_NoiseGamma l gamma T BlinkScript1.GodRaysProjectorVolumeKernel_NoiseGamma}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_NoiseMix l mix T BlinkScript1.GodRaysProjectorVolumeKernel_NoiseMix}
+ addUserKnob {26 ""}
+ addUserKnob {41 xform_order l "transform order" T Axis1.xform_order}
+ addUserKnob {41 rot_order l "rotation order" T Axis1.rot_order}
+ addUserKnob {41 translate T Axis1.translate}
+ addUserKnob {41 rotate T Axis1.rotate}
+ addUserKnob {41 scaling l scale T Axis1.scaling}
+ addUserKnob {41 uniform_scale l "shadow length scale" T Axis1.uniform_scale}
+ addUserKnob {41 skew T Axis1.skew}
+ addUserKnob {41 pivot T Axis1.pivot}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 colourTweaks l Image n 1}
+ colourTweaks 0
+ addUserKnob {41 GodRaysProjectorVolumeKernel_EnableSourceDarken l "darken at source" t "this exponentially darkens the planes at the source, this is useful for when bunched up planes/pixels cause very bright values\n" T BlinkScript1.GodRaysProjectorVolumeKernel_EnableSourceDarken}
+ addUserKnob {41 clampAlpha l "clamp alpha" -STARTLINE T Clamp1.clampAlpha}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_fromColour l "from colour" T BlinkScript1.GodRaysProjectorVolumeKernel_fromColour}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_toColour l "to colour" T BlinkScript1.GodRaysProjectorVolumeKernel_toColour}
+ addUserKnob {41 GodRaysProjectorVolumeKernel_toFromGamma l gamma T BlinkScript1.GodRaysProjectorVolumeKernel_toFromGamma}
+ addUserKnob {26 ""}
+ addUserKnob {41 size l "gaussian blur size" T Blur1.size}
+ addUserKnob {41 blurShadow l "blur shadow" -STARTLINE T Blur1.blurShadow}
+ addUserKnob {41 parallelScaleBlur l "parallel scale blur" T GodRays1.parallelScaleBlur}
+ addUserKnob {41 bidirectional -STARTLINE T GodRays1.bidirectional}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {20 shadowSettings l Shadow n 1}
+ shadowSettings 0
+ addUserKnob {41 in l "position data" T Shuffle1.in}
+ addUserKnob {41 in_1 l "normals data" T Shuffle2.in}
+ addUserKnob {41 enableShadow l "enable shadow" T Merge1.enableShadow}
+ addUserKnob {41 useCustomShadowMask l "use custom shadow mask" t "this bypasses the position and normals processing and intead uses the alpha channel straight from the shadow input" -STARTLINE T Switch3.useCustomShadowMask}
+ addUserKnob {41 mix l "stencil amount" T Merge1.mix}
+ addUserKnob {41 scale_1 l scale T GodRays5.scale}
+ addUserKnob {41 from_color l "from color" T GodRays5.from_color}
+ addUserKnob {41 to_color l "to color" T GodRays5.to_color}
+ addUserKnob {41 gamma T GodRays5.gamma}
+ addUserKnob {41 steps T GodRays5.steps}
+ addUserKnob {41 max -STARTLINE T GodRays5.max}
+ addUserKnob {41 size_1 l "shadow blur size" T Blur4.size}
+ addUserKnob {26 ""}
+ addUserKnob {41 blackpoint l "facing mask blackpoint" t "this controls the falloff of the mask created using the facing angle of an object to the camera" T Grade2.blackpoint}
+ addUserKnob {41 whitepoint l "facing mask whitepoint" t "this controls the falloff of the mask created using the facing angle of an object to the camera" T Grade2.whitepoint}
+ addUserKnob {26 ""}
+ addUserKnob {41 useVolumeDepth l "depth region override" t "this overrides the near/far values of the projection when selecting the region of the position data used to generate a shadow" T BlinkScript2.useVolumeDepth}
+ addUserKnob {41 nearDepth l "near depth" T BlinkScript2.nearDepth}
+ addUserKnob {41 farDepth l "far depth" T BlinkScript2.farDepth}
+ addUserKnob {20 endGroup_3 l endGroup n -1}
+ addUserKnob {26 _1 l "" +STARTLINE}
+ addUserKnob {26 credit l "" +STARTLINE T "Chris Fryer | 2021"}
+ addUserKnob {20 About}
+ addUserKnob {26 info l "" +STARTLINE T "v1.1 - 03.03.21\n\n- complete rebuild\n- 4 point approximation no longer available\n- input scale option for speed/quality control\n- card placement math no longer breaks under certain angles or behind camera\n- shadow functionality added\n- camera input now uses DummyCam, this allows for non-topnode compliant methods (Axis inputs etc..)\n- 3D noise transform, no longer inverted\n- labels on most knobs\n- code now commented for those learning Blinkscript\n- to/from now functions for RGBA\n- added weight option to skew virtual card placement\n- far card now matches far distance exactly\n- edge pixels no longer wrong"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x191b8eff
+  label DEEP
+  note_font "Verdana Bold"
+  note_font_size 60
+  xpos -592
+  ypos 75
+  bdwidth 357
+  bdheight 812
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0xc69548ff
+  label "VOLUME PROJECTION"
+  note_font "Verdana Bold"
+  note_font_size 60
+  xpos 188
+  ypos -80
+  bdwidth 208
+  bdheight 621
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x3f3f3fff
+  label SHADOW
+  note_font "Verdana Bold"
+  note_font_size 60
+  xpos 938
+  ypos -66
+  bdwidth 324
+  bdheight 717
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0xaa1d1dff
+  label "CAMERA INPUTS"
+  note_font "Verdana Bold"
+  note_font_size 42
+  xpos -43
+  ypos -121
+  bdwidth 196
+  bdheight 195
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 254
+  ypos 28
+ }
+ Reformat {
+  type scale
+  pbb true
+  name Reformat1
+  label "image scaling"
+  selected true
+  xpos 254
+  ypos 92
+  disable {{"scale == 1"}}
+ }
+set N32615c00 [stack 0]
+ Input {
+  inputs 0
+  name shadow
+  xpos 1039
+  ypos 21
+  number 3
+ }
+ Reformat {
+  type scale
+  box_width {{Reformat1.input0.width}}
+  box_height {{Reformat1.input0.height}}
+  scale {{parent.Reformat1.scale} {parent.Reformat1.scale}}
+  filter notch
+  name Reformat3
+  xpos 1039
+  ypos 58
+  disable {{parent.Reformat1.disable}}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 1039
+  ypos 98
+ }
+ Dot {
+  name Dot10
+  xpos 1073
+  ypos 155
+ }
+set N32614400 [stack 0]
+ Dot {
+  name Dot14
+  xpos 996
+  ypos 155
+ }
+set N64bb3c00 [stack 0]
+ Dot {
+  name Dot18
+  xpos 951
+  ypos 155
+ }
+ GodRays {
+  channels alpha
+  scale 2
+  center {{parent.GodRays1.center} {parent.GodRays1.center}}
+  to_color 0
+  steps 10
+  max true
+  name GodRays6
+  xpos 917
+  ypos 462
+  disable {{scale==1}}
+ }
+ Dot {
+  name Dot17
+  xpos 951
+  ypos 568
+ }
+push $N32614400
+ Shuffle {
+  in none
+  name Shuffle1
+  label "Position Data"
+  xpos 1039
+  ypos 184
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove2
+  xpos 1039
+  ypos 222
+ }
+ BlinkScript {
+  recompileCount 134
+  ProgramGroup 1
+  KernelDescription "2 \"PositionInFrustrumKernel\" iterate pixelWise 62c3f92d35daef6caeb6bf3bb07a8403333e7c6da2c2f19b3e5542cb00358efa 2 \"src\" Read Point \"dst\" Write Random 6 \"projCamMatrix\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"projCamFocal\" Float 1 AAAAAA== \"projCamHaperture\" Float 1 AAAAAA== \"projCamVaperture\" Float 1 AAAAAA== \"depthMin\" Float 1 AAAAAA== \"depthMax\" Float 1 AAAAAA== 6 \"projCamMatrix\" 16 1 \"projCamFocal\" 1 1 \"projCamHaperture\" 1 1 \"projCamVaperture\" 1 1 \"depthMin\" 1 1 \"depthMax\" 1 1 2 \"resolution\" Float 2 1 AAAAAAAAAAA= \"posData\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "inline float4 matrixTransform(float4 image, float4x4 matrix)\{\n\n    float4 matrixTransformsOutput;\n\n    matrixTransformsOutput.x = image.x * matrix\[0]\[0] + image.y * matrix\[0]\[1] + image.z * matrix\[0]\[2] + matrix\[0]\[3];\n    matrixTransformsOutput.y = image.x * matrix\[1]\[0] + image.y * matrix\[1]\[1] + image.z * matrix\[1]\[2] + matrix\[1]\[3];\n    matrixTransformsOutput.z = image.x * matrix\[2]\[0] + image.y * matrix\[2]\[1] + image.z * matrix\[2]\[2] + matrix\[2]\[3];\n    matrixTransformsOutput.w = image.x * matrix\[3]\[0] + image.y * matrix\[3]\[1] + image.z * matrix\[3]\[2] + matrix\[3]\[3];\n\n\n    return matrixTransformsOutput;\n\n\}\n\ninline float4 matrixToScreenspace(float4 image, float focal, float haperture, float vaperture, int2 resolution)\{\n\n    image.x = 0.5f - ((image.x) * (focal/haperture))/image.z;\n    image.y = 0.5f - ((image.y) * (focal/vaperture))/image.z;\n    image.z = -image.z;\n\n    image.x = image.x*(resolution.x)-1.0f;\n    image.y = image.y*(resolution.y)-1.0f;\n\n\n    return image;\n\n\}\n\n\n\nkernel PositionInFrustrumKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeNone> src; // the input image\n  Image<eWrite, eAccessRandom> dst; // the output image\n\n  param:\n\n    //projection cam world matrix\n    float4x4 projCamMatrix;\n\n    //projection cam settings\n    float projCamFocal;\n    float projCamHaperture;\n    float projCamVaperture;\n\n    //distance of card from camera\n    float depthMin;\n    float depthMax;\n\n  local:\n\n    float2 resolution;\n    float4 posData;    \n\n  void define() \{\n    \n  \}\n\n  void init() \{\n\n    //defining resolution\n    resolution.x = src.bounds.width();\n    resolution.y = src.bounds.height();    \n    \n  \}\n\n  void process(int2 pos) \{ \n        \n\n    posData = src();\n\n    //transforming card using projection cam\n    posData = matrixTransform(posData, projCamMatrix.invert());\n    \n    //creating screenspace UV coordinates using projection cam data\n    posData = matrixToScreenspace(posData, projCamFocal, projCamHaperture, projCamVaperture, resolution);\n\n    posData.x = posData.x >= 0.0f     && posData.x <= resolution.x-1 ? 1 : 0;\n    posData.y = posData.y >= 0.0f     && posData.y <= resolution.y-1 ? 1 : 0;\n    posData.z = posData.z >= depthMin && posData.z <= depthMax       ? 1 : 0;\n\n    posData.w = posData.x * posData.y * posData.z;\n    \n    \n\n    dst(pos.x, pos.y) = posData;       \n\n\n    \n\n  \}\n\};\n"
+  useGPUIfAvailable {{parent.BlinkScript1.useGPUIfAvailable}}
+  vectorize {{parent.BlinkScript1.vectorize}}
+  rebuild ""
+  PositionInFrustrumKernel_projCamMatrix {
+      {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix}}
+      {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix}}
+      {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix}}
+      {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix}}
+    }
+  PositionInFrustrumKernel_projCamFocal {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamFocal}}
+  PositionInFrustrumKernel_projCamHaperture {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamHaperture}}
+  PositionInFrustrumKernel_projCamVaperture {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamVaperture}}
+  PositionInFrustrumKernel_depthMin {{"useVolumeDepth ? nearDepth : parent.BlinkScript1.GodRaysProjectorVolumeKernel_depthMin "}}
+  PositionInFrustrumKernel_depthMax {{"useVolumeDepth ? farDepth : parent.BlinkScript1.GodRaysProjectorVolumeKernel_depthMax"}}
+  rebuild_finalise ""
+  name BlinkScript2
+  xpos 1039
+  ypos 286
+  addUserKnob {20 User}
+  addUserKnob {7 nearDepth l "shadow region near" R 0 100}
+  nearDepth 1
+  addUserKnob {7 farDepth l "shadow region far" R 0 100}
+  farDepth 10
+  addUserKnob {6 useVolumeDepth l "shadow depth override" +STARTLINE}
+ }
+ Dot {
+  name Dot19
+  xpos 1073
+  ypos 342
+ }
+set N64bb2000 [stack 0]
+ Dot {
+  name Dot21
+  xpos 1158
+  ypos 342
+ }
+ Dot {
+  name Dot20
+  xpos 1158
+  ypos 482
+ }
+push $N32614400
+ Dot {
+  name Dot11
+  xpos 1202
+  ypos 155
+ }
+ Shuffle {
+  in none
+  name Shuffle2
+  label "Normals Data"
+  xpos 1168
+  ypos 185
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove3
+  xpos 1168
+  ypos 223
+ }
+ ColorMatrix {
+  matrix {
+      {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix.0} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix.1} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix.2}}
+      {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix.4} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix.5} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix.6}}
+      {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix.8} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix.9} {parent.BlinkScript1.GodRaysProjectorVolumeKernel_projCamMatrix.10}}
+    }
+  invert true
+  name ColorMatrix1
+  xpos 1168
+  ypos 262
+ }
+ Grade {
+  white_clamp true
+  name Grade2
+  xpos 1168
+  ypos 288
+ }
+ Dot {
+  name Dot12
+  xpos 1202
+  ypos 517
+ }
+push $N64bb3c00
+ Dot {
+  name Dot13
+  xpos 996
+  ypos 411
+ }
+push $N64bb2000
+ ChannelMerge {
+  inputs 2
+  operation multiply
+  name ChannelMerge2
+  xpos 1039
+  ypos 394
+ }
+ GodRays {
+  channels alpha
+  scale 2
+  center {{parent.GodRays1.center} {parent.GodRays1.center}}
+  to_color 0
+  steps 10
+  max true
+  name GodRays5
+  xpos 1039
+  ypos 462
+  disable {{scale==1}}
+ }
+ ChannelMerge {
+  inputs 2+1
+  A rgba.blue
+  operation stencil
+  bbox A
+  name ChannelMerge1
+  xpos 1039
+  ypos 500
+ }
+ Switch {
+  inputs 2
+  which {{useCustomShadowMask}}
+  name Switch3
+  xpos 1039
+  ypos 564
+  addUserKnob {20 User}
+  addUserKnob {6 useCustomShadowMask l "use custom shadow mask" +STARTLINE}
+ }
+ Blur {
+  channels rgba
+  name Blur4
+  xpos 1039
+  ypos 590
+  disable {{"size == 0"}}
+ }
+ Blur {
+  channels rgba
+  size {{parent.Blur1.size}}
+  name Blur2
+  xpos 1039
+  ypos 616
+  disable {{"max(1-parent.Blur1.blurShadow, Blur1.disable )"}}
+  addUserKnob {20 User}
+  addUserKnob {6 blurShadow l "blur shadow" +STARTLINE}
+ }
+ Dot {
+  name Dot15
+  xpos 1073
+  ypos 660
+ }
+set N62546000 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle3
+  tile_color 0xffffff00
+  xpos 1039
+  ypos 745
+ }
+ Reformat {
+  type "to box"
+  box_width {{Reformat1.input0.width}}
+  box_height {{Reformat1.input0.height}}
+  box_fixed true
+  scale {{1/parent.Reformat1.scale} {1/parent.Reformat1.scale}}
+  filter notch
+  name Reformat4
+  xpos 1039
+  ypos 822
+  disable {{parent.Reformat1.disable}}
+ }
+ Dot {
+  name Dot16
+  xpos 1073
+  ypos 965
+ }
+push $N62546000
+push $N32615c00
+ Dot {
+  name Dot4
+  xpos 288
+  ypos 155
+ }
+set N62544c00 [stack 0]
+ BlinkScript {
+  recompileCount 199
+  ProgramGroup 1
+  KernelDescription "2 \"GodRaysProjectorVolumeKernel\" iterate pixelWise c90547bcdf11f7b781348ba43735748059cb3e7f197f04c35f90a8e587e83036 2 \"src\" Read Point \"dst\" Write Random 24 \"renderCamMatrix\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"renderCamFocal\" Float 1 AAAAAA== \"renderCamHaperture\" Float 1 AAAAAA== \"renderCamVaperture\" Float 1 AAAAAA== \"projCamMatrix\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"projCamFocal\" Float 1 AAAAAA== \"projCamHaperture\" Float 1 AAAAAA== \"projCamVaperture\" Float 1 AAAAAA== \"depthMin\" Float 1 AAAAAA== \"depthMax\" Float 1 AAAAAA== \"iterations\" Int 1 AAAAAA== \"projDistSkew\" Float 1 AAAAAA== \"EnableSourceDarken\" Bool 1 AA== \"NoiseOctaves\" Float 1 AAAAAA== \"NoisePersistence\" Float 1 AAAAAA== \"NoiseScale\" Float 1 AAAAAA== \"NoiseSeed\" Float 1 AAAAAA== \"NoiseGamma\" Float 1 AAAAAA== \"axisMatrix\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"EnableNoise\" Bool 1 AA== \"NoiseMix\" Float 1 AAAAAA== \"toColour\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"fromColour\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"toFromGamma\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== 24 \"renderCamMatrix\" 16 1 \"renderCamFocal\" 1 1 \"renderCamHaperture\" 1 1 \"renderCamVaperture\" 1 1 \"projCamMatrix\" 16 1 \"projCamFocal\" 1 1 \"projCamHaperture\" 1 1 \"projCamVaperture\" 1 1 \"depthMin\" 1 1 \"depthMax\" 1 1 \"iterations\" 1 1 \"projDistSkew\" 1 1 \"EnableSourceDarken\" 1 1 \"NoiseOctaves\" 1 1 \"NoisePersistence\" 1 1 \"NoiseScale\" 1 1 \"NoiseSeed\" 1 1 \"NoiseGamma\" 1 1 \"axisMatrix\" 16 1 \"EnableNoise\" 1 1 \"NoiseMix\" 1 1 \"toColour\" 4 1 \"fromColour\" 4 1 \"toFromGamma\" 4 1 7 \"resolution\" Float 2 1 AAAAAAAAAAA= \"nearPosData\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"farPosData\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"posData\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"imageMult\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"NoisePosData\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"cardInfo\" Float 2 1 AAAAAAAAAAA="
+  kernelSource "inline float4 matrixTransform(float4 image, float4x4 matrix)\{\n\n    float4 matrixTransformsOutput;\n\n    matrixTransformsOutput.x = image.x * matrix\[0]\[0] + image.y * matrix\[0]\[1] + image.z * matrix\[0]\[2] + matrix\[0]\[3];\n    matrixTransformsOutput.y = image.x * matrix\[1]\[0] + image.y * matrix\[1]\[1] + image.z * matrix\[1]\[2] + matrix\[1]\[3];\n    matrixTransformsOutput.z = image.x * matrix\[2]\[0] + image.y * matrix\[2]\[1] + image.z * matrix\[2]\[2] + matrix\[2]\[3];\n    matrixTransformsOutput.w = image.x * matrix\[3]\[0] + image.y * matrix\[3]\[1] + image.z * matrix\[3]\[2] + matrix\[3]\[3];\n\n\n    return matrixTransformsOutput;\n\n\}\n\ninline float4 matrixToScreenspace(float4 image, float focal, float haperture, float vaperture, int2 resolution)\{\n\n    image.x = 0.5f - ((image.x) * (focal/haperture))/image.z;\n    image.y = 0.5f - ((image.y) * (focal/vaperture))/image.z;\n    image.z = -image.z;\n\n    image.x = image.x * (resolution.x) - 1.0f;\n    image.y = image.y * (resolution.y) - 1.0f;\n\n    return image;\n\n\}\n\n//Based on https://github.com/Draradech/csworldgen/blob/master/simplexnoise.cpp\n//Ported by Mads Hagbarth Lund 2014\n\n/* Copyright (c) 2007-2012 Eliot Eshelman\n *\n * This program is free software: you can redistribute it and/or modify\n * it under the terms of the GNU General Public License as published by\n * the Free Software Foundation, either version 3 of the License, or\n * (at your option) any later version.\n *\n * This program is distributed in the hope that it will be useful,\n * but WITHOUT ANY WARRANTY; without even the implied warranty of\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n * GNU General Public License for more details.\n *\n * You should have received a copy of the GNU General Public License\n * along with this program. If not, see <http://www.gnu.org/licenses/>.\n *\n */\n\n\nint fastfloor( const float x ) \{ return x > 0 ? (int) x : (int) x - 1; \}\ninline float raw_noise_4d( const float x, const float y, const float z, const float w ) \n\{\nint simplex\[64]\[4] = \{\n    \{0,1,2,3\},\{0,1,3,2\},\{0,0,0,0\},\{0,2,3,1\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{1,2,3,0\},\n    \{0,2,1,3\},\{0,0,0,0\},\{0,3,1,2\},\{0,3,2,1\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{1,3,2,0\},\n    \{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\n    \{1,2,0,3\},\{0,0,0,0\},\{1,3,0,2\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{2,3,0,1\},\{2,3,1,0\},\n    \{1,0,2,3\},\{1,0,3,2\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{2,0,3,1\},\{0,0,0,0\},\{2,1,3,0\},\n    \{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\n    \{2,0,1,3\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{3,0,1,2\},\{3,0,2,1\},\{0,0,0,0\},\{3,1,2,0\},\n    \{2,1,0,3\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{3,1,0,2\},\{0,0,0,0\},\{3,2,0,1\},\{3,2,1,0\}\n\};\n    int perm\[512] = \{\n        151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,\n        8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,\n        35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,\n        134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,\n        55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208, 89,\n        18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,\n        250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,\n        189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,\n        172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,\n        228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,\n        107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,\n        138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180,\n\n        151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,\n        8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,\n        35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,\n        134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,\n        55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208, 89,\n        18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,\n        250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,\n        189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,\n        172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,\n        228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,\n        107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,\n        138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180\n    \};\n   int grad4\[32]\[4]= \{\n    \{0,1,1,1\},  \{0,1,1,-1\},  \{0,1,-1,1\},  \{0,1,-1,-1\},\n    \{0,-1,1,1\}, \{0,-1,1,-1\}, \{0,-1,-1,1\}, \{0,-1,-1,-1\},\n    \{1,0,1,1\},  \{1,0,1,-1\},  \{1,0,-1,1\},  \{1,0,-1,-1\},\n    \{-1,0,1,1\}, \{-1,0,1,-1\}, \{-1,0,-1,1\}, \{-1,0,-1,-1\},\n    \{1,1,0,1\},  \{1,1,0,-1\},  \{1,-1,0,1\},  \{1,-1,0,-1\},\n    \{-1,1,0,1\}, \{-1,1,0,-1\}, \{-1,-1,0,1\}, \{-1,-1,0,-1\},\n    \{1,1,1,0\},  \{1,1,-1,0\},  \{1,-1,1,0\},  \{1,-1,-1,0\},\n    \{-1,1,1,0\}, \{-1,1,-1,0\}, \{-1,-1,1,0\}, \{-1,-1,-1,0\}\n   \};\n    float F4 = (sqrt(5.0f)-1.0)/4.0;\n    float G4 = (5.0-sqrt(5.0f))/20.0;\n    float n0, n1, n2, n3, n4;\n    float s = (x + y + z + w) * F4;\n    int i = fastfloor(x + s);\n    int j = fastfloor(y + s);\n    int k = fastfloor(z + s);\n    int l = fastfloor(w + s);\n    float t = (i + j + k + l) * G4;\n    float X0 = i - t;\n    float Y0 = j - t;\n    float Z0 = k - t;\n    float W0 = l - t;\n\n    float x0 = x - X0;\n    float y0 = y - Y0;\n    float z0 = z - Z0;\n    float w0 = w - W0;\n    int c1 = (x0 > y0) ? 32 : 0;\n    int c2 = (x0 > z0) ? 16 : 0;\n    int c3 = (y0 > z0) ? 8 : 0;\n    int c4 = (x0 > w0) ? 4 : 0;\n    int c5 = (y0 > w0) ? 2 : 0;\n    int c6 = (z0 > w0) ? 1 : 0;\n    int c = c1 + c2 + c3 + c4 + c5 + c6;\n\n    int i1, j1, k1, l1;\n    int i2, j2, k2, l2;\n    int i3, j3, k3, l3;\n    i1 = simplex\[c]\[0]>=3 ? 1 : 0;\n    j1 = simplex\[c]\[1]>=3 ? 1 : 0;\n    k1 = simplex\[c]\[2]>=3 ? 1 : 0;\n    l1 = simplex\[c]\[3]>=3 ? 1 : 0;\n    i2 = simplex\[c]\[0]>=2 ? 1 : 0;\n    j2 = simplex\[c]\[1]>=2 ? 1 : 0;\n    k2 = simplex\[c]\[2]>=2 ? 1 : 0;\n    l2 = simplex\[c]\[3]>=2 ? 1 : 0;\n    i3 = simplex\[c]\[0]>=1 ? 1 : 0;\n    j3 = simplex\[c]\[1]>=1 ? 1 : 0;\n    k3 = simplex\[c]\[2]>=1 ? 1 : 0;\n    l3 = simplex\[c]\[3]>=1 ? 1 : 0;\n    float x1 = x0 - i1 + G4;\n    float y1 = y0 - j1 + G4;\n    float z1 = z0 - k1 + G4;\n    float w1 = w0 - l1 + G4;\n    float x2 = x0 - i2 + 2.0*G4;\n    float y2 = y0 - j2 + 2.0*G4;\n    float z2 = z0 - k2 + 2.0*G4;\n    float w2 = w0 - l2 + 2.0*G4;\n    float x3 = x0 - i3 + 3.0*G4;\n    float y3 = y0 - j3 + 3.0*G4;\n    float z3 = z0 - k3 + 3.0*G4;\n    float w3 = w0 - l3 + 3.0*G4;\n    float x4 = x0 - 1.0 + 4.0*G4;\n    float y4 = y0 - 1.0 + 4.0*G4;\n    float z4 = z0 - 1.0 + 4.0*G4;\n    float w4 = w0 - 1.0 + 4.0*G4;\n    int ii = i & 255;\n    int jj = j & 255;\n    int kk = k & 255;\n    int ll = l & 255;\n    int gi0 = perm\[ii+perm\[jj+perm\[kk+perm\[ll]]]] % 32;\n    int gi1 = perm\[ii+i1+perm\[jj+j1+perm\[kk+k1+perm\[ll+l1]]]] % 32;\n    int gi2 = perm\[ii+i2+perm\[jj+j2+perm\[kk+k2+perm\[ll+l2]]]] % 32;\n    int gi3 = perm\[ii+i3+perm\[jj+j3+perm\[kk+k3+perm\[ll+l3]]]] % 32;\n    int gi4 = perm\[ii+1+perm\[jj+1+perm\[kk+1+perm\[ll+1]]]] % 32;\n    float t0 = 0.6 - x0*x0 - y0*y0 - z0*z0 - w0*w0;\n    if(t0<0) n0 = 0.0;\n    else \{\n        t0 *= t0;\n        n0 = t0 * t0 * dot(float4(grad4\[gi0]\[0],grad4\[gi0]\[2],grad4\[gi0]\[3],grad4\[gi0]\[3]), float4(x0, y0, z0, w0));\n    \}\n    float t1 = 0.6 - x1*x1 - y1*y1 - z1*z1 - w1*w1;\n    if(t1<0) n1 = 0.0;\n    else \{\n        t1 *= t1;\n        n1 = t1 * t1 * dot(float4(grad4\[gi1]\[0],grad4\[gi1]\[2],grad4\[gi1]\[3],grad4\[gi1]\[3]), float4(x1, y1, z1, w1));\n    \}\n    float t2 = 0.6 - x2*x2 - y2*y2 - z2*z2 - w2*w2;\n    if(t2<0) n2 = 0.0;\n    else \{\n        t2 *= t2;\n        n2 = t2 * t2 * dot(float4(grad4\[gi2]\[0],grad4\[gi2]\[2],grad4\[gi2]\[3],grad4\[gi2]\[3]), float4(x2, y2, z2, w2));\n    \}\n    float t3 = 0.6 - x3*x3 - y3*y3 - z3*z3 - w3*w3;\n    if(t3<0) n3 = 0.0;\n    else \{\n        t3 *= t3;\n        n3 = t3 * t3 * dot(float4(grad4\[gi3]\[0],grad4\[gi3]\[2],grad4\[gi3]\[3],grad4\[gi3]\[3]), float4(x3, y3, z3, w3));\n    \}\n    float t4 = 0.6 - x4*x4 - y4*y4 - z4*z4 - w4*w4;\n    if(t4<0) n4 = 0.0;\n    else \{\n        t4 *= t4;\n        n4 = t4 * t4 * dot(float4(grad4\[gi4]\[0],grad4\[gi4]\[2],grad4\[gi4]\[3],grad4\[gi4]\[3]), float4(x4, y4, z4, w4));\n    \}\n    return 27.0 * (n0 + n1 + n2 + n3 + n4);\n\}\n\ninline float octave_noise_4d( const float octaves, const float persistence, const float scale, const float x, const float y, const float z, const float w ) \n\{\n    float total = 0;\n    float frequency = scale;\n    float amplitude = 1;\n    float maxAmplitude = 0;\n    for( int i=0; i < octaves; i++ ) \{\n        total += (float)raw_noise_4d( x * frequency, y * frequency, z * frequency, w * frequency ) * amplitude;\n\n        frequency *= 2;\n        maxAmplitude += amplitude;\n        amplitude *= persistence;\n    \}\n    return float(total / maxAmplitude);\n\}\n\nkernel GodRaysProjectorVolumeKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeNone> src; // the input image\n  Image<eWrite, eAccessRandom, eEdgeNone> dst; // the output image\n\n  param:\n\n    //projection cam world matrix\n    float4x4 renderCamMatrix;\n\n    //projection cam settings\n    float renderCamFocal;\n    float renderCamHaperture;\n    float renderCamVaperture;\n\n\n    //projection cam world matrix\n    float4x4 projCamMatrix;\n\n    //projection cam settings\n    float projCamFocal;\n    float projCamHaperture;\n    float projCamVaperture;\n\n    //distance of card from camera\n    float depthMin;\n    float depthMax;\n\n    //number of samples\n    int iterations;\n    float projDistSkew;\n\n    //darken at source\n    bool EnableSourceDarken;\n\n    //4D noise settings\n    float NoiseOctaves;\n    float NoisePersistence; \n    float NoiseScale; \n    float NoiseSeed;\n    float NoiseGamma;\n    float4x4 axisMatrix;\n    bool EnableNoise;\n    float NoiseMix;\n\n    //to, from, gamma\n    float4 toColour;\n    float4 fromColour;\n    float4 toFromGamma;\n\n\n  local:\n\n    float2 resolution;\n    \n    float4 nearPosData;\n    float4 farPosData;\n    float4 posData;\n\n    float4 imageMult;\n    float4 NoisePosData;\n    float2 cardInfo;\n    \n\n  void define() \{\n    \n  \}\n\n  void init() \{\n\n    //defining resolution\n    resolution.x = src.bounds.width();\n    resolution.y = src.bounds.height();      \n    \n  \}\n\n  void process(int2 pos) \{\n    \n    float NoiseOutput;\n\n    //uses camera information to create virtual card\n    cardInfo.x = ((((pos.x+.5f))/resolution.x-.5f)*projCamHaperture/projCamFocal);\n    cardInfo.y = ((((pos.y+.5f))/resolution.y-.5f)*(resolution.y/resolution.x)*projCamHaperture/projCamFocal);\n\n    //creating near virtual card\n    nearPosData.x = cardInfo.x*depthMin;\n    nearPosData.y = cardInfo.y*depthMin;\n    nearPosData.z = -depthMin;  \n\n    //creating far virtual card\n    farPosData.x = cardInfo.x*depthMax;\n    farPosData.y = cardInfo.y*depthMax;\n    farPosData.z = -depthMax; \n\n\n    //looping for each iterations\n    for(int i = 0; i < iterations; i++)\{\n\n      //iterating from min to max deep over time\n      posData = iterations == 1 ? nearPosData : nearPosData + (farPosData - nearPosData)*pow(float(i)/(iterations-1.0f),projDistSkew);           \n\n      //transforming card using projection cam\n      posData = matrixTransform(posData, projCamMatrix);\n\n      //calculating 4D noise\n      if(EnableNoise == 1)\{\n        NoisePosData = matrixTransform(posData, axisMatrix.invert());\n\n        NoiseOutput = octave_noise_4d(NoiseOctaves, NoisePersistence, NoiseScale, NoisePosData.x, NoisePosData.y, NoisePosData.z, NoiseSeed); \n        NoiseOutput = (NoiseOutput+1.0f)/2.0f;\n      \}\n\n      //transforming card using render cam\n      posData = matrixTransform(posData, renderCamMatrix.invert());\n\n      //creating screenspace UV coordinates using render cam data\n      posData = matrixToScreenspace(posData, renderCamFocal, renderCamHaperture, renderCamVaperture, resolution);\n\n            \n      //multiplier for output image\n      imageMult = 1.0f;\n\n      //4DNoise\n      if(EnableNoise == 1)\{\n        imageMult *= 1.0f+(pow(((NoiseOutput+1.0f)/2.0f), 1.0f/NoiseGamma)-1.0f)*NoiseMix;\n      \}\n\n      //darken at source\n      if(EnableSourceDarken == 1)\{\n        imageMult *= pow((i+1.0f)/iterations,0.5f);\n      \}\n\n      //to-from colour\n      imageMult *= pow((fromColour + (toColour - fromColour)*float(i)/(iterations-1.0f)),1.0f/toFromGamma);\n\n      //iterations average\n      imageMult /= iterations;\n\n      //mults image with modifier \n      imageMult = src()*imageMult;\n\n      //assigns pixel values within image bounds\n      if(posData.x <= (resolution.x) && posData.x >= 0.0f && posData.y <= (resolution.y) && posData.y >= 0.0f) \{  \n        dst(posData.x, posData.y) += imageMult;\n      \}   \n      \n\n    \}\n\n  \}\n\};\n"
+  useGPUIfAvailable false
+  rebuild ""
+  GodRaysProjectorVolumeKernel_renderCamMatrix {
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+    }
+  GodRaysProjectorVolumeKernel_renderCamFocal {{parent.DummyRenderCam.focal}}
+  GodRaysProjectorVolumeKernel_renderCamHaperture {{parent.DummyRenderCam.haperture}}
+  GodRaysProjectorVolumeKernel_renderCamVaperture {{parent.DummyRenderCam.vaperture}}
+  GodRaysProjectorVolumeKernel_projCamMatrix {
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+    }
+  GodRaysProjectorVolumeKernel_projCamFocal {{parent.DummyProjCam.focal}}
+  GodRaysProjectorVolumeKernel_projCamHaperture {{parent.DummyProjCam.haperture x37 0.976}}
+  GodRaysProjectorVolumeKernel_projCamVaperture {{parent.DummyProjCam.vaperture}}
+  GodRaysProjectorVolumeKernel_depthMin 1
+  GodRaysProjectorVolumeKernel_depthMax 10
+  GodRaysProjectorVolumeKernel_iterations 10
+  GodRaysProjectorVolumeKernel_projDistSkew 1
+  GodRaysProjectorVolumeKernel_EnableSourceDarken true
+  GodRaysProjectorVolumeKernel_NoiseOctaves 1
+  GodRaysProjectorVolumeKernel_NoisePersistence 0.5
+  GodRaysProjectorVolumeKernel_NoiseScale 1
+  GodRaysProjectorVolumeKernel_NoiseGamma 0.25
+  GodRaysProjectorVolumeKernel_axisMatrix {
+      {{parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix}}
+      {{parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix}}
+      {{parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix}}
+      {{parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix} {parent.Axis1.world_matrix}}
+    }
+  GodRaysProjectorVolumeKernel_NoiseMix 1
+  GodRaysProjectorVolumeKernel_toColour 1
+  GodRaysProjectorVolumeKernel_fromColour 1
+  GodRaysProjectorVolumeKernel_toFromGamma 0.5
+  rebuild_finalise ""
+  name BlinkScript1
+  xpos 254
+  ypos 220
+ }
+ Multiply {
+  channels rgba
+  value 4
+  name Multiply1
+  xpos 254
+  ypos 280
+  disable {{1-parent.BlinkScript1.useGPUIfAvailable}}
+ }
+ Clamp {
+  channels alpha
+  minimum_enable false
+  name Clamp1
+  xpos 254
+  ypos 306
+  disable {{1-clampAlpha}}
+  addUserKnob {20 User}
+  addUserKnob {6 clampAlpha l "clamp alpha" +STARTLINE}
+  clampAlpha true
+ }
+ GodRays {
+  channels rgba
+  scale {{1+parallelScaleBlur}}
+  center {{parent.Reconcile3D1.output} {parent.Reconcile3D1.output}}
+  steps 8
+  name GodRays1
+  xpos 254
+  ypos 391
+  disable {{scale==1}}
+  addUserKnob {20 User}
+  addUserKnob {6 bidirectional +STARTLINE}
+  bidirectional true
+  addUserKnob {7 parallelScaleBlur l "parallel scale blur"}
+ }
+ GodRays {
+  channels rgba
+  scale {{1/parent.GodRays1.scale}}
+  center {{parent.GodRays1.center} {parent.GodRays1.center}}
+  steps 8
+  name GodRays2
+  xpos 254
+  ypos 417
+  disable {{"max(parent.GodRays1.disable, 1-GodRays1.bidirectional)" x5 1}}
+ }
+ Blur {
+  channels rgba
+  name Blur1
+  xpos 254
+  ypos 491
+  disable {{"size == 0"}}
+  addUserKnob {20 User}
+  addUserKnob {6 blurShadow l "blur shadow" +STARTLINE}
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  bbox B
+  name Merge1
+  xpos 254
+  ypos 656
+  disable {{1-enableShadow}}
+  addUserKnob {20 User}
+  addUserKnob {6 enableShadow l "enable shadow" +STARTLINE}
+ }
+ Dot {
+  name Dot3
+  xpos 288
+  ypos 709
+ }
+set N602aa800 [stack 0]
+ Dot {
+  name Dot2
+  xpos -291
+  ypos 709
+ }
+push $N62544c00
+ Dot {
+  name Dot7
+  xpos -410
+  ypos 155
+ }
+set N602aa000 [stack 0]
+ Dot {
+  name Dot8
+  xpos -548
+  ypos 155
+ }
+ BlinkScript {
+  recompileCount 149
+  ProgramGroup 1
+  KernelDescription "2 \"GodRaysProjectorDeepBackKernel\" iterate pixelWise b2d9280d746340d99b0c7d6e1708f2c867926bf38e3e6d63f84aa6bfe80deed0 2 \"src\" Read Point \"dst\" Write Random 12 \"renderCamMatrix\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"renderCamFocal\" Float 1 AAAAAA== \"renderCamHaperture\" Float 1 AAAAAA== \"renderCamVaperture\" Float 1 AAAAAA== \"projCamMatrix\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"projCamFocal\" Float 1 AAAAAA== \"projCamHaperture\" Float 1 AAAAAA== \"projCamVaperture\" Float 1 AAAAAA== \"depthMin\" Float 1 AAAAAA== \"depthMax\" Float 1 AAAAAA== \"iterations\" Int 1 AAAAAA== \"projDistSkew\" Float 1 AAAAAA== 12 \"renderCamMatrix\" 16 1 \"renderCamFocal\" 1 1 \"renderCamHaperture\" 1 1 \"renderCamVaperture\" 1 1 \"projCamMatrix\" 16 1 \"projCamFocal\" 1 1 \"projCamHaperture\" 1 1 \"projCamVaperture\" 1 1 \"depthMin\" 1 1 \"depthMax\" 1 1 \"iterations\" 1 1 \"projDistSkew\" 1 1 2 \"resolution\" Float 2 1 AAAAAAAAAAA= \"posData\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "inline float4 matrixTransform(float4 image, float4x4 matrix)\{\n\n    float4 matrixTransformsOutput;\n\n    matrixTransformsOutput.x = image.x * matrix\[0]\[0] + image.y * matrix\[0]\[1] + image.z * matrix\[0]\[2] + matrix\[0]\[3];\n    matrixTransformsOutput.y = image.x * matrix\[1]\[0] + image.y * matrix\[1]\[1] + image.z * matrix\[1]\[2] + matrix\[1]\[3];\n    matrixTransformsOutput.z = image.x * matrix\[2]\[0] + image.y * matrix\[2]\[1] + image.z * matrix\[2]\[2] + matrix\[2]\[3];\n    matrixTransformsOutput.w = image.x * matrix\[3]\[0] + image.y * matrix\[3]\[1] + image.z * matrix\[3]\[2] + matrix\[3]\[3];\n\n\n    return matrixTransformsOutput;\n\n\}\n\ninline float4 matrixToScreenspace(float4 image, float focal, float haperture, float vaperture, int2 resolution)\{\n\n    image.x = 0.5f - ((image.x) * (focal/haperture))/image.z;\n    image.y = 0.5f - ((image.y) * (focal/vaperture))/image.z;\n    image.z = -image.z;\n\n    image.x = image.x * (resolution.x) - 1.0f;\n    image.y = image.y * (resolution.y) - 1.0f;\n\n\n    return image;\n\n\}\n\nkernel GodRaysProjectorDeepBackKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeNone> src; // the input image\n  Image<eWrite, eAccessRandom> dst; // the output image\n\n  param:\n\n    //projection cam world matrix\n    float4x4 renderCamMatrix;\n\n    //projection cam settings\n    float renderCamFocal;\n    float renderCamHaperture;\n    float renderCamVaperture;\n\n\n    //projection cam world matrix\n    float4x4 projCamMatrix;\n\n    //projection cam settings\n    float projCamFocal;\n    float projCamHaperture;\n    float projCamVaperture;\n\n    //distance of card from camera\n    float depthMin;\n    float depthMax;\n\n    //number of samples\n    int iterations;\n    float projDistSkew;\n\n  local:\n\n    float2 resolution;\n    float4 posData;\n\n  void define() \{\n    \n  \}\n\n  void init() \{\n\n    //defining resolution\n    resolution.x = src.bounds.width();\n    resolution.y = src.bounds.height();   \n    \n  \}\n\n  void process(int2 pos) \{\n    \n    float Z;\n    \n\n\n    //looping for each iterations\n    for(int i = 0; i < iterations; i++)\{\n\n      //iterating from min to max deep over time\n      Z = iterations == 1 ? depthMin : depthMin + (depthMax - depthMin)*pow(float(i)/(iterations-1.0f),projDistSkew);    \n\n      //creating virtual card\n      posData.x = ((((pos.x+.5f))/resolution.x-.5f)*projCamHaperture/projCamFocal)*Z;\n      posData.y = ((((pos.y+.5f))/resolution.y-.5f)*(resolution.y/resolution.x)*projCamHaperture/projCamFocal)*Z;\n      posData.z = -Z;  \n\n      //transforming card using projection cam\n      posData = matrixTransform(posData, projCamMatrix);      \n\n      //transforming card using render cam\n      posData = matrixTransform(posData, renderCamMatrix.invert());\n\n      //creating screenspace UV coordinates using render cam data\n      posData = matrixToScreenspace(posData, renderCamFocal, renderCamHaperture, renderCamVaperture, resolution);        \n\n      //assigns depth data if it is closer than current value\n      if(posData.x <= (resolution.x) && posData.x >= 0.0f && posData.y <= (resolution.y) && posData.y >= 0.0f) \{\n        dst(posData.x, posData.y) = dst(posData.x, posData.y).x == 0.0f || dst(posData.x, posData.y).x < posData.z ? posData.z : dst(posData.x, posData.y).x;  \n      \}\n\n    \}\n\n  \}\n\};\n"
+  useGPUIfAvailable {{parent.BlinkScript1.useGPUIfAvailable}}
+  vectorize {{parent.BlinkScript1.vectorize}}
+  rebuild ""
+  GodRaysProjectorDeepBackKernel_renderCamMatrix {
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+    }
+  GodRaysProjectorDeepBackKernel_renderCamFocal {{parent.DummyRenderCam.focal}}
+  GodRaysProjectorDeepBackKernel_renderCamHaperture {{parent.DummyRenderCam.haperture}}
+  GodRaysProjectorDeepBackKernel_renderCamVaperture {{parent.DummyRenderCam.vaperture}}
+  GodRaysProjectorDeepBackKernel_projCamMatrix {
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+    }
+  GodRaysProjectorDeepBackKernel_projCamFocal {{parent.DummyProjCam.focal}}
+  GodRaysProjectorDeepBackKernel_projCamHaperture {{parent.DummyProjCam.haperture}}
+  GodRaysProjectorDeepBackKernel_projCamVaperture {{parent.DummyProjCam.vaperture}}
+  GodRaysProjectorDeepBackKernel_depthMin {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_depthMin}}
+  GodRaysProjectorDeepBackKernel_depthMax {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_depthMax}}
+  GodRaysProjectorDeepBackKernel_iterations {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_iterations}}
+  GodRaysProjectorDeepBackKernel_projDistSkew {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projDistSkew}}
+  rebuild_finalise ""
+  name BlinkScript4
+  label "deep back"
+  xpos -582
+  ypos 246
+ }
+ Dot {
+  name Dot6
+  xpos -548
+  ypos 362
+ }
+push $N602aa000
+ BlinkScript {
+  recompileCount 150
+  ProgramGroup 1
+  KernelDescription "2 \"GodRaysProjectorDeepFrontKernel\" iterate pixelWise db8732d7db620ffee3a5d75c1843aeeff690d4bc4ef2286e6d3285d82ce4d06f 2 \"src\" Read Point \"dst\" Write Random 12 \"renderCamMatrix\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"renderCamFocal\" Float 1 AAAAAA== \"renderCamHaperture\" Float 1 AAAAAA== \"renderCamVaperture\" Float 1 AAAAAA== \"projCamMatrix\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"projCamFocal\" Float 1 AAAAAA== \"projCamHaperture\" Float 1 AAAAAA== \"projCamVaperture\" Float 1 AAAAAA== \"depthMin\" Float 1 AAAAAA== \"depthMax\" Float 1 AAAAAA== \"iterations\" Int 1 AAAAAA== \"projDistSkew\" Float 1 AAAAAA== 12 \"renderCamMatrix\" 16 1 \"renderCamFocal\" 1 1 \"renderCamHaperture\" 1 1 \"renderCamVaperture\" 1 1 \"projCamMatrix\" 16 1 \"projCamFocal\" 1 1 \"projCamHaperture\" 1 1 \"projCamVaperture\" 1 1 \"depthMin\" 1 1 \"depthMax\" 1 1 \"iterations\" 1 1 \"projDistSkew\" 1 1 2 \"resolution\" Float 2 1 AAAAAAAAAAA= \"posData\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "inline float4 matrixTransform(float4 image, float4x4 matrix)\{\n\n    float4 matrixTransformsOutput;\n\n    matrixTransformsOutput.x = image.x * matrix\[0]\[0] + image.y * matrix\[0]\[1] + image.z * matrix\[0]\[2] + matrix\[0]\[3];\n    matrixTransformsOutput.y = image.x * matrix\[1]\[0] + image.y * matrix\[1]\[1] + image.z * matrix\[1]\[2] + matrix\[1]\[3];\n    matrixTransformsOutput.z = image.x * matrix\[2]\[0] + image.y * matrix\[2]\[1] + image.z * matrix\[2]\[2] + matrix\[2]\[3];\n    matrixTransformsOutput.w = image.x * matrix\[3]\[0] + image.y * matrix\[3]\[1] + image.z * matrix\[3]\[2] + matrix\[3]\[3];\n\n\n    return matrixTransformsOutput;\n\n\}\n\ninline float4 matrixToScreenspace(float4 image, float focal, float haperture, float vaperture, int2 resolution)\{\n\n    image.x = 0.5f - ((image.x) * (focal/haperture))/image.z;\n    image.y = 0.5f - ((image.y) * (focal/vaperture))/image.z;\n    image.z = -image.z;\n\n    image.x = image.x * (resolution.x) - 1.0f;\n    image.y = image.y * (resolution.y) - 1.0f;\n\n\n    return image;\n\n\}\n\nkernel GodRaysProjectorDeepFrontKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeNone> src; // the input image\n  Image<eWrite, eAccessRandom> dst; // the output image\n\n  param:\n\n    //projection cam world matrix\n    float4x4 renderCamMatrix;\n\n    //projection cam settings\n    float renderCamFocal;\n    float renderCamHaperture;\n    float renderCamVaperture;\n\n\n    //projection cam world matrix\n    float4x4 projCamMatrix;\n\n    //projection cam settings\n    float projCamFocal;\n    float projCamHaperture;\n    float projCamVaperture;\n\n    //distance of card from camera\n    float depthMin;\n    float depthMax;\n\n    //number of samples\n    int iterations;\n    float projDistSkew;\n\n  local:\n\n    float2 resolution;\n    float4 posData;\n\n  void define() \{\n    \n  \}\n\n  void init() \{\n\n    //defining resolution\n    resolution.x = src.bounds.width();\n    resolution.y = src.bounds.height();   \n    \n  \}\n\n  void process(int2 pos) \{\n    \n    float Z;\n    \n\n\n    //looping for each iterations\n    for(int i = 0; i < iterations; i++)\{\n\n      //iterating from min to max deep over time\n      Z = iterations == 1 ? depthMin : depthMin + (depthMax - depthMin)*pow(float(i)/(iterations-1.0f),projDistSkew);    \n\n      //creating virtual card\n      posData.x = ((((pos.x+.5f))/resolution.x-.5f)*projCamHaperture/projCamFocal)*Z;\n      posData.y = ((((pos.y+.5f))/resolution.y-.5f)*(resolution.y/resolution.x)*projCamHaperture/projCamFocal)*Z;\n      posData.z = -Z;  \n\n      //transforming card using projection cam\n      posData = matrixTransform(posData, projCamMatrix);      \n\n      //transforming card using render cam\n      posData = matrixTransform(posData, renderCamMatrix.invert());\n\n      //creating screenspace UV coordinates using render cam data\n      posData = matrixToScreenspace(posData, renderCamFocal, renderCamHaperture, renderCamVaperture, resolution);        \n\n      //assigns depth data if it is closer than current value\n      if(posData.x <= (resolution.x) && posData.x >= 0.0f && posData.y <= (resolution.y) && posData.y >= 0.0f) \{\n        dst(posData.x, posData.y) = dst(posData.x, posData.y).x == 0.0f || dst(posData.x, posData.y).x > posData.z ? posData.z : dst(posData.x, posData.y).x;  \n      \}\n\n    \}\n\n  \}\n\};\n"
+  useGPUIfAvailable {{parent.BlinkScript1.useGPUIfAvailable}}
+  vectorize {{parent.BlinkScript1.vectorize}}
+  rebuild ""
+  GodRaysProjectorDeepFrontKernel_renderCamMatrix {
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+      {{parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix} {parent.DummyRenderCam.world_matrix}}
+    }
+  GodRaysProjectorDeepFrontKernel_renderCamFocal {{parent.DummyRenderCam.focal}}
+  GodRaysProjectorDeepFrontKernel_renderCamHaperture {{parent.DummyRenderCam.haperture}}
+  GodRaysProjectorDeepFrontKernel_renderCamVaperture {{parent.DummyRenderCam.vaperture}}
+  GodRaysProjectorDeepFrontKernel_projCamMatrix {
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+      {{parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix} {parent.DummyProjCam.world_matrix}}
+    }
+  GodRaysProjectorDeepFrontKernel_projCamFocal {{parent.DummyProjCam.focal}}
+  GodRaysProjectorDeepFrontKernel_projCamHaperture {{parent.DummyProjCam.haperture}}
+  GodRaysProjectorDeepFrontKernel_projCamVaperture {{parent.DummyProjCam.vaperture}}
+  GodRaysProjectorDeepFrontKernel_depthMin {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_depthMin}}
+  GodRaysProjectorDeepFrontKernel_depthMax {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_depthMax}}
+  GodRaysProjectorDeepFrontKernel_iterations {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_iterations}}
+  GodRaysProjectorDeepFrontKernel_projDistSkew {{parent.BlinkScript1.GodRaysProjectorVolumeKernel_projDistSkew}}
+  rebuild_finalise ""
+  name BlinkScript3
+  label "deep front"
+  xpos -444
+  ypos 248
+ }
+ Expression {
+  channel0 none
+  channel1 none
+  channel2 none
+  channel3 alpha
+  expr3 "r != 0 || g != 0"
+  name Expression1
+  xpos -444
+  ypos 300
+ }
+ Copy {
+  inputs 2
+  from0 rgba.green
+  to0 rgba.green
+  name Copy1
+  xpos -444
+  ypos 352
+ }
+ Remove {
+  operation keep
+  channels {rgba.red rgba.green -rgba.blue rgba.alpha}
+  name Remove1
+  xpos -444
+  ypos 390
+ }
+ FilterErode {
+  channels rgba
+  size -3
+  name FilterErode1
+  xpos -444
+  ypos 468
+  disable {{parent.GodRays1.disable x5 1}}
+ }
+ GodRays {
+  channels {rgba.red rgba.green -rgba.blue rgba.alpha}
+  scale {{parent.GodRays1.scale}}
+  center {{parent.GodRays1.center} {parent.GodRays1.center}}
+  steps 8
+  max true
+  name GodRays3
+  xpos -444
+  ypos 494
+  disable {{scale==1}}
+ }
+ GodRays {
+  channels {rgba.red rgba.green -rgba.blue rgba.alpha}
+  scale {{1/parent.GodRays3.scale}}
+  center {{parent.GodRays1.center} {parent.GodRays1.center}}
+  steps 8
+  max true
+  name GodRays4
+  xpos -444
+  ypos 532
+  disable {{parent.GodRays2.disable x5 1}}
+ }
+ Blur {
+  channels rgba
+  size {{parent.Blur1.size}}
+  name Blur3
+  xpos -444
+  ypos 588
+  disable {{parent.Blur1.disable}}
+  addUserKnob {20 User}
+  addUserKnob {6 blurShadow l "blur shadow" +STARTLINE}
+ }
+ Unpremult {
+  channels {rgba.red rgba.green -rgba.blue none}
+  name Unpremult1
+  xpos -444
+  ypos 614
+  disable {{"Blur1.size == 0 "}}
+ }
+ DeepFromImage {
+  premult true
+  name DeepFromImage1
+  xpos -444
+  ypos 661
+ }
+ DeepExpression {
+  chans1 deep
+  deep.front r
+  deep.back g
+  name DeepExpression1
+  xpos -444
+  ypos 687
+ }
+ Dot {
+  name Dot5
+  xpos -410
+  ypos 793
+ }
+ DeepRecolor {
+  inputs 2
+  targetInputAlpha true
+  name DeepRecolor1
+  xpos -325
+  ypos 789
+ }
+ DeepReformat {
+  type "to box"
+  box_width {{Reformat1.input0.width}}
+  box_height {{Reformat1.input0.height}}
+  box_fixed true
+  scale {{1/parent.Reformat1.scale} {1/parent.Reformat1.scale}}
+  pbb true
+  name DeepReformat1
+  xpos -325
+  ypos 815
+  disable {{parent.Reformat1.disable}}
+ }
+ Dot {
+  name Dot1
+  xpos -291
+  ypos 863
+ }
+push $N602aa800
+ Reformat {
+  type "to box"
+  box_width {{Reformat1.input0.width}}
+  box_height {{Reformat1.input0.height}}
+  box_fixed true
+  scale {{1/parent.Reformat1.scale} {1/parent.Reformat1.scale}}
+  filter notch
+  name Reformat2
+  xpos 254
+  ypos 782
+  disable {{parent.Reformat1.disable}}
+ }
+ Switch {
+  inputs 2
+  which {{"parent.outputMode == 1"}}
+  name Switch1
+  label "deep output switch"
+  xpos 254
+  ypos 853
+ }
+ Switch {
+  inputs 2
+  which {{"parent.outputMode == 2"}}
+  name Switch2
+  label "shadow only switch"
+  xpos 254
+  ypos 961
+ }
+ Output {
+  name Output1
+  xpos 254
+  ypos 1101
+ }
+ Group {
+  inputs 0
+  name GetGPUName
+  label "This just grabs the GPU name"
+  xpos 529
+  ypos 28
+  disable true
+  addUserKnob {20 GodRaysProjectorVolumeKernel}
+  addUserKnob {41 "Local GPU: " T BlinkScript1.gpuName}
+  addUserKnob {41 "Use GPU if Available" T BlinkScript1.useGPUIfAvailable}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 84
+   ypos 418
+  }
+  BlinkScript {
+   recompileCount 201
+   ProgramGroup 1
+   KernelDescription "2 \"BlankKernel\" iterate pixelWise 555f8bedff5787bfff38741a5cf42e9ba1f3e68c81d54c15322b81680fbf2e6e 2 \"src\" Read Point \"dst\" Write Point 0 0 0"
+   kernelSource "\nkernel BlankKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src; // the input image\n  Image<eWrite> dst; // the output image\n  void process() \{\n    \n    // Write the result to the output image\n    dst() = src();\n  \}\n\};\n"
+   useGPUIfAvailable false
+   rebuild ""
+   rebuild_finalise ""
+   name BlinkScript1
+   xpos 84
+   ypos 478
+   disable true
+  }
+  Output {
+   name Output1
+   xpos 84
+   ypos 558
+  }
+ end_group
+ Axis2 {
+  inputs 0
+  name Axis1
+  label "4D Noise Transform"
+  xpos 522
+  ypos 189
+ }
+ Input {
+  inputs 0
+  name projectionCam
+  xpos -33
+  ypos -40
+  number 2
+ }
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {{"\[expression \[value the_cam]far(\[value the_frame])]"}}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyProjCam
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nadrianpueyo.com, 2019-2020"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  label projCam
+  xpos -23
+  ypos 3
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam +INVISIBLE}
+  the_cam "\[\n#DummyCam v1.1. Updated 5 April 2020.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame +INVISIBLE}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 50
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 24.576
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 0.1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 10000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 April 2020" T "<span style=\"color:#666\"><br/><b>DummyCam v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2020</span>"}
+ }
+ Dot {
+  name Dot9
+  xpos 1
+  ypos 324
+ }
+ Input {
+  inputs 0
+  name renderCam
+  xpos 63
+  ypos -41
+  number 1
+ }
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {{"\[expression \[value the_cam]far(\[value the_frame])]"}}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyRenderCam
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nadrianpueyo.com, 2019-2020"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  label renderCam
+  xpos 73
+  ypos 4
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam +INVISIBLE}
+  the_cam "\[\n#DummyCam v1.1. Updated 5 April 2020.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame +INVISIBLE}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 50
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 24.576
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 0.1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 10000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 April 2020" T "<span style=\"color:#666\"><br/><b>DummyCam v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2020</span>"}
+ }
+push $N62544c00
+ Reconcile3D {
+  inputs 3
+  calc_output true
+  name Reconcile3D1
+  label "calculates the 2D screenspace coordinate of the projection cam"
+  xpos 63
+  ypos 307
+  disable {{parent.GodRays1.disable x1 1}}
+ }
+push $N32615c00
+ Viewer {
+  frame_range 1-100
+  name Viewer1
+  xpos 254
+  ypos 130
+ }
+end_group

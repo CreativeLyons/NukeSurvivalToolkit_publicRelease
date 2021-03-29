@@ -1,0 +1,204 @@
+Group {
+ name RayDeepAO
+ onCreate "\nthisGRP = nuke.thisGroup()\nfor knob in thisGRP.knobs() :\n    try :\n        if knob.split('_')\[1] == 'panelDropped' :\n            thisGRP.removeKnob( thisGRP\[knob] )\n    except :\n        pass\n"
+ tile_color 0xffee00ff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {41 use_texture l "use texture" t "The 5th input is the texture for main scene (msc). Texture need to be UV space" T menu01.use_texture}
+ addUserKnob {18 diffuse_color l "diffuse color"}
+ diffuse_color 1
+ addUserKnob {6 diffuse_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 t_ao l "ambient occlusion" T " "}
+ addUserKnob {41 samples T AmbientOcclusion2.samples}
+ addUserKnob {41 spread T AmbientOcclusion2.spread}
+ addUserKnob {41 falloff T AmbientOcclusion2.falloff}
+ addUserKnob {41 near l "near clip" T AmbientOcclusion2.near}
+ addUserKnob {41 far l "far clip" T AmbientOcclusion2.far}
+ addUserKnob {26 ""}
+ addUserKnob {7 stochastic_samples l "stochastic samples" t "Number of samples per pixel to use in stochastic estimation. Zero disables stochastic sampling. It is recommended for motion blur that the number of scenes to sample (<b>samples</b> knob) is adjusted. This will also provide anti-aliasing by jittering the sample point." R 0 50}
+ addUserKnob {26 ""}
+ addUserKnob {41 output_shader_vectors l "output vectors" T dRender.output_shader_vectors}
+ addUserKnob {41 P_channel l "surface point" T dRender.P_channel}
+ addUserKnob {41 N_channel l "surface normal" T dRender.N_channel}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.1}
+ addUserKnob {26 l_DATE l "Date Modified" T 2019-12-18}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.1<br>-&nbsp;added&nbsp;diffuse&nbsp;color&nbsp;parameter<br>-&nbsp;added&nbsp;use&nbsp;texture&nbsp;input&nbsp;option<br>-&nbsp;added&nbsp;output&nbsp;vectors&nbsp;option&nbsp;in&nbsp;deep<br><br>1.0<br>-&nbsp;render&nbsp;AO&nbsp;in&nbsp;deep&nbsp;with&nbsp;non-renderable&nbsp;objects\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -627
+  ypos -267
+  bdwidth 258
+  bdheight 190
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x4c4c4cff
+  label AO
+  note_font_size 42
+  xpos 1076
+  ypos -161
+  bdwidth 337
+  bdheight 720
+ }
+ Input {
+  inputs 0
+  name cam
+  label "\[value number]"
+  xpos -46
+  ypos -352
+  number 1
+ }
+ Dot {
+  name Dot3
+  xpos -12
+  ypos -259
+ }
+set Nbf344000 [stack 0]
+ Constant {
+  inputs 0
+  format "256 256 0 0 256 256 1 square_256"
+  name Constant5
+  xpos 1275
+  ypos -84
+ }
+ Input {
+  inputs 0
+  name ssc
+  label "\[value number]"
+  xpos 545
+  ypos -352
+  number 3
+ }
+ Dot {
+  name Dot4
+  xpos 579
+  ypos -259
+ }
+ ApplyMaterial {
+  inputs 2
+  name scene_noren_2
+  xpos 1275
+  ypos 322
+ }
+ Input {
+  inputs 0
+  name msc_tex
+  xpos 756
+  ypos -346
+  number 4
+ }
+ Dot {
+  name Dot5
+  xpos 790
+  ypos -259
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.diffuse_color} {parent.diffuse_color} {parent.diffuse_color} {curve}}
+  format "256 256 0 0 256 256 1 square_256"
+  name Constant4
+  xpos 1138
+  ypos -85
+ }
+ Switch {
+  inputs 2
+  which {{parent.use_texture}}
+  name Switch1
+  xpos 1138
+  ypos 38
+ }
+ AmbientOcclusion {
+  samples 16
+  name AmbientOcclusion2
+  xpos 1138
+  ypos 120
+ }
+ Input {
+  inputs 0
+  name msc
+  label "\[value number]"
+  xpos 384
+  ypos -352
+  number 2
+ }
+ Dot {
+  name Dot2
+  xpos 418
+  ypos -259
+ }
+set Nc5edb800 [stack 0]
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial1
+  xpos 1138
+  ypos 319
+ }
+ Scene {
+  inputs 2
+  name mainSC
+  xpos 1148
+  ypos 440
+ }
+ Input {
+  inputs 0
+  name bg
+  label "\[value number]"
+  xpos 121
+  ypos -352
+ }
+ Dot {
+  name Dot1
+  xpos 155
+  ypos -259
+ }
+set Nd0bfc800 [stack 0]
+ RayRender {
+  inputs 3
+  stochastic_samples {{parent.stochastic_samples}}
+  name RayRender1
+  xpos 1138
+  ypos 796
+ }
+push $Nbf344000
+push $Nc5edb800
+push $Nd0bfc800
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  stochastic_samples {{parent.stochastic_samples}}
+  motion_vectors_type off
+  MB_channel none
+  name dRender
+  xpos -46
+  ypos 596
+ }
+ DeepRecolor {
+  inputs 2
+  name DeepRecolor1
+  xpos -46
+  ypos 796
+ }
+ Output {
+  name Output1
+  xpos -46
+  ypos 1114
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['use_texture'].getValue() == 1 :\n    thisGRP\['diffuse_color'].setEnabled(False)\nelse :\n    thisGRP\['diffuse_color'].setEnabled(True)\n"
+  xpos -536
+  ypos -166
+  addUserKnob {20 User}
+  addUserKnob {6 use_texture l "use texture" +STARTLINE}
+ }
+end_group

@@ -1,0 +1,505 @@
+Group {
+ name P_Ramp
+ help "P_Ramp\n\nCreate a ramp in the alpha channel using the render of the Position pass.\n\nThe result mask is create in the Alpha channel.\n"
+ onCreate "if nuke.thisNode()\['created'].value() == False:\n    nuke.thisNode()\['created'].setValue(True)\n        \n    if nuke.thisNode().input(0) is not None:\n        w = nuke.thisNode().input(0).width()\n        h = nuke.thisNode().input(0).height()\n        nuke.thisNode().knob('_Start').setValue((w/2-100, h/2-100))\n        nuke.thisNode().knob('_End').setValue((w/2+100, h/2+100))\n    \n    else:\n        rw = nuke.root().format().width()\n        rh = nuke.root().format().height()\n        nuke.thisNode().knob('_Start').setValue((rw/2-100, rh/2-100))\n        nuke.thisNode().knob('_End').setValue((rw/2+100, rh/2+100))"
+ knobChanged "if nuke.thisKnob().name() == 'axex':\n    nuke.thisNode()\['min_offset'].setValue(0)\n    nuke.thisNode()\['max_offset'].setValue(0)\n\n    xstart, ystart = nuke.thisNode().knob('_Start').value()\n    xend, yend = nuke.thisNode().knob('_End').value()\n    with nuke.thisNode():\n        shuffle = nuke.toNode('Shuffle_input_channel')\n        rs = shuffle.sample('red', xstart, ystart)\n        gs = shuffle.sample('green', xstart, ystart)\n        bs = shuffle.sample('blue', xstart, ystart)\n        re = shuffle.sample('red', xend, yend)\n        ge = shuffle.sample('green', xend, yend)\n        be = shuffle.sample('blue', xend, yend)\n\n        node = nuke.toNode('Color')\n        node.knob('min').setValue(\[rs,gs,bs])\n        node.knob('max').setValue(\[re,ge,be])\n\nif nuke.thisKnob().name() == '_Start':\n    if nuke.root().knob('proxy').value() == True:\n        nuke.message('You have to disable the proxy mode')\n    else:\n        animated = nuke.thisKnob().isAnimated()\n        xPos, yPos =  nuke.thisNode().knob('_Start').value()\n        with nuke.thisNode():\n            node = nuke.toNode('Shuffle_input_channel')\n            r = node.sample('red', xPos, yPos)\n            g = node.sample('green', xPos, yPos)\n            b = node.sample('blue', xPos, yPos)\n    \n            node = nuke.toNode('Color')\n            if animated:\n                if not node.knob('min').isAnimated():\n                    node.knob('min').setAnimated()\n            else:\n                node.knob('min').clearAnimated()\n    \n            node.knob('min').setValue(\[r,g,b])\n\nif nuke.thisKnob().name() == '_End':\n    if nuke.root().knob('proxy').value() == True:\n        nuke.message('You have to disable the proxy mode')\n    else:\n        animated = nuke.thisKnob().isAnimated()\n        xPos, yPos =  nuke.thisNode().knob('_End').value()\n        with nuke.thisNode():\n            node = nuke.toNode('Shuffle_input_channel')\n            r = node.sample('red', xPos, yPos)\n            g = node.sample('green', xPos, yPos)\n            b = node.sample('blue', xPos, yPos)\n    \n            node = nuke.toNode('Color')\n            if animated:\n                if not node.knob('max').isAnimated():\n                    node.knob('max').setAnimated()\n            else:\n                node.knob('max').clearAnimated()\n    \n            node.knob('max').setValue(\[r,g,b])\n\nif nuke.thisKnob().name() in ('matte', 'showPanel'):\n\tinputT = nuke.exists('Alpha')\n\tmode = nuke.thisNode()\['matte'].value()\n\tif mode == 'rgba.alpha':\n\t\tif str(inputT)== 'True':\n\t\t\tn = nuke.toNode('Alpha')\n\t\t\tnuke.delete(n)\n\telse:\n\t\tif str(inputT)== 'False':\n\t\t\tnuke.message('Add New Input in Node')\n\t\t\ti = nuke.createNode('Input', inpanel=False )\n\t\t\ti\['name'].setValue('Alpha')\n\t\t\tn = nuke.toNode('Switch2')\n\t\t\tn.setInput(0,i)\n\nnode = nuke.thisGroup()\nknob = nuke.thisKnob()\n\nif knob.name() == 'visualise':\n    if knob.value():\n        node\['point_detail'].setEnabled(True)\n        node\['point_size'].setEnabled(True)\n        node\['sphere'].setEnabled(True)\n    else:\n        node\['point_detail'].setEnabled(False)\n        node\['point_size'].setEnabled(False)\n        node\['sphere'].setEnabled(False)\n"
+ tile_color 0xdda92aff
+ selected true
+ icon F_iconalpha.png
+ addUserKnob {20 PR l "Position Ramp"}
+ addUserKnob {6 created l INVISIBLE +INVISIBLE +STARTLINE}
+ created true
+ addUserKnob {41 in l "<font color=\"green\">@b;P channel" t "Choose the position pass channel." T Shuffle_input_channel.in}
+ addUserKnob {26 ""}
+ addUserKnob {4 axex l Axe t "Choose the direction of the ramp." M {X Y Z}}
+ addUserKnob {12 _Start l "          Start " t "Set a position.\nIt will be the beginning of the ramp." -STARTLINE}
+ _Start {1604 1000}
+ addUserKnob {26 S01 l " " T "                     "}
+ addUserKnob {12 _End l "End " t "Set a position.\nIt will be the end of the ramp." -STARTLINE}
+ _End {1804 1200}
+ addUserKnob {26 S02 l " "}
+ addUserKnob {7 min_offset l "<font color=\"white\">Start <font color=\"grey\">Offset" t "Offset the position of the beginning of the ramp." R -10 10}
+ addUserKnob {7 max_offset l "<font color=\"white\">End <font color=\"grey\">Offset" t "Offset the position of the end of the ramp." R -10 10}
+ addUserKnob {26 S2 l " " T " "}
+ addUserKnob {4 color l Overlay t "Show on the RGB the resulting mask using the overlay method.\nChoose the color of the overlay mask." M {none red green blue black "" "" ""}}
+ color red
+ addUserKnob {4 falloff l INVISIBLE t "Falloff profile of the feathered edge." +INVISIBLE M {Linear Smoothstep Cubic "Inverse Cubic" "" "" "" "" "" "" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {20 options l "3D Options :" n 1}
+ options 0
+ addUserKnob {6 visualise l "Visualize in 3D" t "Build Volume and Point Cloud in 3D Space." +STARTLINE}
+ addUserKnob {7 point_detail l "Point Detail" t "Controls the number of available points to display in the Viewer. \n0 = No points, 1 = All available points" +DISABLED}
+ point_detail 1
+ addUserKnob {7 point_size l "Point Size" t "Controls the display size of the points in the Viewer" +DISABLED R 0 10}
+ point_size 2
+ addUserKnob {26 S07 l " "}
+ addUserKnob {7 sphere l "(Start - End) Size" t "Adjust the size of the start point and the end point of the ramp." +DISABLED R 0.15 10}
+ sphere 2
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 T01 l "     (Un)Premult by" T ""}
+ addUserKnob {6 premult l "" t "The Position Pass is divide by the Alpha channel before being processed, and multiplied again afterwards. This can improve the texturing of anti-aliased edges." -STARTLINE}
+ addUserKnob {4 matte l "" t "Choose the Alpha channel.\nAlpha is usefull for a better result with clean edge (UnPremult / Premult).\n\nrgba.alpha: \nAutomatic pick the .a from the Input.\n\nrgba.alpha (New Input):\nPick the .a from an other Input." -STARTLINE M {rgba.alpha "rgba.alpha (New Input)" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {1 output l INVISIBLE +INVISIBLE}
+ output "\[if \{\[value visualise]==\"true\"\} \{return \"\[knob this.tile_color 0xa30000ff]\"\}  \{return \"\[knob this.tile_color 0xdda92aff]\"\}]Axe \[value axex]"
+ addUserKnob {26 FT1 l " " T "                                                                                               "}
+ addUserKnob {26 FTools l " " t "FranklinVFX.com\n" -STARTLINE T "<font color=\"#1C1C1C\"> Franklin VFX - 2017"}
+}
+ Input {
+  inputs 0
+  name Position
+  xpos -448
+  ypos -854
+ }
+ Dot {
+  name Dot1
+  xpos -414
+  ypos -771
+ }
+set N6946d990 [stack 0]
+ Dot {
+  name Dot9
+  xpos -708
+  ypos -771
+ }
+set N696aafa0 [stack 0]
+push 0
+ Switch {
+  inputs 2
+  which {{!matte}}
+  name Switch2
+  xpos -1001
+  ypos -774
+ }
+ NoOp {
+  name AlphaCheck
+  xpos -1001
+  ypos -719
+  addUserKnob {20 User}
+  addUserKnob {6 alpha +STARTLINE}
+  alpha {{"\[python \"len(\\\[n for n in nuke.channels(nuke.thisNode().input(0)) if n.find(\\\".a\\\") != -1])>0\"]" i}}
+ }
+ AddChannels {
+  channels rgba
+  name AddAlpha
+  xpos -1001
+  ypos -695
+ }
+ Dot {
+  name Dot11
+  xpos -967
+  ypos -613
+ }
+set N6987be00 [stack 0]
+ Dot {
+  name Dot12
+  xpos -967
+  ypos 673
+ }
+push $N6987be00
+push $N696aafa0
+ Shuffle {
+  in rgb
+  name Shuffle_input_channel
+  knobChanged "if nuke.thisKnob().name() == 'in':\n    xPos, yPos = nuke.thisGroup().knob('_Start').value()\n    r = nuke.thisNode().sample('red', xPos, yPos)\n    g = nuke.thisNode().sample('green', xPos, yPos)\n    b = nuke.thisNode().sample('blue', xPos, yPos)\n    node = nuke.toNode('Color')\n    node.knob('min').setValue(\[r,g,b])\n\n    xPos, yPos = nuke.thisGroup().knob('_End').value()\n    r = nuke.thisNode().sample('red', xPos, yPos)\n    g = nuke.thisNode().sample('green', xPos, yPos)\n    b = nuke.thisNode().sample('blue', xPos, yPos)\n    node.knob('max').setValue(\[r,g,b])"
+  xpos -742
+  ypos -696
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos -742
+  ypos -622
+ }
+set N698913e0 [stack 0]
+ Unpremult {
+  name Unpremult2
+  xpos -872
+  ypos -536
+  disable {{!AlphaCheck.alpha i}}
+ }
+push $N698913e0
+ Switch {
+  inputs 2
+  which {{parent.premult}}
+  name Switch9
+  xpos -742
+  ypos -457
+ }
+ Dot {
+  name Dot8
+  xpos -708
+  ypos -353
+ }
+set N698aacb0 [stack 0]
+ Expression {
+  channel0 alpha
+  expr0 clamp((b-(Color.min.b+parent.min_offset))/((Color.max.b+parent.max_offset)-(Color.min.b+parent.min_offset)),0,1)
+  channel1 none
+  channel2 none
+  name Z
+  xpos -639
+  ypos -216
+ }
+set N698aeb40 [stack 0]
+push $N698aacb0
+ Expression {
+  channel0 alpha
+  expr0 clamp((g-(Color.min.g+parent.min_offset))/((Color.max.g+parent.max_offset)-(Color.min.g+parent.min_offset)),0,1)
+  channel1 none
+  channel2 none
+  name Y
+  xpos -742
+  ypos -216
+ }
+set N698bae80 [stack 0]
+push $N698aacb0
+ Expression {
+  channel0 alpha
+  expr0 clamp((r-(Color.min.r+parent.min_offset))/((Color.max.r+parent.max_offset)-(Color.min.r+parent.min_offset)),0,1)
+  channel1 none
+  channel2 none
+  name X
+  xpos -848
+  ypos -216
+ }
+set N698c71f0 [stack 0]
+ Switch {
+  inputs 3
+  which {{axex}}
+  name Switch3
+  xpos -742
+  ypos -93
+ }
+ Dot {
+  name Dot3
+  xpos -708
+  ypos 137
+ }
+set N698da240 [stack 0]
+ Dot {
+  name Dot16
+  xpos -708
+  ypos 233
+ }
+set N698de130 [stack 0]
+ Dot {
+  name Dot4
+  xpos -708
+  ypos 303
+ }
+push $N698de130
+push $N6987be00
+push $N6946d990
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos -448
+  ypos -623
+ }
+set N698e5ed0 [stack 0]
+ Unpremult {
+  name Unpremult1
+  xpos -578
+  ypos -537
+  disable {{!AlphaCheck.alpha i}}
+ }
+push $N698e5ed0
+ Switch {
+  inputs 2
+  which {{parent.premult}}
+  name Switch4
+  xpos -448
+  ypos -458
+ }
+set N695085d0 [stack 0]
+ Grade {
+  inputs 1+1
+  white 0
+  add {{"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"red\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"green\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"blue\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {multiply}}
+  name Grade3
+  xpos -448
+  ypos 230
+  disable {{"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"none\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy3
+  xpos -448
+  ypos 293
+ }
+ Dot {
+  name Dot5
+  xpos -414
+  ypos 374
+ }
+set N68389690 [stack 0]
+ Dot {
+  name Dot6
+  xpos -529
+  ypos 374
+ }
+ Dot {
+  name Dot7
+  xpos -529
+  ypos 583
+ }
+ Axis2 {
+  inputs 0
+  display solid
+  selectable false
+  translate {{"\[python -execlocal axe\\ =\\ nuke.thisGroup().knob('axex').value()\\noffset\\ =\\ (\\\"Color.max+parent.max_offset\\\")\\nex\\ =\\ (\\\"Color.max\\\")\\n\\nif\\ axe\\ ==\\ \\\"X\\\":\\n\\ ret\\ =\\ offset\\nelse:\\n\\ ret\\ =\\ ex\\n]" i} {"\[python -execlocal axe\\ =\\ nuke.thisGroup().knob('axex').value()\\noffset\\ =\\ (\\\"Color.max+parent.max_offset\\\")\\nex\\ =\\ (\\\"Color.max\\\")\\n\\nif\\ axe\\ ==\\ \\\"Y\\\":\\n\\ ret\\ =\\ offset\\nelse:\\n\\ ret\\ =\\ ex\\n]" i} {"\[python -execlocal axe\\ =\\ nuke.thisGroup().knob('axex').value()\\noffset\\ =\\ (\\\"Color.max+parent.max_offset\\\")\\nex\\ =\\ (\\\"Color.max\\\")\\n\\nif\\ axe\\ ==\\ \\\"Z\\\":\\n\\ ret\\ =\\ offset\\nelse:\\n\\ ret\\ =\\ ex\\n]" i}}
+  name End
+  tile_color 0xa30000ff
+  xpos 666
+  ypos -139
+  disable {{!parent.visualise i}}
+ }
+ Axis2 {
+  inputs 0
+  display solid+wireframe
+  selectable false
+  translate {{"\[python -execlocal axe\\ =\\ nuke.thisGroup().knob('axex').value()\\noffset\\ =\\ (\\\"Color.min+parent.min_offset\\\")\\nex\\ =\\ (\\\"Color.min\\\")\\n\\nif\\ axe\\ ==\\ \\\"X\\\":\\n\\ ret\\ =\\ offset\\nelse:\\n\\ ret\\ =\\ ex\\n]"} {"\[python -execlocal axe\\ =\\ nuke.thisGroup().knob('axex').value()\\noffset\\ =\\ (\\\"Color.min+parent.min_offset\\\")\\nex\\ =\\ (\\\"Color.min\\\")\\n\\nif\\ axe\\ ==\\ \\\"Y\\\":\\n\\ ret\\ =\\ offset\\nelse:\\n\\ ret\\ =\\ ex]"} {"\[python -execlocal axe\\ =\\ nuke.thisGroup().knob('axex').value()\\noffset\\ =\\ (\\\"Color.min+parent.min_offset\\\")\\nex\\ =\\ (\\\"Color.min\\\")\\n\\nif\\ axe\\ ==\\ \\\"Z\\\":\\n\\ ret\\ =\\ offset\\nelse:\\n\\ ret\\ =\\ ex]"}}
+  name Start
+  xpos 272
+  ypos -138
+  disable {{!parent.visualise x104 1}}
+ }
+push $N698aeb40
+push $N695085d0
+ Dot {
+  name Dot10
+  xpos -7
+  ypos -454
+ }
+set N69c017d0 [stack 0]
+ Grade {
+  inputs 1+1
+  white 0
+  add {{"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"red\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"green\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"blue\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {multiply}}
+  name Grade7
+  xpos 92
+  ypos -216
+  disable {{"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"none\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"}}
+ }
+push $N698aacb0
+ Dot {
+  name Dot13
+  xpos -256
+  ypos -353
+ }
+ Dot {
+  name Dot14
+  xpos -256
+  ypos -163
+ }
+set N69c16570 [stack 0]
+ PositionToPoints {
+  inputs 2
+  display textured
+  selectable false
+  render_mode textured
+  detail {{point_detail}}
+  pointSize {{point_size}}
+  name PositionToPoints3
+  xpos 92
+  ypos -167
+  disable {{!parent.visualise}}
+ }
+push $N698bae80
+push $N69c017d0
+ Grade {
+  inputs 1+1
+  white 0
+  add {{"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"red\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"green\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"blue\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {multiply}}
+  name Grade5
+  xpos -41
+  ypos -216
+  disable {{"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"none\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"}}
+ }
+push $N69c16570
+ PositionToPoints {
+  inputs 2
+  display textured
+  selectable false
+  render_mode textured
+  detail {{point_detail}}
+  pointSize {{point_size}}
+  name PositionToPoints2
+  xpos -41
+  ypos -167
+  disable {{!parent.visualise}}
+ }
+push $N698c71f0
+push $N69c017d0
+ Grade {
+  inputs 1+1
+  white 0
+  add {{"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"red\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"green\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"blue\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {multiply}}
+  name Grade4
+  xpos -166
+  ypos -216
+  disable {{"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"none\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"}}
+ }
+push $N69c16570
+ PositionToPoints {
+  inputs 2
+  display textured
+  selectable false
+  render_mode textured
+  detail {{point_detail}}
+  pointSize {{point_size}}
+  name PositionToPoints1
+  xpos -166
+  ypos -167
+  disable {{!parent.visualise}}
+ }
+ Switch {
+  inputs 3
+  which {{axex}}
+  name Switch5
+  xpos -41
+  ypos 35
+  disable {{!parent.visualise}}
+ }
+push $N6946d990
+ Dot {
+  name Dot15
+  xpos 479
+  ypos -771
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  label "\[value in]"
+  xpos 445
+  ypos -362
+  disable {{!parent.visualise}}
+ }
+ Grade {
+  white 0
+  add {{"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"red\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"green\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"blue\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"} {multiply}}
+  name Grade1
+  xpos 445
+  ypos -324
+  disable {{"\[python -execlocal col\\ =\\ nuke.thisGroup().knob('color').value()\\n\\nif\\ col\\ ==\\ \\\"none\\\":\\n\\ ret\\ =\\ 1\\nelse:\\n\\ ret\\ =\\ 0]"}}
+ }
+ Invert {
+  channels rgb
+  name Invert1
+  xpos 445
+  ypos -298
+  disable {{!parent.visualise}}
+ }
+ Multiply {
+  value 0.1
+  name Multiply1
+  xpos 445
+  ypos -272
+  disable {{!parent.visualise}}
+ }
+set N69c78280 [stack 0]
+ Sphere {
+  selectable false
+  rows 10
+  columns 10
+  radius {{abs(parent.sphere-0.25/2)}}
+  translate {{parent.Start.translate} {parent.Start.translate} {parent.Start.translate}}
+  name Sphere3
+  xpos 398
+  ypos -119
+  disable {{!parent.visualise}}
+ }
+push $N69c78280
+ Sphere {
+  selectable false
+  rows 10
+  columns 10
+  radius {{abs(parent.sphere-0.25/2)}}
+  translate {{parent.End.translate} {parent.End.translate} {parent.End.translate}}
+  name Sphere4
+  xpos 510
+  ypos -121
+  disable {{!parent.visualise}}
+ }
+ Scene {
+  inputs 5
+  name Scene1
+  xpos 462
+  ypos 15
+  disable {{!parent.visualise}}
+ }
+push $N698da240
+ ScanlineRender {
+  inputs 2
+  name ScanlineRender1
+  xpos 452
+  ypos 134
+  disable true
+ }
+ Dot {
+  name Dot2
+  xpos 486
+  ypos 474
+ }
+push $N68389690
+ Merge2 {
+  inputs 2
+  bbox B
+  name Merge1
+  xpos -448
+  ypos 470
+  disable true
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -448
+  ypos 579
+ }
+set N69047110 [stack 0]
+ Multiply {
+  inputs 1+1
+  value 0
+  invert_mask true
+  name Multiply3
+  xpos -563
+  ypos 663
+  disable {{!AlphaCheck.alpha i}}
+ }
+push $N69047110
+ Switch {
+  inputs 2
+  which {{parent.premult}}
+  name Switch10
+  xpos -448
+  ypos 756
+ }
+ Output {
+  name FranklinVFX
+  xpos -448
+  ypos 841
+ }
+push $N698aacb0
+ NoOp {
+  name Color
+  xpos -848
+  ypos -357
+  hide_input true
+  addUserKnob {20 User}
+  addUserKnob {18 min}
+  min {0 0 0}
+  addUserKnob {6 min_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 min_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 max}
+  max {0 0 0}
+  addUserKnob {6 max_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 max_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+end_group

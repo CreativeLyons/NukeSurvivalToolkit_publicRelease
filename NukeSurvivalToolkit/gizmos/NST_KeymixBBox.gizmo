@@ -1,0 +1,75 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ inputs 3
+ name KeymixBBox
+ tile_color 0x4b5ec6ff
+ selected true
+ addUserKnob {20 KeymixBBox}
+ addUserKnob {41 channels T Keymix8.channels}
+ addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+ addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+ addUserKnob {41 mix T Keymix8.mix}
+ addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 531
+  ypos -493
+  number 2
+ }
+set N8e543ea0 [stack 0]
+ Input {
+  inputs 0
+  name InputA
+  xpos 189
+  ypos -485
+  number 1
+ }
+set Ncfd3cc70 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox intersection
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 285
+  ypos -410
+ }
+set Nc1bc290 [stack 0]
+push $N8e543ea0
+ CopyBBox {
+  inputs 2
+  name CopyBBox2
+  xpos 531
+  ypos -350
+ }
+push $Nc1bc290
+push $Ncfd3cc70
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 189
+  ypos -350
+ }
+ Input {
+  inputs 0
+  name InputB
+  xpos 378
+  ypos -493
+ }
+ Keymix {
+  inputs 3
+  channels rgba
+  name Keymix8
+  selected true
+  xpos 378
+  ypos -350
+ }
+ Output {
+  name Output1
+  xpos 378
+  ypos -249
+ }
+end_group

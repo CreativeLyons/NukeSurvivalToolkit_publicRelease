@@ -1,0 +1,26 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name RotoCentroid
+ tile_color 0x70ff66ff
+ selected true
+ addUserKnob {20 RotoCentroid}
+ addUserKnob {12 centroid}
+ centroid {1054.860665 666.3638309}
+ addUserKnob {68 rotoshape M {Ellipse1}}
+ addUserKnob {3 samples}
+ samples 1000
+ addUserKnob {7 _calc l INVISIBLE +INVISIBLE}
+ _calc {{"\[python -execlocal n=nuke.thisNode()\\n\\ntry:\\n\\ \\ \\ \\ #\\ Setup\\ input\\ shape\\ names\\n\\ \\ \\ \\ rs\\ =\\ n\\\[\\\"rotoshape\\\"\\]\\n\\ \\ \\ \\ rs_v\\ =\\ rs.value()\\n\\ \\ \\ \\ shpl\\ =\\ \\\[\\]\\n\\ \\ \\ \\ rotos=n.input(0)\\n\\ \\ \\ \\ curves=rotos\\\[\\\"curves\\\"\\].rootLayer\\n\\ \\ \\ \\ for\\ c\\ in\\ curves:\\n\\ \\ \\ \\ \\ \\ \\ \\ shpl.append(c.name)\\n\\ \\ \\ \\ rs.setValues(shpl)\\n\\ \\ \\ \\ rs.setValue(rs_v)\\n\\ \\ \\ \\ \\n\\ \\ \\ \\ \\n\\ \\ \\ \\ \\n\\ \\ \\ \\ \\n\\ \\ \\ \\ ev\\ =\\ rotos\\\[\\\"curves\\\"\\].toElement(rs_v).evaluate(0,nuke.frame())\\n\\ \\ \\ \\ samples\\ =\\ n\\\[\\\"samples\\\"\\].value()\\n\\ \\ \\ \\ nsamp\\ =\\ int(samples)\\n\\ \\ \\ \\ pts\\ =\\ \\\[list(ev.getPoint(i/samples))\\\[:2\\]\\ for\\ i\\ in\\ xrange(nsamp)\\]\\n\\ \\ \\ \\ \\n\\ \\ \\ \\ \\n\\ \\ \\ \\ def\\ centroid2d(*points):\\n\\ \\ \\ \\ \\ \\ \\ \\ dist\\ =\\ lambda\\ a,b\\ :\\ ((b\\\[0\\]-a\\\[0\\])**2\\ +\\ (b\\\[1\\]-a\\\[1\\])**2)**0.5\\n\\ \\ \\ \\ \\ \\ \\ \\ l\\ =\\ len(points)\\n\\ \\ \\ \\ \\ \\ \\ \\ subpts\\ =\\ \\\[\\]\\n\\ \\ \\ \\ \\ \\ \\ \\ weights\\ =\\ \\\[\\]\\n\\ \\ \\ \\ \\ \\ \\ \\ for\\ i\\ in\\ xrange(l):\\n\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ subpts.append(points\\\[i\\])\\n\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ weights.append(\\ dist(points\\\[i\\],\\ points\\\[(i+1)%l\\])+dist(points\\\[i\\],\\ points\\\[(i-1)%l\\])\\ )\\n\\ \\ \\ \\ \\ \\ \\ \\ \\n\\ \\ \\ \\ \\ \\ \\ \\ nweight\\ =\\ sum(weights)\\n\\ \\ \\ \\ \\ \\ \\ \\ rx\\ =\\ 0.0\\n\\ \\ \\ \\ \\ \\ \\ \\ ry\\ =\\ 0.0\\n\\ \\ \\ \\ \\ \\ \\ \\ for\\ i\\ in\\ xrange(l):\\n\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ w\\ =\\ weights\\\[i\\]/nweight\\n\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ rx\\ +=\\ subpts\\\[i\\]\\\[0\\]*w\\n\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ ry\\ +=\\ subpts\\\[i\\]\\\[1\\]*w\\n\\ \\ \\ \\ \\ \\ \\ \\ return\\ rx,ry\\n\\ \\ \\ \\ \\n\\ \\ \\ \\ \\n\\ \\ \\ \\ cent\\ =\\ centroid2d(*pts)\\n\\ \\ \\ \\ \\n\\ \\ \\ \\ n\\\[\\\"centroid\\\"\\].setValue(cent\\\[0\\],0)\\n\\ \\ \\ \\ n\\\[\\\"centroid\\\"\\].setValue(cent\\\[1\\],1)\\nexcept:pass\\nret=0\\n]"}}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 0
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 300
+ }
+end_group

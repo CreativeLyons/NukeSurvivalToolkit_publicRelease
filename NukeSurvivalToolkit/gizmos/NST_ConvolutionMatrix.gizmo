@@ -1,0 +1,492 @@
+Group {
+ name ConvolutionMatrix
+ autolabel "nuke.thisNode().name() + \"\\n\" + '(' + str(nuke.thisNode()\['matrix_selection'].value()) + ')' "
+ tile_color 0xfff600ff
+ note_font "Verdana Bold Bold Bold Bold Bold"
+ note_font_size 14
+ selected true
+ addUserKnob {20 matrix l Matrix}
+ addUserKnob {26 message01 l "" +STARTLINE T "Select a matrix and see the result:"}
+ addUserKnob {4 matrix_selection l "" +STARTLINE M {"01 - Identity" "02 - Smoothing - 3x3 convolution kernel" "03 - Gaussian Blur" "04 - Blur" "05 - Motion Blur" "06 - Average/Mean filter" "07 - Antialiasing filter (1)" "08 - Antialiasing filter (2)" "09 - Sharpen" "10 - Intensified sharpen" "11 - Edge detect" "12 - Edge enhance" "13 - Emboss" "14 - Outline" "15 - Top sobel" "16 - Bottom sobel" "17 - Right sobel" "18 - Left sobel" "19 - Roberts Cross Right Bottom" "20 - Roberts Cross Left Bottom" "21 - Roberts Cross Left Top" "22 - Roberts Cross Right Top" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {41 matrix_1 l matrix T MatrixSUPER.matrix}
+ addUserKnob {26 ""}
+ addUserKnob {6 cineon l "Cineon colorspace" +STARTLINE}
+ addUserKnob {20 email l @}
+ addUserKnob {26 message02 l "" +STARTLINE T "<b><font color=yellow>Convolution Matrix</font></b><br>\n<font size=“1”><i>by Andrea Geremia</i><br>\n<br>\nandrea.geremia89@gmail.com<br>\nwww.andreageremia.it</font>"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -580
+  ypos 235
+ }
+ Colorspace {
+  colorspace_out Cineon
+  name Colorspace1
+  xpos -580
+  ypos 301
+  disable {{!parent.cineon}}
+ }
+ Matrix {
+  channels rgba
+  matrix {
+      {{"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(0,0)\\n]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(0,1)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(0,2)]"}}
+      {{"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(1,0)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(1,1)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(1,2)]"}}
+      {{"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(2,0)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(2,1)]"} {"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('matrix').value(2,2)]"}}
+    }
+  normalize {{"\[python nuke.toNode('Matrix'\\ +\\nstr(int(nuke.toNode('Switch1').knob('which').value()))).knob('normalize').value()\\n]"}}
+  name MatrixSUPER
+  xpos -580
+  ypos 370
+ }
+set N20550410 [stack 0]
+ Colorspace {
+  colorspace_in Cineon
+  name Colorspace2
+  xpos -580
+  ypos 455
+  disable {{!parent.cineon}}
+ }
+ Output {
+  name Output1
+  xpos -580
+  ypos 518
+ }
+ Dot {
+  inputs 0
+  name Dot1
+  xpos -1665
+  ypos -76
+ }
+set N2055ffd0 [stack 0]
+ Dot {
+  name Dot16
+  xpos -1555
+  ypos -76
+ }
+set N20562570 [stack 0]
+ Dot {
+  name Dot15
+  xpos -1445
+  ypos -76
+ }
+set N20564b10 [stack 0]
+ Dot {
+  name Dot14
+  xpos -1335
+  ypos -76
+ }
+set N205670b0 [stack 0]
+ Dot {
+  name Dot13
+  xpos -1225
+  ypos -76
+ }
+set N20569650 [stack 0]
+ Dot {
+  name Dot12
+  xpos -1115
+  ypos -76
+ }
+set N2056bbf0 [stack 0]
+ Dot {
+  name Dot11
+  xpos -1005
+  ypos -76
+ }
+set N2056e190 [stack 0]
+ Dot {
+  name Dot10
+  xpos -895
+  ypos -76
+ }
+set N20570730 [stack 0]
+ Dot {
+  name Dot9
+  xpos -785
+  ypos -76
+ }
+set N20572cd0 [stack 0]
+ Dot {
+  name Dot19
+  xpos -656
+  ypos -76
+ }
+set N20575270 [stack 0]
+ Dot {
+  name Dot21
+  xpos -546
+  ypos -76
+ }
+set N20577810 [stack 0]
+ Dot {
+  name Dot20
+  xpos -420
+  ypos -76
+ }
+set N20579db0 [stack 0]
+ Matrix {
+  channels rgba
+  matrix {
+      {0 0 0}
+      {0 -1 0}
+      {0 0 1}
+    }
+  name Matrix20
+  label "Robert Cross Left Top"
+  xpos -454
+  ypos 30
+ }
+set N2057c350 [stack 0]
+push $N20550410
+push $N20579db0
+ Dot {
+  name Dot22
+  xpos -293
+  ypos -76
+ }
+ Matrix {
+  channels rgba
+  matrix {
+      {0 0 0}
+      {0 0 -1}
+      {0 1 0}
+    }
+  name Matrix21
+  label "Robert Cross Right Top"
+  xpos -327
+  ypos 33
+ }
+push $N2057c350
+push $N20577810
+ Matrix {
+  channels rgba
+  matrix {
+      {0 0 0}
+      {0 0 1}
+      {0 -1 0}
+    }
+  name Matrix19
+  label "Robert Cross Left Down"
+  xpos -580
+  ypos 29
+ }
+push $N20575270
+ Matrix {
+  channels rgba
+  matrix {
+      {0 0 0}
+      {0 1 0}
+      {0 0 -1}
+    }
+  name Matrix18
+  label "Robert Cross Right Down"
+  xpos -690
+  ypos 30
+ }
+push $N20572cd0
+ Matrix {
+  channels rgba
+  matrix {
+      {-1 0 1}
+      {-2 0 2}
+      {-1 0 1}
+    }
+  name Matrix17
+  label "Right Sobel"
+  xpos -819
+  ypos 30
+ }
+push $N20570730
+ Matrix {
+  channels rgba
+  matrix {
+      {1 0 -1}
+      {2 0 -2}
+      {1 0 -1}
+    }
+  name Matrix16
+  label "Left Sobel"
+  xpos -929
+  ypos 28
+ }
+push $N2056e190
+ Matrix {
+  channels rgba
+  matrix {
+      {-1 -2 -1}
+      {0 0 0}
+      {1 2 1}
+    }
+  name Matrix15
+  label "Bottom Sobel"
+  xpos -1039
+  ypos 28
+ }
+push $N2056bbf0
+ Matrix {
+  channels rgba
+  matrix {
+      {1 2 1}
+      {0 0 0}
+      {-1 -2 -1}
+    }
+  name Matrix14
+  label "Top Sobel"
+  xpos -1149
+  ypos 28
+ }
+push $N20569650
+ Matrix {
+  channels rgba
+  matrix {
+      {-1 -1 -1}
+      {-1 8 -1}
+      {-1 -1 -1}
+    }
+  name Matrix13
+  label Outline
+  xpos -1259
+  ypos 28
+ }
+push $N205670b0
+ Matrix {
+  channels rgba
+  matrix {
+      {-2 -1 0}
+      {-1 1 1}
+      {0 1 2}
+    }
+  name Matrix12
+  label Emboss
+  xpos -1369
+  ypos 28
+ }
+push $N20564b10
+ Matrix {
+  channels rgba
+  matrix {
+      {0 0 0}
+      {-1 1 0}
+      {0 0 0}
+    }
+  name Matrix11
+  label "Edge Enhance"
+  xpos -1479
+  ypos 31
+ }
+push $N20562570
+ Matrix {
+  channels rgba
+  matrix {
+      {0 1 0}
+      {1 -4 1}
+      {0 1 0}
+    }
+  name Matrix10
+  label "Edge detect"
+  xpos -1589
+  ypos 28
+ }
+push $N2055ffd0
+ Matrix {
+  channels rgba
+  matrix {
+      {-1 -1 -1}
+      {-1 9 -1}
+      {-1 -1 -1}
+    }
+  name Matrix9
+  label "Intensified sharpen"
+  xpos -1699
+  ypos 28
+ }
+push $N2055ffd0
+ Dot {
+  name Dot8
+  xpos -1759
+  ypos -76
+ }
+set N205cc5b0 [stack 0]
+ Matrix {
+  channels rgba
+  matrix {
+      {0 -1 0}
+      {-1 5 -1}
+      {0 -1 0}
+    }
+  normalize true
+  name Matrix8
+  label Sharpen
+  xpos -1793
+  ypos 28
+ }
+push $N205cc5b0
+ Dot {
+  name Dot6
+  xpos -1854
+  ypos -76
+ }
+set N205d3f50 [stack 0]
+ Matrix {
+  channels rgb
+  matrix {
+      {1 2 1}
+      {2 4 2}
+      {1 2 1}
+    }
+  normalize true
+  name Matrix7
+  label "Antialiasing filter\nsize 2"
+  xpos -1888
+  ypos 24
+ }
+push $N205d3f50
+ Dot {
+  name Dot5
+  xpos -1964
+  ypos -76
+ }
+set N205db730 [stack 0]
+ Matrix {
+  channels rgb
+  matrix {
+      {0 1 0}
+      {1 2 1}
+      {0 1 0}
+    }
+  normalize true
+  name Matrix6
+  label "Antialiasing filter\nsize 1"
+  xpos -1998
+  ypos 28
+ }
+push $N205db730
+ Dot {
+  name Dot17
+  xpos -2082
+  ypos -76
+ }
+set N205e2fa0 [stack 0]
+ Matrix {
+  channels rgba
+  matrix {
+      {0.1111111111 0.11111111 0.11111111}
+      {0.11111111 0.11111111 0.11111111}
+      {0.11111111 0.11111111 0.11111111}
+    }
+  normalize true
+  name Matrix5
+  label "Average filter"
+  xpos -2116
+  ypos 28
+ }
+push $N205e2fa0
+ Dot {
+  name Dot18
+  xpos -2207
+  ypos -76
+ }
+set N205ea740 [stack 0]
+ Matrix {
+  channels rgba
+  matrix {
+      {1 0 0}
+      {0 1 0}
+      {0 0 1}
+    }
+  normalize true
+  name Matrix4
+  label "Motion Blur"
+  xpos -2241
+  ypos 31
+ }
+push $N205ea740
+ Dot {
+  name Dot7
+  xpos -2318
+  ypos -76
+ }
+set N205f1e60 [stack 0]
+ Matrix {
+  channels rgba
+  matrix {
+      {0.0625 0.125 0.0625}
+      {0.125 0.25 0.125}
+      {0.0625 0.125 0.0625}
+    }
+  normalize true
+  name Matrix3
+  label Blur
+  xpos -2352
+  ypos 30
+ }
+push $N205f1e60
+ Dot {
+  name Dot4
+  xpos -2413
+  ypos -76
+ }
+set N205f95b0 [stack 0]
+ Matrix {
+  channels rgba
+  matrix {
+      {0 1 0}
+      {1 4 1}
+      {0 1 0}
+    }
+  normalize true
+  name Matrix2
+  label "Gaussian Blur"
+  xpos -2447
+  ypos 28
+ }
+push $N205f95b0
+ Dot {
+  name Dot3
+  xpos -2530
+  ypos -76
+ }
+set N2f504d30 [stack 0]
+ Matrix {
+  channels rgba
+  matrix {
+      {1 1 1}
+      {1 1 1}
+      {1 1 1}
+    }
+  normalize true
+  name Matrix1
+  label "Smoothing\n3x3 convolution kernel"
+  xpos -2564
+  ypos 27
+ }
+push $N2f504d30
+ Dot {
+  name Dot2
+  xpos -2645
+  ypos -76
+ }
+ Matrix {
+  channels rgba
+  matrix {
+      {0 0 0}
+      {0 1 0}
+      {0 0 0}
+    }
+  normalize true
+  name Matrix0
+  label Identity
+  xpos -2679
+  ypos 29
+ }
+ Switch {
+  inputs 22
+  which {{parent.matrix_selection}}
+  name Switch1
+  label "\[value which]"
+  xpos -1634
+  ypos 420
+ }
+end_group

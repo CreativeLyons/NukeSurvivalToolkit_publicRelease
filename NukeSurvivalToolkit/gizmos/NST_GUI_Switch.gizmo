@@ -1,0 +1,41 @@
+Group {
+ name GUI_Switch
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"disable\":\n    if k.getValue() == 1:\n        n\[\"output\"].setValue(\"RENDER\")\n        n\[\"tile_color\"].setValue(16711935)\n    elif k.getValue() == 0:\n        n\[\"output\"].setValue(\"GUI\")\n        n\[\"tile_color\"].setValue(4278190335)"
+ tile_color 0xff0000ff
+ note_font "Verdana Bold Bold"
+ note_font_color 0x40404ff
+ selected true
+ dope_sheet true
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 description l Description: T "GUI_Switch\n\nNode will switch to the Render Pipe on Render Time.  \n\nNode will display the GUI Pipe while working.\n\nDisabling defaults to Render Side \n(can safely toggle disable since\nexpression is on the switch 'which' knob)"}
+ addUserKnob {1 output l INVISIBLE +INVISIBLE}
+ output GUI
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name InputRender
+  xpos -502
+  ypos -435
+ }
+ Input {
+  inputs 0
+  name InputGUI
+  xpos -341
+  ypos -517
+  number 1
+ }
+ Switch {
+  inputs 2
+  which {{"\[python nuke.executing()]"}}
+  name Switch1
+  xpos -341
+  ypos -435
+ }
+ Output {
+  name Output1
+  xpos -341
+  ypos -366
+ }
+end_group

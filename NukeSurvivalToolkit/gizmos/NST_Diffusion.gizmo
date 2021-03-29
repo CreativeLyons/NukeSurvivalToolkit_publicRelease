@@ -1,0 +1,178 @@
+Group {
+ name Diffusion
+ onCreate "n = nuke.thisNode()\nn.knob('size').setRange(0, 300)"
+ tile_color 0xcc804eff
+ note_font "Bitstream Vera Sans Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 Diffusion}
+ addUserKnob {41 channels T Merge1.also_merge}
+ addUserKnob {26 ""}
+ addUserKnob {41 size T Blur33.size}
+ addUserKnob {7 amount R 0 4}
+ amount 1
+ addUserKnob {26 text l " " T " "}
+ addUserKnob {7 min}
+ min 1
+ addUserKnob {7 max}
+ max 1
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 mix T Merge1.mix}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -297
+  ypos 634
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -458
+  ypos 115
+ }
+ Dot {
+  name Dot43
+  xpos -424
+  ypos 250
+ }
+set Ne65091b0 [stack 0]
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos -424
+  ypos 334
+ }
+set Ne6522bb0 [stack 0]
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos -275
+  ypos 334
+ }
+set Ndf58cc90 [stack 0]
+ Dot {
+  name Dot77
+  xpos -165
+  ypos 334
+ }
+set Ne5fdeaa0 [stack 0]
+ Dot {
+  name Dot78
+  xpos -28
+  ypos 334
+ }
+ Blur {
+  size 100
+  name Blur33
+  label "\[value size]"
+  xpos -62
+  ypos 366
+ }
+push $Ne5fdeaa0
+ Merge2 {
+  inputs 2
+  operation minus
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  name Merge36
+  selected true
+  xpos -199
+  ypos 371
+ }
+ Dot {
+  name Dot79
+  xpos -165
+  ypos 446
+ }
+push $Ndf58cc90
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  mix {{parent.amount/13}}
+  name Merge37
+  xpos -309
+  ypos 439
+ }
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos -275
+  ypos 512
+ }
+set Ne5e70760 [stack 0]
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos -275
+  ypos 572
+ }
+push $Ne5e70760
+push $Ne6522bb0
+ Merge2 {
+  inputs 2
+  operation min
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  mix {{parent.min}}
+  name Merge2
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -458
+  ypos 505
+ }
+ Merge2 {
+  inputs 2
+  operation max
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  mix {{parent.max}}
+  name Merge3
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -458
+  ypos 565
+ }
+push $Ne65091b0
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos -624
+  ypos 250
+ }
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos -624
+  ypos 638
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  output none
+  also_merge rgb
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -458
+  ypos 631
+ }
+ Output {
+  name Output1
+  xpos -458
+  ypos 721
+ }
+end_group

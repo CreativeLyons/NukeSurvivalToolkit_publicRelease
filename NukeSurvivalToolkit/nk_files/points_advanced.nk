@@ -1,0 +1,161 @@
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x71c67100
+ note_font_size 42
+ xpos -210
+ ypos -380
+ bdwidth 204
+ bdheight 257
+}
+Flare {
+ inputs 0
+ position {288 240}
+ size_mult 0.7
+ inner_color 1
+ outer_falloff 0.1
+ inner_falloff 0.1
+ vis_mask_size 1
+ corners 6
+ flattening 1
+ sharpness 0.99
+ corners_angle 30
+ name Flare1
+ xpos -220
+ ypos -61
+}
+Shuffle {
+ green red
+ blue red
+ alpha red
+ name Shuffle1
+ tile_color 0x93000000
+ xpos -220
+ ypos -37
+}
+Crop {
+ box {212 154 365 326}
+ reformat true
+ crop false
+ name Crop1
+ xpos -220
+ ypos -13
+}
+Dot {
+ name Dot1
+ xpos -186
+ ypos 35
+}
+Expression {
+ inputs 0
+ expr0 "fmod(y/rows,offsetX) == 0 ? floor(y/offsetX)%2 == 0 ? ((x+offset)%offsetY)/offsetY == 0 ? random_points==1 && random_every_frame == 0 ? gain*random(x,y,1) : random_points == 1 && random_every_frame == 1?random(x*y, 1, frame)*gain:random_points==0 && random_every_frame==1?random(frame,1)*gain:gain :0:0:0"
+ expr1 "fmod(y/rows,offsetX) == 0 ? floor(y/offsetX)%2 == 0 ? ((x+offset)%offsetY)/offsetY == 0 ? random_points==1 && random_every_frame == 0 ? gain*random(x,y,2) : random_points == 1 && random_every_frame == 1?random(x*y, 2, frame)*gain:random_points==0 && random_every_frame==1?random(frame,2)*gain:gain :0:0:0"
+ expr2 "fmod(y/rows,offsetX) == 0 ? floor(y/offsetX)%2 == 0 ? ((x+offset)%offsetY)/offsetY == 0 ? random_points==1 && random_every_frame == 0 ? gain*random(x,y,3) : random_points == 1 && random_every_frame == 1?random(x*y, 3, frame)*gain:random_points==0 && random_every_frame==1?random(frame,3)*gain:gain :0:0:0"
+ expr3 "fmod(y/rows,offsetX) == 0 ? floor(y/offsetX)%2 == 0 ? ((x+offset)%offsetY)/offsetY == 0 ? 1 :0:0:0"
+ name Expression4
+ xpos -96
+ ypos -211
+ addUserKnob {20 User}
+ addUserKnob {7 offsetX R 0 200}
+ offsetX {{parent.MASTER_POINTS.offsetX}}
+ addUserKnob {7 offsetY R 0 200}
+ offsetY {{parent.MASTER_POINTS.offsetY}}
+ addUserKnob {3 rows l INVISIBLE +INVISIBLE}
+ rows {{parent.MASTER_POINTS.rows}}
+ addUserKnob {3 columns l INVISIBLE +INVISIBLE}
+ columns {{parent.MASTER_POINTS.columns}}
+ addUserKnob {3 offset}
+ offset {{parent.MASTER_POINTS.offset}}
+ addUserKnob {7 gain R 0 4}
+ gain {{parent.MASTER_POINTS.gain}}
+ addUserKnob {6 random_points l "random points" +STARTLINE}
+ random_points {{parent.MASTER_POINTS.random_points}}
+ addUserKnob {6 random_every_frame l "random every frame" -STARTLINE}
+ random_every_frame {{parent.MASTER_POINTS.random_every_frame}}
+}
+Expression {
+ inputs 0
+ expr0 "fmod((y+1)/rows,offsetX) == 0 ? floor(y/offsetX)%2 == 0 ? ((x)%offsetY)/offsetY == 0 ? random_points==1 && random_every_frame == 0 ? gain*random(x,y,1) : random_points == 1 && random_every_frame == 1?random(x*y, 1, frame)*gain:random_points==0 && random_every_frame==1?random(frame,1)*gain:gain :0:0:0"
+ expr1 "fmod((y+1)/rows,offsetX) == 0 ? floor(y/offsetX)%2 == 0 ? ((x)%offsetY)/offsetY == 0 ? random_points==1 && random_every_frame == 0 ? gain*random(x,y,2) : random_points == 1 && random_every_frame == 1?random(x*y, 2, frame)*gain:random_points==0 && random_every_frame==1?random(frame,2)*gain:gain :0:0:0"
+ expr2 "fmod((y+1)/rows,offsetX) == 0 ? floor(y/offsetX)%2 == 0 ? ((x)%offsetY)/offsetY == 0 ? random_points==1 && random_every_frame == 0 ? gain*random(x,y,3) : random_points == 1 && random_every_frame == 1?random(x*y, 3, frame)*gain:random_points==0 && random_every_frame==1?random(frame,3)*gain:gain :0:0:0"
+ expr3 "fmod((y+1)/rows,offsetX) == 0 ? floor(y/offsetX)%2 == 0 ? ((x)%offsetY)/offsetY == 0 ? 1 :0:0:0"
+ name Expression11
+ xpos -200
+ ypos -210
+ addUserKnob {20 User}
+ addUserKnob {7 offsetX R 0 200}
+ offsetX {{parent.MASTER_POINTS.offsetX}}
+ addUserKnob {7 offsetY R 0 200}
+ offsetY {{parent.MASTER_POINTS.offsetY}}
+ addUserKnob {3 rows l INVISIBLE +INVISIBLE}
+ rows {{parent.MASTER_POINTS.rows}}
+ addUserKnob {3 columns l INVISIBLE +INVISIBLE}
+ columns {{parent.MASTER_POINTS.columns}}
+ addUserKnob {3 offset}
+ offset {{parent.MASTER_POINTS.offset}}
+ addUserKnob {7 gain R 0 4}
+ gain {{parent.MASTER_POINTS.gain}}
+ addUserKnob {6 random_points l "random points" +STARTLINE}
+ random_points {{parent.MASTER_POINTS.random_points}}
+ addUserKnob {6 random_every_frame l "random every frame" -STARTLINE}
+ random_every_frame {{parent.MASTER_POINTS.random_every_frame}}
+}
+Dot {
+ name Dot6
+ xpos -166
+ ypos -148
+}
+Merge2 {
+ inputs 2
+ name Merge4
+ xpos -96
+ ypos -151
+}
+Dilate {
+ size 10
+ name Dilate10
+ label "\[value size]"
+ xpos -96
+ ypos -107
+}
+Grade {
+ white 50
+ name Grade1
+ xpos -96
+ ypos -30
+}
+Convolve2 {
+ inputs 2
+ name Convolve1
+ xpos -96
+ ypos 28
+}
+Expression {
+ inputs 0
+ name MASTER_POINTS
+ tile_color 0xff500001
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ xpos -139
+ ypos -300
+ addUserKnob {20 User}
+ addUserKnob {3 offsetX}
+ offsetX 135
+ addUserKnob {3 offsetY}
+ offsetY 181
+ addUserKnob {3 rows l INVISIBLE +INVISIBLE}
+ rows 1
+ addUserKnob {3 columns l INVISIBLE +INVISIBLE}
+ columns 1
+ addUserKnob {26 ""}
+ addUserKnob {3 offset}
+ offset 87
+ addUserKnob {26 ""}
+ addUserKnob {20 Color n 1}
+ addUserKnob {7 gain R 0 4}
+ gain 1
+ addUserKnob {6 random_points l "random points" +STARTLINE}
+ random_points true
+ addUserKnob {6 random_every_frame l "random every frame" -STARTLINE}
+ random_every_frame true
+ addUserKnob {20 endGroup n -1}
+}

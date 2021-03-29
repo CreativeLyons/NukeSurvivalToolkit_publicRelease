@@ -1,0 +1,59 @@
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x3d7c8401
+ note_font "Helvetica bold Bold"
+ note_font_size 100
+ xpos 79
+ ypos -222
+ bookmark false
+ bdwidth 355
+ bdheight 365
+}
+Noise {
+ inputs 0
+ output {-rgba.red -rgba.green rgba.blue rgba.alpha}
+ center {1024 778}
+ name Noise1
+ xpos 328
+ ypos -36
+ disable true
+}
+ColorWheel {
+ inputs 0
+ gamma 0.45
+ name ColorWheel1
+ xpos 110
+ ypos -141
+}
+set Na8e2fa0 [stack 0]
+Expression {
+ expr0 cx
+ expr1 cy
+ expr2 0
+ name Expression1
+ xpos 280
+ ypos -117
+}
+Dot {
+ name Dot1
+ tile_color 0xcccccc00
+ xpos 314
+ ypos 58
+}
+push $Na8e2fa0
+PositionToPoints2 {
+ inputs 2
+ display textured
+ render_mode textured
+ name PositionToPoints1
+ xpos 110
+ ypos 55
+}
+StickyNote {
+ inputs 0
+ name StickyNote1
+ label "Insert Noise on Blue channel\nto apply DIsplacement"
+ xpos 332
+ ypos 23
+}

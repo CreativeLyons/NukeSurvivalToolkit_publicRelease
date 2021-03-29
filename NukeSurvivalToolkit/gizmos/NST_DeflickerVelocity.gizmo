@@ -1,0 +1,927 @@
+Group {
+ inputs 3
+ name DeflickerVelocity
+ tile_color 0x7f00ffff
+ note_font Verdana
+ mapsize {0.15 0.15}
+ addUserKnob {20 User l Controls}
+ addUserKnob {4 velocity_type l "Velocity Type" M {" 0 > 1  -  3DS Max " "-1 > 1  -  Maya\\Nuke " "" "" "" "" "" "" ""}}
+ addUserKnob {6 noVelocity l "No Velocity" t "Wether or not the node should try to realign the footage based on vector information" -STARTLINE}
+ addUserKnob {6 protect_alpha l "Protect Alpha" -STARTLINE}
+ protect_alpha true
+ addUserKnob {7 velocity_multiplier l "Velocity Multiplier" t "How much the Velocity will be multiplied o align the previous and next frame  to the middle frame. Based on Vray Velocity Pass \"max velocity\" parameter." R 0 100}
+ velocity_multiplier 1
+ addUserKnob {26 ""}
+ addUserKnob {6 Maskbyvelocity l "Mask by Velocity" +STARTLINE}
+ addUserKnob {7 MaskVelocityThreshold l Threshold R 0 100}
+ MaskVelocityThreshold 0.1
+ addUserKnob {7 MaskVelocitySoftness l Softness R 0 10}
+ MaskVelocitySoftness 0.1
+ addUserKnob {7 ConservativeMasking l Conservative}
+ ConservativeMasking 1
+ addUserKnob {7 VelocityBlurMask l Blur R 0 200}
+ VelocityBlurMask 1
+ addUserKnob {7 VelocityErodeMask l Erode R -20 20}
+ addUserKnob {26 ""}
+ addUserKnob {6 Difference_mask l "Mask by Difference" +STARTLINE}
+ addUserKnob {7 difference_mask_preblur l "Pre Blur" R 0 200}
+ difference_mask_preblur 5
+ addUserKnob {7 difference_mask_threshold l Threshold}
+ difference_mask_threshold 0.1
+ addUserKnob {7 difference_mask_softness l Softness}
+ difference_mask_softness 0.1
+ addUserKnob {7 difference_mask_blur l "Post Blur" R 0 200}
+ difference_mask_blur 5
+ addUserKnob {7 difference_mask_erode l Erode R -20 20}
+ difference_mask_erode 1
+ addUserKnob {26 ""}
+ addUserKnob {6 input_mask l "Mask by Input   " -STARTLINE}
+ addUserKnob {4 input_mask_channel l "   Channel " -STARTLINE M {rgba.red rgba.green rgba.blue rgba.alpha}}
+ input_mask_channel rgba.alpha
+ addUserKnob {6 input_mask_invert l Invert -STARTLINE}
+ addUserKnob {7 input_mask_conservative l Conservative}
+ input_mask_conservative 1
+ addUserKnob {7 Input_mask_blur l Blur R 0 200}
+ Input_mask_blur 5
+ addUserKnob {7 Input_mask_erode l Erode R -20 20}
+ addUserKnob {26 ""}
+ addUserKnob {6 CheckMask l "Display Masks" +STARTLINE}
+ addUserKnob {7 Opacity}
+ Opacity 1
+ addUserKnob {26 ""}
+ addUserKnob {26 Info l "" +STARTLINE T "Velocity Deflicker 1.1 by Ju / the Post Bangkok\nwww.juvano.com\nwww.the-post-bangkok.com"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x8e8e3800
+  label "Velocity Shift\n"
+  note_font_size 42
+  xpos -330
+  ypos -651
+  bdwidth 317
+  bdheight 450
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x8e8e3800
+  label "Velocity\nConversion"
+  note_font_size 42
+  xpos 185
+  ypos -1205
+  bdwidth 245
+  bdheight 204
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode5
+  tile_color 0x7171c600
+  label "MASK\nDIFFERENCE"
+  note_font_size 42
+  xpos -897
+  ypos -1102
+  bdwidth 341
+  bdheight 1019
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x7171c600
+  label "MASK INPUT"
+  note_font_size 42
+  xpos 544
+  ypos -1017
+  bdwidth 404
+  bdheight 1156
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x7171c600
+  label "MASK VELOCITY"
+  note_font_size 42
+  xpos 69
+  ypos -946
+  bdwidth 375
+  bdheight 813
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode6
+  tile_color 0x7171c600
+  label WARNINGS
+  note_font_size 42
+  xpos -89
+  ypos 367
+  bdwidth 639
+  bdheight 332
+ }
+ Blur {
+  inputs 0
+  name Blur2
+  xpos -680
+  ypos -796
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {0.5 0.5 0.5 1}
+  name Constant1
+  xpos 366
+  ypos -1383
+ }
+ Reformat {
+  type "to box"
+  box_width {{img.width i}}
+  box_height {{img.height i}}
+  box_fixed true
+  filter Impulse
+  name Reformat1
+  xpos 366
+  ypos -1301
+ }
+set N2879ea10 [stack 0]
+push $N2879ea10
+ Input {
+  inputs 0
+  name velocity
+  xpos 621
+  ypos -1347
+  number 1
+ }
+push $N2879ea10
+ Switch {
+  inputs 2
+  which {{"\[python -execlocal ret\\ =\\ min\\ (\\ len(nuke.toNode(\\\"velocity\\\").channels())\\ ,\\ 1\\ )]" i}}
+  name Switch_MissingVelocity
+  xpos 547
+  ypos -1251
+ }
+ Switch {
+  inputs 2
+  which {{parent.noVelocity i}}
+  name Switch_NoVelocity
+  xpos 547
+  ypos -1198
+ }
+ Grade {
+  multiply {1 1 0 1}
+  black_clamp false
+  name REMOVE_BLUE
+  xpos 547
+  ypos -1047
+  disable true
+ }
+ Grade {
+  multiply 2
+  add -1
+  black_clamp false
+  name Max_2_Maya_Conv
+  xpos 253
+  ypos -1047
+  disable {{parent.velocity_type i}}
+ }
+set N27d554e0 [stack 0]
+ Input {
+  inputs 0
+  name img
+  xpos -41
+  ypos -1377
+ }
+ Constant {
+  inputs 0
+  name Constant4
+  xpos 110
+  ypos -1402
+ }
+ Switch {
+  inputs 2
+  which {{"\[python -execlocal ret\\ =\\ min\\ (\\ len(nuke.toNode(\\\"img\\\").channels())\\ ,\\ 1\\ )]" i}}
+  name Switch_MissingImage
+  xpos -41
+  ypos -1276
+ }
+set N54a4840 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 forward.u
+  from1 rgba.green
+  to1 forward.v
+  name Velocity
+  xpos -41
+  ypos -1059
+ }
+ Dot {
+  name Dot6
+  xpos 3
+  ypos -990
+ }
+set N27d55e70 [stack 0]
+ Dot {
+  name Dot5
+  xpos -166
+  ypos -990
+ }
+set N27d561a0 [stack 0]
+ Dot {
+  name Dot9
+  xpos -231
+  ypos -990
+ }
+ Dot {
+  name Dot15
+  xpos -231
+  ypos -571
+ }
+set N27d90b50 [stack 0]
+ TimeOffset {
+  time_offset -1
+  name TimeOffset2
+  xpos -319
+  ypos -510
+ }
+ set C27d90e80 [stack 0]
+ Crop {
+  box {0 0 {img.width i} {img.height i}}
+  crop false
+  name Crop2
+  xpos -319
+  ypos -486
+ }
+ set C27d911b0 [stack 0]
+ IDistort {
+  uv forward
+  uv_scale {{parent.velocity_multiplier i}}
+  maskChannel rgba.alpha
+  name IDistort1
+  xpos -319
+  ypos -462
+  disable {{parent.noVelocity i}}
+ }
+set N27d914e0 [stack 0]
+ Dot {
+  name Dot22
+  xpos -526
+  ypos -453
+ }
+ Dot {
+  name Dot19
+  xpos -526
+  ypos -924
+ }
+ Blur {
+  size {{parent.difference_mask_preblur i}}
+  name Blur4
+  xpos -863
+  ypos -933
+ }
+ set C27d91e70 [stack 0]
+push $N54a4840
+ Dot {
+  name Dot4
+  xpos -397
+  ypos -1273
+ }
+set N27d921a0 [stack 0]
+ Dot {
+  name Dot11
+  xpos -464
+  ypos -1273
+ }
+ Dot {
+  name Dot24
+  xpos -464
+  ypos -962
+ }
+set N27dbeb50 [stack 0]
+ Crop {
+  box {0 0 {img.width i} {img.height i}}
+  name Crop1
+  xpos -665
+  ypos -965
+ }
+clone $C27d91e70 {
+  xpos -775
+  ypos -971
+  selected false
+ }
+ Dot {
+  name Dot12
+  xpos -731
+  ypos -861
+ }
+set N27dbf4e0 [stack 0]
+ Merge2 {
+  inputs 2
+  operation difference
+  name Merge13
+  xpos -863
+  ypos -544
+ }
+push $N27d90b50
+ TimeOffset {
+  time_offset 1
+  name TimeOffset3
+  xpos -320
+  ypos -351
+ }
+ set C27dbfb40 [stack 0]
+clone $C27d911b0 {
+  xpos -320
+  ypos -327
+  selected false
+ }
+ IDistort {
+  uv forward
+  uv_scale {{-parent.velocity_multiplier i}}
+  maskChannel rgba.alpha
+  name IDistort2
+  xpos -320
+  ypos -303
+  disable {{parent.noVelocity i}}
+ }
+set N27dc01a0 [stack 0]
+ Dot {
+  name Dot21
+  xpos -539
+  ypos -294
+ }
+ Dot {
+  name Dot20
+  xpos -539
+  ypos -886
+ }
+clone $C27d91e70 {
+  xpos -886
+  ypos -895
+  selected false
+ }
+push $N27dbf4e0
+ Merge2 {
+  inputs 2
+  operation difference
+  name Merge3
+  xpos -886
+  ypos -687
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge14
+  xpos -750
+  ypos -626
+ }
+ Grade {
+  blackpoint {{"clamp(parent.difference_mask_threshold - parent.difference_mask_softness)" i}}
+  whitepoint {{"clamp(parent.difference_mask_threshold + parent.difference_mask_softness)" i}}
+  white_clamp true
+  name Grade14
+  xpos -750
+  ypos -391
+ }
+ Invert {
+  name Invert2
+  xpos -750
+  ypos -367
+  disable true
+ }
+ HueShift {
+  saturation 0
+  name HueShift1
+  xpos -750
+  ypos -331
+ }
+ Shuffle {
+  alpha red
+  name Shuffle2
+  xpos -750
+  ypos -307
+ }
+ Blur {
+  size {{parent.difference_mask_blur i}}
+  name Blur3
+  xpos -750
+  ypos -242
+ }
+ Dilate {
+  size {{parent.difference_mask_erode i}}
+  name Dilate6
+  xpos -750
+  ypos -206
+ }
+ Dot {
+  name Dot27
+  xpos -706
+  ypos -120
+ }
+push $N27d554e0
+ Dot {
+  name Dot18
+  xpos 297
+  ypos -997
+ }
+set N27e29ab0 [stack 0]
+ Grade {
+  multiply -1
+  black_clamp false
+  name FLIP_plus1_to_min1
+  xpos 190
+  ypos -866
+ }
+ Grade {
+  name CLAMP_BLACK1
+  xpos 190
+  ypos -759
+ }
+push $N27e29ab0
+ Grade {
+  name CLAMP_BLACK2
+  xpos 330
+  ypos -797
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name ADD
+  xpos 330
+  ypos -759
+ }
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos 330
+  ypos -735
+ }
+ Grade {
+  blackpoint {{clamp(parent.MaskVelocityThreshold-parent.MaskVelocitySoftness,0,100000000) i}}
+  whitepoint {{clamp(parent.MaskVelocityThreshold+parent.MaskVelocitySoftness,0,10000000000) i}}
+  name Grade1
+  xpos 330
+  ypos -711
+ }
+ Shuffle {
+  alpha red
+  name Shuffle1
+  xpos 330
+  ypos -687
+ }
+ Dot {
+  name Dot17
+  xpos 374
+  ypos -650
+ }
+set N27e2b430 [stack 0]
+push $N27e2b430
+clone $C27dbfb40 {
+  xpos 86
+  ypos -426
+  selected false
+ }
+push $N27e2b430
+clone $C27d90e80 {
+  xpos 79
+  ypos -579
+  selected false
+ }
+push $N27e2b430
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge4
+  xpos 222
+  ypos -512
+ }
+ Grade {
+  channels rgba
+  white_clamp true
+  name Grade12
+  xpos 222
+  ypos -488
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge10
+  xpos 222
+  ypos -378
+ }
+ Grade {
+  channels rgba
+  white_clamp true
+  name Grade13
+  xpos 222
+  ypos -354
+ }
+ Dilate {
+  size 1
+  name Dilate2
+  xpos 222
+  ypos -325
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  mix {{abs(parent.ConservativeMasking-1) i}}
+  name Merge11
+  xpos 330
+  ypos -267
+ }
+ Grade {
+  channels rgba
+  white_clamp true
+  name Grade8
+  xpos 330
+  ypos -243
+ }
+ Blur {
+  size {{parent.VelocityBlurMask i}}
+  name Blur5
+  xpos 330
+  ypos -219
+ }
+ Dilate {
+  size {{parent.VelocityErodeMask i}}
+  name Dilate7
+  xpos 330
+  ypos -183
+ }
+ Constant {
+  inputs 0
+  name Constant3
+  xpos 604
+  ypos -744
+ }
+ Reformat {
+  type "to box"
+  box_width {{img.width i}}
+  box_height {{img.height i}}
+  box_fixed true
+  filter Impulse
+  name Reformat2
+  xpos 604
+  ypos -662
+ }
+ Invert {
+  name Invert3
+  xpos 604
+  ypos -623
+  disable {{parent.input_mask_invert i}}
+ }
+ set C27f04dd0 [stack 0]
+ Input {
+  inputs 0
+  name mask
+  xpos 792
+  ypos -929
+  number 2
+ }
+set N27f05100 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle6
+  xpos 837
+  ypos -841
+ }
+push $N27f05100
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name Shuffle5
+  xpos 769
+  ypos -816
+ }
+push $N27f05100
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name Shuffle4
+  xpos 691
+  ypos -844
+ }
+push $N27f05100
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle3
+  xpos 579
+  ypos -829
+ }
+ Switch {
+  inputs 4
+  which {{parent.input_mask_channel i}}
+  name Switch3
+  xpos 792
+  ypos -757
+ }
+ Grade {
+  channels rgba
+  white_clamp true
+  name Grade5
+  xpos 792
+  ypos -641
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  name Merge9
+  xpos 792
+  ypos -617
+  disable {{parent.input_mask i}}
+ }
+ Dot {
+  name Dot14
+  xpos 836
+  ypos -565
+ }
+set N27f06750 [stack 0]
+push $N27f06750
+clone $C27dbfb40 {
+  xpos 561
+  ypos -459
+  selected false
+ }
+push $N27f06750
+clone $C27d90e80 {
+  xpos 562
+  ypos -568
+  selected false
+ }
+push $N27f06750
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge1
+  xpos 697
+  ypos -500
+ }
+ Grade {
+  channels rgba
+  white_clamp true
+  name Grade10
+  xpos 697
+  ypos -476
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge2
+  xpos 697
+  ypos -430
+ }
+ Grade {
+  channels rgba
+  white_clamp true
+  name Grade11
+  xpos 697
+  ypos -406
+ }
+ Dilate {
+  size 1
+  name Dilate1
+  xpos 697
+  ypos -375
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  mix {{abs(parent.input_mask_conservative-1)}}
+  name Merge8
+  xpos 792
+  ypos -318
+ }
+ Grade {
+  channels rgba
+  white_clamp true
+  name Grade9
+  xpos 792
+  ypos -294
+ }
+clone $C27f04dd0 {
+  xpos 792
+  ypos -265
+  selected false
+ }
+ Blur {
+  size {{parent.Input_mask_blur i}}
+  name Blur1
+  xpos 792
+  ypos -229
+ }
+ Dilate {
+  size {{parent.Input_mask_erode i}}
+  name Dilate3
+  xpos 792
+  ypos -193
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name MASK_VEL
+  xpos 792
+  ypos -157
+  disable {{abs(parent.Maskbyvelocity-1) i}}
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name MASK_DIFF
+  xpos 792
+  ypos -123
+  disable {{abs(parent.Difference_mask-1) i}}
+ }
+ Grade {
+  channels rgba
+  white_clamp true
+  name Grade6
+  xpos 792
+  ypos -92
+ }
+ Grade {
+  channels rgba
+  white_clamp true
+  name Grade7
+  xpos 792
+  ypos -58
+ }
+ Dot {
+  name Dot16
+  xpos 836
+  ypos 59
+ }
+ Dot {
+  name Dot7
+  xpos 726
+  ypos 59
+ }
+set N280070e0 [stack 0]
+ Invert {
+  name Invert1
+  xpos 165
+  ypos 284
+ }
+push $N27dbeb50
+ Dot {
+  name Dot13
+  xpos -464
+  ypos 193
+ }
+push $N280070e0
+push $N27d921a0
+ Dot {
+  name Dot10
+  xpos -397
+  ypos 59
+ }
+push $N27d55e70
+ Dot {
+  name Dot2
+  xpos 3
+  ypos -460
+ }
+set N28007da0 [stack 0]
+ Constant {
+  inputs 0
+  color 1
+  name Constant2
+  xpos -119
+  ypos -548
+ }
+ Reformat {
+  type "to box"
+  box_width {{img.width i}}
+  box_height {{img.height i}}
+  box_fixed true
+  filter Impulse
+  name Reformat3
+  xpos -119
+  ypos -466
+ }
+push $N28007da0
+ Switch {
+  inputs 2
+  which {{abs(parent.protect_alpha-1) i}}
+  name Switch2
+  xpos -119
+  ypos -431
+ }
+set N54a44f0 [stack 0]
+push $N27dc01a0
+ Dot {
+  name Dot3
+  xpos -210
+  ypos -308
+ }
+push $N54a44f0
+push $N27d914e0
+ Dot {
+  name Dot1
+  xpos -221
+  ypos -466
+ }
+push $N27d561a0
+ Merge2 {
+  inputs 2+1
+  operation copy
+  maskChannelInput -rgba.alpha
+  mix 0.5
+  name Merge5
+  xpos -210
+  ypos -500
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  maskChannelInput -rgba.alpha
+  mix {{1/3 i}}
+  name Merge6
+  xpos -210
+  ypos -352
+ }
+ ShuffleCopy {
+  inputs 2
+  name ShuffleCopy1
+  xpos -79
+  ypos -289
+  disable {{abs(parent.protect_alpha-1) i}}
+ }
+ Dot {
+  name Dot8
+  xpos -35
+  ypos -223
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge7
+  xpos -79
+  ypos 56
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  maskChannelMask rgba.green
+  mix {{abs(parent.Opacity-1) i}}
+  name Mix1
+  xpos -79
+  ypos 190
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  name Merge12
+  xpos -79
+  ypos 290
+  disable {{abs(parent.CheckMask-1) i}}
+ }
+ Text {
+  message "Velocity input missing"
+  font C:/Windows/Fonts/arial.ttf
+  yjustify bottom
+  Transform 1
+  box {10 10 1000 10}
+  color {1 0 0 1}
+  name Warning_Velocity
+  xpos -79
+  ypos 447
+  disable {{"\[python min\\ (\\ (len(nuke.toNode(\\\"velocity\\\").channels())\\ +\\ nuke.toNode(\\\"Switch_NoVelocity\\\")\\\['which'\\].value())\\ ,\\ 1\\ )]" i}}
+ }
+ Text {
+  message "Img input missing"
+  font C:/Windows/Fonts/arial.ttf
+  yjustify bottom
+  Transform 1
+  box {10 70 1000 70}
+  color {1 0 0 1}
+  name Warning_Img
+  xpos -79
+  ypos 487
+  disable {{"\[python min\\ (\\ len(nuke.toNode(\\\"img\\\").channels())\\ ,\\ 1\\ )]" i}}
+ }
+ Output {
+  name Output1
+  xpos -79
+  ypos 766
+ }
+ Dilate {
+  inputs 0
+  size -1
+  name Dilate4
+  xpos -884
+  ypos -469
+  disable true
+ }
+ Dilate {
+  size 2
+  name Dilate5
+  xpos -884
+  ypos -433
+  disable true
+ }
+end_group

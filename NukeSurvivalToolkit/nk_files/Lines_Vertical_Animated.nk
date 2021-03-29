@@ -1,0 +1,18 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr0 sin((x-width)*((x+width)/(size*1000))+(frame*speed))
+ expr1 sin((x-width)*((x+width)/(size*1000))+(frame*speed))
+ expr2 sin((x-width)*((x+width)/(size*1000))+(frame*speed))
+ expr3 sin((x-width)*((x+width)/(size*1000))+(frame*speed))
+ name Lines_Vertical_Animated
+ selected true
+ xpos 224
+ ypos 26
+ addUserKnob {20 User}
+ addUserKnob {7 size R 0 10}
+ size 30
+ addUserKnob {7 speed R 0 10}
+ speed 1
+}

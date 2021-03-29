@@ -1,0 +1,38 @@
+Group {
+ inputs 0
+ name WaveMaker
+ onCreate "#========================================\n# onCreate\n#========================================\nimport nuke\ndef getRoot():\n    root = None\n    try:\n        root = nuke.root()\n        if root.name():\n            pass\n    except:\n        root = None\n    return root\n\ndef onCreate():\n    node = nuke.thisNode()\n    knob = node.knob(\"firstFrame\")\n    root = getRoot()\n    if not root:\n        return\n    # Prevent node from throwing python error on comp open\n    knob.setValue(root.knob(\"first_frame\").value())\nonCreate()"
+ knobChanged "#========================================\n# knobChanged\n#========================================\nimport nuke\ndef knobChanged():\n    node = nuke.thisNode()\n    knob = nuke.thisKnob()\n    knobName = knob.name()\n    waves = \[\n        \"(sin(pi/2+(frame-firstFrame-((phase+(invPhase ? 0.5 : 0))*waveLength*(0.5)))/(waveLength/(2*pi)))+1)/2\", # sin\n        \"(asin(sin(pi/2+(frame-firstFrame-((phase+(invPhase ? 0.5 : 0))*waveLength*(0.5)))/(waveLength/(2*pi))))+pi/2)/pi\", # triangle\n        \"(ceil(sin(pi/2+(frame-firstFrame-((phase+(invPhase ? 0.5 : 0))*waveLength*(0.5)))/(waveLength/(2*pi)))))\", # square\n        \"(abs(sin(pi/2+(frame-firstFrame-((phase+(invPhase ? 0.5 : 0))*waveLength*(0.5)))/(waveLength/(pi)))))\", # bounce\n        \"((random(evolution, pi/2+(frame-firstFrame-((phase+(invPhase ? 0.5 : 0))*waveLength*(0.5)))/(waveLength/(pi)))))\", # random\n        \"((((frame-firstFrame-((phase+(invPhase ? 0.5 : 0))*waveLength*(0.5)))%(waveLength)))/waveLength)\", # sawtooth\n        \"(sin(((pow(pi,2)/2)*(frame-((phase+(invPhase ? 0.5 : 0))*waveLength*(0.5)))/(pi*waveLength)) % (pi/2)))\", # sawtooth parabolic\n        \"(cos(((pow(pi,2)/2)*(frame-((phase+(invPhase ? 0.5 : 0))*waveLength*(0.5)))/(pi*waveLength)) % (pi/2)))\",  # sawtooth parabolic reversed\n        \"((exp(((2*pi)*(frame-((phase+(invPhase ? 0.5 : 0))*waveLength*(0.5)))%(waveLength*(pi*2)))/waveLength)-1)/exp(2*pi))\",  # sawtooth exponential\n    ]\n    if knobName in \[\"wave0\", \"wave1\"]:\n        # Build output expression\n        expr0 = waves\[int(node.knob(\"wave0\").getValue())]\n        expr1 = waves\[int(node.knob(\"wave1\").getValue())]\n        exprOut = \"disable ? 0 : (((\{0\}*(1-waveMix)) + (\{1\}*waveMix))*(maxValue-minValue)+minValue)*power\".format(expr0, expr1)\n        node.knob(\"output\").setExpression(exprOut)\n        # Enable evolution knob if random wave selected\n        node.knob(\"evolution\").setEnabled(any(\[i.value().lower() == \"random\" for i in \[node.knob(\"wave0\"), node.knob(\"wave1\")]]))\nknobChanged()"
+ tile_color 0x3aff71ff
+ note_font Verdana
+ addUserKnob {20 User}
+ addUserKnob {3 firstFrame l "First Frame"}
+ firstFrame 1000
+ addUserKnob {7 minValue l "Min Value" t "lowest possible value"}
+ addUserKnob {7 maxValue l "Max Value" t "highest possible value" -STARTLINE}
+ maxValue 1
+ addUserKnob {7 waveLength l Length t "Higher values are slower. Values below 2 may produce undesirable results when using even waves like sine" R 2 50}
+ waveLength 25
+ addUserKnob {7 phase l Phase t "Not counted in frames but in cycles:\n1 'phase' is half a cycle (or evolution) of the wave."}
+ phase 0.5
+ addUserKnob {6 invPhase l invert t "inverts the curves' phase" -STARTLINE}
+ addUserKnob {7 evolution t "evolution for the random curve"}
+ addUserKnob {68 wave0 l Wave M {Sine Triangle Square Bounce Random Sawtooth/Sawtooth "Sawtooth/Sawtooth (Parabolic)" "Sawtooth/Sawtooth (Parabolic Reversed)" "Sawtooth/Sawtooth (Exponential)" "" "" ""}}
+ addUserKnob {68 wave1 l "Wave 1" -STARTLINE M {Sine Triangle Square Bounce Random Sawtooth/Sawtooth "Sawtooth/Sawtooth (Parabolic)" "Sawtooth/Sawtooth (Parabolic Reversed)" "Sawtooth/Sawtooth (Exponential)" "" ""}}
+ wave1 Random
+ addUserKnob {7 waveMix l "Wave Mix" t "0 = Only Wave 0\n1 = Only Wave 1"}
+ addUserKnob {26 ""}
+ addUserKnob {7 power}
+ power 1
+ addUserKnob {7 output}
+ output {{"disable ? 0 : ((((sin(pi/2+(frame-firstFrame-((phase+(invPhase ? 0.5 : 0))*waveLength*(0.5)))/(waveLength/(2*pi)))+1)/2*(1-waveMix)) + (((random(evolution, pi/2+(frame-firstFrame-((phase+(invPhase ? 0.5 : 0))*waveLength*(0.5)))/(waveLength/(pi)))))*waveMix))*(maxValue-minValue)+minValue)*power"}}
+ addUserKnob {26 ""}
+ addUserKnob {26 credit l "" +STARTLINE T "WaveMaker v1.0 | Fynn Laue 2020"}
+}
+ Output {
+  inputs 0
+  name Output1
+  xpos 0
+  ypos 300
+ }
+end_group

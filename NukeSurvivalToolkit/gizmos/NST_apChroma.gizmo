@@ -1,0 +1,612 @@
+Group {
+name apChroma
+help "Advanced chromatic drift gizmo, that works through a sub-frame blend of different values on an STMap and Transform, while creating a color spectrum.\n\napChroma v1.1\nadrianpueyo.com"
+knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\nif kn == \"monochrome\":\n    k.setValue(min(1,max(0,k.value())))\nelif kn == \"output_dist_matte\":\n    n.knob(\"output_matte_channel\").setEnabled(k.value())"
+tile_color 0x736efdff
+addUserKnob {20 apChroma}
+addUserKnob {26 text l "<b> Transform"}
+addUserKnob {41 translate T Transform17.translate}
+addUserKnob {41 rotate T Transform17.rotate}
+addUserKnob {41 scale T Transform17.scale}
+addUserKnob {41 center T Transform17.center}
+addUserKnob {22 center_on_input l "center on input" -STARTLINE T "n = nuke.thisNode()\ntry:\n    ni = n.input(0)\n    n\[\"center\"].setValue(\[ni.width()/2,ni.height()/2])\nexcept:\n    pass"}
+addUserKnob {7 smooth l "smooth<i style=\"color:#888\"></i>" t "Helps keep a lower sample number for large distortions by adding motion blur. The higher this value, the higher the motion blur quality.\n\nFor typical aberrations this won't be needed, so better avoid smoothing when possible by keeping it 0, as it is super heavy to compute!"}
+addUserKnob {41 invert_matrix l invert T Transform17.invert_matrix}
+addUserKnob {6 black_outside l "black outside" t "When disabled, the edges of your image will be extended in the aberration instead of seeing black entering through the first frequencies." -STARTLINE}
+addUserKnob {22 create_uv_map l " Create UV Map " T "n = nuke.thisNode()\nn.end()\nns = nuke.selectedNodes()\n\[i.setSelected(False) for i in ns]\nuv = nuke.nodes.Expression()\nuv.setXYpos(n.xpos()+140, n.ypos()-100)\nuv.setSelected(True)\nuv\[\"expr0\"].setValue(\"(x+0.5)/width\")\nuv\[\"expr1\"].setValue(\"(y+0.5)/height\")\nn.setInput(1,uv)\nd = nuke.createNode(\"Dot\")\nd.hideControlPanel()\nd.setYpos(int(n.ypos()+n.screenHeight()/2 - d.screenHeight()/2))\nuv.setSelected(False)\nd.setSelected(False)\n\[i.setSelected(True) for i in ns]" +STARTLINE}
+addUserKnob {26 breathe l "" +STARTLINE T " "}
+addUserKnob {26 text_1 l "<b> Settings"}
+addUserKnob {3 samples}
+samples 10
+addUserKnob {7 ab l aberration t "This drives the amount of color aberration.\n0 = No aberration at all, works as regular STMap.\n1 = Amount of aberration equal to the values of the input UV Map." R 0 2}
+ab 1
+addUserKnob {7 compensate t "Inverse the values of the distortion map so that the overall effect stays at the same position." R -1 1}
+compensate 1
+addUserKnob {7 monochrome t "With the same amount of \"color leak\", this desaturates the spectrum in that leak.\nAt value 1, the effect is similar to a directional blur."}
+addUserKnob {14 overscan R 0 100}
+addUserKnob {6 invert_spectrum l "invert spectrum" +STARTLINE}
+addUserKnob {6 calculate_multi_alpha l "calculate per-channel alpha" t "Also generates a channel layer called apChroma wich includes the transformed alphas for each of the rgba channels. This is necessary if you want to merge the result of this node onto a background. You'll need apChromaMerge or a similar gizmo in order to perform the special merge." -STARTLINE}
+calculate_multi_alpha true
+addUserKnob {6 output_dist_matte l "output distortion matte" t "Useful if you want to add a grading or iBlur afterwards, driven by the amount of chromatic aberration." +STARTLINE}
+addUserKnob {41 output_matte_channel l "" -STARTLINE T CopyAlpha.to0}
+addUserKnob {26 breathe3 l "" +STARTLINE T " "}
+addUserKnob {26 ""}
+addUserKnob {41 maskChannelMask l "mask " T MergeRGB.maskChannelMask}
+addUserKnob {41 inject -STARTLINE T MergeRGB.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T MergeRGB.invert_mask}
+addUserKnob {41 fringe -STARTLINE T MergeRGB.fringe}
+addUserKnob {41 mix T MergeRGB.mix}
+addUserKnob {26 version_author l "" t "apChroma v1.1\n2016-2019" +STARTLINE T "<span style=\"color:#666\"><br/><b>apChroma v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2016-2019</span>"}
+addUserKnob {20 Spectrum}
+addUserKnob {41 lut l "" +STARTLINE T CLP.lut}
+addUserKnob {22 lutPrepare l INVISIBLE +INVISIBLE T "n = nuke.thisNode()\ntry:\n    n.knob(\"lut\").delCurve(\"master\")\n    n.knob(\"lut\").delCurve(\"alpha\")\nexcept:\n    pass" +STARTLINE}
+addUserKnob {52 lutPrepareGo T "nuke.thisNode()\[\"lutPrepare\"].execute()" +STARTLINE}
+}
+ColorLookup {
+inputs 0
+use_precomputed false
+lut {red {curve C 0 s0 x0.3128865659 1 s-0 v0.7904256582 x0.7806204557 -0.0007482314769 s0 u1.743535638 v1.742119074 x0.9418143034 0.06970721483 s-0.05000000075 x1 0 s0}
+  green {curve C x0.1143286526 0 s0.01999999955 v1.837088585 x0.530087471 1 s-0.05000000075 u1.36422956 v1.120811915 x0.9743717909 0 s-0 u2.045060158}
+  blue {curve C x0.6321670413 0 s0 x0.8160832524 0.99800843 s0 x1 0 s0}}
+name CLP
+label "Natural Spectrum"
+xpos 137
+ypos -191
+}
+Input {
+inputs 0
+name Inputmask
+xpos -498
+ypos 449
+number 2
+}
+Dot {
+name Dot25
+note_font_size 41
+xpos -464
+ypos 494
+}
+set Neafe7a20 [stack 0]
+Dot {
+name Dot21
+xpos -464
+ypos 532
+}
+set Ncfaf2d00 [stack 0]
+Dot {
+name Dot24
+note_font_size 41
+xpos -464
+ypos 576
+}
+Input {
+inputs 0
+name Inputimg
+xpos -388
+ypos -554
+}
+NoTimeBlur {
+rounding none
+name NoTB
+xpos -388
+ypos -528
+}
+AdjBBox {
+numpixels {{parent.overscan} {parent.overscan}}
+name AdjBBox
+xpos -388
+ypos -502
+}
+set N6b5da4e0 [stack 0]
+Dot {
+name Dot1
+xpos -47
+ypos -498
+}
+set N3ec0c30 [stack 0]
+Expression {
+expr0 (x+0.5)/width
+expr1 (y+0.5)/height
+expr2 0
+name ExpressionUVDefault
+xpos 118
+ypos -502
+}
+Input {
+inputs 0
+name Inputuv
+xpos 279
+ypos -558
+number 1
+}
+Switch {
+inputs 2
+which 1
+name SwitchUV
+xpos 279
+ypos -502
+disable {{"\[exists parent.input1]"}}
+}
+NoTimeBlur {
+rounding none
+name NoTB1
+xpos 279
+ypos -476
+}
+Dot {
+name Dot3
+note_font_size 41
+xpos 313
+ypos -275
+}
+set N821d4e10 [stack 0]
+Dot {
+name Dot11
+note_font_size 41
+xpos 447
+ypos -275
+}
+Remove {
+name Remove1
+xpos 413
+ypos -257
+}
+Expression {
+expr0 (x+0.5)/width
+expr1 (y+0.5)/height
+expr2 0
+expr3 0
+name ExpressionUV
+xpos 413
+ypos -219
+}
+Dot {
+name Dot13
+note_font_size 41
+xpos 447
+ypos -183
+}
+set N769b0b30 [stack 0]
+Dot {
+name Dot15
+note_font_size 41
+xpos 690
+ypos -183
+}
+set N4c2ec340 [stack 0]
+Multiply {
+channels {rgba.red rgba.green -rgba.blue none}
+value {{1-parent.ab} {1-parent.ab} 1 1}
+name Multiply6
+xpos 656
+ypos -98
+}
+Dot {
+name Dot16
+xpos 690
+ypos -38
+}
+push $N821d4e10
+Dot {
+name Dot27
+note_font_size 41
+xpos 214
+ypos -275
+}
+Dot {
+name Dot5
+note_font_size 41
+xpos 214
+ypos -233
+}
+push $N821d4e10
+Merge2 {
+inputs 2
+operation copy
+name Merge3
+xpos 279
+ypos -237
+}
+Dot {
+name Dot8
+note_font_size 41
+xpos 313
+ypos -164
+}
+set Nc1e6dfb0 [stack 0]
+Dot {
+name Dot14
+note_font_size 41
+xpos 600
+ypos -164
+}
+Multiply {
+channels {rgba.red rgba.green -rgba.blue none}
+value {{parent.ab} {parent.ab} 0 0}
+name Multiply5
+xpos 566
+ypos -98
+}
+Merge2 {
+inputs 2
+operation plus
+bbox B
+output rgb
+name Merge4
+xpos 566
+ypos -42
+}
+Transform {
+center {1024 576}
+motionblur {{parent.smooth}}
+shutter {{1/parent.samples}}
+shutteroffset centred
+name Transform17
+label control
+xpos 566
+}
+set Nec6fd710 [stack 0]
+push $N4c2ec340
+Dot {
+name Dot18
+note_font_size 41
+xpos 831
+ypos -183
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 797
+ypos 6
+}
+Dot {
+name Dot19
+xpos 831
+ypos 77
+}
+push $Nec6fd710
+Merge2 {
+inputs 2
+operation difference
+bbox B
+name Merge5
+xpos 566
+ypos 73
+}
+Expression {
+expr3 sqrt(pow2(r)+pow2(g))
+name ExpressionDiff
+xpos 566
+ypos 99
+}
+Dot {
+name Dot9
+xpos 600
+ypos 376
+}
+push $N3ec0c30
+Dot {
+name Dot2
+note_font_size 41
+xpos -47
+ypos -436
+}
+set Nec35a090 [stack 0]
+Dot {
+name Dot17
+note_font_size 41
+xpos 31
+ypos -436
+}
+Dot {
+name Dot26
+note_font_size 41
+xpos 31
+ypos -347
+}
+push $Nec35a090
+add_layer {apChroma apChroma.red apChroma.green apChroma.blue apChroma.alpha}
+Shuffle {
+alpha white
+black alpha
+white alpha
+red2 alpha
+out2 {apChroma.red apChroma.green apChroma.blue -apChroma.alpha}
+name ShuffleAlpha1
+xpos -81
+ypos -401
+}
+Merge2 {
+inputs 2
+operation copy
+Achannels {{{parent.MergeCopyChroma.Achannels}}}
+Bchannels none
+name MergeGetChroma
+xpos -81
+ypos -351
+disable {{"\[\nif \{ \[lsearch -exact \[channels \[input this 1]] \[lindex \[channels MergeChosen] 0]] >= 0\} \{\n    return 0\n\} else \{\n    return 1\n\}\n]"}}
+}
+Remove {
+channels apChroma
+name Remove_apChroma
+xpos -81
+ypos -278
+disable {{parent.calculate_multi_alpha}}
+}
+add_layer {apChromaWeight apChromaWeight.red apChromaWeight.green apChromaWeight.blue apChromaWeight.alpha}
+AddChannels {
+channels apChromaWeight
+color 1
+name AddChannels1
+xpos -81
+ypos -240
+}
+Multiply {
+value {{!parent.invert_spectrum?CL.lut.red(TB.frf):CL.lut.red(1-TB.frf)} {!parent.invert_spectrum?CL.lut.green(TB.frf):CL.lut.green(1-TB.frf)} {!parent.invert_spectrum?CL.lut.blue(TB.frf):CL.lut.blue(1-TB.frf)} {!parent.invert_spectrum?CL.lut.red(TB.frf):CL.lut.red(1-TB.frf)}}
+name Multiply1
+xpos -81
+ypos -189
+addUserKnob {20 User}
+addUserKnob {19 fullcolor}
+fullcolor {{!parent.invert_spectrum?CLP.lut.red(TB.frf):CLP.lut.red(1-TB.frf)} {!parent.invert_spectrum?CLP.lut.green(TB.frf):CLP.lut.green(1-TB.frf)} {!parent.invert_spectrum?CLP.lut.blue(TB.frf):CLP.lut.blue(1-TB.frf)} {!parent.invert_spectrum?CLP.lut.red(TB.frf):CLP.lut.red(1-TB.frf)}}
+addUserKnob {6 fullcolor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 fullcolor_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 fullcolor_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 fullcolor_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 fullcolor_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 fullcolor_panelDropped_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 fullcolor_panelDropped_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+addUserKnob {6 fullcolor_panelDropped_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+}
+Dot {
+name Dot6
+note_font_size 41
+xpos -47
+ypos -141
+}
+set N47690fd0 [stack 0]
+Dot {
+name Dot7
+note_font_size 41
+xpos -139
+ypos -141
+}
+Dot {
+name Dot10
+note_font_size 41
+xpos -139
+ypos 90
+}
+push $Nc1e6dfb0
+Multiply {
+channels {rgba.red rgba.green -rgba.blue none}
+value {{"(TB.frf-.5)*parent.ab + 0.5*(1-parent.compensate)"} {"(TB.frf-.5)*parent.ab + 0.5*(1-parent.compensate)"} 0 0}
+name Multiply3
+xpos 279
+ypos -146
+}
+Dot {
+name Dot12
+note_font_size 41
+xpos 313
+ypos -108
+}
+push $N769b0b30
+Multiply {
+channels {rgba.red rgba.green -rgba.blue none}
+value {{"(1- ((TB.frf-.5)*parent.ab + 0.5*(1-parent.compensate)) )" i} {"(1- ((TB.frf-.5)*parent.ab + 0.5*(1-parent.compensate)) )" i} 1 1}
+name Multiply4
+xpos 413
+ypos -145
+}
+Merge2 {
+inputs 2
+operation plus
+Achannels {rgba.red rgba.green -rgba.blue -rgba.alpha}
+Bchannels {rgba.red rgba.green -rgba.blue -rgba.alpha}
+output {rgba.red rgba.green -rgba.blue -rgba.alpha}
+name Merge1
+xpos 413
+ypos -112
+}
+Dot {
+name Dot4
+xpos 447
+ypos 43
+}
+push $N47690fd0
+Remove {
+channels apChromaWeight
+name Remove3
+xpos -81
+ypos -104
+}
+Transform {
+translate {{"parent.Transform17.translate*((TB.frf-0.5)*parent.ab+ 0.5*(1-parent.compensate))"} {"parent.Transform17.translate*((TB.frf-0.5)*parent.ab+ 0.5*(1-parent.compensate))"}}
+rotate {{"parent.Transform17.rotate*((TB.frf-0.5)*parent.ab+ 0.5*(1-parent.compensate))"}}
+scale {{"parent.Transform17.scale*((TB.frf-0.5)*parent.ab+ 0.5*(1-parent.compensate)) + 1 - ((TB.frf-0.5)*parent.ab+ 0.5*(1-parent.compensate)) "} {"parent.Transform17.scale*((TB.frf-0.5)*parent.ab+ 0.5*(1-parent.compensate)) + 1 - ((TB.frf-0.5)*parent.ab+ 0.5*(1-parent.compensate)) "}}
+center {{parent.Transform17.center} {parent.Transform17.center}}
+invert_matrix {{parent.Transform17.invert_matrix}}
+black_outside {{parent.black_outside}}
+motionblur {{parent.smooth}}
+shutter {{1/parent.samples}}
+name TransformI
+xpos -81
+ypos -66
+}
+Blur {
+channels rgba
+name Blur1
+xpos -81
+ypos -40
+addUserKnob {20 User}
+addUserKnob {26 info l "" +STARTLINE T "needed to break concatenation and make sure mblur works with the stmaps"}
+}
+STMap {
+inputs 2
+uv rgb
+blur_scale 0
+name STMap1
+xpos -81
+ypos 33
+disable {{"!\[exists parent.input1]"}}
+}
+Copy {
+inputs 2
+channels apChromaWeight
+name Copy2
+xpos -81
+ypos 74
+}
+TimeBlur {
+divisions {{parent.samples}}
+shutter 1
+shutteroffset start
+shuttercustomoffset 0
+name TB
+xpos -81
+ypos 124
+addUserKnob {20 User}
+addUserKnob {7 frf}
+frf {{(frame%1)*(parent.samples+1)/parent.samples}}
+}
+set N24e20ab0 [stack 0]
+push $N24e20ab0
+Shuffle {
+in apChromaWeight
+name Shuffle2
+label "\[value in]"
+xpos 89
+ypos 118
+}
+set N40bd86d0 [stack 0]
+Merge2 {
+inputs 2
+operation divide
+bbox A
+metainput A
+rangeinput A
+Achannels apChroma
+output apChroma
+name Merge6
+xpos 89
+ypos 227
+}
+push $N24e20ab0
+push $N40bd86d0
+Merge2 {
+inputs 2
+operation divide
+bbox A
+metainput A
+rangeinput A
+name Merge2
+xpos -81
+ypos 195
+}
+Copy {
+inputs 2
+channels apChroma
+name Copy3
+xpos -81
+ypos 221
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 apChroma.alpha
+from1 rgba.alpha
+to1 rgba.alpha
+bbox B
+name Copy1
+xpos -81
+ypos 360
+}
+Dot {
+name Dot22
+note_font_size 41
+xpos -47
+ypos 494
+}
+set Nfd2c8010 [stack 0]
+Dot {
+name Dot20
+xpos -47
+ypos 532
+}
+set Nec3eba80 [stack 0]
+Dot {
+name Dot23
+note_font_size 41
+xpos -47
+ypos 576
+}
+push $Ncfaf2d00
+push $Nec3eba80
+push $Neafe7a20
+push $Nfd2c8010
+push $N6b5da4e0
+Merge2 {
+inputs 2+1
+operation copy
+Achannels rgb
+Bchannels rgb
+output rgb
+also_merge apChroma
+name MergeRGB
+xpos -388
+ypos 490
+}
+Copy {
+inputs 2+1
+channels apChroma
+maskChannelMask {{{parent.MergeRGB.maskChannelMask}}}
+maskChannelInput {{{parent.MergeRGB.maskChannelInput}}}
+inject {{parent.MergeRGB.inject}}
+invert_mask {{parent.MergeRGB.invert_mask}}
+fringe {{parent.MergeRGB.fringe}}
+mix {{parent.MergeRGB.mix}}
+name Copy_apChroma
+xpos -388
+ypos 516
+disable {{!parent.calculate_multi_alpha}}
+}
+Copy {
+inputs 2+1
+from0 rgba.alpha
+to0 rgba.alpha
+name CopyAlpha
+xpos -388
+ypos 566
+disable {{!parent.output_dist_matte}}
+}
+Output {
+name Output
+xpos -388
+ypos 604
+}
+ColorLookup {
+inputs 0
+channels rgb
+lut {master {}
+  red {"CLP.lut.red * (1-parent.monochrome) + parent.monochrome" C 0 1}
+  green {"CLP.lut.green * (1-parent.monochrome) + parent.monochrome" C 0 1}
+  blue {"CLP.lut.blue * (1-parent.monochrome) + parent.monochrome" C 0 1}
+  alpha {"CLP.lut.alpha * (1-parent.monochrome) + parent.monochrome" C 0 1}}
+name CL
+label monochrome
+xpos 27
+ypos -149
+}
+Merge2 {
+inputs 0
+operation copy
+Achannels {{{parent.MergeCopyChroma.Achannels}}}
+Bchannels none
+output {{{parent.MergeCopyChroma.Achannels}}}
+name MergeChosen
+xpos -209
+ypos -351
+hide_input true
+}
+end_group

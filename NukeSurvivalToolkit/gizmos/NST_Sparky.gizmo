@@ -1,0 +1,391 @@
+Group {
+ name Sparky
+ tile_color 0xbd4600ff
+ label "\[if \{\[value ROrP]==false\} \{return \"Render Mode\"\} \{return \"!! PARTICLE MODE !! \\nENABLED\"\}]"
+ note_font "Bitstream Vera Sans Bold"
+ selected true
+ lock_connections true
+ addUserKnob {20 SparkTab l "Sparky Settings"}
+ addUserKnob {41 start_frame l "Initial Frame" T SparkEmit.start_frame}
+ addUserKnob {7 EmissionRate l "Emission Amount" R 0 100}
+ EmissionRate 15
+ addUserKnob {26 ""}
+ addUserKnob {26 emittertext l "" +STARTLINE T "Emitter Settings"}
+ addUserKnob {13 Direction t "Set the initial velocity applied to the particles. This will orient the sparks in 3D space."}
+ Direction {100 40 0}
+ addUserKnob {7 MaxLife l "Particle Life" t "Maximum amount of frames the particles will live for." R 10 100}
+ MaxLife 60
+ addUserKnob {7 LifeRange l "Life Range" t "Randomizes the Life Range of the particles." R 0 2}
+ LifeRange 0.75
+ addUserKnob {3 seed l "Particle  Seed" t "Randomizes the simulation."}
+ seed 123
+ addUserKnob {26 ""}
+ addUserKnob {7 ParticleSize l "Particle Size" t "Change Particle Size" R 1 5}
+ ParticleSize 2
+ addUserKnob {7 Explosivity t "Changes how much influence the initial force has on the particles." R 0 100}
+ Explosivity 45
+ addUserKnob {7 Scatter t "Adds some randomness between particles." R 0 100}
+ Scatter 100
+ addUserKnob {41 Softness l "Particle Softness" T CustomKnobs.Softness}
+ addUserKnob {26 ""}
+ addUserKnob {4 ROption l "Render Options" t "Multi Scanline: Output is a ScanlineRender with motionblur enabled. Can be DeepMerged\nVectorBlur: 2D motionblur added post-render. Can get rid of sample issues, but is not Deep compatible." M {"Multi Scanline" VectorBlur "" ""}}
+ addUserKnob {41 format l Format T RootFormatSetup.format}
+ addUserKnob {14 Overscan R 0 100}
+ Overscan 100
+ addUserKnob {6 ROrP l "Output As Particles" t "Check this to output Particles instead of a 2D render.\nIt can then be plugged into a 3D scene." +INVISIBLE +STARTLINE}
+ addUserKnob {6 OutputDeep l "Output Deep" t "Warning: Will output in Multi-Scanlinde mode only. Doesn't have any effect if \"Output As Particles is selected\"." -STARTLINE}
+ addUserKnob {22 outParticles l "Output As Particles" t "Click this to output Particles instead of a 2D render.\nIt can then be plugged into a 3D scene." T "n = nuke.thisNode()\n\nn.begin()\n\nSwitch = nuke.toNode('DotSwitch')\nP= nuke.toNode('ParticlesDot')\nR= nuke.toNode('RenderDot')\n\nif n\['ROrP'].value() ==0:\n    Switch.setInput(0,P)\n    n\['ROrP'].setValue(1)\n    n\['outParticles'].setLabel(\"Output As 2D Render\")\nelse:\n    Switch.setInput(0,R)\n    n\['ROrP'].setValue(0)\n    n\['outParticles'].setLabel(\"Output As Particles\")\n\nn.end()\n" +STARTLINE}
+ addUserKnob {20 Presets}
+ addUserKnob {4 AnimPreset l "Animation Presets" t "None: This wont do anything. Serves as safety to not enable a preset accidentally\nSingle Hit Heavy: Heavy hit with a double pop.\nSingle Hit Light : Light pop of sparks.\nWelding : Expression that will mimic a natural welding feeling.\nWavy : Constant sim with some strong variation in birth rate.\nConstant : Softer variation than the Wavy preset.\nLoopy : Loops the same pop of Sparks." M {None "Single Hit Heavy" "Single Hit Light" Welding Wavy Constant Loopy "" "" "" "" ""}}
+ addUserKnob {22 Apply l "Apply Preset" t "    " T "def checkPreset():\n    preset = int(nuke.thisNode()\['AnimPreset'].getValue())\n    print preset\n    if preset ==0:\n        return False\n    else:\n        return preset\n\ndef checkFrame():\n    InitFrame = nuke.getInput(\"Enter Initial Frame\", '1001')\n    if InitFrame:\n        try:\n            InitFrame = int(InitFrame)\n            return InitFrame\n        except ValueError:\n            nuke.message(\"Not a valid frame number\")\n            return False\n\n\nif checkPreset() == False:\n    nuke.ask(\"No preset selected\")\nelse:\n    n=nuke.thisNode()\['EmissionRate']\n    s=int(nuke.thisNode()\['AnimPreset'].getValue())\n    cf=checkFrame()\n    if cf!=False and cf!=None:\n        if s == 1:        \n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setAnimated()\n            sCurve = '\{curve K x%v1 0 S 400 x%v2 0 12 x%v3 175 x%v4 20 0\}'\n            sCurve=sCurve.replace(\"%v1\",str(cf))\n            sCurve=sCurve.replace(\"%v2\",str(cf+3))\n            sCurve=sCurve.replace(\"%v3\",str(cf+6))\n            sCurve=sCurve.replace(\"%v4\",str(cf+12))\n            n.fromScript(sCurve)\n            nuke.message(\"Applied Single Hit Heavy Preset\")\n        elif s == 2:\n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setAnimated()\n            sCurve = '\{curve K x%v1 0 S 140 x%v2 0\}'\n            sCurve=sCurve.replace(\"%v1\",str(cf))\n            sCurve=sCurve.replace(\"%v2\",str(cf+3))\n            n.fromScript(sCurve)\n            nuke.message(\"Applied Single Hit Light Preset\")\n        elif s == 3:\n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setExpression(\"max(0,(random(frame+seed)*120*((sin(frame+seed)+1)*0.5)-12))*3\")\n            nuke.message(\"Applied Welding Preset\")\n        elif s == 4:\n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setExpression(\"random(frame+seed)*120*((sin(frame+seed)+1)*0.5)\")\n            nuke.message(\"Applied Wavy Preset\")\n        elif s == 5:\n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setExpression(\"random(frame/5+seed)*100+60\")\n            nuke.message(\"Applied Constant Preset\")\n        else:\n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setAnimated()\n            sCurve = '\{curve(((frame-%v1)%(%v6-%v1+1))+%v1) K x%v1 0 S 400 x%v2 0 x%v3 12 175 x%v4 20 x%v5 0 x%v6 0\}'\n            sCurve=sCurve.replace(\"%v1\",str(cf))\n            sCurve=sCurve.replace(\"%v2\",str(cf+3))\n            sCurve=sCurve.replace(\"%v3\",str(cf+4))\n            sCurve=sCurve.replace(\"%v4\",str(cf+7))\n            sCurve=sCurve.replace(\"%v5\",str(cf+11))\n            sCurve=sCurve.replace(\"%v6\",str(cf+14))\n            n.fromScript(sCurve)\n            nuke.message(\"Applied Loopy Preset\")\n\n" +STARTLINE}
+ addUserKnob {20 Advanced l "Advanced Settings"}
+ addUserKnob {7 TVelocity l "Transfer Velocity"}
+ TVelocity 0.5
+ addUserKnob {7 TWindow l "Transfer window" R 0 5}
+ TWindow 2
+ addUserKnob {7 Spread l "Emission Spread"}
+ Spread 0.1
+ addUserKnob {26 ""}
+ addUserKnob {41 samples l "Scanline Samples" T MultiSampleRender.samples}
+ addUserKnob {7 Shutter}
+ Shutter 0.5
+ addUserKnob {41 shutteroffset l "Shutter Offset" T MultiSampleRender.shutteroffset}
+ addUserKnob {41 shuttercustomoffset l "" -STARTLINE T MultiSampleRender.shuttercustomoffset}
+ addUserKnob {20 Instructions}
+ addUserKnob {26 info l "" +STARTLINE T "Sparky v1.5\n\nEasy to use particle setup for Sparks.\n\nOutputs an image by default, but can be configured to be rendered through a specific Camera or\nto output as particles, which allows you to plug Sparky into a 3D scene.\n\nIf you wish to use the 3D version of this Gizmo, simply plug your Camera and plug an Axis to \nmove and place the sparks where you need them.\n\nFor more information about presets and changelogs, head to the Nukepedia page!"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode9
+  tile_color 0x557fffff
+  label "Welcome Curious Comper!\n\nI hope you'll find answers\nto what you are looking for\ninside here! <img src=\"ParticleBounce.png\">"
+  note_font "Bitstream Vera Sans"
+  note_font_size 111
+  xpos -2486
+  ypos -861
+  bdwidth 2780
+  bdheight 1970
+ }
+ Input {
+  inputs 0
+  name Camera
+  xpos -1457
+  ypos 312
+ }
+ Dot {
+  name Dot3
+  xpos -1423
+  ypos 551
+ }
+ Camera2 {
+  inputs 0
+  translate {0 -100 1200}
+  focal 20
+  haperture 24
+  vaperture 13.5
+  near 1
+  far 1000000
+  name Default2DCam
+  xpos -1217
+  ypos 210
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input0]"}}
+  name Switch1
+  xpos -1227
+  ypos 548
+ }
+set N5c811000 [stack 0]
+ ColorWheel {
+  inputs 0
+  format "256 256 0 0 256 256 1 square_256"
+  gamma 0.45
+  name ColorWheel1
+  xpos -1170
+  ypos -537
+ }
+ Saturation {
+  saturation 0
+  mode Maximum
+  name Saturation1
+  xpos -1170
+  ypos -427
+ }
+ FilterErode {
+  channels all
+  size {{abs(parent.CustomKnobs.Softness)}}
+  filter gaussian
+  name ErodeSoft
+  xpos -1170
+  ypos -384
+ }
+ Reformat {
+  type scale
+  scale 0.125
+  resize distort
+  black_outside true
+  name Reformat2
+  xpos -1170
+  ypos -325
+ }
+ Grade {
+  white {0.9 0.35 0.085 1}
+  name Grade1
+  xpos -1170
+  ypos -267
+ }
+ BlendMat {
+  operation max
+  surfaceblend modulate
+  name BlendMat1
+  xpos -971
+  ypos -267
+ }
+ Noise {
+  inputs 0
+  size 750
+  zoffset {{frame/5+CustomKnobs.time_offset}}
+  octaves 6
+  lacunarity 1.45
+  gain 0.6
+  center {1440 810}
+  name Noise6
+  xpos -676
+  ypos -548
+ }
+set N5950d400 [stack 0]
+ Sphere {
+  name Sphere1
+  xpos -770
+  ypos -456
+ }
+push $N5950d400
+ Sphere {
+  translate {{parent.input1.translate} {parent.input1.translate} {parent.input1.translate}}
+  rotate {{parent.input1.rotate} {parent.input1.rotate} {parent.input1.rotate}}
+  scaling {{parent.input1.scaling} {parent.input1.scaling} {parent.input1.scaling}}
+  name Sphere2
+  xpos -575
+  ypos -460
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input1]"}}
+  name Switch3
+  xpos -676
+  ypos -342
+ }
+push 0
+ ParticleEmitter {
+  inputs 3
+  start_frame 1001
+  emit_from faces
+  randomize_type "randomized direction"
+  rate {{parent.EmissionRate}}
+  rate_variation 0.5
+  rate_channel rgba.red
+  lifetime {{parent.MaxLife}}
+  lifetime_variation {{parent.LifeRange}}
+  halflife {{lifetime/2.5}}
+  velocity {{"!\[exists parent.input1]?7.5+(10*Explosivity/100):7.5+(10*Explosivity/100)*((parent.input1.uniform_scale-1)*0.25+1)"}}
+  velocity_variation {{0.125+abs((min(100,parent.Scatter)*0.035))}}
+  size {{"!\[exists parent.input1]?max(0.1,parent.ParticleSize):max(0.01,parent.ParticleSize)*((parent.input1.uniform_scale-1)*0.25+1)"}}
+  size_variation 1.6
+  mass {{"!\[exists parent.input1]?0.5+(1-(clamp(parent.Explosivity,0,100))/100)*3.5:(0.5+((1-(clamp(parent.Explosivity,0,100))/100)*3.5))*(((parent.input1.uniform_scale-1)*0.25)+1)"}}
+  mass_variation {{1.5*(clamp(parent.Scatter,0,100))/100}}
+  transfer_velocity {{parent.TVelocity}}
+  transfer_window {{parent.TWindow}}
+  spread {{parent.Spread}}
+  color {0.9 0.35 0.085 1}
+  seed {{CustomKnobs.time_offset}}
+  name SparkEmit
+  xpos -676
+  ypos -267
+ }
+ ParticleDirectionalForce {
+  strength {{"parent.Direction*(\[exists parent.input1]?1+(parent.input1.uniform_scale-1)*0.85:1)"} {"parent.Direction*(\[exists parent.input1]?1+(parent.input1.uniform_scale-1)*0.85:1)"} {"parent.Direction*(\[exists parent.input1]?1+(parent.input1.uniform_scale-1)*0.85:1)"}}
+  max_age {{1/(max(1,parent.SparkEmit.lifetime*1.25))}}
+  name ParticleDirectionalForce
+  xpos -676
+  ypos -120
+ }
+ ParticleDrag {
+  drag 0.6
+  name ParticleDrag
+  xpos -676
+  ypos -36
+ }
+ ParticleTurbulence {
+  strength {2 0.85 4}
+  scale {5 10 20}
+  name ParticleTurbulence
+  xpos -676
+  ypos 22
+ }
+ ParticleDrag {
+  drag 0.1
+  name ParticleDrag2
+  xpos -676
+  ypos 86
+ }
+ ParticleGravity {
+  to {0 {"!\[exists parent.input1]?-3:-1-(2*(parent.input1.uniform_scale))"} 0}
+  min_age 0.1
+  name ParticleGravity
+  xpos -676
+  ypos 148
+ }
+ ParticleCurve {
+  curves {r {curve L x0.04740819708 1 S l x0.4987964034 0.7955223322 x1 0}
+    g {curve L x0.04740819708 1 S l x0.4987964034 0.7955223322 x1 0}
+    b {curve L x0.04740819708 1 S l x1 0}
+    a {curve L x0.04740819708 1 S l x0.4939824343 0.7353233099 x1 0}
+    size {}
+    mass {}}
+  seed {{HiddenSeed}}
+  name FadeOut
+  xpos -676
+  ypos 201
+ }
+ ParticleSettings {
+  name ParticleSettings1
+  xpos -676
+  ypos 265
+ }
+set N79949400 [stack 0]
+ Dot {
+  name Dot6
+  xpos -642
+  ypos 516
+ }
+set N59540000 [stack 0]
+ Constant {
+  inputs 0
+  name Constant1
+  xpos -161
+  ypos 316
+ }
+ Reformat {
+  resize none
+  name RootFormatSetup
+  xpos -161
+  ypos 406
+  addUserKnob {20 User}
+  addUserKnob {14 Overscan R 0 100}
+  Overscan {{parent.Overscan}}
+ }
+ Dot {
+  name Dot4
+  xpos -127
+  ypos 551
+ }
+set N79871800 [stack 0]
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  antialiasing high
+  overscan {{parent.RootFormatSetup.Overscan}}
+  spatial_jitter 0.1
+  motion_vectors_type velocity
+  name NO_Motionblur
+  xpos -449
+  ypos 548
+ }
+ VectorBlur2 {
+  channels rgba
+  uv forward
+  alpha -rgba.alpha
+  scale 0.5
+  motion_falloff 0.65
+  offset 0
+  grow_bbox 40
+  normalize false
+  name MBlur
+  xpos -448
+  ypos 708
+ }
+push $N5c811000
+ Dot {
+  name Dot48
+  xpos -1192
+  ypos 640
+ }
+push $N59540000
+push $N79871800
+ Dot {
+  name Dot5
+  xpos -126
+  ypos 640
+ }
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  antialiasing high
+  ambient {{parent.RootFormatSetup.Overscan}}
+  samples 30
+  shutter {{parent.Shutter}}
+  spatial_jitter 0.025
+  motion_vectors_type velocity
+  name MultiSampleRender
+  xpos -676
+  ypos 637
+ }
+ Switch {
+  inputs 2
+  which {{OutputDeep==1?0:ROption}}
+  name Switch2
+  xpos -677
+  ypos 714
+ }
+ Dot {
+  name RenderDot
+  xpos -643
+  ypos 763
+ }
+ Dot {
+  name DotSwitch
+  xpos -643
+  ypos 904
+ }
+ Output {
+  name Output
+  xpos -677
+  ypos 1014
+ }
+ NoOp {
+  inputs 0
+  name CustomKnobs
+  tile_color 0xff9fff
+  xpos -90
+  ypos -264
+  addUserKnob {20 User}
+  addUserKnob {7 Softness R 0 100}
+  Softness 10
+  addUserKnob {3 time_offset l Seed}
+  time_offset {{parent.seed}}
+ }
+ Input {
+  inputs 0
+  name Axis
+  xpos -358
+  ypos -541
+  number 1
+ }
+ Dot {
+  name Dot7
+  xpos -324
+  ypos -479
+ }
+push $N79949400
+ Dot {
+  name Dot2
+  xpos -924
+  ypos 711
+ }
+ Dot {
+  name ParticlesDot
+  xpos -924
+  ypos 831
+ }
+end_group

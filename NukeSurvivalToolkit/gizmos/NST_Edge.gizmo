@@ -1,0 +1,1036 @@
+Group {
+ name Edge
+ help "Edge allows you to extend the proper color out over transparent edges or areas with a lot of motionblur without eroding away the nice detail. This edge extend has some more advanced features like splitting the core matte and final key which allows you to work on motion blur without effecting small details like hair or a swinging rope for example. There is also more control over how you blend the core detail to the extended edge color. This was shown to me years ago by an old comp sup I had and is the same as the edge extend by Frank Reuter. This is my version of it that has evolved a little bit over the years.\n\nInputs\nThere are multiple inputs to Edge but you can just plug in your FG with alpha if you want to use it simplified. Separating Core and Softer keys or using roto with and without motionblur has advantages in certain situations. ie: If you have a thin object this will help maintain solid alpha where you need it.\n\nFG – Foreground plate with Spill suppression applied\nCore – This is like a core matte, it helps identify the leading edge and where the edge tool should start from. It is important to add this core so that small details are not lost like a thin rope or hair.\nKey – This is your Key with fine hair details and transparent motion blurred edges. For Roto you want to have motion blur turned on.\nBG – This is where your Background goes if you are using the node as Final Result\nMask - Currently this only works if you are using Edge in Final result."
+ tile_color 0x990000
+ label "\[value iterations]"
+ selected true
+ addUserKnob {20 User l Extend}
+ addUserKnob {6 xxx_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {41 in l channels T Shuffle2.in}
+ addUserKnob {4 operation t "Here you can choose if you want to use the Edge Tool to merge together your foreground and background giving you the Final Result or if you would like the Intermediate Result which is unpremultiplied and not merged over the background. The Intermediate Result can be helpful when tweaking parameters like the edgegrow start and edgegrow size." M {Final Intermediate "" ""}}
+ operation Intermediate
+ addUserKnob {6 previewedgematte l "preview edge matte" t "This allows you to preview your edge matte that you can use via the channels created in the edge node or by creating a shuffle using the button at the bottom." -STARTLINE}
+ addUserKnob {6 extendChromaOnly l "extend chroma only" t "This selection will extend only Chroma information by swapping back in the original luminance information." +STARTLINE}
+ addUserKnob {41 exp -STARTLINE T EdgeExpansion.exp}
+ addUserKnob {6 premultiplied t "Select this if your footage is already premultiplied to remove dark edges in the extension." -STARTLINE}
+ addUserKnob {6 clamped l "clamp alpha" t "Select this if your alpha has values below 0 or above 1." -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {14 edgeStart l "slice start" t "Determines where you would like to start bleeding out the color from the inside of your key. It does this with a series of unpremult, blur, premult operations instead of a standard erode." R 0 100}
+ edgeStart 1
+ addUserKnob {41 iterations l "slice iterations" t "Sets how large the edge with the color bleeding will be from the edge grow start or core matte and how many times this will be duplicated." T EdgeExpansion.iterations}
+ addUserKnob {41 sliceWidth l "slice width" t "The slice width is the amount of blur being applied per slice." T EdgeExpansion.sliceWidth}
+ addUserKnob {41 sliceBlur l INVISIBLE +INVISIBLE T EdgeExpansion.sliceBlur}
+ addUserKnob {26 ""}
+ addUserKnob {7 blurEdgeBlend l "edge blend" t "Helps to soften the transition from the original to the new edge. It tends to erode the bleeding color back inwards if you use high values." R 0 10}
+ addUserKnob {7 blurEdgeBlur l "edge blur" t "This helps soften the transition bringing back original detail. This can sometimes bring back some lighting information instead of having it completely replaced." R 0 10}
+ addUserKnob {7 filterErodeEdgeSmooth l "edge smooth" t "This one will help with extremely large motionblur and completely takes away detail. This should not be used in most cases but if you do use it sparingly." R -10 10}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask -STARTLINE T Merge3.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge3.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge3.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge3.fringe}
+ addUserKnob {26 ""}
+ addUserKnob {22 edgeShuffleButton l "create edge matte" t "This will generate a shuffle node that isolates the areas of extension which you can use to regrain your edges." T "nuke.root().begin()\nEdgeShuffle = nuke.createNode('Shuffle', inpanel = False)\nEdgeShuffle\['label'].setValue( 'Regrain this edge' )\nEdgeShuffle\['in'].setValue( 'edge' )\nEdgeShuffle\['in2'].setValue( 'none' )\nEdgeShuffle\['red'].setValue('alpha')\nEdgeShuffle\['green'].setValue('alpha')\nEdgeShuffle\['blue'].setValue('alpha')\nEdgeShuffle\['alpha'].setValue('alpha')" +STARTLINE}
+ addUserKnob {26 reminder l "" -STARTLINE T "*** use edge.matte to regrain your edges. ***"}
+ addUserKnob {20 color l Blending}
+ addUserKnob {6 enablecolor l enable t "This tab will help you blending your foreground edges with the background color. it is based off the edge extension in the first tab but you can modify the edge properties to get your desired look." +STARTLINE}
+ addUserKnob {6 colorpreview l preview t "Preview the edge being used for blending with the BG. This helps if you want to modify it further." -STARTLINE}
+ addUserKnob {41 operation_1 l operation t "This is the merge operation you want to use for blending. It is set to average by default but you can use anything you like ie: plus, max, min." T ColorMerge.operation}
+ addUserKnob {7 erodeExpandEdge l "expand edge" t "You can expand or contract the edge created in the extend tab." R -100 100}
+ addUserKnob {7 blurSoftenEdge l "soften edge" t "This blur will help soften the transition of the inside blending edge." R 0 100}
+ addUserKnob {41 mix_1 l "mix fg luma" t "At a value of 1 this will only blend the chroma information but you can mix this back to include the luma info as well." T Copy5.mix}
+ addUserKnob {7 mergeBlendingMix l mix t "Mix Edge Blending result"}
+ mergeBlendingMix 1
+ addUserKnob {26 ""}
+ addUserKnob {7 BlurBG l "blur bg" t "Blur the details in the background when you blend them so your foreground doesnt look transparent." R 0 100}
+ addUserKnob {26 ""}
+ addUserKnob {20 AdjustBGColor l "adjust bg color" t "Here you can modify the color and saturation of the bg being used for blending. This will anly affect the blending not the actual bg." n 1}
+ AdjustBGColor 0
+ addUserKnob {41 white l gain T GradeEdgeColor.white}
+ addUserKnob {41 gamma T GradeEdgeColor.gamma}
+ addUserKnob {41 black l lift T GradeEdgeColor.black}
+ addUserKnob {41 saturation T EdgeSat.saturation}
+ addUserKnob {41 mix l INVISIBLE +INVISIBLE T ColorMerge.mix}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 MaskBGLuma l "mask bg luma" t "This section will allow you to preview and isolate the bright areas of the bg to wrap around your foreground. Think of this as a way to have lights wrap arpound your foreground in car comps." n 1}
+ MaskBGLuma 0
+ addUserKnob {26 maskBgLuma l "mask bg luma"}
+ addUserKnob {6 enableBGMask l "enable bg mask" +STARTLINE}
+ addUserKnob {6 PreviewBG l "preview bg input" -STARTLINE}
+ addUserKnob {41 range l INVISIBLE +INVISIBLE T Keyer1.range}
+ addUserKnob {41 out l "Luma Range" T controler.out}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 ""}
+ addUserKnob {26 info_1 l "" +STARTLINE T "\nEdge Version 6.9\nCreated by Rob Bannister\nwww.bannisterpost.com"}
+ addUserKnob {26 help_1 l "" +STARTLINE T "<a href=\"http://www.bannisterpost.com/downloads/edge/\" style=\"color:white\">HELP</a>"}
+}
+ Histogram {
+  inputs 0
+  name controler
+  xpos -982
+  ypos 561
+ }
+ Input {
+  inputs 0
+  name FG
+  xpos 376
+  ypos -342
+ }
+ Unpremult {
+  name Unpremult3
+  xpos 376
+  ypos -288
+  disable {{!parent.premultiplied}}
+ }
+ Dot {
+  name Dot14
+  xpos 410
+  ypos -224
+ }
+set N209dd000 [stack 0]
+ Input {
+  inputs 0
+  name Key
+  xpos -215
+  ypos -318
+  number 1
+ }
+ Clamp {
+  name Clamp1
+  xpos -215
+  ypos -180
+  disable {{parent.clamped==0?1:0}}
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input1]"}}
+  name Switch1
+  xpos -215
+  ypos -61
+ }
+set N209dd800 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  xpos -215
+  ypos 237
+ }
+set N20a19000 [stack 0]
+ Dot {
+  name Dot6
+  xpos -181
+  ypos 477
+ }
+set N20a18c00 [stack 0]
+push $N209dd800
+ Input {
+  inputs 0
+  name Core
+  xpos 791
+  ypos -331
+  number 2
+ }
+ Clamp {
+  name Clamp2
+  xpos 787
+  ypos -157
+  disable {{parent.clamped==0?1:0}}
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input2]"}}
+  name Switch5
+  xpos 787
+  ypos -61
+ }
+ Erode {
+  size {{parent.edgeStart}}
+  name Erode1
+  label "\[value size]"
+  xpos 787
+  ypos 22
+ }
+ Blur {
+  channels alpha
+  size {{parent.blurEdgeBlur}}
+  name Blur_edgeBur
+  label "\[value size]"
+  xpos 787
+  ypos 126
+ }
+set N20a19800 [stack 0]
+ Blur {
+  channels alpha
+  size {{parent.blurEdgeBlend}}
+  name blue_edgeBlend
+  label "\[value size]"
+  xpos 591
+  ypos 126
+ }
+ FilterErode {
+  size {{parent.filterErodeEdgeSmooth}}
+  filter gaussian
+  name FilterErode_edgeSmooth
+  label "\[value size]"
+  xpos 591
+  ypos 224
+ }
+set N20a4b800 [stack 0]
+push $N20a19000
+ ChannelMerge {
+  inputs 2
+  operation stencil
+  name ChannelMerge1
+  xpos -64
+  ypos 224
+ }
+ ChannelMerge {
+  inputs 2
+  operation multiply
+  name ChannelMerge2
+  xpos -64
+  ypos 460
+ }
+ Dot {
+  name Dot17
+  xpos -30
+  ypos 691
+ }
+set N20a4a800 [stack 0]
+ Dot {
+  name Dot11
+  xpos -30
+  ypos 1133
+ }
+ Input {
+  inputs 0
+  name BG
+  xpos -1081
+  ypos -343
+  number 3
+ }
+ Dot {
+  name Dot5
+  xpos -1047
+  ypos 293
+ }
+set N20a4bc00 [stack 0]
+ Dot {
+  name Dot12
+  xpos -1047
+  ypos 644
+ }
+set N20a6bc00 [stack 0]
+ Keyer {
+  operation "luminance key"
+  range {{parent.controler.out.0} {parent.controler.out.1} 1 1}
+  name Keyer1
+  xpos -979
+  ypos 634
+ }
+ Blur {
+  channels rgba
+  size {{parent.BlurBG}}
+  name Blur2
+  label "\[value size]"
+  xpos -717
+  ypos 634
+ }
+set N20a6b400 [stack 0]
+push $N20a4b800
+ Dot {
+  name Dot7
+  xpos 625
+  ypos 344
+ }
+set N20a6b000 [stack 0]
+ Dilate {
+  channels alpha
+  size {{parent.erodeExpandEdge}}
+  name DilateColorEdge
+  label "\[value size]"
+  xpos -388
+  ypos 327
+ }
+ Blur {
+  channels alpha
+  size {{parent.blurSoftenEdge}}
+  name BlurColorEdge
+  label "\[value size]"
+  xpos -498
+  ypos 327
+ }
+push $N20a19800
+push $N209dd000
+ Shuffle {
+  name Shuffle2
+  xpos 376
+  ypos -174
+ }
+ Remove {
+  channels alpha
+  name Remove1
+  xpos 376
+  ypos -113
+ }
+ Dot {
+  name Dot16
+  xpos 410
+  ypos 459
+ }
+set N32be1c00 [stack 0]
+ Group {
+  inputs 2
+  name EdgeExpansion
+  knobChanged "\n\nn = nuke.thisNode()\nk = nuke.thisKnob()\n\nif 'iterations' in k.name(): \n    #print int(k.value())\n    k.setValue(int(k.value()))\n    if k.value()<1:\n        k.setValue(1)\n    n.begin()\n\n    for node in nuke.allNodes():\n        if 'static' not in node\['label'].value():\n            nuke.delete(node)\n\n    slices = int(n\['iterations'].value())-1\n    step = 1\n    blur_count = 5\n    merge_count = 2\n    unpremult_count = 4\n    num = 1\n    for x in range(1,slices+step,step):\n        \n        a = nuke.createNode('Blur', inpanel=False)\n        new_knob = nuke.Int_Knob('exp_value')\n        a.addKnob(new_knob)\n        a\['exp_value'].setValue(num)\n        a.setInput(0, nuke.toNode('Unpremult' + str(unpremult_count)))\n        a\['size'].setExpression('parent.sliceWidth*(parent.exp==0?1:exp_value)')\n        a\['channels'].setValue('red green blue depth.Z')\n\n        b = nuke.createNode('Shuffle', inpanel=False)\n        b\['in'].setValue( 'rgba' )\n        b\['in2'].setValue( 'depth' )\n        b\['out2'].setValue( 'depth' )\n        b\['alpha'].setValue('red2')\n\n        c = nuke.createNode('Unpremult', inpanel=False)\n        c\['channels'].setValue('red green blue alpha')\n        c\['alpha'].setValue('depth.Z')\n\n        d = nuke.createNode('Blur', inpanel=False)\n        new_knob = nuke.Int_Knob('exp_value')\n        d.addKnob(new_knob)\n        d\['exp_value'].setValue(num)\n        d\['size'].setExpression('parent.sliceWidth*(parent.exp==0?1:exp_value)')\n        d\['channels'].setValue('rgba')\n\n        e = nuke.createNode('Merge2', inpanel=False)\n        e\['Achannels'].setValue('red green blue depth.Z')\n        e.setInput(1, nuke.toNode('Merge' + str(merge_count)))\n        e.setInput(0, nuke.toNode('Blur' + str(blur_count+2)))\n\n        merge_count += 1\n        blur_count += 2\n        unpremult_count += 1\n\n        f = nuke.createNode('Blur', inpanel=False)\n        new_knob = nuke.Int_Knob('exp_value')\n        f.addKnob(new_knob)\n        f\['exp_value'].setValue(num)\n        f.setInput(0, nuke.toNode('Unpremult' + str(unpremult_count)))\n        f\['size'].setExpression('parent.sliceWidth*(parent.exp==0?1:exp_value)')\n        f\['channels'].setValue('rgba')\n\n        g = nuke.createNode('Shuffle', inpanel=False)\n        g\['in'].setValue( 'rgba' )\n        g\['in2'].setValue( 'depth' )\n        g\['out2'].setValue( 'depth' )\n        g\['black'].setValue('alpha')\n\n        h = nuke.createNode('Unpremult', inpanel=False)\n        h\['channels'].setValue('red green blue depth.Z')\n\n        j = nuke.createNode('Blur', inpanel=False)\n        new_knob = nuke.Int_Knob('exp_value')\n        j.addKnob(new_knob)\n        j\['exp_value'].setValue(num)\n        j\['size'].setExpression('parent.sliceWidth*(parent.exp==0?1:exp_value)')\n        j\['channels'].setValue('red green blue depth.Z')\n\n        k = nuke.createNode('Merge2', inpanel=False)\n        k.setInput(1, nuke.toNode('Merge' + str(merge_count)))\n        k.setInput(0, nuke.toNode('Blur' + str(blur_count+2)))\n\n        merge_count += 1\n        blur_count += 2\n        unpremult_count += 1\n        num += 1\n        nuke.toNode('Output1').setInput(0, k)\n\n    try:\n        nuke.toNode('Blur5').setInput(0, nuke.toNode('Unpremult4'))\n    except:\n        nuke.toNode('Output1').setInput(0, nuke.toNode('Merge2'))\n\n    n.end()\n    \n\n"
+  note_font_size 25
+  xpos 787
+  ypos 449
+  addUserKnob {20 User}
+  addUserKnob {6 firstrun l "Disable before input" +STARTLINE}
+  firstrun {{"!\[exists parent.input0]"}}
+  addUserKnob {6 exp t "The exponential check box will add a variable to the duplicated blurs that increases as they move outwards from the original edge. This might help if you have a large distance to extend." +STARTLINE}
+  addUserKnob {7 iterations t "Sets how large the edge with the color bleeding will be from the edge grow start or core matte and how many times this will be duplicated. The smaller the width the more detail is preserved.This should be just big enough to reach the edge of the largest areas of motionblur." R 1 25}
+  iterations 5
+  addUserKnob {7 sliceWidth l "slice width" t "The slice width is the amount of blur being applied per slice." R 1 10}
+  sliceWidth 1
+  addUserKnob {7 sliceBlur l "slice blur" t "The slice width is the amount of blur being applied per slice." R 1 10}
+  sliceBlur 1
+ }
+  Input {
+   inputs 0
+   name Alpha
+   label static
+   xpos -218
+   ypos -646
+   number 1
+  }
+  Input {
+   inputs 0
+   name RGB
+   label static
+   xpos -64
+   ypos -772
+  }
+  Unpremult {
+   name Unpremult1
+   label static
+   xpos -64
+   ypos -689
+  }
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 rgba.alpha
+   name Copy1
+   label static
+   xpos -64
+   ypos -653
+   disable {{parent.firstrun}}
+  }
+  Premult {
+   name Premult1
+   label static
+   xpos -64
+   ypos -599
+  }
+  Shuffle {
+   black alpha
+   out2 depth
+   name Shuffle1
+   label static
+   xpos -64
+   ypos -561
+  }
+  Unpremult {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   name Unpremult2
+   label static
+   xpos -64
+   ypos -523
+  }
+set N32be0000 [stack 0]
+  Blur {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   size {{parent.sliceWidth}}
+   name Blur1
+   label static
+   xpos -64
+   ypos -428
+  }
+  Dot {
+   name Dot2
+   label static
+   xpos -30
+   ypos -336
+  }
+push $N32be0000
+  Blur {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   size {{parent.sliceWidth}}
+   name Blur2
+   label static
+   xpos 46
+   ypos -523
+  }
+  Shuffle {
+   in2 depth
+   alpha red2
+   out2 depth
+   name Shuffle2
+   label static
+   xpos 46
+   ypos -471
+  }
+  Unpremult {
+   channels rgba
+   alpha depth.Z
+   name Unpremult3
+   label static
+   xpos 46
+   ypos -435
+  }
+set N32c06c00 [stack 0]
+  Blur {
+   channels rgba
+   size {{parent.sliceWidth}}
+   name Blur3
+   label static
+   xpos 46
+   ypos -381
+  }
+  Merge2 {
+   inputs 2
+   Achannels {rgba.red rgba.green rgba.blue depth.Z}
+   name Merge1
+   label static
+   xpos 46
+   ypos -343
+  }
+  Dot {
+   name Dot3
+   label static
+   xpos 80
+   ypos -237
+  }
+push $N32c06c00
+  Blur {
+   channels rgba
+   size {{parent.sliceWidth}}
+   name Blur4
+   label static
+   xpos 156
+   ypos -428
+  }
+  Shuffle {
+   in2 depth
+   black alpha
+   out2 depth
+   name Shuffle3
+   label static
+   xpos 156
+   ypos -390
+  }
+  Unpremult {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   name Unpremult4
+   label static
+   xpos 156
+   ypos -350
+  }
+set N32c37400 [stack 0]
+  Blur {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   size {{parent.sliceWidth}}
+   name Blur5
+   label static
+   xpos 156
+   ypos -299
+  }
+  Merge2 {
+   inputs 2
+   name Merge2
+   label static
+   xpos 156
+   ypos -247
+  }
+push $N32c37400
+  Blur {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur6
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 1
+  }
+  Shuffle {
+   in2 depth
+   alpha red2
+   out2 depth
+   name Shuffle4
+  }
+  Unpremult {
+   channels rgba
+   alpha depth.Z
+   name Unpremult5
+  }
+set N32c36000 [stack 0]
+  Blur {
+   channels rgba
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur7
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 1
+  }
+  Merge2 {
+   inputs 2
+   Achannels {rgba.red rgba.green rgba.blue depth.Z}
+   name Merge3
+  }
+push $N32c36000
+  Blur {
+   channels rgba
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur8
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 1
+  }
+  Shuffle {
+   in2 depth
+   black alpha
+   out2 depth
+   name Shuffle5
+  }
+  Unpremult {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   name Unpremult6
+  }
+set N32c68c00 [stack 0]
+  Blur {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur9
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 1
+  }
+  Merge2 {
+   inputs 2
+   name Merge4
+  }
+push $N32c68c00
+  Blur {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur10
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 2
+  }
+  Shuffle {
+   in2 depth
+   alpha red2
+   out2 depth
+   name Shuffle6
+  }
+  Unpremult {
+   channels rgba
+   alpha depth.Z
+   name Unpremult7
+  }
+set N32ca3800 [stack 0]
+  Blur {
+   channels rgba
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur11
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 2
+  }
+  Merge2 {
+   inputs 2
+   Achannels {rgba.red rgba.green rgba.blue depth.Z}
+   name Merge5
+  }
+push $N32ca3800
+  Blur {
+   channels rgba
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur12
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 2
+  }
+  Shuffle {
+   in2 depth
+   black alpha
+   out2 depth
+   name Shuffle7
+  }
+  Unpremult {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   name Unpremult8
+  }
+set N32ca2400 [stack 0]
+  Blur {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur13
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 2
+  }
+  Merge2 {
+   inputs 2
+   name Merge6
+  }
+push $N32ca2400
+  Blur {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur14
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 3
+  }
+  Shuffle {
+   in2 depth
+   alpha red2
+   out2 depth
+   name Shuffle8
+  }
+  Unpremult {
+   channels rgba
+   alpha depth.Z
+   name Unpremult9
+  }
+set N32cd7000 [stack 0]
+  Blur {
+   channels rgba
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur15
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 3
+  }
+  Merge2 {
+   inputs 2
+   Achannels {rgba.red rgba.green rgba.blue depth.Z}
+   name Merge7
+  }
+push $N32cd7000
+  Blur {
+   channels rgba
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur16
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 3
+  }
+  Shuffle {
+   in2 depth
+   black alpha
+   out2 depth
+   name Shuffle9
+  }
+  Unpremult {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   name Unpremult10
+  }
+set N32d11c00 [stack 0]
+  Blur {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur17
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 3
+  }
+  Merge2 {
+   inputs 2
+   name Merge8
+  }
+push $N32d11c00
+  Blur {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur18
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 4
+  }
+  Shuffle {
+   in2 depth
+   alpha red2
+   out2 depth
+   name Shuffle10
+  }
+  Unpremult {
+   channels rgba
+   alpha depth.Z
+   name Unpremult11
+  }
+set N32d10800 [stack 0]
+  Blur {
+   channels rgba
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur19
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 4
+  }
+  Merge2 {
+   inputs 2
+   Achannels {rgba.red rgba.green rgba.blue depth.Z}
+   name Merge9
+  }
+push $N32d10800
+  Blur {
+   channels rgba
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur20
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 4
+  }
+  Shuffle {
+   in2 depth
+   black alpha
+   out2 depth
+   name Shuffle11
+  }
+  Unpremult {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   name Unpremult12
+  }
+  Blur {
+   channels {rgba.red rgba.green rgba.blue depth.Z}
+   size {{parent.sliceWidth*(parent.exp==0?1:exp_value)}}
+   name Blur21
+   label "\[value size]"
+   addUserKnob {20 User}
+   addUserKnob {3 exp_value}
+   exp_value 4
+  }
+  Merge2 {
+   inputs 2
+   name Merge10
+   selected true
+  }
+  Output {
+   name Output1
+   label static
+   xpos 156
+   ypos 4217
+  }
+ end_group
+set N209ee900 [stack 0]
+push $N20a19000
+ Switch {
+  inputs 2
+  which {{parent.FinalSwitch.which}}
+  name Switch2
+  xpos -418
+  ypos 237
+ }
+ Dilate {
+  size 50
+  name Dilate1
+  label "\[value size]"
+  xpos -608
+  ypos 224
+  disable true
+ }
+set N32d44000 [stack 0]
+ ChannelMerge {
+  inputs 2
+  operation stencil
+  name ChannelMerge3
+  xpos -608
+  ypos 327
+ }
+ ChannelMerge {
+  inputs 2
+  operation multiply
+  name ChannelMerge_colormask
+  xpos -608
+  ypos 627
+  disable {{!parent.enableBGMask}}
+ }
+ Dot {
+  name Dot4
+  xpos -574
+  ypos 702
+ }
+set N32d75400 [stack 0]
+ Dot {
+  name Dot10
+  xpos -573
+  ypos 1057
+ }
+push $N20a6b400
+ Dot {
+  name Dot13
+  xpos -683
+  ypos 993
+ }
+ Premult {
+  name Premult1
+  xpos -971
+  ypos 990
+ }
+push $N32d75400
+push $N20a18c00
+push $N20a4a800
+push $N32be1c00
+ Dot {
+  name Dot1
+  xpos 410
+  ypos 565
+ }
+set N32d74400 [stack 0]
+ Dot {
+  name Dot18
+  xpos 190
+  ypos 565
+ }
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace2
+  xpos 156
+  ypos 596
+ }
+push $N20a6b000
+ Dot {
+  name Dot8
+  xpos 625
+  ypos 602
+ }
+push $N32d74400
+push $N209ee900
+ Dot {
+  name Dot15
+  xpos 821
+  ypos 531
+ }
+ Dot {
+  name Dot3
+  xpos 821
+  ypos 733
+ }
+ Keymix {
+  inputs 3
+  name Keymix1
+  xpos 376
+  ypos 723
+ }
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace1
+  xpos 266
+  ypos 729
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  name Copy1
+  xpos 156
+  ypos 723
+  disable {{!parent.extendChromaOnly}}
+ }
+ Colorspace {
+  colorspace_in YCbCr
+  name Colorspace3
+  xpos 46
+  ypos 729
+ }
+add_layer {edge edge.red edge.green edge.blue edge.alpha edge.matte}
+ ShuffleCopy {
+  inputs 2
+  red alpha
+  green alpha
+  blue alpha
+  out edge
+  name ShuffleCopy1
+  xpos -64
+  ypos 729
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos -215
+  ypos 723
+ }
+ Dot {
+  name Dot9
+  xpos -472
+  ypos 733
+ }
+set N32dbf400 [stack 0]
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace4
+  xpos -506
+  ypos 434
+ }
+push $N20a4bc00
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace6
+  xpos -791
+  ypos 289
+ }
+ Blur {
+  channels rgb
+  size {{parent.BlurBG}}
+  name Blur1
+  label "\[value size]"
+  xpos -790
+  ypos 341
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  from1 rgba.alpha
+  to1 rgba.alpha
+  name Copy5
+  xpos -790
+  ypos 421
+ }
+ Colorspace {
+  colorspace_in YCbCr
+  name Colorspace5
+  xpos -790
+  ypos 487
+ }
+ Grade {
+  black_clamp false
+  name GradeEdgeColor
+  xpos -790
+  ypos 525
+ }
+ Saturation {
+  name EdgeSat
+  xpos -790
+  ypos 563
+ }
+push $N32dbf400
+ Merge2 {
+  inputs 2+1
+  operation average
+  Achannels rgb
+  output rgb
+  mix {{parent.mergeBlendingMix}}
+  name ColorMerge
+  selected true
+  xpos -791
+  ypos 730
+  disable {{!parent.enablecolor}}
+ }
+set N32dfd400 [stack 0]
+ Dot {
+  name Dot2
+  xpos -757
+  ypos 911
+ }
+ Input {
+  inputs 0
+  name Mask
+  xpos -1288
+  ypos 730
+  number 4
+ }
+push $N32dfd400
+ Premult {
+  name Premult3
+  xpos -956
+  ypos 730
+ }
+push $N20a6bc00
+ Merge2 {
+  inputs 2+1
+  also_merge edge
+  name Merge3
+  xpos -1081
+  ypos 730
+ }
+ Switch {
+  inputs 2
+  which {{operation}}
+  name FinalSwitch
+  xpos -1081
+  ypos 908
+ }
+ Switch {
+  inputs 2
+  which {{parent.PreviewBG}}
+  name BGPreview
+  xpos -1081
+  ypos 990
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.red
+  name Copy3
+  xpos -1081
+  ypos 1050
+  disable {{parent.colorpreview*-1+1}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.red
+  name Copy4
+  xpos -1081
+  ypos 1123
+  disable {{!parent.previewedgematte}}
+ }
+ Shuffle {
+  out {{{parent.Shuffle2.in}}}
+  name Shuffle3
+  xpos -1081
+  ypos 1239
+ }
+ Output {
+  name Output1
+  xpos -1081
+  ypos 1947
+ }
+push $N32d44000
+push $N32dfd400
+ Viewer {
+  inputs 2
+  frame 1
+  frame_range 100-100
+  colour_sample_bbox {-0.7646484375 -0.2055664063 -0.7197265625 -0.1782226563}
+  input_process false
+  name Viewer1
+  xpos -706
+  ypos 1852
+ }
+end_group

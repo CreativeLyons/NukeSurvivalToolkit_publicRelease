@@ -1,0 +1,68 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+RotoPaint {
+ curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097664}
+    {t x4493a000 x440b8000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {curvegroup Bezier2 512 bezier
+     {{cc
+       {f 8192}
+       {px x44872000
+        {0 0}
+        {x449dedc6 x445c9c0d}
+        {0 0}
+        {0 0}
+        {x449e088f x445ca874}
+        {0 0}}}     idem}
+     {tx x44872000 x449dbb34 x445c8b86}
+     {a osw x41200000 osf 0 str 1 spx x4493a000 spy x440b8000 sb 1 ltn x44872000 ltm x44872000 tt x40800000}}}}}}
+ toolbox {selectAll {
+  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush bs 1 h 1 str 1 ssx 1 ssy 1 sf 1 sb 1 ltn 1081 ltm 1081 tt 17 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone opc 0.1 src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 tt 19 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 ep1 5 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear opc 0.5 src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+ toolbar_brush_hardness 0.200000003
+ toolbar_source_transform_scale {1 1}
+ toolbar_source_transform_center {1181 558}
+ colorOverlay {0 0 0 0}
+ lifetime_type "all frames"
+ lifetime_start 1081
+ lifetime_end 1081
+ motionblur_shutter_offset_type centred
+ brush_size 1
+ brush_spacing 0.05000000075
+ brush_hardness 0
+ source_black_outside true
+ name RotoPaint6
+ selected true
+ xpos 627
+ ypos -198
+}
+Expression {
+ expr0 r!=0?1*exp(500)/0.0000000001:0
+ expr1 g!=0?1*exp(500)/0.0000000001:0
+ expr2 b!=0?1*exp(500)/0.0000000001:0
+ expr3 a!=0?1*exp(500)/0.0000000001:0
+ name Create_inf_pixel
+ selected true
+ xpos 627
+ ypos -118
+}

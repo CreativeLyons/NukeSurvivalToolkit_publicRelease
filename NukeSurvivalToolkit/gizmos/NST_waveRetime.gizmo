@@ -1,0 +1,76 @@
+Group {
+ name WaveRetime
+ onCreate "#========================================\n# ON CREATE\n#========================================\nimport nuke\ndef onCreate():\n    n = nuke.thisNode()\n    # Set LOG sliders\n    n.knob(\"speed\").setFlag(0x00000004)\nonCreate()"
+ knobChanged "#========================================\n# KNOB CHANGED\n#========================================\nimport nuke\ndef knobChanged():\n    node = nuke.thisNode()\n    knob = nuke.thisKnob()\n    k_before = node.knob(\"before\")\n    k_after = node.knob(\"after\")\n    k_output = node.knob(\"output\")\n    # Cancel if other frame than before/after curve was changed\n    if knob not in \[k_before, k_after]:\n        return\n    # Loop modes \[before, after]\n    loopModes = \[\n        \[\"tmp2\", \"tmp2\"], # loop\n        \[\"tmp2(firstFrameOut)\", \"tmp2(lastFrameOut)\"], # hold\n    ]\n    modeBeforeIndex = int(k_before.getValue())\n    modeAfterIndex = int(k_after.getValue())\n    modeBefore = loopModes\[modeBeforeIndex]\[0]\n    modeAfter = loopModes\[modeAfterIndex]\[1]\n    expression = \"disable ? inp1 : frame <= firstFrameOut ? \{\} : frame >= lastFrameOut ? \{\} : tmp2\".format(modeBefore, modeAfter)\n    k_output.setExpression(expression)\nknobChanged()"
+ tile_color 0xb09549ff
+ note_font Verdana
+ addUserKnob {20 User}
+ addUserKnob {41 inp1 +INVISIBLE T upstreamValue5.output}
+ addUserKnob {3 firstFrame l "input range" t "First frame of input to use"}
+ firstFrame 1001
+ addUserKnob {3 lastFrame l "" t "Last frame of input to use" -STARTLINE}
+ lastFrame 1101
+ addUserKnob {22 getInputFromParentRange l "From Input" -STARTLINE T "#========================================\n# getInputFromParentRange\n#========================================\nimport nuke\ndef getAnimationRange(knob):\n    frameRange = \[0, 0]\n    anims = knob.animations()\[0:]\n    if anims:\n        anim = knob.animation(0)\n        keys = anim.keys()\n        frameRange\[0] = int(keys\[0].x)\n        frameRange\[1] = int(keys\[-1].x)\n    return frameRange\n\ndef main():\n    node = nuke.thisNode()\n    frameRange = \[]\n    if node.inputs():\n        pNode = node.input(0)\n        knob = pNode.knob(\"custom\")\n        if knob:\n            # 1) waveCustom : Get first and last keyframe\n            frameRange = getAnimationRange(knob)\n        if not knob:\n            knob = pNode.knob(\"waveLength\")\n            if knob:\n                rootFirst = nuke.root().knob(\"first_frame\").value()\n                frameRange = \[int(rootFirst), int(knob.value()-1+rootFirst)]\n        if not knob:\n            knob = pNode.knob(\"firstFrameOut\")\n            if knob:\n                knob2 = pNode.knob(\"lastFrameOut\")\n                frameRange = \[int(knob.value()), int(knob2.value())]\n    if frameRange:\n        node.knob(\"firstFrame\").setValue(frameRange\[0])\n        node.knob(\"lastFrame\").setValue(frameRange\[1])\n    else:\n        nuke.alert(\"<b>Can't get input range</b>\\n\\nNeeds a <b>waveRetime</b> <b>waveCustom</b> or <b>waveMaker</b> node as input to be able to fetch range\")\nmain()"}
+ addUserKnob {3 firstFrameOut l "output range" t "First frame of output"}
+ firstFrameOut 1001
+ addUserKnob {3 lastFrameOut l "" t "Last frame of output" -STARTLINE}
+ lastFrameOut 1101
+ addUserKnob {22 setOutputFromInputRange l "From Input" -STARTLINE T "import nuke\n\ndef main():\n    node = nuke.thisNode()\n    firstFrame = node.knob(\"firstFrame\").value()\n    lastFrame = node.knob(\"lastFrame\").value()\n    node.knob(\"firstFrameOut\").setValue(firstFrame)\n    node.knob(\"lastFrameOut\").setValue(lastFrame)\nmain()"}
+ addUserKnob {22 getOutputFromProjectRange l "From Project" -STARTLINE T "import nuke\n\ndef main():\n    node = nuke.thisNode()\n    root = nuke.root()\n    firstFrame = root.knob(\"first_frame\").value()\n    lastFrame = root.knob(\"last_frame\").value()\n    node.knob(\"firstFrameOut\").setValue(firstFrame)\n    node.knob(\"lastFrameOut\").setValue(lastFrame)\nmain()"}
+ addUserKnob {7 speed R 0.1 10}
+ speed 1
+ addUserKnob {4 before M {loop hold}}
+ before hold
+ addUserKnob {4 after M {loop hold}}
+ after hold
+ addUserKnob {7 loopCount +INVISIBLE}
+ loopCount {{floor((frame-firstFrame)/(lastFrame-firstFrame))}}
+ addUserKnob {7 frm t "Which frame of the original frame to show" +INVISIBLE}
+ frm {{frame-((lastFrame-firstFrame+1)*loopCount)}}
+ addUserKnob {7 tmp t "inpValue at frm" +INVISIBLE}
+ tmp {{"loopCount < 0 ? (before == 1 ? inp1(firstFrame) : inp1(frm)) : loopCount > 0 ? (after == 1 ? inp1(lastFrame) : inp1(frm)) : inp1(frm)"}}
+ addUserKnob {7 tmp2 t "show tmp at frame+(firstFrameOut-firstFrame)" +INVISIBLE}
+ tmp2 {{tmp((frame+(firstFrame-firstFrameOut)-firstFrameOut)*speed+firstFrameOut)}}
+ addUserKnob {7 output}
+ output {{"disable ? inp1 : frame <= firstFrameOut ? tmp2(firstFrameOut) : frame >= lastFrameOut ? tmp2(lastFrameOut) : tmp2"}}
+ addUserKnob {26 ""}
+ addUserKnob {26 credits l "" +STARTLINE T "WaveRetime v1.0 | Fynn Laue 2020"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -40
+  ypos 39
+ }
+ Group {
+  name upstreamValue5
+  onCreate "n = nuke.thisNode()\n# Hide these knobs from the curve editor\nn.knob(\"output\").setFlag(0x20000000)"
+  label v005
+  xpos -40
+  ypos 150
+  addUserKnob {20 User}
+  addUserKnob {43 pNode t "this script finds the upstream value. Or rather the name of the node and appends a .\nThis is then used in an expression appended by a knob name to get that knob's value." +INVISIBLE}
+  pNode "\[\n    # This throws error 'Nothing is named \"Nothing\"' when node has no input0\n    # set x \[node this.input0]\n    set starting_point \"this.input0\"\n    set default \"this.d_\"\n\n    # Set x to input if it exists, otherwise return default\n    if \{\[exists \$starting_point]\} \{\n        set x \[node \$starting_point]\n    \} \{\n        return \$default\n    \}\n\n    set finished 0\n    while \{\$finished != 1\} \{\n        # First look for a specific node type\n        set skip_node 1\n        while \{\$skip_node == 1\} \{\n            # TODO: Make better grouping to reduce nested if statements\n            if \{(\[class \$x] != \"Group\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x])\} \{\n                set x \[node \$x.input0]\n            \} \{\n                # Stop at first enabled Group node\n                if \{(\[class \$x] == \"Group\") || (\[class \$x] == \"Input\")\} \{\n                    set skip_node 0\n                \} \{\n                    if \{\$x == \[topnode \$x]\} \{\n                        return \$default\n                    \} \{\n                        set x \[node \$x.input0]\n                    \}\n                \}\n            \}\n        \}\n        # Return Group node if it has an output knob\n        if \{\[class \$x] == \"Group\" && \[exists \$x.output]\} \{\n            set x \[append x \".\"]\n            return \$x\n        \} \{\n            # If node is an Input node (of a Group node), return its parent\n            if \{\[class \$x]==\"Input\"\} \{\n                set inp \"\$x.parent.input\"\n                set inputNum \[value \$x.number]\n                set inp \[append inp \$inputNum]\n                if \{\[exists \$inp]\} \{\n                    set x \[node \$inp]\n                \} \{\n                    set finished 1\n                \}\n            \} \{\n                set finished 1\n            \}\n        \}\n    \}\n    return \$default\n]"
+  addUserKnob {7 d_output t "if no upstream value is found, default to this value"}
+  addUserKnob {7 output}
+  output {{"\[value knob.pNode]output"}}
+  addUserKnob {26 ""}
+  addUserKnob {26 credit l "" +STARTLINE T "upstreamValue v1.0 | Fynn Laue 2020"}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 0
+  }
+  Output {
+   name Output1
+   xpos 0
+   ypos 300
+  }
+ end_group
+ Output {
+  name Output1
+  xpos -40
+  ypos 303
+ }
+end_group

@@ -1,0 +1,139 @@
+Group {
+ name LineTool
+ tile_color 0xc4f8cff
+ note_font "Verdana Bold Bold Bold"
+ note_font_color 0xffd199ff
+ selected true
+ addUserKnob {20 line l Line}
+ addUserKnob {41 from l From T Parameters.from}
+ addUserKnob {41 to l To T Parameters.to}
+ addUserKnob {26 ""}
+ addUserKnob {41 strokeWidth l Width T Parameters.strokeWidth}
+ addUserKnob {41 color l Color T Parameters.color}
+ addUserKnob {26 ""}
+ addUserKnob {41 subsample l Subsample T Parameters.subsample}
+ addUserKnob {41 replace l "Output Line Only" T Parameters.replace}
+ addUserKnob {26 ""}
+ addUserKnob {20 infoTab}
+ addUserKnob {26 info l Info T "\tName:......mcp_Line\n\tVersion:....1.1.0\n\tAuthor:.....Fredrik Brännbacka\n\tEmail:.......fredrik@madcrew.se\n\tCompany:..Mad Crew\n\tWeb:........www.madcrew.se\n"}
+}
+ Constant {
+  inputs 0
+  color {{Parameters.color} {Parameters.color} {Parameters.color} {Parameters.color}}
+  format "512 512 0 0 512 512 1 square_512"
+  name LineSolid
+  xpos 462
+  ypos 130
+ }
+ Reformat {
+  type "to box"
+  box_width {{(Parameters.subsample+1)*50}}
+  box_height {{"sqrt(pow((Parameters.to.x-Parameters.from.x), 2)+pow((Parameters.to.y-Parameters.from.y), 2))*(Parameters.subsample+1)"}}
+  box_fixed true
+  resize distort
+  filter Impulse
+  black_outside true
+  pbb true
+  name ReformatLine
+  xpos 462
+  ypos 202
+ }
+ Transform {
+  translate {{(Parameters.subsample+1)*-25} 0}
+  scale {1 1}
+  filter Impulse
+  name CenterPivot
+  xpos 462
+  ypos 228
+ }
+ Transform {
+  translate {{Parameters.from*(Parameters.subsample+1)} {Parameters.from*(Parameters.subsample+1)}}
+  rotate {{"degrees(atan2((Parameters.to.y-Parameters.from.y), (Parameters.to.x-Parameters.from.x)))-90"}}
+  scale {{Parameters.strokeWidth/50} 1}
+  filter Impulse
+  name TransformLine
+  xpos 462
+  ypos 248
+ }
+ Crop {
+  box {0 0 {Parameters.width*(Parameters.subsample+1)} {Parameters.height*(Parameters.subsample+1)}}
+  reformat true
+  crop false
+  name MatchBBox
+  xpos 462
+  ypos 274
+ }
+ Reformat {
+  type scale
+  scale {{1/(Parameters.subsample+1)}}
+  name Downsample
+  xpos 462
+  ypos 298
+ }
+set N5358e010 [stack 0]
+ Dot {
+  name Dot1
+  xpos 496
+  ypos 352
+ }
+push $N5358e010
+ Input {
+  inputs 0
+  name BG
+  xpos 320
+  ypos 93
+ }
+ Constant {
+  inputs 0
+  name Constant1
+  xpos 187
+  ypos 106
+ }
+ Switch {
+  inputs 2
+  which {{(BG.bbox.width*BG.bbox.height)>1}}
+  name ForceBackground
+  xpos 320
+  ypos 130
+ }
+ NoOp {
+  name Parameters
+  xpos 320
+  ypos 156
+  addUserKnob {20 line l Line}
+  addUserKnob {3 test}
+  test {{subsample}}
+  addUserKnob {4 subsample l Subsample M {1x1 2x2 3x3}}
+  addUserKnob {19 color l Color}
+  color {0.04929798841 0.308957994 0.547755599 1}
+  addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {7 strokeWidth l Width R 0 10}
+  strokeWidth 2
+  addUserKnob {12 from l From}
+  from {1088 462}
+  addUserKnob {12 to l To}
+  to {1312.400024 560.2000122}
+  addUserKnob {6 replace l "Output Line Only" +STARTLINE}
+  replace true
+ }
+ Merge2 {
+  inputs 2
+  bbox B
+  name MergeLine
+  xpos 320
+  ypos 298
+ }
+ Switch {
+  inputs 2
+  which {{Parameters.replace}}
+  name Switch1
+  xpos 320
+  ypos 349
+ }
+ Output {
+  name OUT
+  xpos 320
+  ypos 449
+ }
+end_group

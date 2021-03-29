@@ -1,0 +1,11 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr0 ((x+0.5)/width)-r+((x+0.5)/width)
+ expr1 ((y+0.5)/height)-g+((y+0.5)/height)
+ name ST_invert
+ selected true
+ xpos 1179
+ ypos 52
+}

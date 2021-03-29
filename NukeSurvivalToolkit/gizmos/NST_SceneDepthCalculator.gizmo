@@ -1,0 +1,102 @@
+Group {
+ name SceneDepthCalculator
+ inputs 0
+ tile_color 0xd6ff32ff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {41 frame_range l "frame range" T menu01.frame_range}
+ addUserKnob {3 frameST l "custom range" +DISABLED}
+ frameST 1001
+ addUserKnob {3 frameED l "" -STARTLINE +DISABLED}
+ frameED 1100
+ addUserKnob {26 title_cam l <b>Camera</b>}
+ addUserKnob {20 cam_transformation l transformation n 1}
+ cam_transformation 0
+ addUserKnob {4 cam_xform_order l "transform order" +DISABLED M {SRT STR RST RTS TSR TRS}}
+ addUserKnob {26 cam_xform_order_status l "link : " -STARTLINE +DISABLED T None}
+ addUserKnob {4 cam_rot_order l "rotate order" +DISABLED M {XYZ XZY YXZ YZX ZXY ZYX}}
+ cam_rot_order ZXY
+ addUserKnob {26 cam_rot_order_status l "link :" -STARTLINE +DISABLED T None}
+ addUserKnob {13 cam_translate l translate +DISABLED}
+ addUserKnob {26 cam_translate_status l "link :" -STARTLINE +DISABLED T None}
+ addUserKnob {13 cam_rotate l rotate +DISABLED}
+ addUserKnob {26 cam_rotate_status l "link :" -STARTLINE +DISABLED T None}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 cam_link_status l "Camera Linked to" T None}
+ addUserKnob {22 link_cam l "Link to Selected Camera" T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\nroot = getLevel()\nthisGRP = nuke.thisGroup()\n\nmainKnobs = \['cam_xform_order', 'cam_rot_order','cam_translate','cam_rotate']\nstatusKnobs = \['cam_xform_order_status', 'cam_rot_order_status','cam_translate_status','cam_rotate_status','cam_link_status']\ndefaultKnobs = \{\n\t'transform order' :'xform_order', \n\t'rotation order' : 'rot_order', \n\t'translate' : 'translate',\n\t'rotate' : 'rotate'\n\t\}\n\nselNodeKnobs = \[]\nreplaceKnobs = \[]\n\n\ntry :\n\twith root :\n\t\tselNode = nuke.selectedNode()\n\n\t\tfor knob in selNode.knobs() :\n\t\t\tselNodeKnobs.append( knob )\n\n\tselNodeKnobs.sort()\n\n\tfor key,value in defaultKnobs.items() :\n\t\tif value not in selNodeKnobs :\n\t\t\treplaceKnobs.append( key )\n\n\tCAMnode = selNode.name()\n\n\tif len(replaceKnobs) != 0 :\n\t\tp = nuke.Panel('Select knobs :')\n\t\tp.addBooleanCheckBox( '<b>Unable to find the default knobs. Please use the pulldown menu below to define the knob manually.</b>' , False)\n\t\tfor rk in replaceKnobs :\n\t\t\tp.addEnumerationPulldown( rk, ' '.join( selNodeKnobs ) )\n\n\t\tif p.show() :\n\t\t\ttry :\n\t\t\t\tfor key,value in defaultKnobs.items() :\n\t\t\t\t\tif p.value( key ) != None :\n\t\t\t\t\t\tdefaultKnobs\[key] = p.value( key )\n\t\t\texcept :\n\t\t\t\tpass\n\n\t\t\twith thisGRP :\n\t\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['transform order']))\n\t\t\t\tthisGRP\[statusKnobs\[0]].setValue('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['transform order']))\n\n\t\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['rotation order']))\n\t\t\t\tthisGRP\[statusKnobs\[1]].setValue('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['rotation order']))\n\n\t\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['translate']))\n\t\t\t\tthisGRP\[statusKnobs\[2]].setValue('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['translate']))\n\n\t\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['rotate']))\n\t\t\t\tthisGRP\[statusKnobs\[3]].setValue('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['rotate']))\n\n\t\t\t\tthisGRP\[statusKnobs\[4]].setValue('<font color=\\'orange\\'>' + selNode.name() + '</font>')\n\telse :\n\t\t\twith thisGRP :\n\t\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.xform_order'.format(CAMnode))\n\t\t\t\tthisGRP\[statusKnobs\[0]].setValue('\{0\}.xform_order'.format(CAMnode))\n\n\t\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.rot_order'.format(CAMnode))\n\t\t\t\tthisGRP\[statusKnobs\[1]].setValue('\{0\}.rot_order'.format(CAMnode))\n\n\t\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.translate'.format(CAMnode))\n\t\t\t\tthisGRP\[statusKnobs\[2]].setValue('\{0\}.translate'.format(CAMnode))\n\n\t\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.rotate'.format(CAMnode))\n\t\t\t\tthisGRP\[statusKnobs\[3]].setValue('\{0\}.rotate'.format(CAMnode))\n\n\t\t\t\tthisGRP\[statusKnobs\[4]].setValue('<font color=\\'orange\\'>' + selNode.name() + '</font>')\nexcept :\n\tnuke.message('no node selected.')" +STARTLINE}
+ addUserKnob {22 link_remove_cam l "Remove Linked Camera" -STARTLINE T "thisGRP = nuke.thisGroup()\nmainKnobs = \['cam_xform_order', 'cam_rot_order','cam_translate','cam_rotate']\nstatusKnobs = \['cam_xform_order_status', 'cam_rot_order_status','cam_translate_status','cam_rotate_status','cam_link_status']\n\nfor knob in thisGRP.knobs() :\n    if mainKnobs.count(knob) != 0 :\n        thisGRP\[knob].clearAnimated()\n\nfor knob in thisGRP.knobs() :\n    if statusKnobs.count(knob) != 0 :\n        thisGRP\[knob].setValue('None')"}
+ addUserKnob {26 title_target l <b>Target</b>}
+ addUserKnob {20 tgt_transformation l transformation n 1}
+ tgt_transformation 0
+ addUserKnob {13 tgt_translate l translate +DISABLED}
+ addUserKnob {26 tgt_translate_status l "link :" -STARTLINE +DISABLED T None}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 tgt_link_status l "Target Linked to" T None}
+ addUserKnob {22 link_tgt l "Link to Selected Axis/Geo" T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\nroot = getLevel()\nthisGRP = nuke.thisGroup()\n\ndefaultKnobs = \{'translate' : 'translate'\}\nselNodeKnobs = \[]\n\ntry :\n\twith root :\n\t\tselNode = nuke.selectedNode()\n\n\t\tfor knob in selNode.knobs() :\n\t\t\tselNodeKnobs.append( knob )\n\n\tselNodeKnobs.sort()\n\n\ttgtNODE = selNode.name()\n\n\tif defaultKnobs\['translate'] not in selNodeKnobs :\n\t\tp = nuke.Panel('Select knobs :')\n\t\tp.addBooleanCheckBox( '<b>Unable to find the default knobs. Please use the pulldown menu below to define the knob manually.</b>' , False)\n\t\tp.addEnumerationPulldown( 'translate' , ' '.join( selNodeKnobs ) )\n\n\t\tif p.show() :\n\t\t\twith thisGRP :\n\t\t\t\tthisGRP\['tgt_translate'].setExpression('\{0\}.\{1\}'.format(tgtNODE, p.value( 'translate' )))\n\t\t\t\tthisGRP\['tgt_translate_status'].setValue('\{0\}.\{1\}'.format(tgtNODE, p.value( 'translate' )))\n\t\t\t\tthisGRP\['tgt_link_status'].setValue('<font color=orange>' + tgtNODE + '</font>')\n\telse :\n\t\twith thisGRP :\n\t\t\tthisGRP\['tgt_translate'].setExpression('\{0\}.translate'.format(tgtNODE))\n\t\t\tthisGRP\['tgt_translate_status'].setValue('\{0\}.translate'.format(tgtNODE))\n\t\t\tthisGRP\['tgt_link_status'].setValue('<font color=orange>' + tgtNODE + '</font>')\nexcept :\n\tnuke.message('no node selected.')" +STARTLINE}
+ addUserKnob {22 link_remove_tgt l "Remove Linked Target" -STARTLINE T "thisGRP = nuke.thisGroup()\nmainKnobs = \['tgt_translate']\nstatusKnobs = \['tgt_translate_status','tgt_link_status']\n\nfor knob in thisGRP.knobs() :\n    if mainKnobs.count(knob) != 0 :\n        thisGRP\[knob].clearAnimated()\n\nfor knob in thisGRP.knobs() :\n    if statusKnobs.count(knob) != 0 :\n        thisGRP\[knob].setValue('None')"}
+ addUserKnob {26 ""}
+ addUserKnob {22 calculate l "<b>\[CALCULATE]</b>" T "thisGRP = nuke.thisGroup()\n\nframe_range = thisGRP\['frame_range'].getValue()\n\nif frame_range == 0 :\n\tframeST = nuke.root().firstFrame()\n\tframeED = nuke.root().lastFrame()\n\nif frame_range == 1 :\n\tframeST = int(nuke.frame())\n\tframeED = int(nuke.frame())\n\nif frame_range == 2 :\n\tframeST = int(thisGRP\['frameST'].getValue())\n\tframeED = int(thisGRP\['frameED'].getValue())\n\nthisGRP\['depth_value'].clearAnimated()\nthisGRP\['output_depth'].clearAnimated()\n\nif frameST == frameED :\n\tcheckANI = 0\nelse :\n\tcheckANI = 1\n\ntargetMain = nuke.math.Matrix4()\nrevCam = nuke.math.Matrix4()\n\nif checkANI != 0 :\n\tthisGRP\['depth_value'].setAnimated()\n\tthisGRP\['output_depth'].setAnimated()\n\nfor n in xrange (frameST, frameED +1 , 1) :\n\tfor m in range (0,16) :\n\t\ttargetMain\[m] = nuke.toNode('ax_tgt').knob('matrix').getValueAt(n)\[m]\n\t\trevCam\[m] = nuke.toNode('reverse_cam').knob('matrix').getValueAt(n)\[m]\n\n\ttargetResult_mx = targetMain*revCam\n\n\tthisGRP\['depth_value'].setValueAt(targetResult_mx\[11]*-1, time=n)\n\nthisGRP\['output_depth'].setExpression('depth_invert == 0 ? depth_value+offset_value : depth_value == 0 ? 0 : (1/depth_value)+offset_value')" +STARTLINE}
+ addUserKnob {20 resultTabStart l "" +STARTLINE n -2}
+ addUserKnob {20 result l "Depth Result"}
+ addUserKnob {7 depth_value l Depth +DISABLED R -100 100}
+ addUserKnob {7 offset_value l Offset R -500 500}
+ addUserKnob {7 output_depth l "Output Depth" R -500 500}
+ addUserKnob {6 depth_invert l 1/z +STARTLINE}
+ addUserKnob {22 reset l "Reset Result" T "thisGRP = nuke.thisGroup()\nresultKnob = \['depth_value','offset_value','output_depth']\nfor i in range (0, len(resultKnob), 1) :\n\tthisGRP\[resultKnob\[i]].clearAnimated()\n\tthisGRP\[resultKnob\[i]].setValue(0)" +STARTLINE}
+ addUserKnob {20 resultTabEnd l "" -STARTLINE n -3}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l <b>Version</b> T 1.9}
+ addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2019-08-08}
+ addUserKnob {26 l_CHANGELOG l <b>Changelog</b> T "1.9\n- bug fix manually link camera knob.\n- manual link knob sort by alphabet\n\n1.7\n- removed node class restriction\n* Because some companies are using\ntheir own camera/axis class nodes.\nSo it supported any type of nodes\n\n- can use any nodes' knob value\n* if detected missing default knob to\nlink, user can set another knob manually\nor even use the custom data in 'NoOp' .\n\n- show linked expression of camera and target\n\n- frame range added 'current frame'\noption. For 1 frame calculation."}
+ addUserKnob {26 l_DEV l "<b>Developed by</b>" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "Don't touch"
+  note_font_size 42
+  xpos -322
+  ypos -66
+  bdwidth 197
+  bdheight 175
+ }
+ Card {
+  inputs 0
+  display off
+  selectable false
+  render_mode off
+  translate {{parent.tgt_translate} {parent.tgt_translate} {parent.tgt_translate}}
+  m00 {0 0.3333333731 0}
+  m01 {0 -0.3333333731 0}
+  m10 {0.3333333731 0 0}
+  m11 {-0.3333333731 0 0}
+  m20 {0 -0.3333333731 0}
+  m21 {0 0.3333333731 0}
+  m30 {-0.3333333731 0 0}
+  m31 {0.3333333731 0 0}
+  name ax_tgt
+  xpos -48
+  ypos 37
+ }
+ Axis2 {
+  inputs 0
+  display off
+  selectable false
+  xform_order {{"parent.cam_xform_order == 0 ? 5 : parent.cam_xform_order == 1 ? 3 : parent.cam_xform_order == 2 ? 4 : parent.cam_xform_order == 3 ? 1 : parent.cam_xform_order == 4 ? 2 : 0"}}
+  rot_order {{"parent.cam_rot_order == 0 ? 5 : parent.cam_rot_order == 1 ? 3 : parent.cam_rot_order == 2 ? 4 : parent.cam_rot_order == 3 ? 1 : parent.cam_rot_order == 4 ? 2 : 0"}}
+  translate {{parent.cam_translate*-1} {parent.cam_translate*-1} {parent.cam_translate*-1}}
+  rotate {{parent.cam_rotate*-1} {parent.cam_rotate*-1} {parent.cam_rotate*-1}}
+  name reverse_cam
+  xpos 84
+  ypos 15
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['frame_range'].getValue() == 2 :\n    thisGRP\['frameST'].setEnabled(True)\n    thisGRP\['frameED'].setEnabled(True)\nelse :\n    thisGRP\['frameST'].setEnabled(False)\n    thisGRP\['frameED'].setEnabled(False)\n"
+  xpos -264
+  ypos 43
+  addUserKnob {20 User}
+  addUserKnob {4 frame_range l "frame range" M {"project setting" "current frame" custom "" ""}}
+ }
+end_group

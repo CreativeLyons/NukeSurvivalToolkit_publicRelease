@@ -1,0 +1,310 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name DefocusSwirlyBokeh
+ tile_color 0xb16f43ff
+ selected true
+ addUserKnob {20 DefocusSwirlyBokeh}
+ addUserKnob {6 usegpu l "use gpu" t "You REALLY need a good GPU to use this node effectively. With CPU it will be excruciatingly slow." +STARTLINE}
+ usegpu true
+ addUserKnob {7 size l "bokeh size" t "The size of your defocus." R 2 100}
+ size 25
+ addUserKnob {7 aspect_ratio l "aspect ratio" R 0.25 1.5}
+ aspect_ratio 1
+ addUserKnob {7 swirl_amount l "swirly amount" t "How much to increase the cat's eye effect on the edges of frame."}
+ swirl_amount 1
+ addUserKnob {26 spacer2 l " " T ""}
+ addUserKnob {7 bokeh_contrast l "bokeh contrast" t "adjust contrast of bokeh up or down: 0 is grey. 1 is no change. 4 is high contrast.\n" R 0 2}
+ bokeh_contrast 1
+ addUserKnob {7 bokeh_blur l "bokeh blur" t "Blur the bokeh to soften out the edges. (percent of input resolution)." R 0 0.5}
+ addUserKnob {26 spacer l " " T ""}
+ addUserKnob {6 enable_bokeh_masking l "enable bokeh masking" t "false: \nuse the input filter for the whole frame. \n\ntrue: \nthe outward facing edges of the bokeh get increasingly masked by a radial towards the edge of frame." +STARTLINE}
+ addUserKnob {7 bokeh_radial_softness l "radial softness" t "How soft is the radial that masks the edge bokeh if enable bokeh masking is true."}
+ bokeh_radial_softness 0.5
+ addUserKnob {15 mattebox}
+ addUserKnob {7 mattebox_softness l "mattebox softness" R 0 25}
+ addUserKnob {20 About}
+ addUserKnob {26 about_label l " " T "<br/>\nBased on Alexander Kulikov's CatsEyeDefocus.<br/>\nwww.nukepedia.com/blink/filter/catseyedefocus\n<br/><br/>\nSimplifying the node. The blink convolution  node is the same.\n<br/><br/>\ngist.github.com/jedypod\n"}
+}
+ Input {
+  inputs 0
+  name Inputfilter
+  label "\[value number]"
+  xpos -370
+  ypos -568
+  number 1
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width 128
+  box_height {{box_width}}
+  box_fixed true
+  name ReformatBox
+  xpos -590
+  ypos -562
+ }
+ Flare {
+  position {{width/2} {height/2}}
+  radius {{position.x-(position.x*0.15)} {radius.0+(radius.0*0.02)} {radius.0+(radius.0*0.05)}}
+  inner_color 0.145
+  outer_falloff 0.54
+  inner_falloff 0.88
+  name Flare1
+  xpos -590
+  ypos -514
+ }
+ Keyer {
+  operation "luminance key"
+  range {0 0.404087018 1 1}
+  name Keyer1
+  xpos -590
+  ypos -472
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input1]"}}
+  name Switch1
+  xpos -370
+  ypos -466
+ }
+ Dot {
+  name Dot2
+  label " "
+  note_font "Helvetica Bold Bold"
+  note_font_size 24
+  note_font_color 0xa5a5a501
+  xpos -336
+  ypos -366
+ }
+set Nced61ee0 [stack 0]
+ Radial {
+  replace true
+  area {0 0 {input.width} {input.height}}
+  softness {{parent.bokeh_radial_softness}}
+  name LensEdgeBokehSoften
+  xpos -370
+  ypos -346
+ }
+ Reformat {
+  type "to box"
+  box_width {{parent.size}}
+  box_height {{box_width}}
+  box_fixed true
+  name SCALE_FILTER1
+  xpos -370
+  ypos -298
+ }
+ Reformat {
+  type scale
+  box_fixed true
+  scale {{parent.aspect_ratio} 1}
+  resize distort
+  name ASPECT_RATIO2
+  xpos -370
+  ypos -250
+ }
+ Crop {
+  box {{parent.mattebox+(parent.mattebox*input.width)} {parent.mattebox+(parent.mattebox*input.height)} {input.width-(parent.mattebox*input.width)} {input.height-(parent.mattebox*input.height)}}
+  softness {{parent.mattebox_softness}}
+  name MATTEBOX
+  xpos -370
+  ypos -202
+ }
+ Mirror2 {
+  flip true
+  flop true
+  name Mirror2_1
+  xpos -370
+  ypos -154
+ }
+ Reformat {
+  type "to box"
+  box_width {{"\[exists input] ? input.width : root.width"}}
+  box_height {{"\[exists input] ? input.height : root.height"}}
+  box_fixed true
+  box_pixel_aspect {{"\[exists input] ? input.pixel_aspect : root.pixel_aspect"}}
+  resize none
+  black_outside true
+  name BboxRemove
+  xpos -370
+  ypos -34
+ }
+ Dot {
+  name Dot3
+  label " "
+  note_font "Helvetica Bold Bold"
+  note_font_size 24
+  note_font_color 0xa5a5a501
+  xpos -336
+  ypos 138
+ }
+push $Nced61ee0
+ Dot {
+  name Dot1
+  label " "
+  note_font "Helvetica Bold Bold"
+  note_font_size 24
+  note_font_color 0xa5a5a501
+  xpos -116
+  ypos -366
+ }
+ Reformat {
+  type "to box"
+  box_width {{parent.size}}
+  box_height {{box_width}}
+  box_fixed true
+  name SCALE_FILTER
+  xpos -150
+  ypos -298
+ }
+ Reformat {
+  type scale
+  box_fixed true
+  scale {{parent.aspect_ratio} 1}
+  resize distort
+  name ASPECT_RATIO
+  selected true
+  xpos -150
+  ypos -250
+ }
+ Crop {
+  box {{parent.mattebox+(parent.mattebox*input.width)} {parent.mattebox+(parent.mattebox*input.height)} {input.width-(parent.mattebox*input.width)} {input.height-(parent.mattebox*input.height)}}
+  softness {{parent.mattebox_softness}}
+  name MATTEBOX1
+  xpos -150
+  ypos -202
+ }
+ CCorrect {
+  channels rgb
+  contrast {{parent.bokeh_contrast}}
+  name BokehContrast
+  xpos -150
+  ypos -154
+ }
+ Clamp {
+  channels rgba
+  maximum_enable false
+  name ClampMin
+  xpos -150
+  ypos -118
+ }
+ Group {
+  name BlurPercent
+  tile_color 0xc4814dff
+  xpos -150
+  ypos -82
+  addUserKnob {20 percentBlur l "Percent Blur"}
+  addUserKnob {41 channels T _BLUR_.channels}
+  addUserKnob {14 percent R 0 100}
+  percent {{parent.bokeh_blur*100}}
+  addUserKnob {41 filter T _BLUR_.filter}
+  addUserKnob {41 quality l "" -STARTLINE T _BLUR_.quality}
+  addUserKnob {41 crop l "crop to format" -STARTLINE T _BLUR_.crop}
+  addUserKnob {41 mix T _BLUR_.mix}
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos 440
+   ypos -225
+  }
+  Blur {
+   channels rgba
+   size {{width/3*(percent/100) x1001 6.826666667e+10} {width/3*(percent/100)*(1/pixel_aspect)}}
+   crop false
+   name _BLUR_
+   xpos 440
+   ypos -153
+   addUserKnob {20 User}
+   addUserKnob {7 xpercent l xPercent R 0 100}
+   xpercent 25.5
+   addUserKnob {7 ypercent l yPercent R 0 100}
+   ypercent {{xpercent}}
+  }
+  Output {
+   name Output1
+   xpos 440
+   ypos -81
+  }
+ end_group
+ Reformat {
+  type "to box"
+  box_width {{"\[exists input] ? input.width : root.width"}}
+  box_height {{"\[exists input] ? input.height : root.height"}}
+  box_fixed true
+  box_pixel_aspect {{"\[exists input] ? input.pixel_aspect : root.pixel_aspect"}}
+  resize none
+  black_outside true
+  name BboxRemove1
+  xpos -150
+  ypos -10
+ }
+ Dot {
+  name Dot4
+  label " "
+  note_font "Helvetica Bold Bold"
+  note_font_size 24
+  note_font_color 0xa5a5a501
+  xpos -116
+  ypos 66
+ }
+set Ncee42110 [stack 0]
+ Switch {
+  inputs 2
+  which {{parent.enable_bokeh_masking}}
+  name SoftEdgeBokeh
+  xpos -150
+  ypos 134
+ }
+push $Ncee42110
+ Dot {
+  name Dot5
+  label " "
+  note_font "Helvetica Bold Bold"
+  note_font_size 24
+  note_font_color 0xa5a5a501
+  xpos -6
+  ypos 66
+ }
+ Input {
+  inputs 0
+  name Input
+  label "\[value number]"
+  xpos 70
+  ypos -568
+ }
+ Constant {
+  inputs 0
+  name Constant1
+  xpos 290
+  ypos -442
+  postage_stamp false
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input0]"}}
+  name Switch2
+  xpos 70
+  ypos -442
+ }
+ BlinkScript {
+  inputs 3
+  ProgramGroup 1
+  KernelDescription "2 \"CatsEyeConvolve\" iterate pixelWise d3f7f7268f50afeb0ffd385b019c65664a5775e0f4a8983e20044cb012fe17e8 4 \"src\" Read Ranged2D \"filter\" Read Random \"ext\" Read Random \"dst\" Write Point 3 \"Amount\" Float 1 AACAPw== \"Format\" Int 2 AAUAANACAAA= \"Interpolate\" Bool 1 AQ== 3 \"amount\" 1 1 \"_format\" 2 1 \"interpolate\" 1 1 7 \"srcrangeMin\" Int 2 1 AAAAAAAAAAA= \"srcrangeMax\" Int 2 1 AAAAAAAAAAA= \"extconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"_filterOffset\" Int 2 1 AAAAAAAAAAA= \"halfWidth\" Int 1 1 AAAAAA== \"halfHeight\" Int 1 1 AAAAAA== \"step\" Float 1 1 AAAAAA=="
+  EncodedSource "1 2904 +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"
+  rebuild ""
+  CatsEyeConvolve_Amount {{parent.swirl_amount}}
+  CatsEyeConvolve_Format {{input.width} {input.height}}
+  protectKernelWhenPublishing true
+  rebuild_finalise ""
+  name BlinkScript2
+  xpos 70
+  ypos 128
+ }
+ Output {
+  name Output
+  xpos 70
+  ypos 254
+ }
+end_group

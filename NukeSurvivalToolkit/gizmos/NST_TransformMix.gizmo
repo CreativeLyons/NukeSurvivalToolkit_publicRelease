@@ -1,0 +1,155 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name Transform_Mix
+ help "Transform ( Mix - Dissolve )\n\nChange all knobs of a Transform node (linked in this curent node) using two different way.\n\nMix:\nMultiply all the Transform curves by the mix slider value.\n\nDissolve:\nMix two Transform nodes together.\nOn dissolve slider, \"0\" to keep the value of the Transform 1 and \"1\" the Transform 2.\n"
+ knobChanged "node = nuke.thisNode()\nknob = nuke.thisKnob()\nmode = node\['mode'].value()\nglcolor = node\['gl_color'].value()\nsavecolor = node\['tile_color'].value()\n\nif knob.name() in ('mode', 'showPanel'):\n    if mode == 'Mix':\n        node\['mode_2'].setValue('Mix')\n        node\['dissolve'].setVisible(False)\n        node\['mix'].setVisible(True)\n        node\['T2'].setVisible(False)\n\n        if savecolor == (2989502719):\n            node\['tile_color'].setValue(glcolor)\n            node\['gl_color'].setValue(savecolor)\n    else:\n        node\['dissolve'].setVisible(True)\n        node\['mix'].setVisible(False)\n        node\['T2'].setVisible(True)\n\n        allnodes = \[nodeT.name() for nodeT in nuke.allNodes(group=nuke.root())]\n        if node.knob('T2').value() in allnodes:\n            if savecolor == (2989502719):\n                node\['gl_color'].setValue(savecolor)\n                node\['tile_color'].setValue(glcolor)\n            node\['mode_2'].setValue('Dissolve')\n        else:\n            if savecolor != (2989502719):\n                node\['tile_color'].setValue(2989502719)\n                node\['gl_color'].setValue(savecolor)\n                nuke.thisNode()\['mode_2'].setValue('Need to be link to a Transform node')\n\nif knob.name() in \['T1', 'T2']:\n    if mode == 'Dissolve':\n        allnodes = \[nodeT.name() for nodeT in nuke.allNodes(group=nuke.root())]\n    \n        if node.knob('T2').value() in allnodes:\n            if savecolor == (2989502719):\n                node\['gl_color'].setValue(savecolor)\n                node\['tile_color'].setValue(glcolor)\n            nuke.thisNode()\['mode_2'].setValue('Dissolve')\n        else:\n            if savecolor != (2989502719):\n                node\['tile_color'].setValue(2989502719)\n                node\['gl_color'].setValue(savecolor)\n                nuke.thisNode()\['mode_2'].setValue('Need to be link to a Transform node')\n    else:\n        if savecolor == (2776279807):\n            glcolor = node\['gl_color'].value()\n            if glcolor == (2776279807):\n                node\['tile_color'].setValue(glcolor)\n        else:\n            pass\n"
+ tile_color 0xb23030ff
+ gl_color 0xa57aaaff
+ selected true
+ addUserKnob {20 FT l "Mix - Dissolve"}
+ addUserKnob {4 mode l "@b;<font color=\"green\">Mode" t "Mix:\nMultiply all the Transform curves by the mix slider value.\n\nDissolve:\nMix two Transform nodes together.\nOn dissolve slider, \"0\" to keep the value of the Trasform 1 and \"1\" the Trasform 2." M {Mix Dissolve "" "" "" "" "" "" "" ""}}
+ mode Dissolve
+ addUserKnob {26 S02 l " "}
+ addUserKnob {41 T1 l "     Transform 1" t "Type the Transform node name you want to mix / dissolve." T Input.T1}
+ addUserKnob {1 T2 l "       2 " t "Type the Transform node name you want to dissolve with the Transform 1." -STARTLINE}
+ T2 Transform_Name
+ addUserKnob {7 mix l Mix t "Multiply all the Transform 1 curves by the mix value." +HIDDEN}
+ mix 1
+ addUserKnob {7 dissolve l Dissolve t "\"0\" is the Trasform 1 curves value and \"1\" is the Trasform 2 curves value."}
+ dissolve 1
+ addUserKnob {26 T01 l "" +STARTLINE}
+ addUserKnob {20 transform_result l "Result (Transform)" n 1}
+ transform_result 0
+ addUserKnob {26 S01 l " " T " "}
+ addUserKnob {41 translate l Translate T Maths.translate}
+ addUserKnob {41 rotate l Rotate T Maths.rotate}
+ addUserKnob {41 scale l Scale T Maths.scale}
+ addUserKnob {41 skewX l "Skew X" T Maths.skewX}
+ addUserKnob {41 skewY l "Skew Y" T Maths.skewY}
+ addUserKnob {41 skew_order l "Skew order" T T_RESULT.skew_order}
+ addUserKnob {41 center l Center T Maths.center}
+ addUserKnob {41 invert_matrix l Invert T T_RESULT.invert_matrix}
+ addUserKnob {41 filter l Filter T T_RESULT.filter}
+ addUserKnob {41 clamp l Clamp -STARTLINE T T_RESULT.clamp}
+ addUserKnob {41 black_outside l "Black Outside" -STARTLINE T T_RESULT.black_outside}
+ addUserKnob {41 motionblur l Motionblur T T_RESULT.motionblur}
+ addUserKnob {41 shutter l Shutter T T_RESULT.shutter}
+ addUserKnob {41 shutteroffset l "Shutter Offset" T T_RESULT.shutteroffset}
+ addUserKnob {41 shuttercustomoffset l "" -STARTLINE T T_RESULT.shuttercustomoffset}
+ addUserKnob {26 S03 l " " T " "}
+ addUserKnob {22 create_transform l "<font color = \"springGreen\"> Create Transform - Linked" t "Create a Transform node that have all knobs linked to this node." T "groupNode = nuke.thisNode()\nname = groupNode.name()\ncolornode = groupNode.knob('tile_color').value()\n\nNT = nuke.createNode(\"Transform\", inpanel=False )\nNT\['translate'].setExpression(name + \".translate\")\nNT\['rotate'].setExpression(name + \".rotate\")\nNT\['scale'].setExpression(name + \".scale\")\nNT\['scale'].setSingleValue(False)\nNT\['center'].setExpression(name + \".center\")\nNT\['invert_matrix'].setExpression(name + \".invert_matrix\")\nNT\['filter'].setExpression(name + \".filter\")\nNT\['clamp'].setExpression(name + \".clamp\")\nNT\['black_outside'].setExpression(name + \".black_outside\")\nNT\['motionblur'].setExpression(name + \".motionblur\")\nNT\['shutter'].setExpression(name + \".shutter\")\nNT\['shutteroffset'].setExpression(name + \".shutteroffset\")\nNT\['shuttercustomoffset'].setExpression(name + \".shuttercustomoffset\")\nNT\['label'].setValue(\"(\" +name + \")\")\nNT\['tile_color'].setValue(colornode)\nNT.setSelected(True)\n\nnuke.nodeCopy('%clipboard%')\n\nn = nuke.selectedNode()\nnuke.delete(n)\n\nnuke.selectAll() \nnuke.invertSelection()\n\nnodePos = ( nuke.thisNode().xpos(), nuke.thisNode().ypos()) \n\ngroupNode.end()\n\nfor node in nuke.allNodes():\n    node.setSelected(False)\n\nnuke.nodePaste('%clipboard%')\n\ngroupNode.setSelected(False)\n\nnodesToPlace = sorted( nuke.selectedNodes(), key=lambda node: node.ypos())\n\nfor index,node in enumerate(nodesToPlace):\n    node.setXYpos(nodePos\[0]+100, nodePos\[1])" +STARTLINE}
+ addUserKnob {22 createb l "<font color = \"CornflowerBlue\">Create Transform - Baked" t "Create a Transform node with the same curves as the Camera Shake node." -STARTLINE T "groupNode = nuke.thisNode()\nname = groupNode.name()\ncolornode = groupNode.knob('tile_color').value()\n\nNT = nuke.createNode(\"Transform\", inpanel=False )\nNT\['translate'].setExpression(name + \".translate\")\nNT\['rotate'].setExpression(name + \".rotate\")\nNT\['scale'].setExpression(name + \".scale_1\")\nNT\['scale'].setSingleValue(False)\nNT\['center'].setExpression(name + \".center\")\nNT\['invert_matrix'].setExpression(name + \".invert_matrix\")\nNT\['filter'].setExpression(name + \".filter\")\nNT\['clamp'].setExpression(name + \".clamp\")\nNT\['black_outside'].setExpression(name + \".black_outside\")\nNT\['motionblur'].setExpression(name + \".motionblur\")\nNT\['shutter'].setExpression(name + \".shutter\")\nNT\['shutteroffset'].setExpression(name + \".shutteroffset\")\nNT\['shuttercustomoffset'].setExpression(name + \".shuttercustomoffset\")\nNT\['label'].setValue(\"(\" +name + \")\")\nNT\['tile_color'].setValue(colornode)\nNT.setSelected(True)\n\n\ndef bakeExpressions(nodes=None, start=None, end=None, views=None):\n\n    if nodes is None:\n        nodes = nuke.selectedNodes()\n    if not nodes:\n        nuke.message('No nodes to bake')\n        return\n\n    scriptRange = nuke.root().frameRange()\n    if start is None:\n        start = scriptRange.first()\n    if end is None:\n        end = scriptRange.last()\n\n    if views is None:\n        views = nuke.views()\n    elif not views:\n        nuke.message('No views to bake')\n        return\n    elif not set(views).issubset(nuke.views()):\n        nuke.message('Not all views in %s exist in script' % views)\n        return\n\n    for node in nodes:\n        for knob in node.knobs().itervalues():\n            if isinstance(knob, nuke.Array_Knob):\n                for view in views:\n                    if knob.isAnimated(view=view):\n                        aSize = 1 if knob.singleValue(view) else knob.arraySize()\n                        for index in range(aSize):\n                            anim = knob.animation(index, view=view)\n                            if anim is None or anim.noExpression():\n                                continue\n                            for f in range(start, end + 1):\n                                anim.setKey(f, anim.evaluate(f))\n                            knob.setExpression('curve', channel=index, view=view)\n                            if anim.constant():\n                                knob.clearAnimated(index, view=view)\n\ndef promptAndBake():\n    nodes = nuke.selectedNodes()\n    fr = nuke.getFramesAndViews(\"Range to Bake\", str(nuke.root().frameRange()))\n    if fr is None:\n        return\n    fr, v = fr\n    try:\n        fr = nuke.FrameRange(fr)\n    except ValueError as e:\n        nuke.message(str(e))\n        return\n    bakeExpressions(nodes=nodes, start=fr.first(), end=fr.last(), views=v)\n    \npromptAndBake()\n\nnuke.nodeCopy('%clipboard%')\n\nn = nuke.selectedNode()\nnuke.delete(n)\n\nnuke.selectAll() \nnuke.invertSelection()\n\nnodePos = ( nuke.thisNode().xpos(), nuke.thisNode().ypos()) \n\ngroupNode.end()\n\nfor node in nuke.allNodes():\n    node.setSelected(False)\n\nnuke.nodePaste('%clipboard%')\n\ngroupNode.setSelected(False)\n\nnodesToPlace = sorted( nuke.selectedNodes(), key=lambda node: node.ypos())\n\nfor index,node in enumerate(nodesToPlace):\n    node.setXYpos(nodePos\[0]+100, nodePos\[1])"}
+ addUserKnob {26 S04 l " "}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 by2 l " " T "                                                                                               "}
+ addUserKnob {26 FTools l " " t "FranklinVFX.com\n" -STARTLINE T "<font color=\"#1C1C1C\"> Franklin VFX - 2017"}
+ addUserKnob {1 output l INVISIBLE +INVISIBLE}
+ output "\[if \{\[exists \[value T2]]==\"0\"\} \{return \"\[knob this.name_2 0]\"\} \{return \"\[knob this.name_2 1]\"\}]\[value mode_2]"
+ addUserKnob {1 error l INVISIBLE +INVISIBLE}
+ error "\[if \{\[exists \[value T2]]==\"0\"\} \{return \"\[knob this.name_2 0]\"\} \{return \"\[knob this.name_2 1]\"\}]"
+ addUserKnob {1 name_2 l INVISIBLE +INVISIBLE}
+ name_2 0
+ addUserKnob {1 mode_2 l INVISIBLE +INVISIBLE}
+ mode_2 "Need to be link to a Transform node"
+}
+ Transform {
+  inputs 0
+  center {{"\[value parent.T1].center.x"} {"\[value parent.T1].center.y"}}
+  shutteroffset centred
+  name T0
+  tile_color 0xfefefeff
+  xpos 399
+  ypos 703
+  hide_input true
+ }
+ Transform {
+  translate {{"\[value parent.T1].translate"} {"\[value parent.T1].translate"}}
+  rotate {{"\[value parent.T1].rotate"}}
+  scale {{"\[value parent.T1].scale"}}
+  skewX {{"\[value parent.T1].skewX"}}
+  skewY {{"\[value parent.T1].skewY"}}
+  center {{"\[value parent.T1].center.x"} {"\[value parent.T1].center.y"}}
+  invert_matrix {{"\[value parent.T1].invert_matrix"}}
+  shutteroffset centred
+  name T1
+  tile_color 0xfefefeff
+  label "\[value parent.T1]"
+  xpos 399
+  ypos 729
+ }
+ Transform {
+  translate {{"\[value parent.T2].translate"} {"\[value parent.T2].translate"}}
+  rotate {{"\[value parent.T2].rotate"}}
+  scale {{"\[value parent.T2].scale"}}
+  skewX {{"\[value parent.T2].skewX"}}
+  skewY {{"\[value parent.T2].skewY"}}
+  center {{"\[value parent.T2].center.x"} {"\[value parent.T2].center.y"}}
+  invert_matrix {{"\[value parent.T2].invert_matrix"}}
+  filter Impulse
+  shutteroffset centred
+  name T2
+  tile_color 0xfefefeff
+  label "\[value parent.T2]\n"
+  note_font Verdana
+  xpos 399
+  ypos 767
+ }
+ NoOp {
+  name Maths
+  label "\[value parent.T1]\n\[value parent.T2]"
+  note_font Verdana
+  xpos 399
+  ypos 803
+  hide_input true
+  addUserKnob {20 User}
+  addUserKnob {6 mode +STARTLINE}
+  mode {{parent.mode}}
+  addUserKnob {7 mixer2 l mix}
+  mixer2 {{1-parent.mix}}
+  addUserKnob {7 mixer l dissolve}
+  mixer {{parent.dissolve}}
+  addUserKnob {12 translate}
+  translate {{"\[value mode] ? (\[exists \[value parent.T2]] ? ((\[value parent.T1].translate)*(1-mixer))+((\[value parent.T2].translate)*mixer) : ((\[value parent.T1].translate)*(1-mixer))+(0*mixer)) : (\[exists \[value parent.T2]] ? ((\[value parent.T1].translate)*(1-mixer2))+((T0.translate)*mixer2) : ((\[value parent.T1].translate)*(1-mixer2))+(0*mixer2))"} {"\[value mode] ? (\[exists \[value parent.T2]] ? ((\[value parent.T1].translate)*(1-mixer))+((\[value parent.T2].translate)*mixer) : ((\[value parent.T1].translate)*(1-mixer))+(0*mixer)) : (\[exists \[value parent.T2]] ? ((\[value parent.T1].translate)*(1-mixer2))+((T0.translate)*mixer2) : ((\[value parent.T1].translate)*(1-mixer2))+(0*mixer2))"}}
+  addUserKnob {7 rotate R -180 180}
+  rotate {{"\[value mode] ? (\[exists \[value parent.T2]] ? ((\[value parent.T1].rotate)*(1-mixer))+((\[value parent.T2].rotate)*mixer) : ((\[value parent.T1].rotate)*(1-mixer))+(0*mixer)) : (\[exists \[value parent.T2]] ? ((\[value parent.T1].rotate)*(1-mixer2))+((T0.rotate)*mixer2) : ((\[value parent.T1].rotate)*(1-mixer2))+(0*mixer2))"}}
+  addUserKnob {14 scale R 0 100}
+  scale {{"\[value mode] ? (\[exists \[value parent.T2]] ? ((\[value parent.T1].scale)*(1-mixer))+((\[value parent.T2].scale)*mixer) : ((\[value parent.T1].scale)*(1-mixer))+(1*mixer)) : (\[exists \[value parent.T2]] ? ((\[value parent.T1].scale)*(1-mixer2))+((T0.scale)*mixer2) : ((\[value parent.T1].scale)*(1-mixer2))+(1*mixer2))"} {"\[value mode] ? (\[exists \[value parent.T2]] ? ((\[value parent.T1].scale)*(1-mixer))+((\[value parent.T2].scale)*mixer) : ((\[value parent.T1].scale)*(1-mixer))+(1*mixer)) : (\[exists \[value parent.T2]] ? ((\[value parent.T1].scale)*(1-mixer2))+((T0.scale)*mixer2) : ((\[value parent.T1].scale)*(1-mixer2))+(1*mixer2))"}}
+  addUserKnob {7 skewX l "skew X" R -1 1}
+  skewX {{"\[value mode] ? (\[exists \[value parent.T2]] ? ((\[value parent.T1].skewX)*(1-mixer))+((\[value parent.T2].skewX)*mixer) : ((\[value parent.T1].skewX)*(1-mixer))+(0*mixer)) : (\[exists \[value parent.T2]] ? ((\[value parent.T1].skewX)*(1-mixer2))+((T0.skewX)*mixer2) : ((\[value parent.T1].skewX)*(1-mixer2))+(0*mixer2))"}}
+  addUserKnob {7 skewY l "skew Y" R -1 1}
+  skewY {{"\[value mode] ? (\[exists \[value parent.T2]] ? ((\[value parent.T1].skewY)*(1-mixer))+((\[value parent.T2].skewY)*mixer) : ((\[value parent.T1].skewY)*(1-mixer))+(0*mixer)) : (\[exists \[value parent.T2]] ? ((\[value parent.T1].skewY)*(1-mixer2))+((T0.skewY)*mixer2) : ((\[value parent.T1].skewY)*(1-mixer2))+(0*mixer2))"}}
+  addUserKnob {12 center}
+  center {{"\[value mode] ? (\[exists \[value parent.T2]] ? ((\[value parent.T1].center.x)*(1-mixer))+((\[value parent.T2].center.x)*mixer) : (\[value parent.T1].center.x)) : (\[exists \[value parent.T2]] ? ((\[value parent.T1].center.x)*(1-mixer2))+((T0.center.x)*mixer2) : (\[value parent.T1].center.x))"} {"\[value mode] ? (\[exists \[value parent.T2]] ? ((\[value parent.T1].center.y)*(1-mixer))+((\[value parent.T2].center.y)*mixer) : (\[value parent.T1].center.y)) : (\[exists \[value parent.T2]] ? ((\[value parent.T1].center.y)*(1-mixer2))+((T0.center.y)*mixer2) : (\[value parent.T1].center.y))"}}
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 399
+  ypos 285
+  addUserKnob {20 User}
+  addUserKnob {1 T1}
+  T1 "Transform Name"
+  addUserKnob {1 T2}
+  T2 "\[value parent.T2]"
+ }
+ Transform {
+  translate {{parent.Maths.translate.x} {parent.Maths.translate.y}}
+  rotate {{parent.Maths.rotate}}
+  scale {{parent.Maths.scale.w} {parent.Maths.scale.h}}
+  skewX {{parent.Maths.skewX}}
+  skewY {{parent.Maths.skewY}}
+  center {{parent.Maths.center.x} {parent.Maths.center.y}}
+  shutteroffset centred
+  name T_RESULT
+  label "\[value filter]"
+  selected true
+  xpos 399
+  ypos 359
+ }
+ Output {
+  name FranklinVFX
+  xpos 399
+  ypos 664
+ }
+end_group

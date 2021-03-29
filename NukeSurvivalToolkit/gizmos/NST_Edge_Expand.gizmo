@@ -1,0 +1,1765 @@
+Group {
+ name Edge_Expand
+ inputs 2
+ help "Expand edges to fix fringing on keys.\nUse after a premult is preferred, but can also help on some other inputs."
+ knobChanged "\nnode = nuke.thisNode()\nknob = nuke.thisKnob()\n\nif knob.name() in \['method']:\n    if knob.value() == 'Dilate':\n        node\['size_extend'].clearFlag(nuke.INVISIBLE)\n        node\['samples'].clearFlag(nuke.INVISIBLE)\n        node\['size_warp'].setFlag(nuke.INVISIBLE)\n        node\['warp_amount'].setFlag(nuke.INVISIBLE)\n        node\['warp_normal'].setFlag(nuke.INVISIBLE)\n        node\['size_distort'].setFlag(nuke.INVISIBLE)\n        node\['distort_amount'].setFlag(nuke.INVISIBLE)\n        node\['blur'].clearFlag(nuke.INVISIBLE)\n    elif knob.value() == 'Extend':\n        node\['size_extend'].clearFlag(nuke.INVISIBLE)\n        node\['samples'].clearFlag(nuke.INVISIBLE)\n        node\['size_warp'].setFlag(nuke.INVISIBLE)\n        node\['warp_amount'].setFlag(nuke.INVISIBLE)\n        node\['warp_normal'].setFlag(nuke.INVISIBLE)\n        node\['size_distort'].setFlag(nuke.INVISIBLE)\n        node\['distort_amount'].setFlag(nuke.INVISIBLE)\n        node\['blur'].clearFlag(nuke.INVISIBLE)\n    elif knob.value() == 'Warp':\n        node\['size_extend'].setFlag(nuke.INVISIBLE)\n        node\['samples'].setFlag(nuke.INVISIBLE)\n        node\['size_warp'].clearFlag(nuke.INVISIBLE)\n        node\['warp_amount'].clearFlag(nuke.INVISIBLE)\n        node\['warp_normal'].clearFlag(nuke.INVISIBLE)\n        node\['size_distort'].setFlag(nuke.INVISIBLE)\n        node\['distort_amount'].setFlag(nuke.INVISIBLE)\n        node\['blur'].clearFlag(nuke.INVISIBLE)\n    elif knob.value() == 'Distort':\n        node\['size_extend'].setFlag(nuke.INVISIBLE)\n        node\['samples'].setFlag(nuke.INVISIBLE)\n        node\['size_warp'].setFlag(nuke.INVISIBLE)\n        node\['warp_amount'].setFlag(nuke.INVISIBLE)\n        node\['warp_normal'].setFlag(nuke.INVISIBLE)\n        node\['size_distort'].clearFlag(nuke.INVISIBLE)\n        node\['distort_amount'].clearFlag(nuke.INVISIBLE)\n        node\['blur'].setFlag(nuke.INVISIBLE)\n\nelif knob.name() in \['samples']:\n    if knob.value() > 10:\n        knob.setValue(10)\n    elif knob.value() < 1:\n        knob.setValue(1)\n"
+ tile_color 0xef7033ff
+ label "(\[value method])"
+ addUserKnob {20 User}
+ addUserKnob {4 method l Method t "Dilate: Multiple iterations of Blur and Unpremult of the same input.\nExtend: Recursive iterations of Blur and Unpremult.\nWarp: A vector based method to stretch the edges.\nDistort: A wide distortion which \"grows\" the subject into its matte." M {Dilate Extend Warp Distort}}
+ addUserKnob {6 in_premult l "Input is Premultiplied" -STARTLINE}
+ in_premult true
+ addUserKnob {26 ""}
+ addUserKnob {7 erode t "Erodes the original alpha to get rid of edges." R 0 15}
+ erode 5
+ addUserKnob {14 edgeblur l "edge blur" t "Use this to soften the transition between the extended area and the core." R 0 100}
+ addUserKnob {26 ""}
+ addUserKnob {14 size_extend l size t "Controls the size of the expansion." R 0 100}
+ size_extend 15
+ addUserKnob {3 samples t "Controls the amount of samples for the Dilate or Extend Methods. (min:1 max:10)"}
+ samples 10
+ addUserKnob {14 size_warp l size t "Controls the size of the Warp" +INVISIBLE R 0 100}
+ size_warp 10
+ addUserKnob {7 warp_amount l "warp amount" +INVISIBLE R 0.5 1}
+ warp_amount 1
+ addUserKnob {7 warp_normal l "warp normal" t "Rotates the angle of the vector extension." +INVISIBLE R -90 90}
+ addUserKnob {14 size_distort l size t "Controls the size of the distort." +INVISIBLE R 0 100}
+ size_distort 5
+ addUserKnob {7 distort_amount l "distort amount" +INVISIBLE R 0.5 1}
+ distort_amount 1
+ addUserKnob {14 blur l "blur expansion" R 0 100}
+ addUserKnob {26 ""}
+ addUserKnob {7 mix_luma l "mix luma"}
+ mix_luma 1
+ addUserKnob {7 mix_chroma l "mix chroma"}
+ mix_chroma 1
+ addUserKnob {22 shuffle_edge l "shuffle edge matte" T "node = nuke.thisNode()\nfullName = 'root.' + node.fullName()\nparent_group = fullName.rsplit('.', 1)\[0]\nwith nuke.toNode(parent_group):\n    shuffle = nuke.createNode(\"Shuffle\", 'in edge red alpha green alpha blue alpha label \"Edge Matte\"', inpanel=False)\n    shuffle.setXpos(node.xpos() + 100)\n    shuffle.setYpos(node.ypos())\n    shuffle.setInput(0, node)\n\n" +STARTLINE}
+ addUserKnob {6 premult l "premult output" t "Check this box to get the final result of the expension with the original matte.\nUncheck this box to see the result of the expension with a new expended alpha." -STARTLINE}
+ premult true
+ addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+ addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nEdge_Expand\nVersion 1.0\n2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.0 - 2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -33
+  ypos 1325
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -175
+  ypos -347
+ }
+ Dot {
+  name Dot13
+  tile_color 0xcccccc00
+  xpos -141
+  ypos -279
+ }
+set N958b9a0 [stack 0]
+ Unpremult {
+  name Unpremult2
+  xpos -175
+  ypos -226
+  disable {{!parent.in_premult}}
+ }
+set N95d29c0 [stack 0]
+ Erode {
+  size {{parent.erode}}
+  name Erode1
+  xpos -175
+  ypos -137
+ }
+set N95ccab0 [stack 0]
+ Dot {
+  name Dot1
+  tile_color 0xcc804e00
+  xpos -259
+  ypos -127
+ }
+ Erode {
+  size {{parent.edgeblur} {parent.edgeblur}}
+  blur 1
+  name Erode2
+  xpos -293
+  ypos -93
+ }
+push $N95ccab0
+ ChannelMerge {
+  inputs 2
+  operation min
+  name ChannelMerge1
+  xpos -175
+  ypos -99
+ }
+ Dot {
+  name Dot16
+  tile_color 0x4b5ec600
+  xpos -141
+  ypos -22
+ }
+set N95ae5d0 [stack 0]
+push $N958b9a0
+ Dot {
+  name Dot15
+  tile_color 0xcccccc00
+  xpos -438
+  ypos -279
+ }
+set N1956f6a0 [stack 0]
+ ChannelMerge {
+  inputs 2
+  operation from
+  name ChannelMerge2
+  xpos -472
+  ypos -38
+ }
+push $N1956f6a0
+ Dot {
+  name Dot7
+  tile_color 0xcccccc00
+  xpos -605
+  ypos -279
+ }
+add_layer {edge edge.red edge.green edge.blue edge.alpha}
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 edge.alpha
+  bbox B
+  name Copy5
+  xpos -639
+  ypos -32
+ }
+ Dot {
+  name Dot20
+  tile_color 0x9e3c6300
+  xpos -605
+  ypos 641
+ }
+set Nceed720 [stack 0]
+ Dot {
+  name Dot23
+  tile_color 0x9e3c6300
+  xpos -612
+  ypos 1151
+ }
+set Nce99110 [stack 0]
+ Dot {
+  name Dot24
+  tile_color 0x9e3c6300
+  xpos -612
+  ypos 1329
+ }
+set Nc5922f0 [stack 0]
+push $Nce99110
+push $N95ae5d0
+ Premult {
+  name Premult2
+  xpos -175
+  ypos 51
+ }
+ Dot {
+  name Dot2
+  tile_color 0xcccccc00
+  xpos -141
+  ypos 108
+ }
+set N94727c0 [stack 0]
+ Dot {
+  name Dot11
+  tile_color 0xcccccc00
+  xpos -302
+  ypos 108
+ }
+ Dot {
+  name Dot12
+  tile_color 0xcccccc00
+  xpos -302
+  ypos 561
+ }
+push $N95ae5d0
+ Dot {
+  name Dot14
+  tile_color 0x4b5ec600
+  xpos 253
+  ypos -22
+ }
+ Dot {
+  name Dot6
+  tile_color 0x4b5ec600
+  xpos 253
+  ypos 92
+ }
+set Nbc9a6530 [stack 0]
+push $N95d29c0
+ Dot {
+  name Dot8
+  tile_color 0xcccccc00
+  xpos 121
+  ypos -222
+ }
+set Nb3b2ff0 [stack 0]
+ Dot {
+  name Dot5
+  tile_color 0xcccccc00
+  xpos 367
+  ypos -222
+ }
+ Group {
+  inputs 2
+  name Distort
+  xpos 333
+  ypos 153
+  addUserKnob {20 User}
+  addUserKnob {14 size R 0 100}
+  size {{parent.size_distort} {parent.size_distort}}
+  addUserKnob {7 distort}
+  distort {{parent.distort_amount}}
+ }
+  Input {
+   inputs 0
+   name Inputcontrol_mask
+   xpos 236
+   ypos -303
+   number 1
+  }
+  Shuffle {
+   red alpha
+   green alpha
+   blue alpha
+   name Shuffle1
+   label "in \[value in]-->out \[value out]"
+   xpos 235
+   ypos -248
+  }
+set Na9d4d20 [stack 0]
+  Blur {
+   size {{parent.size*10} {parent.size*10}}
+   quality {{int(parent.size*8)}}
+   name Blur2
+   label "size \[value size]"
+   xpos 360
+   ypos -121
+  }
+push $Na9d4d20
+  Blur {
+   size {{parent.size} {parent.size}}
+   quality 50
+   name Blur1
+   xpos 235
+   ypos -117
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   bbox B
+   name Merge2
+   xpos 234
+   ypos 5
+  }
+  Grade {
+   gamma 0.415
+   name Grade5
+   xpos 234
+   ypos 57
+  }
+set Nbc8bebd0 [stack 0]
+  Invert {
+   name Invert1
+   xpos 61
+   ypos 51
+  }
+  Multiply {
+   value {{parent.size*2}}
+   name Multiply1
+   xpos 61
+   ypos 178
+  }
+  Dot {
+   name Dot1
+   tile_color 0x7aa9ff00
+   xpos 95
+   ypos 441
+  }
+push $Nbc8bebd0
+  Dot {
+   name Dot2
+   tile_color 0x7aa9ff00
+   xpos 269
+   ypos 123
+  }
+set Nbc9dd030 [stack 0]
+  Matrix {
+   matrix {
+       {1 0 -1}
+       {2 0 -2}
+       {1 0 -1}
+     }
+   name Matrix1
+   xpos 235
+   ypos 204
+  }
+push $Nbc9dd030
+  Dot {
+   name Dot3
+   tile_color 0x7aa9ff00
+   xpos 379
+   ypos 123
+  }
+  Matrix {
+   channels rgb
+   matrix {
+       {-1 -2 -1}
+       {0 0 0}
+       {1 2 1}
+     }
+   name Matrix2
+   xpos 345
+   ypos 205
+  }
+  Dot {
+   name Dot4
+   xpos 379
+   ypos 260
+  }
+  ShuffleCopy {
+   inputs 2
+   red red
+   blue black
+   alpha black
+   name ShuffleCopy1
+   xpos 236
+   ypos 256
+  }
+  Expression {
+   temp_name0 mag
+   temp_expr0 sqrt(pow(r,2)+pow(g,2)+pow(b,2))
+   expr0 mag!=0?r/mag:0
+   expr1 mag!=0?g/mag:0
+   expr2 mag!=0?b/mag:0
+   name Normalize
+   xpos 236
+   ypos 321
+  }
+  Multiply {
+   value -1
+   name Multiply2
+   xpos 236
+   ypos 358
+  }
+  Merge2 {
+   inputs 2
+   operation multiply
+   bbox B
+   name Merge1
+   xpos 236
+   ypos 437
+  }
+  Input {
+   inputs 0
+   name Input
+   xpos 536
+   ypos -112
+  }
+  Copy {
+   inputs 2
+   from0 rgba.red
+   to0 forward.u
+   from1 rgba.green
+   to1 forward.v
+   name Copy1
+   selected true
+   xpos 536
+   ypos 425
+  }
+  IDistort {
+   uv forward
+   uv_scale {{parent.distort}}
+   name IDistort1
+   xpos 536
+   ypos 497
+  }
+  Output {
+   name Output1
+   xpos 536
+   ypos 566
+  }
+ end_group
+ Dot {
+  name Dot4
+  tile_color 0xcccccc00
+  xpos 367
+  ypos 217
+ }
+push $Nbc9a6530
+push $Nb3b2ff0
+ Group {
+  inputs 2
+  name Warp
+  xpos 87
+  ypos 154
+  addUserKnob {20 User}
+  addUserKnob {14 size R 0 100}
+  size {{parent.size_warp} {parent.size_warp}}
+  addUserKnob {7 distort}
+  distort {{parent.warp_amount}}
+  addUserKnob {7 normal R -90 90}
+  normal {{parent.warp_normal}}
+ }
+  Input {
+   inputs 0
+   name Inputcontrol_mask
+   xpos 235
+   ypos -176
+   number 1
+  }
+  Shuffle {
+   red alpha
+   green alpha
+   blue alpha
+   name Shuffle1
+   xpos 235
+   ypos -150
+  }
+  Clamp {
+   name Clamp1
+   xpos 235
+   ypos -78
+  }
+  Blur {
+   size {{parent.size/parent.distort} {parent.size/parent.distort}}
+   quality 50
+   name Blur1
+   label "size \[value size]"
+   xpos 235
+   ypos -27
+  }
+  Grade {
+   whitepoint 0.5
+   white_clamp true
+   name Grade2
+   xpos 235
+   ypos 81
+  }
+set Na9c54a0 [stack 0]
+  Invert {
+   name Invert1
+   xpos 61
+   ypos 75
+  }
+  Multiply {
+   value {{parent.size}}
+   name Multiply1
+   xpos 61
+   ypos 113
+  }
+  Dot {
+   name Dot1
+   tile_color 0x7aa9ff00
+   xpos 95
+   ypos 441
+  }
+push $Na9c54a0
+  Dot {
+   name Dot2
+   tile_color 0x7aa9ff00
+   xpos 269
+   ypos 123
+  }
+set Ncebdc20 [stack 0]
+  Matrix {
+   matrix {
+       {1 0 -1}
+       {2 0 -2}
+       {1 0 -1}
+     }
+   name Matrix1
+   xpos 235
+   ypos 206
+  }
+push $Ncebdc20
+  Dot {
+   name Dot3
+   tile_color 0x7aa9ff00
+   xpos 379
+   ypos 123
+  }
+  Matrix {
+   matrix {
+       {-1 -2 -1}
+       {0 0 0}
+       {1 2 1}
+     }
+   name Matrix2
+   xpos 345
+   ypos 205
+  }
+  Dot {
+   name Dot4
+   xpos 379
+   ypos 260
+  }
+  ShuffleCopy {
+   inputs 2
+   red red
+   blue black
+   alpha black
+   name ShuffleCopy1
+   xpos 236
+   ypos 256
+  }
+  Expression {
+   temp_name0 mag
+   temp_expr0 sqrt(pow(r,2)+pow(g,2)+pow(b,2))
+   expr0 mag!=0?r/mag:0
+   expr1 mag!=0?g/mag:0
+   expr2 mag!=0?b/mag:0
+   name Normalize
+   xpos 236
+   ypos 301
+  }
+  Multiply {
+   value -1
+   name Multiply2
+   xpos 236
+   ypos 327
+  }
+  Group {
+   name Vectors_Rotation
+   help "Edit the direction of motion vectors"
+   xpos 236
+   ypos 380
+   addUserKnob {20 VecRot l "Vectors Rotation"}
+   addUserKnob {7 rotation t "Rotates the vectors direction" R -90 90}
+   rotation {{parent.normal}}
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos -303
+    ypos 144
+   }
+   Expression {
+    temp_name0 angleRad
+    temp_expr0 radians(parent.rotation)
+    expr0 "r * cos(angleRad) - g * sin(angleRad)"
+    expr1 "r * sin(angleRad) + g * cos(angleRad)"
+    name Direction
+    xpos -303
+    ypos 217
+   }
+   Output {
+    name Output1
+    xpos -303
+    ypos 291
+   }
+  end_group
+  Merge2 {
+   inputs 2
+   operation multiply
+   bbox B
+   name Merge1
+   xpos 236
+   ypos 437
+  }
+  Input {
+   inputs 0
+   name Input
+   xpos 536
+   ypos -176
+  }
+  Copy {
+   inputs 2
+   from0 rgba.red
+   to0 forward.u
+   from1 rgba.green
+   to1 forward.v
+   name Copy1
+   xpos 536
+   ypos 425
+  }
+  IDistort {
+   uv forward
+   uv_scale {{parent.distort}}
+   name IDistort1
+   selected true
+   xpos 536
+   ypos 497
+  }
+  Output {
+   name Output1
+   xpos 536
+   ypos 607
+  }
+ end_group
+ Dot {
+  name Dot9
+  tile_color 0xcccccc00
+  xpos 121
+  ypos 220
+ }
+push $N94727c0
+ Dot {
+  name Dot3
+  tile_color 0xcccccc00
+  xpos -9
+  ypos 108
+ }
+ Group {
+  name Recursive_Extend
+  xpos -43
+  ypos 153
+  addUserKnob {20 User}
+  addUserKnob {14 size R 0 100}
+  size {{parent.size_extend} {parent.size_extend}}
+  addUserKnob {3 samples}
+  samples {{parent.samples}}
+  addUserKnob {26 ""}
+  addUserKnob {7 threshold t "Used to eliminate ugly edges due to small precision error." R 0 0.001}
+  threshold 0.0002
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 185
+   ypos -5
+  }
+  Clamp {
+   channels alpha
+   name Clamp1
+   xpos 185
+   ypos 46
+  }
+  Dot {
+   name Dot1
+   tile_color 0x7aa9ff00
+   xpos 219
+   ypos 123
+  }
+set Nd7b6820 [stack 0]
+  Dot {
+   name Dot2
+   tile_color 0x7aa9ff00
+   xpos 396
+   ypos 123
+  }
+  Blur {
+   size {{parent.size/parent.samples} {parent.size/parent.samples}}
+   name Blur1
+   xpos 362
+   ypos 187
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult1
+   xpos 362
+   ypos 225
+  }
+push $Nd7b6820
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge1
+   selected true
+   xpos 185
+   ypos 225
+  }
+  Dot {
+   name Dot4
+   tile_color 0x4b5ec600
+   xpos 219
+   ypos 325
+  }
+set Nd7c9f60 [stack 0]
+  Dot {
+   name Dot5
+   tile_color 0x4b5ec600
+   xpos 396
+   ypos 325
+  }
+  Blur {
+   size {{parent.size/parent.samples} {parent.size/parent.samples}}
+   name Blur2
+   xpos 362
+   ypos 384
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult2
+   xpos 362
+   ypos 422
+  }
+push $Nd7c9f60
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge2
+   xpos 185
+   ypos 422
+   disable {{parent.samples<2}}
+  }
+  Dot {
+   name Dot6
+   tile_color 0x4b5ec600
+   xpos 219
+   ypos 527
+  }
+set Nbca9b3d0 [stack 0]
+  Dot {
+   name Dot7
+   tile_color 0x4b5ec600
+   xpos 396
+   ypos 527
+  }
+  Blur {
+   size {{parent.size/parent.samples} {parent.size/parent.samples}}
+   name Blur3
+   xpos 362
+   ypos 586
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult3
+   xpos 362
+   ypos 624
+  }
+push $Nbca9b3d0
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge3
+   xpos 185
+   ypos 624
+   disable {{parent.samples<3}}
+  }
+  Dot {
+   name Dot8
+   tile_color 0x4b5ec600
+   xpos 219
+   ypos 729
+  }
+set Nbc842010 [stack 0]
+  Dot {
+   name Dot9
+   tile_color 0x4b5ec600
+   xpos 396
+   ypos 729
+  }
+  Blur {
+   size {{parent.size/parent.samples} {parent.size/parent.samples}}
+   name Blur4
+   xpos 362
+   ypos 788
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult4
+   xpos 362
+   ypos 826
+  }
+push $Nbc842010
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge4
+   xpos 185
+   ypos 826
+   disable {{parent.samples<4}}
+  }
+  Dot {
+   name Dot10
+   tile_color 0x4b5ec600
+   xpos 219
+   ypos 931
+  }
+set Naa83510 [stack 0]
+  Dot {
+   name Dot11
+   tile_color 0x4b5ec600
+   xpos 396
+   ypos 931
+  }
+  Blur {
+   size {{parent.size/parent.samples} {parent.size/parent.samples}}
+   name Blur5
+   xpos 362
+   ypos 990
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult5
+   xpos 362
+   ypos 1028
+  }
+push $Naa83510
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge5
+   xpos 185
+   ypos 1028
+   disable {{parent.samples<5}}
+  }
+  Dot {
+   name Dot12
+   tile_color 0x4b5ec600
+   xpos 219
+   ypos 1133
+  }
+set N9596430 [stack 0]
+  Dot {
+   name Dot13
+   tile_color 0x4b5ec600
+   xpos 396
+   ypos 1133
+  }
+  Blur {
+   size {{parent.size/parent.samples} {parent.size/parent.samples}}
+   name Blur6
+   xpos 362
+   ypos 1192
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult6
+   xpos 362
+   ypos 1230
+  }
+push $N9596430
+  Merge2 {
+   inputs 2
+   operation under
+   bbox B
+   name Merge6
+   xpos 185
+   ypos 1230
+   disable {{parent.samples<6}}
+  }
+  Dot {
+   name Dot14
+   tile_color 0x4b5ec600
+   xpos 219
+   ypos 1335
+  }
+set Nceef380 [stack 0]
+  Dot {
+   name Dot15
+   tile_color 0x4b5ec600
+   xpos 396
+   ypos 1335
+  }
+  Blur {
+   size {{parent.size/parent.samples} {parent.size/parent.samples}}
+   name Blur7
+   xpos 362
+   ypos 1394
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult7
+   xpos 362
+   ypos 1432
+  }
+push $Nceef380
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge7
+   xpos 185
+   ypos 1432
+   disable {{parent.samples<7}}
+  }
+  Dot {
+   name Dot16
+   tile_color 0x4b5ec600
+   xpos 219
+   ypos 1537
+  }
+set Ne283e90 [stack 0]
+  Dot {
+   name Dot17
+   tile_color 0x4b5ec600
+   xpos 396
+   ypos 1537
+  }
+  Blur {
+   size {{parent.size/parent.samples} {parent.size/parent.samples}}
+   name Blur8
+   xpos 362
+   ypos 1596
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult8
+   xpos 362
+   ypos 1634
+  }
+push $Ne283e90
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge8
+   xpos 185
+   ypos 1634
+   disable {{parent.samples<8}}
+  }
+  Dot {
+   name Dot18
+   tile_color 0x4b5ec600
+   xpos 219
+   ypos 1739
+  }
+set Nbca093e0 [stack 0]
+  Dot {
+   name Dot19
+   tile_color 0x4b5ec600
+   xpos 396
+   ypos 1739
+  }
+  Blur {
+   size {{parent.size/parent.samples} {parent.size/parent.samples}}
+   name Blur9
+   xpos 362
+   ypos 1798
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult9
+   xpos 362
+   ypos 1836
+  }
+push $Nbca093e0
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge9
+   xpos 185
+   ypos 1836
+   disable {{parent.samples<9}}
+  }
+  Dot {
+   name Dot20
+   tile_color 0x4b5ec600
+   xpos 219
+   ypos 1941
+  }
+set N3c24b210 [stack 0]
+  Dot {
+   name Dot21
+   tile_color 0x4b5ec600
+   xpos 396
+   ypos 1943
+  }
+  Blur {
+   size {{parent.size/parent.samples} {parent.size/parent.samples}}
+   name Blur10
+   xpos 362
+   ypos 2000
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult10
+   xpos 362
+   ypos 2038
+  }
+push $N3c24b210
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge10
+   xpos 185
+   ypos 2038
+   disable {{parent.samples<10}}
+  }
+  Output {
+   name Output1
+   xpos 185
+   ypos 2281
+  }
+ end_group
+ Dot {
+  name Dot10
+  tile_color 0xcccccc00
+  xpos -9
+  ypos 216
+ }
+push $N94727c0
+ Group {
+  name Dilate
+  xpos -175
+  ypos 152
+  addUserKnob {20 User}
+  addUserKnob {14 size R 0 100}
+  size {{parent.size_extend} {parent.size_extend}}
+  addUserKnob {3 samples}
+  samples {{parent.samples}}
+  addUserKnob {7 blending}
+  blending 1
+  addUserKnob {26 ""}
+  addUserKnob {7 threshold t "Used to eliminate ugly edges due to small precision error." R 0 0.001}
+  threshold 0.0001
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 0
+   ypos -3
+  }
+  Clamp {
+   channels alpha
+   name Clamp1
+   xpos 0
+   ypos 48
+  }
+  Dot {
+   name Dot3
+   tile_color 0x7aa9ff00
+   xpos 34
+   ypos 123
+  }
+set Nbc9dec30 [stack 0]
+  Dot {
+   name Dot22
+   tile_color 0x7aa9ff00
+   xpos 34
+   ypos 323
+  }
+set Nbc9b8270 [stack 0]
+  Dot {
+   name Dot23
+   tile_color 0x7aa9ff00
+   xpos 34
+   ypos 525
+  }
+set Nbc746e00 [stack 0]
+  Dot {
+   name Dot24
+   tile_color 0x7aa9ff00
+   xpos 34
+   ypos 727
+  }
+set Ne2bd260 [stack 0]
+  Dot {
+   name Dot10
+   tile_color 0x7aa9ff00
+   xpos 34
+   ypos 931
+  }
+set Nbc84f950 [stack 0]
+  Dot {
+   name Dot12
+   tile_color 0x7aa9ff00
+   xpos 34
+   ypos 1133
+  }
+set Naa693c0 [stack 0]
+  Dot {
+   name Dot14
+   tile_color 0x7aa9ff00
+   xpos 34
+   ypos 1333
+  }
+set Nc5e8220 [stack 0]
+  Dot {
+   name Dot16
+   tile_color 0x7aa9ff00
+   xpos 34
+   ypos 1535
+  }
+set Nd7e8470 [stack 0]
+  Dot {
+   name Dot18
+   tile_color 0x7aa9ff00
+   xpos 34
+   ypos 1737
+  }
+set Nbc8e6bf0 [stack 0]
+  Dot {
+   name Dot20
+   tile_color 0x7aa9ff00
+   xpos 34
+   ypos 1941
+  }
+  Dot {
+   name Dot21
+   tile_color 0x7aa9ff00
+   xpos 243
+   ypos 1941
+  }
+  Blur {
+   size {{parent.size/parent.samples*10} {parent.size/parent.samples*10}}
+   name Blur10
+   xpos 209
+   ypos 1998
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult10
+   xpos 209
+   ypos 2036
+  }
+push $Nbc8e6bf0
+  Dot {
+   name Dot19
+   tile_color 0x7aa9ff00
+   xpos 243
+   ypos 1737
+  }
+  Blur {
+   size {{parent.size/parent.samples*9} {parent.size/parent.samples*9}}
+   name Blur9
+   xpos 209
+   ypos 1796
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult9
+   xpos 209
+   ypos 1834
+  }
+  FilterErode {
+   size {{(parent.size/parent.samples)*parent.blending} {(parent.size/parent.samples)*parent.blending}}
+   filter gaussian
+   name FilterErode3
+   xpos 209
+   ypos 1860
+  }
+  Premult {
+   name Premult9
+   xpos 209
+   ypos 1898
+  }
+push $Nd7e8470
+  Dot {
+   name Dot17
+   tile_color 0x7aa9ff00
+   xpos 243
+   ypos 1535
+  }
+  Blur {
+   size {{parent.size/parent.samples*8} {parent.size/parent.samples*8}}
+   name Blur8
+   xpos 209
+   ypos 1594
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult8
+   xpos 209
+   ypos 1632
+  }
+  FilterErode {
+   size {{(parent.size/parent.samples)*parent.blending} {(parent.size/parent.samples)*parent.blending}}
+   filter gaussian
+   name FilterErode4
+   xpos 209
+   ypos 1658
+  }
+  Premult {
+   name Premult8
+   xpos 209
+   ypos 1696
+  }
+push $Nc5e8220
+  Dot {
+   name Dot15
+   tile_color 0x7aa9ff00
+   xpos 243
+   ypos 1333
+  }
+  Blur {
+   size {{parent.size/parent.samples*7} {parent.size/parent.samples*7}}
+   name Blur7
+   xpos 209
+   ypos 1392
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult7
+   xpos 209
+   ypos 1430
+  }
+  FilterErode {
+   size {{(parent.size/parent.samples)*parent.blending} {(parent.size/parent.samples)*parent.blending}}
+   filter gaussian
+   name FilterErode5
+   xpos 209
+   ypos 1456
+  }
+  Premult {
+   name Premult7
+   xpos 209
+   ypos 1494
+  }
+push $Naa693c0
+  Dot {
+   name Dot13
+   tile_color 0x7aa9ff00
+   xpos 243
+   ypos 1133
+  }
+  Blur {
+   size {{parent.size/parent.samples*6} {parent.size/parent.samples*6}}
+   name Blur6
+   xpos 209
+   ypos 1190
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult6
+   xpos 209
+   ypos 1228
+  }
+  FilterErode {
+   size {{(parent.size/parent.samples)*parent.blending} {(parent.size/parent.samples)*parent.blending}}
+   filter gaussian
+   name FilterErode6
+   xpos 209
+   ypos 1254
+  }
+  Premult {
+   name Premult6
+   xpos 209
+   ypos 1292
+  }
+push $Nbc84f950
+  Dot {
+   name Dot11
+   tile_color 0x7aa9ff00
+   xpos 243
+   ypos 931
+  }
+  Blur {
+   size {{parent.size/parent.samples*5} {parent.size/parent.samples*5}}
+   name Blur5
+   xpos 209
+   ypos 988
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult5
+   xpos 209
+   ypos 1026
+  }
+  FilterErode {
+   size {{(parent.size/parent.samples)*parent.blending} {(parent.size/parent.samples)*parent.blending}}
+   filter gaussian
+   name FilterErode7
+   xpos 209
+   ypos 1052
+  }
+  Premult {
+   name Premult5
+   xpos 209
+   ypos 1090
+  }
+push $Ne2bd260
+  Dot {
+   name Dot9
+   tile_color 0x7aa9ff00
+   xpos 243
+   ypos 729
+  }
+  Blur {
+   size {{parent.size/parent.samples*4} {parent.size/parent.samples*4}}
+   name Blur4
+   xpos 209
+   ypos 788
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult4
+   xpos 209
+   ypos 826
+  }
+  FilterErode {
+   size {{(parent.size/parent.samples)*parent.blending} {(parent.size/parent.samples)*parent.blending}}
+   filter gaussian
+   name FilterErode8
+   xpos 209
+   ypos 852
+  }
+  Premult {
+   name Premult4
+   xpos 209
+   ypos 890
+  }
+push $Nbc746e00
+  Dot {
+   name Dot7
+   tile_color 0x7aa9ff00
+   xpos 243
+   ypos 527
+  }
+  Blur {
+   size {{parent.size/parent.samples*3} {parent.size/parent.samples*3}}
+   name Blur3
+   xpos 209
+   ypos 586
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult3
+   xpos 209
+   ypos 624
+  }
+  FilterErode {
+   size {{(parent.size/parent.samples)*parent.blending} {(parent.size/parent.samples)*parent.blending}}
+   filter gaussian
+   name FilterErode9
+   xpos 209
+   ypos 650
+  }
+  Premult {
+   name Premult3
+   xpos 209
+   ypos 688
+  }
+push $Nbc9b8270
+  Dot {
+   name Dot5
+   tile_color 0x7aa9ff00
+   xpos 243
+   ypos 325
+  }
+  Blur {
+   size {{parent.size/parent.samples*2} {parent.size/parent.samples*2}}
+   name Blur2
+   xpos 209
+   ypos 384
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult2
+   xpos 209
+   ypos 422
+  }
+  FilterErode {
+   size {{(parent.size/parent.samples)*parent.blending} {(parent.size/parent.samples)*parent.blending}}
+   filter gaussian
+   name FilterErode10
+   xpos 209
+   ypos 448
+  }
+  Premult {
+   name Premult2
+   xpos 209
+   ypos 486
+  }
+push $Nbc9dec30
+  Dot {
+   name Dot25
+   tile_color 0x7aa9ff00
+   xpos 243
+   ypos 123
+  }
+set Nc5f24c0 [stack 0]
+  Blur {
+   size {{parent.size/parent.samples} {parent.size/parent.samples}}
+   name Blur1
+   xpos 209
+   ypos 187
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult1
+   xpos 209
+   ypos 225
+  }
+  FilterErode {
+   size {{(parent.size/parent.samples)*parent.blending} {(parent.size/parent.samples)*parent.blending}}
+   filter gaussian
+   name FilterErode1
+   xpos 209
+   ypos 251
+  }
+  Premult {
+   name Premult1
+   xpos 209
+   ypos 289
+  }
+push $Nc5f24c0
+  Dot {
+   name Dot1
+   tile_color 0x7aa9ff00
+   xpos 434
+   ypos 123
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge1
+   xpos 400
+   ypos 289
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge2
+   xpos 400
+   ypos 486
+   disable {{parent.samples<2}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge3
+   xpos 400
+   ypos 688
+   disable {{parent.samples<3}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge4
+   xpos 400
+   ypos 890
+   disable {{parent.samples<4}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge5
+   xpos 400
+   ypos 1090
+   disable {{parent.samples<5}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge6
+   xpos 400
+   ypos 1292
+   disable {{parent.samples<6}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge7
+   xpos 400
+   ypos 1494
+   disable {{parent.samples<7}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge8
+   xpos 400
+   ypos 1696
+   disable {{parent.samples<8}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge9
+   xpos 400
+   ypos 1898
+   disable {{parent.samples<9}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge10
+   xpos 400
+   ypos 2036
+   disable {{parent.samples<10}}
+  }
+  Expression {
+   temp_name0 tres
+   temp_expr0 parent.threshold
+   expr0 a>tres?r/a:r
+   expr1 a>tres?g/a:g
+   expr2 a>tres?b/a:b
+   expr3 a>tres?a/a:0
+   name All_unpremult11
+   selected true
+   xpos 400
+   ypos 2062
+  }
+  Output {
+   name Output1
+   xpos 400
+   ypos 2120
+  }
+ end_group
+ Switch {
+  inputs 4
+  which {{parent.method}}
+  name Switch1
+  xpos -175
+  ypos 296
+ }
+ Blur {
+  size {{parent.blur} {parent.blur}}
+  name Blur1
+  xpos -175
+  ypos 410
+  disable {{parent.method==3}}
+ }
+ Merge2 {
+  inputs 2
+  bbox B
+  name Merge1
+  xpos -175
+  ypos 557
+  disable {{parent.method==3}}
+ }
+ Dot {
+  name Dot26
+  tile_color 0x4b5ec600
+  xpos -141
+  ypos 747
+ }
+set N175d7d90 [stack 0]
+push $Nceed720
+ Dot {
+  name Dot19
+  tile_color 0x9e3c6300
+  xpos -489
+  ypos 641
+ }
+ Unpremult {
+  name Unpremult1
+  xpos -523
+  ypos 666
+  disable {{!parent.in_premult}}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -523
+  ypos 743
+ }
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace1
+  label "input \[value colorspace_in]\noutput \[value colorspace_out]"
+  xpos -523
+  ypos 820
+ }
+ Dot {
+  name Dot21
+  tile_color 0xcccccc00
+  xpos -489
+  ypos 884
+ }
+set N7ffeedc0 [stack 0]
+ Dot {
+  name Dot22
+  tile_color 0xcccccc00
+  xpos -489
+  ypos 953
+ }
+push $N7ffeedc0
+push $N175d7d90
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace3
+  label "input \[value colorspace_in]\noutput \[value colorspace_out]"
+  xpos -175
+  ypos 796
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  bbox B
+  mix {{1-parent.mix_luma}}
+  name Copy2
+  xpos -175
+  ypos 874
+ }
+ Copy {
+  inputs 2
+  from0 rgba.green
+  to0 rgba.green
+  from1 rgba.blue
+  to1 rgba.blue
+  bbox B
+  mix {{1-parent.mix_chroma}}
+  name Copy3
+  xpos -175
+  ypos 937
+ }
+ Colorspace {
+  colorspace_in YCbCr
+  name Colorspace2
+  label "input \[value colorspace_in]\noutput \[value colorspace_out]"
+  xpos -175
+  ypos 994
+ }
+ Dot {
+  name Dot17
+  tile_color 0xcccccc00
+  xpos -141
+  ypos 1151
+ }
+set N8d701ec0 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  bbox A
+  name Copy1
+  xpos -327
+  ypos 1141
+ }
+ Premult {
+  name Premult1
+  xpos -327
+  ypos 1179
+ }
+ Dot {
+  name Dot18
+  tile_color 0xcccccc00
+  xpos -293
+  ypos 1249
+ }
+push $N8d701ec0
+ Switch {
+  inputs 2
+  which {{parent.premult}}
+  name Switch2
+  xpos -175
+  ypos 1245
+ }
+ Keymix {
+  inputs 3
+  channels rgba
+  invertMask true
+  name Keymix1
+  xpos -175
+  ypos 1325
+  disable {{"!\[exists parent.input1] "}}
+ }
+ Dot {
+  name Dot25
+  tile_color 0x4b5ec600
+  xpos -141
+  ypos 1421
+ }
+push $Nc5922f0
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  from1 rgba.green
+  to1 rgba.green
+  from2 rgba.blue
+  to2 rgba.blue
+  bbox A
+  name Copy4
+  xpos -646
+  ypos 1393
+  disable {{"!\[exists parent.input0] "}}
+ }
+set Nbc7870e0 [stack 0]
+ Output {
+  name Output1
+  xpos -646
+  ypos 1525
+ }
+end_group

@@ -1,0 +1,59 @@
+Group {
+ name Randomizer
+ tile_color 0x5f5f5fff
+ label "\[value type]"
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ mapsize {0.15 0.15}
+ addUserKnob {20 Settings}
+ addUserKnob {4 type l Type: M {random noise sine triangle square bounce sawtooth "sawtooth (parabolic)" "sawtooth (parabolic reversed)" "sawtooth (exponential)" blip "sine blip" "" "" "" "" ""}}
+ addUserKnob {4 scaleAmpFrom l "Amplitude Pivot:" M {center min max "" "" "" "" ""}}
+ addUserKnob {7 scaleFromNum -STARTLINE +INVISIBLE}
+ scaleFromNum {{"scaleAmpFrom == 0 ? 0 : scaleAmpFrom == 1 ? -.5 : .5"}}
+ addUserKnob {41 Amplitude T Randomizer.Amplitude}
+ addUserKnob {3 pivotFrame l "Pivot Frame"}
+ addUserKnob {41 Frequency T Randomizer.Frequency}
+ addUserKnob {26 ""}
+ addUserKnob {41 PositionX T Randomizer.PositionX}
+ addUserKnob {41 PositionY T Randomizer.PositionY}
+ addUserKnob {26 ""}
+ addUserKnob {6 squarify l "squarify | " +STARTLINE}
+ addUserKnob {3 seed -STARTLINE}
+ seed 12345
+ addUserKnob {22 randomSeedButton l "Randomize Seed" -STARTLINE T "import random\nnuke.thisNode().knob('seed').setValue(random.randint(1,99999))"}
+ addUserKnob {41 output l "Output Curve" T Randomizer.Curve}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Creates a random curve with controls.\nBest to view curve editor while tweaking." T Randomizer}
+ addUserKnob {26 ver l Version: T v02}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 289
+  ypos -533
+ }
+ NoOp {
+  name Randomizer
+  selected true
+  xpos 289
+  ypos -486
+  addUserKnob {20 Settings}
+  addUserKnob {7 Curve t "Copy this Curve to another nodes attributes and use the below sliders to adjust this curve. Use graph editor for guidance.\n" R -1 1}
+  Curve {{"type == 0 ? squarify == 1 ? Amplitude*((random(floor(((frame+seed-pivotFrame)/Frequency+pivotFrame)/2)+PositionX))-scaleFromNum)-(abs(Amplitude/2))+(PositionY+scaleFromNum) : Amplitude*((random((((frame+seed-pivotFrame)/Frequency+pivotFrame)/2)+PositionX))-scaleFromNum)-(abs(Amplitude/2))+(PositionY+scaleFromNum) :\ntype == 1 ? squarify == 1 ? Amplitude*(((noise(((floor((frame+seed-pivotFrame)/Frequency+pivotFrame)/2)+PositionX))/2)-scaleFromNum+.5))-(abs(Amplitude/2))+(PositionY+scaleFromNum) : Amplitude*(((noise((((frame+seed-pivotFrame)/Frequency+pivotFrame)/2)+PositionX))/2)-scaleFromNum+.5)-(abs(Amplitude/2))+(PositionY+scaleFromNum) :\ntype == 2 ? Amplitude*(((sin(2*pi*((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10)+PositionX))+1)/2)-scaleFromNum) -(abs(Amplitude/2))+(PositionY+scaleFromNum) :\ntype == 3 ? Amplitude*((asin(sin(2*pi*((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10)+PositionX)))/pi+0.5)-scaleFromNum) -(abs(Amplitude/2))+(PositionY+scaleFromNum) :\ntype == 4 ? Amplitude*(int(sin(2*pi*((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10)+PositionX))+1)-scaleFromNum) -(abs(Amplitude/2))+(PositionY+scaleFromNum) :\ntype == 5 ? Amplitude*(abs(sin(pi*((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10)+PositionX)))-scaleFromNum)-(abs(Amplitude/2))+(PositionY+scaleFromNum) :\ntype == 6 ? Amplitude*(((((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10)+PositionX)% 1)/1)-scaleFromNum) -(abs(Amplitude/2))+(PositionY+scaleFromNum) :\ntype == 7 ? Amplitude*((sin((pi*((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10)+PositionX)/2) % (pi/2)))-scaleFromNum) -(abs(Amplitude/2))+(PositionY+scaleFromNum) :\ntype == 8 ? Amplitude*((cos((pi*((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10)+PositionX)/(2)) % (pi/2)))-scaleFromNum) -(abs(Amplitude/2))+(PositionY+scaleFromNum) :\ntype == 9 ? Amplitude*(((exp(2*pi*(((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10)+PositionX) % 1)/1)-1)/exp(2*pi))-scaleFromNum) -(abs(Amplitude/2))+(PositionY+scaleFromNum) :\ntype == 10 ? Amplitude*((((((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10)+PositionX) % (1+1)/(1)) *(1/1) - (1/1) >= 0 ? -.5 : .5)+.5)-scaleFromNum) -(abs(Amplitude/2))+(PositionY+scaleFromNum) :\ntype == 11 ? Amplitude*((((int((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10+PositionX) % 2)) >= 0 ? ((int((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10+PositionX) % 2)) <= (0+(1-1)) ? ((sin(pi*((((frame+seed-pivotFrame)/Frequency+pivotFrame)/10+PositionX) % 2)/1)/2+1/2) * (2*.5-2*-.5) + (2*-.5-.5)) : -.5)  : -.5)+.5)-scaleFromNum) -(abs(Amplitude/2))+(PositionY+scaleFromNum) :\n0"}}
+  addUserKnob {26 ""}
+  addUserKnob {7 Amplitude t "Use this to control the amplitude or \"height\" of the curve." R 0 3}
+  Amplitude 1
+  addUserKnob {7 Frequency t "Use this to control the frequency or \"height\" of the curve." R 0.1 20}
+  Frequency 1
+  addUserKnob {26 ""}
+  addUserKnob {7 PositionX t "This will \"slide\" the Random curve along the X axis.  It is most useful for creating a variation of the random curve.\n\nEx: A curve with this set to 1 will be way different than a curve with this set to 430." R -10 10}
+  addUserKnob {7 PositionY t "This changes the Y position of the curve in the graph editor along the Y axis.\n\nKeyframing this will create a new curve which the random curve will be guided along.\n" R -4 4}
+ }
+ Output {
+  name Output1
+  xpos 289
+  ypos -392
+ }
+end_group

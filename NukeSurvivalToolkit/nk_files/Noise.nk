@@ -1,0 +1,15 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ temp_name0 value
+ temp_expr0 5
+ expr0 noise(value)
+ expr1 noise(value)
+ expr2 noise(value)
+ expr3 noise(r,g,b)
+ name Noise_expression
+ selected true
+ xpos 97
+ ypos -53
+}

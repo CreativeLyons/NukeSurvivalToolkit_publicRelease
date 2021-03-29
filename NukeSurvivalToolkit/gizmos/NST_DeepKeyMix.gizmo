@@ -1,0 +1,237 @@
+Group {
+ inputs 2
+ name DeepKeyMix
+ tile_color 0x59ff
+ selected true
+ addUserKnob {20 User l DeepKeyMix}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {41 matte_channel l matte T Controller.matte_channel}
+ addUserKnob {41 Invert_Mask l invert T Controller.Invert_Mask}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 text l "" -STARTLINE T "               DeepKeyMix 1.00     ©    "}
+ addUserKnob {22 Luc_Julien l "Luc Julien" -STARTLINE T "import os\nimport sys\n\ntry:\n    import subprocess\n    def _run(cmd, shell, wait):\n        opener = subprocess.Popen(cmd, shell=shell)\n        if wait:\n            opener.wait()\n        return opener.pid\nexcept ImportError:\n    import popen2\n    def _run(cmd, shell, wait):\n        opener = popen2.Popen3(cmd)\n        if wait:\n            opener.wait()\n        return opener.pid\n\ndef _open(url, wait=0):\n    if sys.platform == \"darwin\":\n        cmd = \[\"open\", url]\n    elif hasattr(os, \"startfile\"):\n        return os.startfile(url)\n    elif os.environ.has_key(\"KDE_FULL_SESSION\") or os.environ.has_key(\"KDE_MULTIHEAD\") or \\\n        os.environ.has_key(\"GNOME_DESKTOP_SESSION_ID\") or os.environ.has_key(\"GNOME_KEYRING_SOCKET\"):\n        cmd = \[\"xdg-open\", url]\n    else:\n        raise OSError, \"Desktop not supported.\"\n\n    return _run(cmd, 0, wait)\n\n_open('http://www.linkedin.com/in/lucjulien')"}
+}
+ NoOp {
+  inputs 0
+  name Controller
+  xpos 728
+  ypos 164
+  addUserKnob {20 User}
+  addUserKnob {4 matte_channel l matte M {alpha luma}}
+  addUserKnob {6 Invert_Mask l invert +STARTLINE}
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 553
+  ypos -43
+  number 2
+ }
+set N2f1be3d0 [stack 0]
+ Keyer {
+  operation "max keyer"
+  name Keyer1
+  xpos 499
+  ypos 93
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle4
+  xpos 499
+  ypos 127
+ }
+push $N2f1be3d0
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle2
+  xpos 602
+  ypos 102
+ }
+ Switch {
+  inputs 2
+  which {{parent.Controller.matte_channel}}
+  name Switch1
+  xpos 549
+  ypos 187
+ }
+ Invert {
+  channels alpha
+  clamp true
+  name Invert2
+  xpos 549
+  ypos 262
+  disable {{parent.Controller.Invert_Mask*-1+1}}
+ }
+ Dot {
+  name Dot3
+  xpos 583
+  ypos 355
+ }
+set N1b895a10 [stack 0]
+ Shuffle {
+  red alpha
+  black white
+  out depth
+  out2 alpha
+  name Shuffle1
+  xpos 549
+  ypos 631
+ }
+set N2f2c1390 [stack 0]
+ DeepFromImage {
+  z 1
+  name DeepFromImage3
+  xpos 549
+  ypos 738
+ }
+ Input {
+  inputs 0
+  name B
+  xpos 1104
+  ypos 130
+ }
+ Dot {
+  name Dot4
+  xpos 1138
+  ypos 172
+ }
+set N2f56a3a0 [stack 0]
+ DeepMerge {
+  inputs 2
+  operation holdout
+  name DeepMerge2
+  xpos 1104
+  ypos 738
+ }
+push $N2f2c1390
+ Invert {
+  channels depth
+  clamp true
+  name Invert1
+  xpos 644
+  ypos 626
+ }
+ DeepFromImage {
+  z 1
+  name DeepFromImage4
+  xpos 644
+  ypos 681
+ }
+ Input {
+  inputs 0
+  name A
+  xpos 1197
+  ypos 131
+  number 1
+ }
+ Dot {
+  name Dot1
+  xpos 1231
+  ypos 219
+ }
+set N2f53a490 [stack 0]
+ DeepMerge {
+  inputs 2
+  operation holdout
+  name DeepMerge3
+  xpos 1197
+  ypos 681
+ }
+ DeepMerge {
+  inputs 2
+  drop_hidden true
+  name DeepMerge4
+  xpos 1197
+  ypos 792
+ }
+push $N1b895a10
+ Dot {
+  name Dot2
+  xpos 782
+  ypos 355
+ }
+set N2f8d8350 [stack 0]
+push $N2f8d8350
+ Merge2 {
+  inputs 2
+  operation xor
+  name Merge2
+  xpos 748
+  ypos 408
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle3
+  xpos 748
+  ypos 432
+ }
+ Grade {
+  channels all
+  whitepoint 0.13
+  black_clamp false
+  name Grade2
+  xpos 748
+  ypos 456
+ }
+push $N2f8d8350
+push $N2f53a490
+ Dot {
+  name Dot6
+  xpos 1008
+  ypos 219
+ }
+ DeepToImage {
+  name DeepToImage2
+  xpos 974
+  ypos 273
+ }
+push $N2f56a3a0
+ Dot {
+  name Dot5
+  xpos 884
+  ypos 172
+ }
+ DeepToImage {
+  name DeepToImage1
+  xpos 850
+  ypos 277
+ }
+ Keymix {
+  inputs 3
+  channels rgba
+  name Keymix2
+  xpos 909
+  ypos 352
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge1
+  xpos 909
+  ypos 461
+ }
+ DeepFromImage {
+  premult true
+  name DeepFromImage5
+  xpos 909
+  ypos 491
+ }
+ DeepMerge {
+  inputs 2
+  drop_hidden true
+  name DeepMerge5
+  xpos 909
+  ypos 792
+ }
+ Output {
+  name Output1
+  xpos 909
+  ypos 860
+ }
+end_group

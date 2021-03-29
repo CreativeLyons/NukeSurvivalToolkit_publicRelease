@@ -1,0 +1,599 @@
+Group {
+ name MirrorBorder
+ onCreate "n = nuke.thisNode()\nsize = n.knob(\"size\")\n\nsize.setRange(0, 500)"
+ tile_color 0xa57aaaff
+ note_font "Bitstream Vera Sans Bold Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 MirrorBorder}
+ addUserKnob {4 type l "Tile Region" M {"to Format" "to input BBox" "" ""}}
+ addUserKnob {14 size l "Tile Amount" R 0 500}
+ size 500
+ addUserKnob {26 chokeEdgesText l "<b><font color=skyblue>Choke Edges"}
+ addUserKnob {7 leftChoke l "Left Choke" R -100 100}
+ addUserKnob {7 rightChoke l "Right Choke" R -100 100}
+ addUserKnob {7 topChoke l "Top Choke" R -100 100}
+ addUserKnob {7 bottomChoke l "Bottom Choke" R -100 100}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelMask l "" -STARTLINE T Multiply1.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Multiply1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Multiply1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Multiply1.fringe}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {20 Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Name: T MirrorBorder}
+ addUserKnob {26 ver l Version: T v03}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x3f414400
+  label "width mirror"
+  note_font_size 60
+  note_font_color 0xffffffff
+  xpos 704
+  ypos -277
+  bdwidth 265
+  bdheight 260
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x43504700
+  label "height mirror"
+  note_font_size 60
+  note_font_color 0xffffffff
+  xpos 1072
+  ypos -271
+  bdwidth 259
+  bdheight 267
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x5f6870ff
+  label Corners
+  note_font_size 60
+  note_font_color 0xffffffff
+  xpos 1416
+  ypos -270
+  bdwidth 545
+  bdheight 264
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 2050
+  ypos -606
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 2084
+  ypos -546
+ }
+set N81deb2f0 [stack 0]
+ Group {
+  name BBoxToFormat
+  onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
+  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"overscanType\":\n    if n.knob(\"overscanType\").getValue() == 1:\n        n.knob(\"overscanPercent\").setVisible(True)\n        n.knob(\"overscan\").setVisible(False)\n    else:\n        n.knob(\"overscanPercent\").setVisible(False)\n        n.knob(\"overscan\").setVisible(True)"
+  tile_color 0xa57aaaff
+  note_font "Verdana Bold"
+  note_font_color 0xffffffff
+  xpos 1907
+  ypos -549
+  addUserKnob {20 CropBBox}
+  addUserKnob {4 type l Type +INVISIBLE M {"To Format" "To BBox"}}
+  addUserKnob {41 intersect T Crop6.intersect}
+  addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+  addUserKnob {4 overscanType l "Overscan Type:" M {Pixels Percentage}}
+  addUserKnob {14 overscan l Overscan R 0 400}
+  addUserKnob {14 overscanPercent l "Overscan Percent" +HIDDEN R 1 4}
+  overscanPercent 1
+  addUserKnob {20 inputBbox l "BBox Data" n 1}
+  addUserKnob {15 inputFormat l "Input Format"}
+  inputFormat {0 0 {input.width} {input.height}}
+  addUserKnob {15 inputBBox l "Input BBox"}
+  inputBBox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+  addUserKnob {12 outputBBoxCenter l OutputBBoxCenter}
+  outputBBoxCenter {{OutputBBox1.outputBBoxCenter.w} {OutputBBox1.outputBBoxCenter.h}}
+  addUserKnob {15 outputBBox l "Output BBox"}
+  outputBBox {{OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox}}
+  addUserKnob {20 endGroup n -1}
+  addUserKnob {20 info_1 l Info}
+  addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+  addUserKnob {26 desc l Description: t "crop to inputformat\n\ndisplays values of input bbox" T CropBBox}
+  addUserKnob {26 ver l Version: T v02}
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos 261
+   ypos 394
+  }
+  Dot {
+   name Dot2
+   note_font_size 41
+   xpos 295
+   ypos 462
+  }
+set N83862910 [stack 0]
+  Dot {
+   name Dot1
+   note_font_size 41
+   xpos -160
+   ypos 462
+  }
+set N83c07610 [stack 0]
+push $N83862910
+  Crop {
+   box {{curve} {curve} {input.width} {input.height}}
+   crop {{parent.blackOutside}}
+   name Crop6
+   xpos 261
+   ypos 510
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+set N83c005a0 [stack 0]
+  Remove {
+   operation keep
+   channels none
+   name Remove1
+   xpos 120
+   ypos 504
+  }
+set N819e4950 [stack 0]
+  Transform {
+   scale {{parent.overscanPercent} {parent.overscanPercent}}
+   center {{input.bbox.r/2} {input.bbox.t/2}}
+   shutteroffset centred
+   name Transform1
+   xpos 120
+   ypos 555
+  }
+push $N819e4950
+  AdjBBox {
+   numpixels {{parent.overscan} {parent.overscan}}
+   name AdjBBox1
+   xpos -5
+   ypos 510
+  }
+  Switch {
+   inputs 2
+   which {{overscanType}}
+   name Switch2
+   label "\[value which]"
+   xpos -5
+   ypos 549
+  }
+  Merge2 {
+   inputs 2
+   bbox intersection
+   Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+   Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+   output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+   name Merge1
+   xpos -5
+   ypos 647
+   disable {{!parent.Crop6.intersect}}
+  }
+push $N83c07610
+  CopyBBox {
+   inputs 2
+   name CopyBBox1
+   xpos -194
+   ypos 653
+  }
+  BlackOutside {
+   name BlackOutside1
+   xpos -194
+   ypos 692
+   disable {{!parent.blackOutside}}
+  }
+  Dot {
+   name Dot4
+   note_font_size 41
+   xpos -160
+   ypos 769
+  }
+push $N83c005a0
+  Switch {
+   inputs 2
+   which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
+   name Switch1
+   label "\[value which]"
+   xpos 261
+   ypos 759
+  }
+set N83a16300 [stack 0]
+  Output {
+   name Output1
+   xpos 261
+   ypos 921
+  }
+push $N83a16300
+  NoOp {
+   name OutputBBox1
+   selected true
+   xpos 378
+   ypos 821
+   addUserKnob {20 User}
+   addUserKnob {15 OutputBBox l "Output BBox"}
+   OutputBBox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+   addUserKnob {14 outputBBoxCenter l "Output BBox Center" R 0 100}
+   outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
+  }
+ end_group
+ NoOp {
+  name Settings
+  xpos 1907
+  ypos -493
+  addUserKnob {20 User}
+  addUserKnob {15 mirrorRegion l "Mirror Region"}
+  mirrorRegion {{"(type == 0 ? parent.BBoxToFormat.inputFormat : parent.BBoxToFormat.inputBBox) + int(parent.leftChoke)"} {"(type == 0 ? parent.BBoxToFormat.inputFormat : parent.BBoxToFormat.inputBBox) + int(parent.bottomChoke)"} {"(type == 0 ? parent.BBoxToFormat.inputFormat : parent.BBoxToFormat.inputBBox) - int(parent.rightChoke)"} {"(type == 0 ? parent.BBoxToFormat.inputFormat : parent.BBoxToFormat.inputBBox) - int(parent.topChoke)"}}
+ }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 1818
+  ypos 134
+  number 1
+ }
+ Dot {
+  name Dot26
+  note_font_size 41
+  xpos 1852
+  ypos 236
+ }
+set N81fb32b0 [stack 0]
+ Invert {
+  name Invert1
+  xpos 1818
+  ypos 275
+ }
+push $N81fb32b0
+push $N81deb2f0
+ Dot {
+  name Dot4
+  xpos 2084
+  ypos -344
+ }
+set N80e84b90 [stack 0]
+ Dot {
+  name Dot8
+  xpos 1491
+  ypos -344
+ }
+set N80e80a90 [stack 0]
+ Dot {
+  name Dot9
+  xpos 1491
+  ypos -170
+ }
+set N80e30c70 [stack 0]
+ Dot {
+  name Dot11
+  xpos 1607
+  ypos -170
+ }
+set N80e45df0 [stack 0]
+ Dot {
+  name Dot13
+  xpos 1735
+  ypos -170
+ }
+set N80e7c770 [stack 0]
+ Dot {
+  name Dot14
+  xpos 1876
+  ypos -170
+ }
+ Crop {
+  box {{parent.Settings.mirrorRegion.r-parent.size.w} {parent.Settings.mirrorRegion.y} {parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.y+parent.size.h}}
+  name Crop_BR
+  xpos 1842
+  ypos -124
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  addUserKnob {22 cropToBbox_1 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  addUserKnob {22 cropToBbox_2 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Transform {
+  scale -1
+  center {{parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.y}}
+  name Transform_BR
+  label BottomRight
+  xpos 1842
+  ypos -71
+ }
+push $N80e7c770
+ Crop {
+  box {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.y} {parent.Settings.mirrorRegion.x+parent.size.w} {parent.Settings.mirrorRegion.y+parent.size.h}}
+  name Crop_BL
+  xpos 1701
+  ypos -125
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Transform {
+  scale -1
+  center {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.y}}
+  name Transform_BL
+  label "Bottom Left"
+  xpos 1701
+  ypos -70
+ }
+push $N80e45df0
+ Crop {
+  box {{parent.Settings.mirrorRegion.r-parent.size.w} {parent.Settings.mirrorRegion.t-parent.size.h} {parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.t}}
+  name Crop_TR
+  xpos 1573
+  ypos -122
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Transform {
+  scale -1
+  center {{parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.t}}
+  name Transform_TR
+  label "Top Right"
+  xpos 1573
+  ypos -70
+ }
+push $N80e30c70
+ Crop {
+  box {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.t-parent.size.h} {parent.Settings.mirrorRegion.x+parent.size.w} {parent.Settings.mirrorRegion.t}}
+  name Crop_TL
+  xpos 1457
+  ypos -124
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Transform {
+  scale -1
+  center {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.t}}
+  name Transform_TL
+  label "Top Left"
+  xpos 1457
+  ypos -72
+ }
+push $N80e80a90
+ Dot {
+  name Dot7
+  xpos 1146
+  ypos -344
+ }
+set N80ff2030 [stack 0]
+ Dot {
+  name Dot5
+  xpos 1146
+  ypos -171
+ }
+set N80feba50 [stack 0]
+ Dot {
+  name Dot6
+  xpos 1245
+  ypos -171
+ }
+ Crop {
+  box {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.t-parent.size.h} {parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.t}}
+  name Crop_T
+  xpos 1211
+  ypos -124
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Transform {
+  scale {1 -1}
+  center {0 {parent.Settings.mirrorRegion.t}}
+  name Transform_T
+  label Top
+  xpos 1211
+  ypos -73
+ }
+push $N80feba50
+ Crop {
+  box {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.y} {parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.y+parent.size.h}}
+  name Crop_B
+  xpos 1112
+  ypos -126
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Transform {
+  scale {1 -1}
+  center {0 {parent.Settings.mirrorRegion.y}}
+  name Transform_B
+  label Bottom
+  xpos 1112
+  ypos -71
+ }
+push 0
+push $N80ff2030
+ Dot {
+  name Dot2
+  xpos 883
+  ypos -344
+ }
+set N80f923a0 [stack 0]
+ Dot {
+  name Dot3
+  xpos 883
+  ypos -177
+ }
+set N80f8daf0 [stack 0]
+ Crop {
+  box {{parent.Settings.mirrorRegion.r-parent.size.w} {parent.Settings.mirrorRegion.y} {parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.t}}
+  name Crop_R
+  xpos 849
+  ypos -128
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Transform {
+  scale {-1 1}
+  center {{parent.Settings.mirrorRegion.r} 0}
+  filter Impulse
+  name Transform_R
+  label Right
+  xpos 849
+  ypos -84
+ }
+push $N80f8daf0
+ Dot {
+  name Dot10
+  xpos 778
+  ypos -177
+ }
+ Crop {
+  box {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.y} {parent.Settings.mirrorRegion.x+parent.size.w} {parent.Settings.mirrorRegion.t}}
+  name Crop_L
+  xpos 744
+  ypos -126
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Transform {
+  scale {-1 1}
+  center {{parent.Settings.mirrorRegion.x} 0}
+  filter Impulse
+  name Transform_L
+  label Left
+  xpos 744
+  ypos -82
+ }
+ Merge2 {
+  inputs 8+1
+  operation disjoint-over
+  also_merge all
+  name Merge5
+  xpos 1346
+  ypos 122
+ }
+ Dot {
+  name Dot15
+  note_font_size 41
+  xpos 1380
+  ypos 236
+ }
+set N80f44280 [stack 0]
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox intersection
+  name MergeIntersection1
+  xpos 1701
+  ypos 233
+  disable {{"!\[exists parent.input1]"}}
+ }
+push $N80f44280
+ Dot {
+  name Dot17
+  note_font_size 41
+  xpos 1380
+  ypos 359
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 1701
+  ypos 356
+  disable {{"!\[exists parent.input1]"}}
+ }
+ Multiply {
+  inputs 1+1
+  value 0
+  name Multiply1
+  label "\[value value]"
+  xpos 1818
+  ypos 347
+  disable {{"!\[exists parent.input1]"}}
+ }
+push $N80e84b90
+ Crop {
+  box {{parent.Settings.mirrorRegion} {parent.Settings.mirrorRegion} {parent.Settings.mirrorRegion} {parent.Settings.mirrorRegion}}
+  name Crop1
+  xpos 2050
+  ypos -200
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Merge2 {
+  inputs 2
+  operation disjoint-over
+  also_merge all
+  maskChannelMask {{{exists parent.input[value input1.number] == 0 ? 0 : 5}}}
+  name Merge3
+  xpos 2050
+  ypos 356
+ }
+ Dot {
+  name Dot20
+  label A
+  note_font_size 41
+  xpos 2084
+  ypos 469
+ }
+push $N80f923a0
+ Dot {
+  name Dot12
+  note_font_size 41
+  xpos 600
+  ypos -344
+ }
+ Dot {
+  name Dot18
+  label B
+  note_font_size 41
+  xpos 600
+  ypos 471
+ }
+ Dot {
+  name Dot23
+  note_font_size 41
+  xpos 600
+  ypos 558
+ }
+ Dot {
+  name Dot16
+  note_font_size 41
+  xpos 1940
+  ypos 558
+ }
+set N81848aa0 [stack 0]
+ Merge2 {
+  inputs 2
+  operation copy
+  Achannels none
+  Bchannels none
+  output none
+  also_merge all
+  mix {{parent.mix}}
+  name MergeKeymix
+  xpos 2050
+  ypos 551
+ }
+push $N81848aa0
+ Dot {
+  name Dot19
+  note_font_size 41
+  xpos 1940
+  ypos 640
+ }
+ Switch {
+  inputs 2
+  which {{"parent.mix > 0 ? 1 : 0"}}
+  name Switch1
+  xpos 2050
+  ypos 637
+ }
+ Output {
+  name Output1
+  xpos 2050
+  ypos 841
+ }
+end_group

@@ -1,0 +1,66 @@
+Group {
+ inputs 0
+ name Pyclopedia
+ onCreate "\nimport os\nimport pydoc\nimport re\n\n##########\n\ndef pyclopediaLoadField( _thisG ) :\n    usrStar = \[]\n    if _thisG\['use_module'].getValue() :\n        importMod = _thisG\['module'].value()\n        if len( importMod ) :\n            exec 'import \{0\}'.format( importMod )\n\n        try :\n            usrStar = pyclopediaListStar( _thisG )\[importMod]\n        except :\n            pass\n\n    else :\n\n        try :\n            usrStar = pyclopediaListStar( _thisG )\['']\n        except :\n            pass\n\n    try :\n        knobstatus = pyclopediaGetKnobs( _thisG )\n\n        cline = _thisG\['cmd_line'].value().replace( ' ' , '' )\n        kwfilter = _thisG\['keyword_filter'].value().replace( ' ' , '' )\n        if len( cline ) :\n            if knobstatus\[0] == 0 :\n                _thisG\['basechk'].setValue( cline )\n\n            if _thisG\['basechk'].value() == cline :\n                if len( knobstatus\[1] ) :\n                    knobstatus\[1].sort()\n                    for knob in knobstatus\[1] :\n                        cline = cline + '.' + _thisG\[knob].value().replace('\[*] ','')\n\n                matchStar = pyclopediaMatchStar( usrStar , cline , knobstatus\[0] )\n                matchStar.sort()\n                matchStar.reverse()\n\n                try  :\n                    fields = \[]\n                    for i in eval( 'dir( \{0\} )'.format( cline ) ) :\n                        if not i\[:2] == '__' and not i\[:1] == '_' :\n                            if len(kwfilter) :\n                                if kwfilter.lower() in i.lower() :\n                                    fields.append(i)\n                            else :\n                                fields.append(i)\n\n                    for star in matchStar :\n                        try :\n                            fields.remove( star )\n                            fields.insert( 0, '\[*] '+star )\n                        except ValueError :\n                            pass\n\n                    ### generate ###\n                    if len( fields ) :\n                        _thisG\[ 'field_' + str( knobstatus\[0]+1 ) ].setVisible( True )\n                        _thisG\[ 'field_' + str( knobstatus\[0]+1 ) ].setValues( fields )\n                    else :\n                        nuke.message( 'no more sub-field' )\n                except NameError as err :\n                    nuke.message( 'NameError : \{0\}<br><br><i>Make sure the command line belongs to correct module.<i>'.format( err ) )\n            else :\n                _thisG\['reset'].execute()\n                pyclopediaLoadField( _thisG )\n        else :\n            nuke.message('command line is empty.')\n    except AttributeError as err :\n        if nuke.ask( 'AttributeError : \{0\}<br><br><i>Do you want to fix this error?<i>'.format( err ) ) :\n            pyclopediaFixField( _thisG )\n\n##########\n\ndef pyclopediaGetKnobs( _thisG ) :\n    maxfield = 0\n    fieldknobs = \[]\n\n    for knob in _thisG.knobs() :\n        if knob\[:6] == 'field_' :\n            if len( _thisG\[knob].values()\[0] ) :\n                fieldknobs.append( knob )\n\n                if int( knob.split('_')\[1] ) > maxfield :\n                    maxfield = int( knob.split('_')\[1] )\n            else :\n                _thisG\[knob].setVisible( False )\n                _thisG\[knob].setValue(0)\n                _thisG\[knob].setValues( \[''] )\n\n    return maxfield, fieldknobs\n\n##########\n\ndef pyclopediaFixField( _thisG ) :\n    if _thisG\['use_module'].getValue() :\n        importMod = _thisG\['module'].value()\n        if len( importMod ) :\n            exec 'import \{0\}'.format( importMod )\n\n    knobstatus = pyclopediaGetKnobs( _thisG )\n\n    cline = _thisG\['cmd_line'].value()\n    if knobstatus\[0] == 0 :\n        _thisG\['basechk'].setValue( cline )\n\n    knobstatus\[1].sort()\n\n    check = 0\n    while check < len(knobstatus\[1]) :\n        try :\n            temp = \[ _thisG\[knobstatus\[1]\[i]].value() for i in range( check+1 ) ]\n            temp.insert( 0, cline )\n            eval( 'dir( \{0\} )'.format( '.'.join( temp ) ) )\n            check += 1\n        except :\n            for knob in knobstatus\[1]\[check:] :\n                _thisG\[ knob ].setVisible( False )\n                _thisG\[ knob ].setValue(0)\n                _thisG\[ knob ].setValues( \[''] )\n            check = len(knobstatus\[1])\n\n##########\n\ndef pyclopediaShowDoc( _thisG ) :\n    try :\n        if _thisG\['use_module'].getValue() :\n            importMod = _thisG\['module'].value()\n            if len( importMod ) :\n                exec 'import \{0\}'.format( importMod )\n\n        fieldknobs = \[]\n\n        for knob in _thisG.knobs() :\n            if knob\[:6] == 'field_' :\n                if len( _thisG\[knob].values()\[0] ) :\n                    fieldknobs.append( knob )\n\n        cline = _thisG\['cmd_line'].value()\n\n        if len( fieldknobs ) :\n            fieldknobs.sort()\n            for knob in fieldknobs :\n                cline = cline + '.' + _thisG\[knob].value().replace('\[*] ','')\n\n        content = pydoc.plain( pydoc.render_doc( eval( cline ) ) )\n\n        displayPanel = pyclopediaPanel( cline , content )\n        if displayPanel\[1] :\n            pyclopediaAddStar( _thisG , displayPanel\[0].value('line') )\n\n    except AttributeError as err :\n        if nuke.ask( 'AttributeError : \{0\}<br><br><i>Do you want to fix this error?<i>'.format( err ) ) :\n            pyclopediaFixField( _thisG )\n            _thisG\['show_doc'].execute()\n\n##########\n\ndef pyclopediaPanel( _line , _content ) :\n    p = nuke.Panel( 'Help on : \{0\}'.format( _line ) )\n    p.addSingleLineInput( 'line' , _line )\n    p.addNotepad( '', _content )\n    p.addButton('Close')\n    p.addButton('Starred this')\n    p.setWidth( 960 )\n    return ( p , p.show() )\n\n##########\n\ndef pyclopediaBackField( _thisG ) :\n    knobstatus = pyclopediaGetKnobs( _thisG )\n\n    if knobstatus\[0] :\n        _thisG\[ 'field_' + str(knobstatus\[0]) ].setVisible( False )\n        _thisG\[ 'field_' + str(knobstatus\[0]) ].setValue(0)\n        _thisG\[ 'field_' + str(knobstatus\[0]) ].setValues( \[''] )\n\n##########\n\ndef pyclopediaReset( _thisG ) :\n    for knob in _thisG.knobs() :\n        if knob\[:6] == 'field_' :\n            _thisG\[knob].setVisible( False )\n            _thisG\[knob].setValue(0)\n            _thisG\[knob].setValues( \[''] )\n    _thisG\['basechk'].setValue('')\n\n##########\n\ndef pyclopediaReadStar() :\n    nkfolder = \[ os.environ\['HOME'] , '.nuke' ]\n    file = open( os.sep.join( nkfolder + \[ 'pyclopedia' , 'favourite' ] ) , 'r' )\n    context = file.readlines()\n    file.close()\n    return context\n\n##########\n\ndef pyclopediaWriteStar( _context=\[] , _mode='update') :\n    nkfolder = \[ os.environ\['HOME'] , '.nuke' ]\n    if _mode == 'new' :\n        os.mkdir( os.sep.join( nkfolder + \[ 'pyclopedia' ] ) )\n    file = open( os.sep.join( nkfolder + \[ 'pyclopedia' , 'favourite' ] ) , 'w' )\n    if _mode == 'update' :\n        file.write( ''.join( _context ) )\n    file.close()\n\n##########\n\ndef pyclopediaAddStar( _thisG , _line ) :\n    nkfolder = \[ os.environ\['HOME'] , '.nuke' ]\n\n    ##### if file not exist, create one\n    try :\n        context = pyclopediaReadStar()\n    except IOError :\n        pyclopediaWriteStar( _mode='new' )\n        context = \[]\n\n    if _thisG\['use_module'].value() :\n        fline = '|'.join( \[ _thisG\['module'].value() , _line ] ) + '\\n'\n    else :\n        fline = '|'.join( \[ '' , _line ] ) + '\\n'\n\n    if fline not in context :\n        context.append( fline )\n        pyclopediaWriteStar( context )\n        pyclopediaGetFData( _thisG )\n    else :\n        nuke.message('This command already in Starred list.')\n\n##########\n\ndef pyclopediaListStar( _thisG ) :\n    starItems = \{\}\n    try :\n        context = pyclopediaReadStar()\n        for line in context :\n            items = re.split( '\\||\\n' , line )\[:2]\n            try :\n                starItems\[items\[0]].append( items\[1] )\n            except :\n                starItems\[items\[0]] = \[ items\[1] ]\n    except :\n        pass\n    return starItems\n\n##########\n\ndef pyclopediaMatchStar( _listStar , _cin , _kcount ) :\n    matchStar = \[]\n    for star in _listStar :\n        if len( star.split('.') ) == _kcount + 2 :\n            if star.split('.')\[:_kcount+1] == _cin.split('.') :\n                matchStar.append( star.split('.')\[-1:]\[0] )\n    return matchStar\n\n##########\n\ndef pyclopediaGetFData( _thisG ) :\n    data = pyclopediaListStar( _thisG )\n    temp = \[]\n    for key, value in data.items() :\n        for cmd in value :\n            if key == '' :\n                temp.append( '\{set ' + '\"\"' + ' ' + cmd + '\}' )\n            else :\n                temp.append( '\{set \"' + key + '\" ' + cmd + '\}' )\n    _thisG\['modStarData'].fromScript( '\\n'.join(temp) )\n\n##########\n\ndef pyclopediaModFData( _thisG ) :\n    fmd = _thisG\['modStarData'].toScript().split('\\n')\n    context = \[]\n    for line in fmd :\n        if len( ''.join( line\[5:-1].replace('\"','').split(' ') ) ) :\n            mod =  ' '.join( line\[5:-1].split(' ')\[:-1] )\n            cmd = line\[5:-1].split(' ')\[-1:]\[0]\n            context.append( ''.join( \[ '|'.join( \[ mod, cmd ] ).replace('\"','') , '\\n' ] ) )\n    try :\n        pyclopediaWriteStar( context )\n    except :\n        pyclopediaWriteStar( _mode='new')\n\n##### startup command #####\n\npyclopediaGetFData( nuke.thisGroup() )\n"
+ tile_color 0x7f7f7fff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {1 keyword_filter l "keyword filter" t "keyword to filter next field result.\n\n*non-case sensitive"}
+ addUserKnob {22 get_sub_field l "get sub field" t "get next field" -STARTLINE T "pyclopediaLoadField( nuke.thisGroup() )"}
+ addUserKnob {22 back_field l "back field" t "revert to one field backward" -STARTLINE T "pyclopediaBackField( nuke.thisGroup() )"}
+ addUserKnob {22 show_doc l "show doc" -STARTLINE T "pyclopediaShowDoc( nuke.thisGroup() )"}
+ addUserKnob {22 reset -STARTLINE +INVISIBLE T "pyclopediaReset( nuke.thisGroup() )"}
+ addUserKnob {26 ""}
+ addUserKnob {1 basechk +HIDDEN}
+ basechk nuke
+ addUserKnob {41 use_module l "import module" T menu01.use_module}
+ addUserKnob {1 module +HIDDEN}
+ addUserKnob {1 cmd_line l "command line"}
+ cmd_line nuke
+ addUserKnob {4 field_1 l "field 1" +HIDDEN M {""}}
+ addUserKnob {4 field_2 l "field 2" +HIDDEN M {""}}
+ addUserKnob {4 field_3 l "field 3" +HIDDEN M {""}}
+ addUserKnob {4 field_4 l "field 4" +HIDDEN M {""}}
+ addUserKnob {4 field_5 l "field 5" +HIDDEN M {""}}
+ addUserKnob {4 field_6 l "field 6" +HIDDEN M {""}}
+ addUserKnob {4 field_7 l "field 7" +HIDDEN M {""}}
+ addUserKnob {4 field_8 l "field 8" +HIDDEN M {""}}
+ addUserKnob {4 field_9 l "field 9" +HIDDEN M {""}}
+ addUserKnob {4 field_10 l "field 10" +HIDDEN M {""}}
+ addUserKnob {20 starred_manager l "starred manager" n 1}
+ starred_manager 0
+ addUserKnob {41 modStarData l "" +STARTLINE T ModifyMetaData.metadata}
+ addUserKnob {22 clear_all l "clear all starred command" T "pyclopediaWriteStar( \[] )\npyclopediaGetFData( nuke.thisGroup() )" +STARTLINE}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.3}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-05-26}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.3<br>-&nbsp;remove&nbsp;gizmo&nbsp;version,&nbsp;some&nbsp;setup&nbsp;not&nbsp;compatible&nbsp;in&nbsp;gizmo&nbsp;format.<br><br>1.2<br>-&nbsp;enhanced&nbsp;entire&nbsp;code<br>-&nbsp;improved&nbsp;error&nbsp;detection<br>-&nbsp;removed&nbsp;reset&nbsp;button<br>-&nbsp;some&nbsp;labels&nbsp;updated&nbsp;the&nbsp;name<br>-&nbsp;added&nbsp;'starred'&nbsp;function<br>-&nbsp;added&nbsp;'keyword&nbsp;filter'<br><br>1.1<br>-&nbsp;fixed&nbsp;'back&nbsp;level'&nbsp;error<br><br>1.0<br>-&nbsp;python&nbsp;encyclopedia\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -287
+  ypos -247
+  bdwidth 296
+  bdheight 273
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nnuke.thisGroup()\['module'].setVisible( nuke.thisGroup()\['use_module'].value() )\n"
+  xpos -183
+  ypos -157
+  addUserKnob {20 User}
+  addUserKnob {6 use_module l "use module" +STARTLINE}
+ }
+ ModifyMetaData {
+  inputs 0
+  name ModifyMetaData
+  knobChanged "pyclopediaModFData( nuke.thisGroup() )"
+  xpos -180
+  ypos -77
+ }
+end_group

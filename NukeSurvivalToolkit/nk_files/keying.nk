@@ -1,0 +1,42 @@
+Expression {
+ inputs 0
+ temp_name0 strip_low_r
+ temp_expr0 "parent.Expression_Keying.thresh_low * parent.Expression_Keying.pick.r/(parent.Expression_Keying.pick.r + parent.Expression_Keying.pick.g + parent.Expression_Keying.pick.b)"
+ temp_name1 strip_low_g
+ temp_expr1 "parent.Expression_Keying.thresh_low * parent.Expression_Keying.pick.g/(parent.Expression_Keying.pick.r + parent.Expression_Keying.pick.g + parent.Expression_Keying.pick.b)"
+ temp_name2 strip_low_b
+ temp_expr2 "parent.Expression_Keying.thresh_low * parent.Expression_Keying.pick.b/(parent.Expression_Keying.pick.r + parent.Expression_Keying.pick.g + parent.Expression_Keying.pick.b)"
+ expr0 "r > strip_low_r ? r : 0"
+ expr1 "g > strip_low_g ? g : 0"
+ expr2 "b > strip_low_b ? b : 0"
+ name Expression_Tweaking
+ xpos 615
+ ypos -48
+}
+Expression {
+ temp_name0 r_ratio
+ temp_expr0 "abs(pick.r/(pick.r + pick.g + pick.b) -  r/(r+g+b))\ng"
+ temp_name1 g_ratio
+ temp_expr1 "abs(pick.g/(pick.r + pick.g + pick.b) -  g/(r+g+b))"
+ temp_name2 b_ratio
+ temp_expr2 "abs(pick.b/(pick.r + pick.g + pick.b) -  b/(r+g+b))"
+ temp_name3 valid
+ temp_expr3 "r_ratio < ratio.r && g_ratio < ratio.g && b_ratio < ratio.b"
+ expr3 "valid ? 1 - (r_ratio + g_ratio + b_ratio)/(ratio.r + ratio.g + ratio.b) : 0\n"
+ name Expression_Keying
+ xpos 615
+ ypos -3
+ addUserKnob {20 Keying}
+ addUserKnob {26 instructions l "" +STARTLINE T "<i>Pick the color you want to Key.<br> This is telling us is how similar the colour’s ratio is to the target’s ratio.<br> If it’s the exact same, we’ll have 0, and the further away it is, the greater the number it will be. <br>Valid = This simply checks if our calculated similarity is less than the ratio for each channel"}
+ addUserKnob {6 ratio_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 pick t "It's comparing the picked colour against every pixel, and as long as the ratio r, g and b is within the specified range.\nIt returns a single value between 0 and 1 of it’s similarity"}
+ pick {0 0 0}
+ addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 ratio}
+ ratio {0 0 0}
+ addUserKnob {6 ratio_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 thresh_low l "Low Threshold"}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 tutorial l "" +STARTLINE T "From the tutorial: <br>\nhttps://gizmosandgames.com/2016/02/15/colour-keying-with-expressions/ <br>\nThank you <i>Matthew \"Rick\" Shaw"}
+}

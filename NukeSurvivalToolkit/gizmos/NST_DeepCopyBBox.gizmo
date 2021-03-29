@@ -1,0 +1,34 @@
+Group {
+ name DeepCopyBBox
+ tile_color 0x5fff
+ addUserKnob {20 D_DeepCopyBBox}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 copyright l "" +STARTLINE T "D_DeepCopyBBox v1.0 - (c) 2013 - Denis Scolan"}
+}
+ Input {
+  inputs 0
+  name Ext_BBox
+  xpos -630
+  ypos 402
+  number 1
+ }
+ Input {
+  inputs 0
+  name deep
+  xpos -821
+  ypos 403
+ }
+ DeepCrop {
+  use_znear false
+  use_zfar false
+  bbox {{input1.bbox.x} {input1.bbox.y} {input1.bbox.r} {input1.bbox.t}}
+  name DeepBbox
+  xpos -821
+  ypos 506
+ }
+ Output {
+  name Output1
+  xpos -821
+  ypos 623
+ }
+end_group

@@ -1,0 +1,56 @@
+Group {
+ name DeepFromDepth
+ tile_color 0x66ff
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {41 in l z T Shuffle21.in}
+ addUserKnob {41 in2 l alpha T Shuffle21.in2}
+ addUserKnob {41 premult l premultiplied T DeepFromImage2.premult}
+ addUserKnob {1 FS_PROPERTY +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -896
+  ypos 390
+ }
+ Shuffle {
+  in depth
+  in2 alpha
+  red blue
+  green blue
+  alpha alpha2
+  name Shuffle21
+  xpos -896
+  ypos 439
+ }
+ Shuffle {
+  red blue
+  green blue
+  out deep
+  name Shuffle28
+  xpos -896
+  ypos 499
+ }
+ DeepFromImage {
+  premult true
+  name DeepFromImage2
+  xpos -896
+  ypos 583
+ }
+ DeepExpression {
+  chans1 deep
+  rgba.alpha a
+  deep.front r==0?inf:r
+  deep.back g==0?inf:g
+  name DeepExpression1
+  selected true
+  xpos -896
+  ypos 643
+ }
+ Output {
+  name Output1
+  xpos -896
+  ypos 718
+ }
+end_group

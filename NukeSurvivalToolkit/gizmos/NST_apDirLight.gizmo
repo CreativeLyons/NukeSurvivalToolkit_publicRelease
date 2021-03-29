@@ -1,0 +1,113 @@
+Group {
+ name apDirLight
+ help "Simulate a simple directional/infinite light through a normal pass, by picking a normal color and then tweaking the radius, falloff and hardness of the light.\n\napDirLight v0.2 by Adrian Pueyo\nadrianpueyo.com, 2016"
+ knobChanged "\nif int(nuke.thisNode()\['theOutput'].getValue())==1:\n    nuke.thisNode()\['color'].setEnabled(True)\n    nuke.thisNode()\['intensity'].setEnabled(True)\nelse:\n    nuke.thisNode()\['color'].setEnabled(False)\n    nuke.thisNode()\['intensity'].setEnabled(False)\n"
+ selected true
+ addUserKnob {20 apDirLight}
+ addUserKnob {41 in l "input normals" T ShuffleNormals.in}
+ addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {41 pick T CalcLight.pick}
+ addUserKnob {7 radius t "Radius of the DirLight around the picked color." R 0 2}
+ radius 0.5
+ addUserKnob {7 falloff t "Inverse gamma of the DirLight." R 0 5}
+ falloff 1
+ addUserKnob {7 hardness t "Brings black point and white point closer together, to create a hard center."}
+ addUserKnob {4 theOutput l output t "Output the light in the alpha channel or in the rgb by choosing its color/gain." M {alpha rgb}}
+ addUserKnob {18 color t "Set a rgb color to the DirLight." +DISABLED}
+ color 1
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 intensity t "Multiplier for the color." +DISABLED R 0 3}
+ intensity 1
+ addUserKnob {26 copyright l "" +STARTLINE T "\napDirLight v0.2 - adrianpueyo.com, 2016."}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -164
+  ypos 44
+  number 1
+ }
+ Input {
+  inputs 0
+  name InputN
+  xpos -54
+  ypos -131
+ }
+ Shuffle {
+  in rgb
+  name ShuffleNormals
+  xpos -54
+  ypos -107
+ }
+ Expression {
+  temp_name0 cosA
+  temp_expr0 (r*pick.r+g*pick.g+b*pick.b)/(sqrt(r*r+g*g+b*b)*sqrt(pick.r*pick.r+pick.g*pick.g+pick.b*pick.b))
+  expr3 1-pow(clamp(cosA),1/pow(radius,5))
+  name CalcLight
+  xpos -54
+  ypos -83
+  addUserKnob {20 Picker}
+  addUserKnob {18 pick}
+  pick {1 1 1}
+  addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Gamma {
+  channels alpha
+  value {{parent.falloff}}
+  name Gamma
+  xpos -54
+  ypos -59
+ }
+ Grade {
+  channels alpha
+  blackpoint {{parent.hardness>1?0.5:parent.hardness<0?0:parent.hardness/2}}
+  whitepoint {{parent.hardness>1?0.5:parent.hardness<0?1:1-parent.hardness/2}}
+  name GradeHardness
+  xpos -54
+  ypos -27
+ }
+ Invert {
+  channels alpha
+  name Invert
+  xpos -54
+  ypos 5
+ }
+ ChannelMerge {
+  inputs 2
+  operation multiply
+  name ChannelMergeMask
+  xpos -54
+  ypos 35
+  disable {{"!\[exists parent.input1]"}}
+ }
+set N193debd0 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  alpha black
+  name ShuffleRGB
+  xpos 43
+  ypos 44
+ }
+ Grade {
+  white {{parent.color} {parent.color} {parent.color} {parent.color}}
+  multiply {{parent.intensity}}
+  name GradeRGB
+  xpos 43
+  ypos 77
+ }
+push $N193debd0
+ Switch {
+  inputs 2
+  which {{parent.theOutput}}
+  name SwitchRGB
+  xpos -54
+  ypos 77
+ }
+ Output {
+  name Output
+  xpos -54
+  ypos 101
+ }
+end_group

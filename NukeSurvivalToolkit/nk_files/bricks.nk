@@ -1,0 +1,47 @@
+Reformat {
+ inputs 0
+ format "1920 1080 0 0 1920 1080 1 HD_1080"
+ name Reformat1
+ xpos 131
+ ypos -105
+}
+Expression {
+ temp_name0 dimension_width
+ temp_expr0 size*width_brick
+ temp_name1 difference_size
+ temp_expr1 size
+ temp_name2 dimension_height
+ temp_expr2 size
+ expr0 "floor(y/size)%2 == 0? (x%(dimension_width*scale))/(difference_size*width_brick*scale) : ((x+offset)%dimension_width)/(difference_size*width_brick)"
+ expr1 "floor(y/size)%2 == 0? (y%dimension_height)/(difference_size) : ((y)%dimension_height)/(difference_size)"
+ name bricks
+ xpos 131
+ ypos -64
+ addUserKnob {20 User}
+ addUserKnob {7 size R 0 200}
+ size 216
+ addUserKnob {7 offset R 0 100}
+ offset 132
+ addUserKnob {7 scale R 0 6}
+ scale 1
+ addUserKnob {26 ""}
+ addUserKnob {7 width_brick R 0 5}
+ width_brick 1.3
+ addUserKnob {3 random_value l INVISIBLE +INVISIBLE}
+ random_value 61
+}
+ColorWheel {
+ inputs 0
+ gamma 0.45
+ name ColorWheel1
+ xpos 7
+ ypos -37
+}
+STMap {
+ inputs 2
+ channels rgba
+ uv rgba
+ name STMap1
+ xpos 131
+ ypos -13
+}

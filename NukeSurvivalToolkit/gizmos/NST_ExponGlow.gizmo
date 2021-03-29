@@ -1,0 +1,927 @@
+Group {
+ name ExponGlow
+ onCreate "n = nuke.thisNode()\nn.knob('size').setRange(0, 5)\nn.knob('exp').setRange(0, 4)\nn.knob('adjustBBoxPixels').setRange(0, 400)\nn.knob('adjustBBoxPercent').setRange(1, 2)\nn.knob('safeBBoxPixels').setRange(0, 400)\nn.knob('safeBBoxPercent').setRange(1, 2)"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"includeOriginal\":\n    if n.knob('includeOriginal').getValue() == 1:\n        merge = nuke.toNode(\"Merge1\")\n        original = nuke.toNode('Original')\n        AvgMult = nuke.toNode(\"AverageMult\")\n        steps = int(n.knob('steps').getValue())\n        merge.setInput(steps+1, original)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n\n    else:\n        merge.setInput(steps+1, None)\n        AvgMult\['whitepoint'].setValue(2 if steps<2 else steps)\n\nelif k.name() == \"steps\":\n\n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        start = nuke.toNode(\"Start\")\n        end   = nuke.toNode(\"End\")\n        b1    = nuke.toNode(\"Blur1\")\n        m1    = nuke.toNode(\"Multiply1\")\n        merge = nuke.toNode(\"Merge1\")\n        AvgMult = nuke.toNode(\"AverageMult\")\n\n        b1x   = b1.xpos()\n        b1y   = b1.ypos()\n        b1n   = b1.name()\n\n        m1x   = m1.xpos()\n        m1y   = m1.ypos()\n        m1n   = m1.name()\n\n        steps = int(n.knob('steps').getValue())\n        size  = n.knob('size').getValue()\n        mult  = n.knob('exp').getValue()\n\n        #b1.setInput(0, start)\n        for i in range(1,merge.inputs()):\n            merge.setInput(i,None)\n        merge.setInput(0, m1)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n        for i in range(1,steps):\n            # Blur\n            b = nuke.nodes.Blur()\n            m = nuke.nodes.Multiply()\n            b.setXYpos(b1x+i*100,b1y)\n            b.setInput(0,start)\n            b\[\"channels\"].setValue(\"all\")\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(0, 1)\n            b\[\"size\"].setExpression( \"(width/25*pow(parent.size*\{\}, parent.exp.w))*((aspectCalc.aspect.w/100))\".format(str(i+1)), 0 )\n            b\[\"size\"].setExpression( \"(height/25*pow(parent.size*\{\}, parent.exp.h))*((aspectCalc.aspect.h/100))\".format(str(i+1)), 1 )\n            b\[\"label\"].setValue('')\n            blurAbove = b.name()\n\n            m.setXYpos(m1x+i*100,m1y)\n            m.setInput(0, nuke.toNode(blurAbove))\n            m\[\"channels\"].setValue(\"all\")\n            m\[\"value\"].setValue(1,1,1,1)\n            j = 1-(i/steps)\n            m\[\"value\"].setExpression('falloffType == 0 ? \{\} :falloffType == 1 ? pow(\{\}, 3) : falloffType == 2 ? \{\}*\{\}*(3-2*\{\}) : falloffType == 3 ? \{\}*\{\}*(2 - \{\}) : falloffType == 4 ? \{\}*(1 + \{\}*(1 - \{\})) : 0'.format(j,j,j,j,j,j,j,j,j,j,j))\n            m\[\"mix\"].setExpression(\"falloff\")\n            m\[\"label\"].setValue('')\n\n            merge.setInput(i if i<2 else i+1, m)\n            AvgMult\['whitepoint'].setValue(i if i<2 else i+1)\n\n        if n.knob('includeOriginal').getValue() == 1:\n            merge = nuke.toNode(\"Merge1\")\n            original = nuke.toNode('Original')\n            AvgMult = nuke.toNode(\"AverageMult\")\n            steps = int(n.knob('steps').getValue())\n            merge.setInput(steps+1, original)\n            AvgMult\['whitepoint'].setValue(2 if steps<2 else steps+1)\n\nelif k.name() == \"output2\":\n    if n.knob(\"output2\").getValue() == 4:\n        n.knob('AvgMaxOriginal').setVisible(True)\n    else:\n        n.knob('AvgMaxOriginal').setVisible(False)\n\nelif k.name() == \"safeBBox\":\n    if n.knob(\"safeBBox\").getValue() == 0:\n        n.knob('safeBBoxText').setVisible(False)\n        n.knob('safetyBBoxMethod').setVisible(False)\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(False)\n\n    elif n.knob(\"safeBBox\").getValue() == 1:\n        n.knob('safetyBBoxMethod').setVisible(True)\n        n.knob('safeBBoxText').setVisible(True)\n        if n.knob('safetyBBoxMethod').value() == \"pixels\":\n            n.knob('safeBBoxPixels').setVisible(True)\n            n.knob('safeBBoxPercent').setVisible(False)\n        elif n.knob('safetyBBoxMethod').value() == \"percent\":\n            n.knob('safeBBoxPixels').setVisible(False)\n            n.knob('safeBBoxPercent').setVisible(True)\n\nelif k.name() == \"safetyBBoxMethod\":\n    if n.knob(\"safetyBBoxMethod\").value() == \"pixels\":\n        n.knob('safeBBoxPixels').setVisible(True)\n        n.knob('safeBBoxPercent').setVisible(False)\n    elif n.knob(\"safetyBBoxMethod\").value() == \"percent\":\n        n.knob('safeBBoxPixels').setVisible(False)\n        n.knob('safeBBoxPercent').setVisible(True)\n\nelif k.name() == \"adjustBBoxExtra\":\n    if n.knob(\"adjustBBoxExtra\").value() == \"pixels\":\n        n.knob('adjustBBoxPixels').setVisible(True)\n        n.knob('adjustBBoxPercent').setVisible(False)\n    elif n.knob(\"adjustBBoxExtra\").value() == \"percent\":\n        n.knob('adjustBBoxPixels').setVisible(False)\n        n.knob('adjustBBoxPercent').setVisible(True)\n"
+ tile_color 0xcc804eff
+ label "(\[value output2])"
+ note_font "Verdana Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 ExponGlow}
+ addUserKnob {41 channels T Remove1.channels}
+ addUserKnob {41 maskChannelMask_1 l area T MultiplyArea.maskChannelMask}
+ addUserKnob {41 inject_1 l inject -STARTLINE T MultiplyArea.inject}
+ addUserKnob {41 invert_mask_1 l invert -STARTLINE T MultiplyArea.invert_mask}
+ addUserKnob {41 fringe_1 l fringe -STARTLINE T MultiplyArea.fringe}
+ addUserKnob {26 ""}
+ addUserKnob {26 ToleranceTitle l Tolerance T " "}
+ addUserKnob {6 tolerance_2 l " " -STARTLINE}
+ tolerance_2 true
+ addUserKnob {7 tolerance l "" -STARTLINE R 0 4}
+ tolerance 1
+ addUserKnob {4 output2 l Operation M {Screen Plus Over Hypot Average Max Min ""}}
+ output2 Plus
+ addUserKnob {3 steps l "  Steps" -STARTLINE}
+ steps 10
+ addUserKnob {26 text l " " -STARTLINE T " "}
+ addUserKnob {6 includeOriginal l "Include Original?" -STARTLINE}
+ addUserKnob {19 intensity l Intensity R 0 4}
+ intensity 1
+ addUserKnob {6 intensity_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 intensity_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 intensity_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 text_1 l " "}
+ addUserKnob {6 AvgMaxOriginal l "Use Max of Average and Original" +HIDDEN +STARTLINE}
+ addUserKnob {14 size l Size R 0 5}
+ size 1
+ addUserKnob {14 exp l Exponent R 0 4}
+ exp 3
+ addUserKnob {6 color_rgba_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {4 falloffType l Falloff M {Linear pLinear smooth smooth0 smooth1 "" ""}}
+ addUserKnob {7 falloff l "" -STARTLINE}
+ falloff 1
+ addUserKnob {26 text_4 l " "}
+ addUserKnob {6 color_rgba_panelDropped_1 l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {14 postBlur l "Post Blur" R 0 100}
+ addUserKnob {6 effectOnly l "Effect Only" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {20 bboxControl l "BBox Control" n 1}
+ bboxControl 0
+ addUserKnob {26 text_2 l " " T " "}
+ addUserKnob {4 bbox l "BBox: " -STARTLINE M {union intersectionMask A B "input format" "" "" "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+ addUserKnob {6 safeBBox l "Safe BBox" t "If the output BBox is larger than the input format and the input box combined. the result will be max of the input/format bbox plus a safety \"buffer\" in pixels or percent \n\nTurning off might make your BBox grow exponentially with high blur values" -STARTLINE}
+ safeBBox true
+ addUserKnob {26 safeBBoxText l "" +STARTLINE T " "}
+ addUserKnob {4 safetyBBoxMethod l "Safe BBox Buffer  " -STARTLINE M {pixels percent "" "" "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+ safetyBBoxMethod percent
+ addUserKnob {14 safeBBoxPixels l "" -STARTLINE +HIDDEN R 0 400}
+ safeBBoxPixels 100
+ addUserKnob {14 safeBBoxPercent l "" -STARTLINE R 1 2}
+ safeBBoxPercent 1.1
+ addUserKnob {26 text_3 l "" +STARTLINE T " "}
+ addUserKnob {4 adjustBBoxExtra l "Extra BBox Adjust" -STARTLINE M {pixels percent "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {14 adjustBBoxPercent l "" -STARTLINE +HIDDEN R 1 2}
+ adjustBBoxPercent 1
+ addUserKnob {14 adjustBBoxPixels l "" -STARTLINE R 0 400}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {41 maskChannelMask l mask T MergeKeymix.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T MergeKeymix.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T MergeKeymix.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T MergeKeymix.fringe}
+ addUserKnob {41 mix T MergeKeymix.mix}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "Tony Lyons"}
+ addUserKnob {26 desc l Description: T ExponGlow}
+ addUserKnob {26 ver l Version: T v03}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x535e5a00
+  label "BBox Management"
+  note_font_size 30
+  note_font_color 0xffffffff
+  xpos -529
+  ypos 636
+  bdwidth 341
+  bdheight 525
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos 0
+  ypos -1449
+ }
+ Dot {
+  name Dot16
+  note_font_size 41
+  xpos 34
+  ypos -1282
+ }
+set N462002e0 [stack 0]
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos -367
+  ypos -1282
+ }
+ Dot {
+  name Dot25
+  note_font_size 41
+  xpos -367
+  ypos 360
+ }
+ Dot {
+  name Dot18
+  label B
+  note_font_size 41
+  xpos -367
+  ypos 578
+ }
+ Dot {
+  name Dot11
+  note_font_size 41
+  xpos -367
+  ypos 767
+ }
+set N5648c920 [stack 0]
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos -367
+  ypos 819
+ }
+set N311cc890 [stack 0]
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos -463
+  ypos 819
+ }
+ Dot {
+  name Dot15
+  note_font_size 41
+  xpos -463
+  ypos 975
+ }
+ Crop {
+  inputs 0
+  box {{"!\[exists parent.input0] ? 0 : input.format.x"} {"!\[exists parent.input0] ? 0 : input.format.y"} {"!\[exists parent.input0] ? 0 : input.format.r"} {"!\[exists parent.input0] ? 0 : input.format.t"}}
+  reformat true
+  crop false
+  name Crop1
+  xpos 210
+  ypos -1006
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels2
+  xpos 210
+  ypos -980
+ }
+push $N462002e0
+ Merge2 {
+  inputs 2
+  name Merge3
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 83
+  ypos -927
+ }
+ NoOp {
+  name BBoxInput
+  xpos 83
+  ypos -884
+  addUserKnob {20 User}
+  addUserKnob {15 bbox}
+  bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+ }
+ Dot {
+  name Dot23
+  note_font_size 41
+  xpos 117
+  ypos -146
+ }
+ Input {
+  inputs 0
+  name Inputarea
+  xpos 289
+  ypos -894
+  number 2
+ }
+ AddChannels {
+  channels alpha
+  color 1
+  name AddChannels1
+  xpos 289
+  ypos -836
+ }
+ Invert {
+  channels rgba
+  name Invert3
+  xpos 289
+  ypos -759
+ }
+push $N462002e0
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 461
+  ypos -1282
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos 427
+  ypos -1204
+ }
+ NoOp {
+  name aspectCalc
+  xpos 427
+  ypos -1163
+  addUserKnob {20 User}
+  addUserKnob {14 aspect R 0 100}
+  aspect {{parent.size.w} {parent.size.h/format.pixel_aspect/height*width}}
+ }
+ Dot {
+  name Dot21
+  note_font_size 41
+  xpos 461
+  ypos -1026
+ }
+set N6268540 [stack 0]
+ Invert {
+  name Invert1
+  xpos 864
+  ypos -1033
+  disable {{"parent.size < 0 ? 0 : 1"}}
+ }
+ Keyer {
+  operation "luminance key"
+  range {{parent.tolerance} {range.A+1} {range.B} {range.B}}
+  name Keyer1
+  xpos 864
+  ypos -979
+  disable {{!tolerance_2}}
+ }
+ Premult {
+  channels all
+  name Premult1
+  xpos 864
+  ypos -933
+  disable {{!tolerance_2}}
+ }
+ Multiply {
+  inputs 1+1
+  value 0
+  name MultiplyArea
+  label "\[value value]"
+  xpos 864
+  ypos -768
+ }
+set Nf6337a80 [stack 0]
+ NoOp {
+  name Start
+  xpos 864
+  ypos -706
+ }
+set N6229d30 [stack 0]
+ Blur {
+  size {{"(width/25*pow(parent.size*10, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*10, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
+  crop false
+  name Blur10
+  xpos 1764
+  ypos -554
+ }
+ Multiply {
+  value {{"falloffType == 0 ? 0.1 :falloffType == 1 ? pow(0.1, 3) : falloffType == 2 ? 0.1*0.1*(3-2*0.1) : falloffType == 3 ? 0.1*0.1*(2 - 0.1) : falloffType == 4 ? 0.1*(1 + 0.1*(1 - 0.1)) : 0"} {"falloffType == 0 ? 0.1 :falloffType == 1 ? pow(0.1, 3) : falloffType == 2 ? 0.1*0.1*(3-2*0.1) : falloffType == 3 ? 0.1*0.1*(2 - 0.1) : falloffType == 4 ? 0.1*(1 + 0.1*(1 - 0.1)) : 0"} {"falloffType == 0 ? 0.1 :falloffType == 1 ? pow(0.1, 3) : falloffType == 2 ? 0.1*0.1*(3-2*0.1) : falloffType == 3 ? 0.1*0.1*(2 - 0.1) : falloffType == 4 ? 0.1*(1 + 0.1*(1 - 0.1)) : 0"} {"falloffType == 0 ? 0.1 :falloffType == 1 ? pow(0.1, 3) : falloffType == 2 ? 0.1*0.1*(3-2*0.1) : falloffType == 3 ? 0.1*0.1*(2 - 0.1) : falloffType == 4 ? 0.1*(1 + 0.1*(1 - 0.1)) : 0"}}
+  mix {{falloff}}
+  name Multiply10
+  xpos 1764
+  ypos -477
+ }
+push $N6229d30
+ Blur {
+  size {{"(width/25*pow(parent.size*9, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*9, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
+  crop false
+  name Blur9
+  xpos 1664
+  ypos -554
+ }
+ Multiply {
+  value {{"falloffType == 0 ? 0.2 :falloffType == 1 ? pow(0.2, 3) : falloffType == 2 ? 0.2*0.2*(3-2*0.2) : falloffType == 3 ? 0.2*0.2*(2 - 0.2) : falloffType == 4 ? 0.2*(1 + 0.2*(1 - 0.2)) : 0"} {"falloffType == 0 ? 0.2 :falloffType == 1 ? pow(0.2, 3) : falloffType == 2 ? 0.2*0.2*(3-2*0.2) : falloffType == 3 ? 0.2*0.2*(2 - 0.2) : falloffType == 4 ? 0.2*(1 + 0.2*(1 - 0.2)) : 0"} {"falloffType == 0 ? 0.2 :falloffType == 1 ? pow(0.2, 3) : falloffType == 2 ? 0.2*0.2*(3-2*0.2) : falloffType == 3 ? 0.2*0.2*(2 - 0.2) : falloffType == 4 ? 0.2*(1 + 0.2*(1 - 0.2)) : 0"} {"falloffType == 0 ? 0.2 :falloffType == 1 ? pow(0.2, 3) : falloffType == 2 ? 0.2*0.2*(3-2*0.2) : falloffType == 3 ? 0.2*0.2*(2 - 0.2) : falloffType == 4 ? 0.2*(1 + 0.2*(1 - 0.2)) : 0"}}
+  mix {{falloff}}
+  name Multiply9
+  xpos 1664
+  ypos -477
+ }
+push $N6229d30
+ Blur {
+  size {{"(width/25*pow(parent.size*8, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*8, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
+  crop false
+  name Blur8
+  xpos 1564
+  ypos -554
+ }
+ Multiply {
+  value {{"falloffType == 0 ? 0.3 :falloffType == 1 ? pow(0.3, 3) : falloffType == 2 ? 0.3*0.3*(3-2*0.3) : falloffType == 3 ? 0.3*0.3*(2 - 0.3) : falloffType == 4 ? 0.3*(1 + 0.3*(1 - 0.3)) : 0"} {"falloffType == 0 ? 0.3 :falloffType == 1 ? pow(0.3, 3) : falloffType == 2 ? 0.3*0.3*(3-2*0.3) : falloffType == 3 ? 0.3*0.3*(2 - 0.3) : falloffType == 4 ? 0.3*(1 + 0.3*(1 - 0.3)) : 0"} {"falloffType == 0 ? 0.3 :falloffType == 1 ? pow(0.3, 3) : falloffType == 2 ? 0.3*0.3*(3-2*0.3) : falloffType == 3 ? 0.3*0.3*(2 - 0.3) : falloffType == 4 ? 0.3*(1 + 0.3*(1 - 0.3)) : 0"} {"falloffType == 0 ? 0.3 :falloffType == 1 ? pow(0.3, 3) : falloffType == 2 ? 0.3*0.3*(3-2*0.3) : falloffType == 3 ? 0.3*0.3*(2 - 0.3) : falloffType == 4 ? 0.3*(1 + 0.3*(1 - 0.3)) : 0"}}
+  mix {{falloff}}
+  name Multiply8
+  xpos 1564
+  ypos -477
+ }
+push $N6229d30
+ Blur {
+  size {{"(width/25*pow(parent.size*7, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*7, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
+  crop false
+  name Blur7
+  xpos 1464
+  ypos -554
+ }
+ Multiply {
+  value {{"falloffType == 0 ? 0.4 :falloffType == 1 ? pow(0.4, 3) : falloffType == 2 ? 0.4*0.4*(3-2*0.4) : falloffType == 3 ? 0.4*0.4*(2 - 0.4) : falloffType == 4 ? 0.4*(1 + 0.4*(1 - 0.4)) : 0"} {"falloffType == 0 ? 0.4 :falloffType == 1 ? pow(0.4, 3) : falloffType == 2 ? 0.4*0.4*(3-2*0.4) : falloffType == 3 ? 0.4*0.4*(2 - 0.4) : falloffType == 4 ? 0.4*(1 + 0.4*(1 - 0.4)) : 0"} {"falloffType == 0 ? 0.4 :falloffType == 1 ? pow(0.4, 3) : falloffType == 2 ? 0.4*0.4*(3-2*0.4) : falloffType == 3 ? 0.4*0.4*(2 - 0.4) : falloffType == 4 ? 0.4*(1 + 0.4*(1 - 0.4)) : 0"} {"falloffType == 0 ? 0.4 :falloffType == 1 ? pow(0.4, 3) : falloffType == 2 ? 0.4*0.4*(3-2*0.4) : falloffType == 3 ? 0.4*0.4*(2 - 0.4) : falloffType == 4 ? 0.4*(1 + 0.4*(1 - 0.4)) : 0"}}
+  mix {{falloff}}
+  name Multiply7
+  xpos 1464
+  ypos -477
+ }
+push $N6229d30
+ Blur {
+  size {{"(width/25*pow(parent.size*6, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*6, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
+  crop false
+  name Blur6
+  xpos 1364
+  ypos -554
+ }
+ Multiply {
+  value {{"falloffType == 0 ? 0.5 :falloffType == 1 ? pow(0.5, 3) : falloffType == 2 ? 0.5*0.5*(3-2*0.5) : falloffType == 3 ? 0.5*0.5*(2 - 0.5) : falloffType == 4 ? 0.5*(1 + 0.5*(1 - 0.5)) : 0"} {"falloffType == 0 ? 0.5 :falloffType == 1 ? pow(0.5, 3) : falloffType == 2 ? 0.5*0.5*(3-2*0.5) : falloffType == 3 ? 0.5*0.5*(2 - 0.5) : falloffType == 4 ? 0.5*(1 + 0.5*(1 - 0.5)) : 0"} {"falloffType == 0 ? 0.5 :falloffType == 1 ? pow(0.5, 3) : falloffType == 2 ? 0.5*0.5*(3-2*0.5) : falloffType == 3 ? 0.5*0.5*(2 - 0.5) : falloffType == 4 ? 0.5*(1 + 0.5*(1 - 0.5)) : 0"} {"falloffType == 0 ? 0.5 :falloffType == 1 ? pow(0.5, 3) : falloffType == 2 ? 0.5*0.5*(3-2*0.5) : falloffType == 3 ? 0.5*0.5*(2 - 0.5) : falloffType == 4 ? 0.5*(1 + 0.5*(1 - 0.5)) : 0"}}
+  mix {{falloff}}
+  name Multiply6
+  xpos 1364
+  ypos -477
+ }
+push $N6229d30
+ Blur {
+  size {{"(width/25*pow(parent.size*5, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*5, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
+  crop false
+  name Blur5
+  xpos 1264
+  ypos -554
+ }
+ Multiply {
+  value {{"falloffType == 0 ? 0.6 :falloffType == 1 ? pow(0.6, 3) : falloffType == 2 ? 0.6*0.6*(3-2*0.6) : falloffType == 3 ? 0.6*0.6*(2 - 0.6) : falloffType == 4 ? 0.6*(1 + 0.6*(1 - 0.6)) : 0"} {"falloffType == 0 ? 0.6 :falloffType == 1 ? pow(0.6, 3) : falloffType == 2 ? 0.6*0.6*(3-2*0.6) : falloffType == 3 ? 0.6*0.6*(2 - 0.6) : falloffType == 4 ? 0.6*(1 + 0.6*(1 - 0.6)) : 0"} {"falloffType == 0 ? 0.6 :falloffType == 1 ? pow(0.6, 3) : falloffType == 2 ? 0.6*0.6*(3-2*0.6) : falloffType == 3 ? 0.6*0.6*(2 - 0.6) : falloffType == 4 ? 0.6*(1 + 0.6*(1 - 0.6)) : 0"} {"falloffType == 0 ? 0.6 :falloffType == 1 ? pow(0.6, 3) : falloffType == 2 ? 0.6*0.6*(3-2*0.6) : falloffType == 3 ? 0.6*0.6*(2 - 0.6) : falloffType == 4 ? 0.6*(1 + 0.6*(1 - 0.6)) : 0"}}
+  mix {{falloff}}
+  name Multiply5
+  xpos 1264
+  ypos -477
+ }
+push $N6229d30
+ Blur {
+  size {{"(width/25*pow(parent.size*4, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*4, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
+  crop false
+  name Blur4
+  xpos 1164
+  ypos -554
+ }
+ Multiply {
+  value {{"falloffType == 0 ? 0.7 :falloffType == 1 ? pow(0.7, 3) : falloffType == 2 ? 0.7*0.7*(3-2*0.7) : falloffType == 3 ? 0.7*0.7*(2 - 0.7) : falloffType == 4 ? 0.7*(1 + 0.7*(1 - 0.7)) : 0"} {"falloffType == 0 ? 0.7 :falloffType == 1 ? pow(0.7, 3) : falloffType == 2 ? 0.7*0.7*(3-2*0.7) : falloffType == 3 ? 0.7*0.7*(2 - 0.7) : falloffType == 4 ? 0.7*(1 + 0.7*(1 - 0.7)) : 0"} {"falloffType == 0 ? 0.7 :falloffType == 1 ? pow(0.7, 3) : falloffType == 2 ? 0.7*0.7*(3-2*0.7) : falloffType == 3 ? 0.7*0.7*(2 - 0.7) : falloffType == 4 ? 0.7*(1 + 0.7*(1 - 0.7)) : 0"} {"falloffType == 0 ? 0.7 :falloffType == 1 ? pow(0.7, 3) : falloffType == 2 ? 0.7*0.7*(3-2*0.7) : falloffType == 3 ? 0.7*0.7*(2 - 0.7) : falloffType == 4 ? 0.7*(1 + 0.7*(1 - 0.7)) : 0"}}
+  mix {{falloff}}
+  name Multiply4
+  xpos 1164
+  ypos -477
+ }
+push $N6229d30
+ Blur {
+  size {{"(width/25*pow(parent.size*3, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*3, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
+  crop false
+  name Blur3
+  xpos 1064
+  ypos -554
+ }
+ Multiply {
+  value {{"falloffType == 0 ? 0.8 :falloffType == 1 ? pow(0.8, 3) : falloffType == 2 ? 0.8*0.8*(3-2*0.8) : falloffType == 3 ? 0.8*0.8*(2 - 0.8) : falloffType == 4 ? 0.8*(1 + 0.8*(1 - 0.8)) : 0"} {"falloffType == 0 ? 0.8 :falloffType == 1 ? pow(0.8, 3) : falloffType == 2 ? 0.8*0.8*(3-2*0.8) : falloffType == 3 ? 0.8*0.8*(2 - 0.8) : falloffType == 4 ? 0.8*(1 + 0.8*(1 - 0.8)) : 0"} {"falloffType == 0 ? 0.8 :falloffType == 1 ? pow(0.8, 3) : falloffType == 2 ? 0.8*0.8*(3-2*0.8) : falloffType == 3 ? 0.8*0.8*(2 - 0.8) : falloffType == 4 ? 0.8*(1 + 0.8*(1 - 0.8)) : 0"} {"falloffType == 0 ? 0.8 :falloffType == 1 ? pow(0.8, 3) : falloffType == 2 ? 0.8*0.8*(3-2*0.8) : falloffType == 3 ? 0.8*0.8*(2 - 0.8) : falloffType == 4 ? 0.8*(1 + 0.8*(1 - 0.8)) : 0"}}
+  mix {{falloff}}
+  name Multiply3
+  xpos 1064
+  ypos -477
+ }
+push 0
+push $N6229d30
+ Blur {
+  size {{"(width/25*pow(parent.size*2, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*2, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
+  crop false
+  name Blur2
+  xpos 964
+  ypos -554
+ }
+ Multiply {
+  value {{"falloffType == 0 ? 0.9 :falloffType == 1 ? pow(0.9, 3) : falloffType == 2 ? 0.9*0.9*(3-2*0.9) : falloffType == 3 ? 0.9*0.9*(2 - 0.9) : falloffType == 4 ? 0.9*(1 + 0.9*(1 - 0.9)) : 0"} {"falloffType == 0 ? 0.9 :falloffType == 1 ? pow(0.9, 3) : falloffType == 2 ? 0.9*0.9*(3-2*0.9) : falloffType == 3 ? 0.9*0.9*(2 - 0.9) : falloffType == 4 ? 0.9*(1 + 0.9*(1 - 0.9)) : 0"} {"falloffType == 0 ? 0.9 :falloffType == 1 ? pow(0.9, 3) : falloffType == 2 ? 0.9*0.9*(3-2*0.9) : falloffType == 3 ? 0.9*0.9*(2 - 0.9) : falloffType == 4 ? 0.9*(1 + 0.9*(1 - 0.9)) : 0"} {"falloffType == 0 ? 0.9 :falloffType == 1 ? pow(0.9, 3) : falloffType == 2 ? 0.9*0.9*(3-2*0.9) : falloffType == 3 ? 0.9*0.9*(2 - 0.9) : falloffType == 4 ? 0.9*(1 + 0.9*(1 - 0.9)) : 0"}}
+  mix {{falloff}}
+  name Multiply2
+  xpos 964
+  ypos -477
+ }
+push $N6229d30
+ Blur {
+  size {{(width/10*parent.size*(aspectCalc.aspect.w/100))} {(height/10*parent.size*(aspectCalc.aspect.h/100))}}
+  crop false
+  name Blur1
+  xpos 864
+  ypos -554
+ }
+ Multiply {
+  value {1 1 1 1}
+  mix {{falloff}}
+  name Multiply1
+  xpos 864
+  ypos -477
+ }
+ Merge2 {
+  inputs 10+1
+  operation {{mergeNumber.mergeNumber}}
+  also_merge all
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 864
+  ypos -327
+ }
+ NoOp {
+  name End
+  xpos 864
+  ypos -279
+ }
+set N6678730 [stack 0]
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 585
+  ypos -149
+ }
+ Group {
+  name BBoxToFormat
+  onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
+  tile_color 0xa57aaaff
+  note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font_color 0xffffffff
+  xpos 585
+  ypos -106
+  addUserKnob {20 CropBBox}
+  addUserKnob {4 type l Type +INVISIBLE M {"To Format" "To BBox"}}
+  addUserKnob {41 intersect T Crop6.intersect}
+  addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+  addUserKnob {4 overscanType l "Overscan Type:" M {Pixels Percentage}}
+  overscanType {{parent.safetyBBoxMethod}}
+  addUserKnob {14 overscan l Overscan R 0 400}
+  overscan {{parent.safeBBoxPixels} {parent.safeBBoxPixels}}
+  addUserKnob {14 overscanPercent l "Overscan Percent" R 1 4}
+  overscanPercent {{parent.safeBBoxPercent} {parent.safeBBoxPercent}}
+  addUserKnob {20 inputBbox l "BBox Data" n 1}
+  addUserKnob {15 inputFormat l "Input Format"}
+  inputFormat {0 0 {input.width} {input.height}}
+  addUserKnob {15 inputBBox l "Input BBox"}
+  inputBBox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+  addUserKnob {12 outputBBoxCenter l OutputBBoxCenter}
+  outputBBoxCenter {{OutputBBox1.outputBBoxCenter.w} {OutputBBox1.outputBBoxCenter.h}}
+  addUserKnob {15 outputBBox l "Output BBox"}
+  outputBBox {{OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox}}
+  addUserKnob {20 endGroup n -1}
+  addUserKnob {20 info_1 l Info}
+  addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+  addUserKnob {26 desc l Description: t "crop to inputformat\n\ndisplays values of input bbox" T CropBBox}
+  addUserKnob {26 ver l Version: T v02}
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos 261
+   ypos 394
+  }
+  Dot {
+   name Dot2
+   note_font_size 41
+   xpos 295
+   ypos 462
+  }
+set Ndc230270 [stack 0]
+  Dot {
+   name Dot1
+   note_font_size 41
+   xpos -160
+   ypos 462
+  }
+set Nc63ae100 [stack 0]
+push $Ndc230270
+  Crop {
+   box {{parent.inputBBox} {parent.inputBBox} {parent.inputBBox} {parent.inputBBox}}
+   crop {{parent.blackOutside}}
+   name Crop6
+   xpos 261
+   ypos 510
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+set N26227a70 [stack 0]
+  Remove {
+   operation keep
+   channels none
+   name Remove1
+   xpos 120
+   ypos 504
+  }
+set Ndc630a20 [stack 0]
+  Transform {
+   scale {{parent.overscanPercent} {parent.overscanPercent}}
+   center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
+   shutteroffset centred
+   name Transform1
+   selected true
+   xpos 120
+   ypos 553
+  }
+push $Ndc630a20
+  AdjBBox {
+   numpixels {{parent.overscan} {parent.overscan}}
+   name AdjBBox1
+   xpos -5
+   ypos 510
+  }
+  Switch {
+   inputs 2
+   which {{overscanType}}
+   name Switch2
+   label "\[value which]"
+   xpos -5
+   ypos 549
+  }
+  Merge2 {
+   inputs 2
+   bbox intersection
+   Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+   Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+   output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+   name Merge1
+   xpos -5
+   ypos 647
+   disable {{!parent.Crop6.intersect}}
+  }
+push $Nc63ae100
+  CopyBBox {
+   inputs 2
+   name CopyBBox1
+   xpos -194
+   ypos 653
+  }
+  BlackOutside {
+   name BlackOutside1
+   xpos -194
+   ypos 692
+   disable {{!parent.blackOutside}}
+  }
+  Dot {
+   name Dot4
+   note_font_size 41
+   xpos -160
+   ypos 769
+  }
+push $N26227a70
+  Switch {
+   inputs 2
+   which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
+   name Switch1
+   label "\[value which]"
+   xpos 261
+   ypos 759
+  }
+set N1906ff80 [stack 0]
+  Output {
+   name Output1
+   xpos 261
+   ypos 921
+  }
+push $N1906ff80
+  NoOp {
+   name OutputBBox1
+   xpos 378
+   ypos 821
+   addUserKnob {20 User}
+   addUserKnob {15 OutputBBox l "Output BBox"}
+   OutputBBox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+   addUserKnob {14 outputBBoxCenter l "Output BBox Center" R 0 100}
+   outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
+  }
+ end_group
+push $N6678730
+ Merge2 {
+  inputs 2
+  bbox intersection
+  name Merge4
+  xpos 585
+  ypos -66
+ }
+push $N6678730
+ CopyBBox {
+  inputs 2
+  name CopyBBox2
+  xpos 585
+  ypos -21
+ }
+set Ndc4bb490 [stack 0]
+push $Nf6337a80
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos 540
+  ypos -678
+ }
+ NoOp {
+  name Original
+  xpos 506
+  ypos -327
+ }
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 540
+  ypos 78
+ }
+push $Ndc4bb490
+push $N6678730
+ Switch {
+  inputs 2
+  which {{"parent.safeBBox && ((BBoxResult.bbox.x < BBoxInput.bbox.x || BBoxResult.bbox.y < BBoxInput.bbox.y || BBoxResult.bbox.r > BBoxInput.bbox.r || BBoxResult.bbox.t > BBoxInput.bbox.t))"}}
+  name Switch2
+  label "\[value which]"
+  xpos 864
+  ypos -25
+ }
+ Grade {
+  channels all
+  whitepoint 10
+  black_clamp false
+  name AverageMult
+  xpos 864
+  ypos 27
+  disable {{"output2 == 4 ? 0 : 1"}}
+ }
+ Merge2 {
+  inputs 2
+  operation max
+  also_merge all
+  name Merge2
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 864
+  ypos 74
+  disable {{"output2 == 4 && includeOriginal == 1 && AvgMaxOriginal == 1 ? 0 : 1"}}
+ }
+ Multiply {
+  value {{parent.intensity/steps}}
+  name Multiply12
+  xpos 864
+  ypos 98
+ }
+ Blur {
+  size {{postBlur} {postBlur}}
+  name BlurOriginal
+  xpos 864
+  ypos 155
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox3
+  xpos 864
+  ypos 224
+ }
+ Invert {
+  name Invert2
+  xpos 864
+  ypos 283
+  disable {{"parent.size < 0 ? 0 : 1"}}
+ }
+push $N6268540
+ Switch {
+  inputs 2
+  which {{"parent.size == 0 ? 0 : 1"}}
+  name Switch1
+  label "\[value which]"
+  xpos 427
+  ypos 283
+ }
+push $N462002e0
+ Dot {
+  name Dot22
+  note_font_size 41
+  xpos 34
+  ypos 157
+ }
+ Multiply {
+  channels {{{parent.Remove1.channels}}}
+  value 0
+  name Multiply11
+  xpos 0
+  ypos 227
+  disable {{!effectOnly}}
+ }
+ Merge2 {
+  inputs 2
+  operation {{mergeNumber.mergeNumber}}
+  also_merge all
+  name Merge7
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 287
+ }
+ Dot {
+  name Dot17
+  label A
+  note_font_size 41
+  xpos 34
+  ypos 599
+ }
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 34
+  ypos 729
+ }
+set Ndc332d50 [stack 0]
+ Dot {
+  name Dot12
+  note_font_size 41
+  xpos -260
+  ypos 729
+ }
+ Dot {
+  name Dot13
+  note_font_size 41
+  xpos -260
+  ypos 943
+ }
+push $N5648c920
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 346
+  ypos 516
+  number 1
+ }
+ Dot {
+  name Dot19
+  label Mask
+  note_font_size 41
+  xpos 380
+  ypos 582
+ }
+set N44b75aa0 [stack 0]
+ Dot {
+  name Dot20
+  note_font_size 41
+  xpos 270
+  ypos 582
+ }
+push $Ndc332d50
+ Merge2 {
+  inputs 2
+  bbox intersection
+  Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  Bchannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  output {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  name MergeIntersection
+  xpos 236
+  ypos 719
+  disable {{"!\[exists parent.input1]"}}
+ }
+ Merge2 {
+  inputs 2
+  Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  Bchannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  output {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  name MergeUnion
+  xpos 236
+  ypos 757
+  disable {{"!\[exists parent.input1]"}}
+ }
+ Dot {
+  name Dot6
+  label "intersection\nof (Mask and A) + B"
+  note_font_size 14
+  note_font_color 0xffffffff
+  xpos 270
+  ypos 917
+ }
+push $N44b75aa0
+ Dot {
+  name Dot10
+  note_font_size 41
+  xpos 380
+  ypos 819
+ }
+push $Ndc332d50
+push $N311cc890
+ Merge2 {
+  inputs 2+1
+  operation copy
+  Achannels none
+  Bchannels none
+  output none
+  also_merge {{{parent.Remove1.channels}}}
+  name MergeKeymix
+  xpos 0
+  ypos 809
+ }
+ Dot {
+  name Dot14
+  note_font_size 41
+  xpos 34
+  ypos 891
+ }
+set N3605a100 [stack 0]
+push $N311cc890
+ CopyBBox {
+  inputs 2
+  name CopyBBoxUnion
+  xpos -401
+  ypos 887
+  disable {{parent.bbox==0?0:1}}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBoxIntersection
+  xpos -401
+  ypos 913
+  disable {{"parent.bbox==1 ? 0 : 1"}}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBoxA
+  xpos -401
+  ypos 939
+  disable {{"parent.bbox==2 ? 0 : 1"}}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBoxB
+  xpos -401
+  ypos 971
+  disable {{"parent.bbox==3 ? 0 : 1"}}
+ }
+ Crop {
+  box {0 0 {parent.width} {parent.height}}
+  crop false
+  name CopyBBoxFormat
+  xpos -401
+  ypos 997
+  disable {{"parent.bbox==4 ? 0 : 1"}}
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+set N3602b060 [stack 0]
+ Transform {
+  scale {{parent.adjustBBoxPercent} {parent.adjustBBoxPercent}}
+  center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
+  black_outside false
+  shutteroffset centred
+  name TransformBBoxAdjustPercent
+  xpos -516
+  ypos 1042
+ }
+push $N3602b060
+ AdjBBox {
+  numpixels {{parent.adjustBBoxPixels} {parent.adjustBBoxPixels}}
+  name AdjBBoxPixels
+  xpos -401
+  ypos 1045
+ }
+ Switch {
+  inputs 2
+  which {{adjustBBoxExtra}}
+  name Switch3
+  xpos -401
+  ypos 1084
+ }
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos -367
+  ypos 1137
+ }
+push $N3605a100
+ CopyBBox {
+  inputs 2
+  name CopyBBox
+  xpos 0
+  ypos 1133
+ }
+ BlackOutside {
+  name BlackOutside1
+  xpos 0
+  ypos 1159
+  disable {{!parent.blackOutside}}
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 1299
+ }
+push $N6678730
+ NoOp {
+  name BBoxResult
+  xpos 714
+  ypos -279
+  addUserKnob {20 User}
+  addUserKnob {15 bbox}
+  bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+ }
+ NoOp {
+  inputs 0
+  name mergeNumber
+  xpos 202
+  ypos -1339
+  addUserKnob {20 User}
+  addUserKnob {3 mergeNumber}
+  mergeNumber {{"output2 == 0 ? 25 : output2 == 1 ? 24 : output2 == 2 ? 22 : output2 == 3 ? 13 : output2 == 4 ? 24 : output2 == 5 ? 17 : 18"}}
+ }
+end_group

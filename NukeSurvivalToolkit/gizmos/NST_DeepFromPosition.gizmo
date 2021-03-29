@@ -1,0 +1,116 @@
+Group {
+ name DeepFromPosition
+ tile_color 0x145bff
+ label "<font color=cyan>Deep Output</font>"
+ selected true
+ addUserKnob {20 tab_general l General}
+ addUserKnob {41 position l "position channel" T Shuffle_pos.in}
+ addUserKnob {4 space -STARTLINE M {world camera ""}}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.0}
+ addUserKnob {26 l_DATE l "Date Modified" T 2019-12-21}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.0<br>-&nbsp;convert&nbsp;position&nbsp;to&nbsp;deep\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ Input {
+  inputs 0
+  name img
+  xpos 0
+  ypos 169
+ }
+ Dot {
+  name Dot2
+  xpos 34
+  ypos 251
+ }
+set N8630940 [stack 0]
+ Dot {
+  name Dot4
+  xpos 134
+  ypos 251
+ }
+set N8634570 [stack 0]
+ Dot {
+  name Dot3
+  xpos 134
+  ypos 661
+ }
+push $N8634570
+ Dot {
+  name Dot1
+  xpos 235
+  ypos 251
+ }
+ Unpremult {
+  channels all
+  name Unpremult1
+  xpos 201
+  ypos 341
+ }
+ Shuffle {
+  in rgb
+  in2 alpha
+  alpha red2
+  name Shuffle_pos
+  xpos 201
+  ypos 421
+ }
+ Add {
+  channels {rgba.red rgba.green rgba.blue none}
+  value {{"\[exists parent.input1] == 0 ? 0 : -parent.input1.world_matrix.3"} {"\[exists parent.input1] == 0 ? 0 : -parent.input1.world_matrix.7"} {"\[exists parent.input1] == 0 ? 0 : -parent.input1.world_matrix.11"} 0}
+  name Add1
+  xpos 201
+  ypos 503
+ }
+ ColorMatrix {
+  matrix {
+      {{"\[exists parent.input1] == 0 ? 1 : parent.input1.world_matrix.0"} {"\[exists parent.input1] == 0 ? 0 : parent.input1.world_matrix.1"} {"\[exists parent.input1] == 0 ? 0 : parent.input1.world_matrix.2"}}
+      {{"\[exists parent.input1] == 0 ? 0 : parent.input1.world_matrix.4"} {"\[exists parent.input1] == 0 ? 1 : parent.input1.world_matrix.5"} {"\[exists parent.input1] == 0 ? 0 : parent.input1.world_matrix.6"}}
+      {{"\[exists parent.input1] == 0 ? 0 : parent.input1.world_matrix.8"} {"\[exists parent.input1] == 0 ? 0 : parent.input1.world_matrix.9"} {"\[exists parent.input1] == 0 ? 1 : parent.input1.world_matrix.10"}}
+    }
+  invert true
+  name ColorMatrix1
+  xpos 201
+  ypos 585
+ }
+ Expression {
+  expr2 "alpha <= 0 ? 0 : 1 / -blue"
+  name Expression1
+  xpos 201
+  ypos 667
+ }
+ Switch {
+  inputs 2
+  which {{space}}
+  name Switch1
+  selected true
+  xpos 201
+  ypos 749
+ }
+push $N8630940
+ ShuffleCopy {
+  inputs 2
+  red blue
+  out depth
+  name ShuffleCopy1
+  xpos 0
+  ypos 749
+ }
+ DeepFromImage {
+  name DeepFromImage1
+  xpos 0
+  ypos 831
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 913
+ }
+ Input {
+  inputs 0
+  name cam
+  xpos 377
+  ypos 172
+  number 1
+ }
+end_group

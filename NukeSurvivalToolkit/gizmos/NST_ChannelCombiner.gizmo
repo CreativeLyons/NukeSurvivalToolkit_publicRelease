@@ -1,0 +1,181 @@
+Group {
+ name ChannelCombiner
+ tile_color 0x9e3c63ff
+ note_font "Verdana Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 ChannelCombiner}
+ addUserKnob {41 from0 l "Channel 1" T Cmask01.from0}
+ addUserKnob {41 value T Mult_red.value}
+ addUserKnob {41 operation_4 l Ch1-->Ch2 T MergeR_G.operation}
+ addUserKnob {41 disable_1 l disable -STARTLINE T MergeR_G.disable}
+ addUserKnob {41 from0_1 l "Channel 2" T Cmask02.from0}
+ addUserKnob {41 value_1 l value T Mult_Green.value}
+ addUserKnob {41 operation_1 l Ch2-->Ch3 T Merge_G_B.operation}
+ addUserKnob {41 disable_2 l disable -STARTLINE T Merge_G_B.disable}
+ addUserKnob {41 from0_2 l "Channel 3" T Cmask03.from0}
+ addUserKnob {41 value_2 l value T Mult_blue1.value}
+ addUserKnob {41 operation_2 l Ch3-->Ch4 T MergeB_A.operation}
+ addUserKnob {41 disable_3 l disable -STARTLINE T MergeB_A.disable}
+ addUserKnob {41 from0_3 l "Channel 4" T Cmask04.from0}
+ addUserKnob {41 mix l value T Cmask04.mix}
+ addUserKnob {26 ""}
+ addUserKnob {6 clampCheck l "Clamp Values?" +STARTLINE}
+ clampCheck true
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Choose channels and a mix of the channel, and the merge operation between the different channels.\n\nOption to clamp the output" T ChannelCombiner}
+ addUserKnob {26 ver l Version: T v07}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 83
+  ypos -657
+ }
+ Dot {
+  name Dot1
+  xpos 117
+  ypos -633
+ }
+set N9968abc0 [stack 0]
+push $N9968abc0
+push $N9968abc0
+push $N9968abc0
+push $N9968abc0
+ Remove {
+  name Remove1
+  xpos -371
+  ypos -643
+ }
+ Copy {
+  inputs 2
+  to0 rgba.red
+  name Cmask01
+  xpos -371
+  ypos -519
+ }
+ Copy {
+  inputs 2
+  to0 rgba.green
+  name Cmask02
+  xpos -203
+  ypos -519
+ }
+ Copy {
+  inputs 2
+  to0 rgba.blue
+  name Cmask03
+  xpos -65
+  ypos -519
+ }
+ Copy {
+  inputs 2
+  to0 rgba.alpha
+  name Cmask04
+  xpos 83
+  ypos -519
+ }
+ Shuffle {
+  name channel_selector
+  label "\[value in]"
+  xpos 83
+  ypos -356
+ }
+set N996b0460 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Alpha
+  xpos 83
+  ypos -193
+ }
+ Multiply {
+  name Mult_alpha
+  xpos 83
+  ypos -134
+ }
+push $N996b0460
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name Blue
+  xpos -65
+  ypos -192
+ }
+ Multiply {
+  name Mult_blue1
+  xpos -75
+  ypos -131
+ }
+push $N996b0460
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name Green
+  xpos -190
+  ypos -193
+ }
+ Multiply {
+  name Mult_Green
+  xpos -190
+  ypos -139
+ }
+push $N996b0460
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Red
+  xpos -303
+  ypos -194
+ }
+ Multiply {
+  name Mult_red
+  xpos -303
+  ypos -139
+ }
+ Merge2 {
+  inputs 2
+  name MergeR_G
+  xpos -249
+  ypos -53
+ }
+ Merge2 {
+  inputs 2
+  name Merge_G_B
+  xpos -75
+  ypos -53
+ }
+ Merge2 {
+  inputs 2
+  name MergeB_A
+  xpos 83
+  ypos -53
+ }
+ Clamp {
+  name Clamp1
+  xpos 83
+  ypos 104
+  disable {{!parent.clampCheck}}
+ }
+ Shuffle {
+  red alpha
+  green black
+  blue black
+  name Shuffle20
+  label "\[value in]"
+  xpos 83
+  ypos 232
+ }
+set N9974e150 [stack 0]
+ Output {
+  name Output2
+  xpos 83
+  ypos 398
+ }
+push $N9974e150
+end_group

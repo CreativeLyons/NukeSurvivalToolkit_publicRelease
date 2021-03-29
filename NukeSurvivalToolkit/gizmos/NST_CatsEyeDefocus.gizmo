@@ -1,0 +1,384 @@
+Group {
+ inputs 2
+ name CatsEyeDefocus
+ tile_color 0xb16f43ff
+ addUserKnob {20 CtrlTab l "Cat's Eye Defocus"}
+ addUserKnob {4 show l output M {result preview bokeh highlights "" ""}}
+ addUserKnob {7 size R 1 100}
+ size 50
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T BlinkScript1.useGPUIfAvailable}
+ addUserKnob {26 catseyeeffect l "@b;Cat's eye"}
+ addUserKnob {7 effectAmount l "effect amount"}
+ effectAmount 0.5
+ addUserKnob {7 edgeSoftness l "edge softness"}
+ edgeSoftness 0.05
+ addUserKnob {6 interpolate +STARTLINE}
+ interpolate true
+ addUserKnob {26 Shape l "@b;Bokeh"}
+ addUserKnob {3 blades l "blades count"}
+ blades 6
+ addUserKnob {7 rounded}
+ rounded 0.9
+ addUserKnob {7 sharpness_1 l sharpness}
+ sharpness_1 0.8
+ addUserKnob {7 rotate R 0 360}
+ rotate 12
+ addUserKnob {26 hr l "       "}
+ addUserKnob {7 innersize l "inner size"}
+ innersize 0.8
+ addUserKnob {7 innerfalloff l "inner falloff"}
+ innerfalloff 0.6
+ addUserKnob {7 innerBrightness l "inner brightness"}
+ innerBrightness 0.5
+ addUserKnob {6 useimage l "use filter image" +STARTLINE}
+ addUserKnob {6 linksize l "link size" -STARTLINE}
+ linksize true
+ addUserKnob {26 highlightsHr l "@b;Hightlights"}
+ addUserKnob {7 boostHighlights l boost R 0 10}
+ boostHighlights 6
+ addUserKnob {7 highlightsSaturation l saturation}
+ highlightsSaturation 1
+ addUserKnob {7 highlightsStart l "range start"}
+ highlightsStart 0.5
+ addUserKnob {7 highlightsEnd l "range end"}
+ highlightsEnd 0.6
+ addUserKnob {20 Help}
+ addUserKnob {26 ver l "" +STARTLINE T "CatsEyeDefocus is a manual convolution filter which simulates swirly bokeh.\n\n.kernel/gizmo ver 1.0/2.0\n\nAlexander Kulikov\ncoolikov.com\n"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x388e8e00
+  label SRC
+  note_font_size 42
+  xpos -437
+  ypos -218
+  bdwidth 297
+  bdheight 357
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x71bec6ff
+  label "Bokeh Setup"
+  note_font_size 42
+  xpos 238
+  ypos -192
+  bdwidth 298
+  bdheight 328
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x7171c600
+  label "Filter Image"
+  note_font_size 42
+  xpos -68
+  ypos -69
+  bdwidth 237
+  bdheight 208
+ }
+ Input {
+  inputs 0
+  name src
+  xpos -337
+  ypos -139
+ }
+set N39ddee20 [stack 0]
+ Dot {
+  name Dot3
+  xpos -303
+  ypos -79
+ }
+set N39ddf190 [stack 0]
+ Dot {
+  name Dot4
+  xpos -208
+  ypos -79
+ }
+ Keyer {
+  operation "luminance key"
+  range {{parent.highlightsStart x232 0.06} {parent.highlightsEnd x232 0.7912925952} 1 1}
+  name Keyer3
+  xpos -242
+  ypos -10
+ }
+ Dot {
+  name Dot7
+  xpos -208
+  ypos 85
+ }
+set N39ddfbe0 [stack 0]
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Highlights
+  xpos -242
+  ypos 640
+ }
+ Input {
+  inputs 0
+  name filter
+  xpos 15
+  ypos -1
+  number 1
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha black
+  name Shuffle1
+  xpos 15
+  ypos 38
+ }
+ Reformat {
+  type "to box"
+  box_width {{int(parent.size)}}
+  name Reformat2
+  xpos 15
+  ypos 91
+  disable {{!parent.linksize}}
+ }
+ Dot {
+  name Dot14
+  xpos 49
+  ypos 209
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format "255 255 0 0 255 255 1 256x256"
+  name Constant1
+  label "512x512 Constant"
+  xpos 276
+  ypos -97
+  postage_stamp false
+ }
+ Flare {
+  position {{(width+1)/2} {(height+1)/2}}
+  offset 3.55
+  radius {{(radius.2*0.96)*parent.innersize x60 0 x70 0 x71 108} 490 500}
+  size_mult {{width/radius.2/2}}
+  inner_color {{parent.innerBrightness}}
+  outer_falloff 2
+  inner_falloff {{parent.innerfalloff*10}}
+  vis_out 1
+  corners {{parent.blades}}
+  flattening {{clamp(1-parent.rounded)}}
+  sharpness {{parent.sharpness_1}}
+  corners_angle {{parent.rotate}}
+  asym_repeat 0
+  name Flare
+  selected true
+  xpos 276
+  ypos -35
+ }
+ Shuffle {
+  alpha black
+  name Shuffle3
+  xpos 276
+  ypos 19
+ }
+ Reformat {
+  type "to box"
+  box_width {{int(parent.size)}}
+  name Reformat1
+  xpos 276
+  ypos 83
+ }
+ Switch {
+  inputs 2
+  which {{parent.useimage}}
+  name SwitchFilter
+  xpos 276
+  ypos 206
+ }
+ Dot {
+  name Dot22
+  xpos 310
+  ypos 309
+ }
+set N39f922d0 [stack 0]
+ Transform {
+  translate {{"src.width/2 - width/2"} {"src.height/2 - height/2"}}
+  center {{width/2} {height/2}}
+  name Transform1
+  xpos -584
+  ypos 306
+ }
+ Dot {
+  name Dot21
+  xpos -550
+  ypos 403
+ }
+push $N39ddee20
+ Dot {
+  name Dot20
+  xpos -655
+  ypos -136
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle4
+  xpos -689
+  ypos 306
+ }
+ Merge2 {
+  inputs 2
+  bbox B
+  name Merge5
+  xpos -689
+  ypos 400
+ }
+ Shuffle {
+  green red
+  blue red
+  name Bokeh
+  xpos -689
+  ypos 635
+ }
+ Dot {
+  name Dot9
+  xpos -655
+  ypos 787
+ }
+push $N39f922d0
+ Dot {
+  name Dot1
+  xpos 310
+  ypos 379
+ }
+set N39f93e50 [stack 0]
+ Dot {
+  name Dot15
+  xpos 310
+  ypos 444
+ }
+set N39f941c0 [stack 0]
+ Dot {
+  name Dot16
+  xpos 32
+  ypos 444
+ }
+push $N39ddfbe0
+push $N39ddf190
+ Dot {
+  name Dot5
+  xpos -393
+  ypos -79
+ }
+ Multiply {
+  channels rgb
+  value {{parent.boostHighlights<0?0:parent.boostHighlights}}
+  name Multiply1
+  xpos -427
+  ypos -18
+ }
+ Saturation {
+  saturation {{1+parent.highlightsSaturation*0.5}}
+  mode Average
+  name Saturation1
+  xpos -427
+  ypos 6
+ }
+ Dot {
+  name Dot6
+  xpos -393
+  ypos 85
+ }
+push $N39ddf190
+ Merge2 {
+  inputs 2+1
+  operation screen
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  Bchannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos -337
+  ypos 82
+ }
+ Dot {
+  name Dot2
+  xpos -303
+  ypos 524
+ }
+ Dot {
+  name Dot17
+  xpos -75
+  ypos 524
+ }
+set N3a047fa0 [stack 0]
+ Dot {
+  name Dot18
+  xpos -75
+  ypos 611
+ }
+ Convolve2 {
+  inputs 2
+  channels rgba
+  useGPUIfAvailable {{parent.BlinkScript1.useGPUIfAvailable}}
+  filter_channel rgba.red
+  name Convolve1
+  xpos -2
+  ypos 608
+ }
+ Dot {
+  name Dot11
+  xpos 32
+  ypos 709
+ }
+push $N39f93e50
+ Radial {
+  replace true
+  area {0 0 {input.width} {input.height}}
+  softness {{parent.edgeSoftness}}
+  name LensEdge
+  xpos 390
+  ypos 376
+ }
+ Dot {
+  name Dot8
+  xpos 424
+  ypos 524
+ }
+push $N39f941c0
+push $N3a047fa0
+ BlinkScript {
+  inputs 3
+  ProgramGroup 1
+  KernelDescription "1 \"CatsEyeConvolve\" iterate pixelWise d3f7f7268f50afeb0ffd385b019c65664a5775e0f4a8983e20044cb012fe17e8 4 \"src\" Read Ranged2D \"filter\" Read Random \"ext\" Read Random \"dst\" Write Point 3 \"Amount\" Float 1 AACAPw== \"Format\" Int 2 AAUAANACAAA= \"Interpolate\" Bool 1 AQ=="
+  EncodedSource "1 2904 +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"
+  vectorize false
+  rebuild ""
+  CatsEyeConvolve_Amount {{parent.effectAmount}}
+  CatsEyeConvolve_Format {{src.width} {src.height}}
+  CatsEyeConvolve_Interpolate {{parent.interpolate}}
+  protectKernelWhenPublishing true
+  name BlinkScript1
+  xpos 276
+  ypos 515
+ }
+ Dot {
+  name Dot10
+  label result
+  note_font_size 30
+  xpos 310
+  ypos 787
+ }
+ Switch {
+  inputs 4
+  which {{parent.show}}
+  name ShowSwitch
+  xpos -242
+  ypos 784
+ }
+ Output {
+  name Output1
+  xpos -242
+  ypos 902
+ }
+end_group

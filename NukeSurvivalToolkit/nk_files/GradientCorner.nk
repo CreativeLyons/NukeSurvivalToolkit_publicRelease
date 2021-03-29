@@ -1,0 +1,41 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+Constant {
+ inputs 0
+ channels rgb
+ name Constant1
+ selected true
+ xpos 327
+ ypos -56
+}
+Expression {
+ temp_name0 DownLeftCorner
+ temp_expr0 (1-x/width)*(1-y/height)
+ temp_name1 DownRightCorner
+ temp_expr1 (x/width)*(1-y/height)
+ temp_name2 UpRightCorner
+ temp_expr2 (x/width)*(y/height)
+ temp_name3 UpLeftCorner
+ temp_expr3 (1-x/width)*(y/height)
+ expr0 DownLeftColor.r*DownLeftCorner+DownRightColor.r*DownRightCorner+UpRightColor.r*UpRightCorner+UpLeftColor.r*UpLeftCorner
+ expr1 DownLeftColor.g*DownLeftCorner+DownRightColor.g*DownRightCorner+UpRightColor.g*UpRightCorner+UpLeftColor.g*UpLeftCorner
+ expr2 DownLeftColor.b*DownLeftCorner+DownRightColor.b*DownRightCorner+UpRightColor.b*UpRightCorner+UpLeftColor.b*UpLeftCorner
+ name GradientCorner
+ selected true
+ xpos 327
+ ypos 16
+ addUserKnob {20 User}
+ addUserKnob {18 UpLeftColor}
+ UpLeftColor {1 0 1}
+ addUserKnob {6 UpLeftColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 UpRightColor}
+ UpRightColor {0 0 1}
+ addUserKnob {6 UpRightColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {18 DownLeftColor}
+ DownLeftColor {1 0 0}
+ addUserKnob {6 DownLeftColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 DownRightColor}
+ DownRightColor {0 1 0}
+ addUserKnob {6 DownRightColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}

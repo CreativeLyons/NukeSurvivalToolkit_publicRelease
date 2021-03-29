@@ -1,0 +1,13 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr0 random(frame)*random
+ expr1 random(frame)*random
+ expr2 random(frame)*random
+ expr3 random(frame)*random
+ name Random_every_frame
+ selected true
+ xpos 166
+ ypos 78
+}

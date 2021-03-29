@@ -1,0 +1,34 @@
+Group {
+name bm_NoiseGen
+ inputs 0
+ help "Generates a noise curve."
+ tile_color 0x222222ff
+ addUserKnob {20 optionsTab l Options}
+ addUserKnob {26 ""}
+ addUserKnob {4 pChoice l "Noise Type" M {Random Noise Sine Triangle Square Sawtooth Bounce Blip "" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {7 noiseMin l Minimum R -10 0}
+ addUserKnob {7 noiseMax l Maximum R 0 10}
+ noiseMax 1
+ addUserKnob {7 noiseFrequency l Frequency}
+ noiseFrequency 10
+ addUserKnob {7 noiseOffset l "Time Offset" R -10 10}
+ addUserKnob {3 noiseSeed l Seed}
+ noiseSeed 12345
+ addUserKnob {22 randomizeSeedBtn l "  Randomize Seed  " -STARTLINE T "import random\nnuke.thisNode().knob('noiseSeed').setValue(random.randint(1,99999))"}
+ addUserKnob {26 ""}
+ addUserKnob {7 noiseOutput l Output R -10 10}
+ noiseOutput {{"pChoice==0?random((frame+noiseSeed+noiseOffset)/noiseFrequency) * (noiseMax-noiseMin) + noiseMin:\npChoice==1?(noise((frame+noiseSeed+noiseOffset)/noiseFrequency)+1)/2 * (noiseMax-noiseMin) + noiseMin:\npChoice==2?(sin(2*pi*(frame+noiseSeed+noiseOffset)/noiseFrequency)+1)/2 * (noiseMax-noiseMin) + noiseMin:\npChoice==3?(asin(sin(2*pi*(frame+noiseSeed+noiseOffset)/noiseFrequency))/pi+0.5) * (noiseMax-noiseMin) + noiseMin:\npChoice==4?int(sin(2*pi*(frame+noiseSeed+noiseOffset)/noiseFrequency)+1) * (noiseMax-noiseMin) + noiseMin:\npChoice==5?((frame+noiseSeed+noiseOffset) % noiseFrequency)/noiseFrequency * (noiseMax-noiseMin) + noiseMin:\npChoice==6?abs(sin(pi*(frame+noiseSeed + noiseOffset)/noiseFrequency))* (noiseMax-noiseMin) + noiseMin:\npChoice==7?((frame+noiseSeed+(noiseOffset+noiseFrequency)) % (noiseFrequency+(noiseFrequency/5))/(noiseFrequency)) *(noiseFrequency/(noiseFrequency/5)) - (noiseFrequency/(noiseFrequency/5)) >= 0 ? noiseMax : noiseMin:\n0"}}
+ addUserKnob {26 ""}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 ""}
+ addUserKnob {26 versionText l "" +STARTLINE T "\nCreated by Ben McEwan\nwww.benmcewan.com\n\nVersion 2.0\nLast Updated: January 23rd, 2018\n"}
+ addUserKnob {26 ""}
+}
+ Output {
+  inputs 0
+  name Output1
+  xpos 3
+  ypos 300
+ }
+end_group

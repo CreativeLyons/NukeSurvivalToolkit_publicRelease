@@ -1,0 +1,774 @@
+add_layer {P P.red P.green P.blue P.alpha}
+Group {
+ name aPMatte
+ help "aPMatte v2.0 by Adrian Pueyo\n\nCreates a matte of different shapes, based on a Position pass. Includes transformation and falloff controls, and the option to output or overlay a Position 4D noise.\n\nv2.0 has the code more optimized, new available shapes and modes, includes a 3D-space view of the matte and point cloud, and accepts an Axis or Camera input. Also, lets you preview the p-matte over an image input and merge the alpha with the incoming one.\n\nadrianpueyo.com, 2017-2019"
+ onCreate "n = nuke.thisNode()\n\nfor k in \[\"radius\",\"card_scale\",\"noise_size\"]:\n    n\[k].setFlag(0x00000004)"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\n\nif kn in \['xpos','ypos','selected']:\n    pass\nelif kn == \"shape\":\n    ramp_on = k.value() in \['linear ramp', 'radial ramp']\n    n\['radius'].setVisible(not ramp_on)\n    n.knobs()\[\"black\"].setVisible(ramp_on)\n    n\[\"axis\"].setVisible(k.value()==\"plane\")\n    n\[\"card_scale\"].setVisible(k.getValue() in \[3,5] and n\[\"preview_in_3d\"].value())\n    picker = n.knobs()\[\"picker\"]\n    if ramp_on:\n        picker.setLabel(\"white\")\n    elif k.value() == \"plane\":\n        picker.setLabel(\"pivot\")\n    else:\n        picker.setLabel(\"center\")\n\n    # Connect Scene\n    sc = nuke.toNode(\"SceneGeo\")\n    kv = k.getValue()\n    if kv in \[0,1,2]:\n        sc.setInput(1,nuke.toNode(\"DotSphereCube\"))\n    elif kv in \[3,5]:\n        sc.setInput(1,nuke.toNode(\"DotPlanes\"))\n    else:\n        sc.setInput(1,nuke.toNode(\"DotRadialRamp\"))\n\nelif kn == \"use_axis\":\n    ianame = \"Inputaxis\"\n    if k.value():\n        a = nuke.toNode(\"AxisInput\")\n        if not nuke.exists(ianame):\n            ia = nuke.nodes.Input(name=ianame)\n            ia.setXYpos(a.xpos()-10,a.ypos()-60)\n            a.setInput(0,ia)\n    else:\n        if nuke.exists(ianame):\n            n.setInput(3,None)\n            ia = nuke.toNode(ianame)\n            nuke.delete(ia)\n\nelif kn == \"preview_in_3d\":\n    kv = k.value()\n    n.knobs()\[\"point_detail\"].setVisible(kv)\n    n.knobs()\[\"point_size\"].setVisible(kv)\n    n\[\"card_scale\"].setVisible(n\[\"shape\"].getValue() in \[3,5] and k.value())\n    nuke.toNode(\"RenderPC\").setInput(1,nuke.toNode(\"SceneGeo\") if kv else None)\nelif kn == \"noise\":\n    noise_on = k.value() != 'off'\n    for t in \['noise_rel','noise_persistance','noise_octaves','noise_lacunarity','noise_size','noise_offset','noise_add','noise_gain','noise_gamma','noise_mix']:\n        n\[t].setVisible(noise_on)\np_input = n.input(1) is not None\nn\[\"img_in\"].setEnabled(not p_input)\nn\[\"img_txt\"].setEnabled(not p_input)\nn.knobs()\[\"p_in\"].setEnabled(p_input)\nn.knobs()\[\"p_txt\"].setEnabled(p_input)\n"
+ tile_color 0x898989ff
+ selected true
+ addUserKnob {20 aPMatte}
+ addUserKnob {26 position_from l "" +STARTLINE T " Position from:"}
+ addUserKnob {26 img_txt l img T " "}
+ addUserKnob {41 img_in l "" -STARTLINE T ShuffleInImg.in}
+ addUserKnob {26 p_txt l "P (optional)" +DISABLED T " "}
+ addUserKnob {41 p_in l "" -STARTLINE +DISABLED T ShuffleIn.in}
+ addUserKnob {6 premultiplied +STARTLINE}
+ premultiplied true
+ addUserKnob {6 alpha_masking l "alpha masking" t "Multiply the output by the input's alpha." -STARTLINE}
+ addUserKnob {26 text l "" +STARTLINE}
+ addUserKnob {4 outChannels l output M {alpha rgba ""}}
+ addUserKnob {6 mergeAlpha l "merge with input alpha" -STARTLINE}
+ addUserKnob {41 Channeloperation l "" -STARTLINE T ChannelMerge1.operation}
+ addUserKnob {6 preview l "preview over image" +STARTLINE}
+ preview true
+ addUserKnob {26 ""}
+ addUserKnob {4 shape M {sphere "cusped box" "rounded box" "linear ramp" "radial ramp" plane}}
+ addUserKnob {4 axis l "" -STARTLINE +HIDDEN M {X Y Z "" "" "" ""}}
+ axis Y
+ addUserKnob {6 mirrored -STARTLINE}
+ addUserKnob {6 invert -STARTLINE}
+ addUserKnob {41 picker l center T BlinkScriptPMatte.picker}
+ addUserKnob {6 use_axis l "use axis" -STARTLINE}
+ addUserKnob {7 radius R 0.1 1000}
+ radius 5
+ addUserKnob {41 black t "Black point of your ramp." +HIDDEN T BlinkScriptPMatte.black_point}
+ addUserKnob {26 ""}
+ addUserKnob {6 preview_in_3d l "preview in 3d space" t "Recreates a 3D-space preview of the point cloud and the P-matte. After activating this, simply press the Tab key on the active viewer to change to 3D space." +STARTLINE}
+ addUserKnob {41 point_detail l "point detail" +HIDDEN T PositionToPointsPC.detail}
+ addUserKnob {41 point_size l "point size" +HIDDEN T PositionToPointsPC.pointSize}
+ addUserKnob {7 card_scale l "card scale" +HIDDEN R 0 100}
+ card_scale 100
+ addUserKnob {26 ""}
+ addUserKnob {4 falloff t "Fallof type for the matte." M {linear smooth quadratic cubic "inv. cubic" "" ""}}
+ addUserKnob {7 hardness}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {26 ""}
+ addUserKnob {41 xform_order l "transform order" T Axis.xform_order}
+ addUserKnob {41 rot_order l "rotation order" T Axis.rot_order}
+ addUserKnob {41 translate T Axis.translate}
+ addUserKnob {41 rotate T Axis.rotate}
+ addUserKnob {41 scaling l scale T Axis.scaling}
+ addUserKnob {41 uniform_scale l "uniform scale" T Axis.uniform_scale}
+ addUserKnob {41 skew T Axis.skew}
+ addUserKnob {41 pivot T Axis.pivot}
+ addUserKnob {22 reset_transformations l "  reset transformations  " T "a = nuke.toNode(\"Axis\")\na.readKnobs(\"xform_order SRT rot_order ZXY translate \{0 0 0\} rotate \{0 0 0\} scaling \{1 1 1\} uniform_scale 1 skew \{0 0 0\} pivot \{0 0 0\} useMatrix false\")" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {4 noise t "overlay: uses the noise in overlay blend mode over the resulting mask, to make it more organic and less obvious for grading.\nnoise only: ignore the mask, output a 4D noise." M {off overlay "noise only" ""}}
+ addUserKnob {6 noise_rel l relative t "On: Pick world transformations and positioning of the shape.\nOff: Pick absolute world transformations.\n\nTip: Check when you want the mask to always be affected by the same noise, uncheck when you want to lock the noise to your scene." -STARTLINE +HIDDEN}
+ noise_rel true
+ addUserKnob {7 noise_size l size t "Size of the noise pattern." +HIDDEN R 0 100}
+ noise_size 10
+ addUserKnob {7 noise_offset l offset t "Spatial offset of the noise pattern (use to find a sweet spot for your matte)." +HIDDEN R 0 100}
+ addUserKnob {3 noise_octaves l octaves t "Number of noise iterations." +HIDDEN}
+ noise_octaves 8
+ addUserKnob {7 noise_lacunarity l lacunarity t "Each octave gets downscaled by this value." +HIDDEN R 0 10}
+ noise_lacunarity 1.8
+ addUserKnob {7 noise_persistance l persistance t "Each octave gets multiplied by this value." +HIDDEN}
+ noise_persistance 0.5
+ addUserKnob {7 noise_add l add t "Add a value to the noise." +HIDDEN}
+ noise_add 0.5
+ addUserKnob {7 noise_gain l gain t "Multiply the resulting noise by this value." +HIDDEN R 0 4}
+ noise_gain 1
+ addUserKnob {7 noise_gamma l gamma t "Gamma the resulting value." +HIDDEN R 0 4}
+ noise_gamma 0.3
+ addUserKnob {7 noise_mix l mix +HIDDEN}
+ noise_mix 1
+ addUserKnob {26 version_author l " " t "aPMatte v2.0\n24 Sep 2019" T "<span style=\"color:#666\"><b>aPMatte v2.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2015-2019</span>"}
+ addUserKnob {6 BlinkScriptPMatte_black_point_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Axis2 {
+  inputs 0
+  display off
+  selectable false
+  translate {{parent.BlinkScriptPMatte.aPMatteKernel_picked} {parent.BlinkScriptPMatte.aPMatteKernel_picked} {parent.BlinkScriptPMatte.aPMatteKernel_picked}}
+  name AxisPicked
+  xpos 211
+  ypos 364
+ }
+ Axis2 {
+  display off
+  selectable false
+  useMatrix true
+  matrix {
+      {{parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix}}
+      {{parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix}}
+      {{parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix}}
+      {{parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix}}
+    }
+  name AxisInputCopy1
+  xpos 211
+  ypos 430
+ }
+ Axis2 {
+  name Axis
+  xpos 211
+  ypos 496
+ }
+ Dot {
+  name Dot18
+  note_font_size 41
+  xpos 235
+  ypos 635
+ }
+set N66176940 [stack 0]
+ Axis2 {
+  display off
+  selectable false
+  uniform_scale {{sqrt(pow2(BlinkScriptPMatte.aPMatteKernel_picked.x-BlinkScriptPMatte.aPMatteKernel_pickedB.x)+pow2(BlinkScriptPMatte.aPMatteKernel_picked.y-BlinkScriptPMatte.aPMatteKernel_pickedB.y)+pow2(BlinkScriptPMatte.aPMatteKernel_picked.z-BlinkScriptPMatte.aPMatteKernel_pickedB.z))}}
+  name Axis2
+  xpos 211
+  ypos 870
+ }
+ Card2 {
+  inputs 0
+  display wireframe
+  selectable false
+  render_mode off
+  cast_shadow false
+  receive_shadow false
+  image_aspect false
+  rows 1
+  columns 1
+  uniform_scale {{parent.card_scale}}
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card2
+  xpos 617
+  ypos 438
+ }
+ Dot {
+  name Dot29
+  note_font_size 41
+  xpos 651
+  ypos 484
+ }
+set N5e5e2610 [stack 0]
+ Dot {
+  name Dot30
+  note_font_size 41
+  xpos 651
+  ypos 537
+ }
+ Sphere {
+  inputs 0
+  display wireframe
+  selectable false
+  render_mode off
+  cast_shadow false
+  receive_shadow false
+  rows 6
+  columns 6
+  name Sphere2
+  xpos 709
+  ypos 438
+ }
+ Dot {
+  name Dot31
+  note_font_size 41
+  xpos 743
+  ypos 563
+ }
+push $N5e5e2610
+ Cube {
+  inputs 0
+  display wireframe
+  selectable false
+  render_mode off
+  cast_shadow false
+  receive_shadow false
+  rows 1
+  columns 1
+  cube {-1 -1 -1 1 1 1}
+  name Cube1
+  xpos 523
+  ypos 438
+ }
+set N5e5d4630 [stack 0]
+ Dot {
+  name Dot20
+  note_font_size 41
+  xpos 591
+  ypos 484
+ }
+push $N5e5d4630
+ Sphere {
+  inputs 0
+  display wireframe
+  selectable false
+  render_mode off
+  cast_shadow false
+  receive_shadow false
+  rows 6
+  columns 6
+  name Sphere1
+  xpos 433
+  ypos 438
+ }
+ Dot {
+  name Dot21
+  note_font_size 41
+  xpos 467
+  ypos 499
+ }
+ Switch {
+  inputs 6
+  which {{parent.shape}}
+  name SwitchShapeGeo
+  xpos 523
+  ypos 559
+ }
+ Dot {
+  name Dot25
+  note_font_size 41
+  xpos 557
+  ypos 756
+ }
+set N66583fc0 [stack 0]
+ Dot {
+  name Dot28
+  note_font_size 41
+  xpos 331
+  ypos 756
+ }
+ TransformGeo {
+  inputs 2
+  selectable false
+  name TransformGeoRadius1
+  xpos 297
+  ypos 890
+ }
+ Dot {
+  name DotRadialRamp
+  label "\[value name]"
+  note_font_size 12
+  xpos 331
+  ypos 922
+ }
+push $N66176940
+ Dot {
+  name Dot26
+  note_font_size 41
+  xpos 466
+  ypos 635
+ }
+set N6656da50 [stack 0]
+ Axis2 {
+  display off
+  selectable false
+  uniform_scale {{parent.BlinkScriptPMatte.aPMatteKernel_radius}}
+  name Axis1
+  xpos 442
+  ypos 868
+ }
+push $N66583fc0
+ TransformGeo {
+  inputs 2
+  selectable false
+  name TransformGeoAxis1
+  xpos 523
+  ypos 888
+ }
+ Dot {
+  name DotSphereCube
+  label "\[value name]"
+  note_font_size 12
+  xpos 557
+  ypos 967
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos -528
+  ypos 176
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos -494
+  ypos 257
+ }
+set N5e602650 [stack 0]
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos -350
+  ypos 257
+ }
+set N5e61e4c0 [stack 0]
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos -240
+  ypos 257
+ }
+set N5e6112f0 [stack 0]
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos -157
+  ypos 257
+ }
+set N5e5e1ee0 [stack 0]
+ Input {
+  inputs 0
+  name InputP
+  xpos -73
+  ypos 178
+  number 1
+ }
+set N5e60caf0 [stack 0]
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 100
+  ypos 182
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input0]"}}
+  name SwitchAlpha
+  label "\[value which]"
+  xpos 66
+  ypos 247
+ }
+ Dot {
+  name Dot8
+  xpos 100
+  ypos 356
+ }
+push $N5e5e1ee0
+ Shuffle {
+  in P
+  in2 rgba
+  alpha alpha2
+  name ShuffleInImg
+  xpos -191
+  ypos 296
+ }
+push $N5e60caf0
+ Shuffle {
+  in2 rgba
+  alpha alpha2
+  name ShuffleIn
+  xpos -73
+  ypos 225
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input1]"}}
+  name Switch1
+  label "\[value which]"
+  xpos -73
+  ypos 290
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos -73
+  ypos 346
+  disable {{!parent.alpha_masking}}
+ }
+ Unpremult {
+  name UnpremultP
+  xpos -73
+  ypos 384
+  disable {{!parent.premultiplied}}
+ }
+ Dot {
+  name Dot15
+  note_font_size 41
+  xpos -39
+  ypos 440
+ }
+set N5e5ba2d0 [stack 0]
+ Dot {
+  name Dot16
+  note_font_size 41
+  xpos -132
+  ypos 440
+ }
+ Blur {
+  channels rgba
+  name Blur1
+  xpos -166
+  ypos 827
+ }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -679
+  ypos 579
+  number 2
+ }
+ Dot {
+  name Dot14
+  note_font_size 41
+  xpos -645
+  ypos 629
+ }
+set N5e59d2b0 [stack 0]
+push $N5e5ba2d0
+ BlinkScript {
+  recompileCount 9
+  ProgramGroup 1
+  KernelDescription "2 \"aPMatteKernel\" iterate pixelWise a9e2f4ce494401f56bb6fe8816e2389016c58248ae203f67227e1334a7acbe47 2 \"p\" Read Point \"dst\" Write Point 21 \"picked\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"pickedB\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"m\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA== \"radius\" Float 1 AAAAAA== \"shape\" Int 1 AAAAAA== \"invert_shape\" Int 1 AAAAAA== \"use_alpha\" Int 1 AAAAAA== \"mirrored\" Int 1 AAAAAA== \"falloff\" Int 1 AQAAAA== \"hardness\" Float 1 AAAAAA== \"use noise\" Int 1 AAAAAA== \"noise_relative\" Int 1 AAAAAA== \"noise octaves\" Int 1 CAAAAA== \"noise persistence\" Float 1 AAAAPw== \"lacunarity\" Float 1 AAAAQA== \"noise scale\" Float 1 CtcjPA== \"noise_offset\" Float 1 AAAAAA== \"noise_add\" Float 1 AAAAAA== \"noise_gain\" Float 1 AAAAAA== \"noise_gamma\" Float 1 AAAAAA== \"noise_mix\" Float 1 AAAAAA== 21 \"picked\" 3 1 \"pickedB\" 3 1 \"m\" 16 1 \"radius\" 1 1 \"shape\" 1 1 \"invert_shape\" 1 1 \"use_alpha\" 1 1 \"mirrored\" 1 1 \"falloff\" 1 1 \"hardness\" 1 1 \"use_noise\" 1 1 \"noise_relative\" 1 1 \"noise_octaves\" 1 1 \"noise_persistence\" 1 1 \"noise_lacunarity\" 1 1 \"noise_scale\" 1 1 \"noise_offset\" 1 1 \"noise_add\" 1 1 \"noise_gain\" 1 1 \"noise_gamma\" 1 1 \"noise_mix\" 1 1 0"
+  kernelSource "// ----------------------------------------------------------------\n// aPMatte v1.0 by Adrian Pueyo\n//\n// Generate a matte of different shapes, based on a Position pass.\n// Includes options to transform the mask and change its falloff.\n// Also includes the option to output or overlay a P-based noise.\n//\n// adrianpueyo.com, 2017-2019\n// ----------------------------------------------------------------\n\n\n// Noise algorithm adapted by Adrian Pueyo from Noise4D function by Mads Hagbarth Lund\n// Noise4D function Ported by Mads Hagbarth Lund 2014\n// Based on https://github.com/Draradech/csworldgen/blob/master/simplexnoise.cpp\n\n/* Copyright (c) 2007-2012 Eliot Eshelman\n *\n * This program is free software: you can redistribute it and/or modify\n * it under the terms of the GNU General Public License as published by\n * the Free Software Foundation, either version 3 of the License, or\n * (at your option) any later version.\n *\n * This program is distributed in the hope that it will be useful,\n * but WITHOUT ANY WARRANTY; without even the implied warranty of\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n * GNU General Public License for more details.\n *\n * You should have received a copy of the GNU General Public License\n * along with this program. If not, see <http://www.gnu.org/licenses/>.\n *\n */\n\n\nint fastfloor( const float x ) \{ return x > 0 ? (int) x : (int) x - 1; \}\ninline float raw_noise_4d( const float x, const float y, const float z, const float w ) \n\{\nint simplex\[64]\[4] = \{\n    \{0,1,2,3\},\{0,1,3,2\},\{0,0,0,0\},\{0,2,3,1\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{1,2,3,0\},\n    \{0,2,1,3\},\{0,0,0,0\},\{0,3,1,2\},\{0,3,2,1\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{1,3,2,0\},\n    \{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\n    \{1,2,0,3\},\{0,0,0,0\},\{1,3,0,2\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{2,3,0,1\},\{2,3,1,0\},\n    \{1,0,2,3\},\{1,0,3,2\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{2,0,3,1\},\{0,0,0,0\},\{2,1,3,0\},\n    \{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\n    \{2,0,1,3\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{3,0,1,2\},\{3,0,2,1\},\{0,0,0,0\},\{3,1,2,0\},\n    \{2,1,0,3\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{3,1,0,2\},\{0,0,0,0\},\{3,2,0,1\},\{3,2,1,0\}\n\};\n    int perm\[512] = \{\n        151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,\n        8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,\n        35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,\n        134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,\n        55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208, 89,\n        18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,\n        250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,\n        189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,\n        172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,\n        228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,\n        107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,\n        138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180,\n\n        151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,\n        8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,\n        35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,\n        134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,\n        55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208, 89,\n        18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,\n        250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,\n        189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,\n        172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,\n        228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,\n        107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,\n        138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180\n    \};\n  int grad4\[32]\[4]= \{\n    \{0,1,1,1\},  \{0,1,1,-1\},  \{0,1,-1,1\},  \{0,1,-1,-1\},\n    \{0,-1,1,1\}, \{0,-1,1,-1\}, \{0,-1,-1,1\}, \{0,-1,-1,-1\},\n    \{1,0,1,1\},  \{1,0,1,-1\},  \{1,0,-1,1\},  \{1,0,-1,-1\},\n    \{-1,0,1,1\}, \{-1,0,1,-1\}, \{-1,0,-1,1\}, \{-1,0,-1,-1\},\n    \{1,1,0,1\},  \{1,1,0,-1\},  \{1,-1,0,1\},  \{1,-1,0,-1\},\n    \{-1,1,0,1\}, \{-1,1,0,-1\}, \{-1,-1,0,1\}, \{-1,-1,0,-1\},\n    \{1,1,1,0\},  \{1,1,-1,0\},  \{1,-1,1,0\},  \{1,-1,-1,0\},\n    \{-1,1,1,0\}, \{-1,1,-1,0\}, \{-1,-1,1,0\}, \{-1,-1,-1,0\}\n  \};\n    float F4 = (sqrt(5.0f)-1.0)/4.0;\n    float G4 = (5.0-sqrt(5.0f))/20.0;\n    float n0, n1, n2, n3, n4;\n    float s = (x + y + z + w) * F4;\n    int i = fastfloor(x + s);\n    int j = fastfloor(y + s);\n    int k = fastfloor(z + s);\n    int l = fastfloor(w + s);\n    float t = (i + j + k + l) * G4;\n    float X0 = i - t;\n    float Y0 = j - t;\n    float Z0 = k - t;\n    float W0 = l - t;\n\n    float x0 = x - X0;\n    float y0 = y - Y0;\n    float z0 = z - Z0;\n    float w0 = w - W0;\n    int c1 = (x0 > y0) ? 32 : 0;\n    int c2 = (x0 > z0) ? 16 : 0;\n    int c3 = (y0 > z0) ? 8 : 0;\n    int c4 = (x0 > w0) ? 4 : 0;\n    int c5 = (y0 > w0) ? 2 : 0;\n    int c6 = (z0 > w0) ? 1 : 0;\n    int c = c1 + c2 + c3 + c4 + c5 + c6;\n\n    int i1, j1, k1, l1;\n    int i2, j2, k2, l2;\n    int i3, j3, k3, l3;\n    i1 = simplex\[c]\[0]>=3 ? 1 : 0;\n    j1 = simplex\[c]\[1]>=3 ? 1 : 0;\n    k1 = simplex\[c]\[2]>=3 ? 1 : 0;\n    l1 = simplex\[c]\[3]>=3 ? 1 : 0;\n    i2 = simplex\[c]\[0]>=2 ? 1 : 0;\n    j2 = simplex\[c]\[1]>=2 ? 1 : 0;\n    k2 = simplex\[c]\[2]>=2 ? 1 : 0;\n    l2 = simplex\[c]\[3]>=2 ? 1 : 0;\n    i3 = simplex\[c]\[0]>=1 ? 1 : 0;\n    j3 = simplex\[c]\[1]>=1 ? 1 : 0;\n    k3 = simplex\[c]\[2]>=1 ? 1 : 0;\n    l3 = simplex\[c]\[3]>=1 ? 1 : 0;\n    float x1 = x0 - i1 + G4;\n    float y1 = y0 - j1 + G4;\n    float z1 = z0 - k1 + G4;\n    float w1 = w0 - l1 + G4;\n    float x2 = x0 - i2 + 2.0*G4;\n    float y2 = y0 - j2 + 2.0*G4;\n    float z2 = z0 - k2 + 2.0*G4;\n    float w2 = w0 - l2 + 2.0*G4;\n    float x3 = x0 - i3 + 3.0*G4;\n    float y3 = y0 - j3 + 3.0*G4;\n    float z3 = z0 - k3 + 3.0*G4;\n    float w3 = w0 - l3 + 3.0*G4;\n    float x4 = x0 - 1.0 + 4.0*G4;\n    float y4 = y0 - 1.0 + 4.0*G4;\n    float z4 = z0 - 1.0 + 4.0*G4;\n    float w4 = w0 - 1.0 + 4.0*G4;\n    int ii = i & 255;\n    int jj = j & 255;\n    int kk = k & 255;\n    int ll = l & 255;\n    int gi0 = perm\[ii+perm\[jj+perm\[kk+perm\[ll]]]] % 32;\n    int gi1 = perm\[ii+i1+perm\[jj+j1+perm\[kk+k1+perm\[ll+l1]]]] % 32;\n    int gi2 = perm\[ii+i2+perm\[jj+j2+perm\[kk+k2+perm\[ll+l2]]]] % 32;\n    int gi3 = perm\[ii+i3+perm\[jj+j3+perm\[kk+k3+perm\[ll+l3]]]] % 32;\n    int gi4 = perm\[ii+1+perm\[jj+1+perm\[kk+1+perm\[ll+1]]]] % 32;\n    float t0 = 0.6 - x0*x0 - y0*y0 - z0*z0 - w0*w0;\n    if(t0<0) n0 = 0.0;\n    else \{\n        t0 *= t0;\n        n0 = t0 * t0 * dot(float4(grad4\[gi0]\[0],grad4\[gi0]\[2],grad4\[gi0]\[3],grad4\[gi0]\[3]), float4(x0, y0, z0, w0));\n    \}\n    float t1 = 0.6 - x1*x1 - y1*y1 - z1*z1 - w1*w1;\n    if(t1<0) n1 = 0.0;\n    else \{\n        t1 *= t1;\n        n1 = t1 * t1 * dot(float4(grad4\[gi1]\[0],grad4\[gi1]\[2],grad4\[gi1]\[3],grad4\[gi1]\[3]), float4(x1, y1, z1, w1));\n    \}\n    float t2 = 0.6 - x2*x2 - y2*y2 - z2*z2 - w2*w2;\n    if(t2<0) n2 = 0.0;\n    else \{\n        t2 *= t2;\n        n2 = t2 * t2 * dot(float4(grad4\[gi2]\[0],grad4\[gi2]\[2],grad4\[gi2]\[3],grad4\[gi2]\[3]), float4(x2, y2, z2, w2));\n    \}\n    float t3 = 0.6 - x3*x3 - y3*y3 - z3*z3 - w3*w3;\n    if(t3<0) n3 = 0.0;\n    else \{\n        t3 *= t3;\n        n3 = t3 * t3 * dot(float4(grad4\[gi3]\[0],grad4\[gi3]\[2],grad4\[gi3]\[3],grad4\[gi3]\[3]), float4(x3, y3, z3, w3));\n    \}\n    float t4 = 0.6 - x4*x4 - y4*y4 - z4*z4 - w4*w4;\n    if(t4<0) n4 = 0.0;\n    else \{\n        t4 *= t4;\n        n4 = t4 * t4 * dot(float4(grad4\[gi4]\[0],grad4\[gi4]\[2],grad4\[gi4]\[3],grad4\[gi4]\[3]), float4(x4, y4, z4, w4));\n    \}\n    return 27.0 * (n0 + n1 + n2 + n3 + n4);\n\}\ninline float octave_noise_4d( const float octaves, const float persistence, const float scale, const float x, const float y, const float z, const float w, const float lacunarity=2 ) \n\{\n    float total = 0;\n    float frequency = scale;\n    float amplitude = 1;\n    float maxAmplitude = 0;\n    for( int i=0; i < octaves; i++ ) \{\n        total += (float)raw_noise_4d( x * frequency, y * frequency, z * frequency, w * frequency ) * amplitude;\n\n        frequency *= lacunarity;\n        maxAmplitude += amplitude;\n        amplitude *= persistence;\n    \}\n    return float(total / maxAmplitude);\n\}\n\nkernel aPMatteKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> p;\n  Image<eWrite> dst;\n\n  param:\n    float3 picked; //Center, or white for ramps\n    float3 pickedB; //Black for ramps\n    float4x4 m; //Camera or axis matrix.\n    float radius;\n    int shape; //0=sphere,1=cusped box,2=rounded box,3=ramp, 4=rad.ramp\n    int invert_shape;\n    int use_alpha;\n    int mirrored;\n    int falloff; //0=linear,1=smooth,2=square,3=inv.square\n    float hardness;\n\n    // Noise parameters here\n    int use_noise; //0=off,1=overlay,2=noise only\n    int noise_relative;\n    int noise_octaves;\n    float noise_persistence;\n    float noise_lacunarity;\n    float noise_scale;\n    float noise_offset;\n    float noise_add;\n    float noise_gain;\n    float noise_gamma;\n    float noise_mix;\n\n  void define() \{\n    defineParam(falloff, \"falloff\", 1);\n    defineParam(use_noise, \"use noise\", 0);\n    defineParam(noise_octaves, \"noise octaves\", 8);\n    defineParam(noise_persistence, \"noise persistence\",  0.5f);\n    defineParam(noise_lacunarity, \"lacunarity\",  2.0f);\n    defineParam(noise_scale, \"noise scale\", 0.01f);\n  \}\n\n  inline float rad(float deg)\{ \n    return deg*PI/180;\n  \}\n\n  inline float smoothstep(float edge0, float edge1, float x)\{\n    x = clamp((x - edge0)/(edge1 - edge0), 0.0f, 1.0f);\n    return x*x*x*(x*(x*6-15)+10);\n  \}\n\n  inline float cl(float val)\{\n  return clamp(val,0.0f,1.0f); \n  \}\n\n\n  void process() \{\n    //1. P WORLD\n    // Center the coordinates\n    float3 color = float3(p(0)-picked.x,p(1)-picked.y,p(2)-picked.z);\n    int black = 0;\n\n    // Matrix!\n    float4x4 mi = m;\n    mi = mi.invert();\n    for(int c = 0; c<dst.kComps; c++)\{\n      color\[c] = mi\[c]\[0]*color\[0] + mi\[c]\[1]*color\[1] + mi\[c]\[2]*color\[2] + mi\[c]\[3]*1.0f;\n    \}\n\n    //2. SHAPES\n    float dist;\n    float result;\n\n    if(shape==0)\{//Sphere\n      dist = sqrt(pow(color\[0],2) + pow(color\[1],2) + pow(color\[2],2));\n      result = radius==0.0f? 0:cl(1-dist/radius);\n    \} else if(shape==1)\{//Cusped Box\n      result = min( min( cl((radius-fabs(color.x))/radius) , cl((radius-fabs(color.y))/radius)) , cl((radius-fabs(color.z))/radius)) ;\n      result = hardness>=1? float(result>0) : result;\n    \} else if(shape==2)\{//Rounded Box\n      result = radius==0.0f? 0: smoothstep(0,1-hardness, cl(1-fabs(float(color.x)/radius)) ) * smoothstep(0,1-hardness, cl(1-fabs(float(color.y)/radius)) ) * smoothstep(0,1-hardness, cl(1-fabs(float(color.z)/radius)) );\n      result = hardness>=1? float(result>0) : result;\n    \} else if(shape==3)\{//Linear Ramp\n      dist = sqrt(pow(color\[0],2) + pow(color\[1],2) + pow(color\[2],2));\n      float distB = sqrt(pow(color\[0]-(pickedB.x-picked.x),2) + pow(color\[1]-(pickedB.y-picked.y),2) + pow(color\[2]-(pickedB.z-picked.z),2));\n      float distWB = sqrt(pow(pickedB.x-picked.x,2) + pow(pickedB.y-picked.y,2) + pow(pickedB.z-picked.z,2));\n      float angWB = acos( clamp((pow(dist,2)-pow(distB,2)+pow(distWB,2))/(2*dist*distWB),-1.0f,1.0f) );\n      float cosAngWB = dist==0.0f? 0:cos(angWB);\n      result = distWB==0? 0.0f: cl((dist * cosAngWB) / distWB );\n      result = 1-result;\n    \} else if(shape==4)\{//Radial Ramp\n      dist = sqrt(pow(color\[0],2) + pow(color\[1],2) + pow(color\[2],2));\n      float distB = sqrt(pow(color\[0]-(pickedB.x-picked.x),2) + pow(color\[1]-(pickedB.y-picked.y),2) + pow(color\[2]-(pickedB.z-picked.z),2));\n      float distWB = sqrt(pow(pickedB.x-picked.x,2) + pow(pickedB.y-picked.y,2) + pow(pickedB.z-picked.z,2));\n      result = distWB==0? 0.0f: cl((dist) / distWB );\n      result = 1-result;\n    \}\n    result = mirrored ? result*(1-result)*4:result;\n    result = invert_shape? 1-result:result;\n\n    //3. FALLOFF\n    if(falloff==0)\{//Linear\n      result = hardness>=1? float(result>0) : cl(result/(1-hardness));\n    \}else if(falloff==1)\{//Smooth\n      result = hardness>=1? float(result>0) : smoothstep(0,1-hardness,result);\n    \}else if(falloff==2)\{//Quadratic\n      result = hardness>=1? float(result>0) : cl(pow(float(result/(1-hardness)),2));\n    \}else if(falloff==3)\{//Cubic\n      result = hardness>=1? float(result>0) : cl(pow(float(result/(1-hardness)),3));\n    \}else if(falloff==4)\{//Inv. Cubic\n      result = hardness>=1? float(result>0) : 1-cl(pow(float(cl(1-(result/(1-hardness)))),3));\n    \}\n\n    //4. GENERATE NOISE\n    float noise;\n    if(use_noise!=0)\{//Avoid calculations if possible\n      if(noise_relative!=1)\{\n        noise = (float)octave_noise_4d(float(noise_octaves),noise_persistence,noise_scale==0?10000.0f:1/noise_scale,p(0),p(1),p(2),noise_offset,noise_lacunarity);\n      \}else\{\n        noise = (float)octave_noise_4d(float(noise_octaves),noise_persistence,noise_scale==0?10000.0f:1/noise_scale,color\[0],color\[1],color\[2],noise_offset,noise_lacunarity);\n      \}\n      noise = cl(pow(max((noise+noise_add)*noise_gain,0.0f),noise_gamma==0?1:1/noise_gamma));\n    \}\n\n\n    //5. ALPHA MASK AND APPLY NOISE\n    result = max(result,0.0f); //Clamp negative values\n    if(use_noise==1)\{//Overlay\n      result = result<0.5f? noise_mix*(2*noise*result)+(1-noise_mix)*result : noise_mix*(1-2*(1-result)*(1-noise))+(1-noise_mix)*result;\n    \}else if(use_noise>=2)\{\n      result = noise*noise_mix;\n    \}\n\n    if(use_alpha > 0) result=result*p(3);\n\n    //6. WE'RE DONE\n    dst() = result;\n  \}\n\};"
+  useGPUIfAvailable false
+  rebuild ""
+  aPMatteKernel_picked {{(parent.shape==3&&parent.mirrored)?picker-(black_point-picker):(parent.shape==5&&parent.mirrored)?picker-radius:picker} {(parent.shape==3&&parent.mirrored)?picker-(black_point-picker):(parent.shape==5&&parent.mirrored)?picker-radius:picker} {(parent.shape==3&&parent.mirrored)?picker-(black_point-picker):(parent.shape==5&&parent.mirrored)?picker-radius:picker}}
+  aPMatteKernel_pickedB {{parent.shape==5?parent.axis==0?picker+radius+0.0001:picker:black_point} {parent.shape==5?parent.axis==1?picker+radius+0.0001:picker:black_point} {parent.shape==5?parent.axis==2?picker+radius+0.0001:picker+0.00001:black_point}}
+  group_aPMatteKernel_m 1
+  aPMatteKernel_m {
+      {{parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix}}
+      {{parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix}}
+      {{parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix}}
+      {{parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix} {parent.AxisCopy.world_matrix}}
+    }
+  aPMatteKernel_radius {{parent.radius}}
+  aPMatteKernel_shape {{parent.shape==5?3:parent.shape}}
+  aPMatteKernel_invert_shape {{parent.invert}}
+  aPMatteKernel_use_alpha {{parent.alpha_masking}}
+  aPMatteKernel_mirrored {{parent.mirrored}}
+  aPMatteKernel_falloff {{parent.falloff}}
+  aPMatteKernel_hardness {{parent.hardness}}
+  "aPMatteKernel_use noise" {{parent.noise}}
+  aPMatteKernel_noise_relative {{parent.noise_rel}}
+  "aPMatteKernel_noise octaves" {{parent.noise_octaves}}
+  "aPMatteKernel_noise persistence" {{parent.noise_persistance}}
+  aPMatteKernel_lacunarity {{parent.noise_lacunarity}}
+  "aPMatteKernel_noise scale" {{parent.noise_size}}
+  aPMatteKernel_noise_offset {{parent.noise_offset}}
+  aPMatteKernel_noise_add {{parent.noise_add}}
+  aPMatteKernel_noise_gain {{parent.noise_gain}}
+  aPMatteKernel_noise_gamma {{parent.noise_gamma}}
+  aPMatteKernel_noise_mix {{parent.noise_mix}}
+  rebuild_finalise ""
+  name BlinkScriptPMatte
+  xpos -73
+  ypos 489
+  addUserKnob {20 User}
+  addUserKnob {18 picker}
+  picker {0 0 0}
+  addUserKnob {6 picker_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 picker_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 black_point l black}
+  black_point {0 0 0}
+  addUserKnob {6 black_point_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 black_point_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Multiply {
+  channels rgba
+  value {{parent.mix}}
+  name Multiply1
+  label "\[value value]"
+  selected true
+  xpos -73
+  ypos 553
+ }
+ Dot {
+  name Dot13
+  note_font_size 41
+  xpos -39
+  ypos 629
+ }
+set N5e791bc0 [stack 0]
+push $N5e6112f0
+ Merge2 {
+  inputs 2+1
+  Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -274
+  ypos 625
+ }
+ Dot {
+  name Dot9
+  xpos -240
+  ypos 894
+ }
+set N5e7b7690 [stack 0]
+ PositionToPoints2 {
+  inputs 2
+  display textured
+  selectable false
+  render_mode off
+  detail 1
+  name PositionToPointsPC
+  xpos -166
+  ypos 890
+  disable {{!parent.preview_in_3d}}
+ }
+ Scene {
+  inputs 2
+  name SceneGeo
+  xpos -156
+  ypos 983
+  disable {{!parent.preview_in_3d}}
+ }
+ ScanlineRender {
+  inputs 0
+  conservative_shader_sampling false
+  motion_vectors_type distance
+  name RenderPC
+  xpos -166
+  ypos 1102
+  disable {{!parent.preview_in_3d}}
+ }
+ Dot {
+  name Dot17
+  note_font_size 41
+  xpos -132
+  ypos 1172
+ }
+push $N5e7b7690
+push $N5e59d2b0
+ Dot {
+  name Dot12
+  note_font_size 41
+  xpos -645
+  ypos 800
+ }
+set N5e77c6e0 [stack 0]
+ Dot {
+  name Dot11
+  note_font_size 41
+  xpos -645
+  ypos 844
+ }
+push $N5e791bc0
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos -39
+  ypos 700
+ }
+set N5e77fe00 [stack 0]
+push $N5e61e4c0
+ ChannelMerge {
+  inputs 2
+  name ChannelMerge1
+  xpos -384
+  ypos 684
+ }
+push $N5e77fe00
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos -39
+  ypos 768
+ }
+ Switch {
+  inputs 2
+  which {{parent.mergeAlpha}}
+  name Switch2
+  label "\[value which]"
+  xpos -384
+  ypos 758
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name ShuffleToRGBA
+  tile_color 0xffffffff
+  xpos -384
+  ypos 796
+ }
+set N5e799880 [stack 0]
+ Dot {
+  name Dot10
+  note_font_size 41
+  xpos -350
+  ypos 844
+ }
+push $N5e77c6e0
+push $N5e799880
+push $N5e602650
+ Copy {
+  inputs 2+1
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name CopyA
+  xpos -528
+  ypos 790
+ }
+ Copy {
+  inputs 2+1
+  channels rgb
+  name CopyRGB
+  xpos -528
+  ypos 828
+  disable {{parent.outChannels==0}}
+ }
+ Copy {
+  inputs 2
+  channels rgb
+  name CopyPreview
+  xpos -528
+  ypos 878
+  disable {{!parent.preview}}
+ }
+ Dissolve {
+  inputs 2
+  channels rgba
+  name DissolvePC
+  xpos -528
+  ypos 1168
+  disable {{!parent.preview_in_3d}}
+ }
+ Output {
+  name Output
+  xpos -528
+  ypos 1254
+ }
+push $N6656da50
+ Dot {
+  name Dot27
+  note_font_size 41
+  xpos 691
+  ypos 635
+ }
+set N5e75ebd0 [stack 0]
+ Dot {
+  name Dot24
+  note_font_size 41
+  xpos 994
+  ypos 635
+ }
+ Axis2 {
+  display off
+  selectable false
+  translate {{-parent.BlinkScriptPMatte.aPMatteKernel_picked} {-parent.BlinkScriptPMatte.aPMatteKernel_picked} {-parent.BlinkScriptPMatte.aPMatteKernel_picked}}
+  name AxisPickedReversed
+  xpos 970
+  ypos 719
+ }
+ Axis2 {
+  display off
+  selectable false
+  translate {{parent.BlinkScriptPMatte.aPMatteKernel_pickedB} {parent.BlinkScriptPMatte.aPMatteKernel_pickedB} {parent.BlinkScriptPMatte.aPMatteKernel_pickedB}}
+  name AxisPickedBlack1
+  xpos 970
+  ypos 785
+ }
+set N6983e1a0 [stack 0]
+push $N5e75ebd0
+ Axis2 {
+  display off
+  selectable false
+  name AxisWhite
+  xpos 667
+  ypos 795
+ }
+set N698951b0 [stack 0]
+ Dot {
+  name Dot34
+  note_font_size 41
+  xpos 691
+  ypos 914
+ }
+push $N66583fc0
+ Dot {
+  name Dot23
+  note_font_size 41
+  xpos 783
+  ypos 756
+ }
+set N69a30e40 [stack 0]
+ TransformGeo {
+  inputs 3
+  selectable false
+  name TransformGeoWhite
+  xpos 749
+  ypos 910
+ }
+push $N698951b0
+push $N6983e1a0
+ Dot {
+  name Dot33
+  note_font_size 41
+  xpos 994
+  ypos 913
+ }
+push $N69a30e40
+ Dot {
+  name Dot32
+  note_font_size 41
+  xpos 909
+  ypos 756
+ }
+ TransformGeo {
+  inputs 3
+  name TransformGeo1
+  xpos 875
+  ypos 909
+ }
+ Dot {
+  name Dot19
+  note_font_size 41
+  xpos 909
+  ypos 940
+ }
+ MergeGeo {
+  inputs 2
+  selectable false
+  name MergeGeo2
+  xpos 749
+  ypos 936
+ }
+ Dot {
+  name DotPlanes
+  label "\[value name]"
+  note_font_size 12
+  xpos 783
+  ypos 1011
+ }
+ Axis2 {
+  inputs 0
+  display off
+  selectable false
+  useMatrix true
+  matrix {
+      {{parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix}}
+      {{parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix}}
+      {{parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix}}
+      {{parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix} {parent.AxisInput.world_matrix}}
+    }
+  name AxisInputCopy2
+  xpos 102
+  ypos 428
+ }
+ Axis2 {
+  display off
+  useMatrix true
+  matrix {
+      {{parent.Axis.matrix} {parent.Axis.matrix} {parent.Axis.matrix} {parent.Axis.matrix}}
+      {{parent.Axis.matrix} {parent.Axis.matrix} {parent.Axis.matrix} {parent.Axis.matrix}}
+      {{parent.Axis.matrix} {parent.Axis.matrix} {parent.Axis.matrix} {parent.Axis.matrix}}
+      {{parent.Axis.matrix} {parent.Axis.matrix} {parent.Axis.matrix} {parent.Axis.matrix}}
+    }
+  name AxisCopy
+  xpos 102
+  ypos 494
+ }
+ Axis2 {
+  inputs 0
+  display off
+  selectable false
+  name AxisInput
+  xpos 333
+  ypos 432
+ }
+end_group

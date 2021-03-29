@@ -1,0 +1,42 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+BackdropNode {
+ inputs 0
+ name BackdropNode4
+ tile_color 0xc69871ff
+ label "a < 0.1"
+ note_font_size 42
+ selected true
+ xpos 1595
+ ypos -323
+ bdwidth 274
+ bdheight 394
+}
+push $cut_paste_input
+Noise {
+ center {1181 558}
+ name Noise1
+ selected true
+ xpos 1703
+ ypos -165
+}
+Expression {
+ temp_name0 number
+ temp_expr0 0.1
+ expr0 a<number?r:0
+ expr1 a<number?g:0
+ expr2 a<number?b:0
+ expr3 a<number?a:0
+ name alpha_comparison
+ selected true
+ xpos 1703
+ ypos -61
+}
+StickyNote {
+ inputs 0
+ name StickyNote2
+ label "Return pixel if a < number"
+ selected true
+ xpos 1682
+ ypos -6
+}

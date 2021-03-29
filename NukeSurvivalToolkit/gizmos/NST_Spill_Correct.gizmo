@@ -1,0 +1,874 @@
+Group {
+ name Spill_Correct
+ help "Use this tool to \"despill\" or mute colors introduced from Red/Green/Blue screens."
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkName = k.name()\nif kName == \"neutralize\":\n    n.knob('neutral_color').setEnabled(k.value())\n    n.knob('plate_only').setEnabled(k.value())"
+ addUserKnob {20 Spill_Correct}
+ addUserKnob {68 algorithm l Algorithm t "Choose Algorithm to perform Despill.\nKillspill is using an IBK inspired process.\nAverage/Double Average/Limits are algorithms taken from Despill_Madness, extrapolated to work on red despill as well." M {KeySpill Average "Double Average R>G>B" "Double Average B>G>R" "Limit R>G>B" "Limit B>G>R" "" ""}}
+ addUserKnob {18 screen_color l "Screen Color" t "Pick the color of the spill to remove."}
+ screen_color {0 1 0}
+ addUserKnob {6 screen_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 fine_tune l "Fine Tune" t "Tweak for the algorithms." R 0.5 1.5}
+ fine_tune 1
+ addUserKnob {26 ""}
+ addUserKnob {6 neutralize l "Neutralize Color" t "On a plate with an overall color tint, the despill might affect more than the spill areas. \nNeutralizing the color before the despill can solve these this problem." +STARTLINE}
+ addUserKnob {18 neutral_color l "Neutral Color" t "Pick the color to protect.\nNote: No Neutralize will happen if one of the color values is 0, as this would break the math." +DISABLED}
+ neutral_color {1 1 1}
+ addUserKnob {6 neutral_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 plate_only l "Plate Only" t "By cheking this box, the Neutralize will leave the replacement color untouched. \nOtherwise, the replacement color will be tinted according to the original plate tint." -STARTLINE +DISABLED}
+ plate_only true
+ addUserKnob {26 ""}
+ addUserKnob {18 replace l "Replacement Gain" t "Spill color is desaturated to preserve brightness.\nGain this up or down to fix dark/bright edges." R 0 2}
+ replace 1
+ addUserKnob {6 replace_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 gamma l "Replacement Gamma" t "Gamma correct your spill replacement." R 0.5 1.5}
+ gamma 1
+ addUserKnob {6 gamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {6 out_alpha l "Output Spill Alpha" t "If checked, the node will output an alpha of the area despilled. Otherwise the original alpha will be left untouched." +STARTLINE}
+ addUserKnob {7 mix l Mix t "Mix between original and despilled version."}
+ mix 1
+ addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+ addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nSpill_Correct\nVersion 2.0" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 2.0 - 2017-2019 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+ BackdropNode {
+  inputs 0
+  name kbd8310
+  tile_color 0x5963525e
+  label "KeySpill(IBK Style)"
+  note_font_size 40
+  xpos -168
+  ypos -650
+  bdwidth 532
+  bdheight 471
+ }
+ BackdropNode {
+  inputs 0
+  name kbd9376
+  tile_color 0x5b655f64
+  label Average
+  note_font_size 40
+  xpos 414
+  ypos -650
+  bdwidth 408
+  bdheight 359
+  z_order 1
+ }
+ BackdropNode {
+  inputs 0
+  name kbd1
+  tile_color 0x587077ff
+  label "Double Average BGR"
+  note_font_size 40
+  xpos 1270
+  ypos -648
+  bdwidth 408
+  bdheight 359
+  z_order 2
+ }
+ BackdropNode {
+  inputs 0
+  name kbd2
+  tile_color 0x587077ff
+  label "Limit BGR"
+  note_font_size 40
+  xpos 2127
+  ypos -649
+  bdwidth 408
+  bdheight 359
+  z_order 2
+ }
+ BackdropNode {
+  inputs 0
+  name kbd3
+  tile_color 0x5850645d
+  label "Limit RGB"
+  note_font_size 40
+  xpos 1716
+  ypos -647
+  bdwidth 408
+  bdheight 359
+  z_order 2
+ }
+ BackdropNode {
+  inputs 0
+  name kbd3580
+  tile_color 0x5850645d
+  label "Double Average RGB"
+  note_font_size 40
+  xpos 859
+  ypos -647
+  bdwidth 408
+  bdheight 359
+  z_order 2
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 151
+  ypos 1031
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 262
+  ypos -920
+ }
+ Grade {
+  whitepoint {{parent.neutral_color} {parent.neutral_color} {parent.neutral_color} {parent.neutral_color}}
+  white {{parent.neutral_color.r*0.2126+parent.neutral_color.g*0.7152+parent.neutral_color.b*0.0722}}
+  black_clamp false
+  name Neutralize
+  xpos 262
+  ypos -860
+  disable {{(parent.neutral_color.r==0|parent.neutral_color.g==0|parent.neutral_color.b==0)|!parent.neutralize}}
+ }
+ Dot {
+  name Dot12
+  tile_color 0x7aa9ff00
+  xpos 296
+  ypos -725
+ }
+set N615f5000 [stack 0]
+ Dot {
+  name Dot13
+  tile_color 0x7aa9ff00
+  xpos 616
+  ypos -725
+ }
+set N615f4c00 [stack 0]
+ Dot {
+  name Dot24
+  tile_color 0x7aa9ff00
+  xpos 1061
+  ypos -725
+ }
+set N615f4800 [stack 0]
+ Dot {
+  name Dot26
+  tile_color 0x7aa9ff00
+  xpos 1472
+  ypos -725
+ }
+set N615f4400 [stack 0]
+ Dot {
+  name Dot31
+  tile_color 0x7aa9ff00
+  xpos 1918
+  ypos -725
+ }
+set N615f4000 [stack 0]
+ Dot {
+  name Dot36
+  tile_color 0x7aa9ff00
+  xpos 2329
+  ypos -725
+ }
+ Dot {
+  name Dot37
+  tile_color 0x7aa9ff00
+  xpos 2329
+  ypos -559
+ }
+set N61611800 [stack 0]
+ Dot {
+  name Dot38
+  tile_color 0x7aa9ff00
+  xpos 2439
+  ypos -559
+ }
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr2 b>g*LimitPercentage?g*LimitPercentage:b
+  name Limit_BG
+  xpos 2405
+  ypos -457
+ }
+push $N61611800
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr1 g>r*LimitPercentage?r*LimitPercentage:g
+  name Limit_GR
+  xpos 2295
+  ypos -459
+ }
+push $N61611800
+ Dot {
+  name Dot39
+  tile_color 0x7aa9ff00
+  xpos 2211
+  ypos -559
+ }
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr0 r>b*LimitPercentage?b*LimitPercentage:r
+  name Limit_RB
+  xpos 2177
+  ypos -460
+ }
+ Switch {
+  inputs 3
+  which {{parent.screen_color.r>max(parent.screen_color.g,parent.screen_color.b)?0:parent.screen_color.b>=max(parent.screen_color.r,parent.screen_color.g)?2:1}}
+  name Switch_maxRGB6
+  xpos 2295
+  ypos -360
+ }
+ Dot {
+  name Dot40
+  xpos 2329
+  ypos -130
+ }
+push $N615f4000
+ Dot {
+  name Dot32
+  tile_color 0x7aa9ff00
+  xpos 1918
+  ypos -557
+ }
+set N61637800 [stack 0]
+ Dot {
+  name Dot33
+  tile_color 0x7aa9ff00
+  xpos 2028
+  ypos -557
+ }
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr2 b>r*LimitPercentage?r*LimitPercentage:b
+  name Limit_BR
+  xpos 1994
+  ypos -455
+ }
+push $N61637800
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr1 g>b*LimitPercentage?b*LimitPercentage:g
+  name Limit_GB
+  xpos 1884
+  ypos -457
+ }
+push $N61637800
+ Dot {
+  name Dot34
+  tile_color 0x7aa9ff00
+  xpos 1800
+  ypos -557
+ }
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr0 r>g*LimitPercentage?g*LimitPercentage:r
+  name Limit_RG
+  xpos 1766
+  ypos -458
+ }
+ Switch {
+  inputs 3
+  which {{parent.screen_color.r>max(parent.screen_color.g,parent.screen_color.b)?0:parent.screen_color.b>=max(parent.screen_color.r,parent.screen_color.g)?2:1}}
+  name Switch_maxRGB5
+  xpos 1884
+  ypos -358
+ }
+ Dot {
+  name Dot35
+  xpos 1918
+  ypos -119
+ }
+push $N615f4400
+ Dot {
+  name Dot27
+  tile_color 0x7aa9ff00
+  xpos 1472
+  ypos -558
+ }
+set N6165f800 [stack 0]
+ Dot {
+  name Dot28
+  tile_color 0x7aa9ff00
+  xpos 1582
+  ypos -558
+ }
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr2 b>(2*g+r)/2*LimitPercentage?(r+2*g)/2*LimitPercentage:b
+  name DoubleAverage_B_2
+  xpos 1548
+  ypos -456
+ }
+push $N6165f800
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr1 g>(b+2*r)/3*LimitPercentage?(b+2*r)/3*LimitPercentage:g
+  name DoubleAverage_G_2
+  xpos 1438
+  ypos -458
+ }
+push $N6165f800
+ Dot {
+  name Dot29
+  tile_color 0x7aa9ff00
+  xpos 1354
+  ypos -558
+ }
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr0 r>(g+2*b)/3*LimitPercentage?(g+2*b)/3*LimitPercentage:r
+  name DoubleAverage_R_2
+  xpos 1320
+  ypos -459
+ }
+ Switch {
+  inputs 3
+  which {{parent.screen_color.r>max(parent.screen_color.g,parent.screen_color.b)?0:parent.screen_color.b>=max(parent.screen_color.r,parent.screen_color.g)?2:1}}
+  name Switch_maxRGB4
+  xpos 1438
+  ypos -359
+ }
+ Dot {
+  name Dot30
+  xpos 1472
+  ypos -130
+ }
+push $N615f4800
+ Dot {
+  name Dot21
+  tile_color 0x7aa9ff00
+  xpos 1061
+  ypos -557
+ }
+set N61689800 [stack 0]
+ Dot {
+  name Dot22
+  tile_color 0x7aa9ff00
+  xpos 1171
+  ypos -557
+ }
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr2 b>(g+2*r)/2*LimitPercentage?(2*r+g)/2*LimitPercentage:b
+  name DoubleAverage_B_1
+  xpos 1137
+  ypos -455
+ }
+push $N61689800
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr1 g>(2*b+r)/3*LimitPercentage?(2*b+r)/3*LimitPercentage:g
+  name DoubleAverage_G_1
+  xpos 1027
+  ypos -457
+ }
+push $N61689800
+ Dot {
+  name Dot23
+  tile_color 0x7aa9ff00
+  xpos 943
+  ypos -557
+ }
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr0 r>(2*g+b)/3*LimitPercentage?(2*g+b)/3*LimitPercentage:r
+  name DoubleAverage_R_1
+  xpos 909
+  ypos -458
+ }
+ Switch {
+  inputs 3
+  which {{parent.screen_color.r>max(parent.screen_color.g,parent.screen_color.b)?0:parent.screen_color.b>=max(parent.screen_color.r,parent.screen_color.g)?2:1}}
+  name Switch_maxRGB3
+  xpos 1027
+  ypos -358
+ }
+ Dot {
+  name Dot25
+  xpos 1061
+  ypos -119
+ }
+push $N615f4c00
+ Dot {
+  name Dot6
+  tile_color 0x7aa9ff00
+  xpos 616
+  ypos -560
+ }
+set N636b1800 [stack 0]
+ Dot {
+  name Dot15
+  tile_color 0x7aa9ff00
+  xpos 726
+  ypos -560
+ }
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr2 b>(r+g)/2*LimitPercentage?(r+g)/2*LimitPercentage:b
+  name Average_B
+  xpos 692
+  ypos -458
+ }
+push $N636b1800
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr1 g>(b+r)/2*LimitPercentage?(b+r)/2*LimitPercentage:g
+  name Average_G
+  xpos 582
+  ypos -460
+ }
+push $N636b1800
+ Dot {
+  name Dot14
+  tile_color 0x7aa9ff00
+  xpos 498
+  ypos -560
+ }
+ Expression {
+  temp_name0 LimitPercentage
+  temp_expr0 parent.fine_tune
+  expr0 r>(g+b)/2*LimitPercentage?(g+b)/2*LimitPercentage:r
+  name Average_R
+  xpos 464
+  ypos -461
+ }
+ Switch {
+  inputs 3
+  which {{parent.screen_color.r>max(parent.screen_color.g,parent.screen_color.b)?0:parent.screen_color.b>=max(parent.screen_color.r,parent.screen_color.g)?2:1}}
+  name Switch_maxRGB2
+  xpos 582
+  ypos -361
+ }
+ Dot {
+  name Dot20
+  xpos 616
+  ypos -130
+ }
+push $N615f5000
+ Dot {
+  name Dot9
+  tile_color 0x7aa9ff00
+  xpos 296
+  ypos -560
+ }
+set N636d9800 [stack 0]
+ Dot {
+  name Dot3
+  tile_color 0x7aa9ff00
+  xpos 296
+  ypos -505
+ }
+set N636d9400 [stack 0]
+ Dot {
+  name Dot11
+  tile_color 0x7aa9ff00
+  xpos 229
+  ypos -505
+ }
+set N636d9000 [stack 0]
+ Expression {
+  temp_name0 weight
+  temp_expr0 parent.fine_tune-0.5
+  channel0 rgba
+  expr0 (b-(g*weight+r*(1-weight)))/(parent.screen_color.b-(parent.screen_color.g*weight+parent.screen_color.r*(1-weight)))
+  name SpillMatte_B
+  xpos 195
+  ypos -451
+ }
+push $N636d9000
+ Dot {
+  name Dot10
+  tile_color 0x7aa9ff00
+  xpos 122
+  ypos -505
+ }
+set N636d8800 [stack 0]
+ Expression {
+  temp_name0 weight
+  temp_expr0 parent.fine_tune-0.5
+  channel0 rgba
+  expr0 (g-(r*weight+b*(1-weight)))/(parent.screen_color.g-(parent.screen_color.r*weight+parent.screen_color.b*(1-weight)))
+  name SpillMatte_G
+  xpos 88
+  ypos -451
+ }
+push $N636d8800
+ Dot {
+  name Dot1
+  tile_color 0x7aa9ff00
+  xpos 25
+  ypos -505
+ }
+ Expression {
+  temp_name0 weight
+  temp_expr0 parent.fine_tune-0.5
+  channel0 rgba
+  expr0 (r-(b*weight+g*(1-weight)))/(parent.screen_color.r-(parent.screen_color.b*weight+parent.screen_color.g*(1-weight)))
+  name SpillMatte_R
+  xpos -9
+  ypos -454
+ }
+ Switch {
+  inputs 3
+  which {{parent.screen_color.r>max(parent.screen_color.g,parent.screen_color.b)?0:parent.screen_color.b>=max(parent.screen_color.r,parent.screen_color.g)?2:1}}
+  name Switch_maxRGB1
+  xpos 89
+  ypos -395
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp1
+  xpos 89
+  ypos -365
+ }
+ Expression {
+  channel0 rgba
+  expr0 "isinf(r)? 0:r"
+  name fix_inf
+  xpos 89
+  ypos -327
+ }
+ Expression {
+  channel0 rgba
+  expr0 "isnan(r)? 0:r"
+  name fix_nan
+  xpos 89
+  ypos -301
+ }
+ Dot {
+  name Dot8
+  xpos 123
+  ypos -276
+ }
+ Dot {
+  name Dot7
+  xpos -50
+  ypos -276
+ }
+push $N636d9800
+ Dot {
+  name Dot2
+  tile_color 0x7aa9ff00
+  xpos -84
+  ypos -560
+ }
+ Expression {
+  expr0 parent.screen_color.r
+  expr1 parent.screen_color.g
+  expr2 parent.screen_color.b
+  name Screen_Color
+  xpos -118
+  ypos -479
+ }
+ Dot {
+  name Dot47
+  xpos -84
+  ypos -419
+ }
+set N2421e800 [stack 0]
+ Merge2 {
+  inputs 2
+  operation multiply
+  bbox B
+  name Merge1
+  xpos -118
+  ypos -251
+ }
+push $N636d9400
+ Merge2 {
+  inputs 2
+  operation from
+  bbox B
+  name Merge2
+  xpos 262
+  ypos -251
+ }
+ Dot {
+  name Dot4
+  xpos 296
+  ypos -139
+ }
+ Switch {
+  inputs 6
+  which {{parent.algorithm}}
+  name Algorithm_Switch
+  xpos 582
+  ypos 225
+ }
+ Dot {
+  name Dot19
+  tile_color 0xcccccc00
+  xpos 616
+  ypos 310
+ }
+set N6372e800 [stack 0]
+push $N615f5000
+ Dot {
+  name Dot17
+  tile_color 0x7aa9ff00
+  xpos -236
+  ypos -725
+ }
+ Dot {
+  name Dot18
+  tile_color 0x7aa9ff00
+  xpos -236
+  ypos 310
+ }
+set N6372e000 [stack 0]
+ Merge2 {
+  inputs 2
+  operation from
+  bbox B
+  name Merge3
+  xpos 371
+  ypos 306
+ }
+ Saturation {
+  saturation 0
+  name DeSaturate
+  xpos 371
+  ypos 362
+ }
+set N63755800 [stack 0]
+ Input {
+  inputs 0
+  name Inputbg
+  xpos -198
+  ypos 364
+  number 2
+ }
+push $N2421e800
+ Dot {
+  name Dot48
+  xpos -155
+  ypos -419
+ }
+ Saturation {
+  saturation 0
+  name DeSaturate1
+  xpos -68
+  ypos 211
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge7
+  xpos -68
+  ypos 362
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge6
+  xpos 88
+  ypos 362
+ }
+set N2421ec00 [stack 0]
+ Dot {
+  name Dot49
+  xpos 122
+  ypos 416
+ }
+push $N63755800
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input2]"}}
+  name Switch2
+  xpos 371
+  ypos 412
+ }
+ Dot {
+  name Dot43
+  tile_color 0x7aa9ff00
+  xpos 405
+  ypos 450
+ }
+set N63755400 [stack 0]
+ Multiply {
+  value {{parent.replace} {parent.replace} {parent.replace} {parent.replace}}
+  name Replace_color_Mult
+  xpos 371
+  ypos 484
+ }
+ Gamma {
+  value {{parent.gamma} {parent.gamma} {parent.gamma} {parent.gamma}}
+  name Gamma
+  xpos 371
+  ypos 536
+ }
+ Dot {
+  name Dot16
+  tile_color 0x7aa9ff00
+  xpos 405
+  ypos 609
+ }
+push $N6372e800
+ Grade {
+  whitepoint {{parent.neutral_color} {parent.neutral_color} {parent.neutral_color} {parent.neutral_color}}
+  white {{parent.neutral_color.r*0.2126+parent.neutral_color.g*0.7152+parent.neutral_color.b*0.0722}}
+  reverse true
+  black_clamp false
+  name Neutralize1
+  xpos 582
+  ypos 456
+  disable {{((parent.neutral_color.r==0|parent.neutral_color.g==0|parent.neutral_color.b==0)|!parent.neutralize)|!parent.plate_only}}
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox B
+  output rgb
+  name Merge5
+  xpos 582
+  ypos 605
+ }
+ Dot {
+  name Dot44
+  tile_color 0x4b5ec600
+  xpos 616
+  ypos 692
+ }
+push $N6372e000
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  from1 rgba.green
+  to1 rgba.green
+  from2 rgba.blue
+  to2 rgba.blue
+  bbox B
+  name Copy2
+  xpos -270
+  ypos 670
+ }
+push $N6372e000
+ Dot {
+  name Dot46
+  tile_color 0x7aa9ff00
+  xpos -346
+  ypos 310
+ }
+ Dot {
+  name Dot41
+  tile_color 0x7aa9ff00
+  xpos -346
+  ypos 879
+ }
+set N63784c00 [stack 0]
+ Dissolve {
+  inputs 2
+  which {{parent.mix}}
+  name Dissolve1
+  xpos -270
+  ypos 869
+ }
+set N63784800 [stack 0]
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  expr3 1
+  name Expression1
+  xpos 26
+  ypos 875
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input1] "}}
+  name Switch1
+  xpos 26
+  ypos 1031
+ }
+ Invert {
+  channels alpha
+  name Invert1
+  xpos -88
+  ypos 1025
+ }
+set N637afc00 [stack 0]
+push $N63755400
+ Dot {
+  name Dot5
+  tile_color 0x7aa9ff00
+  xpos 295
+  ypos 450
+ }
+ Multiply {
+  value {{parent.mix}}
+  name Multiply1
+  xpos 261
+  ypos 917
+ }
+ Dot {
+  name Dot45
+  tile_color 0x7aa9ff00
+  xpos 295
+  ypos 1162
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  bbox B
+  name Merge4
+  xpos -88
+  ypos 1158
+ }
+ Clamp {
+  channels alpha
+  name Clamp2
+  xpos -88
+  ypos 1238
+ }
+push $N637afc00
+push $N63784c00
+ Dot {
+  name Dot42
+  tile_color 0x7aa9ff00
+  xpos -346
+  ypos 1035
+ }
+push $N63784800
+ Keymix {
+  inputs 3
+  bbox B
+  name Keymix1
+  xpos -270
+  ypos 1025
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.alpha
+  bbox B
+  name Copy1
+  xpos -270
+  ypos 1238
+  disable {{!parent.out_alpha}}
+ }
+ Grade {
+  whitepoint {{parent.neutral_color} {parent.neutral_color} {parent.neutral_color} {parent.neutral_color}}
+  white {{parent.neutral_color.r*0.2126+parent.neutral_color.g*0.7152+parent.neutral_color.b*0.0722}}
+  reverse true
+  black_clamp false
+  name Neutralize2
+  xpos -270
+  ypos 1332
+  disable {{((parent.neutral_color.r==0|parent.neutral_color.g==0|parent.neutral_color.b==0)|!parent.neutralize)|parent.plate_only}}
+ }
+ Output {
+  name Output1
+  xpos -270
+  ypos 1429
+ }
+end_group

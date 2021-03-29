@@ -1,0 +1,64 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+BackdropNode {
+ inputs 0
+ name BackdropNode17
+ tile_color 0x7190c6ff
+ label check
+ note_font_size 42
+ selected true
+ xpos 492
+ ypos 65
+ bdwidth 247
+ bdheight 213
+ z_order 1
+}
+push $cut_paste_input
+Dot {
+ name Dot1
+ selected true
+ xpos 614
+ ypos 145
+}
+set N1863380 [stack 0]
+Expression {
+ expr0 isinf(r)?1000:0
+ expr1 isinf(g)?1000:0
+ expr2 isinf(b)?1000:0
+ expr3 isinf(a)?1000:0
+ name Expression17
+ label INF
+ selected true
+ xpos 502
+ ypos 195
+}
+Blur {
+ channels rgba
+ size 20
+ name Blur204
+ label "\[value size]"
+ selected true
+ xpos 502
+ ypos 233
+}
+push $N1863380
+Expression {
+ expr0 isnan(r)?1000:0
+ expr1 isnan(g)?1000:0
+ expr2 isnan(b)?1000:0
+ expr3 isnan(a)?1000:0
+ name Expression16
+ label NAN
+ selected true
+ xpos 649
+ ypos 190
+}
+Blur {
+ channels rgba
+ size 20
+ name Blur205
+ label "\[value size]"
+ selected true
+ xpos 649
+ ypos 236
+}

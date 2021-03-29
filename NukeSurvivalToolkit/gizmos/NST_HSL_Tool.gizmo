@@ -1,0 +1,201 @@
+Group {
+ name HSL_Tool
+ tile_color 0xe2f1ff
+ selected true
+ addUserKnob {20 hue}
+ addUserKnob {41 lut l "" -STARTLINE T HUE_key.lut}
+ addUserKnob {20 sat}
+ addUserKnob {41 lut_1 l "" -STARTLINE T SAT_key.lut}
+ addUserKnob {20 lum}
+ addUserKnob {41 lut_2 l "" -STARTLINE T LUM_key.lut}
+ addUserKnob {20 Settings}
+ addUserKnob {6 displayAlpha l "display Mask in Alpha" +STARTLINE}
+ displayAlpha true
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge5.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge5.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge5.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge5.fringe}
+ addUserKnob {41 mix T Merge5.mix}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 565
+  ypos 920
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 420
+  ypos 425
+ }
+ Dot {
+  name Dot1
+  xpos 454
+  ypos 547
+ }
+set N9c565e20 [stack 0]
+ Dot {
+  name Dot2
+  xpos 700
+  ypos 547
+ }
+set N9c542480 [stack 0]
+ Dot {
+  name Dot3
+  xpos 813
+  ypos 547
+ }
+set N9c546090 [stack 0]
+ Dot {
+  name Dot4
+  xpos 923
+  ypos 547
+ }
+ HueKeyer {
+  lut {amount {curve 1 1 1 1 1 1 1}
+    sat_thrsh {curve 0 0 0 0 0 0 0}}
+  invert false
+  name LUM_key
+  xpos 889
+  ypos 597
+ }
+ Shuffle {
+  red white
+  green white
+  blue alpha
+  name Shuffle3
+  xpos 889
+  ypos 700
+ }
+push $N9c546090
+ HueKeyer {
+  lut {amount {curve 1 1 0.3495025039 0.3495025039 0.3495025039 1 1}
+    sat_thrsh {curve 0 0 0 0 0 0 0}}
+  invert false
+  name SAT_key
+  xpos 779
+  ypos 597
+ }
+ Shuffle {
+  red white
+  green alpha
+  blue white
+  name Shuffle2
+  xpos 779
+  ypos 664
+ }
+push $N9c542480
+ HueKeyer {
+  lut {amount {curve 1 1 1 1 1 1 1}
+    sat_thrsh {curve 0 0 0 0 0 0 0}}
+  invert false
+  name HUE_key
+  xpos 666
+  ypos 598
+ }
+ Shuffle {
+  red alpha
+  green black
+  blue black
+  name Shuffle1
+  xpos 666
+  ypos 634
+ }
+push $N9c565e20
+ Colorspace {
+  colorspace_out HSL
+  name Colorspace1
+  xpos 420
+  ypos 597
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge1
+  xpos 420
+  ypos 634
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge2
+  xpos 420
+  ypos 664
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge3
+  xpos 420
+  ypos 700
+ }
+ Colorspace {
+  colorspace_in HSL
+  name Colorspace2
+  xpos 420
+  ypos 757
+ }
+set N7e480490 [stack 0]
+push $N9c565e20
+ Dot {
+  name Dot5
+  xpos 315
+  ypos 547
+ }
+set N7e491ff0 [stack 0]
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge4
+  xpos 281
+  ypos 757
+ }
+ Expression {
+  expr3 abs(red)+abs(green)+abs(blue)
+  name Expression1
+  xpos 281
+  ypos 822
+ }
+push $N7e480490
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  mix {{parent.displayAlpha}}
+  name Copy1
+  xpos 420
+  ypos 816
+ }
+push $N7e491ff0
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos 78
+  ypos 547
+ }
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 78
+  ypos 923
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge5
+  xpos 420
+  ypos 920
+ }
+ Output {
+  name Output1
+  xpos 420
+  ypos 1018
+ }
+end_group

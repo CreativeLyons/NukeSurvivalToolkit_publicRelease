@@ -1,0 +1,169 @@
+Group {
+ name BeautifulSkin
+ tile_color 0xb2776dff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 BeautifulSkin}
+ addUserKnob {41 channels l Channels T Merge1.also_merge}
+ addUserKnob {41 size l "Dilate size" T Dilate5.size}
+ addUserKnob {26 ""}
+ addUserKnob {4 blurType l "Blur Type" M {Blur Defocus Median}}
+ blurType Median
+ addUserKnob {7 blurDefocusSize l "Blur/Defocus size" R 0 100}
+ blurDefocusSize 5
+ addUserKnob {41 size_2 l "Median size" T Median2.size}
+ addUserKnob {6 guiblur l "use blur in gui, switch to defocus/median at render time" +STARTLINE}
+ guiblur true
+ addUserKnob {26 ""}
+ addUserKnob {41 mixMax l "mix Max back in" T Merge8.mix}
+ addUserKnob {41 mixMin l "mix Min back in" T Merge7.mix}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 mix T Merge1.mix}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: T BeautifulSkin}
+ addUserKnob {26 ver l Version: T v02}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 626
+  ypos -370
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 462
+  ypos -1126
+ }
+ Dot {
+  name Dot9
+  xpos 496
+  ypos -1018
+ }
+set Neb880d20 [stack 0]
+ Dot {
+  name Dot10
+  xpos 264
+  ypos -1018
+ }
+ Dot {
+  name Dot12
+  xpos 264
+  ypos -530
+ }
+set Neb885890 [stack 0]
+ Dot {
+  name Dot13
+  xpos 264
+  ypos -454
+ }
+set Neb8897b0 [stack 0]
+push $Neb885890
+push $Neb880d20
+ Dilate {
+  size 3
+  name Dilate5
+  xpos 462
+  ypos -959
+ }
+ Dilate {
+  size {{-parent.Dilate5.size i}}
+  name Dilate6
+  xpos 462
+  ypos -895
+ }
+ Dot {
+  name Dot14
+  xpos 496
+  ypos -819
+ }
+set Neb8d7770 [stack 0]
+ Blur {
+  size {{parent.blurDefocusSize}}
+  name Blur10
+  label "\[value size]"
+  xpos 343
+  ypos -736
+ }
+set Neb8db490 [stack 0]
+push $Neb8d7770
+ Median {
+  channels all
+  size 2
+  ignore_top_line false
+  name Median2
+  xpos 573
+  ypos -729
+ }
+push $Neb8d7770
+ Defocus {
+  defocus {{parent.blurDefocusSize i}}
+  name Defocus1
+  xpos 462
+  ypos -728
+ }
+push $Neb8db490
+ Switch {
+  inputs 3
+  which {{parent.blurType i}}
+  name Switch1
+  xpos 462
+  ypos -660
+ }
+ Switch {
+  inputs 2
+  which {{guiblur i}}
+  name Switch2
+  xpos 462
+  ypos -602
+ }
+ Merge2 {
+  inputs 2
+  operation max
+  also_merge all
+  mix 0.5
+  name Merge8
+  xpos 462
+  ypos -534
+ }
+ Merge2 {
+  inputs 2
+  operation min
+  also_merge all
+  mix 0.2
+  name Merge7
+  xpos 462
+  ypos -458
+ }
+push $Neb8897b0
+ Dot {
+  name Dot11
+  xpos 264
+  ypos -367
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  Achannels none
+  Bchannels none
+  output none
+  also_merge rgb
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 462
+  ypos -374
+ }
+ Output {
+  name Output1
+  xpos 462
+  ypos -225
+ }
+end_group

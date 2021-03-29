@@ -1,0 +1,47 @@
+Group {
+name ParticleKiller
+tile_color 0x101010ff
+selected true
+addUserKnob {20 particleKillerTab l ParticleKiller}
+addUserKnob {41 ids t "The ids of the particles that should be affected. Separate using spaces or comma's." T ParticleExpression2.ids}
+addUserKnob {41 operation l "" t "Kill: all the named particles are deleted.\nKeep: all but the named particles are deleted." -STARTLINE T ParticleExpression2.operation}
+addUserKnob {26 ""}
+addUserKnob {22 displayPoints l "display point numbers" t "Toggle the visibility of the particle ids in the 3D viewer." T "knob = nuke.activeViewer().node().knob('show_vertex_num')\nknob.setValue(1 - knob.value())" +STARTLINE}
+addUserKnob {6 colorPreview l "overwrite color with particle id" t "Replace the particles' color values with their ids for easy identification." -STARTLINE}
+addUserKnob {1 channels l INVISIBLE +INVISIBLE}
+channels "\[expr \{ \[value colorPreview] ? \"Color Preview Enabled\" : \"rgb\"\}]"
+}
+Input {
+inputs 0
+name Input
+label "\[value number]"
+xpos 167
+ypos -29
+}
+ParticleExpression {
+colexpr id
+name ParticleExpression1
+xpos 167
+ypos 47
+disable {{"max(parent.disable, (1 - parent.colorPreview))"}}
+}
+ParticleExpression {
+channelsexpr_onlynew true
+new_channels {}
+name ParticleExpression2
+knobChanged "node = nuke.thisNode()\n\nmode = int(node.knob(\"operation\").getValue())\noperation = \[\"=\",\"!\"]\[mode]\ndivider = \[\"|\",\"&\"]\[mode]\ndivider = \" %s \"%(divider*2)\n\nnumbers = \[str(i) for i in range(10)]\n\nids = node.knob(\"ids\").value()\n\nids = ids.replace(\",\",\" \").split()\nids = sorted(list(set(\[int(id) for id in ids if all(\[number in numbers for number in id])])))\nids = \[\"id %s= %s\"%(operation, id) for id in ids]\n\nexpression = divider.join(ids)\n\nnode.knob(\"channelsexpr\").setValue(expression)"
+xpos 167
+ypos 112
+disable {{"max( parent.disable, (1 - clamp(\[string length \[value channelsexpr]])))"}}
+addUserKnob {20 killTab l Kill}
+addUserKnob {26 credits l "" +STARTLINE T "ParticleKiller v1.0 - Wouter Gilsing"}
+addUserKnob {1 ids}
+addUserKnob {4 operation -STARTLINE M {kill keep "" ""}}
+}
+Output {
+name Output1
+xpos 167
+ypos 193
+}
+end_group
+

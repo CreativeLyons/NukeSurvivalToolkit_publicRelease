@@ -1,0 +1,1193 @@
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ label WORDART
+ note_font_size 72
+ note_font_color 0xffffffff
+ xpos 1371
+ ypos -847
+ bdwidth 828
+ bdheight 20
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ label BACKLIT
+ note_font_size 72
+ note_font_color 0xffffffff
+ xpos -93
+ ypos -853
+ bdwidth 828
+ bdheight 20
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode3
+ label HOLOGRAM
+ note_font_size 72
+ note_font_color 0xffffffff
+ xpos 2646
+ ypos -870
+ bdwidth 828
+ bdheight 20
+}
+Axis2 {
+ inputs 0
+ rotate {{curve x1 -7.904351676 x100 -7.785} {curve x1 -38.0573257 x100 23.01} {curve x1 6.145020451 x100 -25.775}}
+ name Axis1
+ xpos 408
+ ypos -462
+}
+Camera2 {
+ translate {0 {curve x1 0 x100 0.175} {curve x1 1.5 x100 1.25}}
+ focal 23.8
+ name Camera1
+ xpos 408
+ ypos -396
+}
+set N656ab000 [stack 0]
+Light2 {
+ inputs 0
+ light_type spot
+ color_panelDropped true
+ cone_angle 120
+ cone_penumbra_angle 180
+ cone_falloff 15
+ falloff_type Quadratic
+ translate {0.04599991813 0.1635388732 -0.8183040619}
+ rotate {-13.71810454 -179.9999913 -179.9999913}
+ cast_shadows true
+ shadow_mode "clipped alpha"
+ filter Impulse
+ scene_epsilon 0.114
+ depthmap_slope_bias 0.218
+ clipping_threshold 0.84
+ shadow_jitter_scale 0
+ depthmap_width 512
+ name Light1
+ xpos 262
+ ypos -428
+}
+set N656aac00 [stack 0]
+push $N656ab000
+push $N656aac00
+BasicMaterial {
+ inputs 0
+ name BasicMaterial1
+ xpos -23
+ ypos -546
+}
+Card2 {
+ orientation ZX
+ image_aspect false
+ uniform_scale 2
+ control_points {3 3 3 6
+
+1 {-0.5 0 -0.5} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0.1666666865} 0 {0 0 0} 0 {0 0 0}
+1 {0 0 -0.5} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0.1666666865} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 0 -0.5} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0.1666666865} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0.1666666716} 0 {0 0 -0.1666666716} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0.1666666716} 0 {0 0 -0.1666666716} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0.1666666716} 0 {0 0 -0.1666666716} 0 {1 0.5 0}
+1 {-0.5 0 0.5} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 0 -0.1666666865} 0 {0 1 0}
+1 {0 0 0.5} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 0 -0.1666666865} 0 {0.5 1 0}
+1 {0.5 0 0.5} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 0 -0.1666666865} 0 {1 1 0} }
+ name Card2
+ xpos -23
+ ypos -520
+}
+Text2 {
+ inputs 0
+ font_size_toolbar 500
+ font_width_toolbar 100
+ font_height_toolbar 100
+ kerning_toolbar 0.5
+ output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+ message BACKLIT
+ old_message {{66 65 67 75 76 73 84}
+   }
+ box {68.5 279.5 1859.5 780.5}
+ transforms {{0 2}
+   }
+ font_size_values {{0 500 1 500 2 500 3 500 4 500 5 500 6 500 0 96 1 96 2 96 3 96 4 96 5 96 6 96}
+   }
+ font_width_values {{0 100 1 100 2 100 3 100 4 100 5 100 6 100 0 101 1 101 2 101 3 101 4 101 5 101 6 101}
+   }
+ kern_values {{0 0.5 1 0.5 2 0.5 3 0.5 4 0.5 5 0.5 6 0.5 0 0.006 1 0.006 2 0.006 3 0.006 4 0.006 5 0.006 6 0.006}
+   }
+ font {{ Impact : Regular : impact.ttf : 0 }}
+ font_size 500
+ kerning 0.5
+ scale {1 1}
+ center {960 540}
+ cursor_initialised true
+ initial_cursor_position {{68.5 780.5}
+   }
+ group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+ animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+   }
+ name Text1
+ xpos 270
+ ypos -681
+}
+Card2 {
+ translate {0 0.08900000155 0}
+ control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+ name Card1
+ xpos 270
+ ypos -594
+}
+set N6571b800 [stack 0]
+Scene {
+ inputs 3
+ name Scene1
+ xpos 117
+ ypos -482
+}
+push 0
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ ztest_enabled false
+ filter Impulse
+ max_tessellation 1
+ motion_vectors_type off
+ MB_channel none
+ name ScanlineRender1
+ xpos 107
+ ypos -298
+}
+ZDefocus2 {
+ channels rgb
+ center {{curve x1 0.7172219157 x50 0.7677050233 x100 0.8260945082}}
+ focal_point {962 402}
+ blur_dof false
+ size 40
+ max_size 50
+ autoLayerSpacing false
+ layers 5
+ layerCurve 2
+ legacy_resize_mode false
+ show_legacy_resize_mode false
+ name ZDefocus1
+ xpos 107
+ ypos -194
+}
+Grade {
+ white {1.44 1.1 1 1}
+ white_panelDropped true
+ multiply 0.5
+ gamma {0.6 0.6 0.74 0.6}
+ gamma_panelDropped true
+ name Grade1
+ xpos 107
+ ypos -158
+}
+set N6571a400 [stack 0]
+push $N656ab000
+Noise {
+ inputs 0
+ zoffset {{frame/300}}
+ octaves 6
+ gain 0.425
+ gamma 0.635
+ center {960 540}
+ name Noise1
+ xpos 581
+ ypos -723
+}
+IDistort {
+ channels {rgba.red -rgba.green -rgba.blue none}
+ uv rgb
+ uv_offset 0.5
+ uv_scale -100
+ filter Impulse
+ name IDistort1
+ xpos 581
+ ypos -695
+ disable true
+}
+IDistort {
+ channels {-rgba.red -rgba.green rgba.blue none}
+ uv rgb
+ uv_offset 0.5
+ uv_scale 100
+ filter Impulse
+ name IDistort2
+ xpos 581
+ ypos -658
+ disable true
+}
+Saturation {
+ name Saturation1
+ xpos 581
+ ypos -632
+ disable true
+}
+Radial {
+ invert true
+ area {12 -2 1944 1094}
+ color 0
+ name Radial1
+ xpos 581
+ ypos -594
+}
+Card2 {
+ translate {{parent.Light1.translate} {parent.Light1.translate} {parent.Light1.translate}}
+ uniform_scale 2
+ control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+ name Card3
+ xpos 581
+ ypos -529
+}
+push $N6571b800
+Scene {
+ inputs 2
+ name Scene2
+ xpos 591
+ ypos -483
+}
+push 0
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ ztest_enabled false
+ filter Impulse
+ max_tessellation 1
+ motion_vectors_type off
+ MB_channel none
+ name ScanlineRender2
+ xpos 581
+ ypos -274
+}
+Merge2 {
+ inputs 2
+ operation screen
+ name Merge1
+ xpos 581
+ ypos -158
+}
+X_Aton_Volumetrics {
+ inputs 3
+ name X_Aton1
+ xpos 581
+ ypos -39
+ use_3d true
+ mode Diffuse
+ gamma 1.5
+ iterations 40
+}
+push $N6571a400
+Merge2 {
+ inputs 2
+ operation screen
+ name Merge2
+ xpos 107
+ ypos 29
+}
+Grade {
+ white 3.95
+ multiply {1.38 0.52 0.16 1}
+ multiply_panelDropped true
+ add {0.025 0.01 0.035 0}
+ add_panelDropped true
+ gamma {0.96 0.79 0.82 1}
+ gamma_panelDropped true
+ name Grade3
+ xpos 107
+ ypos 158
+}
+Reformat {
+ type "to box"
+ box_width 1920
+ box_height 811
+ box_fixed true
+ name Reformat1
+ xpos 107
+ ypos 224
+}
+Grain2 {
+ name Grain2_1
+ label "Kodak 5218"
+ xpos 107
+ ypos 248
+ red_size 0.1
+ green_size 1.6
+ blue_size 1.91
+ green_i 0.86
+ blue_i 0.73
+ red_m 0.38
+ green_m 0.17
+ blue_m 0.87
+ black {0 0 0}
+ minimum {0 0 0}
+}
+Group {
+ name CC1
+ xpos 107
+ ypos 309
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 510
+  ypos 91
+ }
+ ColorCorrect {
+  highlights.gain 5
+  lookup {shadow {}
+    midtone {}
+    highlight {curve x-0.008459195495 0 s0 x0.3823549747 0.1056844592 x2.526475906 1 s0}}
+  name ColorCorrect1
+  xpos 510
+  ypos 131
+ }
+ Expression {
+  expr0 r/(r+1)
+  expr1 g/(g+1)
+  expr2 b/(b+1)
+  name Expression1
+  xpos 510
+  ypos 157
+ }
+ Grade {
+  multiply 1.62
+  gamma 0.76
+  mix_luminance 1
+  name Grade2
+  xpos 510
+  ypos 183
+ }
+ Output {
+  name Output1
+  xpos 510
+  ypos 283
+ }
+end_group
+Camera2 {
+ inputs 0
+ translate {0 0 2.266000032}
+ name Camera2
+ xpos 1534
+ ypos -384
+}
+set N6548b000 [stack 0]
+Light2 {
+ inputs 0
+ translate {{curve x1 0.1260000169 x31 0.2119999826 x60 0.0120000001 x100 0.5440000892} {curve x1 -0.3319999874 x31 0.2619999945 x60 -0.3099999726 x100 -0.3240000308} {curve x1 -1 x31 -1 x60 -0.9999999404 x100 -1}}
+ rotate {{curve x1 -22.44072312 x31 23.1059494 x60 -18.7450068 x100 -18.09145503} {curve x1 -9.586705816 x31 -16.4712983 x60 0.1313750468 x100 -40.04410137} {curve x1 1.04731346 x31 -15.92444262 x60 -20.64958627 x100 26.71281691}}
+ depthmap_slope_bias 0.01
+ name Light2
+ xpos 1887
+ ypos -447
+}
+set N6548ac00 [stack 0]
+push $N6548b000
+push $N6548ac00
+Ramp {
+ inputs 0
+ invert true
+ p0 {1816 196}
+ name Ramp1
+ xpos 1591
+ ypos -629
+}
+Shuffle {
+ green white
+ blue white
+ name Shuffle1
+ xpos 1591
+ ypos -603
+}
+Colorspace {
+ colorspace_in HSV
+ name Colorspace1
+ xpos 1591
+ ypos -577
+}
+Text2 {
+ inputs 0
+ font_size_toolbar 500
+ font_width_toolbar 100
+ font_height_toolbar 100
+ message WordArt
+ old_message {{87 111 114 100 65 114 116}
+   }
+ box {109.5 281.5 1806.5 782.5}
+ transforms {{0 2}
+   }
+ font_size_values {{0 500 1 500 2 500 3 500 4 500 5 500 6 500 0 500 1 500 2 500 3 500 4 500 5 500 6 500}
+   }
+ font {{ Impact : Regular : impact.ttf : 0 }}
+ font_size 500
+ scale {1 1}
+ center {960 540}
+ cursor_initialised true
+ initial_cursor_position {{109.5 782.5}
+   }
+ group_animations {{0} imported: 0 selected: 0 items: "root transform/"}
+ animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+   }
+ name Text2
+ xpos 1715
+ ypos -657
+}
+Transform {
+ skewY -0.1
+ center {960 540}
+ name Transform1
+ xpos 1715
+ ypos -631
+}
+Expression {
+ channel0 rgba
+ expr0 a>.1
+ name Expression1
+ xpos 1715
+ ypos -592
+}
+Merge2 {
+ inputs 2
+ operation multiply
+ bbox B
+ Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+ Bchannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+ output {rgba.red rgba.green rgba.blue -rgba.alpha}
+ name Merge3
+ xpos 1715
+ ypos -566
+}
+Card2 {
+ control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+ name Card4
+ xpos 1715
+ ypos -453
+}
+TransformGeo {
+ inputs 2
+ translate {0 0 1}
+ name TransformGeo1
+ xpos 1715
+ ypos -427
+}
+push 0
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ ztest_enabled false
+ filter Impulse
+ motion_vectors_type off
+ MB_channel none
+ name ScanlineRender3
+ xpos 1715
+ ypos -364
+}
+Crop {
+ box {0 0 1920 1080}
+ name Crop1
+ xpos 1715
+ ypos -328
+}
+X_Aton_Volumetrics {
+ inputs 3
+ name X_Aton2
+ xpos 1715
+ ypos -276
+ use_3d true
+ length -0.35
+ mode Brightest
+ decay 5
+ gamma 0.86
+ iterations 100
+}
+Unpremult {
+ name Unpremult1
+ xpos 1715
+ ypos -205
+}
+Expression {
+ expr3 a>0
+ name Expression2
+ xpos 1715
+ ypos -179
+}
+Constant {
+ inputs 0
+ channels rgb
+ color 1
+ name Constant1
+ xpos 1954
+ ypos -218
+}
+Grid {
+ opacity 0.1
+ number {32.14 17.6}
+ size 5
+ translate {234 158}
+ color 0
+ name Grid1
+ xpos 1954
+ ypos -146
+}
+Grid {
+ opacity 0.1
+ number {6.428 3.52}
+ size 7
+ translate {234 158}
+ color 0
+ name Grid2
+ xpos 1954
+ ypos -120
+}
+Merge2 {
+ inputs 2
+ name Merge4
+ xpos 1715
+ ypos -86
+}
+Radial {
+ inputs 0
+ area {-1061 -738 3021 1902}
+ name Radial3
+ xpos 3155
+ ypos 622
+}
+Group {
+ inputs 0
+ name Lens_Dust
+ xpos 3246
+ ypos 414
+}
+ Noise {
+  inputs 0
+  size 135
+  gain 1
+  center {960 540}
+  name Noise7
+  xpos -581
+  ypos 136
+ }
+ Grade {
+  blackpoint 0.98
+  white 0.02
+  gamma 0.77
+  name Grade11
+  xpos -581
+  ypos 162
+ }
+ Defocus {
+  defocus 20
+  name Defocus1
+  xpos -581
+  ypos 188
+ }
+ Sharpen {
+  size 15.5
+  name Sharpen1
+  xpos -581
+  ypos 226
+ }
+ TransformMasked {
+  channels {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  translate {0 -5}
+  scale 1.02
+  center {960 540}
+  filter Sinc4
+  name Transform4
+  xpos -581
+  ypos 264
+ }
+ Output {
+  name Output1
+  xpos -581
+  ypos 364
+ }
+end_group
+Camera2 {
+ inputs 0
+ translate {{curve x1 -0.18 x50 0.02 x100 0.12} {curve x1 -0.04 x50 0.02 x100 -0.02} 3}
+ rotate {{curve x1 -5.999998093 x50 5.515254021 x101 -2.181924343} {curve x1 17.20000648 x50 -4.985045433 x101 -17.09903526} {curve x1 2.146191065e-007 x50 2.144360991e-007 x101 1.601986526e-007}}
+ pivot {0 0 -3.5}
+ focal 70
+ name Camera4
+ xpos 2867
+ ypos 65
+}
+set N36b9800 [stack 0]
+Dot {
+ name Dot2
+ xpos 3120
+ ypos 232
+}
+set N36b9400 [stack 0]
+Light2 {
+ inputs 0
+ translate {0.4850000143 0.3149999976 -3.549999952}
+ depthmap_slope_bias 0.01
+ name Light4
+ xpos 3288
+ ypos -20
+}
+Dot {
+ name Dot3
+ xpos 3212
+ ypos 227
+}
+set N36b8c00 [stack 0]
+push $N36b9800
+Grid {
+ inputs 0
+ opacity {{abs(sin(frame*180))}}
+ number {1 100}
+ translate {0 {frame}}
+ name Grid4
+ xpos 3143
+ ypos -253
+}
+Text2 {
+ inputs 0
+ font_size_toolbar 500
+ font_width_toolbar 100
+ font_height_toolbar 100
+ output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ message POWER
+ old_message {{80 79 87 69 82}
+   }
+ box {257.5 251.5 1666.5 752.5}
+ transforms {{0 2}
+   }
+ font_size_values {{0 500 1 500 2 500 3 500 4 500 0 500 1 500 2 500 3 500 4 500}
+   }
+ cursor_position 2
+ font {{ Impact : Regular : impact.ttf : 0 }}
+ font_size 500
+ scale {1 1}
+ cursor_initialised true
+ initial_cursor_position {{257.5 752.5}
+   }
+ group_animations {{0} imported: 0 selected: items: "root transform/"}
+ animation_layers {{1 11 960 540 0 0 1 1 0 0 0 0}
+   }
+ name Text4
+ xpos 3025
+ ypos -717
+}
+Crop {
+ box {0 0 1920 1080}
+ name Crop2
+ xpos 3025
+ ypos -600
+}
+set N36b9c00 [stack 0]
+EdgeDetectWrapper {
+ channels {rgba.red -rgba.green -rgba.blue none}
+ name EdgeDetect2
+ xpos 2860
+ ypos -606
+}
+Shuffle {
+ red alpha
+ green alpha
+ blue alpha
+ name Shuffle2
+ xpos 2860
+ ypos -568
+}
+Multiply {
+ value {{abs(sin(frame*11))*.2}}
+ name Multiply1
+ xpos 2860
+ ypos -542
+}
+Dot {
+ name Dot4
+ xpos 2894
+ ypos -249
+}
+push $N36b9c00
+Noise {
+ output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ replace true
+ maskChannelInput rgba.red
+ type turbulence
+ size 1200
+ zoffset {{frame/8}}
+ octaves 8
+ lacunarity 2.3
+ gain 0.51
+ gamma 0.165
+ translate {{curve x1 9176.75 x38 9469.2 x39 9350.85 x48 9417.9 x51 9470 x57 9286.25 x59 8987.4 x91 8987.4 x92 9687.4 x97 8860.77963 x98 8987.4} {curve x1 -497.25 x38 -436.1 x48 -188.75 x51 -210 x91 -210 x97 0}}
+ rotate 61
+ center {960 540}
+ name Noise3
+ xpos 3025
+ ypos -574
+}
+EdgeDetectWrapper {
+ channels {rgba.red -rgba.green -rgba.blue none}
+ name EdgeDetect1
+ xpos 3025
+ ypos -536
+}
+FilterErode {
+ size -10
+ filter triangle
+ mix 0.5
+ name FilterErode1
+ xpos 3025
+ ypos -498
+}
+Laplacian {
+ channels alpha
+ size 164
+ quality 5
+ name Laplacian1
+ xpos 3025
+ ypos -465
+}
+Grade {
+ channels alpha
+ white 2
+ gamma 0.2
+ name Grade5
+ xpos 3025
+ ypos -427
+}
+TimeEcho {
+ mode Plus
+ framesbehind 10
+ frmaesfade 10
+ name TimeEcho1
+ xpos 3025
+ ypos -383
+}
+Noise {
+ output {-rgba.red -rgba.green rgba.blue -rgba.alpha}
+ zoffset {{frame}}
+ octaves 4
+ center {960 540}
+ name Noise4
+ xpos 3025
+ ypos -357
+}
+Noise {
+ output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+ type turbulence
+ size 200
+ zoffset {{frame}}
+ octaves 6
+ gain 0.625
+ center {960 540}
+ name Noise5
+ xpos 3025
+ ypos -331
+}
+Noise {
+ output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+ type turbulence
+ size 9.8
+ zoffset {{frame}}
+ octaves 2
+ gain 0.625
+ center {960 540}
+ name Noise6
+ xpos 3025
+ ypos -305
+}
+Premult {
+ name Premult1
+ xpos 3025
+ ypos -279
+}
+Merge2 {
+ inputs 2+1
+ mix 0.1
+ name Merge8
+ xpos 3025
+ ypos -253
+}
+Grid {
+ opacity {{abs(sin(frame*180))}}
+ maskChannelInput rgba.alpha
+ number {1 200}
+ size 0.7
+ translate {0 {frame}}
+ name Grid3
+ xpos 3025
+ ypos -219
+}
+Saturation {
+ saturation 0.5
+ mode Average
+ name Saturation3
+ xpos 3025
+ ypos -181
+}
+Grade {
+ multiply {0.66 1.02 3.2 1}
+ multiply_panelDropped true
+ gamma {0.89 1.1 1.42 1}
+ gamma_panelDropped true
+ name Grade6
+ xpos 3025
+ ypos -155
+}
+TransformMasked {
+ channels {-rgba.red rgba.green -rgba.blue none}
+ translate {1 {sin(frame*111)*.5}}
+ center {960 540}
+ filter Sinc4
+ name Transform2
+ xpos 3025
+ ypos -129
+}
+Dot {
+ name Dot5
+ xpos 3059
+ ypos -44
+}
+set Nf90e1400 [stack 0]
+TimeOffset {
+ time_offset 1
+ time ""
+ name TimeOffset1
+ xpos 3134
+ ypos -48
+}
+Multiply {
+ value 0.25
+ name Multiply2
+ xpos 3134
+ ypos -22
+}
+Card2 {
+ cast_shadow false
+ receive_shadow false
+ control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+ name Card9
+ xpos 3134
+ ypos 19
+}
+TransformGeo {
+ uniform_scale 0.98
+ pivot {0.4850000143 0.3149999976 -3.549999952}
+ name TransformGeo2
+ xpos 3134
+ ypos 72
+}
+push $Nf90e1400
+Card2 {
+ cast_shadow false
+ receive_shadow false
+ control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+ name Card8
+ xpos 3025
+ ypos 23
+}
+MergeGeo {
+ inputs 2
+ name MergeGeo1
+ xpos 3025
+ ypos 72
+}
+push 0
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ motion_vectors_type off
+ MB_channel none
+ name ScanlineRender6
+ xpos 3025
+ ypos 148
+}
+Crop {
+ box {0 0 1920 1080}
+ name Crop3
+ xpos 3025
+ ypos 174
+}
+Dot {
+ name Dot1
+ xpos 3059
+ ypos 249
+}
+set N51f83400 [stack 0]
+X_Aton_Volumetrics {
+ inputs 3
+ name X_Aton4
+ xpos 3025
+ ypos 278
+ center {1758 880}
+ use_3d true
+ length 4
+ diffuse 0
+ multiply 10
+ iterations 250
+ maxGPUMemory 70
+}
+push $N36b9400
+push $N36b8c00
+push $N51f83400
+X_Aton_Volumetrics {
+ inputs 3
+ name X_Aton5
+ xpos 3154
+ ypos 269
+ center {{parent.X_Aton4.center} {parent.X_Aton4.center}}
+ use_3d true
+ length -1
+ diffuse 0
+ multiply 10
+ iterations 150
+}
+Merge2 {
+ inputs 2
+ name Merge7
+ xpos 3025
+ ypos 314
+}
+Grade {
+ gamma 0.75
+ name Grade7
+ xpos 3025
+ ypos 340
+}
+Group {
+ name Glow
+ xpos 3025
+ ypos 456
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -581
+  ypos 17
+ }
+ Blur {
+  size {100 5}
+  mix 0.1
+  name Blur1
+  xpos -581
+  ypos 57
+ }
+ Blur {
+  size {300 5}
+  mix 0.1
+  name Blur2
+  xpos -581
+  ypos 95
+ }
+ Blur {
+  size {5 100}
+  mix 0.1
+  name Blur4
+  xpos -581
+  ypos 133
+ }
+ Blur {
+  size {500 500}
+  mix 0.06
+  name Blur3
+  xpos -581
+  ypos 172
+ }
+ Blur {
+  size {200 200}
+  mix 0.1
+  name Blur5
+  xpos -581
+  ypos 210
+ }
+ Blur {
+  size {50 50}
+  mix 0.1
+  name Blur6
+  xpos -581
+  ypos 248
+ }
+ Output {
+  name Output1
+  xpos -581
+  ypos 348
+ }
+end_group
+set N630b1a80 [stack 0]
+Blur {
+ size 500
+ name Blur7
+ xpos 3135
+ ypos 450
+}
+Merge2 {
+ inputs 2
+ operation multiply
+ name Merge9
+ xpos 3246
+ ypos 521
+}
+push $N630b1a80
+Merge2 {
+ inputs 2
+ operation plus
+ Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+ Bchannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+ output {rgba.red rgba.green rgba.blue -rgba.alpha}
+ name Merge10
+ xpos 3025
+ ypos 521
+}
+Grade {
+ black {0 0 0 0}
+ black_panelDropped true
+ multiply {1.2 1 1 1}
+ multiply_panelDropped true
+ gamma {0.9 1 1 1}
+ gamma_panelDropped true
+ name Grade8
+ xpos 3025
+ ypos 564
+}
+Grade {
+ black {0.01 0.002 0.05 0}
+ black_panelDropped true
+ name Grade10
+ xpos 3025
+ ypos 590
+}
+Grade {
+ inputs 1+1
+ multiply 0.26
+ gamma 0.83
+ invert_mask true
+ name Grade9
+ xpos 3025
+ ypos 616
+}
+TransformMasked {
+ channels {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+ translate {0 -1}
+ scale 1.005
+ center {960 540}
+ filter Lanczos4
+ name Transform3
+ xpos 3025
+ ypos 642
+}
+Grain2 {
+ name Grain2_3
+ label "Kodak 5218"
+ xpos 3025
+ ypos 694
+ red_size 0.1
+ green_size 1.6
+ blue_size 1.91
+ green_i 0.86
+ blue_i 0.73
+ red_m 2
+ green_m 0.39
+ blue_m 1
+ black {0 0 0}
+ minimum {0 0 0}
+ maskgrain false
+}
+Group {
+ name CC3
+ xpos 3025
+ ypos 732
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 510
+  ypos 91
+ }
+ ColorCorrect {
+  highlights.gain 5
+  lookup {shadow {}
+    midtone {}
+    highlight {curve x-0.008459195495 0 s0 x0.3823549747 0.1056844592 x2.526475906 1 s0}}
+  name ColorCorrect1
+  xpos 510
+  ypos 131
+ }
+ Expression {
+  expr0 r/(r+1)
+  expr1 g/(g+1)
+  expr2 b/(b+1)
+  name Expression1
+  xpos 510
+  ypos 157
+ }
+ Grade {
+  multiply 1.62
+  gamma 0.76
+  mix_luminance 1
+  name Grade2
+  xpos 510
+  ypos 183
+ }
+ Output {
+  name Output1
+  xpos 510
+  ypos 283
+ }
+end_group
+Reformat {
+ type "to box"
+ box_width 1920
+ box_height 811
+ box_fixed true
+ name Reformat3
+ xpos 3025
+ ypos 758
+}

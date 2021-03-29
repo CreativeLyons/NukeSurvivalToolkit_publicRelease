@@ -1,0 +1,13 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr0 "1-(y / height)"
+ expr1 "1-(y / height)"
+ expr2 "1-(y / height)"
+ expr3 "1-(y / height)"
+ name gradient_vertical_invert
+ selected true
+ xpos 1443
+ ypos 516
+}

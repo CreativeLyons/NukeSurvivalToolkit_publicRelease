@@ -1,0 +1,123 @@
+Group {
+ inputs 2
+ name MergeBlend
+ tile_color 0x4b5ec6ff
+ label "\[value merge1] | \[value merge2]"
+ note_font "Verdana Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 MergeBlend}
+ addUserKnob {41 channels T Merge1.also_merge}
+ addUserKnob {41 bbox l "set bbox to " T Merge9.bbox}
+ addUserKnob {41 metainput l "metadata from" -STARTLINE T Merge9.metainput}
+ addUserKnob {41 rangeinput l "range from" -STARTLINE T Merge9.rangeinput}
+ addUserKnob {26 ""}
+ addUserKnob {41 merge1 l Merge1 T Merge9.operation}
+ addUserKnob {41 merge2 l "         Merge2" -STARTLINE T Merge8.operation}
+ addUserKnob {26 text l " " T "0 is Merge1 <------> 1 is Merge2"}
+ addUserKnob {41 blend l Blend T Dissolve1.which}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 mix T Merge1.mix}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "Mix between 2 Merge Operations" T MergeBlend}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -239
+  ypos 761
+  number 2
+ }
+ Input {
+  inputs 0
+  name InputA
+  xpos -332
+  ypos 355
+  number 1
+ }
+ Dot {
+  name Dot16
+  xpos -298
+  ypos 448
+ }
+set Nc7745230 [stack 0]
+ Input {
+  inputs 0
+  name InputB
+  xpos -569
+  ypos 353
+ }
+ Dot {
+  name Dot19
+  xpos -535
+  ypos 461
+ }
+set Nc774ca40 [stack 0]
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox {{Merge9.bbox}}
+  metainput {{Merge9.metainput}}
+  rangeinput {{Merge9.rangeinput}}
+  also_merge all
+  name Merge8
+  xpos -332
+  ypos 572
+ }
+push $Nc7745230
+push $Nc774ca40
+ Merge2 {
+  inputs 2
+  operation screen
+  also_merge all
+  name Merge9
+  xpos -569
+  ypos 572
+ }
+ Dissolve {
+  inputs 2
+  which 0.5
+  name Dissolve1
+  xpos -460
+  ypos 673
+ }
+push $Nc774ca40
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos -645
+  ypos 461
+ }
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos -645
+  ypos 764
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox {{Merge9.bbox}}
+  metainput {{Merge9.metainput}}
+  rangeinput {{Merge9.rangeinput}}
+  Achannels none
+  Bchannels none
+  output none
+  also_merge rgba
+  name Merge1
+  xpos -460
+  ypos 757
+ }
+ Output {
+  name Output1
+  xpos -460
+  ypos 854
+ }
+end_group

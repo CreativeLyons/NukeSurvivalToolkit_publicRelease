@@ -1,0 +1,23 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+DeepToImage {
+ name DeepToImage1
+ selected true
+ xpos 150
+ ypos -47
+}
+AddChannels {
+ channels depth
+ name AddChannels1
+ selected true
+ xpos 150
+}
+Expression {
+ channel3 depth
+ expr3 "deep.r == 0 ? inf : deep.r"
+ name DeepToDepth
+ selected true
+ xpos 150
+ ypos 59
+}

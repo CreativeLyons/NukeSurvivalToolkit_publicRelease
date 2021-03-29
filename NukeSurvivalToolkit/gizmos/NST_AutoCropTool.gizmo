@@ -1,0 +1,224 @@
+Group {
+ name AutoCropTool
+ tile_color 0xa57aaaff
+ note_font "Bitstream Vera Sans Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 AutoCropTool}
+ addUserKnob {41 channels l "Channels to Analyse" T CurveTool.channels}
+ addUserKnob {26 ""}
+ addUserKnob {26 preReformat l "@b; Pre-Reformat Scale" T " "}
+ addUserKnob {41 scale l "" -STARTLINE T Reformat1.scale}
+ addUserKnob {22 go l Go! T "import time\nimport threading\n\nn = nuke.thisNode()\n#Define this node\n\nct1 = nuke.toNode(\"CurveTool\")\n# Define curveTool nodes\n\nfirst_frame = int(nuke.Root()\['first_frame'].getValue())\nlast_frame = int(nuke.Root()\['last_frame'].getValue())\n# Grab first and last frame from root\n\np = nuke.Panel(\"Execute on FrameRange\")\np.addSingleLineInput('First Frame', first_frame)\np.addSingleLineInput('Last Frame', last_frame)\np.addSingleLineInput('Increment', 1)\nif p.show():\n    \n    # Create user input panel\n    \n    ff = int(p.value(\"First Frame\"))\n    lf = int(p.value(\"Last Frame\"))\n    i = int(p.value(\"Increment\"))\n    # Define first, last, increment from user input panel\n    \n    with n:\n        \n        ct1\[\"autocropdata\"].clearAnimated()\n        # Clear any intensitydata from all CurveTool nodes\n    \n        def executeCT(first,last,inc):\n            runMe = True\n            while runMe == True:\n                nuke.execute(ct1,first,last,inc)\n                stop_event.set()\n                runMe = False\n                #print 'CurveTools done'\n                break\n            # Define CurveTool execution function\n    \n    \n        global stop_event \n        stop_event = threading.Event()\n        threading.Thread(target=executeCT, kwargs=dict(first=ff,last=lf,inc=i) ).start() \n        while not stop_event.is_set():\n            time.sleep(0.1)\n        # run CurveTools with threading" +STARTLINE}
+ addUserKnob {26 adjustbbox l "@b;Adjust Final BBox"}
+ addUserKnob {6 blackOutside l BlackOutside +STARTLINE}
+ addUserKnob {7 addPix l "Add Pixels" R 0 100}
+ addPix 20
+ addUserKnob {20 outbbox2 l "Output BBox Data" n 1}
+ outbbox2 0
+ addUserKnob {41 box T CropBBox_v02_.box}
+ addUserKnob {41 bboxCenter l "bbox Center" T CropBBox_v02_.bboxCenter}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 Info}
+ addUserKnob {26 creator l Creator: T "<big><b>Tony Lyons"}
+ addUserKnob {26 desc l Name: T AutoCropTool}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -489
+  ypos 342
+ }
+ Dot {
+  name Dot159
+  xpos -455
+  ypos 404
+ }
+set Na1222db0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.05
+  pbb true
+  name Reformat1
+  xpos -629
+  ypos 400
+ }
+set Na11adfe0 [stack 0]
+ CurveTool {
+  operation "Auto Crop"
+  channels alpha
+  ROI {{"min(bboxSize1.Crop6.box.x, bboxSize2.Crop6.box.x)"} {"min(bboxSize1.Crop6.box.y, bboxSize2.Crop6.box.y)"} {"max(bboxSize1.Crop6.box.r, bboxSize2.Crop6.box.r)"} {"max(bboxSize1.Crop6.box.t, bboxSize2.Crop6.box.t)"}}
+  autocropdata {{curve} {curve} {curve} {curve}}
+  intensitydata {0 0 0 0}
+  name CurveTool
+  xpos -629
+  ypos 496
+ }
+ Crop {
+  box {{parent.CurveTool.autocropdata} {parent.CurveTool.autocropdata} {parent.CurveTool.autocropdata} {parent.CurveTool.autocropdata}}
+  name Crop29
+  xpos -629
+  ypos 534
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  addUserKnob {22 cropToBbox_1 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  addUserKnob {22 cropToBbox_2 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Reformat {
+  type scale
+  scale {{1/parent.Reformat1.scale}}
+  pbb true
+  name Reformat6
+  xpos -629
+  ypos 560
+ }
+ Group {
+  name CropBBox_v02_
+  tile_color 0xa57aaaff
+  selected true
+  xpos -629
+  ypos 586
+  lock_connections {{curve x1000 0}}
+  addUserKnob {20 User}
+  addUserKnob {26 info l "" +STARTLINE T "crop node with width/height set to the inputs width/height, with black outside checked off"}
+  addUserKnob {4 type l Type M {"To Format" "To BBox"}}
+  type "To BBox"
+  addUserKnob {41 intersect T Crop6.intersect}
+  addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+  addUserKnob {20 inputBbox n 1}
+  addUserKnob {41 box T Crop6.box}
+  addUserKnob {14 bboxCenter l "bbox Center" R 0 100}
+  bboxCenter {{"(this.Crop6.box.r-this.Crop6.box.x)/2 + this.Crop6.box.x"} {"(this.Crop6.box.t-this.Crop6.box.y)/2 + this.Crop6.box.y"}}
+  addUserKnob {20 endGroup n -1}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 261
+   ypos 388
+  }
+  Crop {
+   box {{"type == 0 ? 0 : input.bbox.x"} {"type == 0 ? 0 : input.bbox.y"} {"type == 0 ? input.width : input.bbox.r"} {"type == 0 ? input.height : input.bbox.t"}}
+   crop {{parent.blackOutside}}
+   name Crop6
+   xpos 261
+   ypos 466
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+   addUserKnob {22 cropToBbox_1 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+   addUserKnob {22 cropToBbox_2 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Output {
+   name Output1
+   xpos 261
+   ypos 583
+  }
+ end_group
+ AdjBBox {
+  numpixels {{parent.addPix}}
+  name AdjBBox6
+  xpos -629
+  ypos 612
+ }
+push $Na1222db0
+ CopyBBox {
+  inputs 2
+  name CopyBBox13
+  xpos -489
+  ypos 612
+ }
+ BlackOutside {
+  name BlackOutside1
+  xpos -489
+  ypos 636
+  disable {{!parent.blackOutside}}
+ }
+ Output {
+  name Output1
+  xpos -489
+  ypos 712
+ }
+push $Na11adfe0
+ Group {
+  name bboxSize1
+  tile_color 0xa57aaaff
+  xpos -780
+  ypos 400
+  lock_connections {{curve x1000 0}}
+  addUserKnob {20 User}
+  addUserKnob {26 info l "" +STARTLINE T "crop node with width/height set to the inputs width/height, with black outside checked off"}
+  addUserKnob {4 type l Type M {"To Format" "To BBox"}}
+  addUserKnob {41 intersect T Crop6.intersect}
+  addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+  addUserKnob {20 inputBbox n 1}
+  addUserKnob {41 box T Crop6.box}
+  addUserKnob {14 bboxCenter l "bbox Center" R 0 100}
+  bboxCenter {{"(this.Crop6.box.r-this.Crop6.box.x)/2 + this.Crop6.box.x"} {"(this.Crop6.box.t-this.Crop6.box.y)/2 + this.Crop6.box.y"}}
+  addUserKnob {20 endGroup n -1}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 261
+   ypos 388
+  }
+  Crop {
+   box {{"type == 0 ? 0 : input.bbox.x"} {"type == 0 ? 0 : input.bbox.y"} {"type == 0 ? input.width : input.bbox.r"} {"type == 0 ? input.height : input.bbox.t"}}
+   intersect true
+   crop {{parent.blackOutside}}
+   name Crop6
+   xpos 261
+   ypos 466
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+   addUserKnob {22 cropToBbox_1 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+   addUserKnob {22 cropToBbox_2 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Output {
+   name Output1
+   xpos 261
+   ypos 583
+  }
+ end_group
+push $Na11adfe0
+ Group {
+  name bboxSize2
+  tile_color 0xa57aaaff
+  xpos -763
+  ypos 501
+  lock_connections {{curve x1000 0}}
+  addUserKnob {20 User}
+  addUserKnob {26 info l "" +STARTLINE T "crop node with width/height set to the inputs width/height, with black outside checked off"}
+  addUserKnob {4 type l Type M {"To Format" "To BBox"}}
+  type "To BBox"
+  addUserKnob {41 intersect T Crop6.intersect}
+  addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+  addUserKnob {20 inputBbox n 1}
+  addUserKnob {20 endGroup n -1}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 261
+   ypos 388
+  }
+  Crop {
+   box {{"type == 0 ? 0 : input.bbox.x"} {"type == 0 ? 0 : input.bbox.y"} {"type == 0 ? input.width : input.bbox.r"} {"type == 0 ? input.height : input.bbox.t"}}
+   intersect true
+   crop {{parent.blackOutside}}
+   name Crop6
+   xpos 261
+   ypos 466
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+   addUserKnob {22 cropToBbox_1 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+   addUserKnob {22 cropToBbox_2 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Output {
+   name Output1
+   xpos 261
+   ypos 583
+  }
+ end_group
+end_group

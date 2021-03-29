@@ -1,0 +1,583 @@
+Group {
+ inputs 0
+ name SpotFlare
+ tile_color 0x2f66ff
+ addUserKnob {20 User}
+ addUserKnob {26 Headline l "" +STARTLINE T "<font color=#80dddd size=\"7\">S</font><font color=#90dede size=\"7\">p</font><font color=#a0dfdf size=\"7\">o</font><font color=#b0e0e0 size=\"7\">t</font><font color=#c0e1e1 size=\"7\">F</font><font color=#b0e0e0 size=\"7\">l</font><font color=#a0dfdf size=\"7\">are</font><font color=#90dede size=\"3\">v</font><font color=#80dddd size=\"2\">1.0</font>"}
+ addUserKnob {26 HeadlineB l "" +STARTLINE T "<font color=#80dddd size=\"2\">by Mads Hagbarth Lund</font>"}
+ addUserKnob {26 devider001 l "<b><font color=#70EE70>General</font><b>"}
+ addUserKnob {12 Position}
+ Position {1036 496}
+ addUserKnob {7 Gain}
+ Gain 0.63
+ addUserKnob {7 Gamma R 0 5}
+ Gamma 1.12
+ addUserKnob {7 Scale}
+ Scale 0.55
+ addUserKnob {6 SoftClip t "By default, spotflare will be very bright at the center. Use softclip to limit the maximum brightness." +STARTLINE}
+ addUserKnob {7 softclipmax l max -STARTLINE R 1 100}
+ softclipmax 10
+ addUserKnob {6 glow_enable l Glow +STARTLINE}
+ glow_enable true
+ addUserKnob {6 EffectOnly l "Effect Only" +STARTLINE}
+ EffectOnly true
+ addUserKnob {22 FixJitter l "Fix Jitter" t "This does nothing... yet still fixes the bug with the expression node not updating its cashe from time to time.\nPlease fix The Foundry!" +STARTLINE}
+ addUserKnob {26 devider02 l "<b><font color=#70EE70>Color</font><b>"}
+ addUserKnob {18 GainTint}
+ GainTint {0.601217 0.681301 1}
+ addUserKnob {6 GainTint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ GainTint_panelDropped true
+ addUserKnob {18 GammaTint}
+ GammaTint {1 1 1}
+ addUserKnob {6 GammaTint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ GammaTint_panelDropped true
+ addUserKnob {26 devide01 l "" +STARTLINE T " "}
+ addUserKnob {22 Reset l "Reset Color" T "nuke.thisNode().knob(\"GainTint\").setValue(1,0)\nnuke.thisNode().knob(\"GainTint\").setValue(1,1)\nnuke.thisNode().knob(\"GainTint\").setValue(1,2)\nnuke.thisNode().knob(\"GainTint\").setValue(1,3)\nnuke.thisNode().knob(\"GammaTint\").setValue(1,0)\nnuke.thisNode().knob(\"GammaTint\").setValue(1,1)\nnuke.thisNode().knob(\"GammaTint\").setValue(1,2)\nnuke.thisNode().knob(\"GammaTint\").setValue(1,3)" +STARTLINE}
+ addUserKnob {26 DeviderShimmer l "<b><font color=#70EE70>Shimmer</font><b>"}
+ addUserKnob {6 shimmer_enable l Shimmer +STARTLINE}
+ shimmer_enable true
+ addUserKnob {7 lacunarity l Detail R 0 5}
+ lacunarity 3.5
+ addUserKnob {7 noise_gain l Gain}
+ noise_gain 1
+ addUserKnob {7 Speed}
+ Speed 0.76
+ addUserKnob {7 Noise_Gang l "Time Offset" R 0 1000}
+ Noise_Gang 240
+ addUserKnob {26 devider04 l "<b><font color=#70EE70>Masking</font><b>"}
+ addUserKnob {6 Mask +STARTLINE}
+ addUserKnob {7 MaskRotation l "Mask Rotation"}
+ MaskRotation 0.31
+ addUserKnob {7 MaskGain l "Mask Gain"}
+ MaskGain 0.4
+ addUserKnob {7 MaskSoftness R 0 10}
+ MaskSoftness 2.35
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode5
+  tile_color 0x71c67100
+  label "Spot Facing"
+  note_font_size 42
+  xpos -1463
+  ypos 208
+  bdwidth 252
+  bdheight 258
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x388e8e00
+  label Glow
+  note_font_size 42
+  xpos -597
+  ypos 209
+  bdwidth 280
+  bdheight 258
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x7171c600
+  label Spike
+  note_font_size 42
+  xpos -222
+  ypos 207
+  bdwidth 270
+  bdheight 257
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0xffffffff
+  gl_color 0xff
+  label "WELCOME TO SPOTFLARE"
+  note_font_size 42
+  xpos -904
+  ypos -206
+  bdwidth 523
+  bdheight 138
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode6
+  tile_color 0xff
+  label "PLEASE ENJOY"
+  note_font_size 42
+  xpos -801
+  ypos 896
+  bdwidth 333
+  bdheight 160
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x8e388e00
+  label Glare
+  note_font_size 42
+  xpos -1156
+  ypos 207
+  bdwidth 468
+  bdheight 298
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote2
+  label "This is a super inefficient way\nto avoid the 1-0 seam and\na major performence hit.\nIf anyone have a better solution,\nplease mail me! =)"
+  note_font_size 8
+  xpos -1045
+  ypos 350
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  tile_color 0xcc0000ff
+  gl_color 0xcc0000ff
+  label "not yet implamented"
+  xpos -222
+  ypos 206
+ }
+ Dot {
+  inputs 0
+  name Dot19
+  tile_color 0xff0000ff
+  xpos -674
+  ypos -127
+  hide_input true
+ }
+ Dot {
+  inputs 0
+  name Dot20
+  tile_color 0xffff00ff
+  xpos -658
+  ypos -127
+  hide_input true
+ }
+ Dot {
+  inputs 0
+  name Dot21
+  tile_color 0xff00ff
+  xpos -641
+  ypos -127
+  hide_input true
+ }
+ Dot {
+  inputs 0
+  name Dot22
+  tile_color 0xffffff
+  xpos -624
+  ypos -127
+  hide_input true
+ }
+ Dot {
+  inputs 0
+  name Dot23
+  tile_color 0xffff
+  xpos -607
+  ypos -127
+  hide_input true
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos -674
+  ypos -106
+ }
+ Dot {
+  name Dot13
+  xpos -640
+  ypos -25
+ }
+set N60fa3bb0 [stack 0]
+ Reformat {
+  black_outside true
+  name Reformat1
+  xpos -674
+  ypos 11
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle3
+  xpos -674
+  ypos 35
+ }
+ Dot {
+  name Dot1
+  xpos -640
+  ypos 131
+ }
+set N60fa4600 [stack 0]
+ Dot {
+  name Dot9
+  xpos -456
+  ypos 131
+ }
+set N60fa8e30 [stack 0]
+ Dot {
+  name Dot2
+  xpos -61
+  ypos 131
+ }
+ Expression {
+  expr0 "(atan(x-parent.Position.x,-y--parent.Position.y)+ (pi))/(pi*2)"
+  name Expression8
+  xpos -95
+  ypos 268
+ }
+ Expression {
+  expr0 sin(r*(16*pi))
+  name Expression14
+  xpos -95
+  ypos 310
+ }
+ Grade {
+  white 0.89
+  gamma 0.2
+  name Grade6
+  xpos -95
+  ypos 352
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle2
+  xpos -95
+  ypos 396
+ }
+push $N60fa8e30
+ Expression {
+  temp_name0 xd
+  temp_expr0 parent.Position.x-x
+  temp_name1 yd
+  temp_expr1 parent.Position.y-y
+  temp_name2 dist
+  temp_expr2 "sqrt(xd*xd + yd*yd)"
+  temp_name3 scale
+  temp_expr3 "dist / ((parent.Scale*1))"
+  expr0 scale
+  channel1 {-rgba.red -rgba.green -rgba.blue none}
+  channel2 {-rgba.red -rgba.green -rgba.blue none}
+  channel3 {none none none -rgba.alpha}
+  enable_mix_luminance false
+  name distance
+  xpos -490
+  ypos 262
+ }
+ Grade {
+  white {{pow(1-parent.Gain,4)}}
+  gamma {{pow2(parent.Gamma)}}
+  name Grade16
+  xpos -490
+  ypos 305
+ }
+ Expression {
+  temp_name3 invsqr
+  temp_expr3 isnan(r)?0:1/(r*r)
+  expr0 invsqr
+  expr1 invsqr
+  expr2 invsqr
+  name Inverse_Square
+  xpos -490
+  ypos 341
+ }
+ Grade {
+  white {{parent.GainTint.r} {parent.GainTint.g} {parent.GainTint.b} 1}
+  white_panelDropped true
+  multiply {1 1 1 1}
+  multiply_panelDropped true
+  gamma {{parent.GammaTint} {parent.GammaTint} {parent.GammaTint} 1}
+  name Grade2
+  xpos -490
+  ypos 387
+ }
+ Clamp {
+  maximum 59999
+  MinClampTo_enable true
+  MaxClampTo {{maximum}}
+  MaxClampTo_enable true
+  name Clamp_Superbrights
+  xpos -490
+  ypos 428
+ }
+set N60fa9f60 [stack 0]
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge3
+  xpos -95
+  ypos 434
+ }
+ Dot {
+  name Dot3
+  xpos -61
+  ypos 708
+ }
+ Dot {
+  name Dot15
+  xpos -572
+  ypos 708
+ }
+push $N60fa4600
+ Dot {
+  name Dot16
+  xpos -750
+  ypos 131
+ }
+set N60fa4970 [stack 0]
+ Dot {
+  name Dot17
+  xpos -868
+  ypos 131
+ }
+ Dot {
+  name Dot7
+  xpos -1332
+  ypos 131
+ }
+ Expression {
+  temp_name0 theta
+  temp_expr0 pi*(parent.MaskRotation*2)
+  temp_name1 px
+  temp_expr1 "cos(theta) * (x-parent.Position.x) - sin(theta) * (y-parent.Position.y) + parent.Position.x"
+  temp_name2 py
+  temp_expr2 "sin(theta) * (x-parent.Position.x) + cos(theta) * (y-parent.Position.y) + parent.Position.y"
+  temp_name3 val
+  temp_expr3 "(atan(px-parent.Position.x,-py--parent.Position.y)+ pi)/+ (pi*2)"
+  expr0 "smoothstep(0,1, sin(val*pi))"
+  name Expression1
+  xpos -1366
+  ypos 298
+ }
+ Grade {
+  black 0.033
+  white {{(pow(parent.MaskGain,2)*10)+0.0001}}
+  gamma {{(pow(parent.MaskSoftness,2)/2)+0.15}}
+  name Grade9
+  xpos -1366
+  ypos 336
+ }
+ Expression {
+  expr0 max(0,1-r)
+  expr1 max(0,1-r)
+  expr2 max(0,1-r)
+  name Expression17
+  xpos -1366
+  ypos 380
+ }
+ Dot {
+  name Dot8
+  xpos -1332
+  ypos 745
+ }
+push $N60fa4970
+ Dot {
+  name Dot4
+  xpos -750
+  ypos 230
+ }
+set N60fa6180 [stack 0]
+ Dot {
+  name Dot5
+  xpos -868
+  ypos 230
+ }
+ Expression {
+  expr0 "(atan(x-parent.Position.x,-y--parent.Position.y)+ pi)/+ (pi*2)"
+  name inversefacing
+  xpos -902
+  ypos 267
+ }
+set N60fa6860 [stack 0]
+ Dot {
+  name Dot18
+  xpos -978
+  ypos 270
+ }
+ Expression {
+  expr0 pow(sin(r*pi),16)
+  name reduction
+  xpos -1012
+  ypos 313
+ }
+set N60fa6f40 [stack 0]
+ Dot {
+  name Dot10
+  xpos -978
+  ypos 415
+ }
+push $N60fa6f40
+push $N60fa6860
+ ShuffleCopy {
+  inputs 2
+  green red
+  alpha alpha2
+  name ShuffleCopy1
+  xpos -902
+  ypos 313
+ }
+ Expression {
+  temp_name0 octaves
+  temp_expr0 5
+  temp_name1 lacunarity
+  temp_expr1 parent.lacunarity
+  temp_name2 gain
+  temp_expr2 parent.noise_gain
+  temp_name3 Noise
+  temp_expr3 g>0.0001?fBm(r,1,1+((frame+parent.Noise_Gang)/((1.0001-parent.Speed)*10000)),octaves,lacunarity,gain):0
+  expr0 Noise
+  expr1 Noise
+  expr2 Noise
+  name noise_top
+  xpos -902
+  ypos 348
+ }
+ Grade {
+  black 0.54
+  gamma 0.585
+  black_clamp false
+  name Grade14
+  xpos -902
+  ypos 388
+ }
+push $N60fa6180
+ Expression {
+  temp_name0 xd
+  temp_expr0 parent.Position.x-x
+  temp_name1 yd
+  temp_expr1 parent.Position.y-y
+  temp_name2 dist
+  temp_expr2 "sqrt(xd*xd + yd*yd)"
+  expr0 "(atan(x-parent.Position.x,y-parent.Position.y)+ pi)/+ (pi*2)"
+  expr1 dist/width
+  name facing
+  xpos -784
+  ypos 267
+ }
+ Expression {
+  temp_name0 octaves
+  temp_expr0 5
+  temp_name1 lacunarity
+  temp_expr1 parent.lacunarity
+  temp_name2 gain
+  temp_expr2 parent.noise_gain
+  temp_name3 Noise
+  temp_expr3 fBm(r,1,1+((frame+8+parent.Noise_Gang)/((1.0001-parent.Speed)*10000)),octaves,lacunarity,gain)
+  expr0 Noise
+  expr1 Noise
+  expr2 Noise
+  name noise
+  xpos -784
+  ypos 314
+ }
+ Grade {
+  black 0.54
+  gamma 0.585
+  black_clamp false
+  name Grade15
+  xpos -784
+  ypos 412
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  maskChannelMask rgba.red
+  name FixSeam
+  xpos -902
+  ypos 412
+ }
+push $N60fa9f60
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge1
+  xpos -902
+  ypos 436
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp_Negative_Numbers
+  xpos -902
+  ypos 460
+ }
+ Dot {
+  name Dot6
+  xpos -868
+  ypos 660
+ }
+push $N60fa9f60
+ Dot {
+  name Dot11
+  xpos -456
+  ypos 587
+ }
+push $N60fa4600
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge6
+  xpos -674
+  ypos 584
+  disable {{1-parent.glow_enable}}
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge2
+  xpos -674
+  ypos 657
+  disable {{1-parent.shimmer_enable x2012 1}}
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge5
+  xpos -674
+  ypos 742
+  disable {{1-parent.Mask}}
+ }
+ SoftClip {
+  conversion "preserve hue and saturation"
+  softclip_min 1
+  softclip_max {{parent.softclipmax}}
+  name SoftClip1
+  xpos -674
+  ypos 766
+  disable {{1-parent.SoftClip}}
+ }
+push $N60fa3bb0
+ Dot {
+  name Dot12
+  xpos -689
+  ypos -25
+ }
+ Grade {
+  multiply 0
+  black_clamp false
+  enable_mix_luminance false
+  name Grade1
+  xpos -723
+  ypos 77
+  disable {{1-parent.EffectOnly}}
+ }
+ Dot {
+  name Dot14
+  xpos -692
+  ypos 794
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge7
+  xpos -674
+  ypos 791
+ }
+ Output {
+  name Output1
+  xpos -674
+  ypos 991
+ }
+end_group

@@ -1,0 +1,13 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr0 "x / width"
+ expr1 "x / width"
+ expr2 "x / width"
+ expr3 "x / width"
+ name gradient_horizontal
+ selected true
+ xpos 1426
+ ypos 448
+}

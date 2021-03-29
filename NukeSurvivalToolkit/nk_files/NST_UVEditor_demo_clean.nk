@@ -1,0 +1,3540 @@
+#write_info Write1 file:"" format:"256 256 1" chans:":rgba.red:rgba.green:rgba.blue:" framerange:"1001 1050" fps:"0" colorspace:"default" datatype:"unknown" transfer:"unknown" views:"main" colorManagement:"Nuke"
+Root {
+ inputs 0
+ frame 1027
+ first_frame 1001
+ last_frame 1050
+ format "2048 1556 0 0 2048 1556 1 2K_Super_35(full-ap)"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode1
+ tile_color 0x354c4cff
+ label "preview in uv space"
+ note_font_size 42
+ xpos -383
+ ypos -672
+ bdwidth 469
+ bdheight 698
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode2
+ tile_color 0x354c4cff
+ label "udim - modify / export"
+ note_font_size 42
+ xpos 200
+ ypos -670
+ bdwidth 622
+ bdheight 696
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode3
+ tile_color 0x354c4cff
+ label "uvtile - map to geo directly"
+ note_font_size 42
+ xpos 992
+ ypos -668
+ bdwidth 646
+ bdheight 689
+}
+BackdropNode {
+ inputs 0
+ name BackdropNode4
+ tile_color 0x354c4cff
+ label "UV pass - for STmap"
+ note_font_size 42
+ xpos 1762
+ ypos -527
+ bdwidth 594
+ bdheight 558
+}
+Axis2 {
+ inputs 0
+ rotate {0 {curve x1001 -20 x1050 20} 0}
+ name Axis2
+ xpos 228
+ ypos -546
+}
+Camera2 {
+ translate {66.90603638 35.25645828 -5.300000668}
+ rotate {-24.62797338 90.0000025 0}
+ name Camera4
+ xpos 228
+ ypos -424
+}
+Dot {
+ name Dot5
+ xpos 252
+ ypos -240
+}
+set N8decb800 [stack 0]
+FrameHold {
+ first_frame 1001
+ name FrameHold2
+ xpos 305
+ ypos -250
+}
+CheckerBoard2 {
+ inputs 0
+ name CheckerBoard2
+ xpos 415
+ ypos -372
+}
+Project3D2 {
+ inputs 2
+ name Project3D2
+ xpos 415
+ ypos -244
+}
+ReadGeo2 {
+ inputs 0
+ file ./Trex_UVtile_skin.abc
+ localizationPolicy off
+ version 2
+ use_geometry_colors false
+ range_first 0
+ range_last 0
+ scene_view {{0} imported: 0 selected: 0 items: /root/Trex_UVtile:Skin/Trex_UVtile:SkinShape}
+ name ReadGeo8
+ xpos 531
+ ypos -243
+}
+Group {
+ inputs 2
+ name UVEditor3
+ onCreate "\nthisGRP = nuke.thisGroup()\nif not thisGRP\['disable_error'].getValue() :\n    import os\n    import re\n\n    fontpath = re.split( '/|\"\"' , nuke.EXE_PATH )\n    fontpath.pop()\n    fontpath += \['plugins','fonts']\n    \n    if os.path.isfile( '/'.join( fontpath + \['UtopiaBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['UtopiaBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['CourierBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['CourierBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) )\n    else :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['BitstreamCharterBold.pfb'] ) )\n"
+ tile_color 0x6666ff
+ xpos 466
+ ypos -154
+ addUserKnob {20 tab_general l General}
+ addUserKnob {3 texSize l "texture size"}
+ texSize 256
+ addUserKnob {41 filter T SR.filter}
+ addUserKnob {41 antialiasing T SR.antialiasing}
+ addUserKnob {26 ""}
+ addUserKnob {41 view_wireframe l "view wireframe" T menu02.view_wireframe}
+ addUserKnob {7 wireframe_size l "wireframe size" +DISABLED R 0.1 10}
+ wireframe_size 0.1
+ addUserKnob {26 ""}
+ addUserKnob {41 output T menu01.output}
+ addUserKnob {30 uv_shift l INVISIBLE +INVISIBLE}
+ addUserKnob {41 scanRes +INVISIBLE T store.scanRes}
+ addUserKnob {22 udim_export l export T "thisGRP = nuke.thisGroup()\ndataCheckNode = nuke.toNode('dataCheck')\n\n########################################################\n\nusrUV = thisGRP\['uv_shift'].getValue()\ndataReturn = \[]\n\nprogBar = nuke.ProgressTask('Checking UV')\njobCount = 0\n\nfor v in range (0, 10) :\n  for u in range (0, 10) :\n\n    ### progress bar\n    jobCount += 1\n    progShow = int(jobCount/100 * 100)\n    if progBar.isCancelled() :\n      break;\n    progBar.setProgress(progShow)\n    #################\n\n    thisGRP\['uv_shift'].setValue(\[u,v])\n    nuke.execute(dataCheckNode, nuke.frame(), nuke.frame())\n    if dataCheckNode\['maxlumapixvalue'].getValue() != \[0.0, 0.0, 0.0] :\n      dataReturn.append(1)\n    else :\n      dataReturn.append(0)\n\ndel progBar\n\ndataCheckNode\['maxlumapixdata'].clearAnimated()\ndataCheckNode\['maxlumapixvalue'].clearAnimated()\ndataCheckNode\['minlumapixdata'].clearAnimated()\ndataCheckNode\['minlumapixvalue'].clearAnimated()\n\nif len(dataReturn) == 100 :\n\tfor i in range (0, 100) :\n\t  if dataReturn\[i] == 1 :\n\t    uvMax = i\n\n\tthisGRP\['uv_shift'].setValue(usrUV)\n\n\t########################################################\n\n\tgoStore = nuke.toNode('store')\n\tgoStore\['fn'].execute()\n\n\troot = getLevel()\n\n\troot.begin()\n\toutFR = nuke.nodes.FrameRange()\n\toutFR\['first_frame'].setValue(1001)\n\toutFR\['last_frame'].setValue(1001 + uvMax)\n\toutFR\['label'].setValue( 'udim range : 1001 - \{0\}'.format( str(1001 + uvMax) ) )\n\toutFR.setInput(0, thisGRP)\n\toutFR.setXYpos(int(thisGRP\['xpos'].value()), int(thisGRP\['ypos'].value()+80))\n\n\texpDot = nuke.nodes.Dot()\n\texpDot\['label'].setValue('Texture modify here : swap the paint/patch texture into udim frame')\n\texpDot.setInput(0, outFR)\n\n\tyDot = nuke.nodes.Dot()\n\tyDot.setInput(0, expDot)\n\n\tuvGRP = nuke.nodes.Group()\n\tuvGRP\['label'].setValue('udim stitch for nuke')\n\n\tnDot = nuke.nodes.Dot()\n\tnDot\['label'].setValue('Connect to Geo')\n\troot.end()\n\n\tuvGRP.begin()\n\tinNode = nuke.nodes.Input(name='udim')\n\tcropNode = nuke.nodes.Crop()\n\tcropNode\['crop'].setValue(1)\n\tcropNode.setInput(0, inNode)\n\tallDot = nuke.nodes.Dot()\n\tallDot.setInput(0, cropNode)\n\n\tuvMerge = nuke.nodes.Merge2()\n\toutNode = nuke.nodes.Output()\n\toutNode.setInput(0, uvMerge)\n\n\tfor i in range (0, uvMax+1) :\n\t  uDimHold = nuke.nodes.FrameHold()\n\t  uDimHold\['first_frame'].setValue(1001+i)\n\t  uDimHold.setInput(0, allDot)\n\t  \n\t  uvTran = nuke.nodes.Transform()\n\t  uvTran.addKnob(nuke.UV_Knob('uv_offset'))\n\t  if i < 10 :\n\t    u = i\n\t    v = 0\n\t  else :\n\t    if i < 100 :\n\t      u = int(str(i)\[1])\n\t      v = int(str(i)\[0])\n\t  uvTran\['uv_offset'].setValue(\[u, v])\n\t  uvTran\['translate'].setExpression('input.width*uv_offset.u', 0)\n\t  uvTran\['translate'].setExpression('input.height*uv_offset.v', 1)\n\t  uvTran.setInput(0, uDimHold)\n\n\t  uvMerge.setInput(i+3, uvTran)\n\n\n\tuvGRP.end()\n\n\tuvGRP.setInput(0, yDot)\n\tnDot.setInput(0, uvGRP)\n\n\troot.begin()\n\texWrite = nuke.nodes.Write()\n\texWrite.setInput(0, yDot)\n\texWrite\['label'].setValue('export udim<br>render range : \[value input.first_frame] - \[value input.last_frame]')\n\troot.end()\n\n\tdel uvMax\nelse :\n\tnuke.message('Scan process terminated by user.')\n\ndel dataReturn" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 font T store.font}
+ addUserKnob {6 disable_error l "disable text" +STARTLINE}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.4}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-04-24}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.4<br>-&nbsp;fix&nbsp;misspelling&nbsp;of&nbsp;knob's&nbsp;label<br>-&nbsp;fix&nbsp;not&nbsp;working&nbsp;disable&nbsp;text&nbsp;knob<br><br>1.3<br>-&nbsp;fix&nbsp;font&nbsp;issue<br>&nbsp;&nbsp;works&nbsp;on&nbsp;linux,&nbsp;mac&nbsp;&&nbsp;windows<br><br>1.2<br>-&nbsp;preview&nbsp;in&nbsp;uv&nbsp;space&nbsp;set&nbsp;limited&nbsp;<br>&nbsp;&nbsp;in&nbsp;1024&nbsp;resolution&nbsp;for&nbsp;not&nbsp;drag&nbsp;<br>&nbsp;&nbsp;down&nbsp;speed&nbsp;purpose.<br>-&nbsp;added&nbsp;show&nbsp;tile&nbsp;number<br>-&nbsp;changed&nbsp;uv&nbsp;combine&nbsp;to&nbsp;uv&nbsp;stitch<br>&nbsp;&nbsp;in&nbsp;export&nbsp;group<br>-&nbsp;code&nbsp;update<br>-&nbsp;scan&nbsp;size&nbsp;reduce,&nbsp;speed&nbsp;up&nbsp;process\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -1755
+  ypos 302
+  bdwidth 263
+  bdheight 296
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x424242ff
+  label "UV preview"
+  note_font_size 42
+  xpos -824
+  ypos 451
+  bdwidth 343
+  bdheight 672
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x424242ff
+  label udim
+  note_font_size 42
+  xpos -328
+  ypos 451
+  bdwidth 354
+  bdheight 675
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x424242ff
+  label uvtile
+  note_font_size 42
+  xpos 109
+  ypos 451
+  bdwidth 354
+  bdheight 675
+ }
+ Input {
+  inputs 0
+  name tex
+  xpos -1000
+  ypos 83
+  number 1
+ }
+ Wireframe {
+  inputs 0
+  line_width {{wireframe_size}}
+  name Wireframe1
+  xpos -866
+  ypos 207
+ }
+ Switch {
+  inputs 2
+  which {{!view_wireframe}}
+  name Switch2
+  xpos -1000
+  ypos 207
+ }
+ Input {
+  inputs 0
+  name geo
+  xpos -1171
+  ypos 82
+ }
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial1
+  xpos -1171
+  ypos 207
+ }
+ Dot {
+  name Dot6
+  xpos -1137
+  ypos 287
+ }
+ Dot {
+  name Dot1
+  xpos -1137
+  ypos 384
+ }
+set Na6c8e000 [stack 0]
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{store.scanRes}}
+  box_height {{box_width}}
+  box_fixed true
+  name scanRes
+  xpos -1061
+  ypos 595
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  projection_mode uv
+  overscan {{store.scanRes*10}}
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR1
+  xpos -1171
+  ypos 595
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos -1171
+  ypos 675
+ }
+ Transform {
+  translate {{store.scanRes*uv_offset.u*-1} {store.scanRes*uv_offset*-1}}
+  shutteroffset centred
+  name pos_shift
+  xpos -1171
+  ypos 740
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {{uv_shift} {uv_shift}}
+ }
+ Crop {
+  box {0 0 {store.scanRes} {store.scanRes}}
+  reformat true
+  crop false
+  name Crop1
+  xpos -1171
+  ypos 801
+ }
+ CurveTool {
+  operation "Max Luma Pixel"
+  ROI {0 0 {store.scanRes} {store.scanRes}}
+  intensitydata {0 0 0 0}
+  maxlumapixvalue {0 0 0}
+  minlumapixvalue {0 0 0}
+  name dataCheck
+  xpos -1171
+  ypos 881
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['output'].getValue() == 1 :\n    thisGRP\['udim_export'].setEnabled(True)\nelse :\n    thisGRP\['udim_export'].setEnabled(False)\n"
+  xpos -1669
+  ypos 392
+  addUserKnob {20 User}
+  addUserKnob {4 output M {"preview in uv space" udim "uv tile" "uv pass"}}
+  output udim
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{texSize*10}}
+  box_height {{texSize*10}}
+  box_fixed true
+  resize none
+  name Reformat4
+  xpos 719
+  ypos 638
+ }
+ Expression {
+  expr0 x/width
+  expr1 y/height
+  channel2 none
+  channel3 none
+  name uv
+  xpos 719
+  ypos 720
+ }
+ Multiply {
+  channels rgb
+  value {10 10 1 1}
+  name Multiply1
+  xpos 719
+  ypos 798
+ }
+ Reformat {
+  type "to box"
+  box_width {{texSize}}
+  box_height {{texSize}}
+  box_fixed true
+  resize none
+  center false
+  pbb true
+  name Reformat3
+  xpos 719
+  ypos 878
+ }
+ Dot {
+  name Dot8
+  xpos 753
+  ypos 1225
+ }
+push $Na6c8e000
+ Dot {
+  name Dot4
+  xpos -780
+  ypos 384
+ }
+set Na68b0000 [stack 0]
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{texSize}}
+  box_height {{box_width}}
+  box_fixed true
+  name res
+  xpos 5
+  ypos 381
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  filter Impulse
+  projection_mode uv
+  overscan {{texSize*10 x1009 1948}}
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR
+  xpos -154
+  ypos 381
+ }
+ Dot {
+  name Dot2
+  xpos -120
+  ypos 628
+ }
+set Na5309000 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos -292
+  ypos 625
+ }
+ Text {
+  output rgb
+  cliptype none
+  message " 91 92 93 94 95 96 97 98 99 00\n 81 82 83 84 85 86 87 88 89 90\n 71 72 73 74 75 76 77 78 79 80\n 61 62 63 64 65 66 67 68 69 70\n 51 52 53 54 55 56 57 58 59 60\n 41 42 43 44 45 46 47 48 49 50\n 31 32 33 34 35 36 37 38 39 40\n 21 22 23 24 25 26 27 28 29 30\n 11 12 13 14 15 16 17 18 19 20\n 01 02 03 04 05 06 07 08 09 10"
+  font "\[value store.font]"
+  kerning 0.236
+  leading 1.051
+  yjustify bottom
+  Transform 1
+  box {0 0 1024 999}
+  translate {0 {"( ( texSize * 10 ) / 1024 ) *25"}}
+  scale {{"( texSize * 10 ) / 1024"}}
+  name Text2
+  xpos -292
+  ypos 707
+  disable {{disable_error}}
+ }
+ Multiply {
+  channels rgb
+  value {0 0.05 0.05 1}
+  name Multiply3
+  xpos -292
+  ypos 769
+ }
+ Dot {
+  name Dot13
+  xpos -258
+  ypos 821
+ }
+ Dot {
+  name Dot11
+  xpos -178
+  ypos 821
+ }
+set Naa775800 [stack 0]
+ Dot {
+  name Dot12
+  xpos 221
+  ypos 821
+ }
+push $Na5309000
+ Dot {
+  name Dot5
+  xpos 281
+  ypos 628
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge4
+  xpos 247
+  ypos 879
+ }
+ Crop {
+  box {0 0 {texSize*10} {texSize*10}}
+  crop false
+  name Crop4
+  xpos 247
+  ypos 961
+ }
+ Dot {
+  name Dot7
+  xpos 281
+  ypos 1204
+ }
+push $Naa775800
+push $Na5309000
+ Merge2 {
+  inputs 2
+  operation under
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge3
+  xpos -154
+  ypos 879
+ }
+ Transform {
+  translate {{texSize*uv_offset.u*-1 i} {texSize*uv_offset*-1 i}}
+  shutteroffset centred
+  name pos_shift1
+  xpos -154
+  ypos 961
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {{"frame <=1001 ? 0 : (frame-1)%10"} {"frame < 1000 ? 0 : int(((frame-1)/10)-100)"}}
+ }
+ Dot {
+  name Dot3
+  xpos -120
+  ypos 1202
+ }
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat2
+  xpos -693
+  ypos 712
+ }
+ Dot {
+  name Dot9
+  xpos -659
+  ypos 770
+ }
+set Na6c60c00 [stack 0]
+ Dot {
+  name Dot10
+  xpos -533
+  ypos 770
+ }
+ Text {
+  output rgb
+  message " 91 92 93 94 95 96 97 98 99 00\n 81 82 83 84 85 86 87 88 89 90\n 71 72 73 74 75 76 77 78 79 80\n 61 62 63 64 65 66 67 68 69 70\n 51 52 53 54 55 56 57 58 59 60\n 41 42 43 44 45 46 47 48 49 50\n 31 32 33 34 35 36 37 38 39 40\n 21 22 23 24 25 26 27 28 29 30\n 11 12 13 14 15 16 17 18 19 20\n 01 02 03 04 05 06 07 08 09 10"
+  font "\[value store.font]"
+  kerning 0.236
+  leading 1.051
+  yjustify bottom
+  Transform 1
+  box {0 0 1024 999}
+  translate {0 25}
+  name Text1
+  xpos -567
+  ypos 818
+  disable {{disable_error}}
+ }
+ Multiply {
+  channels rgb
+  value {0 0.05 0.05 1}
+  name Multiply2
+  xpos -567
+  ypos 887
+ }
+push $Na6c60c00
+ Grid {
+  name Grid1
+  xpos -693
+  ypos 814
+ }
+ Merge2 {
+  inputs 2
+  name Merge2
+  xpos -693
+  ypos 887
+ }
+push $Na68b0000
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat5
+  xpos -689
+  ypos 531
+ }
+ Reformat {
+  type scale
+  scale 0.1
+  resize none
+  name Reformat6
+  xpos -689
+  ypos 594
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  projection_mode uv
+  overscan 2560
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR2
+  xpos -814
+  ypos 594
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge1
+  xpos -814
+  ypos 887
+ }
+ Crop {
+  box {0 0 1024 1024}
+  reformat true
+  crop false
+  name Crop2
+  xpos -814
+  ypos 969
+ }
+ Switch {
+  inputs 4
+  which {{output}}
+  name Switch1
+  xpos -814
+  ypos 1412
+ }
+ Output {
+  name Output1
+  xpos -814
+  ypos 1597
+ }
+ NoOp {
+  inputs 0
+  name menu02
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['view_wireframe'].getValue() == 1 :\n        thisGRP\['wireframe_size'].setEnabled(True)\nelse :\n        thisGRP\['wireframe_size'].setEnabled(False)\n"
+  xpos -1668
+  ypos 484
+  addUserKnob {20 User}
+  addUserKnob {6 view_wireframe l "view wireframe" +STARTLINE}
+ }
+ NoOp {
+  inputs 0
+  name store
+  xpos -1419
+  ypos 388
+  addUserKnob {20 User}
+  addUserKnob {22 fn T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel" +STARTLINE}
+  addUserKnob {3 scanRes}
+  scanRes 64
+  addUserKnob {2 font}
+  font "C:/Program Files/Nuke12.0v3/plugins/fonts/UtopiaBold.pfa"
+ }
+end_group
+FrameRange {
+ first_frame 1001
+ last_frame 1022
+ time ""
+ name FrameRange1
+ label "udim range : 1001 - 1022"
+ xpos 466
+ ypos -90
+}
+Dot {
+ name Dot2
+ label "Texture modify here : swap the paint/patch texture into udim frame"
+ xpos 500
+ ypos -10
+}
+RotoPaint {
+ curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 2097152}
+    {t x44800000 x44428000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
+    {cubiccurve Brush2 512 catmullrom
+     {cc
+      {f 2080}
+      {p
+       {x42e40000 x435e0000 x3d904090}
+       {x42e50000 x435f0000 x3e044084}
+       {x42e40000 x43600000 x3ea24ca2}
+       {x42e20000 x43600000 x3eb458b4}
+       {x42e00000 x435f8000 x3eb458b4}
+       {x42de0000 x435f0000 x3eb658b6}
+       {x42dd0000 x435d8000 x3eb658b6}
+       {x42da0000 x435c8000 x3eb658b6}
+       {x42d80000 x435b8000 x3eb658b6}
+       {x42d40000 x435a0000 x3eba58ba}
+       {x42d20000 x43580000 x3eb958b9}
+       {x42cf0000 x43568000 x3eba58ba}
+       {x42cc0000 x43550000 x3eb958b9}
+       {x42ca0000 x43538000 x3eba58ba}
+       {x42c90000 x43528000 x3eba58ba}
+       {x42c90000 x43518000 x3eb958b9}
+       {x42ca0000 x43508000 x3eb958b9}
+       {x42cc0000 x43500000 x3eb958b9}
+       {x42cf0000 x434e8000 x3eb958b9}
+       {x42d30000 x434e0000 x3eba58ba}
+       {x42d80000 x434d0000 x3eba58ba}
+       {x42dc0000 x434c8000 x3eba58ba}
+       {x42e00000 x434b8000 x3eb958b9}
+       {x42e50000 x434b0000 x3eba58ba}
+       {x42e80000 x43498000 x3eb958b9}
+       {x42ec0000 x43490000 x3eb958b9}
+       {x42ef0000 x43488000 x3eba58ba}
+       {x42f20000 x43478000 x3eba58ba}
+       {x42f20000 x43460000 x3ebb5cbb}
+       {x42f20000 x43448000 x3ebc5cbc}
+       {x42f10000 x43438000 x3ebe5cbe}
+       {x42ef0000 x43420000 x3ebe5cbe}
+       {x42ec0000 x43410000 x3ebd5cbd}
+       {x42e80000 x433f0000 x3ebf5cbf}
+       {x42e40000 x433d8000 x3ebf5cbf}
+       {x42e00000 x433c8000 x3ebf5cbf}
+       {x42de0000 x433b0000 x3ec15cc1}
+       {x42db0000 x433a0000 x3ebe5cbe}
+       {x42da0000 x43390000 x3ebe5cbe}
+       {x42dc0000 x43388000 x3ebf5cbf}
+       {x42de0000 x43380000 x3ebf5cbf}
+       {x42e30000 x43378000 x3ebf5cbf}
+       {x42e70000 x43370000 x3ec25cc2}
+       {x42ec0000 x43360000 x3ec360c3}
+       {x42ef0000 x43350000 x3ec360c3}
+       {x42f30000 x43348000 x3ec360c3}
+       {x42f70000 x43338000 x3ec360c3}
+       {x42fa0000 x43320000 x3ec25cc2}
+       {x42fc0000 x43308000 x3ec560c5}
+       {x42fe0000 x432f8000 x3ec660c6}
+       {x42fe0000 x432e0000 x3ec960c9}
+       {x42fe0000 x432c0000 x3ecc64cc}
+       {x42fd0000 x432a8000 x3ecd64cd}
+       {x42fa0000 x43290000 x3ecd64cd}
+       {x42f70000 x43268000 x3ed064d0}
+       {x42f30000 x43250000 x3ecd64cd}
+       {x42ef0000 x43238000 x3ecf64cf}
+       {x42e90000 x43220000 x3ed064d0}
+       {x42e50000 x43210000 x3ed064d0}
+       {x42e20000 x43208000 x3ed064d0}
+       {x42df0000 x43200000 x3ecf64cf}
+       {x42e30000 x43208000 x3ed264d2}
+       {x42e60000 x43210000 x3ed468d4}
+       {x42ea0000 x43218000 x3ed264d2}
+       {x42f00000 x43218000 x3ed468d4}
+       {x42f60000 x43218000 x3ed264d2}
+       {x42fc0000 x43208000 x3ed568d5}
+       {x43020000 x431f8000 x3edc6cdc}
+       {x43060000 x431e0000 x3ee970e9}
+       {x430a8000 x431b8000 x3eef74ef}
+       {x430d0000 x43198000 x3ef074f0}
+       {x430f8000 x43170000 x3ef274f2}
+       {x43100000 x43150000 x3ef374f3}
+       {x43100000 x43128000 x3ef678f6}
+       {x430f8000 x43110000 x3ef778f7}
+       {x430d8000 x43100000 x3efa78fa}
+       {x430b8000 x430f0000 x3efb78fb}
+       {x43088000 x430f0000 x3efa78fa}
+       {x43060000 x43100000 x3efb78fb}
+       {x43028000 x43118000 x3efc7cfc}
+       {x43000000 x43148000 x3efc7cfc}
+       {x42f20000 x431b8000 x3efa78fa}
+       {x42ed0000 x43200000 x3ef778f7}
+       {x42e70000 x43248000 x3ef478f4}
+       {x42e40000 x43298000 x3ee970e9}
+       {x42e00000 x432e8000 x3ee570e5}
+       {x42df0000 x43328000 x3ee06ce0}
+       {x42df0000 x43360000 x3ee06ce0}
+       {x42df0000 x43390000 x3ee06ce0}
+       {x42e00000 x433b0000 x3edd6cdd}
+       {x42e30000 x433d0000 x3edf6cdf}
+       {x42e50000 x433e8000 x3edd6cdd}
+       {x42e80000 x433f8000 x3ede6cde}
+       {x42ea0000 x43410000 x3edd6cdd}
+       {x42ee0000 x43410000 x3ede6cde}
+       {x42f10000 x43418000 x3ede6cde}
+       {x42f30000 x43418000 x3edd6cdd}
+       {x42f70000 x43410000 x3edb6cdb}
+       {x42fa0000 x43400000 x3ed968d9}
+       {x42fc0000 x433f8000 x3ed668d6}
+       {x42fe0000 x433f0000 x3ed568d5}
+       {x43008000 x433e8000 x3ed768d7}
+       {x43018000 x433e8000 x3ed668d6}
+       {x43028000 x43410000 x3ed968d9}
+       {x43030000 x43428000 x3ed868d8}
+       {x43038000 x43440000 x3edb6cdb}
+       {x43040000 x43468000 x3edd6cdd}
+       {x43050000 x43490000 x3edd6cdd}
+       {x43050000 x434c8000 x3edf6cdf}
+       {x43050000 x43500000 x3edf6cdf}
+       {x43050000 x43530000 x3edf6cdf}
+       {x43050000 x43570000 x3ee06ce0}
+       {x43050000 x435a8000 x3ee26ce2}
+       {x43050000 x435d8000 x3ee26ce2}
+       {x43050000 x435f8000 x3ee770e7}
+       {x43050000 x43610000 x3eeb70eb}
+       {x43050000 x43620000 x3eec74ec}
+       {x43050000 x43630000 x3eec74ec}
+       {x43050000 x43640000 x3eef74ef}
+       {x43058000 x43628000 x3eec74ec}
+       {x43060000 x43618000 x3eed74ed}
+       {x43068000 x43608000 x3eec74ec}
+       {x43078000 x435f0000 x3eed74ed}
+       {x43078000 x435c8000 x3eed74ed}
+       {x43080000 x435a8000 x3eed74ed}
+       {x43080000 x43580000 x3ef074f0}
+       {x43080000 x43568000 x3eef74ef}
+       {x43080000 x43558000 x3ef074f0}
+       {x43088000 x43578000 x3ef274f2}
+       {x43090000 x435a0000 x3ef174f1}
+       {x43090000 x435c8000 x3ef174f1}
+       {x430a0000 x435f8000 x3ef074f0}
+       {x430a8000 x43618000 x3ef174f1}
+       {x430a8000 x43630000 x3eef74ef}
+       {x430b8000 x43648000 x3ef074f0}
+       {x430d0000 x43648000 x3ef074f0}
+       {x430f8000 x43628000 x3eef74ef}
+       {x43118000 x43608000 x3eef74ef}
+       {x43150000 x435c8000 x3eef74ef}
+       {x43180000 x43580000 x3ef174f1}
+       {x431b8000 x43530000 x3ef678f6}
+       {x431f0000 x434e0000 x3ef578f5}
+       {x43210000 x43490000 x3ef878f8}
+       {x43238000 x43440000 x3ef878f8}
+       {x43240000 x433f0000 x3ef778f7}
+       {x43240000 x433a0000 x3ef878f8}
+       {x43230000 x43358000 x3ef778f7}
+       {x43208000 x43320000 x3ef878f8}
+       {x431e0000 x432f0000 x3ef878f8}
+       {x431a8000 x432d8000 x3ef678f6}
+       {x43168000 x432b8000 x3eec74ec}
+       {x43128000 x432b8000 x3ee670e6}
+       {x43090000 x432d0000 x3ee470e4}
+       {x43050000 x432e8000 x3ee16ce1}
+       {x43008000 x43310000 x3ee16ce1}
+       {x42fa0000 x43348000 x3ee26ce2}
+       {x42f20000 x433d8000 x3ee16ce1}
+       {x42f10000 x433f8000 x3ee26ce2}
+       {x42f10000 x43418000 x3ee16ce1}
+       {x42f20000 x43430000 x3ee16ce1}
+       {x42f30000 x43440000 x3ee26ce2}
+       {x42f70000 x43450000 x3ee16ce1}
+       {x42f90000 x43450000 x3ee26ce2}
+       {x42fe0000 x43460000 x3ee26ce2}
+       {x43028000 x43460000 x3ee16ce1}
+       {x43068000 x43460000 x3ee16ce1}
+       {x430b8000 x43450000 x3ee16ce1}
+       {x43100000 x43440000 x3ee470e4}
+       {x43150000 x43430000 x3ee16ce1}
+       {x43198000 x43418000 x3ee16ce1}
+       {x431c8000 x433f0000 x3ee26ce2}
+       {x431f8000 x433d8000 x3ee570e5}
+       {x43208000 x433b0000 x3ee470e4}
+       {x43208000 x43390000 x3ee670e6}
+       {x431e8000 x43370000 x3ee770e7}
+       {x431b0000 x43348000 x3ee670e6}
+       {x43168000 x43330000 x3ee670e6}
+       {x43110000 x43310000 x3ee670e6}
+       {x430b0000 x432f8000 x3ee770e7}
+       {x43040000 x432f0000 x3ee670e6}
+       {x42fc0000 x432e0000 x3ee670e6}
+       {x42f00000 x432d8000 x3ee670e6}
+       {x42e40000 x432d0000 x3ee670e6}
+       {x42da0000 x432c0000 x3ee770e7}
+       {x42d20000 x432c0000 x3ee770e7}
+       {x42cc0000 x432b8000 x3ee670e6}
+       {x42c90000 x432b8000 x3ee670e6}
+       {x42cb0000 x432a8000 x3ee670e6}
+       {x42d00000 x43298000 x3ee770e7}
+       {x42d60000 x43288000 x3ee770e7}
+       {x42df0000 x43268000 x3ee670e6}
+       {x42e80000 x43248000 x3ee770e7}
+       {x42f30000 x43218000 x3ee670e6}
+       {x42fe0000 x431e8000 x3ee870e8}
+       {x43040000 x431a8000 x3ee870e8}
+       {x43088000 x43168000 x3ee870e8}
+       {x430b8000 x43128000 x3eea70ea}
+       {x430d0000 x430e0000 x3eec74ec}
+       {x430d8000 x430a0000 x3ef074f0}
+       {x430d8000 x43068000 x3ef174f1}
+       {x430c0000 x43028000 x3ef374f3}
+       {x43090000 x43000000 x3ef478f4}
+       {x43060000 x42fb0000 x3ef374f3}
+       {x43028000 x42f80000 x3ef478f4}
+       {x42fc0000 x42f70000 x3ef478f4}
+       {x42f20000 x42f60000 x3ef578f5}
+       {x42e70000 x42f60000 x3ef374f3}
+       {x42db0000 x42f70000 x3ef478f4}
+       {x42c40000 x42fd0000 x3ef478f4}
+       {x42ba0000 x43010000 x3ef578f5}
+       {x42b10000 x43028000 x3ef578f5}
+       {x42aa0000 x43038000 x3ef578f5}
+       {x42a70000 x43040000 x3ef578f5}
+       {x42a30000 x43040000 x3ef578f5}
+       {x42a20000 x43050000 x3ef374f3}
+       {x42a30000 x43040000 x3ef478f4}
+       {x42a60000 x43030000 x3ef478f4}
+       {x42ab0000 x43020000 x3ef478f4}
+       {x42b10000 x43008000 x3ef374f3}
+       {x42bb0000 x42fd0000 x3ef478f4}
+       {x42c60000 x42f90000 x3ef374f3}
+       {x42d30000 x42f40000 x3ef678f6}
+       {x42e30000 x42f10000 x3ef478f4}
+       {x42f30000 x42ed0000 x3ef678f6}
+       {x43028000 x42e90000 x3ef678f6}
+       {x430b0000 x42e60000 x3ef678f6}
+       {x43128000 x42e20000 x3ef578f5}
+       {x43198000 x42dd0000 x3ef778f7}
+       {x431e8000 x42d90000 x3ef778f7}
+       {x43220000 x42d40000 x3ef878f8}
+       {x43248000 x42d00000 x3ef878f8}
+       {x43258000 x42cc0000 x3ef778f7}
+       {x43258000 x42ca0000 x3ef778f7}
+       {x43250000 x42c80000 x3ef778f7}
+       {x43238000 x42c60000 x3ef878f8}
+       {x43208000 x42c50000 x3ef778f7}
+       {x431d0000 x42c40000 x3ef778f7}
+       {x43198000 x42c20000 x3ef778f7}
+       {x43110000 x42c00000 x3ef878f8}
+       {x430d8000 x42bf0000 x3ef778f7}
+       {x430b8000 x42bd0000 x3ef878f8}
+       {x43090000 x42bb0000 x3ef878f8}
+       {x43080000 x42b80000 x3ef878f8}
+       {x43078000 x42b60000 x3ef878f8}
+       {x43078000 x42b30000 x3ef778f7}
+       {x43088000 x42ac0000 x3ef778f7}
+       {x430a0000 x42a90000 x3ef778f7}
+       {x430b8000 x42a60000 x3efb78fb}
+       {x430e0000 x42a10000 x3ef878f8}
+       {x43110000 x429e0000 x3efb78fb}
+       {x43148000 x429a0000 x3efa78fa}
+       {x43178000 x42980000 x3efa78fa}
+       {x431b0000 x42960000 x3efa78fa}
+       {x431e0000 x42950000 x3efd7cfd}
+       {x43208000 x42950000 x3efc7cfc}
+       {x43230000 x42950000 x3efc7cfc}
+       {x43250000 x42970000 x3efe7cfe}
+       {x43260000 x42990000 x3efe7cfe}
+       {x43268000 x429d0000 x3eff7cff}
+       {x43268000 x42a00000 x3efe7cfe}
+       {x43268000 x42a30000 x3efd7cfd}
+       {x43258000 x42a70000 x3efe7cfe}
+       {x43240000 x42ab0000 x3efd7cfd}
+       {x43220000 x42b00000 x3efd7cfd}
+       {x431f8000 x42b70000 x3efd7cfd}
+       {x431e8000 x42bc0000 x3efb78fb}
+       {x431e0000 x42bf0000 x3efb78fb}
+       {x431d0000 x42c20000 x3efb78fb}
+       {x431d0000 x42c50000 x3efa78fa}
+       {x431d0000 x42c70000 x3efa78fa}
+       {x431e8000 x42c80000 x3ef578f5}
+       {x43208000 x42c80000 x3ef678f6}
+       {x43220000 x42c60000 x3ef578f5}
+       {x43240000 x42c50000 x3ef578f5}
+       {x43260000 x42c10000 x3ef578f5}
+       {x43288000 x42bf0000 x3ef678f6}
+       {x432b0000 x42bc0000 x3ef778f7}
+       {x432d8000 x42b80000 x3ef778f7}
+       {x432f8000 x42b50000 x3ef678f6}
+       {x43308000 x42b20000 x3ef878f8}
+       {x43320000 x42b00000 x3ef878f8}
+       {x43328000 x42ae0000 x3ef878f8}
+       {x43308000 x42ae0000 x3efa78fa}
+       {x432f0000 x42b10000 x3efa78fa}
+       {x432c0000 x42b40000 x3efa78fa}
+       {x43290000 x42b80000 x3ef778f7}
+       {x43248000 x42be0000 x3ef778f7}
+       {x431e8000 x42c50000 x3ef578f5}
+       {x43178000 x42cc0000 x3ef578f5}
+       {x43100000 x42d40000 x3ef478f4}
+       {x43080000 x42dd0000 x3ef374f3}
+       {x43010000 x42e40000 x3ef374f3}
+       {x42f60000 x42e70000 x3ef374f3}
+       {x42ea0000 x42e80000 x3ef478f4}
+       {x42e00000 x42e60000 x3ef478f4}
+       {x42d80000 x42e20000 x3ef374f3}
+       {x42d00000 x42dc0000 x3ef478f4}
+       {x42c90000 x42d40000 x3ef678f6}
+       {x42c20000 x42ca0000 x3ef478f4}
+       {x42be0000 x42c00000 x3ef478f4}
+       {x42bb0000 x42b50000 x3ef478f4}
+       {x42b80000 x42a90000 x3ef578f5}
+       {x42b60000 x429c0000 x3ef578f5}
+       {x42b50000 x428d0000 x3ef878f8}
+       {x42b50000 x42800000 x3efb78fb}
+       {x42b50000 x42640000 x3ef878f8}
+       {x42b70000 x424c0000 x3efb78fb}
+       {x42ba0000 x42360000 x3ef778f7}
+       {x42bc0000 x42240000 x3efa78fa}
+       {x42bf0000 x42140000 x3efb78fb}
+       {x42c20000 x420a0000 x3efd7cfd}
+       {x42c60000 x41fc0000 x3efc7cfc}
+       {x42c80000 x41f00000 x3efe7cfe}
+       {x42c90000 x41e40000 x3efe7cfe}
+       {x42ca0000 x41d80000 x3eff7cff}
+       {x42c80000 x41d00000 x3f01be82}
+       {x42c50000 x41d00000 x3f013e81}
+       {x42c00000 x41d00000 x3f024082}
+       {x42ba0000 x41d80000 x3f024082}
+       {x42b30000 x41e40000 x3f02c083}
+       {x42ab0000 x41f00000 x3f024082}
+       {x42a20000 x42000000 x3f02c083}
+       {x42990000 x420c0000 x3f024082}
+       {x428f0000 x42180000 x3f044084}
+       {x42850000 x42240000 x3f024082}
+       {x427c0000 x42300000 x3f03c084}
+       {x426e0000 x423a0000 x3f03c084}
+       {x42640000 x42400000 x3f03c084}
+       {x42600000 x42440000 x3f04c085}
+       {x425c0000 x42440000 x3f044084}
+       {x42600000 x423c0000 x3f044084}
+       {x42640000 x42360000 x3f03c084}
+       {x426e0000 x42300000 x3f044084}
+       {x42760000 x42280000 x3f03c084}
+       {x42810000 x42200000 x3f044084}
+       {x42880000 x42180000 x3f03c084}
+       {x428f0000 x42100000 x3f04c085}
+       {x42970000 x420c0000 x3f04c085}
+       {x429f0000 x42080000 x3f04c085}
+       {x42a80000 x42060000 x3f064286}
+       {x42b10000 x42060000 x3f05c086}
+       {x42bb0000 x42080000 x3f05c086}
+       {x42c60000 x420e0000 x3f05c086}
+       {x42d00000 x421a0000 x3f074287}
+       {x42db0000 x42240000 x3f064286}
+       {x42e60000 x42360000 x3f074287}
+       {x42fc0000 x425a0000 x3f06c287}
+       {x43038000 x426e0000 x3f074287}
+       {x430a0000 x427e0000 x3f06c287}
+       {x430f8000 x42860000 x3f074287}
+       {x43148000 x428d0000 x3f074287}
+       {x43198000 x42930000 x3f084288}
+       {x431d0000 x42960000 x3f06c287}
+       {x43218000 x42990000 x3f06c287}
+       {x43298000 x429f0000 x3f074287}
+       {x432d0000 x42a00000 x3f06c287}
+       {x43300000 x42a10000 x3f06c287}
+       {x43338000 x42a20000 x3f074287}
+       {x43370000 x42a30000 x3f06c287}
+       {x43390000 x42a30000 x3f06c287}
+       {x433b0000 x42a20000 x3f064286}
+       {x433c8000 x42a10000 x3f05c086}
+       {x433d8000 x429e0000 x3f064286}
+       {x433d8000 x429a0000 x3f05c086}
+       {x433e0000 x42960000 x3f05c086}
+       {x433e0000 x42900000 x3f05c086}
+       {x433d8000 x42890000 x3f064286}
+       {x433d0000 x42820000 x3f05c086}
+       {x433c0000 x42740000 x3f05c086}
+       {x433b0000 x42540000 x3f05c086}
+       {x433c0000 x42380000 x3f064286}
+       {x433d0000 x422e0000 x3f064286}
+       {x433e0000 x42220000 x3f05c086}
+       {x43400000 x421e0000 x3f05c086}
+       {x43428000 x421a0000 x3f064286}
+       {x43448000 x42180000 x3f05c086}
+       {x43480000 x421a0000 x3f05c086}
+       {x434b8000 x421c0000 x3f074287}
+       {x434e8000 x42220000 x3f05c086}
+       {x43528000 x42280000 x3f06c287}
+       {x43560000 x42320000 x3f074287}
+       {x435a0000 x42380000 x3f06c287}
+       {x43610000 x423a0000 x3f074287}
+       {x43640000 x42340000 x3f074287}
+       {x43660000 x422c0000 x3f074287}
+       {x43690000 x42200000 x3f084288}
+       {x436a8000 x42140000 x3f074287}
+       {x436c8000 x420a0000 x3f084288}
+       {x436e8000 x41f80000 x3f07c288}
+       {x43708000 x41e80000 x3f084288}
+       {x43738000 x41c80000 x3f07c288}
+       {x43750000 x41c40000 x3f094289}
+       {x43760000 x41c00000 x3f0a448a}
+       {x43770000 x41cc0000 x3f0dc48e}
+       {x43770000 x41d80000 x3f0d448d}
+       {x43770000 x41f00000 x3f0d448d}
+       {x43770000 x42060000 x3f0dc48e}
+       {x43760000 x42140000 x3f0d448d}
+       {x43740000 x42280000 x3f0dc48e}
+       {x43710000 x42400000 x3f0dc48e}
+       {x436d0000 x425a0000 x3f0dc48e}
+       {x43690000 x42760000 x3f0dc48e}
+       {x43640000 x428a0000 x3f0cc48d}
+       {x435f8000 x42980000 x3f0cc48d}
+       {x43578000 x42ad0000 x3f0c448c}
+       {x43550000 x42b30000 x3f0bc48c}
+       {x43520000 x42b70000 x3f0bc48c}
+       {x43508000 x42bb0000 x3f0b448b}
+       {x434e8000 x42bc0000 x3f09c28a}
+       {x434d0000 x42bc0000 x3f094289}
+       {x434b0000 x42bb0000 x3f094289}
+       {x43490000 x42b70000 x3f094289}
+       {x43468000 x42b30000 x3f084288}
+       {x43440000 x42ad0000 x3f08c289}
+       {x43410000 x42a70000 x3f084288}
+       {x433e0000 x429f0000 x3f08c289}
+       {x433a8000 x42950000 x3f094289}
+       {x43370000 x428b0000 x3f08c289}
+       {x43330000 x42800000 x3f094289}
+       {x432f0000 x426a0000 x3f094289}
+       {x432b0000 x42500000 x3f08c289}
+       {x43280000 x42380000 x3f08c289}
+       {x43240000 x42200000 x3f094289}
+       {x43208000 x42080000 x3f094289}
+       {x431e8000 x41e80000 x3f094289}
+       {x431d0000 x41c00000 x3f094289}
+       {x431c8000 x41a40000 x3f094289}
+       {x431e0000 x41800000 x3f08c289}
+       {x431f0000 x41700000 x3f0a448a}
+       {x43208000 x41680000 x3f0b448b}
+       {x43218000 x41680000 x3f0bc48c}
+       {x43230000 x41800000 x3f0c448c}
+       {x43240000 x41900000 x3f0c448c}
+       {x43258000 x41a40000 x3f0bc48c}
+       {x43268000 x41c00000 x3f0cc48d}
+       {x43270000 x41e00000 x3f0b448b}
+       {x43280000 x41fc0000 x3f0bc48c}
+       {x43280000 x420c0000 x3f05c086}
+       {x43280000 x42180000 x3efe7cfe}
+       {x43280000 x42200000 x3ef578f5}
+       {x43280000 x421c0000 x3e4e60ce}}}
+     {t x430bce5e x42f9583c}
+     {a r x3eced920 g 0 ro 0 go 0 bo 0 ao 0 bs x40e00000 bu 1 str 1 spx x44800000 spy x44428000 sb 1 ltn x447a4000 ltm x447a4000 ltt x40000000 tt x41880000}}
+    {cubiccurve Brush1 512 catmullrom
+     {cc
+      {f 2080}
+      {p
+       {x42b10000 x43558000 x3cd040d0}
+       {x42b10000 x43568000 x3dc460c4}
+       {x42b30000 x43578000 x3e184898}
+       {x42b80000 x435a0000 x3e4a60ca}
+       {x42bd0000 x435b0000 x3e6c70ec}
+       {x42c40000 x435c0000 x3e7a78fa}
+       {x42ca0000 x435d0000 x3e7e78fe}
+       {x42d20000 x435f0000 x3e7e78fe}
+       {x42dc0000 x43600000 x3e824082}
+       {x42e60000 x43610000 x3e813c81}
+       {x42f10000 x43620000 x3e813c81}
+       {x42fe0000 x43628000 x3e834083}
+       {x43060000 x43630000 x3e844084}
+       {x430c8000 x43630000 x3e844084}
+       {x43128000 x43628000 x3e874087}
+       {x43178000 x43620000 x3e874087}
+       {x431b8000 x43610000 x3e864086}
+       {x431e8000 x435f8000 x3e874087}
+       {x431f8000 x435d8000 x3e874087}
+       {x431f0000 x435b8000 x3e884088}
+       {x431d0000 x43588000 x3e884088}
+       {x431a8000 x43560000 x3e8a448a}
+       {x43168000 x43530000 x3e8a448a}
+       {x43118000 x43508000 x3e8b448b}
+       {x430c0000 x434d8000 x3e8b448b}
+       {x43068000 x434b0000 x3e8a448a}
+       {x42f60000 x43468000 x3e8b448b}
+       {x42ea0000 x43448000 x3e8a448a}
+       {x42df0000 x43430000 x3e8a448a}
+       {x42d50000 x43428000 x3e8b448b}
+       {x42cc0000 x43420000 x3e8a448a}
+       {x42c60000 x43420000 x3e8d448d}
+       {x42c00000 x43430000 x3e8e448e}
+       {x42bd0000 x43440000 x3e8d448d}
+       {x42bb0000 x43460000 x3e8d448d}
+       {x42bb0000 x43478000 x3e8d448d}
+       {x42bc0000 x43490000 x3e8e448e}
+       {x42bf0000 x434a0000 x3e8d448d}
+       {x42c40000 x434b8000 x3e8d448d}
+       {x42ca0000 x434c0000 x3e8d448d}
+       {x42d20000 x434c0000 x3e8e448e}
+       {x42e70000 x434a0000 x3e8e448e}
+       {x42f30000 x43480000 x3e8f448f}
+       {x43008000 x43460000 x3e914491}
+       {x43070000 x43438000 x3e954895}
+       {x430d8000 x43418000 x3e964896}
+       {x43130000 x433e8000 x3e994899}
+       {x43170000 x433c8000 x3e9c4c9c}
+       {x43198000 x43398000 x3e9c4c9c}
+       {x43198000 x43370000 x3ea04ca0}
+       {x43178000 x43340000 x3ea450a4}
+       {x43140000 x43310000 x3ea650a6}
+       {x430f8000 x432e8000 x3ea650a6}
+       {x43090000 x432c0000 x3ea750a7}
+       {x43030000 x432a0000 x3eaa50aa}
+       {x42f90000 x43288000 x3ea850a8}
+       {x42ec0000 x43270000 x3eaa50aa}
+       {x42de0000 x43268000 x3ea850a8}
+       {x42d00000 x43260000 x3eaa50aa}
+       {x42c40000 x43260000 x3eab54ab}
+       {x42b70000 x43260000 x3eab54ab}
+       {x42ad0000 x43270000 x3eac54ac}
+       {x42a70000 x43280000 x3eab54ab}
+       {x42a30000 x43290000 x3ead54ad}
+       {x42a70000 x432b0000 x3ead54ad}
+       {x42ac0000 x432b8000 x3ead54ad}
+       {x42b50000 x432c0000 x3ead54ad}
+       {x42c00000 x432c0000 x3eae54ae}
+       {x42cf0000 x432c0000 x3eaf54af}
+       {x42de0000 x432a8000 x3eb154b1}
+       {x42f00000 x43290000 x3eb458b4}
+       {x43010000 x43260000 x3eb958b9}
+       {x430a8000 x43238000 x3ebe5cbe}
+       {x43140000 x43208000 x3ec25cc2}
+       {x431b0000 x431c0000 x3ec560c5}
+       {x43208000 x43170000 x3ec560c5}
+       {x43230000 x43120000 x3eca60ca}
+       {x43230000 x430d0000 x3ecb64cb}
+       {x43208000 x43088000 x3ecc64cc}
+       {x43168000 x43010000 x3ece64ce}
+       {x43100000 x42fc0000 x3ece64ce}
+       {x43080000 x42f80000 x3ece64ce}
+       {x43008000 x42f40000 x3ece64ce}
+       {x42f00000 x42f20000 x3ecd64cd}
+       {x42e00000 x42f10000 x3ece64ce}
+       {x42d00000 x42f10000 x3ecd64cd}
+       {x42c00000 x42f20000 x3ece64ce}
+       {x42b20000 x42f40000 x3ed064d0}
+       {x42a60000 x42f70000 x3ecf64cf}
+       {x42990000 x42fb0000 x3ecf64cf}
+       {x42970000 x42fd0000 x3ed468d4}
+       {x429c0000 x42fe0000 x3edc6cdc}
+       {x42a20000 x42fe0000 x3ede6cde}
+       {x42ac0000 x42fd0000 x3ede6cde}
+       {x42ba0000 x42fa0000 x3edd6cdd}
+       {x42c90000 x42f70000 x3ee06ce0}
+       {x42da0000 x42f10000 x3ee470e4}
+       {x42ea0000 x42ed0000 x3ee670e6}
+       {x42fa0000 x42e70000 x3eeb70eb}
+       {x43038000 x42e20000 x3eec74ec}
+       {x430c0000 x42d60000 x3eec74ec}
+       {x430d8000 x42d10000 x3ef174f1}
+       {x430d8000 x42cc0000 x3ef478f4}
+       {x430b8000 x42c70000 x3ef578f5}
+       {x43078000 x42c20000 x3ef778f7}
+       {x43020000 x42bf0000 x3ef778f7}
+       {x42f80000 x42bc0000 x3ef878f8}
+       {x42e90000 x42ba0000 x3ef878f8}
+       {x42db0000 x42ba0000 x3ef878f8}
+       {x42cc0000 x42ba0000 x3ef778f7}
+       {x42bd0000 x42ba0000 x3ef778f7}
+       {x42ad0000 x42bd0000 x3ef778f7}
+       {x42a00000 x42bf0000 x3ef578f5}
+       {x42950000 x42c40000 x3ef678f6}
+       {x428d0000 x42c70000 x3ef578f5}
+       {x428a0000 x42cb0000 x3ef678f6}
+       {x428d0000 x42cb0000 x3ef374f3}
+       {x42940000 x42cb0000 x3ef374f3}
+       {x429e0000 x42ca0000 x3ef174f1}
+       {x42ab0000 x42c80000 x3ef374f3}
+       {x42bb0000 x42c50000 x3ef478f4}
+       {x42cc0000 x42bf0000 x3ef578f5}
+       {x42df0000 x42ba0000 x3ef678f6}
+       {x42f00000 x42b30000 x3efa78fa}
+       {x42fe0000 x42ac0000 x3efb78fb}
+       {x430a0000 x429e0000 x3efd7cfd}
+       {x430c0000 x42960000 x3efe7cfe}
+       {x430c0000 x428e0000 x3f013e81}
+       {x430b0000 x42880000 x3f01be82}
+       {x43078000 x42820000 x3f013e81}
+       {x43030000 x427c0000 x3f01be82}
+       {x42fc0000 x42720000 x3f024082}
+       {x42f00000 x426e0000 x3f013e81}
+       {x42e20000 x426c0000 x3f013e81}
+       {x42d40000 x426c0000 x3f013e81}
+       {x42c60000 x426e0000 x3f013e81}
+       {x42b60000 x42740000 x3f013e81}
+       {x42990000 x42840000 x3f01be82}
+       {x428e0000 x428a0000 x3f013e81}
+       {x42860000 x428e0000 x3f01be82}
+       {x42820000 x42930000 x3f01be82}
+       {x42820000 x42960000 x3f013e81}
+       {x42840000 x42980000 x3f00be81}
+       {x428a0000 x429a0000 x3f00be81}
+       {x42930000 x429a0000 x3f00be81}
+       {x429f0000 x429a0000 x3eff7cff}
+       {x42ae0000 x42980000 x3f00be81}
+       {x42c10000 x42950000 x3f003e80}
+       {x42d60000 x42920000 x3f00be81}
+       {x42ec0000 x428d0000 x3f00be81}
+       {x43008000 x428a0000 x3f01be82}
+       {x430a8000 x42860000 x3f00be81}
+       {x431b0000 x427c0000 x3f01be82}
+       {x43210000 x42720000 x3f01be82}
+       {x43258000 x42680000 x3f013e81}
+       {x43288000 x425e0000 x3f003e80}
+       {x43298000 x42560000 x3f003e80}
+       {x43290000 x424c0000 x3f003e80}
+       {x43270000 x42440000 x3f00be81}
+       {x43248000 x423a0000 x3f00be81}
+       {x43200000 x42340000 x3f003e80}
+       {x431a8000 x42300000 x3efe7cfe}
+       {x43140000 x422c0000 x3f00be81}
+       {x430c0000 x42280000 x3f00be81}
+       {x43030000 x42280000 x3efe7cfe}
+       {x42f40000 x422c0000 x3f00be81}
+       {x42e20000 x42300000 x3eff7cff}
+       {x42cf0000 x42360000 x3f003e80}
+       {x42bc0000 x423c0000 x3efe7cfe}
+       {x42ab0000 x42460000 x3efe7cfe}
+       {x429c0000 x424c0000 x3eff7cff}
+       {x42900000 x42500000 x3eff7cff}
+       {x428a0000 x42560000 x3eff7cff}
+       {x42850000 x425a0000 x3f003e80}
+       {x42850000 x42600000 x3f013e81}
+       {x42880000 x42640000 x3eff7cff}
+       {x428d0000 x426c0000 x3efe7cfe}
+       {x42970000 x42720000 x3efe7cfe}
+       {x42a30000 x42760000 x3eff7cff}
+       {x42b30000 x427c0000 x3efc7cfc}
+       {x42c60000 x427c0000 x3eff7cff}
+       {x42da0000 x427c0000 x3eff7cff}
+       {x43040000 x426e0000 x3efe7cfe}
+       {x43108000 x42600000 x3efc7cfc}
+       {x431c8000 x424e0000 x3efe7cfe}
+       {x43270000 x423a0000 x3eff7cff}
+       {x43308000 x42240000 x3eff7cff}
+       {x43388000 x420c0000 x3eff7cff}
+       {x433e0000 x41ec0000 x3efe7cfe}
+       {x43420000 x41c40000 x3efe7cfe}
+       {x43448000 x419c0000 x3f00be81}
+       {x43460000 x41780000 x3f003e80}
+       {x43460000 x41380000 x3f013e81}
+       {x43448000 x41100000 x3f03c084}
+       {x43428000 x40e00000 x3f05c086}
+       {x433e8000 x40c00000 x3f094289}
+       {x433a0000 x40b00000 x3f09c28a}
+       {x43348000 x40b00000 x3f0a448a}
+       {x432e8000 x40d00000 x3f0bc48c}
+       {x43280000 x41100000 x3f0b448b}
+       {x43210000 x41380000 x3f0b448b}
+       {x431b8000 x41780000 x3f0a448a}
+       {x43170000 x419c0000 x3f08c289}
+       {x43150000 x41bc0000 x3f074287}
+       {x43148000 x41d80000 x3f04c085}
+       {x43160000 x41f80000 x3f02c083}
+       {x43198000 x42080000 x3f01be82}
+       {x431e8000 x42100000 x3f00be81}
+       {x432b0000 x421c0000 x3f003e80}
+       {x43328000 x421c0000 x3f00be81}
+       {x433a0000 x421c0000 x3f00be81}
+       {x43498000 x421c0000 x3efe7cfe}
+       {x43518000 x421c0000 x3eff7cff}
+       {x43588000 x421c0000 x3f00be81}
+       {x435f0000 x421a0000 x3f003e80}
+       {x43628000 x42180000 x3f00be81}
+       {x43648000 x42120000 x3f00be81}
+       {x43628000 x420a0000 x3f03c084}
+       {x435f0000 x42060000 x3f04c085}
+       {x435a0000 x42040000 x3f04c085}
+       {x43530000 x42000000 x3f04c085}
+       {x434b8000 x42000000 x3f05c086}
+       {x43428000 x42040000 x3f04c085}
+       {x43390000 x420c0000 x3f04c085}
+       {x432f0000 x42180000 x3f054085}
+       {x43240000 x42240000 x3f05c086}
+       {x43180000 x42380000 x3f05c086}
+       {x430c0000 x42500000 x3f064286}
+       {x43000000 x426a0000 x3f05c086}
+       {x42e80000 x42830000 x3f064286}
+       {x42d20000 x42900000 x3f05c086}
+       {x42be0000 x429f0000 x3f05c086}
+       {x42ac0000 x42ae0000 x3f074287}
+       {x429d0000 x42bd0000 x3f05c086}
+       {x42920000 x42cc0000 x3f064286}
+       {x42890000 x42dc0000 x3f05c086}
+       {x42820000 x42ec0000 x3f05c086}
+       {x42800000 x42fb0000 x3f064286}
+       {x42800000 x43050000 x3f05c086}
+       {x42820000 x430c0000 x3f05c086}
+       {x42880000 x43120000 x3f05c086}
+       {x42920000 x43180000 x3f064286}
+       {x429e0000 x431e0000 x3f04c085}
+       {x42ad0000 x43238000 x3f04c085}
+       {x42c00000 x43288000 x3f054085}
+       {x42d30000 x432d8000 x3f04c085}
+       {x42e70000 x43310000 x3f03c084}
+       {x42fa0000 x43340000 x3f03c084}
+       {x43058000 x43358000 x3f03c084}
+       {x43120000 x43340000 x3f044084}
+       {x43160000 x43300000 x3f03c084}
+       {x43178000 x432a8000 x3f03c084}
+       {x43178000 x43248000 x3f044084}
+       {x43168000 x431d0000 x3f054085}
+       {x43140000 x43160000 x3f04c085}
+       {x430f8000 x430f0000 x3f064286}
+       {x430a8000 x43080000 x3f064286}
+       {x43040000 x43018000 x3f05c086}
+       {x42fb0000 x42f70000 x3f05c086}
+       {x42ec0000 x42ed0000 x3f04c085}
+       {x42db0000 x42e30000 x3f05c086}
+       {x42c90000 x42dc0000 x3f05c086}
+       {x42b70000 x42d90000 x3f064286}
+       {x42a80000 x42d80000 x3f064286}
+       {x42980000 x42db0000 x3f05c086}
+       {x428c0000 x42e20000 x3f064286}
+       {x42720000 x42fd0000 x3f06c287}
+       {x42640000 x43080000 x3f064286}
+       {x425c0000 x43128000 x3f04c085}
+       {x42560000 x431c8000 x3f02c083}
+       {x42560000 x43268000 x3f003e80}
+       {x425a0000 x432f8000 x3efe7cfe}
+       {x42640000 x43380000 x3efc7cfc}
+       {x42740000 x433f8000 x3efd7cfd}
+       {x42850000 x43468000 x3efd7cfd}
+       {x42930000 x434c0000 x3efd7cfd}
+       {x42a20000 x43508000 x3efc7cfc}
+       {x42b40000 x43538000 x3efd7cfd}
+       {x42c70000 x43560000 x3efc7cfc}
+       {x42da0000 x43570000 x3efc7cfc}
+       {x42ee0000 x43570000 x3efc7cfc}
+       {x430b8000 x43518000 x3efc7cfc}
+       {x43160000 x434d0000 x3efd7cfd}
+       {x431f8000 x43470000 x3efa78fa}
+       {x43280000 x433f8000 x3efa78fa}
+       {x432e8000 x43388000 x3efb78fb}
+       {x43330000 x43308000 x3ef878f8}
+       {x43358000 x43288000 x3efb78fb}
+       {x43360000 x43210000 x3ef778f7}
+       {x43360000 x43198000 x3efb78fb}
+       {x43348000 x43120000 x3efb78fb}
+       {x43308000 x430b0000 x3efc7cfc}
+       {x432b0000 x43040000 x3efc7cfc}
+       {x43240000 x42fb0000 x3efc7cfc}
+       {x431b0000 x42f00000 x3efd7cfd}
+       {x43070000 x42de0000 x3efd7cfd}
+       {x42fa0000 x42d90000 x3efc7cfc}
+       {x42e70000 x42d60000 x3efe7cfe}
+       {x42d50000 x42d60000 x3efc7cfc}
+       {x42c50000 x42db0000 x3eff7cff}
+       {x42b60000 x42e30000 x3efc7cfc}
+       {x42a90000 x42ee0000 x3efd7cfd}
+       {x429e0000 x42fc0000 x3efd7cfd}
+       {x42950000 x43060000 x3efc7cfc}
+       {x42900000 x430f0000 x3ef678f6}
+       {x42900000 x43170000 x3ef074f0}
+       {x42950000 x431e0000 x3eea70ea}
+       {x429e0000 x43238000 x3ee970e9}
+       {x42ac0000 x43270000 x3ee970e9}
+       {x42bd0000 x43298000 x3ee670e6}
+       {x42d10000 x432b0000 x3ee670e6}
+       {x42e70000 x432b0000 x3ee770e7}
+       {x43008000 x43298000 x3ee670e6}
+       {x430d0000 x43260000 x3ee770e7}
+       {x431b0000 x43230000 x3ee670e6}
+       {x43290000 x431e0000 x3ee770e7}
+       {x43358000 x43190000 x3ee770e7}
+       {x43400000 x43130000 x3ee970e9}
+       {x43480000 x430d0000 x3eeb70eb}
+       {x434d0000 x43060000 x3ef274f2}
+       {x434f0000 x42fc0000 x3ef478f4}
+       {x434f0000 x42ec0000 x3ef578f5}
+       {x434d0000 x42dc0000 x3ef678f6}
+       {x43430000 x42bd0000 x3ef678f6}
+       {x433d0000 x42b00000 x3ef878f8}
+       {x43350000 x42a20000 x3efa78fa}
+       {x432d0000 x42950000 x3ef878f8}
+       {x43238000 x42880000 x3efc7cfc}
+       {x43198000 x42760000 x3efa78fa}
+       {x43100000 x42600000 x3efa78fa}
+       {x43068000 x424c0000 x3efd7cfd}
+       {x42fc0000 x423c0000 x3efd7cfd}
+       {x42ee0000 x42300000 x3efd7cfd}
+       {x42dd0000 x42240000 x3efc7cfc}
+       {x42db0000 x42240000 x3efc7cfc}
+       {x42dc0000 x422c0000 x3ef778f7}
+       {x42e20000 x42340000 x3ef374f3}
+       {x42ea0000 x42400000 x3ef274f2}
+       {x42f70000 x424a0000 x3ef174f1}
+       {x43028000 x42540000 x3ef174f1}
+       {x430b8000 x42580000 x3ef174f1}
+       {x43150000 x42580000 x3ef174f1}
+       {x431f0000 x42560000 x3ef174f1}
+       {x43288000 x424e0000 x3ef174f1}
+       {x43310000 x42440000 x3ef174f1}
+       {x43390000 x42380000 x3ef274f2}
+       {x433e8000 x42280000 x3ef274f2}
+       {x43420000 x421a0000 x3ef174f1}
+       {x43430000 x420a0000 x3ef778f7}
+       {x43420000 x41f40000 x3efb78fb}
+       {x433e8000 x41d00000 x3efc7cfc}
+       {x43398000 x41b00000 x3efd7cfd}
+       {x43328000 x41940000 x3efd7cfd}
+       {x432a8000 x41700000 x3eff7cff}
+       {x43210000 x41500000 x3eff7cff}
+       {x43170000 x41280000 x3efe7cfe}
+       {x430c8000 x41180000 x3eff7cff}
+       {x43018000 x41180000 x3f00be81}
+       {x42ed0000 x41180000 x3f00be81}
+       {x42d80000 x41300000 x3f003e80}
+       {x42c20000 x41580000 x3f00be81}
+       {x42ae0000 x41840000 x3f00be81}
+       {x429d0000 x41a00000 x3f003e80}
+       {x428e0000 x41c00000 x3f00be81}
+       {x42850000 x41d80000 x3f03c084}
+       {x427e0000 x41f00000 x3f054085}
+       {x42780000 x42040000 x3f05c086}
+       {x42760000 x420a0000 x3f064286}
+       {x42740000 x420e0000 x3f05c086}
+       {x42740000 x42120000 x3f064286}
+       {x42720000 x42180000 x3f064286}
+       {x426e0000 x421c0000 x3f05c086}
+       {x42680000 x421e0000 x3f064286}
+       {x425e0000 x42220000 x3f064286}
+       {x42560000 x42260000 x3f064286}
+       {x424c0000 x422c0000 x3f05c086}
+       {x42440000 x42300000 x3f064286}
+       {x423a0000 x42340000 x3f064286}
+       {x42340000 x42360000 x3f064286}
+       {x422e0000 x42380000 x3f05c086}
+       {x42280000 x423a0000 x3f05c086}
+       {x422c0000 x423a0000 x3f044084}
+       {x42380000 x42400000 x3f03c084}
+       {x42420000 x42440000 x3f03c084}
+       {x424e0000 x424a0000 x3f044084}
+       {x42600000 x42540000 x3f03c084}
+       {x42760000 x425e0000 x3f044084}
+       {x428a0000 x426a0000 x3f024082}
+       {x429a0000 x42780000 x3f03c084}
+       {x42b00000 x42830000 x3f03c084}
+       {x42c80000 x428a0000 x3f044084}
+       {x42e20000 x428f0000 x3f03c084}
+       {x42fd0000 x42940000 x3f03c084}
+       {x430c8000 x42960000 x3f054085}
+       {x431a8000 x42970000 x3f04c085}
+       {x43268000 x42960000 x3f03c084}
+       {x43310000 x42930000 x3f03c084}
+       {x43398000 x428f0000 x3f04c085}
+       {x433f8000 x428a0000 x3f03c084}
+       {x43430000 x42830000 x3f013e81}
+       {x43450000 x42780000 x3eef74ef}
+       {x43450000 x426a0000 x3ed468d4}
+       {x43448000 x425e0000 x3e9d4c9d}
+       {x43430000 x42500000 x3db050b0}}}
+     {t x42f794e9 x42d3d07a}
+     {a r 0 g x3f395810 ro 0 go 0 bo 0 ao 0 bs x40e00000 bu 1 str 1 spx x44800000 spy x44428000 sb 1 ltn x447d8000 ltm x447d8000 ltt x40000000 tt x41880000}}}}}}
+ toolbox {brush {
+  { selectAll r 0.404 g 0 bs 7 str 1 ssx 1 ssy 1 sf 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush r 0.404 g 0 bs 7 str 1 ssx 1 ssy 1 sf 1 sb 1 ltn 1001 ltm 1001 tt 17 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+ toolbar_paint_color {0.4040002823 0 1 1}
+ toolbar_brush_size 7
+ toolbar_brush_hardness 0.200000003
+ toolbar_lifetime_type single
+ toolbar_lifetime_start 1001
+ toolbar_lifetime_end 1001
+ toolbar_source_transform_scale {1 1}
+ toolbar_source_transform_center {1024 778}
+ color {0.4040002823 0 1 1}
+ colorOverlay {0 0 0 0}
+ lifetime_start 1001
+ lifetime_end 1001
+ motionblur_on true
+ brush_size 7
+ brush_spacing 0.05000000075
+ brush_hardness 0.200000003
+ source_black_outside true
+ name RotoPaint1
+ xpos 466
+ ypos 137
+}
+Dot {
+ name Dot3
+ xpos 500
+ ypos 270
+}
+set Na052a000 [stack 0]
+Write {
+ name Write1
+ label "export udim<br>render range : \[value input.first_frame] - \[value input.last_frame]"
+ xpos 576
+ ypos 344
+}
+StickyNote {
+ inputs 0
+ name StickyNote1
+ label "Texture painted on frame 1001 and 1014 = udim 1001 and 1014"
+ xpos 566
+ ypos 135
+}
+StickyNote {
+ inputs 0
+ name StickyNote2
+ label "3D view cant display uvtile, have to check through scanlineRender"
+ xpos 568
+ ypos 529
+}
+Axis2 {
+ inputs 0
+ rotate {0 {curve x1001 -20 x1050 20} 0}
+ name Axis3
+ xpos 1852
+ ypos 509
+}
+Camera2 {
+ translate {66.90603638 35.25645828 -5.300000668}
+ rotate {-24.62797338 90.0000025 0}
+ name Camera2
+ xpos 1852
+ ypos 631
+}
+ReadGeo2 {
+ inputs 0
+ file ./Trex_UVtile_skin.abc
+ localizationPolicy off
+ version 2
+ use_geometry_colors false
+ range_first 0
+ range_last 0
+ scene_view {{0} imported: 0 selected: 0 items: /root/Trex_UVtile:Skin/Trex_UVtile:SkinShape}
+ name ReadGeo5
+ xpos 2011
+ ypos -279
+}
+Group {
+ name UVEditor5
+ onCreate "\nthisGRP = nuke.thisGroup()\nif not thisGRP\['disable_error'].getValue() :\n    import os\n    import re\n\n    fontpath = re.split( '/|\"\"' , nuke.EXE_PATH )\n    fontpath.pop()\n    fontpath += \['plugins','fonts']\n    \n    if os.path.isfile( '/'.join( fontpath + \['UtopiaBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['UtopiaBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['CourierBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['CourierBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) )\n    else :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['BitstreamCharterBold.pfb'] ) )\n"
+ tile_color 0x6666ff
+ xpos 2011
+ ypos -171
+ addUserKnob {20 tab_general l General}
+ addUserKnob {3 texSize l "texture size"}
+ texSize 256
+ addUserKnob {41 filter T SR.filter}
+ addUserKnob {41 antialiasing T SR.antialiasing}
+ addUserKnob {26 ""}
+ addUserKnob {41 view_wireframe l "view wireframe" T menu02.view_wireframe}
+ addUserKnob {7 wireframe_size l "wireframe size" +DISABLED R 0.1 10}
+ wireframe_size 0.1
+ addUserKnob {26 ""}
+ addUserKnob {41 output T menu01.output}
+ addUserKnob {30 uv_shift l INVISIBLE +INVISIBLE}
+ addUserKnob {41 scanRes +INVISIBLE T store.scanRes}
+ addUserKnob {22 udim_export l export +DISABLED T "thisGRP = nuke.thisGroup()\ndataCheckNode = nuke.toNode('dataCheck')\n\n########################################################\n\nusrUV = thisGRP\['uv_shift'].getValue()\ndataReturn = \[]\n\nprogBar = nuke.ProgressTask('Checking UV')\njobCount = 0\n\nfor v in range (0, 10) :\n  for u in range (0, 10) :\n\n    ### progress bar\n    jobCount += 1\n    progShow = int(jobCount/100 * 100)\n    if progBar.isCancelled() :\n      break;\n    progBar.setProgress(progShow)\n    #################\n\n    thisGRP\['uv_shift'].setValue(\[u,v])\n    nuke.execute(dataCheckNode, nuke.frame(), nuke.frame())\n    if dataCheckNode\['maxlumapixvalue'].getValue() != \[0.0, 0.0, 0.0] :\n      dataReturn.append(1)\n    else :\n      dataReturn.append(0)\n\ndel progBar\n\ndataCheckNode\['maxlumapixdata'].clearAnimated()\ndataCheckNode\['maxlumapixvalue'].clearAnimated()\ndataCheckNode\['minlumapixdata'].clearAnimated()\ndataCheckNode\['minlumapixvalue'].clearAnimated()\n\nif len(dataReturn) == 100 :\n\tfor i in range (0, 100) :\n\t  if dataReturn\[i] == 1 :\n\t    uvMax = i\n\n\tthisGRP\['uv_shift'].setValue(usrUV)\n\n\t########################################################\n\n\tgoStore = nuke.toNode('store')\n\tgoStore\['fn'].execute()\n\n\troot = getLevel()\n\n\troot.begin()\n\toutFR = nuke.nodes.FrameRange()\n\toutFR\['first_frame'].setValue(1001)\n\toutFR\['last_frame'].setValue(1001 + uvMax)\n\toutFR\['label'].setValue( 'udim range : 1001 - \{0\}'.format( str(1001 + uvMax) ) )\n\toutFR.setInput(0, thisGRP)\n\toutFR.setXYpos(int(thisGRP\['xpos'].value()), int(thisGRP\['ypos'].value()+80))\n\n\texpDot = nuke.nodes.Dot()\n\texpDot\['label'].setValue('Texture modify here : swap the paint/patch texture into udim frame')\n\texpDot.setInput(0, outFR)\n\n\tyDot = nuke.nodes.Dot()\n\tyDot.setInput(0, expDot)\n\n\tuvGRP = nuke.nodes.Group()\n\tuvGRP\['label'].setValue('udim stitch for nuke')\n\n\tnDot = nuke.nodes.Dot()\n\tnDot\['label'].setValue('Connect to Geo')\n\troot.end()\n\n\tuvGRP.begin()\n\tinNode = nuke.nodes.Input(name='udim')\n\tcropNode = nuke.nodes.Crop()\n\tcropNode\['crop'].setValue(1)\n\tcropNode.setInput(0, inNode)\n\tallDot = nuke.nodes.Dot()\n\tallDot.setInput(0, cropNode)\n\n\tuvMerge = nuke.nodes.Merge2()\n\toutNode = nuke.nodes.Output()\n\toutNode.setInput(0, uvMerge)\n\n\tfor i in range (0, uvMax+1) :\n\t  uDimHold = nuke.nodes.FrameHold()\n\t  uDimHold\['first_frame'].setValue(1001+i)\n\t  uDimHold.setInput(0, allDot)\n\t  \n\t  uvTran = nuke.nodes.Transform()\n\t  uvTran.addKnob(nuke.UV_Knob('uv_offset'))\n\t  if i < 10 :\n\t    u = i\n\t    v = 0\n\t  else :\n\t    if i < 100 :\n\t      u = int(str(i)\[1])\n\t      v = int(str(i)\[0])\n\t  uvTran\['uv_offset'].setValue(\[u, v])\n\t  uvTran\['translate'].setExpression('input.width*uv_offset.u', 0)\n\t  uvTran\['translate'].setExpression('input.height*uv_offset.v', 1)\n\t  uvTran.setInput(0, uDimHold)\n\n\t  uvMerge.setInput(i+3, uvTran)\n\n\n\tuvGRP.end()\n\n\tuvGRP.setInput(0, yDot)\n\tnDot.setInput(0, uvGRP)\n\n\troot.begin()\n\texWrite = nuke.nodes.Write()\n\texWrite.setInput(0, yDot)\n\texWrite\['label'].setValue('export udim<br>render range : \[value input.first_frame] - \[value input.last_frame]')\n\troot.end()\n\n\tdel uvMax\nelse :\n\tnuke.message('Scan process terminated by user.')\n\ndel dataReturn" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 font T store.font}
+ addUserKnob {6 disable_error l "disable text" +STARTLINE}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.4}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-04-24}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.4<br>-&nbsp;fix&nbsp;misspelling&nbsp;of&nbsp;knob's&nbsp;label<br>-&nbsp;fix&nbsp;not&nbsp;working&nbsp;disable&nbsp;text&nbsp;knob<br><br>1.3<br>-&nbsp;fix&nbsp;font&nbsp;issue<br>&nbsp;&nbsp;works&nbsp;on&nbsp;linux,&nbsp;mac&nbsp;&&nbsp;windows<br><br>1.2<br>-&nbsp;preview&nbsp;in&nbsp;uv&nbsp;space&nbsp;set&nbsp;limited&nbsp;<br>&nbsp;&nbsp;in&nbsp;1024&nbsp;resolution&nbsp;for&nbsp;not&nbsp;drag&nbsp;<br>&nbsp;&nbsp;down&nbsp;speed&nbsp;purpose.<br>-&nbsp;added&nbsp;show&nbsp;tile&nbsp;number<br>-&nbsp;changed&nbsp;uv&nbsp;combine&nbsp;to&nbsp;uv&nbsp;stitch<br>&nbsp;&nbsp;in&nbsp;export&nbsp;group<br>-&nbsp;code&nbsp;update<br>-&nbsp;scan&nbsp;size&nbsp;reduce,&nbsp;speed&nbsp;up&nbsp;process\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -1755
+  ypos 302
+  bdwidth 263
+  bdheight 296
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x424242ff
+  label "UV preview"
+  note_font_size 42
+  xpos -824
+  ypos 451
+  bdwidth 343
+  bdheight 672
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x424242ff
+  label udim
+  note_font_size 42
+  xpos -328
+  ypos 451
+  bdwidth 354
+  bdheight 675
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x424242ff
+  label uvtile
+  note_font_size 42
+  xpos 109
+  ypos 451
+  bdwidth 354
+  bdheight 675
+ }
+ Input {
+  inputs 0
+  name tex
+  xpos -1000
+  ypos 83
+  number 1
+ }
+ Wireframe {
+  inputs 0
+  line_width {{wireframe_size}}
+  name Wireframe1
+  xpos -866
+  ypos 207
+ }
+ Switch {
+  inputs 2
+  which {{!view_wireframe}}
+  name Switch2
+  xpos -1000
+  ypos 207
+ }
+ Input {
+  inputs 0
+  name geo
+  xpos -1171
+  ypos 82
+ }
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial1
+  xpos -1171
+  ypos 207
+ }
+ Dot {
+  name Dot6
+  xpos -1137
+  ypos 287
+ }
+ Dot {
+  name Dot1
+  xpos -1137
+  ypos 384
+ }
+set Nb3efa400 [stack 0]
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{store.scanRes}}
+  box_height {{box_width}}
+  box_fixed true
+  name scanRes
+  xpos -1061
+  ypos 595
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  projection_mode uv
+  overscan {{store.scanRes*10}}
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR1
+  xpos -1171
+  ypos 595
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos -1171
+  ypos 675
+ }
+ Transform {
+  translate {{store.scanRes*uv_offset.u*-1} {store.scanRes*uv_offset*-1}}
+  shutteroffset centred
+  name pos_shift
+  xpos -1171
+  ypos 740
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {{uv_shift} {uv_shift}}
+ }
+ Crop {
+  box {0 0 {store.scanRes} {store.scanRes}}
+  reformat true
+  crop false
+  name Crop1
+  xpos -1171
+  ypos 801
+ }
+ CurveTool {
+  operation "Max Luma Pixel"
+  ROI {0 0 {store.scanRes} {store.scanRes}}
+  intensitydata {0 0 0 0}
+  maxlumapixvalue {0 0 0}
+  minlumapixvalue {0 0 0}
+  name dataCheck
+  xpos -1171
+  ypos 881
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['output'].getValue() == 1 :\n    thisGRP\['udim_export'].setEnabled(True)\nelse :\n    thisGRP\['udim_export'].setEnabled(False)\n"
+  xpos -1669
+  ypos 392
+  addUserKnob {20 User}
+  addUserKnob {4 output M {"preview in uv space" udim "uv tile" "uv pass"}}
+  output "uv pass"
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{texSize*10}}
+  box_height {{texSize*10}}
+  box_fixed true
+  resize none
+  name Reformat4
+  xpos 719
+  ypos 638
+ }
+ Expression {
+  expr0 x/width
+  expr1 y/height
+  channel2 none
+  channel3 none
+  name uv
+  xpos 719
+  ypos 720
+ }
+ Multiply {
+  channels rgb
+  value {10 10 1 1}
+  name Multiply1
+  xpos 719
+  ypos 798
+ }
+ Reformat {
+  type "to box"
+  box_width {{texSize}}
+  box_height {{texSize}}
+  box_fixed true
+  resize none
+  center false
+  pbb true
+  name Reformat3
+  xpos 719
+  ypos 878
+ }
+ Dot {
+  name Dot8
+  xpos 753
+  ypos 1225
+ }
+push $Nb3efa400
+ Dot {
+  name Dot4
+  xpos -780
+  ypos 384
+ }
+set Nb7288400 [stack 0]
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{texSize}}
+  box_height {{box_width}}
+  box_fixed true
+  name res
+  xpos 5
+  ypos 381
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  filter Impulse
+  projection_mode uv
+  overscan {{texSize*10 x1009 1948}}
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR
+  xpos -154
+  ypos 381
+ }
+ Dot {
+  name Dot2
+  xpos -120
+  ypos 628
+ }
+set Nb2983400 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos -292
+  ypos 625
+ }
+ Text {
+  output rgb
+  cliptype none
+  message " 91 92 93 94 95 96 97 98 99 00\n 81 82 83 84 85 86 87 88 89 90\n 71 72 73 74 75 76 77 78 79 80\n 61 62 63 64 65 66 67 68 69 70\n 51 52 53 54 55 56 57 58 59 60\n 41 42 43 44 45 46 47 48 49 50\n 31 32 33 34 35 36 37 38 39 40\n 21 22 23 24 25 26 27 28 29 30\n 11 12 13 14 15 16 17 18 19 20\n 01 02 03 04 05 06 07 08 09 10"
+  font "\[value store.font]"
+  kerning 0.236
+  leading 1.051
+  yjustify bottom
+  Transform 1
+  box {0 0 1024 999}
+  translate {0 {"( ( texSize * 10 ) / 1024 ) *25"}}
+  scale {{"( texSize * 10 ) / 1024"}}
+  name Text2
+  selected true
+  xpos -292
+  ypos 707
+  disable {{disable_error}}
+ }
+ Multiply {
+  channels rgb
+  value {0 0.05 0.05 1}
+  name Multiply3
+  xpos -292
+  ypos 769
+ }
+ Dot {
+  name Dot13
+  xpos -258
+  ypos 821
+ }
+ Dot {
+  name Dot11
+  xpos -178
+  ypos 821
+ }
+set Nb392dc00 [stack 0]
+ Dot {
+  name Dot12
+  xpos 221
+  ypos 821
+ }
+push $Nb2983400
+ Dot {
+  name Dot5
+  xpos 281
+  ypos 628
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge4
+  xpos 247
+  ypos 879
+ }
+ Crop {
+  box {0 0 {texSize*10} {texSize*10}}
+  crop false
+  name Crop4
+  xpos 247
+  ypos 961
+ }
+ Dot {
+  name Dot7
+  xpos 281
+  ypos 1204
+ }
+push $Nb392dc00
+push $Nb2983400
+ Merge2 {
+  inputs 2
+  operation under
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge3
+  xpos -154
+  ypos 879
+ }
+ Transform {
+  translate {{texSize*uv_offset.u*-1 i} {texSize*uv_offset*-1 i}}
+  shutteroffset centred
+  name pos_shift1
+  xpos -154
+  ypos 961
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {{"frame <=1001 ? 0 : (frame-1)%10"} {"frame < 1000 ? 0 : int(((frame-1)/10)-100)"}}
+ }
+ Dot {
+  name Dot3
+  xpos -120
+  ypos 1202
+ }
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat2
+  xpos -693
+  ypos 712
+ }
+ Dot {
+  name Dot9
+  xpos -659
+  ypos 770
+ }
+set Nb7ce1000 [stack 0]
+ Dot {
+  name Dot10
+  xpos -533
+  ypos 770
+ }
+ Text {
+  output rgb
+  message " 91 92 93 94 95 96 97 98 99 00\n 81 82 83 84 85 86 87 88 89 90\n 71 72 73 74 75 76 77 78 79 80\n 61 62 63 64 65 66 67 68 69 70\n 51 52 53 54 55 56 57 58 59 60\n 41 42 43 44 45 46 47 48 49 50\n 31 32 33 34 35 36 37 38 39 40\n 21 22 23 24 25 26 27 28 29 30\n 11 12 13 14 15 16 17 18 19 20\n 01 02 03 04 05 06 07 08 09 10"
+  font "\[value store.font]"
+  kerning 0.236
+  leading 1.051
+  yjustify bottom
+  Transform 1
+  box {0 0 1024 999}
+  translate {0 25}
+  name Text1
+  xpos -567
+  ypos 818
+  disable {{disable_error}}
+ }
+ Multiply {
+  channels rgb
+  value {0 0.05 0.05 1}
+  name Multiply2
+  xpos -567
+  ypos 887
+ }
+push $Nb7ce1000
+ Grid {
+  name Grid1
+  xpos -693
+  ypos 814
+ }
+ Merge2 {
+  inputs 2
+  name Merge2
+  xpos -693
+  ypos 887
+ }
+push $Nb7288400
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat5
+  xpos -689
+  ypos 531
+ }
+ Reformat {
+  type scale
+  scale 0.1
+  resize none
+  name Reformat6
+  xpos -689
+  ypos 594
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  projection_mode uv
+  overscan 2560
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR2
+  xpos -814
+  ypos 594
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge1
+  xpos -814
+  ypos 887
+ }
+ Crop {
+  box {0 0 1024 1024}
+  reformat true
+  crop false
+  name Crop2
+  xpos -814
+  ypos 969
+ }
+ Switch {
+  inputs 4
+  which {{output}}
+  name Switch1
+  xpos -814
+  ypos 1412
+ }
+ Output {
+  name Output1
+  xpos -814
+  ypos 1597
+ }
+ NoOp {
+  inputs 0
+  name menu02
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['view_wireframe'].getValue() == 1 :\n        thisGRP\['wireframe_size'].setEnabled(True)\nelse :\n        thisGRP\['wireframe_size'].setEnabled(False)\n"
+  xpos -1668
+  ypos 484
+  addUserKnob {20 User}
+  addUserKnob {6 view_wireframe l "view wireframe" +STARTLINE}
+ }
+ NoOp {
+  inputs 0
+  name store
+  xpos -1419
+  ypos 388
+  addUserKnob {20 User}
+  addUserKnob {22 fn T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel" +STARTLINE}
+  addUserKnob {3 scanRes}
+  scanRes 64
+  addUserKnob {2 font}
+  font "C:/Program Files/Nuke12.0v3/plugins/fonts/UtopiaBold.pfa"
+ }
+end_group
+ReadGeo2 {
+ file ./Trex_UVtile_skin.abc
+ localizationPolicy off
+ version 2
+ use_geometry_colors false
+ range_first 0
+ range_last 0
+ scene_view {{0} imported: 0 selected: 0 items: /root/Trex_UVtile:Skin/Trex_UVtile:SkinShape}
+ name ReadGeo9
+ xpos 2011
+ ypos 509
+}
+Reformat {
+ inputs 0
+ format "1280 720 0 0 1280 720 1 HD_720"
+ name Reformat3
+ xpos 2141
+ ypos 647
+}
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ motion_vectors_type off
+ MB_channel none
+ name ScanlineRender3
+ xpos 2011
+ ypos 651
+}
+Axis2 {
+ inputs 0
+ rotate {0 {curve x1001 -20 x1050 20} 0}
+ name Axis1
+ xpos 1065
+ ypos -503
+}
+Camera2 {
+ translate {66.90603638 35.25645828 -5.300000668}
+ rotate {-24.62797338 90.0000025 0}
+ name Camera1
+ xpos 1065
+ ypos -381
+}
+Dot {
+ name Dot7
+ xpos 1089
+ ypos -259
+}
+set Na172b400 [stack 0]
+Dot {
+ name Dot8
+ xpos 1089
+ ypos 665
+}
+push $Na172b400
+FrameHold {
+ first_frame 1001
+ name FrameHold1
+ xpos 1155
+ ypos -269
+}
+CheckerBoard2 {
+ inputs 0
+ name CheckerBoard1
+ xpos 1265
+ ypos -391
+}
+Project3D2 {
+ inputs 2
+ name Project3D1
+ xpos 1265
+ ypos -263
+}
+ReadGeo2 {
+ inputs 0
+ file ./Trex_UVtile_skin.abc
+ localizationPolicy off
+ version 2
+ use_geometry_colors false
+ range_first 0
+ range_last 0
+ scene_view {{0} imported: 0 selected: 0 items: /root/Trex_UVtile:Skin/Trex_UVtile:SkinShape}
+ name ReadGeo3
+ xpos 1382
+ ypos -267
+}
+Group {
+ inputs 2
+ name UVEditor4
+ onCreate "\nthisGRP = nuke.thisGroup()\nif not thisGRP\['disable_error'].getValue() :\n    import os\n    import re\n\n    fontpath = re.split( '/|\"\"' , nuke.EXE_PATH )\n    fontpath.pop()\n    fontpath += \['plugins','fonts']\n    \n    if os.path.isfile( '/'.join( fontpath + \['UtopiaBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['UtopiaBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['CourierBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['CourierBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) )\n    else :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['BitstreamCharterBold.pfb'] ) )\n"
+ tile_color 0x6666ff
+ xpos 1316
+ ypos -176
+ addUserKnob {20 tab_general l General}
+ addUserKnob {3 texSize l "texture size"}
+ texSize 256
+ addUserKnob {41 filter T SR.filter}
+ addUserKnob {41 antialiasing T SR.antialiasing}
+ addUserKnob {26 ""}
+ addUserKnob {41 view_wireframe l "view wireframe" T menu02.view_wireframe}
+ addUserKnob {7 wireframe_size l "wireframe size" +DISABLED R 0.1 10}
+ wireframe_size 0.1
+ addUserKnob {26 ""}
+ addUserKnob {41 output T menu01.output}
+ addUserKnob {30 uv_shift l INVISIBLE +INVISIBLE}
+ addUserKnob {41 scanRes +INVISIBLE T store.scanRes}
+ addUserKnob {22 udim_export l export +DISABLED T "thisGRP = nuke.thisGroup()\ndataCheckNode = nuke.toNode('dataCheck')\n\n########################################################\n\nusrUV = thisGRP\['uv_shift'].getValue()\ndataReturn = \[]\n\nprogBar = nuke.ProgressTask('Checking UV')\njobCount = 0\n\nfor v in range (0, 10) :\n  for u in range (0, 10) :\n\n    ### progress bar\n    jobCount += 1\n    progShow = int(jobCount/100 * 100)\n    if progBar.isCancelled() :\n      break;\n    progBar.setProgress(progShow)\n    #################\n\n    thisGRP\['uv_shift'].setValue(\[u,v])\n    nuke.execute(dataCheckNode, nuke.frame(), nuke.frame())\n    if dataCheckNode\['maxlumapixvalue'].getValue() != \[0.0, 0.0, 0.0] :\n      dataReturn.append(1)\n    else :\n      dataReturn.append(0)\n\ndel progBar\n\ndataCheckNode\['maxlumapixdata'].clearAnimated()\ndataCheckNode\['maxlumapixvalue'].clearAnimated()\ndataCheckNode\['minlumapixdata'].clearAnimated()\ndataCheckNode\['minlumapixvalue'].clearAnimated()\n\nif len(dataReturn) == 100 :\n\tfor i in range (0, 100) :\n\t  if dataReturn\[i] == 1 :\n\t    uvMax = i\n\n\tthisGRP\['uv_shift'].setValue(usrUV)\n\n\t########################################################\n\n\tgoStore = nuke.toNode('store')\n\tgoStore\['fn'].execute()\n\n\troot = getLevel()\n\n\troot.begin()\n\toutFR = nuke.nodes.FrameRange()\n\toutFR\['first_frame'].setValue(1001)\n\toutFR\['last_frame'].setValue(1001 + uvMax)\n\toutFR\['label'].setValue( 'udim range : 1001 - \{0\}'.format( str(1001 + uvMax) ) )\n\toutFR.setInput(0, thisGRP)\n\toutFR.setXYpos(int(thisGRP\['xpos'].value()), int(thisGRP\['ypos'].value()+80))\n\n\texpDot = nuke.nodes.Dot()\n\texpDot\['label'].setValue('Texture modify here : swap the paint/patch texture into udim frame')\n\texpDot.setInput(0, outFR)\n\n\tyDot = nuke.nodes.Dot()\n\tyDot.setInput(0, expDot)\n\n\tuvGRP = nuke.nodes.Group()\n\tuvGRP\['label'].setValue('udim stitch for nuke')\n\n\tnDot = nuke.nodes.Dot()\n\tnDot\['label'].setValue('Connect to Geo')\n\troot.end()\n\n\tuvGRP.begin()\n\tinNode = nuke.nodes.Input(name='udim')\n\tcropNode = nuke.nodes.Crop()\n\tcropNode\['crop'].setValue(1)\n\tcropNode.setInput(0, inNode)\n\tallDot = nuke.nodes.Dot()\n\tallDot.setInput(0, cropNode)\n\n\tuvMerge = nuke.nodes.Merge2()\n\toutNode = nuke.nodes.Output()\n\toutNode.setInput(0, uvMerge)\n\n\tfor i in range (0, uvMax+1) :\n\t  uDimHold = nuke.nodes.FrameHold()\n\t  uDimHold\['first_frame'].setValue(1001+i)\n\t  uDimHold.setInput(0, allDot)\n\t  \n\t  uvTran = nuke.nodes.Transform()\n\t  uvTran.addKnob(nuke.UV_Knob('uv_offset'))\n\t  if i < 10 :\n\t    u = i\n\t    v = 0\n\t  else :\n\t    if i < 100 :\n\t      u = int(str(i)\[1])\n\t      v = int(str(i)\[0])\n\t  uvTran\['uv_offset'].setValue(\[u, v])\n\t  uvTran\['translate'].setExpression('input.width*uv_offset.u', 0)\n\t  uvTran\['translate'].setExpression('input.height*uv_offset.v', 1)\n\t  uvTran.setInput(0, uDimHold)\n\n\t  uvMerge.setInput(i+3, uvTran)\n\n\n\tuvGRP.end()\n\n\tuvGRP.setInput(0, yDot)\n\tnDot.setInput(0, uvGRP)\n\n\troot.begin()\n\texWrite = nuke.nodes.Write()\n\texWrite.setInput(0, yDot)\n\texWrite\['label'].setValue('export udim<br>render range : \[value input.first_frame] - \[value input.last_frame]')\n\troot.end()\n\n\tdel uvMax\nelse :\n\tnuke.message('Scan process terminated by user.')\n\ndel dataReturn" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 font T store.font}
+ addUserKnob {6 disable_error l "disable text" +STARTLINE}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.4}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-04-24}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.4<br>-&nbsp;fix&nbsp;misspelling&nbsp;of&nbsp;knob's&nbsp;label<br>-&nbsp;fix&nbsp;not&nbsp;working&nbsp;disable&nbsp;text&nbsp;knob<br><br>1.3<br>-&nbsp;fix&nbsp;font&nbsp;issue<br>&nbsp;&nbsp;works&nbsp;on&nbsp;linux,&nbsp;mac&nbsp;&&nbsp;windows<br><br>1.2<br>-&nbsp;preview&nbsp;in&nbsp;uv&nbsp;space&nbsp;set&nbsp;limited&nbsp;<br>&nbsp;&nbsp;in&nbsp;1024&nbsp;resolution&nbsp;for&nbsp;not&nbsp;drag&nbsp;<br>&nbsp;&nbsp;down&nbsp;speed&nbsp;purpose.<br>-&nbsp;added&nbsp;show&nbsp;tile&nbsp;number<br>-&nbsp;changed&nbsp;uv&nbsp;combine&nbsp;to&nbsp;uv&nbsp;stitch<br>&nbsp;&nbsp;in&nbsp;export&nbsp;group<br>-&nbsp;code&nbsp;update<br>-&nbsp;scan&nbsp;size&nbsp;reduce,&nbsp;speed&nbsp;up&nbsp;process\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -1755
+  ypos 302
+  bdwidth 263
+  bdheight 296
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x424242ff
+  label "UV preview"
+  note_font_size 42
+  xpos -824
+  ypos 451
+  bdwidth 343
+  bdheight 672
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x424242ff
+  label udim
+  note_font_size 42
+  xpos -328
+  ypos 451
+  bdwidth 354
+  bdheight 675
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x424242ff
+  label uvtile
+  note_font_size 42
+  xpos 109
+  ypos 451
+  bdwidth 354
+  bdheight 675
+ }
+ Input {
+  inputs 0
+  name tex
+  xpos -1000
+  ypos 83
+  number 1
+ }
+ Wireframe {
+  inputs 0
+  line_width {{wireframe_size}}
+  name Wireframe1
+  xpos -866
+  ypos 207
+ }
+ Switch {
+  inputs 2
+  which {{!view_wireframe}}
+  name Switch2
+  xpos -1000
+  ypos 207
+ }
+ Input {
+  inputs 0
+  name geo
+  xpos -1171
+  ypos 82
+ }
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial1
+  xpos -1171
+  ypos 207
+ }
+ Dot {
+  name Dot6
+  xpos -1137
+  ypos 287
+ }
+ Dot {
+  name Dot1
+  xpos -1137
+  ypos 384
+ }
+set Nbcb69c00 [stack 0]
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{store.scanRes}}
+  box_height {{box_width}}
+  box_fixed true
+  name scanRes
+  xpos -1061
+  ypos 595
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  projection_mode uv
+  overscan {{store.scanRes*10}}
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR1
+  xpos -1171
+  ypos 595
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos -1171
+  ypos 675
+ }
+ Transform {
+  translate {{store.scanRes*uv_offset.u*-1} {store.scanRes*uv_offset*-1}}
+  shutteroffset centred
+  name pos_shift
+  xpos -1171
+  ypos 740
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {{uv_shift} {uv_shift}}
+ }
+ Crop {
+  box {0 0 {store.scanRes} {store.scanRes}}
+  reformat true
+  crop false
+  name Crop1
+  xpos -1171
+  ypos 801
+ }
+ CurveTool {
+  operation "Max Luma Pixel"
+  ROI {0 0 {store.scanRes} {store.scanRes}}
+  intensitydata {0 0 0 0}
+  maxlumapixvalue {0 0 0}
+  minlumapixvalue {0 0 0}
+  name dataCheck
+  xpos -1171
+  ypos 881
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['output'].getValue() == 1 :\n    thisGRP\['udim_export'].setEnabled(True)\nelse :\n    thisGRP\['udim_export'].setEnabled(False)\n"
+  xpos -1669
+  ypos 392
+  addUserKnob {20 User}
+  addUserKnob {4 output M {"preview in uv space" udim "uv tile" "uv pass"}}
+  output "uv tile"
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{texSize*10}}
+  box_height {{texSize*10}}
+  box_fixed true
+  resize none
+  name Reformat4
+  xpos 719
+  ypos 638
+ }
+ Expression {
+  expr0 x/width
+  expr1 y/height
+  channel2 none
+  channel3 none
+  name uv
+  xpos 719
+  ypos 720
+ }
+ Multiply {
+  channels rgb
+  value {10 10 1 1}
+  name Multiply1
+  xpos 719
+  ypos 798
+ }
+ Reformat {
+  type "to box"
+  box_width {{texSize}}
+  box_height {{texSize}}
+  box_fixed true
+  resize none
+  center false
+  pbb true
+  name Reformat3
+  xpos 719
+  ypos 878
+ }
+ Dot {
+  name Dot8
+  xpos 753
+  ypos 1225
+ }
+push $Nbcb69c00
+ Dot {
+  name Dot4
+  xpos -780
+  ypos 384
+ }
+set Nbcbc7c00 [stack 0]
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{texSize}}
+  box_height {{box_width}}
+  box_fixed true
+  name res
+  xpos 5
+  ypos 381
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  filter Impulse
+  projection_mode uv
+  overscan {{texSize*10 x1009 1948}}
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR
+  xpos -154
+  ypos 381
+ }
+ Dot {
+  name Dot2
+  xpos -120
+  ypos 628
+ }
+set Nbcbc6c00 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos -292
+  ypos 625
+ }
+ Text {
+  output rgb
+  cliptype none
+  message " 91 92 93 94 95 96 97 98 99 00\n 81 82 83 84 85 86 87 88 89 90\n 71 72 73 74 75 76 77 78 79 80\n 61 62 63 64 65 66 67 68 69 70\n 51 52 53 54 55 56 57 58 59 60\n 41 42 43 44 45 46 47 48 49 50\n 31 32 33 34 35 36 37 38 39 40\n 21 22 23 24 25 26 27 28 29 30\n 11 12 13 14 15 16 17 18 19 20\n 01 02 03 04 05 06 07 08 09 10"
+  font "\[value store.font]"
+  kerning 0.236
+  leading 1.051
+  yjustify bottom
+  Transform 1
+  box {0 0 1024 999}
+  translate {0 {"( ( texSize * 10 ) / 1024 ) *25"}}
+  scale {{"( texSize * 10 ) / 1024"}}
+  name Text2
+  selected true
+  xpos -292
+  ypos 707
+  disable {{disable_error}}
+ }
+ Multiply {
+  channels rgb
+  value {0 0.05 0.05 1}
+  name Multiply3
+  xpos -292
+  ypos 769
+ }
+ Dot {
+  name Dot13
+  xpos -258
+  ypos 821
+ }
+ Dot {
+  name Dot11
+  xpos -178
+  ypos 821
+ }
+set Nbcbf1400 [stack 0]
+ Dot {
+  name Dot12
+  xpos 221
+  ypos 821
+ }
+push $Nbcbc6c00
+ Dot {
+  name Dot5
+  xpos 281
+  ypos 628
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge4
+  xpos 247
+  ypos 879
+ }
+ Crop {
+  box {0 0 {texSize*10} {texSize*10}}
+  crop false
+  name Crop4
+  xpos 247
+  ypos 961
+ }
+ Dot {
+  name Dot7
+  xpos 281
+  ypos 1204
+ }
+push $Nbcbf1400
+push $Nbcbc6c00
+ Merge2 {
+  inputs 2
+  operation under
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge3
+  xpos -154
+  ypos 879
+ }
+ Transform {
+  translate {{texSize*uv_offset.u*-1 i} {texSize*uv_offset*-1 i}}
+  shutteroffset centred
+  name pos_shift1
+  xpos -154
+  ypos 961
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {{"frame <=1001 ? 0 : (frame-1)%10"} {"frame < 1000 ? 0 : int(((frame-1)/10)-100)"}}
+ }
+ Dot {
+  name Dot3
+  xpos -120
+  ypos 1202
+ }
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat2
+  xpos -693
+  ypos 712
+ }
+ Dot {
+  name Dot9
+  xpos -659
+  ypos 770
+ }
+set Nbcc12800 [stack 0]
+ Dot {
+  name Dot10
+  xpos -533
+  ypos 770
+ }
+ Text {
+  output rgb
+  message " 91 92 93 94 95 96 97 98 99 00\n 81 82 83 84 85 86 87 88 89 90\n 71 72 73 74 75 76 77 78 79 80\n 61 62 63 64 65 66 67 68 69 70\n 51 52 53 54 55 56 57 58 59 60\n 41 42 43 44 45 46 47 48 49 50\n 31 32 33 34 35 36 37 38 39 40\n 21 22 23 24 25 26 27 28 29 30\n 11 12 13 14 15 16 17 18 19 20\n 01 02 03 04 05 06 07 08 09 10"
+  font "\[value store.font]"
+  kerning 0.236
+  leading 1.051
+  yjustify bottom
+  Transform 1
+  box {0 0 1024 999}
+  translate {0 25}
+  name Text1
+  xpos -567
+  ypos 818
+  disable {{disable_error}}
+ }
+ Multiply {
+  channels rgb
+  value {0 0.05 0.05 1}
+  name Multiply2
+  xpos -567
+  ypos 887
+ }
+push $Nbcc12800
+ Grid {
+  name Grid1
+  xpos -693
+  ypos 814
+ }
+ Merge2 {
+  inputs 2
+  name Merge2
+  xpos -693
+  ypos 887
+ }
+push $Nbcbc7c00
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat5
+  xpos -689
+  ypos 531
+ }
+ Reformat {
+  type scale
+  scale 0.1
+  resize none
+  name Reformat6
+  xpos -689
+  ypos 594
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  projection_mode uv
+  overscan 2560
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR2
+  xpos -814
+  ypos 594
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge1
+  xpos -814
+  ypos 887
+ }
+ Crop {
+  box {0 0 1024 1024}
+  reformat true
+  crop false
+  name Crop2
+  xpos -814
+  ypos 969
+ }
+ Switch {
+  inputs 4
+  which {{output}}
+  name Switch1
+  xpos -814
+  ypos 1412
+ }
+ Output {
+  name Output1
+  xpos -814
+  ypos 1597
+ }
+ NoOp {
+  inputs 0
+  name menu02
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['view_wireframe'].getValue() == 1 :\n        thisGRP\['wireframe_size'].setEnabled(True)\nelse :\n        thisGRP\['wireframe_size'].setEnabled(False)\n"
+  xpos -1668
+  ypos 484
+  addUserKnob {20 User}
+  addUserKnob {6 view_wireframe l "view wireframe" +STARTLINE}
+ }
+ NoOp {
+  inputs 0
+  name store
+  xpos -1419
+  ypos 388
+  addUserKnob {20 User}
+  addUserKnob {22 fn T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel" +STARTLINE}
+  addUserKnob {3 scanRes}
+  scanRes 64
+  addUserKnob {2 font}
+  font "C:/Program Files/Nuke12.0v3/plugins/fonts/UtopiaBold.pfa"
+ }
+end_group
+ReadGeo2 {
+ file ./Trex_UVtile_skin.abc
+ localizationPolicy off
+ version 2
+ use_geometry_colors false
+ range_first 0
+ range_last 0
+ scene_view {{0} imported: 0 selected: 0 items: /root/Trex_UVtile:Skin/Trex_UVtile:SkinShape}
+ name ReadGeo4
+ xpos 1316
+ ypos 521
+}
+Reformat {
+ inputs 0
+ format "1280 720 0 0 1280 720 1 HD_720"
+ name Reformat2
+ xpos 1446
+ ypos 657
+}
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ motion_vectors_type off
+ MB_channel none
+ name ScanlineRender2
+ xpos 1316
+ ypos 661
+}
+push $N8decb800
+Dot {
+ name Dot6
+ xpos 252
+ ypos 647
+}
+push $Na052a000
+Group {
+ name Group1
+ label "udim stitch for nuke"
+ xpos 466
+ ypos 344
+}
+ Input {
+  inputs 0
+  name udim
+ }
+ Crop {
+  name Crop1
+ }
+ Dot {
+  name Dot1
+ }
+set Na18e7800 [stack 0]
+ FrameHold {
+  first_frame 1022
+  name FrameHold22
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform22
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {1 2}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1021
+  name FrameHold21
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform21
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {0 2}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1020
+  name FrameHold20
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform20
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {9 1}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1019
+  name FrameHold19
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform19
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {8 1}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1018
+  name FrameHold18
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform18
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {7 1}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1017
+  name FrameHold17
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform17
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {6 1}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1016
+  name FrameHold16
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform16
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {5 1}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1015
+  name FrameHold15
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform15
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {4 1}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1014
+  name FrameHold14
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform14
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {3 1}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1013
+  name FrameHold13
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform13
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {2 1}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1012
+  name FrameHold12
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform12
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {1 1}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1011
+  name FrameHold11
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform11
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {0 1}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1010
+  name FrameHold10
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform10
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {9 0}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1009
+  name FrameHold9
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform9
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {8 0}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1008
+  name FrameHold8
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform8
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {7 0}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1007
+  name FrameHold7
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform7
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {6 0}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1006
+  name FrameHold6
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform6
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {5 0}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1005
+  name FrameHold5
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform5
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {4 0}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1004
+  name FrameHold4
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform4
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {3 0}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1003
+  name FrameHold3
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform3
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {2 0}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1002
+  name FrameHold2
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform2
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {1 0}
+ }
+push $Na18e7800
+ FrameHold {
+  first_frame 1001
+  name FrameHold1
+ }
+ Transform {
+  translate {{input.width*uv_offset.u} {input.height*uv_offset.v}}
+  name Transform1
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+ }
+push 0
+push 0
+push 0
+ Merge2 {
+  inputs 24+1
+  name Merge1
+ }
+ Output {
+  name Output1
+ }
+end_group
+Dot {
+ name Dot4
+ label "Connect to Geo"
+ xpos 500
+ ypos 424
+}
+ReadGeo2 {
+ file ./Trex_UVtile_skin.abc
+ localizationPolicy off
+ version 2
+ use_geometry_colors false
+ range_first 0
+ range_last 0
+ scene_view {{0} imported: 0 selected: 0 items: /root/Trex_UVtile:Skin/Trex_UVtile:SkinShape}
+ name ReadGeo1
+ xpos 466
+ ypos 524
+}
+Reformat {
+ inputs 0
+ format "1280 720 0 0 1280 720 1 HD_720"
+ name Reformat1
+ xpos 596
+ ypos 639
+}
+ScanlineRender {
+ inputs 3
+ conservative_shader_sampling false
+ motion_vectors_type off
+ MB_channel none
+ name ScanlineRender1
+ xpos 466
+ ypos 643
+}
+ReadGeo2 {
+ inputs 0
+ file ./Trex_UVtile_skin.abc
+ localizationPolicy off
+ version 2
+ use_geometry_colors false
+ range_first 0
+ range_last 0
+ scene_view {{0} imported: 0 selected: 0 items: /root/Trex_UVtile:Skin/Trex_UVtile:SkinShape}
+ name ReadGeo2
+ xpos -157
+ ypos -276
+}
+Group {
+ name UVEditor2
+ onCreate "\nthisGRP = nuke.thisGroup()\nif not thisGRP\['disable_error'].getValue() :\n    import os\n    import re\n\n    fontpath = re.split( '/|\"\"' , nuke.EXE_PATH )\n    fontpath.pop()\n    fontpath += \['plugins','fonts']\n    \n    if os.path.isfile( '/'.join( fontpath + \['UtopiaBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['UtopiaBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['CourierBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['CourierBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) )\n    else :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['BitstreamCharterBold.pfb'] ) )\n"
+ tile_color 0x6666ff
+ xpos -157
+ ypos -170
+ addUserKnob {20 tab_general l General}
+ addUserKnob {3 texSize l "texture size"}
+ texSize 1024
+ addUserKnob {41 filter T SR.filter}
+ addUserKnob {41 antialiasing T SR.antialiasing}
+ addUserKnob {26 ""}
+ addUserKnob {41 view_wireframe l "view wireframe" T menu02.view_wireframe}
+ addUserKnob {7 wireframe_size l "wireframe size" R 0.1 10}
+ wireframe_size 0.1
+ addUserKnob {26 ""}
+ addUserKnob {41 output T menu01.output}
+ addUserKnob {30 uv_shift l INVISIBLE +INVISIBLE}
+ addUserKnob {41 scanRes +INVISIBLE T store.scanRes}
+ addUserKnob {22 udim_export l export +DISABLED T "thisGRP = nuke.thisGroup()\ndataCheckNode = nuke.toNode('dataCheck')\n\n########################################################\n\nusrUV = thisGRP\['uv_shift'].getValue()\ndataReturn = \[]\n\nprogBar = nuke.ProgressTask('Checking UV')\njobCount = 0\n\nfor v in range (0, 10) :\n  for u in range (0, 10) :\n\n    ### progress bar\n    jobCount += 1\n    progShow = int(jobCount/100 * 100)\n    if progBar.isCancelled() :\n      break;\n    progBar.setProgress(progShow)\n    #################\n\n    thisGRP\['uv_shift'].setValue(\[u,v])\n    nuke.execute(dataCheckNode, nuke.frame(), nuke.frame())\n    if dataCheckNode\['maxlumapixvalue'].getValue() != \[0.0, 0.0, 0.0] :\n      dataReturn.append(1)\n    else :\n      dataReturn.append(0)\n\ndel progBar\n\ndataCheckNode\['maxlumapixdata'].clearAnimated()\ndataCheckNode\['maxlumapixvalue'].clearAnimated()\ndataCheckNode\['minlumapixdata'].clearAnimated()\ndataCheckNode\['minlumapixvalue'].clearAnimated()\n\nif len(dataReturn) == 100 :\n\tfor i in range (0, 100) :\n\t  if dataReturn\[i] == 1 :\n\t    uvMax = i\n\n\tthisGRP\['uv_shift'].setValue(usrUV)\n\n\t########################################################\n\n\tgoStore = nuke.toNode('store')\n\tgoStore\['fn'].execute()\n\n\troot = getLevel()\n\n\troot.begin()\n\toutFR = nuke.nodes.FrameRange()\n\toutFR\['first_frame'].setValue(1001)\n\toutFR\['last_frame'].setValue(1001 + uvMax)\n\toutFR\['label'].setValue( 'udim range : 1001 - \{0\}'.format( str(1001 + uvMax) ) )\n\toutFR.setInput(0, thisGRP)\n\toutFR.setXYpos(int(thisGRP\['xpos'].value()), int(thisGRP\['ypos'].value()+80))\n\n\texpDot = nuke.nodes.Dot()\n\texpDot\['label'].setValue('Texture modify here : swap the paint/patch texture into udim frame')\n\texpDot.setInput(0, outFR)\n\n\tyDot = nuke.nodes.Dot()\n\tyDot.setInput(0, expDot)\n\n\tuvGRP = nuke.nodes.Group()\n\tuvGRP\['label'].setValue('udim stitch for nuke')\n\n\tnDot = nuke.nodes.Dot()\n\tnDot\['label'].setValue('Connect to Geo')\n\troot.end()\n\n\tuvGRP.begin()\n\tinNode = nuke.nodes.Input(name='udim')\n\tcropNode = nuke.nodes.Crop()\n\tcropNode\['crop'].setValue(1)\n\tcropNode.setInput(0, inNode)\n\tallDot = nuke.nodes.Dot()\n\tallDot.setInput(0, cropNode)\n\n\tuvMerge = nuke.nodes.Merge2()\n\toutNode = nuke.nodes.Output()\n\toutNode.setInput(0, uvMerge)\n\n\tfor i in range (0, uvMax+1) :\n\t  uDimHold = nuke.nodes.FrameHold()\n\t  uDimHold\['first_frame'].setValue(1001+i)\n\t  uDimHold.setInput(0, allDot)\n\t  \n\t  uvTran = nuke.nodes.Transform()\n\t  uvTran.addKnob(nuke.UV_Knob('uv_offset'))\n\t  if i < 10 :\n\t    u = i\n\t    v = 0\n\t  else :\n\t    if i < 100 :\n\t      u = int(str(i)\[1])\n\t      v = int(str(i)\[0])\n\t  uvTran\['uv_offset'].setValue(\[u, v])\n\t  uvTran\['translate'].setExpression('input.width*uv_offset.u', 0)\n\t  uvTran\['translate'].setExpression('input.height*uv_offset.v', 1)\n\t  uvTran.setInput(0, uDimHold)\n\n\t  uvMerge.setInput(i+3, uvTran)\n\n\n\tuvGRP.end()\n\n\tuvGRP.setInput(0, yDot)\n\tnDot.setInput(0, uvGRP)\n\n\troot.begin()\n\texWrite = nuke.nodes.Write()\n\texWrite.setInput(0, yDot)\n\texWrite\['label'].setValue('export udim<br>render range : \[value input.first_frame] - \[value input.last_frame]')\n\troot.end()\n\n\tdel uvMax\nelse :\n\tnuke.message('Scan process terminated by user.')\n\ndel dataReturn" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 font T store.font}
+ addUserKnob {6 disable_error l "disable text" +STARTLINE}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.4}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-04-24}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.4<br>-&nbsp;fix&nbsp;misspelling&nbsp;of&nbsp;knob's&nbsp;label<br>-&nbsp;fix&nbsp;not&nbsp;working&nbsp;disable&nbsp;text&nbsp;knob<br><br>1.3<br>-&nbsp;fix&nbsp;font&nbsp;issue<br>&nbsp;&nbsp;works&nbsp;on&nbsp;linux,&nbsp;mac&nbsp;&&nbsp;windows<br><br>1.2<br>-&nbsp;preview&nbsp;in&nbsp;uv&nbsp;space&nbsp;set&nbsp;limited&nbsp;<br>&nbsp;&nbsp;in&nbsp;1024&nbsp;resolution&nbsp;for&nbsp;not&nbsp;drag&nbsp;<br>&nbsp;&nbsp;down&nbsp;speed&nbsp;purpose.<br>-&nbsp;added&nbsp;show&nbsp;tile&nbsp;number<br>-&nbsp;changed&nbsp;uv&nbsp;combine&nbsp;to&nbsp;uv&nbsp;stitch<br>&nbsp;&nbsp;in&nbsp;export&nbsp;group<br>-&nbsp;code&nbsp;update<br>-&nbsp;scan&nbsp;size&nbsp;reduce,&nbsp;speed&nbsp;up&nbsp;process\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -1755
+  ypos 302
+  bdwidth 263
+  bdheight 296
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x424242ff
+  label "UV preview"
+  note_font_size 42
+  xpos -824
+  ypos 451
+  bdwidth 343
+  bdheight 672
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x424242ff
+  label udim
+  note_font_size 42
+  xpos -328
+  ypos 451
+  bdwidth 354
+  bdheight 675
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x424242ff
+  label uvtile
+  note_font_size 42
+  xpos 109
+  ypos 451
+  bdwidth 354
+  bdheight 675
+ }
+ Input {
+  inputs 0
+  name tex
+  xpos -1000
+  ypos 83
+  number 1
+ }
+ Wireframe {
+  inputs 0
+  line_width {{wireframe_size}}
+  name Wireframe1
+  xpos -866
+  ypos 207
+ }
+ Switch {
+  inputs 2
+  which {{!view_wireframe}}
+  name Switch2
+  xpos -1000
+  ypos 207
+ }
+ Input {
+  inputs 0
+  name geo
+  xpos -1171
+  ypos 82
+ }
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial1
+  xpos -1171
+  ypos 207
+ }
+ Dot {
+  name Dot6
+  xpos -1137
+  ypos 287
+ }
+ Dot {
+  name Dot1
+  xpos -1137
+  ypos 384
+ }
+set Nb4b16c00 [stack 0]
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{store.scanRes}}
+  box_height {{box_width}}
+  box_fixed true
+  name scanRes
+  xpos -1061
+  ypos 595
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  projection_mode uv
+  overscan {{store.scanRes*10}}
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR1
+  xpos -1171
+  ypos 595
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos -1171
+  ypos 675
+ }
+ Transform {
+  translate {{store.scanRes*uv_offset.u*-1} {store.scanRes*uv_offset*-1}}
+  shutteroffset centred
+  name pos_shift
+  xpos -1171
+  ypos 740
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {{uv_shift} {uv_shift}}
+ }
+ Crop {
+  box {0 0 {store.scanRes} {store.scanRes}}
+  reformat true
+  crop false
+  name Crop1
+  xpos -1171
+  ypos 801
+ }
+ CurveTool {
+  operation "Max Luma Pixel"
+  ROI {0 0 {store.scanRes} {store.scanRes}}
+  intensitydata {0 0 0 0}
+  maxlumapixvalue {0 0 0}
+  minlumapixvalue {0 0 0}
+  name dataCheck
+  xpos -1171
+  ypos 881
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['output'].getValue() == 1 :\n    thisGRP\['udim_export'].setEnabled(True)\nelse :\n    thisGRP\['udim_export'].setEnabled(False)\n"
+  xpos -1669
+  ypos 392
+  addUserKnob {20 User}
+  addUserKnob {4 output M {"preview in uv space" udim "uv tile" "uv pass"}}
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{texSize*10}}
+  box_height {{texSize*10}}
+  box_fixed true
+  resize none
+  name Reformat4
+  xpos 719
+  ypos 638
+ }
+ Expression {
+  expr0 x/width
+  expr1 y/height
+  channel2 none
+  channel3 none
+  name uv
+  xpos 719
+  ypos 720
+ }
+ Multiply {
+  channels rgb
+  value {10 10 1 1}
+  name Multiply1
+  xpos 719
+  ypos 798
+ }
+ Reformat {
+  type "to box"
+  box_width {{texSize}}
+  box_height {{texSize}}
+  box_fixed true
+  resize none
+  center false
+  pbb true
+  name Reformat3
+  xpos 719
+  ypos 878
+ }
+ Dot {
+  name Dot8
+  xpos 753
+  ypos 1225
+ }
+push $Nb4b16c00
+ Dot {
+  name Dot4
+  xpos -780
+  ypos 384
+ }
+set Nb4b72c00 [stack 0]
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{texSize}}
+  box_height {{box_width}}
+  box_fixed true
+  name res
+  xpos 5
+  ypos 381
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  filter Impulse
+  projection_mode uv
+  overscan {{texSize*10 x1009 1948}}
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR
+  xpos -154
+  ypos 381
+ }
+ Dot {
+  name Dot2
+  xpos -120
+  ypos 628
+ }
+set Nb4ba5c00 [stack 0]
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos -292
+  ypos 625
+ }
+ Text {
+  output rgb
+  cliptype none
+  message " 91 92 93 94 95 96 97 98 99 00\n 81 82 83 84 85 86 87 88 89 90\n 71 72 73 74 75 76 77 78 79 80\n 61 62 63 64 65 66 67 68 69 70\n 51 52 53 54 55 56 57 58 59 60\n 41 42 43 44 45 46 47 48 49 50\n 31 32 33 34 35 36 37 38 39 40\n 21 22 23 24 25 26 27 28 29 30\n 11 12 13 14 15 16 17 18 19 20\n 01 02 03 04 05 06 07 08 09 10"
+  font "\[value store.font]"
+  kerning 0.236
+  leading 1.051
+  yjustify bottom
+  Transform 1
+  box {0 0 1024 999}
+  translate {0 {"( ( texSize * 10 ) / 1024 ) *25"}}
+  scale {{"( texSize * 10 ) / 1024"}}
+  name Text2
+  selected true
+  xpos -292
+  ypos 707
+  disable {{disable_error}}
+ }
+ Multiply {
+  channels rgb
+  value {0 0.05 0.05 1}
+  name Multiply3
+  xpos -292
+  ypos 769
+ }
+ Dot {
+  name Dot13
+  xpos -258
+  ypos 821
+ }
+ Dot {
+  name Dot11
+  xpos -178
+  ypos 821
+ }
+set Nb4ba4400 [stack 0]
+ Dot {
+  name Dot12
+  xpos 221
+  ypos 821
+ }
+push $Nb4ba5c00
+ Dot {
+  name Dot5
+  xpos 281
+  ypos 628
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge4
+  xpos 247
+  ypos 879
+ }
+ Crop {
+  box {0 0 {texSize*10} {texSize*10}}
+  crop false
+  name Crop4
+  xpos 247
+  ypos 961
+ }
+ Dot {
+  name Dot7
+  xpos 281
+  ypos 1204
+ }
+push $Nb4ba4400
+push $Nb4ba5c00
+ Merge2 {
+  inputs 2
+  operation under
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge3
+  xpos -154
+  ypos 879
+ }
+ Transform {
+  translate {{texSize*uv_offset.u*-1 i} {texSize*uv_offset*-1 i}}
+  shutteroffset centred
+  name pos_shift1
+  xpos -154
+  ypos 961
+  addUserKnob {20 User}
+  addUserKnob {30 uv_offset}
+  uv_offset {{"frame <=1001 ? 0 : (frame-1)%10"} {"frame < 1000 ? 0 : int(((frame-1)/10)-100)"}}
+ }
+ Dot {
+  name Dot3
+  xpos -120
+  ypos 1202
+ }
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat2
+  xpos -693
+  ypos 712
+ }
+ Dot {
+  name Dot9
+  xpos -659
+  ypos 770
+ }
+set Na365d800 [stack 0]
+ Dot {
+  name Dot10
+  xpos -533
+  ypos 770
+ }
+ Text {
+  output rgb
+  message " 91 92 93 94 95 96 97 98 99 00\n 81 82 83 84 85 86 87 88 89 90\n 71 72 73 74 75 76 77 78 79 80\n 61 62 63 64 65 66 67 68 69 70\n 51 52 53 54 55 56 57 58 59 60\n 41 42 43 44 45 46 47 48 49 50\n 31 32 33 34 35 36 37 38 39 40\n 21 22 23 24 25 26 27 28 29 30\n 11 12 13 14 15 16 17 18 19 20\n 01 02 03 04 05 06 07 08 09 10"
+  font "\[value store.font]"
+  kerning 0.236
+  leading 1.051
+  yjustify bottom
+  Transform 1
+  box {0 0 1024 999}
+  translate {0 25}
+  name Text1
+  xpos -567
+  ypos 818
+  disable {{disable_error}}
+ }
+ Multiply {
+  channels rgb
+  value {0 0.05 0.05 1}
+  name Multiply2
+  xpos -567
+  ypos 887
+ }
+push $Na365d800
+ Grid {
+  name Grid1
+  xpos -693
+  ypos 814
+ }
+ Merge2 {
+  inputs 2
+  name Merge2
+  xpos -693
+  ypos 887
+ }
+push $Nb4b72c00
+ Reformat {
+  inputs 0
+  format "1024 1024 0 0 1024 1024 1 square_1K"
+  name Reformat5
+  xpos -689
+  ypos 531
+ }
+ Reformat {
+  type scale
+  scale 0.1
+  resize none
+  name Reformat6
+  xpos -689
+  ypos 594
+ }
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  transparency false
+  ztest_enabled false
+  projection_mode uv
+  overscan 2560
+  shutteroffset centred
+  motion_vectors_type off
+  MB_channel none
+  name SR2
+  xpos -814
+  ypos 594
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge1
+  xpos -814
+  ypos 887
+ }
+ Crop {
+  box {0 0 1024 1024}
+  reformat true
+  crop false
+  name Crop2
+  xpos -814
+  ypos 969
+ }
+ Switch {
+  inputs 4
+  which {{output}}
+  name Switch1
+  xpos -814
+  ypos 1412
+ }
+ Output {
+  name Output1
+  xpos -814
+  ypos 1597
+ }
+ NoOp {
+  inputs 0
+  name menu02
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['view_wireframe'].getValue() == 1 :\n        thisGRP\['wireframe_size'].setEnabled(True)\nelse :\n        thisGRP\['wireframe_size'].setEnabled(False)\n"
+  xpos -1668
+  ypos 484
+  addUserKnob {20 User}
+  addUserKnob {6 view_wireframe l "view wireframe" +STARTLINE}
+  view_wireframe true
+ }
+ NoOp {
+  inputs 0
+  name store
+  xpos -1419
+  ypos 388
+  addUserKnob {20 User}
+  addUserKnob {22 fn T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel" +STARTLINE}
+  addUserKnob {3 scanRes}
+  scanRes 64
+  addUserKnob {2 font}
+  font "C:/Program Files/Nuke12.0v3/plugins/fonts/UtopiaBold.pfa"
+ }
+end_group
+Dot {
+ name Dot1
+ xpos -123
+ ypos 637
+}

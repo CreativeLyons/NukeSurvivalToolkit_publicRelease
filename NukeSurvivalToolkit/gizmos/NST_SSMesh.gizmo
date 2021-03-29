@@ -1,0 +1,709 @@
+Group {
+ name SSMesh
+ tile_color 0x5c9e83ff
+ label "<font color=cyan>Geo Output</font>"
+ addUserKnob {20 tab_general l General}
+ addUserKnob {22 set_link l "link to selected camera" t "Click to link selected camera by expression. This tool will get the focal, haperture and world matrix from selected camera to generate" T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\nroot = getLevel()\nthisGRP = nuke.thisGroup()\n\nmainKnobs = \['world_matrix','cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll']\ndefaultKnobs = \{\n\t\t\t'world matrix' : 'world_matrix',\n\t\t\t'focal length' : 'focal',\n\t\t\t'horiz aperture' : 'haperture',\n\t\t\t'window translate' : 'win_translate',\n\t\t\t'window scale' : 'win_scale',\n\t\t\t'window roll' : 'winroll'\n\t\t\t\}\nselNodeKnobs = \[]\nmissingKnob = \[]\n\ntry :\n\twith root :\n\t\tselNode = nuke.selectedNode()\n\n\tfor knob in selNode.knobs() :\n\t\tselNodeKnobs.append( knob )\n\n\tselNodeKnobs.sort()\n\n\tfor key,value in defaultKnobs.items() :\n\t\tif value not in selNodeKnobs :\n\t\t\tmissingKnob.append( key )\n\n\tif not len(missingKnob) :\n\t\twith root :\n\t\t\tCAMnode = selNode.name()\n\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.world_matrix'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.focal'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.haperture'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.win_translate'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.win_scale'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.winroll'.format(CAMnode))\n\telse :\n\t\tp = nuke.Panel('Select knobs :')\n\t\tp.addBooleanCheckBox( '<b>Unable to find the default knobs. Please use the pulldown menu below to define the knob manually.</b>' , False)\n\t\tfor rk in missingKnob :\n\t\t\tp.addEnumerationPulldown( rk, ' '.join( selNodeKnobs ) )\n\n\t\tif p.show() :\n\t\t\ttry :\n\t\t\t\tfor key,value in defaultKnobs.items() :\n\t\t\t\t\tif p.value( key ) != None :\n\t\t\t\t\t\tdefaultKnobs\[key] = p.value( key )\n\t\t\texcept :\n\t\t\t\tpass\n\n\t\t\twith root :\n\t\t\t\tCAMnode = selNode.name()\n\t\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['world matrix']))\n\t\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['focal length']))\n\t\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['horiz aperture']))\n\t\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window translate']))\n\t\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window scale']))\n\t\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window roll']))\nexcept :\n\tnuke.message('no node selected.')" +STARTLINE}
+ addUserKnob {22 remove_link l "remove linked expression" t "Remove the linked camera expression but won't reset any data." -STARTLINE T "thisGRP = nuke.thisGroup()\nmainKnobs = \['world_matrix','cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll']\n\nfor knob in thisGRP.knobs() :\n\tif mainKnobs.count(knob) != 0 :\n\t\t thisGRP\[knob].clearAnimated()"}
+ addUserKnob {20 cam_data_grp l "CAMERA DATA" n 1}
+ cam_data_grp 0
+ addUserKnob {7 cam_focal l "focal length" R 5 100}
+ cam_focal 50
+ addUserKnob {7 cam_haperture l "horiz aperture" R 0.1 50}
+ cam_haperture 24.576
+ addUserKnob {30 cam_win_translate l "window translate"}
+ addUserKnob {30 cam_win_scale l "window scale"}
+ cam_win_scale {1 1}
+ addUserKnob {7 cam_winroll l "window roll" R -45 45}
+ addUserKnob {41 world_matrix l "world matrix" T cam_data.matrix}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 spacer_5 l "" +STARTLINE T <br>}
+ addUserKnob {26 title_basic l "<b>BASIC SETTING</b>"}
+ addUserKnob {4 display l "3D display" t "How to draw in 3D preview. The viewer can override this setting." M {off wireframe soild solid+wireframe textured textured+wireframe "" "" ""}}
+ display textured
+ addUserKnob {4 data_type l "data type" t "data type\nUsing one of these data to convert into 3D mesh.\n\nPosition\nSupported world space or camera space position data.\n\nDepth (normalized far=0)\nNormalized depth data, which is same as depth data output by ScanlineRender.\n\nDeep / Depth (direct)\nRaw camera depth data. If using deep, need to convert DeepToImage first, and selected deep channel on 'channels' knob." M {"position (world space)" "position (camera space)" "depth (normalized far=0)" "deep / depth (direct)" "" "" ""}}
+ data_type "depth (normalized far=0)"
+ addUserKnob {41 channels t "Select which channel represented on selected data type." T shuffle_data.in}
+ addUserKnob {6 unpm l unpremult t "3D data pass should be unpremult with alpha before process." -STARTLINE}
+ unpm true
+ addUserKnob {26 spacer_4 l "" +STARTLINE T <br>}
+ addUserKnob {7 lod l "mesh LOD" t "Level of Details\n\nIf this value set to 1.0, subdivision of the mesh  1:1 to the data available in the resolution. Which mean 1 face of the mesh equal to 1 pixel.\n\nIf this value set to 1.0, it will slow down the render process.\n\nHighly recommend to use 0.1 - 0.5 if high resolution mesh details is not concern."}
+ lod 0.1
+ addUserKnob {41 filter_size l "filter size" T DisplaceGeo.filter_size}
+ addUserKnob {41 filter T DisplaceGeo.filter}
+ addUserKnob {26 spacer_2 l "" +STARTLINE T <br>}
+ addUserKnob {26 title_drange l "" +STARTLINE T "distance range"}
+ addUserKnob {7 drange_near l near t "clip the mesh in the min value in terms of depth." R 0 10000}
+ addUserKnob {7 drange_far l far t "clip the mesh in the max value in terms of depth." R 0 10000}
+ drange_far 10000
+ addUserKnob {6 clip_color l "distance clip on color" t "Apply the distance clip on colored texture." +STARTLINE}
+ clip_color true
+ addUserKnob {26 spacer_3 l "" +STARTLINE T <br>}
+ addUserKnob {26 title_export l <b>EXPORT</b>}
+ addUserKnob {41 file t "only support *.abc file extension (alembric) ." T WriteGeo.file}
+ addUserKnob {22 export_geo l "Export Geo" T "def exportGeo() :\n\twgeo = nuke.toNode('WriteGeo')\n\twgeo\['Execute'].execute()\n\nthisGRP = nuke.thisGroup()\nfilepath = thisGRP\['file'].getValue()\n\nif not len(filepath) :\n\tnuke.message('file path is empty. Process denied.')\nelif not filepath.split('.')\[-1:]\[0].lower() == 'abc' :\n\tif nuke.ask('File extension invalue. Only support render <font color=orange>*.abc</font> . Do you want this tool to fix it and process ?') :\n\t\tthisGRP\['file'].setValue( thisGRP\['file'].getValue() + '.abc' )\n\t\texportGeo()\nelse :\n\texportGeo()" +STARTLINE}
+ addUserKnob {22 import_geo l "Import Geo" -STARTLINE T "prefx = nuke.toNode('preferences')\['GridWidth'].value()\nthisGRP = nuke.thisGroup()\ngoStore = nuke.toNode('store')\ngoStore\['fn'].execute()\n\nroot = getLevel()\n\nwith root :\n\trgeo = nuke.nodes.ReadGeo2( file=thisGRP\['file'].getValue() )\n\trgeo.setXYpos( int( thisGRP\['xpos'].getValue() + prefx ) , int( thisGRP\['ypos'].getValue() ) )"}
+ addUserKnob {20 tab_misc l Miscellaneous}
+ addUserKnob {26 title_focus_region l "<b>FOCUS REGION</b>"}
+ addUserKnob {41 use_focus_region l "use focus region" t "use focus region to generate SSMesh in specific area. Save resources and possible to work with high LOD mesh." T menu2.use_focus_region}
+ addUserKnob {15 focus_region l "focus region" t "Set focus region in screen space. These values are 2D coordinate." +DISABLED}
+ focus_region {0 0 1280 720}
+ addUserKnob {26 spacer_1 l "" +STARTLINE T <br>}
+ addUserKnob {3 fregion_ref_frame l "ref frame" t "set reference frame for tracking focus region. 'focus region' & 'define z' will apply on this reference frame and process the tracking." +DISABLED}
+ fregion_ref_frame 1
+ addUserKnob {22 fregion_set_frame l "set current frame" t "set current frame for focus region reference frame." -STARTLINE +DISABLED T "nuke.thisGroup()\['fregion_ref_frame'].setValue( nuke.frame() )"}
+ addUserKnob {12 sample_point l "sample position" t "Toggle 'sample z' in 2D to enable this 2D sample coordinate." +DISABLED}
+ addUserKnob {22 sample_z_toggle l "sample z in 2D" t "'sample z' is only works for sample value purpose. After sample is done, must turn off sample function." -STARTLINE +DISABLED T "thisGRP = nuke.thisGroup()\nszstatus = thisGRP\['sample_z_status'].value()\n\nstatus = \['<font color=red>\[ OFF ]</font>','<font color=cyan>\[ ON ]</font>']\n\nif szstatus == status\[0] :\n\tthisGRP\['sample_z_status'].setValue( status\[1] )\n\tthisGRP\['sample_point'].setEnabled(True)\n\tthisGRP\['updateUI'].setValue(\"goStore = nuke.toNode(\\'store\\')\\ngoStore\[\\'fn\\'].execute()\\nsample2d()\")\nelse :\n\tthisGRP\['sample_z_status'].setValue( status\[0] )\n\tthisGRP\['sample_point'].setEnabled(False)\n\tthisGRP\['updateUI'].setValue('')"}
+ addUserKnob {26 sample_z_status l "" -STARTLINE +DISABLED T "<font color=red>\[ OFF ]</font>"}
+ addUserKnob {7 fregion_define_z l "define z" t "Define the z value on reference frame. Can use 'sample z in 2D' to get this value." +DISABLED R 0 10000}
+ addUserKnob {22 track_focus_region l "<b>\[ track focus region ]</b>" t "Use the set focus region on reference frame to track with camera in 3D space.\n\n* project setting need to be same as image resolution to get the correct result." +DISABLED T "rootST = int( nuke.root()\['first_frame'].getValue() )\nrootED = int( nuke.root()\['last_frame'].getValue() )\n\ngetFrame = nuke.getFramesAndViews( 'frame range', str( rootST ) + '-' + str( rootED ) )\n\ntry :\n\tframeST = int( getFrame\[0].replace( ' ' , '' ).split('-')\[0] )\n\tframeED = int( getFrame\[0].replace( ' ' , '' ).split('-')\[1] )\n\n\tthisGRP = nuke.thisGroup()\n\trefframe = int( thisGRP\['fregion_ref_frame'].getValue() )\n\tcam = nuke.toNode('cam_data')\n\tpt1 = nuke.toNode('left_pt')\['translate'].getValue()\n\tpt2 = nuke.toNode('right_pt')\['translate'].getValue()\n\n\tct_hack = nuke.nodes.CurveTool()\n\n\twith nuke.root() :\n\n\t\tif frameED - frameST != 0 :\n\t\t\tthisGRP\['focus_region'].clearAnimated()\n\t\t\ttempbuffer1 = thisGRP\['focus_region'].getValue()\n\t\t\tthisGRP\['focus_region'].setAnimated()\n\t\t\tthisGRP\['focus_region'].setValueAt( tempbuffer1\[0] , refframe , 0 )\n\t\t\tthisGRP\['focus_region'].setValueAt( tempbuffer1\[1] , refframe , 1 )\n\t\t\tthisGRP\['focus_region'].setValueAt( tempbuffer1\[2] , refframe , 2 )\n\t\t\tthisGRP\['focus_region'].setValueAt( tempbuffer1\[3] , refframe , 3 )\n\n\t\tfor trackframe in xrange( frameST, frameED+1 , 1 ) :\n\t\t\tnuke.execute( ct_hack, trackframe, trackframe )\n\t\t\tthisGRP\['focus_region'].setValueAt( nukescripts.snap3d.projectPoint( cam, pt1 )\[0] , trackframe , 0 )\n\t\t\tthisGRP\['focus_region'].setValueAt( nukescripts.snap3d.projectPoint( cam, pt1 )\[1] , trackframe , 1 )\n\t\t\tthisGRP\['focus_region'].setValueAt( nukescripts.snap3d.projectPoint( cam, pt2 )\[0] , trackframe , 2 )\n\t\t\tthisGRP\['focus_region'].setValueAt( nukescripts.snap3d.projectPoint( cam, pt2 )\[1] , trackframe , 3 )\n\n\tnuke.delete( ct_hack )\nexcept :\n    pass" +STARTLINE}
+ addUserKnob {26 spacer_6 l "" +STARTLINE T <br>}
+ addUserKnob {20 grp_crop_preview l "3D crop preview" +DISABLED n 1}
+ grp_crop_preview 0
+ addUserKnob {6 show_crop l "show crop point" t "It will show 2 spheres for the crop in 3D space. They set in the place which is where you set the focus region in screen space and defined by z." +DISABLED +STARTLINE}
+ addUserKnob {7 crop_point_scale l scale t "Scale the preview crop points (spheres)." +DISABLED}
+ crop_point_scale 0.3
+ addUserKnob {18 crop_point_color l color t "change color of the crop points (spheres)." +DISABLED}
+ crop_point_color 1
+ addUserKnob {6 crop_point_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 crop_point_color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 crop_point_color_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 crop_point_color_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 crop_point_color_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 crop_point_color_panelDropped_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 crop_point_color_panelDropped_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 crop_point_color_panelDropped_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 crop_point_color_panelDropped_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 spacer l "" +STARTLINE T <br>}
+ addUserKnob {26 title_uv l <b>UV</b>}
+ addUserKnob {41 uv_stabilize l "uv stabilize" t "Turn this on if you need to stabilize in UV space. During UV stabilize on, the geo will not be animated. Set reference frame under 'mesh ref frame'." T menu1.uv_stabilize}
+ addUserKnob {3 uv_ref_frame l "mesh ref frame" t "Select the frame number that will have identity geo shaped for UV texturing." +DISABLED}
+ uv_ref_frame 1001
+ addUserKnob {22 uv_set_frame l "set current frame" -STARTLINE +DISABLED T "nuke.thisGroup()\['uv_ref_frame'].setValue( nuke.frame() )"}
+ addUserKnob {6 black_outside l "black outside" t "black outside the UV texture." +DISABLED +STARTLINE}
+ black_outside true
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.3}
+ addUserKnob {26 l_DATE l "Date Modified" T 2019-11-08}
+ addUserKnob {26 l_CHANGELOG l Changelog T "1.3\n- camera window supported\n- anamophic project supported\n- fix the conflict of 'force region' and 'UV stabilize'.\n  can use both at the same time now.\n\n1.2\n- removed unuse camera link knobs\n- added focus region, so mesh can be\n  form in specific area/object to save\n  resources for higher LOD\n\n1.1\n- fix the missing line on 'Export Geo' \n  button\n\n1.0\n- create mesh/geo in screen space\n  using position/depth/deep data"}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href=\"https://facebook.com/MJTLab\"><font color=orange>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "don't touch"
+  note_font_size 32
+  xpos -1142
+  ypos -169
+  bdwidth 202
+  bdheight 478
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x4c4c4cff
+  label bin
+  note_font_size 32
+  xpos -899
+  ypos -170
+  bdwidth 200
+  bdheight 280
+ }
+ Input {
+  inputs 0
+  name img
+  xpos -100
+  ypos -184
+ }
+ Dot {
+  name img_dot
+  xpos -66
+  ypos -83
+ }
+set N2a6e07b0 [stack 0]
+ Dot {
+  name Dot3
+  xpos 758
+  ypos -83
+ }
+set N2a6e2c70 [stack 0]
+ Shuffle {
+  in depth
+  in2 alpha
+  alpha red2
+  name shuffle_data
+  label "\[value in]"
+  xpos 724
+  ypos -32
+ }
+ Unpremult {
+  name Unpremult_data
+  xpos 724
+  ypos 62
+  disable {{!parent.unpm}}
+ }
+ Dot {
+  name Dot5
+  xpos 758
+  ypos 700
+ }
+set N2a6f1500 [stack 0]
+ Dot {
+  name Dot6
+  xpos 928
+  ypos 700
+ }
+set N2a6f39c0 [stack 0]
+ Dot {
+  name Dot7
+  xpos 1106
+  ypos 700
+ }
+set N2a6f5e80 [stack 0]
+ Dot {
+  name Dot8
+  xpos 1260
+  ypos 700
+ }
+ Expression {
+  temp_name0 dvalue
+  temp_expr0 red
+  temp_name1 xpos
+  temp_expr1 "( ( x + 0.5 ) / input.width - 0.5 ) * \[value global_math.hratio] * abs( dvalue )"
+  temp_name2 ypos
+  temp_expr2 "( ( y + 0.5 ) / input.height - 0.5 ) * ( \[value global_math.hratio] * abs( dvalue ) * ( img_dot.height / img_dot.width ) ) * 1 / \[value format.pixel_aspect]"
+  temp_name3 zpos
+  temp_expr3 "- dvalue"
+  expr0 "( xpos * \[value fb_data.world_matrix.0] + ypos * \[value fb_data.world_matrix.1] ) * \[value fb_data.win_scale.u] + ( \[value global_math.hratio] * abs(zpos) * \[value fb_data.win_translate.u] / 2 )"
+  expr1 "( xpos * \[value fb_data.world_matrix.4] + ypos * \[value fb_data.world_matrix.5] ) * \[value fb_data.win_scale.v] + ( \[value global_math.hratio] * abs(zpos) * \[value fb_data.win_translate.v] / 2 )"
+  expr2 zpos
+  name Expression9
+  xpos 1226
+  ypos 774
+ }
+ Dot {
+  name Dot16
+  xpos 1260
+  ypos 889
+ }
+push $N2a6f5e80
+ Expression {
+  temp_name0 dvalue
+  temp_expr0 "1 / red"
+  temp_name1 xpos
+  temp_expr1 "( ( x + 0.5 ) / input.width - 0.5 ) * \[value global_math.hratio] * abs( dvalue )"
+  temp_name2 ypos
+  temp_expr2 "( ( y + 0.5 ) / input.height - 0.5 ) * ( \[value global_math.hratio] * abs( dvalue ) * ( img_dot.height / img_dot.width ) ) * 1 / \[value format.pixel_aspect]"
+  temp_name3 zpos
+  temp_expr3 "- dvalue"
+  expr0 "( xpos * \[value fb_data.world_matrix.0] + ypos * \[value fb_data.world_matrix.1] ) * \[value fb_data.win_scale.u] + ( \[value global_math.hratio] * abs(zpos) * \[value fb_data.win_translate.u] / 2 )"
+  expr1 "( xpos * \[value fb_data.world_matrix.4] + ypos * \[value fb_data.world_matrix.5] ) * \[value fb_data.win_scale.v] + ( \[value global_math.hratio] * abs(zpos) * \[value fb_data.win_translate.v] / 2 )"
+  expr2 zpos
+  name Expression6
+  xpos 1072
+  ypos 774
+ }
+ Dot {
+  name Dot17
+  xpos 1106
+  ypos 863
+ }
+push $N2a6f39c0
+ Expression {
+  expr2 -blue
+  name Expression7
+  label "fix z"
+  xpos 894
+  ypos 774
+ }
+ Dot {
+  name Dot18
+  xpos 928
+  ypos 876
+ }
+push $N2a6f1500
+ Expression {
+  temp_name0 nx
+  temp_expr0 "red - cam_data.world_matrix.3"
+  temp_name1 ny
+  temp_expr1 "green - cam_data.world_matrix.7"
+  temp_name2 nz
+  temp_expr2 "blue - cam_data.world_matrix.11"
+  expr0 "nx * \[value inverseMatrix.invMatrix.0] + ny * \[value inverseMatrix.invMatrix.1] + nz * \[value inverseMatrix.invMatrix.2]"
+  expr1 "nx * \[value inverseMatrix.invMatrix.3] + ny * \[value inverseMatrix.invMatrix.4] + nz * \[value inverseMatrix.invMatrix.5]"
+  expr2 "nx * \[value inverseMatrix.invMatrix.6] + ny * \[value inverseMatrix.invMatrix.7] + nz * \[value inverseMatrix.invMatrix.8]"
+  name Expression3
+  label "position invert"
+  xpos 724
+  ypos 774
+ }
+ Switch {
+  inputs 4
+  which {{parent.data_type}}
+  name Switch1
+  xpos 724
+  ypos 984
+ }
+ Dot {
+  name Dot13
+  xpos 758
+  ypos 1113
+ }
+set N502cedd0 [stack 0]
+ Dot {
+  name sam_dot
+  xpos 551
+  ypos 1113
+ }
+ NoOp {
+  inputs 0
+  name menu1
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['uv_stabilize'].getValue() == 1 :\n    thisGRP\['uv_ref_frame'].setEnabled(True)\n    thisGRP\['uv_set_frame'].setEnabled(True)\n    thisGRP\['black_outside'].setEnabled(True)\nelse :\n    thisGRP\['uv_ref_frame'].setEnabled(False)\n    thisGRP\['uv_set_frame'].setEnabled(False)\n    thisGRP\['black_outside'].setEnabled(False)\n"
+  xpos -1085
+  ypos -42
+  addUserKnob {20 User}
+  addUserKnob {6 uv_stabilize l "uv stabilize" +STARTLINE}
+ }
+ NoOp {
+  inputs 0
+  name menu2
+  onCreate "\nthisGRP = nuke.thisGroup()\nfregion_knobs = \['focus_region','fregion_define_z','sample_z_toggle','sample_z_status','sample_point','fregion_ref_frame','fregion_set_frame','track_focus_region','grp_crop_preview','show_crop','crop_point_scale','crop_point_color']\n\nthisGRP\[fregion_knobs\[4]].setEnabled(True)\n\nif thisGRP\['use_focus_region'].getValue()  == 0 :\n    for i in fregion_knobs :\n        thisGRP\[i].setEnabled(False)\n    thisGRP\[fregion_knobs\[3]].setValue( '<font color=red>\[ OFF ]</font>' )\n    thisGRP\['updateUI'].setValue('')\n    nuke.toNode('material_switch')\['disable'].setValue(0)\nelse :\n    for i in fregion_knobs :\n        if i != 'sample_point' :\n            thisGRP\[i].setEnabled(True)\n        else :\n            thisGRP\[i].setEnabled(False)\n    nuke.toNode('material_switch')\['disable'].setValue(1)\n"
+  knobChanged "\nthisGRP = nuke.thisGroup()\nfregion_knobs = \['focus_region','fregion_define_z','sample_z_toggle','sample_z_status','sample_point','fregion_ref_frame','fregion_set_frame','track_focus_region','grp_crop_preview','show_crop','crop_point_scale','crop_point_color']\n\nif thisGRP\['use_focus_region'].getValue()  == 0 :\n    for i in fregion_knobs :\n        thisGRP\[i].setEnabled(False)\n    thisGRP\[fregion_knobs\[3]].setValue( '<font color=red>\[ OFF ]</font>' )\n    thisGRP\['updateUI'].setValue('')\n    nuke.toNode('material_switch')\['disable'].setValue(0)\nelse :\n    for i in fregion_knobs :\n        if i != 'sample_point' :\n            thisGRP\[i].setEnabled(True)\n    nuke.toNode('material_switch')\['disable'].setValue(1)\n"
+  xpos -1085
+  ypos 25
+  addUserKnob {20 User}
+  addUserKnob {6 use_focus_region l "use focus region" +STARTLINE}
+ }
+ Camera {
+  inputs 0
+  display off
+  selectable false
+  useMatrix true
+  focal {{parent.cam_focal}}
+  haperture {{cam_haperture}}
+  name cam_data
+  xpos -335
+  ypos 2204
+ }
+push $N502cedd0
+ Expression {
+  temp_name0 unpremultA
+  temp_expr0 "alpha * ( 1 / alpha )"
+  temp_name1 max
+  temp_expr1 blue
+  expr3 "abs( max ) < \[value parent.drange_near] || abs( max ) > \[value parent.drange_far] ? 0 : isnan(unpremultA) ? 0 : unpremultA"
+  name Expression1
+  label "distance crop"
+  xpos 724
+  ypos 1244
+ }
+ Premult {
+  name Premult1
+  xpos 724
+  ypos 1332
+ }
+ Dot {
+  name Dot9
+  xpos 758
+  ypos 1640
+ }
+set N502a7770 [stack 0]
+push $N2a6e07b0
+ Dot {
+  name Dot10
+  xpos -66
+  ypos 1552
+ }
+set N5029e020 [stack 0]
+ Unpremult {
+  name Unpremult1
+  xpos 48
+  ypos 1549
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge2
+  xpos 48
+  ypos 1637
+ }
+ Premult {
+  name Premult3
+  xpos 48
+  ypos 1719
+ }
+push $N5029e020
+ Switch {
+  inputs 2
+  which {{parent.clip_color}}
+  name Switch2
+  xpos -100
+  ypos 1828
+ }
+ Project3D2 {
+  inputs 2
+  crop {{parent.black_outside}}
+  name Project3D2
+  xpos -100
+  ypos 2224
+ }
+push $N2a6e2c70
+ Dot {
+  name Dot2
+  xpos 1576
+  ypos -84
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  label "\[value in]"
+  xpos 1542
+  ypos 30
+ }
+ Remove {
+  name Remove1
+  xpos 1542
+  ypos 118
+ }
+ Reformat {
+  type scale
+  black_outside true
+  name Reformat1
+  xpos 1542
+  ypos 212
+ }
+ Expression {
+  temp_name0 xpos
+  temp_expr0 "( ( x + 0.5 ) / input.width - 0.5) *  \[value global_math.hratio] * abs( \[value parent.drange_far] )"
+  temp_name1 ypos
+  temp_expr1 "( ( y + 0.5 ) / input.height -0.5 ) * ( \[value global_math.hratio] * abs( \[value parent.drange_far] ) * ( img_dot.height / img_dot.width ) ) * 1 / \[value format.pixel_aspect]"
+  temp_name2 zpos
+  temp_expr2 "-\[value parent.drange_far]"
+  expr0 "( xpos * \[value fb_data.world_matrix.0] + ypos * \[value fb_data.world_matrix.1] ) * \[value fb_data.win_scale.u] + ( \[value global_math.hratio] * abs(zpos) * \[value fb_data.win_translate.u] / 2 )"
+  expr1 "( xpos * \[value fb_data.world_matrix.4] + ypos * \[value fb_data.world_matrix.5] ) * \[value fb_data.win_scale.v] + ( \[value global_math.hratio] * abs(zpos) * \[value fb_data.win_translate.v] / 2 )"
+  expr2 zpos
+  name Expression8
+  xpos 1542
+  ypos 845
+ }
+ ColorMatrix {
+  matrix {
+      {{cam_data.world_matrix.0} {cam_data.world_matrix.1} {cam_data.world_matrix.2}}
+      {{cam_data.world_matrix.4} {cam_data.world_matrix.5} {cam_data.world_matrix.6}}
+      {{cam_data.world_matrix.8} {cam_data.world_matrix.9} {cam_data.world_matrix.10}}
+    }
+  name ColorMatrix1
+  xpos 1542
+  ypos 970
+ }
+ Add {
+  channels rgb
+  value {{cam_data.world_matrix.3} {cam_data.world_matrix.7} {cam_data.world_matrix.11} 0}
+  name Add1
+  xpos 1542
+  ypos 1052
+ }
+ Crop {
+  box {{store.fregion} {store.fregion} {store.fregion} {store.fregion}}
+  reformat true
+  crop false
+  name Crop1
+  xpos 1542
+  ypos 1476
+  disable {{!parent.use_focus_region}}
+ }
+ Dot {
+  name Dot4
+  xpos 1576
+  ypos 2402
+ }
+push $N502a7770
+ Crop {
+  box {{store.fregion} {store.fregion} {store.fregion} {store.fregion}}
+  reformat true
+  crop false
+  name Crop4
+  selected true
+  xpos 724
+  ypos 1714
+  disable {{!parent.use_focus_region}}
+ }
+ Unpremult {
+  name Unpremult3
+  xpos 724
+  ypos 1851
+ }
+ Expression {
+  temp_name0 nx
+  temp_expr0 red
+  temp_name1 ny
+  temp_expr1 green
+  temp_name2 nz
+  temp_expr2 blue
+  expr0 "( nx * \[value cam_data.world_matrix.0] + ny * \[value cam_data.world_matrix.1] + nz * \[value cam_data.world_matrix.2] ) + \[value cam_data.world_matrix.3]"
+  expr1 "( nx * \[value cam_data.world_matrix.4] + ny * \[value cam_data.world_matrix.5] + nz * \[value cam_data.world_matrix.6] ) + \[value cam_data.world_matrix.7]"
+  expr2 "( nx * \[value cam_data.world_matrix.8] + ny * \[value cam_data.world_matrix.9] + nz * \[value cam_data.world_matrix.10] ) + \[value cam_data.world_matrix.11]"
+  name Expression4
+  label "position revert"
+  xpos 724
+  ypos 1933
+ }
+ Premult {
+  name Premult2
+  xpos 724
+  ypos 2027
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge1
+  xpos 724
+  ypos 2398
+ }
+ Card {
+  inputs 0
+  image_aspect false
+  rows {{"img_dot.height * parent.lod"}}
+  columns {{"img_dot.width * parent.lod"}}
+  name ssmesh
+  xpos 343
+  ypos 2317
+ }
+ DisplaceGeo {
+  inputs 2
+  source "rgb absolute"
+  scale 1
+  filter_size 1
+  name DisplaceGeo
+  xpos 343
+  ypos 2399
+ }
+ FrameHold {
+  first_frame {{parent.uv_ref_frame}}
+  name FrameHold
+  xpos 343
+  ypos 2479
+  disable {{!parent.uv_stabilize}}
+ }
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial1
+  xpos -100
+  ypos 2483
+ }
+ Scene {
+  display {{parent.display}}
+  name gl_scene
+  xpos -90
+  ypos 3072
+ }
+set N5023bf10 [stack 0]
+ WriteGeo {
+  file_type abc
+  name WriteGeo
+  xpos 120
+  ypos 3093
+ }
+ Axis {
+  inputs 0
+  display off
+  selectable false
+  translate {{"( global_math.pt2.x * cam_data.world_matrix.0(parent.fregion_ref_frame) + global_math.pt2.y * cam_data.world_matrix.1(parent.fregion_ref_frame) + global_math.pt2.z * cam_data.world_matrix.2(parent.fregion_ref_frame) ) + cam_data.world_matrix.3(parent.fregion_ref_frame)"} {"( global_math.pt2.x * cam_data.world_matrix.4(parent.fregion_ref_frame) + global_math.pt2.y * cam_data.world_matrix.5(parent.fregion_ref_frame) + global_math.pt2.z * cam_data.world_matrix.6(parent.fregion_ref_frame) ) + cam_data.world_matrix.7(parent.fregion_ref_frame)"} {"( global_math.pt2.x * cam_data.world_matrix.8(parent.fregion_ref_frame) + global_math.pt2.y * cam_data.world_matrix.9(parent.fregion_ref_frame) + global_math.pt2.z * cam_data.world_matrix.10(parent.fregion_ref_frame) ) + cam_data.world_matrix.11(parent.fregion_ref_frame)"}}
+  name right_pt
+  xpos -600
+  ypos 3218
+ }
+ CheckerBoard2 {
+  inputs 0
+  format "256 256 0 0 256 256 1 square_256"
+  name CheckerBoard1
+  xpos -789
+  ypos 2694
+ }
+ Multiply {
+  channels rgb
+  value {{parent.crop_point_color.r} {parent.crop_point_color.g} {parent.crop_point_color.b} 1}
+  name Multiply
+  xpos -789
+  ypos 2822
+ }
+ Clamp {
+  channels rgba
+  name Clamp1
+  xpos -789
+  ypos 2905
+ }
+ Sphere {
+  selectable false
+  cast_shadow false
+  receive_shadow false
+  rows 10
+  columns 10
+  uniform_scale {{parent.crop_point_scale}}
+  name Sphere1
+  xpos -789
+  ypos 2987
+  disable {{!show_crop}}
+ }
+ Dot {
+  name Dot24
+  xpos -755
+  ypos 3065
+ }
+set N502161d0 [stack 0]
+ Dot {
+  name Dot25
+  xpos -456
+  ypos 3065
+ }
+ TransformGeo {
+  inputs 2
+  selectable false
+  name TransformGeo2
+  xpos -490
+  ypos 3238
+ }
+ Axis {
+  inputs 0
+  display off
+  selectable false
+  translate {{"( global_math.pt1.x * cam_data.world_matrix.0(parent.fregion_ref_frame) + global_math.pt1.y * cam_data.world_matrix.1(parent.fregion_ref_frame) + global_math.pt1.z * cam_data.world_matrix.2(parent.fregion_ref_frame) ) + cam_data.world_matrix.3(parent.fregion_ref_frame)"} {"( global_math.pt1.x * cam_data.world_matrix.4(parent.fregion_ref_frame) + global_math.pt1.y * cam_data.world_matrix.5(parent.fregion_ref_frame) + global_math.pt1.z * cam_data.world_matrix.6(parent.fregion_ref_frame) ) + cam_data.world_matrix.7(parent.fregion_ref_frame)"} {"( global_math.pt1.x * cam_data.world_matrix.8(parent.fregion_ref_frame) + global_math.pt1.y * cam_data.world_matrix.9(parent.fregion_ref_frame) + global_math.pt1.z * cam_data.world_matrix.10(parent.fregion_ref_frame) ) + cam_data.world_matrix.11(parent.fregion_ref_frame)"}}
+  name left_pt
+  xpos -899
+  ypos 3220
+ }
+push $N502161d0
+ TransformGeo {
+  inputs 2
+  selectable false
+  name TransformGeo1
+  xpos -789
+  ypos 3240
+ }
+ Scene {
+  inputs 2
+  selectable false
+  name Scene1
+  xpos -480
+  ypos 3395
+ }
+ ApplyMaterial {
+  display off
+  selectable false
+  render_mode off
+  name material_switch
+  xpos -490
+  ypos 3523
+ }
+push $N5023bf10
+ Scene {
+  inputs 2
+  name Scene2
+  xpos -90
+  ypos 3502
+ }
+ Output {
+  name Output1
+  xpos -100
+  ypos 4030
+ }
+ Group {
+  inputs 0
+  name inverseMatrix
+  tile_color 0x337f4cff
+  xpos 576
+  ypos 780
+  addUserKnob {20 tab_general l General}
+  addUserKnob {1 knob_path}
+  knob_path cam_data.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+  addUserKnob {20 t_VERSION l Version}
+  addUserKnob {26 l_VERSION l Version T 1.0}
+  addUserKnob {26 l_DATE l "Date Modified" T 2011-11-28}
+  addUserKnob {26 l_CHANGELOG l Changelog T "v1.0\n- reveal the calculate output of \n  inverse matrix which is c44matrix\n  and colormatrix doesn't show\n  "}
+  addUserKnob {26 l_DEV l "Developed by" T "Mark Joey Tang"}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Camera {
+  inputs 0
+  rotate {0 0 {-parent.cam_winroll}}
+  win_translate {{parent.cam_win_translate} {parent.cam_win_translate}}
+  win_scale {{parent.cam_win_scale} {parent.cam_win_scale}}
+  name fb_data
+  xpos -340
+  ypos 2087
+ }
+ NoOp {
+  inputs 0
+  name store
+  xpos -843
+  ypos 28
+  addUserKnob {20 User}
+  addUserKnob {22 fn T "### level define ###\n\ndef getLevel() :\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\tggLevel = nuke.root()\n\telse :\n\t\tnodePath = nuke.thisNode().fullName().split('.')\n\t\tnodePath.pop()\n\t\tggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\n### sample z in 2D ###\n\ndef sample2d() :\n\tthisGRP = nuke.thisGroup()\n\tif thisGRP\['sample_z_status'].value() == '<font color=cyan>\[ ON ]</font>' :\n\t\tsam_co = thisGRP\['sample_point'].getValue()\n\t\tzdata = nuke.toNode('sam_dot').sample('blue', sam_co\[0], sam_co\[1]) * -1\n\t\tthisGRP\['fregion_define_z'].setValue( zdata )" +STARTLINE}
+  addUserKnob {15 fregion}
+  fregion {{parent.focus_region} {parent.focus_region} {parent.focus_region} {parent.focus_region}}
+ }
+ NoOp {
+  inputs 0
+  name global_math
+  xpos -842
+  ypos -43
+  addUserKnob {20 User}
+  addUserKnob {7 hratio}
+  hratio {{"cam_data.haperture / cam_data.focal"}}
+  addUserKnob {7 maxwidth}
+  maxwidth {{"hratio * parent.fregion_define_z"}}
+  addUserKnob {7 maxheight}
+  maxheight {{"hratio * parent.fregion_define_z * ( img_dot.height / img_dot.width )"}}
+  addUserKnob {13 pt1}
+  pt1 {{"( ( ( maxwidth * ( parent.focus_region.x(parent.fregion_ref_frame) / img_dot.width) ) - ( maxwidth / 2 ) ) * fb_data.world_matrix.0 + ( ( ( maxheight * ( parent.focus_region.y(parent.fregion_ref_frame) / img_dot.height ) ) - ( maxheight / 2 ) ) * 1 / \[value root.format.pixel_aspect] ) * fb_data.world_matrix.1 ) * fb_data.win_scale.u + ( hratio * abs(parent.fregion_define_z) * fb_data.win_translate.u /2 )"} {"( ( ( maxwidth * ( parent.focus_region.x(parent.fregion_ref_frame) / img_dot.width) ) - ( maxwidth / 2 ) ) * fb_data.world_matrix.4 + \n( ( ( maxheight * ( parent.focus_region.y(parent.fregion_ref_frame) / img_dot.height ) ) - ( maxheight / 2 ) ) * 1 / \[value root.format.pixel_aspect] ) * fb_data.world_matrix.5 ) * fb_data.win_scale.v + ( hratio * abs(parent.fregion_define_z) * fb_data.win_translate.v /2 )"} {-parent.fregion_define_z}}
+  addUserKnob {13 pt2}
+  pt2 {{"( ( ( maxwidth * ( parent.focus_region.r(parent.fregion_ref_frame) / img_dot.width) ) - ( maxwidth / 2 ) ) * fb_data.world_matrix.0 + ( ( ( maxheight * ( parent.focus_region.t(parent.fregion_ref_frame) / img_dot.height ) ) - ( maxheight / 2 ) ) * 1 / \[value root.format.pixel_aspect] ) * fb_data.world_matrix.1 ) * fb_data.win_scale.u + ( hratio * abs(parent.fregion_define_z) * fb_data.win_translate.u /2 )"} {"( ( ( maxwidth * ( parent.focus_region.r(parent.fregion_ref_frame) / img_dot.width) ) - ( maxwidth / 2 ) ) * fb_data.world_matrix.4 + ( ( ( maxheight * ( parent.focus_region.t(parent.fregion_ref_frame) / img_dot.height ) ) - ( maxheight / 2 ) ) * 1 / \[value root.format.pixel_aspect] ) * fb_data.world_matrix.5 ) * fb_data.win_scale.v + ( hratio * abs(parent.fregion_define_z) * fb_data.win_translate.v /2 )"} {-parent.fregion_define_z}}
+ }
+end_group

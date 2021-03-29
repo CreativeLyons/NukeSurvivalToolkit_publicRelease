@@ -1,0 +1,185 @@
+Group {
+ name bm_MatteCheck
+ help "A simple tool designed to check the accuracy of mattes. Choose between overlaying a red color, viewing the matte against a grey background, or viewing the matte against a checkerboard."
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() in ('Type', 'showPanel'):\n    Type = n\['Type'].value()\n    if Type == 'Colour Overlay':\n\n        n\['overlayColour'].setVisible(True)\n        n\['overlayMix'].setVisible(True)\n        n\['greyAmt'].setVisible(False)\n        n\['chkSize'].setVisible(False)\n        n\['chkContrast'].setVisible(False)\n\n    elif Type == 'Grey Background':\n\n        n\['overlayColour'].setVisible(False)\n        n\['overlayMix'].setVisible(False)\n        n\['greyAmt'].setVisible(True)\n        n\['chkSize'].setVisible(False)\n        n\['chkContrast'].setVisible(False)\n\n    elif Type == 'Checkerboard':\n\n        n\['overlayColour'].setVisible(False)\n        n\['overlayMix'].setVisible(False)\n        n\['greyAmt'].setVisible(False)\n        n\['chkSize'].setVisible(True)\n        n\['chkContrast'].setVisible(True)"
+ tile_color 0x232323ff
+ note_font Verdana
+ selected true
+ mapsize {0.15 0.15}
+ addUserKnob {20 Options}
+ addUserKnob {26 ""}
+ addUserKnob {4 Type t "Choose between a colour overlay, or placing your matte over a grey background." M {"Colour Overlay" "Grey Background" Checkerboard "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {18 overlayColour l "Overlay Colour"}
+ overlayColour {1 0 0}
+ addUserKnob {6 overlayColour_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 overlayMix l "Overlay Mix"}
+ overlayMix 0.5
+ addUserKnob {7 chkSize l Size +HIDDEN R 0 64}
+ chkSize 17
+ addUserKnob {7 chkContrast l Contrast +HIDDEN}
+ chkContrast 0.27
+ addUserKnob {18 greyAmt l "Grey Value" t "Brightness of the grey backdrop." +HIDDEN}
+ greyAmt 0.18
+ addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {20 infoTab l Info}
+ addUserKnob {26 ""}
+ addUserKnob {26 versionInfo l "" +STARTLINE T "\nCreated by Ben McEwan\nwww.benmcewan.com\n\nVersion 1.1\nLast Updated: January 23rd, 2018\n"}
+ addUserKnob {26 ""}
+}
+ Input {
+  inputs 0
+  name matte
+  xpos -97
+  ypos -413
+  number 1
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels1
+  selected true
+  xpos -97
+  ypos -374
+ }
+ Dot {
+  name Dot4
+  xpos -63
+  ypos -320
+ }
+set N89ea730 [stack 0]
+ Dot {
+  name Dot6
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -63
+  ypos -152
+ }
+push $N89ea730
+ Invert {
+  channels alpha
+  name Invert1
+  xpos 76
+  ypos -329
+ }
+set N88b0400 [stack 0]
+ Dot {
+  name Dot5
+  xpos 313
+  ypos -320
+ }
+ CheckerBoard2 {
+  inputs 0
+  format {{{input.format}}}
+  boxsize {{chkSize}}
+  color0 {0.1000000015 0.1000000015 0.1000000015 1}
+  color2 {0.1000000015 0.1000000015 0.1000000015 1}
+  linecolor 0
+  centerlinewidth 0
+  name CheckerBoard1
+  xpos 373
+  ypos -483
+ }
+ ColorCorrect {
+  contrast {{chkContrast}}
+  name ColorCorrect1
+  xpos 373
+  ypos -389
+ }
+ Input {
+  inputs 0
+  name plate
+  xpos -94
+  ypos -495
+ }
+set N8a71d40 [stack 0]
+ Dot {
+  name Dot2
+  xpos 110
+  ypos -492
+ }
+set N8a73f40 [stack 0]
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 203
+  ypos -492
+ }
+set N9dbc2f0 [stack 0]
+ Dot {
+  name Dot3
+  xpos 313
+  ypos -492
+ }
+ Keymix {
+  inputs 3
+  name Keymix3
+  xpos 279
+  ypos -395
+ }
+push $N88b0400
+push $N9dbc2f0
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos 169
+  ypos -455
+ }
+ Grade {
+  multiply 0
+  add {{parent.greyAmt} {parent.greyAmt} {parent.greyAmt} 0}
+  name Grade1
+  xpos 169
+  ypos -431
+ }
+push $N8a73f40
+ Keymix {
+  inputs 3
+  name Keymix2
+  xpos 76
+  ypos -387
+ }
+push $N89ea730
+ Constant {
+  inputs 0
+  color {{overlayColour.r} {overlayColour.g} {overlayColour.b} {curve}}
+  name Constant1
+  xpos -345
+  ypos -349
+ }
+push $N8a71d40
+ Dot {
+  name Dot1
+  xpos -172
+  ypos -492
+ }
+ Keymix {
+  inputs 3
+  mix {{overlayMix}}
+  name Keymix1
+  xpos -206
+  ypos -329
+ }
+ Switch {
+  inputs 3
+  which {{Type x1 1}}
+  name typeSwitch1
+  xpos -206
+  ypos -231
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos -206
+  ypos -161
+ }
+ Output {
+  name Output1
+  xpos -206
+  ypos -80
+ }
+end_group

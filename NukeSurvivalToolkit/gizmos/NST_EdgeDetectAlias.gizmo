@@ -1,0 +1,141 @@
+Group {
+ name EdgeDetectAlias
+ tile_color 0xcc804eff
+ note_font "Bitstream Vera Sans Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 EdgeAlias}
+ addUserKnob {7 threshold l Threshold}
+ threshold 0.9
+ addUserKnob {41 size l Blur T Blur1.size}
+ addUserKnob {41 mult l Mult T Grade1.multiply}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 278
+  ypos -386
+ }
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 312
+  ypos -290
+ }
+set N29bdb570 [stack 0]
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 451
+  ypos -290
+ }
+set N29bdf380 [stack 0]
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos 577
+  ypos -290
+ }
+ Dilate {
+  channels rgba
+  size 1
+  name Dilate2
+  xpos 543
+  ypos -231
+ }
+push $N29bdf380
+ Invert {
+  channels rgba
+  name Invert1
+  xpos 417
+  ypos -257
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  name Merge4
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 417
+  ypos -231
+ }
+ Grade {
+  channels rgba
+  blackpoint {{parent.threshold}}
+  name Grade3
+  xpos 417
+  ypos -199
+ }
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos 451
+  ypos -150
+ }
+push $N29bdb570
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 202
+  ypos -290
+ }
+ Dilate {
+  channels rgba
+  size -1
+  name Dilate1
+  xpos 168
+  ypos -227
+ }
+push $N29bdb570
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge3
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 278
+  ypos -227
+ }
+ Grade {
+  channels rgba
+  blackpoint {{parent.threshold}}
+  name Grade2
+  xpos 278
+  ypos -201
+ }
+ Merge2 {
+  inputs 2
+  name Merge5
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 278
+  ypos -154
+ }
+ Blur {
+  channels rgba
+  size 2
+  name Blur1
+  label "\[value size]"
+  xpos 278
+  ypos -98
+ }
+ Grade {
+  channels rgba
+  multiply 2
+  white_clamp true
+  name Grade1
+  xpos 278
+  ypos -60
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle1
+  tile_color 0xffffffff
+  xpos 278
+  ypos -34
+ }
+ Output {
+  name Output1
+  xpos 278
+  ypos 65
+ }
+end_group

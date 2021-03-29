@@ -1,0 +1,108 @@
+add_layer {N N.red N.green N.blue N.alpha}
+add_layer {P P.red P.green P.blue P.alpha}
+Group {
+name apFresnel
+addUserKnob {20 apFresnel}
+addUserKnob {41 outMode l output T ShuffleCopy1.out}
+addUserKnob {6 invert -STARTLINE}
+addUserKnob {26 ""}
+addUserKnob {41 in_n l normals T Shuffle1.in}
+addUserKnob {41 in_p l position T Shuffle2.in}
+addUserKnob {26 ""}
+addUserKnob {41 gamma T Gamma1.value}
+addUserKnob {26 version_author l "" t "apFresnel v0.1\n2019" +STARTLINE T "<span style=\"color:#666\"><br/><b>apFresnel v0.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019</span>"}}
+Input {
+inputs 0
+name Inputcam
+xpos -412
+ypos 74
+number 1
+}
+Axis2 {
+name Axis1
+xpos -402
+ypos 100
+}
+Input {
+inputs 0
+name Inputimg
+xpos 0
+}
+set Nfb6ec3f0 [stack 0]
+Shuffle {
+in P
+name Shuffle2
+label p
+xpos -230
+ypos 110
+}
+Grade {
+add {{parent.Axis1.world_matrix.3} {parent.Axis1.world_matrix.7} {parent.Axis1.world_matrix.11} {curve}}
+reverse true
+black_clamp false
+name Grade1
+xpos -230
+ypos 148
+}
+push $Nfb6ec3f0
+Shuffle {
+in {N.red N.green N.blue N.alpha}
+name Shuffle1
+label n
+xpos -106
+ypos 122
+}
+MergeExpression {
+inputs 2
+temp_name0 cosA
+temp_expr0 (Ar*Br+Ag*Bg+Ab*Bb)/(sqrt(Ar*Ar+Ag*Ag+Ab*Ab)*sqrt(Br*Br+Bg*Bg+Bb*Bb))
+channel0 rgba
+expr0 (1+cosA)
+name MergeExpression1
+xpos -135
+ypos 214
+}
+Gamma {
+channels rgba
+name Gamma1
+xpos -135
+ypos 240
+}
+Expression {
+expr0 isnan(r)?0:r
+expr1 isnan(g)?0:g
+expr2 isnan(b)?0:b
+expr3 isnan(a)?0:a
+name NanToBlack
+xpos -135
+ypos 266
+}
+Invert {
+channels rgba
+name Invert1
+xpos -135
+ypos 292
+disable {{!parent.invert}}
+}
+Dot {
+name Dot1
+xpos -101
+ypos 347
+}
+push $Nfb6ec3f0
+ShuffleCopy {
+inputs 2
+red red
+green red
+blue red
+alpha red
+name ShuffleCopy1
+xpos 0
+ypos 343
+}
+Output {
+name Output1
+xpos 0
+ypos 416
+}
+end_group

@@ -1,0 +1,522 @@
+Group {
+ name ConvertPNZ
+ onCreate "\nthisGRP = nuke.thisGroup()\nif not thisGRP\['disable_error'].getValue() :\n    import os\n    import re\n\n    fontpath = re.split( '/|\"\"' , nuke.EXE_PATH )\n    fontpath.pop()\n    fontpath += \['plugins','fonts']\n    \n    if os.path.isfile( '/'.join( fontpath + \['UtopiaBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['UtopiaBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['CourierBold.pfa'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['CourierBold.pfa'] ) )\n    elif os.path.isfile( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) ) :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['Courier10PitchBold.pfb'] ) )\n    else :\n        thisGRP\['font'].setValue( '/'.join( fontpath + \['BitstreamCharterBold.pfb'] ) )\n"
+ tile_color 0x7f0072ff
+ addUserKnob {20 general l General}
+ addUserKnob {41 data l "input data" T menu1.data}
+ addUserKnob {26 spacer_1 l "" +STARTLINE T <br>}
+ addUserKnob {6 invert_depth l "invert depth (1/z)" +HIDDEN +STARTLINE}
+ invert_depth true
+ addUserKnob {4 in_space l <b>INPUT</b> M {"world space" "camera space" "" "" "" ""}}
+ addUserKnob {4 out_position l <b>OUTPUT</b> M {"world space" "camera space" "" "" ""}}
+ out_position "camera space"
+ addUserKnob {4 out_normal l <b>OUTPUT</b> +HIDDEN M {"world space" "camera space" fresnel ""}}
+ out_normal "camera space"
+ addUserKnob {26 spacer l "" +STARTLINE T <br>}
+ addUserKnob {20 CamTabBegin l "" +STARTLINE n -2}
+ addUserKnob {20 tab_cam_setup l "Camera Setup"}
+ addUserKnob {22 set_link l "link to selected camera" t "Deep data is related to camera. So when convert deep data to anything, it required the camera data.\n\nhow to use :\nSelect the camera, which can be link to any axis nodes. This tool will get the focal, haperture and world matrix from selected camera to generate world space position data.\n\nYou can find the world space position pass store under <b>'deepPosition'</b> channel after this node. The pass support volumatric deep data. If want to bring the position data to 2D in downstream. Please only use <b>DVPToImage</b> which comes along with this toolset.\n\nAdditional note:\nThis node will also create another channel called <b>'deepRawColor'</b> . This channel stored the original of deep data from input for any dev purposes in downstream. User not necessary to use this channel but better to keep it if this toolset occur in downstream." T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\nroot = getLevel()\nthisGRP = nuke.thisGroup()\n\nmainKnobs = \['cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll','world_matrix']\ndefaultKnobs = \{\n\t\t\t'focal length' : 'focal',\n\t\t\t'horiz aperture' : 'haperture',\n\t\t\t'window translate' : 'win_translate',\n\t\t\t'window scale' : 'win_scale',\n\t\t\t'window roll' : 'winroll',\n\t\t\t'world matrix' : 'world_matrix'\n\t\t\t\}\nselNodeKnobs = \[]\nmissingKnob = \[]\n\ntry :\n\twith root :\n\t\tselNode = nuke.selectedNode()\n\n\tfor knob in selNode.knobs() :\n\t\tselNodeKnobs.append( knob )\n\n\tselNodeKnobs.sort()\n\n\tfor key,value in defaultKnobs.items() :\n\t\tif value not in selNodeKnobs :\n\t\t\tmissingKnob.append( key )\n\n\tif not len(missingKnob) :\n\t\twith root :\n\t\t\tfor knob in mainKnobs :\n\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\tCAMnode = selNode.name()\n\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.focal'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.haperture'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.win_translate'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.win_scale'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.winroll'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.world_matrix'.format(CAMnode))\n\telse :\n\t\tp = nuke.Panel('Select knobs :')\n\t\tp.addBooleanCheckBox( '<b>Unable to find the default knobs. Please use the pulldown menu below to define the knob manually.</b>' , False)\n\t\tfor rk in missingKnob :\n\t\t\tp.addEnumerationPulldown( rk, ' '.join( selNodeKnobs ) )\n\n\t\tif p.show() :\n\t\t\ttry :\n\t\t\t\tfor key,value in defaultKnobs.items() :\n\t\t\t\t\tif p.value( key ) != None :\n\t\t\t\t\t\tdefaultKnobs\[key] = p.value( key )\n\t\t\texcept :\n\t\t\t\tpass\n\n\t\t\twith root :\n\t\t\t\tfor knob in mainKnobs :\n\t\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\t\tCAMnode = selNode.name()\n\t\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['focal length']))\n\t\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['horiz aperture']))\n\t\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window translate']))\n\t\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window scale']))\n\t\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window roll']))\n\t\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['world matrix']))\nexcept :\n\tnuke.message('no node selected.')" +STARTLINE}
+ addUserKnob {22 remove_link l "remove linked expression" t "Remove the linked camera expression but won't reset any data. So the position data still works if input doesn't contain any camera movement." -STARTLINE T "thisGRP = nuke.thisGroup()\nmainKnobs = \['cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll','world_matrix']\n\nfor knob in thisGRP.knobs() :\n    if mainKnobs.count(knob) != 0 :\n        thisGRP\[knob].clearAnimated()"}
+ addUserKnob {22 bake_link l "bake expression link" t "Baked out the existing expression link back to this node itself. After that, camera node is not required for this node anymore. Baked value is base on the frame range in project setting of the nuke script.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." T "thisGRP = nuke.thisGroup()\n\nframeST = nuke.root().firstFrame()\nframeED = nuke.root().lastFrame()\n\nallknobs = \['cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll','world_matrix']\nalldata = \{\}\n\nchknobs = 0\nfor knob in allknobs :\n\tif thisGRP\[knob].hasExpression() :\n\t\tchknobs = 1\n\nif chknobs :\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\ttry :\n\t\t\t\talldata\[knob].append( thisGRP\[knob].getValueAt(t) )\n\t\t\texcept :\n\t\t\t\talldata\[knob] = \[ thisGRP\[knob].getValueAt(t) ]\n\n\tfor knob in allknobs :\n\t\tthisGRP\[knob].clearAnimated()\n\t\tthisGRP\[knob].setAnimated()\n\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is float :\n\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST] , t )\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is list :\n\t\t\t\tfor i in range( len( alldata\[knob]\[t-frameST] ) ) :\n\t\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST]\[i] , t , i )\nelse :\n\tnuke.message('no expression link found.')" +STARTLINE}
+ addUserKnob {22 copy_data l "copy from selected camera" t "Select the camera, then this will process 'link to selected camera' and 'bake expression link' in once.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." -STARTLINE T "thisGRP = nuke.thisGroup()\nthisGRP\['set_link'].execute()\nthisGRP\['bake_link'].execute()"}
+ addUserKnob {20 cam_data_grp l "CAMERA DATA" n 1}
+ cam_data_grp 0
+ addUserKnob {7 cam_focal l "focal length" R 5 100}
+ cam_focal 50
+ addUserKnob {7 cam_haperture l "horiz aperture" R 0.1 50}
+ cam_haperture 24.576
+ addUserKnob {30 cam_win_translate l "window translate"}
+ addUserKnob {30 cam_win_scale l "window scale"}
+ cam_win_scale {1 1}
+ addUserKnob {7 cam_winroll l "window roll" R -45 45}
+ addUserKnob {41 world_matrix l "world matrix" T cam_data.matrix}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 CamTabEnd l "" +STARTLINE n -3}
+ addUserKnob {20 tab_misc l Misc}
+ addUserKnob {2 font}
+ font "C:/Program Files/Nuke12.0v3/plugins/fonts/UtopiaBold.pfa"
+ addUserKnob {6 disable_error l "disable onscreen message" +STARTLINE}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.4}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-01-21}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"1.4<br>-&nbsp;a&nbsp;package&nbsp;convert&nbsp;3D&nbsp;tech&nbsp;passes<br>&nbsp;&nbsp;included<br>&nbsp;&nbsp;*&nbsp;P2Z&nbsp;(&nbsp;Position&nbsp;To&nbsp;Depth&nbsp;)<br>&nbsp;&nbsp;*&nbsp;P2N&nbsp;(&nbsp;Position&nbsp;To&nbsp;Normal&nbsp;)<br>&nbsp;&nbsp;*&nbsp;Z2P&nbsp;(&nbsp;Depth&nbsp;To&nbsp;Position&nbsp;)<br>&nbsp;&nbsp;*&nbsp;Z2N&nbsp;(&nbsp;Depth&nbsp;To&nbsp;Normal&nbsp;)<br>&nbsp;&nbsp;*&nbsp;ConvertPNZ&nbsp;(&nbsp;self&nbsp;convertion&nbsp;)<br>-&nbsp;fixed&nbsp;camera&nbsp;window&nbsp;transformation&nbsp;issue<br><br>1.2<br>-&nbsp;changed&nbsp;camera&nbsp;input&nbsp;to&nbsp;expression&nbsp;link<br>-&nbsp;fix&nbsp;alpha&nbsp;check<br>-&nbsp;added&nbsp;support&nbsp;camera&nbsp;window&nbsp;roll<br><br>1.0<br>-&nbsp;Convert&nbsp;Position&nbsp;data&nbsp;to&nbsp;Normal\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -158
+  ypos -449
+  bdwidth 274
+  bdheight 144
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x388e8e00
+  label bin
+  note_font_size 42
+  xpos -153
+  ypos -270
+  bdwidth 272
+  bdheight 503
+ }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width {{global.res.x}}
+  box_height {{global.res.y}}
+  box_fixed true
+  box_pixel_aspect {{global.pxa}}
+  name Reformat1
+  xpos 755
+  ypos 1004
+ }
+ Text {
+  message "missing \[value parent.data] pass"
+  font "\[value parent.font]"
+  size {{global.res.x/15}}
+  xjustify center
+  yjustify center
+  Transform 1
+  box {0 0 {global.res.x} {global.res.y}}
+  center {640 360}
+  name Text1
+  xpos 755
+  ypos 1086
+  disable {{parent.disable_error}}
+ }
+ Reformat {
+  type "to box"
+  box_width {{global.res.x}}
+  box_height {{global.res.y}}
+  box_fixed true
+  box_pixel_aspect {{global.pxa}}
+  black_outside true
+  name Reformat2
+  xpos 755
+  ypos 1168
+ }
+ Dot {
+  name Dot5
+  xpos 789
+  ypos 1250
+ }
+ Input {
+  inputs 0
+  name position
+  xpos 404
+  ypos -536
+ }
+ Expression {
+  temp_name0 detectA
+  temp_expr0 "red == 0 && green == 0 && blue == 0 ? 0 : 1"
+  expr3 detectA
+  name Expression3
+  label "non-filtered alpha"
+  xpos 404
+  ypos -405
+ }
+ Dot {
+  name Dot1
+  xpos 438
+  ypos -173
+ }
+set Nc9f69000 [stack 0]
+ Dot {
+  name Dot4
+  xpos 594
+  ypos -173
+ }
+set Nc9f68c00 [stack 0]
+ Dot {
+  name Dot2
+  xpos 740
+  ypos -173
+ }
+set Nc9f68800 [stack 0]
+ Dot {
+  name Dot8
+  xpos 1043
+  ypos -173
+ }
+set Nc9f68400 [stack 0]
+ Dot {
+  name Dot20
+  xpos 1165
+  ypos -173
+ }
+set Nc9f68000 [stack 0]
+ Dot {
+  name Dot9
+  xpos 1310
+  ypos -173
+ }
+set Nc9f83c00 [stack 0]
+ Dot {
+  name Dot14
+  xpos 1611
+  ypos -173
+ }
+set Nc9f83800 [stack 0]
+ Dot {
+  name Dot17
+  xpos 1904
+  ypos -173
+ }
+set Nc9f83400 [stack 0]
+ Dot {
+  name Dot18
+  xpos 2075
+  ypos -173
+ }
+ Expression {
+  expr0 "1 / red"
+  expr1 "1 / red"
+  expr2 "1 / red"
+  name Expression2
+  xpos 2041
+  ypos -99
+ }
+ Expression {
+  expr0 "isnan(red) || isinf(red) ? 0 : red"
+  expr1 "isnan(green) || isinf(green) ? 0 : green"
+  expr2 "isnan(blue) || isinf(blue) ? 0 : blue"
+  name Expression5
+  label "remove nan&inf"
+  xpos 2041
+  ypos -17
+ }
+ Dot {
+  name Dot19
+  xpos 2075
+  ypos 367
+ }
+push $Nc9f83400
+ Switch {
+  inputs 2
+  which {{invert_depth}}
+  name Switch5
+  xpos 1870
+  ypos 449
+ }
+ Dot {
+  name Dot16
+  xpos 1904
+  ypos 531
+ }
+push $Nc9f83800
+ Shuffle {
+  red blue
+  green blue
+  name Shuffle2
+  xpos 1577
+  ypos 38
+ }
+ Invert {
+  channels rgb
+  name Invert2
+  xpos 1577
+  ypos 120
+ }
+ Premult {
+  name Premult2
+  xpos 1577
+  ypos 202
+ }
+ Dot {
+  name Dot15
+  xpos 1611
+  ypos 342
+ }
+push $Nc9f83c00
+ ColorMatrix {
+  matrix {
+      {{parent.world_matrix.0} {parent.world_matrix.1} {parent.world_matrix.2}}
+      {{parent.world_matrix.4} {parent.world_matrix.5} {parent.world_matrix.6}}
+      {{parent.world_matrix.8} {parent.world_matrix.9} {parent.world_matrix.10}}
+    }
+  invert true
+  name ColorMatrix2
+  label "invert deformation"
+  selected true
+  xpos 1276
+  ypos -99
+ }
+ Dot {
+  name Dot12
+  xpos 1310
+  ypos -5
+ }
+set Nc9fa4400 [stack 0]
+ Dot {
+  name Dot11
+  xpos 1461
+  ypos -5
+ }
+ Shuffle {
+  red blue
+  green blue
+  name Shuffle1
+  xpos 1427
+  ypos 93
+ }
+ Invert {
+  channels rgb
+  name Invert1
+  xpos 1427
+  ypos 175
+ }
+ Premult {
+  name Premult1
+  xpos 1427
+  ypos 257
+ }
+ Dot {
+  name Dot13
+  xpos 1461
+  ypos 339
+ }
+push $Nc9fa4400
+ Dot {
+  name Dot10
+  xpos 1310
+  ypos 337
+ }
+push $Nc9f68000
+ ColorMatrix {
+  matrix {
+      {{parent.cam_data.world_matrix.0} {parent.cam_data.world_matrix.1} {parent.cam_data.world_matrix.2}}
+      {{parent.cam_data.world_matrix.4} {parent.cam_data.world_matrix.5} {parent.cam_data.world_matrix.6}}
+      {{parent.cam_data.world_matrix.8} {parent.cam_data.world_matrix.9} {parent.cam_data.world_matrix.10}}
+    }
+  name ColorMatrix4
+  label transformation
+  xpos 1131
+  ypos -99
+ }
+ Dot {
+  name Dot21
+  xpos 1165
+  ypos 337
+ }
+push $Nc9f68400
+ Switch {
+  inputs 5
+  which {{"in_space == out_normal ? 0 : \nin_space == 0 && out_normal == 1 ? 2 : \nin_space == 1 && out_normal == 0 ? 1 : \nin_space == 0 && out_normal == 2 ? 3 : \n4"}}
+  name Switch4
+  xpos 1009
+  ypos 460
+ }
+ Dot {
+  name Dot7
+  xpos 1043
+  ypos 542
+ }
+push $Nc9f68800
+ Expression {
+  expr2 -blue
+  name Expression6
+  label "invert z"
+  xpos 706
+  ypos -99
+ }
+ ColorMatrix {
+  matrix {
+      {{parent.cam_data.world_matrix.0} {parent.cam_data.world_matrix.1} {parent.cam_data.world_matrix.2}}
+      {{parent.cam_data.world_matrix.4} {parent.cam_data.world_matrix.5} {parent.cam_data.world_matrix.6}}
+      {{parent.cam_data.world_matrix.8} {parent.cam_data.world_matrix.9} {parent.cam_data.world_matrix.10}}
+    }
+  name ColorMatrix3
+  label deformation
+  xpos 706
+  ypos -5
+ }
+ Add {
+  channels rgb
+  value {{parent.cam_data.world_matrix.3} {parent.cam_data.world_matrix.7} {parent.cam_data.world_matrix.11} {curve}}
+  maskChannelInput rgba.alpha
+  name Add3
+  label "invert translation"
+  xpos 706
+  ypos 101
+  bookmark true
+ }
+ Dot {
+  name Dot3
+  xpos 740
+  ypos 321
+ }
+push $Nc9f68c00
+ Add {
+  channels rgb
+  value {{-parent.cam_data.world_matrix.3} {-parent.cam_data.world_matrix.7} {-parent.cam_data.world_matrix.11} {curve}}
+  name Add1
+  label "invert translation"
+  xpos 560
+  ypos -99
+  bookmark true
+ }
+ ColorMatrix {
+  matrix {
+      {{parent.cam_data.world_matrix.0} {parent.cam_data.world_matrix.1} {parent.cam_data.world_matrix.2}}
+      {{parent.cam_data.world_matrix.4} {parent.cam_data.world_matrix.5} {parent.cam_data.world_matrix.6}}
+      {{parent.cam_data.world_matrix.8} {parent.cam_data.world_matrix.9} {parent.cam_data.world_matrix.10}}
+    }
+  invert true
+  name ColorMatrix1
+  label "invert deformation"
+  xpos 560
+  ypos -5
+ }
+ Expression {
+  expr2 -blue
+  name Expression1
+  label "invert z"
+  xpos 560
+  ypos 101
+ }
+ Dot {
+  name Dot6
+  xpos 594
+  ypos 317
+ }
+push $Nc9f69000
+ Switch {
+  inputs 3
+  which {{"in_space == out_position ? 0 : ( in_space == 0 && out_position == 1 ? 1 : 2 )"}}
+  name Switch2
+  xpos 404
+  ypos 453
+ }
+ Switch {
+  inputs 3
+  which {{parent.data}}
+  name Switch1
+  xpos 404
+  ypos 806
+ }
+ Expression {
+  expr0 "red * alpha"
+  expr1 "green * alpha"
+  expr2 "blue * alpha"
+  expr3 0
+  name Expression4
+  label "premult and cleanup"
+  xpos 404
+  ypos 929
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input0]"}}
+  name Switch3
+  xpos 404
+  ypos 1340
+ }
+ Output {
+  name Output1
+  xpos 404
+  ypos 1467
+ }
+ Group {
+  inputs 0
+  name inverseMatrix
+  tile_color 0x337f4cff
+  xpos -111
+  ypos 68
+  addUserKnob {20 tab_general l General}
+  addUserKnob {1 knob_path}
+  knob_path fb_data.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+  addUserKnob {20 t_VERSION l Version}
+  addUserKnob {26 l_VERSION l Version T 1.0}
+  addUserKnob {26 l_DATE l "Date Modified" T 2011-11-28}
+  addUserKnob {26 l_CHANGELOG l Changelog T "v1.0\n- reveal the calculate output of \n  inverse matrix which is c44matrix\n  and colormatrix doesn't show\n  "}
+  addUserKnob {26 l_DEV l "Developed by" T "Mark Joey Tang"}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Axis {
+  inputs 0
+  display off
+  selectable false
+  rotate {0 0 {parent.cam_winroll}}
+  name fb_data
+  xpos -97
+  ypos -47
+ }
+ Camera {
+  inputs 0
+  display off
+  selectable false
+  useMatrix true
+  name cam_data
+  xpos 6
+  ypos -48
+ }
+ NoOp {
+  inputs 0
+  name global
+  xpos -114
+  ypos -148
+  addUserKnob {20 User}
+  addUserKnob {12 res}
+  res {{"\[exists parent.input0] ? parent.input0.width : width"} {"\[exists parent.input0] ? parent.input0.height : height"}}
+  addUserKnob {7 pxa}
+  pxa {{"\[exists parent.input0] ? parent.input0.pixel_aspect : pixel_aspect"}}
+  addUserKnob {7 hratio}
+  hratio {{"parent.cam_haperture / parent.cam_focal"}}
+ }
+ NoOp {
+  inputs 0
+  name menu1
+  knobChanged "\nthisGRP = nuke.thisGroup()\ncamKnobs = \['set_link','remove_link','bake_link','copy_data','cam_data_grp','cam_winroll','world_matrix','endGroup_1']\nif thisGRP\['data'].value() == 'depth' :\n    thisGRP\['in_space'].setVisible(False)\n    thisGRP\['out_position'].setVisible(False)\n    thisGRP\['out_normal'].setVisible(False)\n    thisGRP\['invert_depth'].setVisible(True)\n    for knob in camKnobs :\n        thisGRP\[knob].setEnabled(False)\nelse :\n    thisGRP\['in_space'].setVisible(True)\n    if thisGRP\['data'].value() == 'position' :\n        thisGRP\['out_position'].setVisible(True)\n        thisGRP\['out_normal'].setVisible(False)\n    else :\n        thisGRP\['out_position'].setVisible(False)\n        thisGRP\['out_normal'].setVisible(True)\n    thisGRP\['invert_depth'].setVisible(False)\n    for knob in camKnobs :\n        thisGRP\[knob].setEnabled(True)\nwith thisGRP:\n    for node in nuke.allNodes() :\n        if node.Class() == 'Input' :\n            node\['name'].setValue( thisGRP\['data'].value() )\n"
+  xpos -61
+  ypos -352
+  addUserKnob {20 User}
+  addUserKnob {83 data l "input data" M {position normal depth}}
+ }
+end_group

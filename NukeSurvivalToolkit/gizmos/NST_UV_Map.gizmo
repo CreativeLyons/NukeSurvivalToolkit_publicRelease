@@ -1,0 +1,81 @@
+Group {
+ name UV_Map
+ help "Create an uvmap from the input format or the selected format that can be used for example for baking transformations and applying them through a STmap node.\nUse the overscan to create values outside of the viewing window and the 0-1 range."
+ tile_color 0x578100ff
+ note_font "Bitstream Vera Sans"
+ note_font_color 0xffffffff
+ selected true
+ mapsize {0.15 0.15}
+ addUserKnob {20 tab l "UV Map"}
+ addUserKnob {41 format T Constant1.format}
+ addUserKnob {41 scale l overscan T Reformat1.scale}
+ addUserKnob {6 alpha l "alpha 1" +STARTLINE}
+ addUserKnob {41 black_outside l "black outside" -STARTLINE T Reformat2.black_outside}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 620
+  ypos -370
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos 620
+  ypos -309
+ }
+ Constant {
+  inputs 0
+  name Constant1
+  xpos 479
+  ypos -214
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input0]"}}
+  name Switch1
+  xpos 620
+  ypos -190
+ }
+ Reformat {
+  type scale
+  pbb true
+  name Reformat1
+  xpos 620
+  ypos -71
+ }
+ Reformat {
+  type scale
+  scale {{1/Reformat1.scale} {1/Reformat1.scale}}
+  resize none
+  black_outside true
+  pbb true
+  name Reformat2
+  xpos 620
+  ypos -37
+ }
+ Shuffle {
+  alpha white
+  name Shuffle13
+  tile_color 0xffffff00
+  label "\[value in]"
+  xpos 620
+  ypos 12
+  disable {{!parent.alpha}}
+ }
+ Expression {
+  expr0 (x+0.5)/width
+  expr1 (y+0.5)/height
+  name Expression2
+  xpos 620
+  ypos 75
+ }
+ Output {
+  name Output1
+  xpos 620
+  ypos 127
+ }
+end_group

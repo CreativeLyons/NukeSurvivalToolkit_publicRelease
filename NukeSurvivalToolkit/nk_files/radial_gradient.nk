@@ -1,0 +1,20 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr0 "(size - sqrt( (x-center.x) * (x-center.x) + (y-center.y) * (y-center.y) ) ) / gradient"
+ expr1 "(size - sqrt( (x-center.x) * (x-center.x) + (y-center.y) * (y-center.y) ) ) / gradient"
+ expr2 "(size - sqrt( (x-center.x) * (x-center.x) + (y-center.y) * (y-center.y) ) ) / gradient"
+ expr3 "(size - sqrt( (x-center.x) * (x-center.x) + (y-center.y) * (y-center.y) ) ) / gradient"
+ name RadialGradient
+ selected true
+ xpos 925
+ ypos 634
+ addUserKnob {20 User}
+ addUserKnob {12 center}
+ center {908 374}
+ addUserKnob {7 size R 0 1000}
+ size 300
+ addUserKnob {7 gradient R 0 1000}
+ gradient 300
+}

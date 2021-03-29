@@ -1,0 +1,18 @@
+Group {
+ inputs 0
+ name WaveCustom
+ tile_color 0xb73e3eff
+ addUserKnob {20 User}
+ addUserKnob {7 custom t "Animate this value to create your custom curve"}
+ addUserKnob {7 output +INVISIBLE}
+ output {{"disable ? 0 : custom"}}
+ addUserKnob {26 ""}
+ addUserKnob {26 credits l "" +STARTLINE T "waveCustom v1.0 | Fynn Laue 2020"}
+}
+ Output {
+  inputs 0
+  name Output1
+  xpos 0
+  ypos 300
+ }
+end_group

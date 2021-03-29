@@ -1,0 +1,326 @@
+Group {
+ name Reproject_3D
+ inputs 4
+ help "This gizmo does camera projection using the STMap node to remap all the layers in the input image.  It uses a 3D render of point positions in world space (as output by Nuke's ScanlineRender node) and a 3D camera to create UV texture coordinates that are then used to warp an input image such as a matte painting.\n\nNOTE: The projection works best with unmatted input images or at least unpremulted matting with some coverage, then all masking occurs within the gizmo.\n\nIt can mask the projected image in the following ways:\n- Input alpha from the 3D render.\n- Projecting on surfaces facing camera, using normal (N) in world space. This means all surfaces facing the projecting camera will receive the projection regardless of whether they are blocked by other geometry. This is like Nuke's existing camera projection masking."
+ addUserKnob {20 reproject3d l ReProject3D}
+ addUserKnob {41 pworld_channel l "Surface Pworld" t "Choose the input Position Pass layer from the \"Pworld\" input.  Note that it needs to be rendered in world space." T ShuffleP.in}
+ addUserKnob {41 maskChannelMask l "Surface Alpha" t "Choose the input surface's alpha channel, from the \"Pworld\" input.  This is used as an overall object mask to matte the camera projection." T Multiply2.maskChannelMask}
+ addUserKnob {26 ""}
+ addUserKnob {6 front_only l "Project on Front Only (Requires Normals)" t "This will mask the projection in the same way Nuke does in full 3D.  Requires world N (normals) in the stream of the \"Nworld\" input." +STARTLINE}
+ addUserKnob {41 nworld l "Surface Normals" t "Choose the normal vectors layer (in world space) from the \"Nworld\" input. Used to derive the front-facing matte." T ShuffleN.in}
+ addUserKnob {7 focal l INVISIBLE +INVISIBLE R 5 200}
+ focal {{"\[python -execlocal #\\ Reproject_3D\\ Expression\\nnode\\ =\\ nuke.thisNode()\\nparent\\ =\\ node.input(2)\\nwhile\\ parent\\ and\\ parent.Class()\\ ==\\ 'Dot':\\n\\ \\ \\ \\ parent\\ =\\ parent.input(0)\\nif\\ parent\\ and\\ parent.Class()\\ ==\\ 'Camera2':\\n\\ \\ \\ \\ ret=\\ parent\\\['focal'\\].value()\\nelse:\\n\\ \\ \\ \\ ret\\ =\\ 50.0]"}}
+ addUserKnob {7 h_apert l INVISIBLE +INVISIBLE}
+ h_apert {{"\[python -execlocal #\\ Reproject_3D\\ Expression\\nnode\\ =\\ nuke.thisNode()\\nparent\\ =\\ node.input(2)\\nwhile\\ parent\\ and\\ parent.Class()\\ ==\\ 'Dot':\\n\\ \\ \\ \\ parent\\ =\\ parent.input(0)\\nif\\ parent\\ and\\ parent.Class()\\ ==\\ 'Camera2':\\n\\ \\ \\ \\ ret=\\ parent\\\['haperture'\\].value()\\nelse:\\n\\ \\ \\ \\ ret\\ =\\ 24.576]"}}
+ addUserKnob {7 v_apert l INVISIBLE +INVISIBLE}
+ v_apert {{"\[python -execlocal #\\ Reproject_3D\\ Expression\\nnode\\ =\\ nuke.thisNode()\\nparent\\ =\\ node.input(2)\\nwhile\\ parent\\ and\\ parent.Class()\\ ==\\ 'Dot':\\n\\ \\ \\ \\ parent\\ =\\ parent.input(0)\\nif\\ parent\\ and\\ parent.Class()\\ ==\\ 'Camera2':\\n\\ \\ \\ \\ ret=\\ parent\\\['vaperture'\\].value()\\nelse:\\n\\ \\ \\ \\ ret\\ =\\ 18.672]"}}
+ addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+ addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nReProject_3D\nVersion 1.1\n2017" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.1 - 2017 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  label "Pworld to Pcam"
+  note_font_size 18
+  xpos 334
+  ypos 312
+  bdwidth 190
+  bdheight 338
+ }
+ BackdropNode {
+  inputs 0
+  name kbd7117
+  tile_color 0x625b575a
+  label "Facing Bool"
+  note_font_size 40
+  xpos -318
+  ypos 184
+  bdwidth 189
+  bdheight 428
+ }
+ Input {
+  inputs 0
+  name Pworld
+  label "\[value number]"
+  xpos -17
+  ypos -1
+  number 1
+ }
+ Dot {
+  name Dot1
+  tile_color 0xcccccc00
+  xpos 17
+  ypos 95
+ }
+set Ne99c4b90 [stack 0]
+ Dot {
+  name Dot2
+  tile_color 0xcccccc00
+  xpos 127
+  ypos 95
+ }
+ Dot {
+  name Dot3
+  tile_color 0xcccccc00
+  xpos 127
+  ypos 206
+ }
+push $Ne99c4b90
+ Shuffle {
+  alpha white
+  name ShuffleP
+  xpos -17
+  ypos 145
+ }
+ Multiply {
+  inputs 1+1
+  channels alpha
+  value {{"!\[value . maskChannelMask]"}}
+  maskChannelMask none
+  invert_mask true
+  name Multiply2
+  xpos -17
+  ypos 196
+  disable {{"!\[exists parent.input0]" x1023 1}}
+ }
+ Dot {
+  name Dot4
+  tile_color 0x7aa9ff00
+  xpos 17
+  ypos 262
+ }
+set N2fde20a0 [stack 0]
+ Input {
+  inputs 0
+  name Nworld
+  label "\[value number]"
+  xpos -269
+  ypos 4
+  number 3
+ }
+ Shuffle {
+  in none
+  name ShuffleN
+  xpos -269
+  ypos 124
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  bbox B
+  name Copy1
+  xpos -269
+  ypos 252
+ }
+ Unpremult {
+  name Unpremult3
+  xpos -269
+  ypos 318
+  disable {{!Multiply2.maskChannelMask}}
+ }
+ ColorMatrix {
+  matrix {
+      {{Axis1.world_matrix.0 i} {Axis1.world_matrix.1 i} {Axis1.world_matrix.2 i}}
+      {{Axis1.world_matrix.4 i} {Axis1.world_matrix.5 i} {Axis1.world_matrix.6 i}}
+      {{Axis1.world_matrix.8 i} {Axis1.world_matrix.9 i} {Axis1.world_matrix.10 i}}
+    }
+  invert true
+  name ColorMatrix2
+  label "Convert to camera space"
+  xpos -269
+  ypos 377
+ }
+ Multiply {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  value -1
+  name Multiply10
+  label "reverse z"
+  xpos -269
+  ypos 463
+ }
+ Expression {
+  expr0 clamp(-b)
+  expr1 0
+  expr2 0
+  name Expression5
+  xpos -269
+  ypos 501
+ }
+ Expression {
+  channel0 rgba
+  expr0 "step(0, r)"
+  channel1 {-rgba.red -rgba.green -rgba.blue none}
+  channel2 {-rgba.red -rgba.green -rgba.blue none}
+  channel3 {none none none -rgba.alpha}
+  name cull_backfaces
+  label step
+  xpos -269
+  ypos 540
+ }
+ Dot {
+  name Dot6
+  tile_color 0xcccccc00
+  xpos -235
+  ypos 917
+ }
+push $N2fde20a0
+ Dot {
+  name Dot5
+  tile_color 0x7aa9ff00
+  xpos 17
+  ypos 811
+ }
+push $N2fde20a0
+ Dot {
+  name Dot16
+  tile_color 0x7aa9ff00
+  xpos 427
+  ypos 264
+ }
+ Unpremult {
+  name Unpremult1
+  xpos 393
+  ypos 357
+  disable {{!Multiply2.maskChannelMask}}
+ }
+ Expression {
+  temp_name0 R
+  temp_expr0 Axis1.world_matrix.3
+  temp_name1 G
+  temp_expr1 Axis1.world_matrix.7
+  temp_name2 B
+  temp_expr2 Axis1.world_matrix.11
+  expr0 r-R
+  expr1 g-G
+  expr2 b-B
+  name Expression14
+  label "translate Pworld to camera"
+  xpos 393
+  ypos 383
+ }
+ ColorMatrix {
+  matrix {
+      {{Axis1.world_matrix.0 i} {Axis1.world_matrix.1 i} {Axis1.world_matrix.2 i}}
+      {{Axis1.world_matrix.4 i} {Axis1.world_matrix.5 i} {Axis1.world_matrix.6 i}}
+      {{Axis1.world_matrix.8 i} {Axis1.world_matrix.9 i} {Axis1.world_matrix.10 i}}
+    }
+  invert true
+  name ColorMatrix4
+  label "Rotate to camera"
+  xpos 393
+  ypos 444
+ }
+ Multiply {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  value -1
+  name Multiply13
+  label "reverse Z"
+  xpos 393
+  ypos 529
+ }
+ Dot {
+  name Dot7
+  tile_color 0x7aa9ff00
+  xpos 427
+  ypos 702
+ }
+set Ne0ca2b70 [stack 0]
+ Expression {
+  channel0 rgba
+  expr0 b>0
+  name Expression15
+  label "clip Z behind cam"
+  xpos 393
+  ypos 749
+ }
+push $Ne0ca2b70
+ Expression {
+  temp_name0 h_tan
+  temp_expr0 "(h_apert /2) / focal"
+  temp_name1 v_tan
+  temp_expr1 "(v_apert /2)  / focal"
+  expr0 "0.5 + 0.5 * r / h_tan / b"
+  expr1 "0.5 + 0.5 * g / v_tan / b"
+  expr2 0
+  channel3 {none none none -rgba.alpha}
+  name Expression16
+  label CameraUVs
+  xpos 477
+  ypos 692
+  addUserKnob {20 "" l User}
+  addUserKnob {26 "" l "camera settings"}
+  addUserKnob {7 focal l "focal length" t "Link to projecting camera's focal length" R 0 100}
+  focal {{(parent.v_apert*(img.width/img.height))/(parent.h_apert/parent.focal)}}
+  addUserKnob {7 h_apert l "horiz aperture" t "Link to projecting camera's horizontal aperture" R 0 50}
+  h_apert {{parent.v_apert*(img.width/img.height)}}
+  addUserKnob {7 v_apert l "vert aperture" t "Link to projecting camera's vertical aperture" R 0 50}
+  v_apert {{parent.v_apert}}
+ }
+ Input {
+  inputs 0
+  name img
+  label "\[value number]"
+  xpos 742
+  ypos 375
+ }
+ BlackOutside {
+  name BlackOutside1
+  xpos 742
+  ypos 472
+ }
+ STMap {
+  inputs 2
+  uv rgb
+  blur -rgba.alpha
+  blur_scale 0
+  maskChannel -rgba.alpha
+  name STMap1
+  xpos 742
+  ypos 692
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  bbox B
+  name Merge2
+  xpos 742
+  ypos 755
+ }
+ Multiply {
+  inputs 1+1
+  value {{"\[value . maskChannelMask]>0?0:1"}}
+  invert_mask true
+  name Multiply3
+  label "by surface alpha"
+  xpos 742
+  ypos 795
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  bbox B
+  name Merge1
+  xpos 742
+  ypos 913
+  disable {{!parent.front_only}}
+ }
+ Output {
+  name Output1
+  xpos 742
+  ypos 1014
+ }
+ Input {
+  inputs 0
+  name cam
+  label "\[value number]"
+  xpos 94
+  ypos 397
+  number 2
+ }
+ Axis2 {
+  name Axis1
+  xpos 104
+  ypos 504
+ }
+end_group

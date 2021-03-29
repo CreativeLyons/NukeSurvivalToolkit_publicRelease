@@ -1,0 +1,48 @@
+Group {
+ name TranslateMatrix4_
+ help "Translate a matrix4 using a control channel (rgb from vector input) for which each channel is considered as a scalar for x, y and z"
+ addUserKnob {20 Matrix4x4_Translate}
+ addUserKnob {26 Description l "" +STARTLINE T "Translate a matrix4 using a control channel (rgb) for which each channel is considered as a scalar for x, y and z"}
+ addUserKnob {26 divider_copyright l "" +STARTLINE}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+}
+ Input {
+  inputs 0
+  name vector
+  xpos 491
+  ypos 155
+  number 1
+ }
+ Dot {
+  name Dot1
+  xpos 525
+  ypos 252
+ }
+ Input {
+  inputs 0
+  name matrix
+  xpos 344
+  ypos 161
+ }
+add_layer {matrix0 matrix0.0 matrix0.1 matrix0.2 matrix0.3}
+add_layer {matrix1 matrix1.0 matrix1.1 matrix1.2 matrix1.3}
+add_layer {matrix2 matrix2.0 matrix2.1 matrix2.2 matrix2.3}
+ MergeExpression {
+  inputs 2
+  channel0 {-matrix0.0 -matrix0.1 -matrix0.2 matrix0.3}
+  expr0 matrix0.3+Ar
+  channel1 {-matrix1.0 -matrix1.1 -matrix1.2 matrix1.3}
+  expr1 matrix1.3+Ag
+  channel2 {-matrix2.0 -matrix2.1 -matrix2.2 matrix2.3}
+  expr2 matrix2.3+Ab
+  channel3 none
+  name MergeExpression1
+  xpos 344
+  ypos 249
+ }
+ Output {
+  name Output1
+  xpos 344
+  ypos 349
+ }
+end_group

@@ -1,0 +1,9 @@
+Expression {
+ expr0 (r+x+0.5)/width
+ expr1 (g+y+0.5)/height
+ expr2 0
+ name Vector_to_UV
+ selected true
+ xpos 204
+ ypos 33
+}

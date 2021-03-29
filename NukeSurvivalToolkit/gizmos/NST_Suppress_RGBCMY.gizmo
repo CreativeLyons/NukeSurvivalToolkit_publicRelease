@@ -1,0 +1,377 @@
+Group {
+ name Suppress_RGBCMY
+ help "Suppress specific colors in RGBCMY space"
+ selected true
+ addUserKnob {20 colorSuppress l "Color Suppression"}
+ addUserKnob {7 red l Red t "Suppress this color"}
+ red 1
+ addUserKnob {18 red_luma l "Red Luma" t "Restore the luma of this color.\nCan be used to introduce other colors as well."}
+ red_luma 1
+ addUserKnob {6 red_luma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 green l Green t "Suppress this color"}
+ green 1
+ addUserKnob {18 green_luma l "Green Luma" t "Restore the luma of this color.\nCan be used to introduce other colors as well."}
+ green_luma 1
+ addUserKnob {6 green_luma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 blue l Blue t "Suppress this color"}
+ blue 1
+ addUserKnob {18 blue_luma l "Blue Luma" t "Restore the luma of this color.\nCan be used to introduce other colors as well."}
+ blue_luma 1
+ addUserKnob {6 blue_luma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 cyan l Cyan t "Suppress this color"}
+ cyan 1
+ addUserKnob {18 cyan_luma l "Cyan Luma" t "Restore the luma of this color.\nCan be used to introduce other colors as well."}
+ cyan_luma 1
+ addUserKnob {6 cyan_luma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 magenta l Magenta t "Suppress this color"}
+ magenta 1
+ addUserKnob {18 magenta_luma l "Magenta Luma" t "Restore the luma of this color.\nCan be used to introduce other colors as well."}
+ magenta_luma 1
+ addUserKnob {6 magenta_luma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 yellow l Yellow t "Suppress this color"}
+ yellow 1
+ addUserKnob {18 yellow_luma l "Yellow Luma" t "Restore the luma of this color.\nCan be used to introduce other colors as well."}
+ yellow_luma 1
+ addUserKnob {6 yellow_luma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nSuppress_RGBCMY\nVersion 1.2\n2017-2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.2 - 2017-2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+ Input {
+  inputs 0
+  name img
+  xpos -389
+  ypos -272
+ }
+ Dot {
+  name Dot7
+  xpos -355
+  ypos -137
+ }
+set N7c0a840 [stack 0]
+ Dot {
+  name Dot3
+  xpos -106
+  ypos -137
+ }
+ Dot {
+  name Dot8
+  xpos -106
+  ypos 11
+ }
+set N7a8c230 [stack 0]
+ Dot {
+  name Dot1
+  xpos -106
+  ypos 211
+ }
+set N7b99d90 [stack 0]
+ Dot {
+  name Dot6
+  xpos -106
+  ypos 399
+ }
+set N7af0400 [stack 0]
+ Dot {
+  name Dot5
+  xpos -106
+  ypos 585
+ }
+set N7b5c4f0 [stack 0]
+ Dot {
+  name Dot4
+  xpos -106
+  ypos 783
+ }
+set N7b297d0 [stack 0]
+ Dot {
+  name Dot2
+  xpos -106
+  ypos 989
+ }
+ Expression {
+  temp_name0 yel
+  temp_expr0 "max(min(r-b, g-b),0)"
+  expr0 yel
+  expr1 yel
+  expr2 0
+  name Yellow
+  xpos -258
+  ypos 985
+ }
+set N79f7d40 [stack 0]
+ Saturation {
+  saturation {{parent.yellow}}
+  name Saturation6
+  xpos -258
+  ypos 1038
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp_negatif5
+  xpos -258
+  ypos 1076
+ }
+ Multiply {
+  value {{parent.yellow_luma} {parent.yellow_luma} {parent.yellow_luma} {parent.yellow_luma}}
+  name Multiply6
+  xpos -258
+  ypos 1114
+ }
+push $N79f7d40
+push $N7b297d0
+ Expression {
+  temp_name0 mag
+  temp_expr0 "max(min(r-g, b-g),0)"
+  expr0 mag
+  expr1 0
+  expr2 mag
+  name Magenta
+  xpos -258
+  ypos 779
+ }
+set N7c37d40 [stack 0]
+ Saturation {
+  saturation {{parent.magenta}}
+  name Saturation5
+  xpos -258
+  ypos 820
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp_negatif4
+  xpos -258
+  ypos 858
+ }
+ Multiply {
+  value {{parent.magenta_luma} {parent.magenta_luma} {parent.magenta_luma} {parent.magenta_luma}}
+  name Multiply5
+  xpos -258
+  ypos 896
+ }
+push $N7c37d40
+push $N7b5c4f0
+ Expression {
+  temp_name0 cyan
+  temp_expr0 "max(min(g-r, b-r),0)"
+  expr0 0
+  expr1 cyan
+  expr2 cyan
+  name Cyan
+  xpos -258
+  ypos 581
+ }
+set N7b4a0e0 [stack 0]
+ Saturation {
+  saturation {{parent.cyan}}
+  name Saturation4
+  xpos -258
+  ypos 622
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp_negatif3
+  xpos -258
+  ypos 660
+ }
+ Multiply {
+  value {{parent.cyan_luma} {parent.cyan_luma} {parent.cyan_luma} {parent.cyan_luma}}
+  name Multiply4
+  xpos -258
+  ypos 698
+ }
+push $N7b4a0e0
+push $N7af0400
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 b-min(max(g,r),b)
+  name Blue
+  xpos -258
+  ypos 395
+ }
+set N7a2e7e0 [stack 0]
+ Saturation {
+  saturation {{parent.blue}}
+  name Saturation3
+  xpos -258
+  ypos 436
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp_negatif2
+  xpos -258
+  ypos 474
+ }
+ Multiply {
+  value {{parent.blue_luma} {parent.blue_luma} {parent.blue_luma} {parent.blue_luma}}
+  name Multiply3
+  xpos -258
+  ypos 512
+ }
+push $N7a2e7e0
+push $N7b99d90
+ Expression {
+  expr0 0
+  expr1 g-min(max(r,b),g)
+  expr2 0
+  name Green
+  xpos -258
+  ypos 207
+ }
+set N7a40b30 [stack 0]
+ Saturation {
+  saturation {{parent.green}}
+  name Saturation2
+  xpos -258
+  ypos 248
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp_negatif1
+  xpos -258
+  ypos 286
+ }
+ Multiply {
+  value {{parent.green_luma} {parent.green_luma} {parent.green_luma} {parent.green_luma}}
+  name Multiply2
+  xpos -258
+  ypos 324
+ }
+push $N7a40b30
+push $N7a8c230
+ Expression {
+  expr0 r-min(max(g,b),r)
+  expr1 0
+  expr2 0
+  name Red
+  xpos -257
+  ypos 7
+ }
+set N700d020 [stack 0]
+ Saturation {
+  saturation {{parent.red}}
+  name Saturation1
+  xpos -257
+  ypos 45
+ }
+ Clamp {
+  maximum_enable false
+  name Clamp_negatif
+  xpos -257
+  ypos 86
+ }
+ Multiply {
+  value {{parent.red_luma} {parent.red_luma} {parent.red_luma} {parent.red_luma}}
+  name Multiply1
+  xpos -257
+  ypos 146
+ }
+push $N700d020
+push $N7c0a840
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge1
+  xpos -389
+  ypos 7
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name redLuma
+  xpos -389
+  ypos 152
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge2
+  xpos -389
+  ypos 207
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name greenLuma
+  xpos -389
+  ypos 330
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge3
+  xpos -389
+  ypos 395
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name blueLuma
+  xpos -389
+  ypos 518
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge4
+  xpos -389
+  ypos 581
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name CyanLuma
+  xpos -389
+  ypos 704
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge5
+  xpos -389
+  ypos 779
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name magentaLuma
+  xpos -389
+  ypos 902
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge6
+  xpos -389
+  ypos 985
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name yellowLuma
+  xpos -389
+  ypos 1120
+ }
+ Output {
+  name Output2
+  xpos -389
+  ypos 1205
+ }
+end_group

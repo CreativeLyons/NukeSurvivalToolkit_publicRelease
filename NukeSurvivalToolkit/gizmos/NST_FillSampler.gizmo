@@ -1,0 +1,2829 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name FillSampler
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {26 Info l " " T "FFFiller by Mads Hagbarth Damsbo\nAdd a source with a alpha mask to fill out."}
+ addUserKnob {26 ""}
+ addUserKnob {3 Itterations}
+ Itterations 2
+ addUserKnob {26 ""}
+ addUserKnob {6 Premult -STARTLINE}
+ Premult true
+ addUserKnob {20 Advanced}
+ addUserKnob {3 MaxSamples l "Max Sample Count" -STARTLINE}
+ MaxSamples 13
+ addUserKnob {3 SoftAlphaSamples l "Soft Alpha Samples"}
+ SoftAlphaSamples 1
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x8e388e00
+  label "This is a example of the \nsimple version of the algorithm"
+  note_font_size 20
+  xpos 1302
+  ypos 428
+  bdwidth 278
+  bdheight 135
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x8e388e00
+  label "This is the more advanced version"
+  note_font_size 20
+  xpos 1867
+  ypos 428
+  bdwidth 301
+  bdheight 133
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 1678
+  ypos 282
+ }
+ NoTimeBlur {
+  name NoTimeBlur1
+  xpos 1678
+  ypos 331
+ }
+ Grade {
+  channels alpha
+  add {{-(frame-floor(frame))}}
+  name Grade1
+  xpos 1678
+  ypos 357
+ }
+ Premult {
+  name Premult1
+  xpos 1678
+  ypos 397
+  disable {{!parent.Premult}}
+ }
+ Dot {
+  name Dot5
+  xpos 1712
+  ypos 445
+ }
+set N1a123c00 [stack 0]
+ Group {
+  name Group6
+  xpos 1990
+  ypos 501
+  addUserKnob {20 User}
+  addUserKnob {3 maxsample l "Max Sample Depth"}
+  maxsample {{parent.MaxSamples}}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -524
+   ypos -4613
+  }
+  Dot {
+   name Dot7
+   xpos -490
+   ypos -4579
+  }
+  Dot {
+   name Controller
+   tile_color 0x55ffffff
+   gl_color 0x55ffffff
+   label ControllerNode
+   note_font "DejaVu Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+   note_font_color 0xaadfffff
+   xpos -490
+   ypos -4485
+   addUserKnob {20 User}
+   addUserKnob {3 samples}
+   samples {{min(parent.maxsample,int(log(min(input.width,input.height))/log(2)))}}
+  }
+set N1a12f060 [stack 0]
+  Dot {
+   name Controller1
+   tile_color 0x55ffffff
+   gl_color 0x55ffffff
+   label ControllerNode
+   note_font "DejaVu Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+   note_font_color 0xaadfffff
+   xpos 323
+   ypos -4473
+   addUserKnob {20 User}
+   addUserKnob {3 samples}
+   samples {{min(parent.maxsample,int(log(min(input.width,input.height))/log(2)))}}
+  }
+set N1a131d00 [stack 0]
+  Matrix {
+   matrix {
+       {0 0 0}
+       {1 1 0}
+       {1 1 0}
+     }
+   name Matrix10
+   xpos 393
+   ypos -4306
+  }
+  set C23536d30 [stack 0]
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat1
+   xpos 393
+   ypos -4274
+   disable {{Controller1.samples<1}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression5
+   xpos 393
+   ypos -4250
+  }
+set N1a13ff40 [stack 0]
+  Reformat {
+   type "to box"
+   box_width {{parent.Controller1.input.width}}
+   box_height {{parent.Controller1.input.height}}
+   box_fixed true
+   scale 0.5
+   filter Parzen
+   name Reformat38
+   xpos 283
+   ypos -4250
+  }
+  set C1a1465b0 [stack 0]
+push $N1a131d00
+  Dot {
+   name Dot1
+   xpos -45
+   ypos -4347
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge3
+   xpos -183
+   ypos -4250
+  }
+set N235370f0 [stack 0]
+clone $C23536d30 {
+   xpos 393
+   ypos -4218
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat14
+   xpos 393
+   ypos -4186
+   disable {{Controller1.samples<2}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -4162
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat25
+   xpos 393
+   ypos -4130
+   disable {{Controller1.samples<2}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression7
+   xpos 393
+   ypos -4106
+  }
+set N1a167ca0 [stack 0]
+clone $C1a1465b0 {
+   xpos 295
+   ypos -4106
+   selected false
+  }
+push $N235370f0
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge13
+   xpos -183
+   ypos -4106
+   disable {{Controller1.samples<2-1}}
+  }
+set N1a1751d0 [stack 0]
+clone $C23536d30 {
+   xpos 393
+   ypos -4057
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat15
+   xpos 393
+   ypos -4025
+   disable {{Controller1.samples<3}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -4001
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat26
+   xpos 393
+   ypos -3969
+   disable {{Controller1.samples<3}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -3945
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat27
+   xpos 393
+   ypos -3913
+   disable {{Controller1.samples<3}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression8
+   xpos 393
+   ypos -3867
+  }
+set N1a19fa60 [stack 0]
+clone $C1a1465b0 {
+   xpos 289
+   ypos -3861
+   selected false
+  }
+push $N1a1751d0
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge15
+   xpos -183
+   ypos -3861
+   disable {{Controller1.samples<3-1}}
+  }
+set N1a1acfb0 [stack 0]
+clone $C23536d30 {
+   xpos 393
+   ypos -3804
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat16
+   xpos 393
+   ypos -3772
+   disable {{Controller1.samples<4}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -3748
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat28
+   xpos 393
+   ypos -3716
+   disable {{Controller1.samples<4}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -3692
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat29
+   xpos 393
+   ypos -3660
+   disable {{Controller1.samples<4}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -3636
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat30
+   xpos 393
+   ypos -3604
+   disable {{Controller1.samples<4}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression9
+   xpos 393
+   ypos -3549
+  }
+set N1a1e3bf0 [stack 0]
+clone $C1a1465b0 {
+   xpos 289
+   ypos -3543
+   selected false
+  }
+push $N1a1acfb0
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge16
+   xpos -183
+   ypos -3543
+   disable {{Controller1.samples<4-1}}
+  }
+set N1a1f1090 [stack 0]
+clone $C23536d30 {
+   xpos 393
+   ypos -3487
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat17
+   xpos 393
+   ypos -3455
+   disable {{Controller1.samples<5}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -3431
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat31
+   xpos 393
+   ypos -3399
+   disable {{Controller1.samples<5}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -3375
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat32
+   xpos 393
+   ypos -3343
+   disable {{Controller1.samples<5}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -3319
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat33
+   xpos 393
+   ypos -3287
+   disable {{Controller1.samples<5}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -3263
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat34
+   xpos 393
+   ypos -3231
+   disable {{Controller1.samples<5}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression10
+   xpos 393
+   ypos -3165
+  }
+set N24f38190 [stack 0]
+clone $C1a1465b0 {
+   xpos 289
+   ypos -3159
+   selected false
+  }
+push $N1a1f1090
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge17
+   xpos -183
+   ypos -3159
+   disable {{Controller1.samples<5-1}}
+  }
+set N24f454e0 [stack 0]
+clone $C23536d30 {
+   xpos 393
+   ypos -3125
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat18
+   xpos 393
+   ypos -3093
+   disable {{Controller1.samples<6}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -3069
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat35
+   xpos 393
+   ypos -3037
+   disable {{Controller1.samples<6}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -3013
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat36
+   xpos 393
+   ypos -2981
+   disable {{Controller1.samples<6}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2957
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat37
+   xpos 393
+   ypos -2925
+   disable {{Controller1.samples<6}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2901
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat39
+   xpos 393
+   ypos -2869
+   disable {{Controller1.samples<6}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2845
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat40
+   xpos 393
+   ypos -2813
+   disable {{Controller1.samples<6}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression18
+   xpos 393
+   ypos -2771
+  }
+set N24f94020 [stack 0]
+clone $C1a1465b0 {
+   xpos 289
+   ypos -2765
+   selected false
+  }
+push $N24f454e0
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge18
+   xpos -183
+   ypos -2765
+   disable {{Controller1.samples<6-1}}
+  }
+set N24fa1550 [stack 0]
+clone $C23536d30 {
+   xpos 393
+   ypos -2701
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat19
+   xpos 393
+   ypos -2669
+   disable {{Controller1.samples<7}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2645
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat41
+   xpos 393
+   ypos -2613
+   disable {{Controller1.samples<7}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2589
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat42
+   xpos 393
+   ypos -2557
+   disable {{Controller1.samples<7}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2533
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat43
+   xpos 393
+   ypos -2501
+   disable {{Controller1.samples<7}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2477
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat44
+   xpos 393
+   ypos -2445
+   disable {{Controller1.samples<7}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2421
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat45
+   xpos 393
+   ypos -2389
+   disable {{Controller1.samples<7}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2365
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat46
+   xpos 393
+   ypos -2333
+   disable {{Controller1.samples<7}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression19
+   xpos 393
+   ypos -2303
+  }
+set N2358ee20 [stack 0]
+clone $C1a1465b0 {
+   xpos 289
+   ypos -2297
+   selected false
+  }
+push $N24fa1550
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge19
+   xpos -183
+   ypos -2297
+   disable {{Controller1.samples<7-1}}
+  }
+set N2359c350 [stack 0]
+clone $C23536d30 {
+   xpos 393
+   ypos -2213
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat20
+   xpos 393
+   ypos -2181
+   disable {{Controller1.samples<8}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2157
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat47
+   xpos 393
+   ypos -2125
+   disable {{Controller1.samples<8}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2101
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat48
+   xpos 393
+   ypos -2069
+   disable {{Controller1.samples<8}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -2045
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat49
+   xpos 393
+   ypos -2013
+   disable {{Controller1.samples<8}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1989
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat50
+   xpos 393
+   ypos -1957
+   disable {{Controller1.samples<8}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1933
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat51
+   xpos 393
+   ypos -1901
+   disable {{Controller1.samples<8}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1877
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat52
+   xpos 393
+   ypos -1845
+   disable {{Controller1.samples<8}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1821
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat53
+   xpos 393
+   ypos -1789
+   disable {{Controller1.samples<8}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression20
+   xpos 393
+   ypos -1729
+  }
+set N25007230 [stack 0]
+clone $C1a1465b0 {
+   xpos 283
+   ypos -1729
+   selected false
+  }
+push $N2359c350
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge20
+   xpos -183
+   ypos -1729
+   disable {{Controller1.samples<8-1}}
+  }
+set N25014760 [stack 0]
+clone $C23536d30 {
+   xpos 393
+   ypos -1668
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat21
+   xpos 393
+   ypos -1636
+   disable {{Controller1.samples<9}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1612
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat54
+   xpos 393
+   ypos -1580
+   disable {{Controller1.samples<9}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1556
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat55
+   xpos 393
+   ypos -1524
+   disable {{Controller1.samples<9}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1500
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat56
+   xpos 393
+   ypos -1468
+   disable {{Controller1.samples<9}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1444
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat57
+   xpos 393
+   ypos -1412
+   disable {{Controller1.samples<9}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1388
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat58
+   xpos 393
+   ypos -1356
+   disable {{Controller1.samples<9}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1332
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat59
+   xpos 393
+   ypos -1300
+   disable {{Controller1.samples<9}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1276
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat60
+   xpos 393
+   ypos -1244
+   disable {{Controller1.samples<9}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -1220
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat61
+   xpos 393
+   ypos -1188
+   disable {{Controller1.samples<9}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression21
+   xpos 393
+   ypos -1131
+  }
+set N25087800 [stack 0]
+clone $C1a1465b0 {
+   xpos 283
+   ypos -1131
+   selected false
+  }
+push $N25014760
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge21
+   xpos -183
+   ypos -1131
+   disable {{Controller1.samples<9-1}}
+  }
+set N25094d30 [stack 0]
+clone $C23536d30 {
+   xpos 393
+   ypos -1051
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat22
+   xpos 393
+   ypos -1015
+   disable {{Controller1.samples<10}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -991
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat62
+   xpos 393
+   ypos -959
+   disable {{Controller1.samples<10}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -935
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat63
+   xpos 393
+   ypos -899
+   disable {{Controller1.samples<10}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -875
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat64
+   xpos 393
+   ypos -839
+   disable {{Controller1.samples<10}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -815
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat65
+   xpos 393
+   ypos -783
+   disable {{Controller1.samples<10}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -759
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat66
+   xpos 393
+   ypos -727
+   disable {{Controller1.samples<10}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -703
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat67
+   xpos 393
+   ypos -671
+   disable {{Controller1.samples<10}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -647
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat68
+   xpos 393
+   ypos -615
+   disable {{Controller1.samples<10}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -591
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat69
+   xpos 393
+   ypos -555
+   disable {{Controller1.samples<10}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -531
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat70
+   xpos 393
+   ypos -495
+   disable {{Controller1.samples<10}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression22
+   xpos 393
+   ypos -447
+  }
+set N24fb1cd0 [stack 0]
+clone $C1a1465b0 {
+   xpos 283
+   ypos -447
+   selected false
+  }
+push $N25094d30
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge22
+   xpos -183
+   ypos -447
+   disable {{Controller1.samples<10-1}}
+  }
+set N24fbf200 [stack 0]
+clone $C23536d30 {
+   xpos 393
+   ypos -348
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat23
+   xpos 393
+   ypos -316
+   disable {{Controller1.samples<11}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -292
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat71
+   xpos 393
+   ypos -260
+   disable {{Controller1.samples<11}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -236
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat72
+   xpos 393
+   ypos -204
+   disable {{Controller1.samples<11}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -180
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat73
+   xpos 393
+   ypos -148
+   disable {{Controller1.samples<11}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -124
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat74
+   xpos 393
+   ypos -92
+   disable {{Controller1.samples<11}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -68
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat75
+   xpos 393
+   ypos -36
+   disable {{Controller1.samples<11}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos -12
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat76
+   xpos 393
+   ypos 20
+   disable {{Controller1.samples<11}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 44
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat77
+   xpos 393
+   ypos 76
+   disable {{Controller1.samples<11}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 100
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat78
+   xpos 393
+   ypos 132
+   disable {{Controller1.samples<11}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 156
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat79
+   xpos 393
+   ypos 188
+   disable {{Controller1.samples<11}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 212
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat80
+   xpos 393
+   ypos 244
+   disable {{Controller1.samples<11}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression23
+   xpos 397
+   ypos 327
+  }
+set N2faf20 [stack 0]
+clone $C1a1465b0 {
+   xpos 287
+   ypos 327
+   selected false
+  }
+push $N24fbf200
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge23
+   xpos -183
+   ypos 327
+   disable {{Controller1.samples<11-1}}
+  }
+set N2520c420 [stack 0]
+clone $C23536d30 {
+   xpos 393
+   ypos 414
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat24
+   xpos 393
+   ypos 446
+   disable {{Controller1.samples<12}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 470
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat81
+   xpos 393
+   ypos 502
+   disable {{Controller1.samples<12}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 526
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat82
+   xpos 393
+   ypos 558
+   disable {{Controller1.samples<12}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 582
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat83
+   xpos 393
+   ypos 614
+   disable {{Controller1.samples<12}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 638
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat84
+   xpos 393
+   ypos 670
+   disable {{Controller1.samples<12}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 694
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat85
+   xpos 393
+   ypos 726
+   disable {{Controller1.samples<12}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 750
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat86
+   xpos 393
+   ypos 782
+   disable {{Controller1.samples<12}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 806
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat87
+   xpos 393
+   ypos 838
+   disable {{Controller1.samples<12}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 862
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat88
+   xpos 393
+   ypos 894
+   disable {{Controller1.samples<12}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 918
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat89
+   xpos 393
+   ypos 950
+   disable {{Controller1.samples<12}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 974
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat90
+   xpos 393
+   ypos 1006
+   disable {{Controller1.samples<12}}
+  }
+clone $C23536d30 {
+   xpos 393
+   ypos 1030
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat91
+   xpos 393
+   ypos 1062
+   disable {{Controller1.samples<12}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression24
+   xpos 393
+   ypos 1126
+  }
+set N24fd0640 [stack 0]
+push $N2faf20
+push $N24fb1cd0
+push $N25087800
+push $N25007230
+push $N2358ee20
+push $N24f94020
+push $N24f38190
+push $N1a1e3bf0
+push $N1a19fa60
+push $N1a167ca0
+push $N1a13ff40
+push $N1a12f060
+clone $C23536d30 {
+   xpos -420
+   ypos -4325
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat11
+   xpos -420
+   ypos -4293
+   disable {{Controller.samples<1}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression17
+   xpos -420
+   ypos -4269
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=1}}
+   name Switch1
+   xpos -420
+   ypos -4245
+  }
+set N252a78e0 [stack 0]
+clone $C23536d30 {
+   xpos -420
+   ypos -4168
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat10
+   xpos -420
+   ypos -4136
+   disable {{Controller.samples<2}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression16
+   xpos -420
+   ypos -4112
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=2}}
+   name Switch3
+   xpos -420
+   ypos -4088
+  }
+set N24ff5320 [stack 0]
+clone $C23536d30 {
+   xpos -420
+   ypos -3935
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat9
+   xpos -420
+   ypos -3903
+   disable {{Controller.samples<3}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression2
+   xpos -420
+   ypos -3879
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=3}}
+   name Switch4
+   xpos -420
+   ypos -3855
+  }
+set N2530f7a0 [stack 0]
+clone $C23536d30 {
+   xpos -420
+   ypos -3608
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat8
+   xpos -420
+   ypos -3576
+   disable {{Controller.samples<4}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression4
+   xpos -420
+   ypos -3552
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=4}}
+   name Switch5
+   xpos -420
+   ypos -3528
+  }
+set N2531da70 [stack 0]
+clone $C23536d30 {
+   xpos -420
+   ypos -3233
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat7
+   xpos -420
+   ypos -3201
+   disable {{Controller.samples<5}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression6
+   xpos -420
+   ypos -3173
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=5}}
+   name Switch6
+   xpos -420
+   ypos -3149
+  }
+set N252af350 [stack 0]
+clone $C23536d30 {
+   xpos -420
+   ypos -2831
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat6
+   xpos -420
+   ypos -2799
+   disable {{Controller.samples<6}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression11
+   xpos -420
+   ypos -2775
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=6}}
+   name Switch7
+   xpos -420
+   ypos -2751
+  }
+set N252c5a30 [stack 0]
+clone $C23536d30 {
+   xpos -420
+   ypos -2372
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat5
+   xpos -420
+   ypos -2340
+   disable {{Controller.samples<7}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression12
+   xpos -420
+   ypos -2316
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=7}}
+   name Switch8
+   xpos -420
+   ypos -2292
+  }
+set N252dbfd0 [stack 0]
+clone $C23536d30 {
+   xpos -420
+   ypos -1804
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat4
+   xpos -420
+   ypos -1772
+   disable {{Controller.samples<8}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression13
+   xpos -420
+   ypos -1748
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=8}}
+   name Switch9
+   xpos -420
+   ypos -1724
+  }
+set N252f2570 [stack 0]
+clone $C23536d30 {
+   xpos -420
+   ypos -1194
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat3
+   xpos -420
+   ypos -1162
+   disable {{Controller.samples<9}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression14
+   xpos -420
+   ypos -1138
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=9}}
+   name Switch10
+   xpos -420
+   ypos -1114
+  }
+set N2540cb90 [stack 0]
+clone $C23536d30 {
+   xpos -420
+   ypos -505
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat2
+   xpos -420
+   ypos -469
+   disable {{Controller.samples<10}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression15
+   xpos -420
+   ypos -445
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=10}}
+   name Switch11
+   xpos -420
+   ypos -421
+  }
+set N25423130 [stack 0]
+clone $C23536d30 {
+   xpos -420
+   ypos 276
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat13
+   xpos -420
+   ypos 308
+   disable {{Controller.samples<11}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression1
+   xpos -420
+   ypos 339
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=11}}
+   name Switch12
+   xpos -420
+   ypos 363
+  }
+set N254396d0 [stack 0]
+clone $C23536d30 {
+   xpos -420
+   ypos 1014
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat12
+   xpos -420
+   ypos 1060
+   disable {{Controller.samples<12}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression3
+   xpos -420
+   ypos 1096
+  }
+  Switch {
+   inputs 2
+   which {{parent.parent.Itterations>=12}}
+   name Switch13
+   xpos -420
+   ypos 1120
+  }
+clone $C1a1465b0 {
+   xpos -530
+   ypos 1096
+   selected false
+  }
+push $N254396d0
+clone $C1a1465b0 {
+   xpos -530
+   ypos 339
+   selected false
+  }
+push $N25423130
+clone $C1a1465b0 {
+   xpos -530
+   ypos -445
+   selected false
+  }
+push $N2540cb90
+clone $C1a1465b0 {
+   xpos -530
+   ypos -1138
+   selected false
+  }
+push $N252f2570
+clone $C1a1465b0 {
+   xpos -530
+   ypos -1748
+   selected false
+  }
+push $N252dbfd0
+clone $C1a1465b0 {
+   xpos -524
+   ypos -2310
+   selected false
+  }
+push $N252c5a30
+clone $C1a1465b0 {
+   xpos -524
+   ypos -2769
+   selected false
+  }
+push $N252af350
+clone $C1a1465b0 {
+   xpos -524
+   ypos -3167
+   selected false
+  }
+push $N2531da70
+clone $C1a1465b0 {
+   xpos -524
+   ypos -3546
+   selected false
+  }
+push $N2530f7a0
+clone $C1a1465b0 {
+   xpos -524
+   ypos -3873
+   selected false
+  }
+push $N24ff5320
+clone $C1a1465b0 {
+   xpos -518
+   ypos -4112
+   selected false
+  }
+push $N252a78e0
+clone $C1a1465b0 {
+   xpos -530
+   ypos -4269
+   selected false
+  }
+push $N1a12f060
+  Dot {
+   name Dot6
+   xpos -962
+   ypos -4485
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge4
+   xpos -996
+   ypos -4269
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge5
+   xpos -996
+   ypos -4112
+   disable {{Controller.samples<2-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge6
+   xpos -996
+   ypos -3873
+   disable {{Controller.samples<3-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge7
+   xpos -996
+   ypos -3546
+   disable {{Controller.samples<4-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge8
+   xpos -996
+   ypos -3167
+   disable {{Controller.samples<5-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge9
+   xpos -996
+   ypos -2769
+   disable {{Controller.samples<6-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge10
+   xpos -996
+   ypos -2310
+   disable {{Controller.samples<7-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge11
+   xpos -996
+   ypos -1748
+   disable {{Controller.samples<8-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge14
+   xpos -996
+   ypos -1138
+   disable {{Controller.samples<9-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge12
+   xpos -996
+   ypos -445
+   disable {{Controller.samples<10-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge1
+   xpos -1000
+   ypos 339
+   disable {{Controller.samples<11-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge2
+   xpos -1000
+   ypos 1096
+   disable {{Controller.samples<12-1}}
+  }
+  Output {
+   name Output1
+   xpos -1000
+   ypos 1203
+  }
+push $N24fd0640
+clone $C1a1465b0 {
+   xpos 283
+   ypos 1126
+   selected false
+  }
+push $N2520c420
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge24
+   xpos -187
+   ypos 1126
+   disable {{Controller1.samples<12-1}}
+  }
+ end_group
+push $N1a123c00
+ Group {
+  name Simple
+  selected true
+  xpos 1371
+  ypos 506
+  addUserKnob {20 User}
+  addUserKnob {3 maxsample l "Max Sample Depth"}
+  maxsample {{parent.MaxSamples}}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -420
+   ypos 304
+  }
+  Dot {
+   name Dot7
+   xpos -386
+   ypos 338
+  }
+  Dot {
+   name Controller
+   tile_color 0x55ffffff
+   gl_color 0x55ffffff
+   label ControllerNode
+   note_font "DejaVu Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+   note_font_color 0xaadfffff
+   selected true
+   xpos -386
+   ypos 432
+   addUserKnob {20 User}
+   addUserKnob {3 samples}
+   samples {{min(parent.maxsample,int(log(min(input.width,input.height))/log(2)))}}
+  }
+set N2536e6a0 [stack 0]
+  Matrix {
+   matrix {
+       {0 0 0}
+       {1 1 0}
+       {1 1 0}
+     }
+   name Matrix10
+   xpos -420
+   ypos 473
+  }
+  set C25112840 [stack 0]
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat11
+   xpos -420
+   ypos 505
+   disable {{Controller.samples<1}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression17
+   xpos -420
+   ypos 529
+  }
+set N2511e800 [stack 0]
+clone $C25112840 {
+   xpos -420
+   ypos 557
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat10
+   xpos -420
+   ypos 589
+   disable {{Controller.samples<2}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression16
+   xpos -420
+   ypos 613
+  }
+set N25130e90 [stack 0]
+clone $C25112840 {
+   xpos -420
+   ypos 641
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat9
+   xpos -420
+   ypos 673
+   disable {{Controller.samples<3}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression2
+   xpos -420
+   ypos 697
+  }
+set N25143520 [stack 0]
+clone $C25112840 {
+   xpos -420
+   ypos 725
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat8
+   xpos -420
+   ypos 757
+   disable {{Controller.samples<4}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression4
+   xpos -420
+   ypos 781
+  }
+set N25370fe0 [stack 0]
+clone $C25112840 {
+   xpos -420
+   ypos 805
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat7
+   xpos -420
+   ypos 837
+   disable {{Controller.samples<5}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression6
+   xpos -420
+   ypos 865
+  }
+set N25383670 [stack 0]
+clone $C25112840 {
+   xpos -420
+   ypos 893
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat6
+   xpos -420
+   ypos 925
+   disable {{Controller.samples<6}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression11
+   xpos -420
+   ypos 949
+  }
+set N25395d00 [stack 0]
+clone $C25112840 {
+   xpos -420
+   ypos 977
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat5
+   xpos -420
+   ypos 1009
+   disable {{Controller.samples<7}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression12
+   xpos -420
+   ypos 1033
+  }
+set N253a83f0 [stack 0]
+clone $C25112840 {
+   xpos -420
+   ypos 1061
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat4
+   xpos -420
+   ypos 1093
+   disable {{Controller.samples<8}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression13
+   xpos -420
+   ypos 1117
+  }
+set N253bab30 [stack 0]
+clone $C25112840 {
+   xpos -420
+   ypos 1145
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat3
+   xpos -420
+   ypos 1177
+   disable {{Controller.samples<9}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression14
+   xpos -420
+   ypos 1201
+  }
+set N253cd190 [stack 0]
+clone $C25112840 {
+   xpos -420
+   ypos 1225
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat2
+   xpos -420
+   ypos 1261
+   disable {{Controller.samples<10}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression15
+   xpos -420
+   ypos 1285
+  }
+set N253df840 [stack 0]
+clone $C25112840 {
+   xpos -420
+   ypos 1320
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat13
+   xpos -420
+   ypos 1352
+   disable {{Controller.samples<11}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression1
+   xpos -420
+   ypos 1383
+  }
+set N253f20b0 [stack 0]
+clone $C25112840 {
+   xpos -420
+   ypos 1426
+   selected false
+  }
+  Reformat {
+   type scale
+   scale 0.5
+   resize fit
+   center false
+   filter Impulse
+   name Reformat12
+   xpos -420
+   ypos 1472
+   disable {{Controller.samples<12}}
+  }
+  Expression {
+   expr0 a>0?r/a:a
+   expr1 a>0?g/a:a
+   expr2 a>0?b/a:a
+   expr3 a>0?a/a:a
+   name Expression3
+   xpos -420
+   ypos 1508
+  }
+  Reformat {
+   type "to box"
+   box_width {{parent.Controller.input.width}}
+   box_height {{parent.Controller.input.height}}
+   box_fixed true
+   scale 0.5
+   filter Parzen
+   name Reformat38
+   xpos -530
+   ypos 1508
+  }
+  set C2550edf0 [stack 0]
+push $N253f20b0
+clone $C2550edf0 {
+   xpos -530
+   ypos 1383
+   selected false
+  }
+push $N253df840
+clone $C2550edf0 {
+   xpos -530
+   ypos 1285
+   selected false
+  }
+push $N253cd190
+clone $C2550edf0 {
+   xpos -530
+   ypos 1201
+   selected false
+  }
+push $N253bab30
+clone $C2550edf0 {
+   xpos -530
+   ypos 1117
+   selected false
+  }
+push $N253a83f0
+clone $C2550edf0 {
+   xpos -524
+   ypos 1039
+   selected false
+  }
+push $N25395d00
+clone $C2550edf0 {
+   xpos -524
+   ypos 955
+   selected false
+  }
+push $N25383670
+clone $C2550edf0 {
+   xpos -524
+   ypos 871
+   selected false
+  }
+push $N25370fe0
+clone $C2550edf0 {
+   xpos -524
+   ypos 787
+   selected false
+  }
+push $N25143520
+clone $C2550edf0 {
+   xpos -524
+   ypos 703
+   selected false
+  }
+push $N25130e90
+clone $C2550edf0 {
+   xpos -518
+   ypos 613
+   selected false
+  }
+push $N2511e800
+clone $C2550edf0 {
+   xpos -530
+   ypos 529
+   selected false
+  }
+push $N2536e6a0
+  Dot {
+   name Dot6
+   xpos -858
+   ypos 432
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge4
+   xpos -996
+   ypos 529
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge5
+   xpos -996
+   ypos 613
+   disable {{Controller.samples<2-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge6
+   xpos -996
+   ypos 703
+   disable {{Controller.samples<3-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge7
+   xpos -996
+   ypos 787
+   disable {{Controller.samples<4-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge8
+   xpos -996
+   ypos 871
+   disable {{Controller.samples<5-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge9
+   xpos -996
+   ypos 955
+   disable {{Controller.samples<6-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge10
+   xpos -996
+   ypos 1039
+   disable {{Controller.samples<7-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge11
+   xpos -996
+   ypos 1117
+   disable {{Controller.samples<8-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge14
+   xpos -996
+   ypos 1201
+   disable {{Controller.samples<9-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge12
+   xpos -996
+   ypos 1285
+   disable {{Controller.samples<10-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge1
+   xpos -1000
+   ypos 1383
+   disable {{Controller.samples<11-1}}
+  }
+  Merge2 {
+   inputs 2
+   operation under
+   name Merge2
+   xpos -1000
+   ypos 1508
+   disable {{Controller.samples<12-1}}
+  }
+  Output {
+   name Output1
+   xpos -1000
+   ypos 1615
+  }
+ end_group
+ Switch {
+  inputs 2
+  which {{parent.Itterations!=0}}
+  name Switch1
+  label "\[value which]"
+  xpos 1672
+  ypos 564
+ }
+ TimeBlur {
+  divisions {{parent.SoftAlphaSamples}}
+  shutter 1
+  shutteroffset start
+  shuttercustomoffset 0
+  name TimeBlur1
+  xpos 1672
+  ypos 635
+ }
+ Output {
+  name Output1
+  xpos 1672
+  ypos 699
+ }
+end_group

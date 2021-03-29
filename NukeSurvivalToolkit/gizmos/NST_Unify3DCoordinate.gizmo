@@ -1,0 +1,141 @@
+Group {
+ name Unify3DCoordinate
+ tile_color 0xffbf00ff
+ gl_color 0xffbf00ff
+ addUserKnob {20 tab_general l general}
+ addUserKnob {41 frame_range l "frame range" T menu01.frame_range}
+ addUserKnob {3 firstFR l "custom range" +DISABLED}
+ firstFR 1001
+ addUserKnob {3 lastFR l "" -STARTLINE +DISABLED}
+ lastFR 1100
+ addUserKnob {41 selVertex l "Calculate from selected vertex" T menu02.selVertex}
+ addUserKnob {4 vertexTrans l "Tracking Type" +DISABLED M {translate translate,rotate translate,rotate,scale "" "" "" ""}}
+ addUserKnob {22 calculate l "<b>\[Calculate]</b>" T "import threading\nimport math\n\nthisGRP = nuke.thisGroup()\n\nif thisGRP.input(0) == None :\n\n\tnuke.message('No upstream connected')\n\nelse :\n\n\tstNode = thisGRP.input(0)\n\n\tFRsetting = thisGRP\['frame_range'].getValue()\n\n\tif FRsetting == 0 :\n\t\tframeST = nuke.root().firstFrame()\n\t\tframeED = nuke.root().lastFrame()\n\n\tif FRsetting == 1 :\n\t\tframeST = int(nuke.frame())\n\t\tframeED = int(nuke.frame())\n\n\tif FRsetting == 2 :\n\t\tframeST = int(thisGRP\['firstFR'].getValue())\n\t\tframeED = int(thisGRP\['lastFR'].getValue())\n\n\tthisGRP\['reset'].execute()\n\n\tgoSTORE = nuke.toNode('store')\n\tgoSTORE\['generalFN'].execute()\n\n\tfilterCheck = thisGRP\['filterNonReverse'].getValue().split(',')\n\tfilter3DNodes = thisGRP\['filter3DNodes'].getValue().split(',')\n\n\tvertexOption = thisGRP\['selVertex'].getValue()\n\tvertexType = thisGRP\['vertexTrans'].getValue()\n\n\tnodesMap = upstreamNodes(stNode)\n\n\tif vertexOption == 1 :\n\t\tselectedID = vertexPack()\n\t\tif len(selectedID) < 1 :\n\t\t\tnuke.message('No vertex selected. Cannot process vertex tracking.')\n\t\telse :\n\t\t\tif vertexType == 0 :\n\t\t\t\tvertexSnap(thisGRP, selectedID)\n\n\t\t\tif vertexType == 1 :\n\t\t\t\tif len(selectedID) == 3 :\n\t\t\t\t\tvertexSnap(thisGRP, selectedID)\n\t\t\t\telse :\n\t\t\t\t\tnuke.message('Rotation tracking only support exact 3 vertex.')\n\n\t\t\tif vertexType == 2 :\n\t\t\t\tif len(selectedID) == 3 :\n\t\t\t\t\tvertexSnap(thisGRP, selectedID)\n\t\t\t\telse :\n\t\t\t\t\tnuke.message('Rotation and Scale tracking only support exact 3 vertex.')\n\n\t\t\trefineAnim(thisGRP)\n\telse : \n\t\tunify(nodesMap, thisGRP)" +STARTLINE}
+ addUserKnob {20 resultTabStart l "" +STARTLINE n -2}
+ addUserKnob {20 result l Result}
+ addUserKnob {41 display T Unified_Axis.display}
+ addUserKnob {41 selectable -STARTLINE T Unified_Axis.selectable}
+ addUserKnob {41 xform_order l "transform order" T Unified_Axis.xform_order}
+ addUserKnob {41 rot_order l "rotation order" T Unified_Axis.rot_order}
+ addUserKnob {41 translate T Unified_Axis.translate}
+ addUserKnob {41 rotate T Unified_Axis.rotate}
+ addUserKnob {41 scaling l scale T Unified_Axis.scaling}
+ addUserKnob {20 "" l "World matrix" n 2}
+ addUserKnob {41 world_matrix l "" -STARTLINE T Unified_Axis.world_matrix}
+ addUserKnob {20 "" n -1}
+ addUserKnob {26 ""}
+ addUserKnob {22 export l "export axis" T "thisGRP = nuke.thisGroup()\ngoStore = nuke.toNode('store')\ngoStore\['generalFN'].execute()\n\nlocate = getLevel()\n\nwith locate :\n\tax = nuke.nodes.Axis()\n\tax.setXYpos( thisGRP.xpos() + 100 , thisGRP.ypos() )\n\tax\['label'].setValue('<font color=orange>Export by Unify3DCoordinate</font>')\n\n\tknobsLoop = \['translate','rotate','scaling']\n\n\tfor k in range(3) :\n\t\tif thisGRP\[knobsLoop\[k]].isAnimated() :\n\t\t\tani = thisGRP\[knobsLoop\[k]].animations()\n\t\t\tax\[knobsLoop\[k]].setAnimated()\n\t\t\tfor i in range(3) :\n\t\t\t\tfor key in ani\[i].keys() :\n\t\t\t\t\tax\[knobsLoop\[k]].setValueAt( key.y , key.x , i )\n\t\telse :\n\t\t\tfor i in range(3) :\n\t\t\t\tax\[knobsLoop\[k]].setValue( thisGRP\[knobsLoop\[k]].getValue()\[i] , i)" +STARTLINE}
+ addUserKnob {22 reset -STARTLINE T "thisGRP = nuke.thisGroup()\n\ntoolKnobs = \['display','selectable','translate','rotate','scaling','world_matrix']\n\nfor i in range (0, len(toolKnobs), 1) :\n\tthisGRP\[toolKnobs\[i]].clearAnimated()\n\nthisGRP\['display'].setValue(1)\nthisGRP\['selectable'].setValue(1)\nthisGRP\['translate'].setValue(\[0,0,0])\nthisGRP\['rotate'].setValue(\[0,0,0])\nthisGRP\['scaling'].setValue(\[1,1,1])"}
+ addUserKnob {20 resultTabEnd l "" -STARTLINE n -3}
+ addUserKnob {20 tag_nodeClass l "node class data (dev)"}
+ addUserKnob {43 filterNonReverse +DISABLED}
+ filterNonReverse Camera,Camera2,Light,Light2,DirectLight,Environment,Axis,Axis2
+ addUserKnob {43 filter3DNodes +DISABLED}
+ filter3DNodes Axis,Axis2,Card,Card2,Cube,Cylinder,Sphere,ReadGeo,ReadGeo2,Light,Light2,DirectLight,Spotlight,Environment,TransformGeo,EditGeo,Camera,Camera2
+ addUserKnob {22 add_class l "add new node class into the list" T "p = nuke.Panel('add new node class into the list :')\np.addBooleanCheckBox('Is it a non-reverse node?', False)\np.addSingleLineInput('Node class :', '')\n\nif p.show() :\n\tnewNR = p.value('Is it a non-reverse node?')\n\tnewItem = p.value('Node class :')\n\n\tif not newItem\[:1].isalpha() :\n\t\tnuke.message('Illegal first letter of new node class.<br><font color=\"orange\">Only accept alphabet on the first letter.</font>')\n\telse :\n\t\tthisGRP = nuke.thisGroup()\n\n\t\tfilterCheck = thisGRP\['filterNonReverse'].getValue().split(',')\n\t\tfilter3DNodes = thisGRP\['filter3DNodes'].getValue().split(',')\n\n\t\tcheckReturn = 0\n\n\t\tif newNR :\n\t\t\tif newItem in filterCheck :\n\t\t\t\tcheckReturn = 1\n\n\t\tif newItem in filter3DNodes :\n\t\t\tcheckReturn = 1\n\n\t\tif checkReturn :\n\t\t\tnuke.message('New node class already existed in the list.<br>If you want to modify it, please remove it first.')\n\t\telse :\n\t\t\tif newNR :\n\t\t\t\tfilterCheck.append( newItem )\n\t\t\t\tthisGRP\['filterNonReverse'].setValue( ','.join(filterCheck) )\n\n\t\t\tfilter3DNodes.append( newItem )\n\t\t\tthisGRP\['filter3DNodes'].setValue( ','.join(filter3DNodes) )" +STARTLINE}
+ addUserKnob {22 remove_class l "remove custom class from the list" -STARTLINE T "thisGRP = nuke.thisGroup()\n\nfilterCheck = thisGRP\['filterNonReverse'].getValue().split(',')\nfilter3DNodes = thisGRP\['filter3DNodes'].getValue().split(',')\n\nnoDefault = \['Axis', 'Axis2', 'Card', 'Card2', 'Cube', 'Cylinder', 'Sphere', 'ReadGeo', 'ReadGeo2', 'Light', 'Light2', 'DirectLight', 'Spotlight', 'Environment', 'TransformGeo', 'EditGeo', 'Camera', 'Camera2']\n\ncustomClass = \[]\n\nfor i in filterCheck :\n\tif i not in noDefault :\n\t\tif i not in customClass :\n\t\t\tcustomClass.append( i )\n\nfor i in filter3DNodes :\n\tif i not in noDefault :\n\t\tif i not in customClass :\n\t\t\tcustomClass.append( i )\n\nif customClass :\n\tp = nuke.Panel('select custom class to remove :')\n\tp.addEnumerationPulldown( 'custom class in the list :', ' '.join(customClass) )\n\n\tif p.show() :\n\t\trmItem = p.value( 'custom class in the list :' )\n\n\t\ttry :\n\t\t\tfilterCheck.remove( rmItem )\n\t\t\tthisGRP\['filterNonReverse'].setValue( ','.join(filterCheck) )\n\t\texcept :\n\t\t\tpass\n\n\t\ttry :\n\t\t\tfilter3DNodes.remove( rmItem )\n\t\t\tthisGRP\['filter3DNodes'].setValue( ','.join(filter3DNodes) )\n\t\texcept :\n\t\t\tpass\nelse :\n\tnuke.message('No custom class found in the list.')"}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l <b>Version</b> T 2.2}
+ addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2019-08-07}
+ addUserKnob {26 l_CHANGELOG l <b>Changelog</b> T "2.2\n- frame range added 'current \n  frame'option. For 1 frame calculation.\n- exposed custom node class data.\n  User can add custom node class \n  if there has special 3D nodes.\n  * custom node class MUST\n     included 'matrix' knob.\n\n2.1\n- added export axis\n\n2.0\n- mirror fix\n  updated error message\n  uncheck calculate vertex by default"}
+ addUserKnob {26 l_DEV l "<b>Developed by</b>" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x2f4255ff
+  label bin
+  note_font_size 42
+  xpos -446
+  ypos -75
+  bdwidth 289
+  bdheight 332
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0xff
+  label "Dont touch"
+  note_font_size 42
+  xpos -704
+  ypos -74
+  bdwidth 217
+  bdheight 232
+ }
+ Input {
+  inputs 0
+  name input3D
+  xpos -87
+  ypos -106
+ }
+ Dot {
+  name Dot1
+  xpos -53
+  ypos 53
+ }
+set Nf159f340 [stack 0]
+ Output {
+  name Output1
+  xpos -87
+  ypos 391
+ }
+ CurveTool {
+  inputs 0
+  ROI {512 389 1536 1167}
+  autocropdata {512 389 1536 1167}
+  intensitydata {0 0 0 0}
+  name hack_ct
+  xpos -413
+  ypos 174
+ }
+push $Nf159f340
+ Dot {
+  name Dot2
+  xpos 80
+  ypos 53
+ }
+ EditGeo {
+  name transformationData
+  xpos 46
+  ypos 87
+ }
+ PythonGeo {
+  name pgeoGet
+  xpos 46
+  ypos 139
+ }
+ Axis {
+  inputs 0
+  name Unified_Axis
+  gl_color 0xffbf00ff
+  xpos -284
+  ypos 155
+ }
+ NoOp {
+  inputs 0
+  name menu02
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['selVertex'].getValue() == 1 :\n    thisGRP\['vertexTrans'].setEnabled(True)\nelse :\n    thisGRP\['vertexTrans'].setEnabled(False)\n"
+  xpos -640
+  ypos 88
+  addUserKnob {20 User}
+  addUserKnob {6 selVertex l "Calculate from selected vertex" +STARTLINE}
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['frame_range'].getValue() == 2 :\n    thisGRP\['firstFR'].setEnabled(True)\n    thisGRP\['lastFR'].setEnabled(True)\nelse :\n    thisGRP\['firstFR'].setEnabled(False)\n    thisGRP\['lastFR'].setEnabled(False)\n"
+  xpos -639
+  ypos 21
+  addUserKnob {20 User}
+  addUserKnob {4 frame_range l "frame range" M {"project setting" "current frame" custom ""}}
+ }
+ NoOp {
+  inputs 0
+  name store
+  selected true
+  xpos -348
+  ypos 40
+  addUserKnob {20 User}
+  addUserKnob {22 generalFN T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\n#########################################################\n\ndef upstreamNodes(startNode) :\n\n\tmainStream = \[]\n\n\tcurNode = startNode\n\n\twhile curNode :\n\t\tif curNode.knob('matrix') :\n\t\t\tfor m in range (0,len(filter3DNodes)) :\n\t\t\t\tif curNode.Class() == filter3DNodes\[m] :\n\t\t\t\t\tsubStream = \[curNode.name()]\n\n\t\t\t\t\tfor x in range (1, curNode.inputs()) :\n\t\t\t\t\t\tsubNode = curNode.input(x)\n\t\t\t\t\t\tif subNode.knob('matrix') :\n\t\t\t\t\t\t\tsubStream.append(subNode.name())\n\n\t\t\t\t\t\twhile subNode :\n\t\t\t\t\t\t\tfor y in range (0, subNode.inputs()) :\n\t\t\t\t\t\t\t\tif subNode.input(y).knob('matrix') :\n\t\t\t\t\t\t\t\t\tsubStream.append(subNode.input(y).name())\n\t\t\t\t\t\t\tsubNode = subNode.input(0)\n\n\t\t\t\t\tmainStream.append(subStream)\n\t\tcurNode = curNode.input(0)\n\n\treturn mainStream\n\n#########################################################\n\ndef unify(mainStream, targetNode) :\n\n\torderCheck = 0\n\n\toutMTX = nuke.math.Matrix4()\n\tfailMSG = 0\n\tdisabledNode = \[]\n\tcheckANI = 0\n\n\tfor a in range (0, len(mainStream)) :\n\t\tfor b in range (0, len(mainStream\[a])) :\n\t\t\tif nuke.toNode(mainStream\[a]\[b]).knob('disable').getValue() == 1 :\n\t\t\t\tdisabledNode.append(mainStream\[a]\[b])\n\t\t\t\tfailMSG = 1\n\n\tif failMSG == 1 :\n\t\tdisabledList = '<br>'.join(disabledNode)\n\t\tnuke.message( '<font color=orange>Disabled nodes list:</font><p><font color=red>' +disabledList + '</font><p>Please disconnect these transformation nodes from the tree.' )\n\telse :\n\n\t    # check input node type ##########################################\n\n\t    for oc in range (0, len(filterCheck)) :\n\t        if nuke.toNode(mainStream\[0]\[0]).Class() == filterCheck\[oc] :\n\t            orderCheck = 1\n\n\t    if orderCheck == 0 :\n\t        mainStream.reverse()\n\n\t    # check ani ######################################################\n\n\t    for a in range (0, len(mainStream)) :\n\t        for b in range (0, len(mainStream\[a])) :\n\n\t            getMTX = nuke.math.Matrix4()\n\t            focusNode = nuke.toNode(mainStream\[a]\[b])\n\n\t            for aniCheck in focusNode.knobs().keys() :\n\t                if focusNode.knob(aniCheck).isAnimated() == True :\n\t                    checkANI = 1\n\n        # unify in matrix #################################################\n\n\t\tif checkANI != 0 :\n\t\t\tfor p in xrange (frameST, frameED +1 ) :\n\t\t\t\tfor a in range (0, len(mainStream)) :\n\t\t\t\t\tfor b in range (0, len(mainStream\[a])) :\n\n\t\t\t\t\t\tgetMTX = nuke.math.Matrix4()\n\t\t\t\t\t\tfocusNode = nuke.toNode(mainStream\[a]\[b])\n\n\t\t\t\t\t\tfor q in range (0,16) :\n\t\t\t\t\t\t\tgetMTX\[q] = focusNode.knob('matrix').getValueAt(p)\[q]\n\n\t\t\t\t\t\tif a != 0 :\n\t\t\t\t\t\t\toutMTX = outMTX * getMTX\n\t\t\t\t\t\telse :\n\t\t\t\t\t\t\toutMTX = getMTX\n\n\t\t\t\toutMTX.transpose()\n\n\t\t\t\tmTranslate = nuke.math.Matrix4(outMTX)\n\t\t\t\tmTranslate.translationOnly()\n\t\t\t\tmRotate = nuke.math.Matrix4(outMTX)\n\t\t\t\tmRotate.rotationOnly()\n\t\t\t\tmScale = nuke.math.Matrix4(outMTX)\n\t\t\t\tmScale.scaleOnly()\n\n\t\t\t\ttranslate = (mTranslate\[12], mTranslate\[13], mTranslate\[14])\n\t\t\t\trotateRad = mRotate.rotationsZXY()\n\t\t\t\trotate = (math.degrees(rotateRad\[0]), math.degrees(rotateRad\[1]), math.degrees(rotateRad\[2]))\n\t\t\t\tscale = (mScale.xAxis().x, mScale.yAxis().y, mScale.zAxis().z)\n\n\n\t\t\t\ttargetNode\['translate'].setAnimated()\n\t\t\t\ttargetNode\['rotate'].setAnimated()\n\t\t\t\ttargetNode\['scaling'].setAnimated()\n\t\t\t\ttargetNode\['translate'].setValueAt(mTranslate\[12], p, 0)\n\t\t\t\ttargetNode\['translate'].setValueAt(mTranslate\[13], p, 1)\n\t\t\t\ttargetNode\['translate'].setValueAt(mTranslate\[14], p, 2)\n\t\t\t\ttargetNode\['rotate'].setValueAt(math.degrees(rotateRad\[0]), p, 0)\n\t\t\t\ttargetNode\['rotate'].setValueAt(math.degrees(rotateRad\[1]), p, 1)\n\t\t\t\ttargetNode\['rotate'].setValueAt(math.degrees(rotateRad\[2]), p, 2)\n\t\t\t\ttargetNode\['scaling'].setValueAt(mScale.xAxis().x, p, 0)\n\t\t\t\ttargetNode\['scaling'].setValueAt(mScale.yAxis().y, p, 1)\n\t\t\t\ttargetNode\['scaling'].setValueAt(mScale.zAxis().z, p, 2)\n\n\t\telse :\n\n\t\t\tfor a in range (0, len(mainStream)) :\n\t\t\t\tfor b in range (0, len(mainStream\[a])) :\n\n\t\t\t\t\tgetMTX = nuke.math.Matrix4()\n\t\t\t\t\tfocusNode = nuke.toNode(mainStream\[a]\[b])\n\n\t\t\t\t\tfor q in range (0,16) :\n\t\t\t\t\t\tgetMTX\[q] = focusNode.knob('matrix').getValue()\[q]\n\n\t\t\t\t\tif a != 0 :\n\t\t\t\t\t\toutMTX = outMTX * getMTX\n\t\t\t\t\telse :\n\t\t\t\t\t\toutMTX = getMTX\n\n\t\t\toutMTX.transpose()\n\n\t\t\tmTranslate = nuke.math.Matrix4(outMTX)\n\t\t\tmTranslate.translationOnly()\n\t\t\tmRotate = nuke.math.Matrix4(outMTX)\n\t\t\tmRotate.rotationOnly()\n\t\t\tmScale = nuke.math.Matrix4(outMTX)\n\t\t\tmScale.scaleOnly()\n\n\t\t\ttranslate = (mTranslate\[12], mTranslate\[13], mTranslate\[14])\n\t\t\trotateRad = mRotate.rotationsZXY()\n\t\t\trotate = (math.degrees(rotateRad\[0]), math.degrees(rotateRad\[1]), math.degrees(rotateRad\[2]))\n\t\t\tscale = (mScale.xAxis().x, mScale.yAxis().y, mScale.zAxis().z)\n\n\t\t\ttargetNode\['translate'].clearAnimated()\n\t\t\ttargetNode\['rotate'].clearAnimated()\n\t\t\ttargetNode\['scaling'].clearAnimated()\n\t\t\ttargetNode\['translate'].setValue(translate)\n\t\t\ttargetNode\['rotate'].setValue(rotate)\n\t\t\ttargetNode\['scaling'].setValue(scale)\n\n#########################################################\n\ndef checkVertex() :\n\tcount = \[]\n\tfor point in nukescripts.snap3d.selectedPoints() :\n\t\tcount.append(point)\n\n\treturn len(count)\n\n#########################################################\n\ndef convertIter(xyz) :\n\tfor i in range (0, len(xyz)) :\n\t\ttPos = nuke.math.Vector4(xyz\[i]\[0], xyz\[i]\[1], xyz\[i]\[2], 1.0)\n\t\tyield nukescripts.snap3d.VertexInfo(0, 0, 1, nuke.math.Vector3(tPos.x, tPos.y, tPos.z))\n\n#########################################################\n\ndef vertexPack() :\n\tselid = \[]\n\tfor i in nukescripts.snap3d.selectedVertexInfos() :\n\t\tif selid.count(i.index) == 0 :\n\t\t\tselid.append(i.index)\n\treturn selid\n\n\n#########################################################\n\ndef vertexSnap(targetNode, packID) :\n\tvertexType = targetNode\['vertexTrans'].getValue()\n\n\tif frameST != frameED :\n\t\ttargetNode\['translate'].setAnimated()\n\t\tif vertexType >=1 :\n\t\t\ttargetNode\['rotate'].setAnimated()\n\t\t\tif vertexType == 2 :\n\t\t\t\ttargetNode\['scaling'].setAnimated()\n\n\tpgeoGet = nuke.toNode('pgeoGet')\n\n\thack_ct = nuke.toNode('hack_ct')\n\n\tprogBar = nuke.ProgressTask('Sampling vertex')\n\tjobCount = 0\n\tjobTotal = (frameED+1)-frameST\n\n\tfor ctime in xrange (int(frameST), int(frameED+1), 1) :\n\t\tnuke.execute(hack_ct, ctime, ctime)\n\n\t\t### progress bar\n\t\tjobCount += 1\n\t\tprogShow = int(jobCount/jobTotal * 100)\n\t\tif progBar.isCancelled() :\n\t\t\tbreak;\n\t\tprogBar.setProgress(progShow)\n\t\t#################\n\n\t\tselPos = \[]\n\t\tfor i in range (0, len(packID)) :\n\t\t\tselPos.append(pgeoGet\['geo'].getGeometry()\[0].points()\[3*packID\[i]:(3*packID\[i])+3])\n\t\ttargetNode\['translate'].setValue(nukescripts.snap3d.calcAveragePosition(convertIter(selPos)))\n\t\tif vertexType >=1 :\n\t\t\tvec1 = nuke.math.Vector3(selPos\[0]\[0], selPos\[0]\[1], selPos\[0]\[2])\n\t\t\tvec2 = nuke.math.Vector3(selPos\[1]\[0], selPos\[1]\[1], selPos\[1]\[2])\n\t\t\tvec3 = nuke.math.Vector3(selPos\[2]\[0], selPos\[2]\[1], selPos\[2]\[2])\n\n\t\t\ttargetNode\['rotate'].setValue(math.degrees(nukescripts.snap3d.planeRotation((vec1, vec2, vec3), norm=None)\[0]), 0)\n\t\t\ttargetNode\['rotate'].setValue(math.degrees(nukescripts.snap3d.planeRotation((vec1, vec2, vec3), norm=None)\[1]), 1)\n\t\t\ttargetNode\['rotate'].setValue(math.degrees(nukescripts.snap3d.planeRotation((vec1, vec2, vec3), norm=None)\[2]), 2)\n\t\t\tif vertexType ==2 :\n\t\t\t\ttargetNode\['scaling'].setValue(math.sqrt(math.pow(selPos\[0]\[0]-selPos\[1]\[0], 2)+math.pow(selPos\[0]\[1]-selPos\[1]\[1], 2)+math.pow(selPos\[0]\[2]-selPos\[1]\[2], 2)), 0)\n\t\t\t\ttargetNode\['scaling'].setValue(math.sqrt(math.pow(selPos\[1]\[0]-selPos\[2]\[0], 2)+math.pow(selPos\[1]\[1]-selPos\[2]\[1], 2)+math.pow(selPos\[1]\[2]-selPos\[2]\[2], 2)), 1)\n\t\t\t\ttargetNode\['scaling'].setValue(math.sqrt(math.pow(selPos\[2]\[0]-selPos\[0]\[0], 2)+math.pow(selPos\[2]\[1]-selPos\[0]\[1], 2)+math.pow(selPos\[2]\[2]-selPos\[0]\[2], 2)), 2)\n\n\thack_ct\['intensitydata'].clearAnimated()\n\tdel progBar\n\n#########################################################\n\ndef refineAnim(targetNode) :\n\tif frameST != frameED :\n\t\tfor ctime in xrange (int(frameST), int(frameED+1), 1) :\n\t\t\ttr = targetNode\['translate'].getValueAt(ctime)\n\t\t\ttargetNode\['translate'].setValueAt(tr\[0], ctime, 0)\n\t\t\ttargetNode\['translate'].setValueAt(tr\[1], ctime, 1)\n\t\t\ttargetNode\['translate'].setValueAt(tr\[2], ctime, 2)\n\t\t\tif vertexType >=1 :\n\t\t\t\tro = targetNode\['rotate'].getValueAt(ctime)\n\t\t\t\ttargetNode\['rotate'].setValueAt(ro\[0], ctime, 0)\n\t\t\t\ttargetNode\['rotate'].setValueAt(ro\[1], ctime, 1)\n\t\t\t\ttargetNode\['rotate'].setValueAt(ro\[2], ctime, 2)\n\t\t\t\tif vertexType == 2 :\n\t\t\t\t\tsa = targetNode\['scaling'].getValueAt(ctime)\n\t\t\t\t\ttargetNode\['scaling'].setValueAt(sa\[0], ctime, 0)\n\t\t\t\t\ttargetNode\['scaling'].setValueAt(sa\[1], ctime, 1)\n\t\t\t\t\ttargetNode\['scaling'].setValueAt(sa\[2], ctime, 2)\n" +STARTLINE}
+ }
+end_group

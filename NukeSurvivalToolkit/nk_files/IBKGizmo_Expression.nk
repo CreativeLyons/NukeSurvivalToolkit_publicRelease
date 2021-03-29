@@ -1,0 +1,51 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+MergeExpression {
+ expr3 (Ab-Ar*rw-Ag*gbw)>=0?1:clamp(1-(Ab-Ar*rw-Ag*gbw)/(Bb-Br*rw-Bg*gbw))
+ name MergeExpression5
+ tile_color 0xff01
+ label "IBKGizmo\nBLUE"
+ selected true
+ xpos 2219
+ ypos 427
+ addUserKnob {20 IBKGizmo}
+ addUserKnob {26 message l "<i>Connect B to clean plate, A to fg"}
+ addUserKnob {7 rw l "red weight"}
+ rw 0.5
+ addUserKnob {7 gbw l "green/blue weight"}
+ gbw 0.5
+}
+MergeExpression {
+ inputs 0
+ expr3 (Ag-Ar*rw-Ab*gbw)>=0?1:clamp(1-(Ag-Ar*rw-Ab*gbw)/(Bg-Br*rw-Bb*gbw))
+ name MergeExpression4
+ tile_color 0x990000
+ label "IBKGizmo\nGREEN"
+ selected true
+ xpos 2114
+ ypos 428
+ addUserKnob {20 IBKGizmo}
+ addUserKnob {26 message l "<i>Connect B to clean plate, A to fg"}
+ addUserKnob {7 rw l "red weight"}
+ rw 0.5
+ addUserKnob {7 gbw l "green/blue weight"}
+ gbw 0.5
+}
+MergeExpression {
+ inputs 0
+ expr3 "screen_Type==0 ? (Ag-Ar*rw-Ab*gbw)>=0?1:clamp(1-(Ag-Ar*rw-Ab*gbw)/(Bg-Br*rw-Bb*gbw)) : (Ab-Ar*rw-Ag*gbw)>=0?1:clamp(1-(Ab-Ar*rw-Ag*gbw)/(Bb-Br*rw-Bg*gbw))"
+ name MergeExpression6
+ tile_color 0x990000
+ label IBKGizmo
+ selected true
+ xpos 2163
+ ypos 510
+ addUserKnob {20 IBKGizmo}
+ addUserKnob {4 screen_Type l "screen type" M {Green Blue}}
+ addUserKnob {26 message l "<i>Connect B to clean plate, A to fg"}
+ addUserKnob {7 rw l "red weight"}
+ rw 0.5
+ addUserKnob {7 gbw l "green/blue weight"}
+ gbw 0.5
+}

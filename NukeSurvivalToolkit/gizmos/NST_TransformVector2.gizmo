@@ -1,0 +1,57 @@
+Group {
+ name TransformVector2_
+ help "Transforms an image assuming it is a motion vector in RGBA.\nCompared to a regular transform, this will edit the pixel colors to compensate for vector direction and magnitude.\n\nWarning: This node breaks concatenation."
+ tile_color 0xc692ccff
+ addUserKnob {20 transform l "Transform Vector2"}
+ addUserKnob {41 matrix T Transform1.matrix}
+ addUserKnob {41 translate T Transform1.translate}
+ addUserKnob {41 rotate T Transform1.rotate}
+ addUserKnob {41 scale T Transform1.scale}
+ addUserKnob {41 skewX l "skew X" T Transform1.skewX}
+ addUserKnob {41 skewY l "skew Y" T Transform1.skewY}
+ addUserKnob {41 skew_order l "skew order" T Transform1.skew_order}
+ addUserKnob {41 center T Transform1.center}
+ addUserKnob {41 invert_matrix l invert T Transform1.invert_matrix}
+ addUserKnob {41 filter T Transform1.filter}
+ addUserKnob {41 clamp -STARTLINE T Transform1.clamp}
+ addUserKnob {41 black_outside l "black outside" -STARTLINE T Transform1.black_outside}
+ addUserKnob {41 motionblur T Transform1.motionblur}
+ addUserKnob {41 shutter T Transform1.shutter}
+ addUserKnob {41 shutteroffset l "shutter offset" T Transform1.shutteroffset}
+ addUserKnob {41 shuttercustomoffset l "" -STARTLINE T Transform1.shuttercustomoffset}
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+}
+ Input {
+  inputs 0
+  name vectorB
+  xpos -482
+  ypos -5
+ }
+set N9f70fb0 [stack 0]
+ Transform {
+  center {1024 778}
+  shutteroffset centred
+  name Transform1
+  xpos -482
+  ypos 92
+ }
+set N9f756d0 [stack 0]
+ ColorMatrix {
+  matrix {
+      {{"\[python nuke.toNode('Transform1')\\\['matrix'\\].value()\\\[0\\]]"} {"\[python nuke.toNode('Transform1')\\\['matrix'\\].value()\\\[4\\]]"} 0}
+      {{"\[python nuke.toNode('Transform1')\\\['matrix'\\].value()\\\[1\\]]"} {"\[python nuke.toNode('Transform1')\\\['matrix'\\].value()\\\[5\\]]"} 0}
+      {0 0 0}
+    }
+  name ColorMatrix1
+  xpos -482
+  ypos 172
+ }
+ Output {
+  name Output1
+  xpos -482
+  ypos 232
+ }
+push $N9f756d0
+push $N9f70fb0
+end_group

@@ -1,0 +1,18 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr0 cos((y-height)*((y+height)/(size*1000))+(frame*speed))
+ expr1 cos((y-height)*((y+height)/(size*1000))+(frame*speed))
+ expr2 cos((y-height)*((y+height)/(size*1000))+(frame*speed))
+ expr3 cos((y-height)*((y+height)/(size*1000))+(frame*speed))
+ name Lines_Horizontal_Animated
+ selected true
+ xpos 254
+ ypos -33
+ addUserKnob {20 User}
+ addUserKnob {7 size R 0 10}
+ size 30
+ addUserKnob {7 speed R 0 10}
+ speed 1
+}

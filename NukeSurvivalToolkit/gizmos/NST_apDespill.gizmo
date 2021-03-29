@@ -1,0 +1,150 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name apDespill
+ help "apDespill v1.0 by Adrian Pueyo\n\nGizmo to despill an image, with options to despill any hue (and not only the primaries), select different algorithms for des/respilling, and protect tones from the despill.\n\nIf you just want a basic despill, its default values should already be enough and the tool will avoid any extra calculations.\n\nadrianpueyo.com, 2014-2017"
+ onCreate "n = nuke.thisNode()\nn\['tolerance'].setRange(0,2)\nn\['prot1_tolerance'].setFlag(0x00000004)\nn\['prot1_effect'].setFlag(0x00000004)"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"color\":\n    if k.getValue() == 0:\n        n\[\"custom_weight\"].setLabel(\"green - blue\")\n    elif k.getValue() == 1:\n        n\[\"custom_weight\"].setLabel(\"red - blue\")\n    elif k.getValue() == 2:\n        n\[\"custom_weight\"].setLabel(\"red - green\")\n    n\[\"pick\"].setVisible(k.getValue() == 3)\nelif k.name() == \"mode\":\n    n\[\"custom_weight\"].setVisible(n\[\"mode\"].getValue()==3)\nelif k.name() in \[\"out\",\"output_alpha\"]:\n    n\[\"respill_math\"].setEnabled(n\[\"out\"].getValue()==0 or n\[\"output_alpha\"].getValue()==1)\n    n\[\"respill_color\"].setEnabled(n\[\"out\"].getValue()==0)\nelif k.name() == \"prot1_activate\":\n    protA = n\[\"prot1_activate\"].value()\n    n\[\"prot1_preview\"].setEnabled(protA)\n    n\[\"prot1\"].setVisible(protA)\n    n\[\"prot1_tolerance\"].setVisible(protA)\n    n\[\"prot1_falloff\"].setVisible(protA)\n    n\[\"prot1_effect\"].setVisible(protA)"
+ tile_color 0x8b8b8bff
+ selected true
+ addUserKnob {20 apDespill}
+ addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {41 "Local GPU: " T apDespillKernel.gpuName}
+ addUserKnob {41 "Use GPU if Available" T apDespillKernel.useGPUIfAvailable}
+ addUserKnob {41 vectorize l "Vectorize on CPU" -STARTLINE T apDespillKernel.vectorize}
+ addUserKnob {26 ""}
+ addUserKnob {4 color t "Select a primary as a starting point, or custom to show RGB controls to select any color." M {red green blue custom ""}}
+ color green
+ addUserKnob {18 pick +HIDDEN}
+ pick {0 0 0}
+ addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 dfg_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {4 out l output t "Quick switch to output the despilled image or the substracted one." M {despill spill}}
+ addUserKnob {6 output_alpha l "output spill matte in alpha" t "Output the spill luminance in the alpha channel." -STARTLINE}
+ addUserKnob {4 mode l "despill math" t "average = avg of other two channels\nmaximum = max of other two channels\nminimum = min of other two channels\ncustom = select custom weights" M {average maximum minimum custom}}
+ addUserKnob {4 logLin l "Colorspace Log/Lin" -STARTLINE +INVISIBLE M {Log Lin ""}}
+ logLin Lin
+ addUserKnob {6 logspace l "Log Space" -STARTLINE}
+ addUserKnob {7 custom_weight l "red - blue" t "-1 = only capped by the first channel\n0 = capped by avg of both\n1 = only capped by the second channel" -STARTLINE +HIDDEN R -1 1}
+ addUserKnob {41 colorspace_out l colorspace T Colorspace1.colorspace_out}
+ addUserKnob {41 illuminant_out l "" -STARTLINE T Colorspace1.illuminant_out}
+ addUserKnob {41 primary_out l "" -STARTLINE T Colorspace1.primary_out}
+ addUserKnob {26 text l " " T " "}
+ addUserKnob {7 hue_offset l "hue offset" t "Rotate the despill vectors to despill an arbitrary tone other than the primaries.\nNote: A rotation of +-120 degrees is the same as selecting another color channel." R -180 180}
+ addUserKnob {7 tolerance t "Use this to multiply the hue tolerance (the limiter value). You can move it all the way down to 0 to completely remove a hue from your image." R 0 2}
+ tolerance 1
+ addUserKnob {6 prot1_activate l "protect tones" t "Enable controls to select tones to protect from despilling." +STARTLINE}
+ addUserKnob {6 prot1_preview l preview t "Output the protected tones." -STARTLINE +DISABLED}
+ addUserKnob {18 prot1 l protect t "Pick the central hue to protect.\n(ctrl/cmd+alt+click)" +HIDDEN}
+ prot1 {0 0 0}
+ addUserKnob {6 prot1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 prot1_tolerance l tolerance t "Amount of hues to include in the selection." +HIDDEN}
+ prot1_tolerance 0.2
+ addUserKnob {7 prot1_falloff l falloff t "Falloff for the hue selection. A higher falloff will make hues apart from the picked one lose weight more quickly." +HIDDEN R 0 4}
+ prot1_falloff 2
+ addUserKnob {7 prot1_effect l effect t "Multiplier for the hue protection, and for the spill limit value." +HIDDEN R 0 10}
+ prot1_effect 1
+ addUserKnob {26 respill_divider l "" +STARTLINE}
+ addUserKnob {4 respill_math l "respill math" t "Settings for the way of desaturating the spill before adding it back." M {"Rec 709" "Ccir 601" Average Maximum "" ""}}
+ addUserKnob {18 respill_color l "respill color" t "RGB multiplier for the desaturated spill when adding it back.\n\nNote: if used on non-degrained plates (which should be avoided anyway), any value other than 1 here will most likely produce grain artifacts." R 0 4}
+ respill_color 1
+ addUserKnob {6 respill_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask T Merge.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge.fringe}
+ addUserKnob {41 mix T Merge.mix}
+ addUserKnob {26 version_author l "" t "apDespill v1.0\n14 March, 2017" +STARTLINE T "<span style=\"color:#666\"><br/><b>apDespill v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2014-2017</span>"}
+ addUserKnob {20 GPU_Settings l "GPU Settings"}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 339
+  ypos -447
+  number 1
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos 449
+  ypos -764
+ }
+set Na8abcc00 [stack 0]
+ Colorspace {
+  name Colorspace1
+  label "\[value colorspace_in] >> \[value colorspace_out]"
+  xpos 559
+  ypos -703
+ }
+ Log2Lin {
+  operation lin2log
+  name Log2Lin1
+  xpos 559
+  ypos -665
+  disable {{!logspace}}
+ }
+ Shuffle {
+  name Shuffle
+  xpos 559
+  ypos -608
+  disable {{"\[exists parent.input0]"}}
+ }
+ BlinkScript {
+  ProgramGroup 1
+  KernelDescription "2 \"apDespillKernel\" iterate pixelWise 86d17838f15464a9e9273cd415388c19006f9163a6efd15e7ad521c828dc89ac 2 \"src\" Read Point \"dst\" Write Point 17 \"limit\" Float 1 AACAPw== \"shift\" Float 1 AAAAAA== \"weights\" Float 1 AAAAAA== \"outmode\" Int 1 AAAAAA== \"output_alpha\" Int 1 AAAAAA== \"clr\" Int 1 AAAAAA== \"mode\" Int 1 AAAAAA== \"respill_math\" Int 1 AAAAAA== \"respill_color\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"prot1_on\" Int 1 AAAAAA== \"prot1_preview\" Int 1 AAAAAA== \"prot1\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"prot1_tolerance\" Float 1 AAAAAA== \"prot1_mult\" Float 1 AAAAAA== \"prot1_falloff\" Float 1 AAAAAA== \"lumaHueShift\" Int 1 AAAAAA== \"pickSpill\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== 17 \"limit\" 1 1 \"shift\" 1 1 \"weights\" 1 1 \"outmode\" 1 1 \"output_alpha\" 1 1 \"clr\" 1 1 \"mode\" 1 1 \"respill_math\" 1 1 \"respill_color\" 4 1 \"prot1_on\" 1 1 \"prot1_preview\" 1 1 \"prot1\" 3 1 \"prot1_tolerance\" 1 1 \"prot1_mult\" 1 1 \"prot1_falloff\" 1 1 \"lumaHueShift\" 1 1 \"pickSpill\" 3 1 3 \"_usePicked\" Int 1 1 AAAAAA== \"_clr\" Int 1 1 AAAAAA== \"_ret\" Int 1 1 AAAAAA=="
+  kernelSource "//---------------------------------------------------------\n// apDespillKernel - apDespill v1.0 by Adrian Pueyo\n//\n// Despill an image, with options to despill any hue (and\n// not only the primaries), select different algorithms for\n// des/respilling, and protect tones from the despill.\n//\n// adrianpueyo.com, 2014-2017\n// ---------------------------------------------------------\n\nstatic inline float y_convert_ccir601(const float4 in)\{\n  return in.x * 0.299f + in.y * 0.587f + in.z * 0.114f;\n\}\n\nstatic inline float y_convert_rec709(const float4 in)\{\n  return in.x * 0.2125f + in.y * 0.7154f + in.z * 0.0721f;\n\}\n\nstatic inline float4 hueShift(const float4 in, const float H)\{\n  if(H==0.0f)\{\n    return in;\n  \}else\{\n    float U = cos(H*PI/180);\n    float W = sin(H*PI/180);\n    float3 ret;\n    ret.x = (.299+.701*U+.168*W)*in.x + (.587-.587*U+.330*W)*in.y + (.114-.114*U-.497*W)*in.z;\n    ret.y = (.299-.299*U-.328*W)*in.x + (.587+.413*U+.035*W)*in.y + (.114-.114*U+.292*W)*in.z;\n    ret.z = (.299-.3*U+1.25*W)*in.x + (.587-.588*U-1.05*W)*in.y + (.114+.886*U-.203*W)*in.z;\n    return float4(ret.x,ret.y,ret.z,in\[3]);\n  \}\n\}\n\nstatic inline float4 hueRotate(const float4 in, const float H)\{\n  if(H==0.0f)\{\n    return in;\n  \}else\{\n    float cosH = cos(H*PI/180);\n    float sinH = sin(H*PI/180);\n    float3 ret;\n    ret.x = (in.x+in.y+in.z)*(1-cosH)/3 + in.x*cosH + (-in.y/sqrt(3.0f)+in.z/sqrt(3.0f))*sinH;\n    ret.y = (in.x+in.y+in.z)*(1-cosH)/3 + in.y*cosH + (in.x/sqrt(3.0f)-in.z/sqrt(3.0f))*sinH;\n    ret.z = (in.x+in.y+in.z)*(1-cosH)/3 + in.z*cosH + (-in.x/sqrt(3.0f)+in.y/sqrt(3.0f))*sinH;\n    return float4(ret.x,ret.y,ret.z,in\[3]);\n  \}\n\}\n\nfloat3 vecToPlane(float3 v1, float3 v2 = float3(1.0f,1.0f,1.0f))\{\n  float3 v1onv2;\n  v1onv2 = v2 * float((float(dot(v2,v1))/float(dot(v2,v2)))); //Projection of vector on another (plane's normal)\n  return v1-v1onv2; //Projection of vector on plane\n\}\n\nstatic inline float colorAngle(const float3 v1, const float3 v2)\{\n  const float3 vN=float3(1.0f,1.0f,1.0f);\n  float ang = acos(float(dot(v1,v2))/float(sqrt(dot(v1,v1)*dot(v2,v2))));\n  float3 crs = cross(v1,v2);\n  if (dot(vN, crs) > 0) \{\n    ang = -ang;\n  \}\n  return ang;\n\}\n\nkernel apDespillKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;\n  Image<eWrite> dst;\n\n  param:\n    float limit;\n    float shift;\n    float weights;\n    int outmode;//0=despill,1=spill\n    int output_alpha;\n    int clr; //0=red,1=green,2=blue\n    int mode; //0=average,1=maximum,2=minimum,3=custom\n    int respill_math; //0=Rec709,1=Ccir601,2=Avg,3=Max\n    float4 respill_color;\n    int prot1_on;\n    int prot1_preview;\n    float3 prot1;\n    float prot1_tolerance;\n    float prot1_mult;\n    float prot1_falloff;\n    int lumaHueShift;//If disabled, the hue is just rotated without the luma coefficients\n    float3 pickSpill;\n  local:\n    int _usePicked;\n    int _clr;\n    int _ret;\n\n  void define() \{\n    defineParam(limit, \"limit\", 1.0f);\n    defineParam(shift, \"shift\", 0.0f);\n  \}\n\n  void init() \{\n    _ret = 0;\n    if(clr!=3)\{//red green or blue\n      _usePicked = 0;\n      _clr = clr;\n    \}else if(pickSpill.x==pickSpill.y && pickSpill.x==pickSpill.z)\{\n      _ret = 1;//if \"custom\" selected but has a gray value, avoid any calculations\n    \}else\{\n      _usePicked = 1;\n      _clr = 0;\n    \}\n  \}\n\n  void process() \{\n\n    if(_ret == 1)\{ dst()=src(); return; \}//Avoid any calculations if no despill selected\n    //0. Calculate autoShift if picked spill is not 0\n    float autoShift = 0.0f;\n    if(_usePicked==1)\{\n      float3 vNorm = float3(1.0f,1.0f,1.0f);\n      autoShift = colorAngle(vecToPlane(pickSpill,vNorm),vecToPlane(float3(1.0f,0.0f,0.0f),vNorm));\n      autoShift = autoShift*180/PI;//to deg\n    \}\n\n    //1. HueShift IN\n    float4 despilled;\n    if (lumaHueShift==1)\{\n      despilled = hueShift(src(),shift-autoShift);\n    \}else\{\n      despilled = hueRotate(src(),shift-autoShift);\n    \}\n\n    //2. Calculate the limit\n    float resultLimit = 0.0f;\n    int2 others;\n    if(_clr==0)\{//If red (and if _usePicked, also set red)\n      others = int2(1,2);\n    \}else if(_clr==1)\{\n      others=int2(0,2);\n    \}else if(_clr==2)\{\n      others=int2(0,1);\n    \}\n\n    if(mode==0)\{//average\n      resultLimit = (despilled\[others\[0]]+despilled\[others\[1]])/2;\n    \}else if(mode==1)\{//max\n      resultLimit = max(despilled\[others\[0]],despilled\[others\[1]]);\n    \}else if(mode==2)\{//min\n      resultLimit = min(despilled\[others\[0]],despilled\[others\[1]]);\n    \}else\{//custom\n      resultLimit = despilled\[others\[0]]*weights+despilled\[others\[1]]*(1-weights);\n    \}\n\n    //3. Protect tones\n    float prot1_result;\n    if(prot1_on==1&&(prot1\[0]!=prot1\[1]||prot1\[0]!=prot1\[2]||prot1\[1]!=prot1\[2]))\{\n      float cos_prot1_angle;\n      cos_prot1_angle = (src(0)*prot1\[0]+src(1)*prot1\[1]+src(2)*prot1\[2]) / (sqrt(prot1\[0]*prot1\[0]+prot1\[1]*prot1\[1]+prot1\[2]*prot1\[2]) * sqrt(src(0)*src(0)+src(1)*src(1)+src(2)*src(2)));\n      prot1_result = pow(clamp(cos_prot1_angle,0.0f,1.0f),1/pow(prot1_tolerance,prot1_falloff));\n      resultLimit = resultLimit*(1+prot1_result*prot1_mult);\n    \}\n    \n\n    //4. Calculate the despill and return the hue shift\n    for (int component = 0; component < dst.kComps; component++)\{\n      despilled\[component] = component==_clr?min(despilled\[component],resultLimit*limit):despilled\[component];\n    \}\n    if (lumaHueShift==1)\{\n      despilled = hueShift(despilled,-shift+autoShift);\n    \}else\{\n      despilled = hueRotate(despilled,-shift+autoShift);\n    \}\n\n    //5. Respill/restore despill values\n    float luma;\n    float4 spill = src()-despilled;\n    if(respill_math==0)\{\n      luma = y_convert_rec709(spill);\n    \}else if(respill_math==1)\{\n      luma = y_convert_ccir601(spill);\n    \}else if(respill_math==2)\{\n      luma = (spill\[0]+spill\[1]+spill\[2])/3;\n    \}else\{\n      luma = max(max(spill\[0],spill\[1]),spill\[2]);\n    \}\n\n    //6. Output (options)\n    if(prot1_preview==1 && prot1_on==1)\{\n      dst() = src()*clamp(prot1_result*prot1_mult,0.0f,1.0f);\n    \}else if(outmode==0)\{\n      dst() = despilled+luma*respill_color;\n      if(output_alpha==0)\{\n        dst(3)=src(3);\n      \}else\{\n        dst(3)=luma;\n      \}\n    \}else\{\n      if(output_alpha==0)\{\n        spill\[3]=src(3);\n      \}else\{\n        spill\[3]=luma;\n      \}\n      dst() = spill;\n    \}\n    //dst() = hueRotate(src(),shift-autoShift);\n    //dst() = autoShift;\n  \}\n\};"
+  rebuild ""
+  apDespillKernel_limit {{parent.tolerance}}
+  apDespillKernel_shift {{parent.hue_offset}}
+  apDespillKernel_weights {{(parent.custom_weight+1)/2}}
+  apDespillKernel_outmode {{parent.out}}
+  apDespillKernel_output_alpha {{parent.output_alpha}}
+  apDespillKernel_clr {{parent.color}}
+  apDespillKernel_mode {{parent.mode}}
+  apDespillKernel_respill_math {{parent.respill_math}}
+  apDespillKernel_respill_color {{parent.respill_color.r} {parent.respill_color.g} {parent.respill_color.b} 1}
+  apDespillKernel_prot1_on {{parent.prot1_activate}}
+  apDespillKernel_prot1_preview {{parent.prot1_preview}}
+  apDespillKernel_prot1 {{parent.prot1} {parent.prot1} {parent.prot1}}
+  apDespillKernel_prot1_tolerance {{parent.prot1_tolerance}}
+  apDespillKernel_prot1_mult {{parent.prot1_effect}}
+  apDespillKernel_prot1_falloff {{parent.prot1_falloff}}
+  apDespillKernel_pickSpill {{parent.pick} {parent.pick} {parent.pick}}
+  rebuild_finalise ""
+  name apDespillKernel
+  xpos 559
+  ypos -582
+ }
+ Log2Lin {
+  name Log2Lin2
+  xpos 559
+  ypos -520
+  disable {{!logspace}}
+ }
+ Colorspace {
+  channels {{{parent.Colorspace5.channels}}}
+  colorspace_in {{parent.Colorspace1.colorspace_out}}
+  illuminant_in {{parent.Colorspace1.illuminant_out}}
+  primary_in {{parent.Colorspace1.primary_out}}
+  name Colorspace2
+  label "\[value colorspace_in] >> \[value colorspace_out]"
+  xpos 559
+  ypos -494
+ }
+push $Na8abcc00
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  name Merge
+  xpos 449
+  ypos -447
+ }
+ Output {
+  name Output
+  xpos 449
+  ypos -400
+ }
+end_group

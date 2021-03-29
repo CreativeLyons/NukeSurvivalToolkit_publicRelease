@@ -1,7 +1,8 @@
 '''
 @author: Tony Lyons (creativelyons@gmail.com)
-# init.py with recursive path loading.
+# init.py
 '''
+<<<<<<< HEAD
 import os
 import nuke
 
@@ -34,3 +35,7 @@ for item in sorted(whiteList):
     nuke.pluginAddPath(str(item))
     print(item)
 
+=======
+# import os
+# import nuke
+>>>>>>> dev

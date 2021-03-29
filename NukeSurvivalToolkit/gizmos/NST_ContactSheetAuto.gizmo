@@ -1,0 +1,14 @@
+ContactSheet {
+width {{input.width*columns*resMult}}
+height {{input.height*rows*resMult}}
+rows {{"\[expr \{int( (sqrt( \[numvalue inputs] ) ) )\} ] * \[expr \{int( ceil ( (\[numvalue inputs] /(sqrt( \[numvalue inputs] ) ) )) )\} ] < \[numvalue inputs]   ? \[expr \{int( (sqrt( \[numvalue inputs] ) ) )\} ] +1 : \[expr \{int( (sqrt( \[numvalue inputs] ) ) )\} ]"}}
+columns {{"\[expr \{int( ceil ( (\[numvalue inputs] /(sqrt( \[numvalue inputs] )) )) )\} ]"}}
+center true
+roworder TopBottom
+name ContactSheetAuto
+tile_color 0xff69f7ff
+selected true
+addUserKnob {20 Settings}
+addUserKnob {7 resMult l "Resolution Multiplier" R 0.1 2}
+resMult 1
+}

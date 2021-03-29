@@ -1,0 +1,445 @@
+Group {
+ name apGlow
+ help "apeGlow v1.0 - apEssentials by Adrian Pueyo\n\nExponential glow with advanced controls, using the traditional multi-blur approach.\n\nWith the \"area\" input (optional) you can set only a part of the image to emit glow.\nNaN's will be turned black, on rgba only.\n\nadrianpueyo.com, 2015-2019."
+ onCreate "n = nuke.thisNode()\nfor i in \['intensity','response','max_size','src_black','src_white','response']:\n    n\[i].setFlag(0x00000004)\nn\['max_size'].setRange(0,10000)\nn\['overscan'].setRange(0,1000)"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() in \[\"crop\",\"enableOverscan\"]:\n    kcv = n\[\"crop\"].value()\n    kov = n\[\"enableOverscan\"].value()\n    n\[\"enableOverscan\"].setEnabled(not kcv)\n    n\['overscan'].setEnabled(not kcv and kov)\nelif k.name() == \"s\":\n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        nd = nuke.toNode(\"DP\")\n        nm = nuke.toNode(\"MergeBlurs\")\n        b0 = nuke.toNode(\"Blur0\")\n        b0x = b0.xpos()\n        b0y = b0.ypos()\n        b0n = b0.name()\n        for i in range(1,nm.inputs()):\n            nm.setInput(i,None)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>nd.xpos()]\n        for i in range(1,s):\n            # Blur\n            b = nuke.nodes.Blur()\n            b.setXYpos(b0x+i*100,b0y)\n            b.setInput(0,nd)\n            b\[\"channels\"].setValue(\"all\")\n            for bk in \[\"filter\",\"quality\"]:\n                b\[bk].setExpression(b0n+\".\"+bk)\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(\[0,0])\n            b\[\"size\"].setExpression(\"DP.j((1/parent.s)*%s)/ parent.f\"%(i+1))\n            # Multiply\n            m = nuke.nodes.Multiply()\n            m.setXYpos(b0x+i*100,b0y+38)\n            m.setInput(0,b)\n            m\[\"channels\"].setValue(\"all\")\n            m\[\"value\"].setValue(\[0,0,0,0])\n            m\[\"value\"].setExpression( \"parent.p*%s+%s\"%((i+1)/(s),1-(i+1)/(s)))\n            # Merge\n            nm.setInput(i if i<2 else i+1, m)"
+ tile_color 0xe88543ff
+ addUserKnob {20 apeGlow}
+ addUserKnob {41 channels T KeepWhat.channels}
+ addUserKnob {7 intensity t "Intensity multiplier for the resulting glow." R 0 10}
+ intensity 1
+ addUserKnob {18 p l persistance t "Color gain of the largest step. Affects the other steps progressively, with the least effect on the smallest one.\n\nUse as an inverse falloff or as a progressive color tint." R 0 10}
+ p 1
+ addUserKnob {18 tint t "Overall color multiplier for the intensity."}
+ tint 1
+ addUserKnob {6 effect_only l "effect only" +STARTLINE}
+ effect_only true
+ addUserKnob {26 ""}
+ addUserKnob {7 src_black l "src black" t "Black point of the source image's luminance.\nClip the effect below this luminance value." R 0 4}
+ addUserKnob {7 src_white l "src white" t "White point of the source image's luminance." R 0 4}
+ src_white 1
+ addUserKnob {41 white_clamp l clamp -STARTLINE T Grade1.white_clamp}
+ addUserKnob {7 response t "Gamma on the source image's luminance, to change the response curve falloff." R 0 4}
+ response 1
+ addUserKnob {26 ""}
+ addUserKnob {14 max_size l "max size" t "Maximum pixel size of the exponential glow." R 0 10000}
+ max_size 2000
+ addUserKnob {14 f l "size falloff" t "Falloff adjustment on the exponential distribution of the blur sizes.\n\nReduce this to have the glow more diffuse (starting with larger blurs).\nIncrease to have the glow tighter and more defined (start with smaller blurs)." R 0 10}
+ f 1
+ addUserKnob {3 s l steps t "Number of blur iterations to combine together."}
+ s 10
+ addUserKnob {41 filter T Blur0.filter}
+ addUserKnob {41 quality l "" -STARTLINE T Blur0.quality}
+ addUserKnob {6 crop l "crop to format" -STARTLINE}
+ addUserKnob {14 overscan R 0 1000}
+ overscan 100
+ addUserKnob {6 enableOverscan l enable -STARTLINE}
+ enableOverscan true
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelArea l area -STARTLINE T ExpressionArea.maskChannelMask}
+ addUserKnob {41 inject_area l inject -STARTLINE T ExpressionArea.inject}
+ addUserKnob {41 invert_area l invert -STARTLINE T ExpressionArea.invert_mask}
+ addUserKnob {41 fringe_area l fringe -STARTLINE T ExpressionArea.fringe}
+ addUserKnob {41 maskChannelMask l mask T Merge.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge.fringe}
+ addUserKnob {41 mix T Merge.mix}
+ addUserKnob {26 version_author l "" t "apeGlow v1.0\n2019" +STARTLINE T "<span style=\"color:#666\"><br/><b>apeGlow v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2015-2019</span>"}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -883
+  ypos 975
+  number 2
+ }
+ Input {
+  inputs 0
+  name Inputarea
+  xpos -638
+  ypos 383
+  number 1
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos -773
+  ypos 220
+ }
+ Dot {
+  name Dot6
+  xpos -739
+  ypos 308
+ }
+set N3c98e7f0 [stack 0]
+ Dot {
+  name Dot8
+  xpos -494
+  ypos 308
+ }
+set N3c993260 [stack 0]
+ Remove {
+  name RemoveAll
+  xpos -528
+  ypos 345
+ }
+ Expression {
+  inputs 1+1
+  channel0 rgba
+  expr0 1
+  name ExpressionArea
+  xpos -528
+  ypos 383
+  disable {{"!\[exists parent.input1]"}}
+ }
+ Shuffle {
+  red white
+  green white
+  blue white
+  alpha white
+  name ShuffleWhite
+  xpos -528
+  ypos 409
+  disable {{"\[exists parent.input1]"}}
+ }
+push $N3c993260
+ Dot {
+  name Dot7
+  xpos -384
+  ypos 308
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name KeepWhat
+  xpos -418
+  ypos 377
+ }
+add_layer {apGlowArea apGlowArea.red}
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 apGlowArea.red
+  name Copy1
+  xpos -418
+  ypos 403
+  disable {{"!\[exists parent.input1]"}}
+ }
+ Premult {
+  channels all
+  alpha apGlowArea.red
+  name Premult1
+  xpos -418
+  ypos 441
+  disable {{"!\[exists parent.input1]"}}
+ }
+ Remove {
+  channels apGlowArea
+  name RemoveArea
+  xpos -418
+  ypos 479
+  disable {{"!\[exists parent.input1]"}}
+ }
+ Dot {
+  name Dot5
+  xpos -384
+  ypos 538
+ }
+set N3bfb0600 [stack 0]
+ Dot {
+  name Dot1
+  xpos -494
+  ypos 538
+ }
+ Saturation {
+  channels all
+  saturation 0
+  name Saturation1
+  xpos -528
+  ypos 556
+ }
+set N3bfba3c0 [stack 0]
+ Grade {
+  channels all
+  blackpoint {{parent.src_black}}
+  whitepoint {{parent.src_white}}
+  gamma {{parent.response}}
+  name Grade1
+  xpos -528
+  ypos 594
+ }
+push $N3bfb0600
+push $N3bfba3c0
+ Merge2 {
+  inputs 2
+  operation divide
+  also_merge all
+  name Merge4
+  xpos -418
+  ypos 562
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  also_merge all
+  name Merge3
+  xpos -418
+  ypos 600
+ }
+ Dot {
+  name DP
+  xpos -384
+  ypos 671
+  addUserKnob {20 User}
+  addUserKnob {14 j R 0 100}
+  j {{"pow(2, t*(log(parent.max_size*parent.f)/log(2)) )"} {"pow(2, t*(log(parent.max_size*parent.f)/log(2)) )"}}
+ }
+set N3ccdda10 [stack 0]
+ Blur {
+  size {{"DP.j((1/parent.s)*10)/ parent.f"} {"DP.j((1/parent.s)*10)/ parent.f"}}
+  filter {{Blur0.filter}}
+  quality {{Blur0.quality}}
+  crop false
+  name Blur9
+  xpos 482
+  ypos 729
+ }
+ Multiply {
+  value {{parent.p*1.0+0.0} {parent.p*1.0+0.0} {parent.p*1.0+0.0} {parent.p*1.0+0.0}}
+  name Multiply9
+  xpos 482
+  ypos 767
+ }
+push $N3ccdda10
+ Blur {
+  size {{"DP.j((1/parent.s)*9)/ parent.f"} {"DP.j((1/parent.s)*9)/ parent.f"}}
+  filter {{Blur0.filter}}
+  quality {{Blur0.quality}}
+  crop false
+  name Blur8
+  xpos 382
+  ypos 729
+ }
+ Multiply {
+  value {{parent.p*0.9+0.1} {parent.p*0.9+0.1} {parent.p*0.9+0.1} {parent.p*0.9+0.1}}
+  name Multiply8
+  xpos 382
+  ypos 767
+ }
+push $N3ccdda10
+ Blur {
+  size {{"DP.j((1/parent.s)*8)/ parent.f"} {"DP.j((1/parent.s)*8)/ parent.f"}}
+  filter {{Blur0.filter}}
+  quality {{Blur0.quality}}
+  crop false
+  name Blur7
+  xpos 282
+  ypos 729
+ }
+ Multiply {
+  value {{parent.p*0.8+0.2} {parent.p*0.8+0.2} {parent.p*0.8+0.2} {parent.p*0.8+0.2}}
+  name Multiply7
+  xpos 282
+  ypos 767
+ }
+push $N3ccdda10
+ Blur {
+  size {{"DP.j((1/parent.s)*7)/ parent.f"} {"DP.j((1/parent.s)*7)/ parent.f"}}
+  filter {{Blur0.filter}}
+  quality {{Blur0.quality}}
+  crop false
+  name Blur6
+  xpos 182
+  ypos 729
+ }
+ Multiply {
+  value {{parent.p*0.7+0.3} {parent.p*0.7+0.3} {parent.p*0.7+0.3} {parent.p*0.7+0.3}}
+  name Multiply6
+  xpos 182
+  ypos 767
+ }
+push $N3ccdda10
+ Blur {
+  size {{"DP.j((1/parent.s)*6)/ parent.f"} {"DP.j((1/parent.s)*6)/ parent.f"}}
+  filter {{Blur0.filter}}
+  quality {{Blur0.quality}}
+  crop false
+  name Blur5
+  xpos 82
+  ypos 729
+ }
+ Multiply {
+  value {{parent.p*0.6+0.4} {parent.p*0.6+0.4} {parent.p*0.6+0.4} {parent.p*0.6+0.4}}
+  name Multiply5
+  xpos 82
+  ypos 767
+ }
+push $N3ccdda10
+ Blur {
+  size {{"DP.j((1/parent.s)*5)/ parent.f"} {"DP.j((1/parent.s)*5)/ parent.f"}}
+  filter {{Blur0.filter}}
+  quality {{Blur0.quality}}
+  crop false
+  name Blur4
+  xpos -18
+  ypos 729
+ }
+ Multiply {
+  value {{parent.p*0.5+0.5} {parent.p*0.5+0.5} {parent.p*0.5+0.5} {parent.p*0.5+0.5}}
+  name Multiply4
+  xpos -18
+  ypos 767
+ }
+push $N3ccdda10
+ Blur {
+  size {{"DP.j((1/parent.s)*4)/ parent.f"} {"DP.j((1/parent.s)*4)/ parent.f"}}
+  filter {{Blur0.filter}}
+  quality {{Blur0.quality}}
+  crop false
+  name Blur3
+  xpos -118
+  ypos 729
+ }
+ Multiply {
+  value {{parent.p*0.4+0.6} {parent.p*0.4+0.6} {parent.p*0.4+0.6} {parent.p*0.4+0.6}}
+  name Multiply3
+  xpos -118
+  ypos 767
+ }
+push $N3ccdda10
+ Blur {
+  size {{"DP.j((1/parent.s)*3)/ parent.f"} {"DP.j((1/parent.s)*3)/ parent.f"}}
+  filter {{Blur0.filter}}
+  quality {{Blur0.quality}}
+  crop false
+  name Blur2
+  xpos -218
+  ypos 729
+ }
+ Multiply {
+  value {{parent.p*0.3+0.7} {parent.p*0.3+0.7} {parent.p*0.3+0.7} {parent.p*0.3+0.7}}
+  name Multiply2
+  xpos -218
+  ypos 767
+ }
+push 0
+push $N3ccdda10
+ Blur {
+  size {{"DP.j((1/parent.s)*2)/ parent.f"} {"DP.j((1/parent.s)*2)/ parent.f"}}
+  filter {{Blur0.filter}}
+  quality {{Blur0.quality}}
+  crop false
+  name Blur1
+  xpos -318
+  ypos 729
+ }
+ Multiply {
+  value {{parent.p*0.2+0.8} {parent.p*0.2+0.8} {parent.p*0.2+0.8} {parent.p*0.2+0.8}}
+  name Multiply1
+  xpos -318
+  ypos 767
+ }
+push $N3ccdda10
+ Blur {
+  size {{"DP.j(1/parent.s + 0) / parent.f"} {"DP.j(1/parent.s + 0) / parent.f"}}
+  crop false
+  name Blur0
+  xpos -418
+  ypos 729
+ }
+ Multiply {
+  value {{"parent.p * 1/parent.s + (1-1/parent.s)"}}
+  name Multiply0
+  xpos -418
+  ypos 767
+ }
+ Merge2 {
+  inputs 10+1
+  operation plus
+  name MergeBlurs
+  xpos -418
+  ypos 864
+ }
+ Multiply {
+  value {{parent.intensity*parent.tint/parent.s} {parent.intensity*parent.tint/parent.s} {parent.intensity*parent.tint/parent.s} {parent.intensity*parent.tint/parent.s}}
+  name MultiplyR
+  xpos -418
+  ypos 890
+ }
+ Expression {
+  expr0 isnan(r)?0:r
+  expr1 isnan(g)?0:g
+  expr2 isnan(b)?0:b
+  expr3 isnan(a)?0:a
+  name NanToBlack
+  xpos -418
+  ypos 928
+ }
+push $N3c98e7f0
+ Dot {
+  name Dot4
+  xpos -739
+  ypos 769
+ }
+set N3bdcd360 [stack 0]
+ Dot {
+  name Dot2
+  xpos -629
+  ypos 769
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  name Shuffle
+  xpos -663
+  ypos 847
+  disable {{!parent.effect_only}}
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos -663
+  ypos 873
+  disable {{!parent.effect_only}}
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  also_merge all
+  name Merge1
+  xpos -663
+  ypos 928
+ }
+ Dot {
+  name Dot3
+  xpos -629
+  ypos 978
+ }
+push $N3bdcd360
+ Merge2 {
+  inputs 2+1
+  operation copy
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  also_merge all
+  name Merge
+  xpos -773
+  ypos 974
+ }
+ Crop {
+  box {{parent.crop?0:-parent.overscan} {parent.crop?0:-parent.overscan} {parent.crop?width:width+parent.overscan} {parent.crop?height:height+parent.overscan}}
+  intersect true
+  name CropOverscan
+  xpos -773
+  ypos 1000
+  disable {{"!parent.enableOverscan && !parent.crop"}}
+ }
+ Output {
+  name Output
+  xpos -773
+  ypos 1026
+ }
+end_group

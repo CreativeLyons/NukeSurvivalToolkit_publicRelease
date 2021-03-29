@@ -1,0 +1,2830 @@
+Group {
+ name DVPrelight
+ tile_color 0x7f65ff
+ label "\[value light_type]\n<font color=cyan>Deep Output</font>"
+ addUserKnob {20 tab_general l General}
+ addUserKnob {41 light_type l "light type" T menu01.light_type}
+ addUserKnob {41 color T menu02.color}
+ addUserKnob {7 intensity R 0 50}
+ intensity 1
+ addUserKnob {7 cone_angle l "cone angle" +DISABLED R 0 180}
+ cone_angle 40
+ addUserKnob {7 cone_penumbra_angle l "cone penumbra angle" +DISABLED R -60 60}
+ addUserKnob {7 cone_falloff l "cone falloff" +DISABLED R 0 1000}
+ addUserKnob {4 falloff_type l "falloff type" +DISABLED M {"No Falloff" Linear Quadratic Cubic Exponential "" "" "" ""}}
+ addUserKnob {7 exp_in l "exponential in" +DISABLED R 0.01 10}
+ exp_in 1
+ addUserKnob {7 exp_out l out -STARTLINE +DISABLED R 0.01 10}
+ exp_out 4
+ addUserKnob {26 ""}
+ addUserKnob {4 display_light l display M {off "show light control" "" ""}}
+ display_light "show light control"
+ addUserKnob {4 display_spot l display +HIDDEN M {off "cone angle" "cone penumbra angle" "cone angle + cone penumbra angle"}}
+ display_spot "cone angle + cone penumbra angle"
+ addUserKnob {41 file_menu l @FolderIcon T lgt_data.file_menu}
+ addUserKnob {41 snap_menu l @AxisIcon -STARTLINE T lgt_data.snap_menu}
+ addUserKnob {41 transform T showupTG.transform}
+ addUserKnob {41 xform_order l "transform order" T lgt_data.xform_order}
+ addUserKnob {41 rot_order l "rotation order" T lgt_data.rot_order}
+ addUserKnob {41 translate T lgt_data.translate}
+ addUserKnob {41 rotate T lgt_data.rotate}
+ addUserKnob {41 uniform_scale l "uniform scale" T TransformGeo1.uniform_scale}
+ addUserKnob {26 ""}
+ addUserKnob {20 grp_3dpreview l "Pointcloud preview" n 1}
+ grp_3dpreview 0
+ addUserKnob {4 display_ptc_type l "display type" M {"no pointcloud preview" "raw pointcloud" "with light applied (slow)" "" "" "" ""}}
+ display_ptc_type "raw pointcloud"
+ addUserKnob {41 detail l "point detail" T deepPositionToPoints.detail}
+ addUserKnob {41 pointSize l "point size" T deepPositionToPoints.pointSize}
+ addUserKnob {20 endGroup_1_1 l endGroup n -1}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 3.8}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-02-13}
+ addUserKnob {22 btn_CHANGELOG l <b>Changlelog</b> T "log = \"3.8<br>'DVPMatte'<br>&nbsp;&nbsp;-&nbsp;fixed&nbsp;cube&nbsp;matte&nbsp;shape&nbsp;result&nbsp;when&nbsp;pivot&nbsp;changed.&nbsp;Sphere&nbsp;and&nbsp;Cylinder&nbsp;were&nbsp;fine&nbsp;in&nbsp;the&nbsp;past&nbsp;versions.<br>'DVProjection'<br>&nbsp;&nbsp;-&nbsp;link&nbsp;camera&nbsp;replaced&nbsp;transformation&nbsp;by&nbsp;world&nbsp;matrix,&nbsp;so&nbsp;it&nbsp;works&nbsp;with&nbsp;camera&nbsp;stack&nbsp;with&nbsp;axis.<br>&nbsp;&nbsp;-&nbsp;removed&nbsp;preview&nbsp;projection&nbsp;camera&nbsp;in&nbsp;3D&nbsp;view.<br><br>3.7<br>Toolset&nbsp;update&nbsp;:<br>&nbsp;&nbsp;'DVPort'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;added&nbsp;'near'&nbsp;&&nbsp;'far&nbsp;knobs<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;'DVPmatte'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;fixed&nbsp;missing&nbsp;premult&nbsp;original&nbsp;alpha&nbsp;process<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;revert&nbsp;uniform_scale&nbsp;default&nbsp;value&nbsp;back&nbsp;to&nbsp;1.0<br><br>3.6<br>'DVPsetLight'<br>-&nbsp;improved&nbsp;'generated&nbsp;normal&nbsp;(estimate&nbsp;from&nbsp;position)'&nbsp;and&nbsp;changed&nbsp;to&nbsp;blink&nbsp;script.&nbsp;Get&nbsp;better&nbsp;edges&nbsp;on&nbsp;deepNormal.\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x7f7f7fff
+  label bin
+  note_font_size 42
+  xpos -3686
+  ypos -640
+  bdwidth 2907
+  bdheight 2148
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x191919ff
+  label "dont touch"
+  note_font_size 42
+  xpos -3690
+  ypos -880
+  bdwidth 2912
+  bdheight 192
+ }
+ Input {
+  inputs 0
+  name deep
+  xpos -86
+  ypos -878
+ }
+ Dot {
+  name Dot11
+  xpos -52
+  ypos -750
+ }
+set Ne1805e80 [stack 0]
+ Dot {
+  name Dot4
+  xpos -52
+  ypos -610
+ }
+set Ne1808340 [stack 0]
+add_layer {deepNormal deepNormal.red deepNormal.green deepNormal.blue deepNormal.alpha}
+ DeepExpression {
+  temp_name0 circle
+  temp_expr0 "sqrt( pow2( \[value globalTCL.lx] ) + pow2( \[value globalTCL.ly] ) ) * 2"
+  temp_name1 ocone
+  temp_expr1 "1 / ( tan( radians( \[value oradius] ) ) * abs( \[value globalTCL.lz] ) * 2 * smoothstep( 0, 1, ( 1 / ( \[value parent.cone_falloff] * 0.004 + 1 ) ) ) )"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "clamp( ( \[value globalTCL.lz] <= 0 ? 1 - circle * ocone : 0 ) * \[value mult] )"
+  name DeepExpression9
+  label "normal cone"
+  xpos 759
+  ypos -443
+  addUserKnob {20 User}
+  addUserKnob {7 mult}
+  mult {{"max( 1, parent.cone_angle / abs( parent.cone_penumbra_angle ) )"}}
+  addUserKnob {7 oradius R 0 180}
+  oradius {{"parent.cone_penumbra_angle <= 0 ? parent.cone_angle / 2 : clamp( ( parent.cone_angle + parent.cone_penumbra_angle ) / 2, 0 ,90 )"}}
+ }
+ Dot {
+  name Dot3
+  xpos 793
+  ypos -341
+ }
+set Ne1810480 [stack 0]
+ DeepExpression {
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "pow( 1 - pow( 1 - clamp( deepNormal.alpha * 1 / abs( \[value globalTCL.lz] ) ) , \[value parent.exp_in] ) , \[value parent.exp_out] )"
+  name DeepExpression23
+  label exponential
+  xpos 1201
+  ypos -236
+ }
+push $Ne1810480
+ DeepExpression {
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "clamp( deepNormal.alpha * ( 1 / abs( \[value globalTCL.lz] ) ** 3 ) )"
+  name DeepExpression12
+  label cubic
+  xpos 1074
+  ypos -233
+ }
+push $Ne1810480
+ DeepExpression {
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "clamp( deepNormal.alpha * pow2( 1 / abs( \[value globalTCL.lz] ) ) )"
+  name DeepExpression4
+  label quadratic
+  xpos 970
+  ypos -229
+ }
+push $Ne1810480
+ DeepExpression {
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "clamp( deepNormal.alpha * 1 / abs( \[value globalTCL.lz] * 1 / \[value parent.intensity] ) )"
+  name DeepExpression5
+  label linear
+  xpos 847
+  ypos -231
+ }
+push $Ne1810480
+ Switch {
+  inputs 5
+  which {{parent.falloff_type}}
+  name Switch5
+  xpos 759
+  ypos -85
+ }
+ DeepExpression {
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "deepNormal.alpha * clamp( deepNormal.red * \[value inverseMatrix_lgt.invMatrix.6] + deepNormal.green * \[value inverseMatrix_lgt.invMatrix.7] + deepNormal.blue * \[value inverseMatrix_lgt.invMatrix.8] )"
+  name DeepExpression10
+  label "remove backface"
+  xpos 759
+  ypos -3
+ }
+ DeepExpression {
+  temp_name0 pivot
+  temp_expr0 0.5
+  temp_name1 lift
+  temp_expr1 0.1
+  temp_name2 soft
+  temp_expr2 1
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "( ( deepNormal.alpha < pivot ? deepNormal.alpha + ( lift * ( pow( ( 1 - ( deepNormal.alpha / pivot ) ) , ( ( ( ( pivot / lift ) - 1 ) * soft ) + 1 ) ) ) ) : deepNormal.alpha ) - lift ) * 1 / ( 1 - lift )"
+  name DeepExpression11
+  label "ease out"
+  xpos 759
+  ypos 80
+ }
+ Dot {
+  name Dot5
+  xpos 793
+  ypos 2211
+ }
+push $Ne1808340
+ DeepExpression {
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "deepNormal.red * \[value inverseMatrix_lgt.invMatrix.6] + deepNormal.green * \[value inverseMatrix_lgt.invMatrix.7] + deepNormal.blue * \[value inverseMatrix_lgt.invMatrix.8]"
+  name DeepExpression3
+  label "directional light"
+  xpos 490
+  ypos -431
+ }
+ Dot {
+  name Dot7
+  xpos 524
+  ypos 2219
+ }
+push $Ne1808340
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression8
+  xpos -86
+  ypos -536
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_top
+  addUserKnob {1 mname}
+  mname iMatrix_top
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression13
+  xpos -86
+  ypos -456
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_down
+  addUserKnob {1 mname}
+  mname iMatrix_down
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression6
+  xpos -86
+  ypos -376
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_n
+  addUserKnob {1 mname}
+  mname iMatrix_n
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression7
+  xpos -86
+  ypos -296
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_nw
+  addUserKnob {1 mname}
+  mname iMatrix_nw
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression14
+  xpos -86
+  ypos -216
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_w
+  addUserKnob {1 mname}
+  mname iMatrix_w
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression15
+  xpos -86
+  ypos -136
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_sw
+  addUserKnob {1 mname}
+  mname iMatrix_sw
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression16
+  xpos -86
+  ypos -56
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_s
+  addUserKnob {1 mname}
+  mname iMatrix_s
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression17
+  xpos -86
+  ypos 24
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_se
+  addUserKnob {1 mname}
+  mname iMatrix_se
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression18
+  xpos -86
+  ypos 104
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_e
+  addUserKnob {1 mname}
+  mname iMatrix_e
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression19
+  xpos -86
+  ypos 184
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_ne
+  addUserKnob {1 mname}
+  mname iMatrix_ne
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression20
+  xpos -86
+  ypos 264
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_top_n
+  addUserKnob {1 mname}
+  mname iMatrix_top_n
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression21
+  xpos -86
+  ypos 344
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_top_nw
+  addUserKnob {1 mname}
+  mname iMatrix_top_nw
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression22
+  xpos -86
+  ypos 424
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_top_nw
+  addUserKnob {1 mname}
+  mname iMatrix_top_nw
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression24
+  xpos -86
+  ypos 504
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_top_w
+  addUserKnob {1 mname}
+  mname iMatrix_top_w
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression25
+  xpos -86
+  ypos 584
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_top_sw
+  addUserKnob {1 mname}
+  mname iMatrix_top_sw
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression26
+  xpos -86
+  ypos 664
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_top_s
+  addUserKnob {1 mname}
+  mname iMatrix_top_s
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression27
+  xpos -86
+  ypos 744
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_top_se
+  addUserKnob {1 mname}
+  mname iMatrix_top_se
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression28
+  xpos -86
+  ypos 824
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_top_e
+  addUserKnob {1 mname}
+  mname iMatrix_top_e
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression29
+  xpos -86
+  ypos 904
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_top_ne
+  addUserKnob {1 mname}
+  mname iMatrix_top_ne
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression30
+  xpos -86
+  ypos 984
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_down_n
+  addUserKnob {1 mname}
+  mname iMatrix_down_n
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression31
+  xpos -86
+  ypos 1064
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_down_nw
+  addUserKnob {1 mname}
+  mname iMatrix_down_nw
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression32
+  xpos -86
+  ypos 1144
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_down_w
+  addUserKnob {1 mname}
+  mname iMatrix_down_w
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression33
+  xpos -86
+  ypos 1224
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_down_sw
+  addUserKnob {1 mname}
+  mname iMatrix_down_sw
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression34
+  xpos -86
+  ypos 1304
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_down_s
+  addUserKnob {1 mname}
+  mname iMatrix_down_s
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression35
+  xpos -86
+  ypos 1384
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_down_se
+  addUserKnob {1 mname}
+  mname iMatrix_down_se
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression36
+  xpos -86
+  ypos 1464
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_down_e
+  addUserKnob {1 mname}
+  mname iMatrix_down_e
+ }
+ DeepExpression {
+  temp_name0 zpos
+  temp_expr0 "-( ( deepPosition.red - \[value \[value nname].world_matrix.3] ) * \[value \[value mname].invMatrix.6] + ( deepPosition.green - \[value \[value nname].world_matrix.7] ) * \[value \[value mname].invMatrix.7] + ( deepPosition.blue - \[value \[value nname].world_matrix.11] ) * \[value \[value mname].invMatrix.8] )"
+  temp_name1 znor
+  temp_expr1 "deepNormal.red * \[value \[value mname].invMatrix.6] + deepNormal.green * \[value \[value mname].invMatrix.7] + deepNormal.blue * \[value \[value mname].invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "\[value globalTCL.pt_nstack]"
+  name DeepExpression37
+  xpos -86
+  ypos 1544
+  addUserKnob {20 User}
+  addUserKnob {1 nname}
+  nname pt_down_ne
+  addUserKnob {1 mname}
+  mname iMatrix_down_ne
+ }
+ Dot {
+  name Dot6
+  xpos -52
+  ypos 1768
+ }
+set Ne18cf500 [stack 0]
+ DeepExpression {
+  temp_name0 lgtR
+  temp_expr0 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.0] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.1] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.2]"
+  temp_name1 lgtG
+  temp_expr1 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.3] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.4] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.5]"
+  temp_name2 lgtB
+  temp_expr2 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.6] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.7] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 {-deep.front -deep.back}
+  deepNormal.alpha "pow( 1 - pow( 1 - ( deepNormal.alpha * ( 1 - clamp( sqrt( pow2( lgtR * \[value size_mult] ) + pow2( lgtG * \[value size_mult] ) + pow2( lgtB * \[value size_mult] ) ) ) ) ) , \[value parent.exp_in] ) , \[value parent.exp_out] ) * ( 1 / \[value parent.intensity] )"
+  name DeepExpression41
+  label exponential
+  xpos 152
+  ypos 1944
+  addUserKnob {20 User}
+  addUserKnob {7 size_mult}
+  size_mult {{"1 / parent.intensity"}}
+ }
+push $Ne18cf500
+ DeepExpression {
+  temp_name0 lgtR
+  temp_expr0 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.0] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.1] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.2]"
+  temp_name1 lgtG
+  temp_expr1 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.3] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.4] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.5]"
+  temp_name2 lgtB
+  temp_expr2 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.6] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.7] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 {-deep.front -deep.back}
+  deepNormal.alpha "clamp( ( deepNormal.alpha * ( 1 - clamp( sqrt( pow2( lgtR * \[value size_mult] ) + pow2( lgtG * \[value size_mult] ) + pow2( lgtB * \[value size_mult] ) ) ) ) ) ** 3 ) * ( 1 / \[value parent.intensity] )"
+  name DeepExpression40
+  label cubic
+  xpos 41
+  ypos 1946
+  addUserKnob {20 User}
+  addUserKnob {7 size_mult}
+  size_mult {{"1 / parent.intensity"}}
+ }
+push $Ne18cf500
+ DeepExpression {
+  temp_name0 lgtR
+  temp_expr0 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.0] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.1] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.2]"
+  temp_name1 lgtG
+  temp_expr1 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.3] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.4] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.5]"
+  temp_name2 lgtB
+  temp_expr2 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.6] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.7] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 {-deep.front -deep.back}
+  deepNormal.alpha "clamp( pow2( deepNormal.alpha * ( 1 - clamp( sqrt( pow2( lgtR * \[value size_mult] ) + pow2( lgtG * \[value size_mult] ) + pow2( lgtB * \[value size_mult] ) ) ) ) ) , 0 , 1 ) * ( 1 / \[value parent.intensity] )"
+  name DeepExpression38
+  label quadratic
+  xpos -86
+  ypos 1942
+  addUserKnob {20 User}
+  addUserKnob {7 size_mult}
+  size_mult {{"1 / parent.intensity"}}
+ }
+push $Ne18cf500
+ DeepExpression {
+  temp_name0 lgtR
+  temp_expr0 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.0] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.1] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.2]"
+  temp_name1 lgtG
+  temp_expr1 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.3] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.4] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.5]"
+  temp_name2 lgtB
+  temp_expr2 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.6] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.7] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 {-deep.front -deep.back}
+  deepNormal.alpha "smoothstep( 0, 1, deepNormal.alpha * ( 1 - clamp( sqrt( pow2( lgtR * \[value size_mult] ) + pow2( lgtG * \[value size_mult] ) + pow2( lgtB * \[value size_mult] ) ) ) ) ) * ( 1 / \[value parent.intensity] )"
+  name DeepExpression39
+  label linear
+  xpos -197
+  ypos 1949
+  addUserKnob {20 User}
+  addUserKnob {7 size_mult}
+  size_mult {{"1 / parent.intensity"}}
+ }
+push $Ne18cf500
+ DeepExpression {
+  temp_name0 lgtR
+  temp_expr0 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.0] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.1] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.2]"
+  temp_name1 lgtG
+  temp_expr1 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.3] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.4] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.5]"
+  temp_name2 lgtB
+  temp_expr2 "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.6] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.7] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.8]"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 {-deep.front -deep.back}
+  deepNormal.alpha "deepNormal.alpha * ( 1 - clamp( sqrt( pow2( lgtR * \[value size_mult] ) + pow2( lgtG * \[value size_mult] ) + pow2( lgtB * \[value size_mult] ) ) ) ) * ( 1 / \[value parent.intensity] )"
+  name DeepExpression1
+  xpos -314
+  ypos 1951
+  addUserKnob {20 User}
+  addUserKnob {7 size_mult}
+  size_mult {{"1 / parent.intensity"}}
+ }
+ Switch {
+  inputs 5
+  which {{parent.falloff_type}}
+  name Switch4
+  xpos -86
+  ypos 2117
+ }
+ Switch {
+  inputs 3
+  which {{parent.light_type}}
+  name Switch1
+  xpos -86
+  ypos 2364
+ }
+ DeepExpression {
+  chans0 {rgba.red rgba.green rgba.blue none}
+  chans1 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  rgba.red "red + clamp( deepNormal.alpha ) * ( \[value parent.intensity] * \[value intensity_bias] ) * \[value parent.color.r] )"
+  rgba.green "green + clamp( deepNormal.alpha ) * ( \[value parent.intensity] * \[value intensity_bias] ) * \[value parent.color.g] )"
+  rgba.blue "blue + clamp( deepNormal.alpha ) * ( \[value parent.intensity] * \[value intensity_bias] ) * \[value parent.color.b] )"
+  deepNormal.alpha 0
+  name DeepExpression42
+  xpos -86
+  ypos 2559
+  addUserKnob {20 User}
+  addUserKnob {7 intensity_bias}
+  intensity_bias 5
+ }
+ Dot {
+  name Dot13
+  xpos -52
+  ypos 3046
+ }
+set Ne1903b70 [stack 0]
+ Output {
+  name Output1
+  xpos -86
+  ypos 3349
+ }
+push $Ne1903b70
+push $Ne1805e80
+ Dot {
+  name Dot1
+  xpos 1532
+  ypos -750
+ }
+ Switch {
+  inputs 2
+  which {{"parent.display_ptc_type == 1 ? 0 : parent.display_ptc_type == 2 ? 1 : 0"}}
+  name Switch3
+  xpos 1498
+  ypos 3043
+ }
+ Group {
+  name DeepPositionToImage3
+  tile_color 0x3d99ff
+  label "<font color=cyan>Image Output</font>"
+  xpos 1498
+  ypos 3123
+  addUserKnob {20 t_VERSION l Version}
+  addUserKnob {26 l_VERSION l <b>Version</b> T n/a}
+  addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2019-05-23}
+  addUserKnob {26 l_CHANGELOG l <b>Changelog</b> T "for internal use"}
+  addUserKnob {26 l_DEV l "<b>Developed by</b>" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+ }
+  Input {
+   inputs 0
+   name deep
+   xpos 508
+   ypos -26
+  }
+  Dot {
+   name Dot5
+   xpos 542
+   ypos 31
+  }
+set Ne1914cb0 [stack 0]
+  DeepExpression {
+   chans1 none
+   rgba.red deepPosition.red
+   rgba.green deepPosition.green
+   rgba.blue deepPosition.blue
+   rgba.alpha "alpha == 0 ? 0 : 1"
+   name DeepExpression15
+   xpos 656
+   ypos 28
+  }
+  DeepToImage {
+   name DeepToImage2
+   xpos 656
+   ypos 185
+  }
+push $Ne1914cb0
+  DeepToImage {
+   name DeepToImage1
+   xpos 508
+   ypos 80
+  }
+add_layer {deepPosition deepPosition.red deepPosition.green deepPosition.blue deepPosition.alpha}
+  ShuffleCopy {
+   inputs 2
+   red red
+   green green
+   blue blue
+   alpha black
+   out deepPosition
+   name ShuffleCopy1
+   xpos 508
+   ypos 185
+  }
+  Output {
+   name Output1
+   xpos 508
+   ypos 265
+  }
+ end_group
+ PositionToPoints2 {
+  display textured
+  selectable false
+  render_mode textured
+  cast_shadow false
+  receive_shadow false
+  P_channel deepPosition
+  detail 0.1
+  pointSize 1
+  name deepPositionToPoints
+  xpos 1498
+  ypos 3229
+  disable {{"parent.display_ptc_type == 0 ? 1 : 0"}}
+ }
+ Axis {
+  inputs 0
+  name lgt_data
+  xpos -3592
+  ypos -261
+ }
+set Ne1934fc0 [stack 0]
+ Dot {
+  name Dot2
+  xpos -3568
+  ypos 81
+ }
+set Ne193a320 [stack 0]
+ Axis {
+  display off
+  selectable false
+  name pt_n
+  xpos -3392
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {0 45 0}
+  name pt_nw
+  xpos -3295
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {0 90 0}
+  name pt_w
+  xpos -3192
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {0 135 0}
+  name pt_sw
+  xpos -3091
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {0 180 0}
+  name pt_s
+  xpos -2985
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {0 225 0}
+  name pt_se
+  xpos -2885
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {0 270 0}
+  name pt_e
+  xpos -2786
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {-45 270 0}
+  name pt_down_e
+  xpos -1097
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {45 0 0}
+  name pt_top_n
+  xpos -2566
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {45 45 0}
+  name pt_top_nw
+  xpos -2454
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {45 90 0}
+  name pt_top_w
+  xpos -2355
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {45 135 0}
+  name pt_top_sw
+  xpos -2252
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {45 180 0}
+  name pt_top_s
+  xpos -2153
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {45 225 0}
+  name pt_top_se
+  xpos -2044
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {45 270 0}
+  name pt_top_e
+  xpos -1944
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {45 315 0}
+  name pt_top_ne
+  xpos -1849
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {-45 0 0}
+  name pt_down_n
+  xpos -1707
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {-45 45 0}
+  name pt_down_nw
+  xpos -1609
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {-45 90 0}
+  name pt_down_w
+  xpos -1512
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {-45 135 0}
+  name pt_down_sw
+  xpos -1409
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {-45 180 0}
+  name pt_down_s
+  xpos -1308
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {-45 225 0}
+  name pt_down_se
+  xpos -1198
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {-45 315 0}
+  name pt_down_ne
+  xpos -999
+  ypos 528
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {90 0 0}
+  name pt_top
+  xpos -3592
+  ypos 528
+ }
+ Group {
+  inputs 0
+  name iMatrix_top
+  tile_color 0x337f4cff
+  xpos -3604
+  ypos 609
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_top.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_down
+  tile_color 0x337f4cff
+  xpos -3502
+  ypos 609
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_down.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_n
+  tile_color 0x337f4cff
+  xpos -3403
+  ypos 609
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_n.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_nw
+  tile_color 0x337f4cff
+  xpos -3307
+  ypos 609
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_nw.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_w
+  tile_color 0x337f4cff
+  xpos -3206
+  ypos 609
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_w.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_sw
+  tile_color 0x337f4cff
+  xpos -3099
+  ypos 610
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_sw.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_s
+  tile_color 0x337f4cff
+  xpos -2995
+  ypos 609
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_s.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_se
+  tile_color 0x337f4cff
+  xpos -2897
+  ypos 610
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_se.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_e
+  tile_color 0x337f4cff
+  xpos -2793
+  ypos 611
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_e.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {0 315 0}
+  name pt_ne
+  xpos -2682
+  ypos 530
+ }
+ Group {
+  inputs 0
+  name iMatrix_ne
+  tile_color 0x337f4cff
+  xpos -2692
+  ypos 610
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_ne.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_top_n
+  tile_color 0x337f4cff
+  xpos -2578
+  ypos 611
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_top_n.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_top_nw
+  tile_color 0x337f4cff
+  xpos -2465
+  ypos 612
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_top_nw.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_top_w
+  tile_color 0x337f4cff
+  xpos -2365
+  ypos 613
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_top_w.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_top_sw
+  tile_color 0x337f4cff
+  xpos -2262
+  ypos 614
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_top_sw.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_top_s
+  tile_color 0x337f4cff
+  xpos -2159
+  ypos 615
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_top_s.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_top_se
+  tile_color 0x337f4cff
+  xpos -2056
+  ypos 615
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_top_se.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_top_e
+  tile_color 0x337f4cff
+  xpos -1956
+  ypos 614
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_top_e.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_top_ne
+  tile_color 0x337f4cff
+  xpos -1857
+  ypos 614
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_top_ne.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_down_n
+  tile_color 0x337f4cff
+  xpos -1721
+  ypos 611
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_down_n.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_down_nw
+  tile_color 0x337f4cff
+  xpos -1618
+  ypos 610
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_down_nw.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_down_w
+  tile_color 0x337f4cff
+  xpos -1517
+  ypos 611
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_down_w.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_down_sw
+  tile_color 0x337f4cff
+  xpos -1418
+  ypos 608
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_down_sw.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_down_s
+  tile_color 0x337f4cff
+  xpos -1315
+  ypos 607
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_down_s.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_down_se
+  tile_color 0x337f4cff
+  xpos -1213
+  ypos 608
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_down_se.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_down_e
+  tile_color 0x337f4cff
+  xpos -1106
+  ypos 610
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_down_e.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name iMatrix_down_ne
+  tile_color 0x337f4cff
+  xpos -1008
+  ypos 611
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path pt_down_ne.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Group {
+  inputs 0
+  name inverseMatrix_lgt
+  tile_color 0x337f4cff
+  xpos -3602
+  ypos -346
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path lgt_data.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nlgtKnobs = \['cone_angle','cone_penumbra_angle','cone_falloff','falloff_type','exp_in','exp_out']\n\nif thisGRP\['light_type'].value() == 'point' :\n    for knob in lgtKnobs :\n        if knob == 'falloff_type' or knob == 'exp_in' or knob == 'exp_out' :\n            thisGRP\[knob].setEnabled(True)\n        else :\n            thisGRP\[knob].setEnabled(False)\n    thisGRP\['display_spot'].setVisible(False)\n    thisGRP\['display_light'].setVisible(True)\nelif thisGRP\['light_type'].value() == 'directional' :\n    for knob in lgtKnobs :\n        thisGRP\[knob].setEnabled(False)\n    thisGRP\['display_spot'].setVisible(False)\n    thisGRP\['display_light'].setVisible(True)\nelif thisGRP\['light_type'].value() == 'spot' :\n    for knob in lgtKnobs :\n        thisGRP\[knob].setEnabled(True)\n    thisGRP\['display_spot'].setVisible(True)\n    thisGRP\['display_light'].setVisible(False)\n"
+  xpos -3596
+  ypos -773
+  addUserKnob {20 User}
+  addUserKnob {4 light_type l "light type" M {point directional spot ""}}
+  light_type directional
+ }
+ NoOp {
+  inputs 0
+  name CTRL
+  xpos -3598
+  ypos -553
+  addUserKnob {20 User}
+  addUserKnob {3 lgt_display}
+  lgt_display {{"parent.display_light == 0 && parent.display_light == 0 || parent.display_light == 1 && parent.display_light == 0 || parent.display_light == 0 && parent.display_spot == 0 ? 0 : 1"}}
+ }
+push $Ne1934fc0
+ Group {
+  inputs 0
+  name spot
+  xpos -3342
+  ypos -482
+ }
+  Cylinder {
+   inputs 0
+   display wireframe
+   selectable false
+   render_mode off
+   cast_shadow false
+   receive_shadow false
+   rows 1
+   columns 8
+   close_bottom true
+   translate {0 1 0}
+   rotate {-90 0 0}
+   pivot {0 -1 0}
+   name Cylinder1
+   xpos 215
+   ypos 295
+  }
+  EditGeo {
+   selectable false
+   render_mode off
+   keys {{0 1 2 3 4 5 6 7 8}
+     }
+   values {{0.001 0.001 -0.001 0.001 -0.9988563061 0.001 -0.7062979937 -0.7062979937 0.001 -0.9988563657 8.035581089e-08 -0.001 -0.7062979937 0.7062980533 -0.001 0.001 0.9988564253 -0.001 0.7062981725 0.7062979341 -0.001 0.9988564253 0.001 -0.001 0.7062978148 -0.7062982321 0.001}
+     }
+   scaling {0 0 0}
+   name EditGeo2
+   xpos 215
+   ypos 375
+  }
+  Dot {
+   name Dot1
+   xpos 249
+   ypos 430
+  }
+set Ne1c658f0 [stack 0]
+  TransformGeo {
+   display wireframe
+   selectable false
+   render_mode off
+   scaling {{"radians( parent.parent.cone_angle + parent.parent.cone_penumbra_angle )"} {scaling.x} 1}
+   name TransformGeo1
+   xpos 332
+   ypos 491
+  }
+set Ne1c67db0 [stack 0]
+push $Ne1c658f0
+  TransformGeo {
+   display wireframe
+   selectable false
+   render_mode off
+   scaling {{"radians( parent.parent.cone_angle )"} {scaling.x} 1}
+   name TransformGeo2
+   xpos 215
+   ypos 489
+  }
+set Ne1c6f020 [stack 0]
+  MergeGeo {
+   inputs 2
+   name MergeGeo1
+   xpos 332
+   ypos 571
+  }
+push $Ne1c67db0
+push $Ne1c6f020
+  Switch {
+   inputs 3
+   which {{"parent.parent.display_spot == 1 ? 0 : parent.parent.display_spot == 2 ? 1 : 2"}}
+   name Switch1
+   xpos 215
+   ypos 642
+  }
+  Output {
+   name Output1
+   xpos 215
+   ypos 722
+  }
+ end_group
+ Group {
+  inputs 0
+  name directional
+  xpos -3446
+  ypos -478
+ }
+  Cylinder {
+   inputs 0
+   selectable false
+   rows 1
+   columns 4
+   translate {0 1 0}
+   rotate {-90 0 0}
+   scaling {0.01 1 0.01}
+   uniform_scale 0.1
+   pivot {0 -1 0}
+   name Cylinder2
+   selected true
+   xpos 215
+   ypos 418
+  }
+set Nda563660 [stack 0]
+  TransformGeo {
+   selectable false
+   translate {0.01 0.01 0}
+   name TransformGeo4
+   xpos 537
+   ypos 534
+  }
+push $Nda563660
+  TransformGeo {
+   selectable false
+   translate {-0.01 0.01 0}
+   name TransformGeo3
+   xpos 430
+   ypos 535
+  }
+push $Nda563660
+  TransformGeo {
+   selectable false
+   translate {-0.01 -0.01 0}
+   name TransformGeo2
+   xpos 325
+   ypos 536
+  }
+push $Nda563660
+  TransformGeo {
+   selectable false
+   translate {0.01 -0.01 0}
+   name TransformGeo1
+   xpos 215
+   ypos 538
+  }
+  MergeGeo {
+   inputs 4
+   selectable false
+   name MergeGeo1
+   xpos 215
+   ypos 618
+  }
+  Output {
+   name Output1
+   xpos 215
+   ypos 693
+  }
+ end_group
+ Group {
+  inputs 0
+  name point
+  xpos -3536
+  ypos -480
+ }
+  Sphere {
+   inputs 0
+   display wireframe
+   render_mode off
+   cast_shadow false
+   receive_shadow false
+   rows 10
+   columns 10
+   uniform_scale 0.1
+   name Sphere24
+   selected true
+   xpos -497
+   ypos -420
+  }
+  Output {
+   name Output1
+   xpos -497
+   ypos -320
+  }
+ end_group
+ Switch {
+  inputs 3
+  which {{parent.light_type}}
+  name Switch2
+  xpos -3446
+  ypos -403
+ }
+ TransformGeo {
+  selectable false
+  name TransformGeo1
+  xpos -3446
+  ypos -323
+ }
+ TransformGeo {
+  inputs 2
+  display {{CTRL.lgt_display}}
+  selectable false
+  uniform_scale 10
+  name showupTG
+  gl_color 0x7f7f7fff
+  xpos -3446
+  ypos -240
+ }
+ NoOp {
+  inputs 0
+  name menu02
+  knobChanged "\nthisN = nuke.thisNode()\nfor knob in thisN.knobs() :\n    try :\n        if knob.split('_')\[1] == 'panelDropped' :\n            thisN.removeKnob( thisN\[knob] )\n    except :\n        pass\n"
+  xpos -3473
+  ypos -772
+  addUserKnob {20 User}
+  addUserKnob {18 color}
+  color {1 1 1}
+  addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 color_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+push $Ne193a320
+ Axis {
+  display off
+  selectable false
+  rotate {-90 0 0}
+  name pt_down
+  xpos -3488
+  ypos 528
+ }
+ NoOp {
+  inputs 0
+  name globalTCL
+  xpos -3484
+  ypos -556
+  addUserKnob {20 User}
+  addUserKnob {1 lx}
+  lx "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.0] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.1] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.2]"
+  addUserKnob {1 ly}
+  ly "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.3] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.4] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.5]"
+  addUserKnob {1 lz}
+  lz "( deepPosition.red - \[value lgt_data.world_matrix.3] ) * \[value inverseMatrix_lgt.invMatrix.6] + ( deepPosition.green - \[value lgt_data.world_matrix.7] ) * \[value inverseMatrix_lgt.invMatrix.7] + ( deepPosition.blue - \[value lgt_data.world_matrix.11] ) * \[value inverseMatrix_lgt.invMatrix.8]"
+  addUserKnob {26 ""}
+  addUserKnob {1 pt_nstack}
+  pt_nstack "clamp( deepNormal.alpha + clamp( zpos >= 0 ? zpos * znor : 0 ) )"
+ }
+end_group

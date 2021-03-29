@@ -1,0 +1,253 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name GrainAdvanced
+ help "Adds synthetic grain. \n\nThe defaults are setup to simulate an HD Alexa plate's grain.\n\nYou can adjust the sliders to match a sample piece of grain. Find a sample with a rather constant background, blur it to remove the grain, and use as input to this. View with a wipe in the viewer so you can make a match. It helps to view and match each of the red, green, blue separately."
+ tile_color 0x323232ff
+ note_font_color 0xb80045ff
+ selected true
+ addUserKnob {20 grain_tab l Grain}
+ addUserKnob {3 seed t "Change this value to make different instances of this operator produce different noise"}
+ seed 134
+ addUserKnob {26 "" l "@b;Size"}
+ addUserKnob {14 red_size l red R 0 100}
+ red_size 0.4
+ addUserKnob {14 green_size l green R 0 100}
+ green_size 0.6
+ addUserKnob {14 blue_size l blue R 0 100}
+ blue_size 1.6
+ addUserKnob {7 irregularity}
+ irregularity 0.6
+ addUserKnob {26 Intensity l "@b;Intensity Bright"}
+ addUserKnob {7 red_m l red t "Amount of grain to add to a white pixel"}
+ red_m 0.15
+ addUserKnob {7 green_m l green}
+ green_m 0.15
+ addUserKnob {7 blue_m l blue}
+ blue_m 0.2
+ addUserKnob {26 Darks l "@b;Intensity Darks"}
+ addUserKnob {7 red_i l red R 0 0.2}
+ red_i 0.025
+ addUserKnob {7 green_i l green R 0 0.2}
+ green_i 0.01
+ addUserKnob {7 blue_i l blue R 0 0.2}
+ blue_i 0.03
+ addUserKnob {26 Softness l "@b;Softness"}
+ addUserKnob {7 red_soft l red R 0 2}
+ red_soft 1.3
+ addUserKnob {7 green_soft l green R 0 2}
+ green_soft 1.1
+ addUserKnob {7 blue_soft l blue R 0 2}
+ blue_soft 1.3
+ addUserKnob {26 Globals l "@b;Global Controls"}
+ addUserKnob {7 saturation l "Grain Saturation" t "Control how saturated the grain appears"}
+ saturation 0.85
+ addUserKnob {7 aspect_ratio l "Aspect Ratio" t "Edit the aspect ratio of the grain to match anamorphic plates." R 0.5 2}
+ aspect_ratio 1
+ addUserKnob {4 ar_filter l " " t "Set the filter on the aspect ratio transform" -STARTLINE M {Impulse Cubic ""}}
+ ar_filter Cubic
+ addUserKnob {6 apply_alpha l "Apply only through alpha" +STARTLINE}
+ addUserKnob {6 invert_alpha l "Invert alpha" -STARTLINE}
+ addUserKnob {6 invert_mask l "Invert mask" -STARTLINE}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {26 ""}
+ addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nGrain_Advanced\nVersion 1.1\n2017" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.1 - 2017 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 368
+  ypos 675
+  number 1
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 34
+  ypos -150
+ }
+ Dot {
+  name Dot1
+  tile_color 0xcccccc00
+  xpos 68
+  ypos -58
+ }
+set Na44a0240 [stack 0]
+ Dot {
+  name Dot5
+  tile_color 0xcccccc00
+  xpos -75
+  ypos -58
+ }
+set Na44a3d70 [stack 0]
+ Dot {
+  name Dot6
+  tile_color 0xcccccc00
+  xpos -146
+  ypos -58
+ }
+ Dot {
+  name Dot7
+  tile_color 0xcccccc00
+  xpos -146
+  ypos 679
+ }
+push $Na44a3d70
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos -109
+  ypos 86
+  disable {{parent.apply_alpha}}
+ }
+ Dot {
+  name Dot4
+  tile_color 0x9e3c6300
+  xpos -76
+  ypos 557
+ }
+push $Na44a0240
+ Dot {
+  name Dot2
+  tile_color 0xcccccc00
+  xpos 164
+  ypos -58
+ }
+set Na44c1190 [stack 0]
+ Noise {
+  output {rgba.red -rgba.green -rgba.blue -rgba.alpha}
+  cliptype none
+  replace true
+  size {{parent.red_size.w} {parent.red_size.h}}
+  zoffset {{frame+seed+(irregularity/2)}}
+  octaves 2
+  gamma 1
+  xrotate {{irregularity*45}}
+  yrotate {{irregularity*45}}
+  name red
+  xpos 252
+  ypos -62
+ }
+ Noise {
+  output {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  cliptype none
+  replace true
+  size {{parent.green_size.w} {parent.green_size.h}}
+  zoffset {{frame+6+seed+(irregularity/2)}}
+  octaves 2
+  gamma 1
+  xrotate {{irregularity*45}}
+  yrotate {{irregularity*45}}
+  name green
+  xpos 252
+  ypos -19
+ }
+ Noise {
+  output {-rgba.red -rgba.green rgba.blue -rgba.alpha}
+  cliptype none
+  replace true
+  size {{parent.blue_size.w} {parent.blue_size.h}}
+  zoffset {{frame+3*seed+(irregularity/2)}}
+  octaves 2
+  gamma 1
+  xrotate {{irregularity*45}}
+  yrotate {{irregularity*45}}
+  name blue
+  xpos 252
+  ypos 20
+ }
+ Transform {
+  scale {{parent.aspect_ratio>1?parent.aspect_ratio:1 x3 0} {parent.aspect_ratio<1?1/parent.aspect_ratio:1 x3 0}}
+  filter {{parent.ar_filter}}
+  shutteroffset centred
+  name Scale_Ratio
+  xpos 252
+  ypos 62
+ }
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{parent.red_soft}}
+  name Blur1
+  label "size \[value size]"
+  xpos 252
+  ypos 122
+ }
+ Blur {
+  channels {-rgba.red rgba.green -rgba.blue none}
+  size {{parent.green_soft}}
+  name Blur2
+  label "size \[value size]"
+  xpos 252
+  ypos 173
+ }
+ Blur {
+  channels {-rgba.red -rgba.green rgba.blue none}
+  size {{parent.blue_soft}}
+  name Blur3
+  label "size \[value size]"
+  xpos 252
+  ypos 223
+ }
+ Grade {
+  multiply 2
+  add -1
+  black_clamp false
+  name Grade1
+  xpos 252
+  ypos 295
+ }
+push $Na44c1190
+ Grade {
+  black {{parent.red_i} {parent.green_i} {parent.blue_i} {curve}}
+  white {{parent.red_m} {parent.green_m} {parent.blue_m} {curve}}
+  name Grade4
+  xpos 130
+  ypos 422
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  bbox B
+  name Merge3
+  xpos 252
+  ypos 422
+ }
+ Saturation {
+  saturation {{parent.saturation}}
+  name Saturation1
+  xpos 252
+  ypos 465
+ }
+ Dot {
+  name Dot3
+  tile_color 0x7aa9ff00
+  xpos 286
+  ypos 557
+ }
+push $Na44a0240
+ Merge2 {
+  inputs 2+1
+  operation plus
+  bbox B
+  output rgb
+  invert_mask {{invert_alpha}}
+  mix {{parent.mix}}
+  name Merge4
+  xpos 34
+  ypos 553
+ }
+ Keymix {
+  inputs 3
+  invertMask {{!invert_mask}}
+  name Keymix1
+  xpos 34
+  ypos 669
+  disable {{"!\[exists parent.input1] "}}
+ }
+ Output {
+  name Output1
+  xpos 34
+  ypos 758
+ }
+end_group

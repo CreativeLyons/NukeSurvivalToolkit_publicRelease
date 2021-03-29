@@ -1,0 +1,402 @@
+Group {
+ name apEdgePush
+ help "Distort the edges of your image outwards through its alpha, useful to hide edges with background influence showing up.\n\napEdgePush v1.2 by Adrian Pueyo.\nadrianpueyo.com, 2016"
+ tile_color 0x8a8a8aff
+ addUserKnob {20 apEdgePush}
+ addUserKnob {41 channels T IDistort.channels}
+ addUserKnob {4 theOutput l output t "By setting this output to distortion matte setup you'll have visual control of the following knobs. Then switch back to result and refine the \nvalues." M {result "distortion matte setup" ""}}
+ addUserKnob {6 crop_to_format l "crop to format" -STARTLINE}
+ crop_to_format true
+ addUserKnob {6 premultiplied l "(un)premult rgb" t "Unpremult rgb before applying the distortion and premultiply it back after." -STARTLINE}
+ addUserKnob {7 value t "Strength of the distortion." R 0 100}
+ value 1
+ addUserKnob {14 soft t "Pre-blur of the distortion matte." R 0 100}
+ soft 2
+ addUserKnob {7 falloff t "Falloff of the distortion/gamma of the distortion map."}
+ falloff 0.2
+ addUserKnob {14 maxIndent l "max indent" t "Maximum distance in pixels from the edge where this tool can apply distortion (use this to limit the inside distortion when using high values)." R 0 100}
+ maxIndent 10
+ addUserKnob {26 ""}
+ addUserKnob {41 matte t "Channel from the matte input to use as a distortion matte. If nothing is pluged, alpha from the img layer is used." T Copy2.from0}
+ addUserKnob {6 invert_matte l invert -STARTLINE}
+ addUserKnob {41 maskChannel l mask T Keymix1.maskChannel}
+ addUserKnob {41 invertMask l invert -STARTLINE T Keymix1.invertMask}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {26 version_author l "" t "apEdgePush v1.2\n2016" +STARTLINE T "<span style=\"color:#666\"><br/><b>apEdgePush v1.2</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2014-2016</span>"}
+}
+ Input {
+  inputs 0
+  name Inputimg
+  xpos 131
+  ypos 237
+ }
+ Shuffle {
+  name Shuffle
+  xpos 131
+  ypos 261
+ }
+set N32bf9c60 [stack 0]
+ Dot {
+  name Dot27
+  xpos 165
+  ypos 929
+ }
+set N33804b10 [stack 0]
+ Dot {
+  name Dot1
+  xpos 165
+  ypos 1085
+ }
+set N338070b0 [stack 0]
+ Dot {
+  name Dot13
+  xpos 165
+  ypos 1117
+ }
+set N33809650 [stack 0]
+ Dot {
+  name Dot14
+  xpos 165
+  ypos 1145
+ }
+push $N33809650
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 822
+  ypos 1054
+  number 2
+ }
+ Invert {
+  name Invert5
+  xpos 822
+  ypos 1078
+ }
+push $N338070b0
+ Input {
+  inputs 0
+  name Inputmatte
+  xpos 351
+  ypos 192
+  number 1
+ }
+ Expression {
+  expr3 1
+  name Expression1
+  xpos 351
+  ypos 216
+  disable {{"\[exists parent.input1]"}}
+ }
+push $N32bf9c60
+ Remove {
+  operation keep
+  channels alpha
+  name Remove2
+  xpos 241
+  ypos 257
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos 351
+  ypos 257
+  disable {{"!\[exists parent.input1]"}}
+ }
+ Invert {
+  channels alpha
+  name InvertAlpha
+  xpos 351
+  ypos 289
+  disable {{!parent.invert_matte}}
+ }
+ Dot {
+  name Dot12
+  xpos 385
+  ypos 348
+ }
+set N3382d110 [stack 0]
+ Dot {
+  name Dot25
+  xpos 385
+  ypos 595
+ }
+set N3382f6b0 [stack 0]
+ Dot {
+  name Dot26
+  xpos 385
+  ypos 874
+ }
+set N33831c50 [stack 0]
+ FilterErode {
+  size {{parent.maxIndent} {parent.maxIndent}}
+  filter gaussian
+  name FilterErodeMaxI
+  label MaxIndent
+  xpos 455
+  ypos 862
+ }
+push $N3382f6b0
+push $N3382d110
+ Dot {
+  name Dot11
+  xpos 648
+  ypos 348
+ }
+set N338394d0 [stack 0]
+ Matrix {
+  channels alpha
+  matrix {
+      {0.33 0 -0.33}
+      {1 0 -1}
+      {0.33 0 -0.33}
+    }
+  name hGrad
+  xpos 614
+  ypos 398
+ }
+push $N338394d0
+ Dot {
+  name Dot3
+  xpos 756
+  ypos 348
+ }
+ Matrix {
+  channels alpha
+  matrix {
+      {-0.33 -1 -0.33}
+      {0 0 0}
+      {0.33 1 0.33}
+    }
+  name vGrad
+  xpos 722
+  ypos 398
+ }
+ Dot {
+  name Dot8
+  xpos 756
+  ypos 470
+ }
+ MergeExpression {
+  inputs 2
+  expr0 Aa
+  expr1 Ba
+  expr2 0
+  name MergeExpressionHV
+  xpos 614
+  ypos 467
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge1
+  selected true
+  xpos 614
+  ypos 592
+ }
+ Blur {
+  channels rgba
+  size {{parent.soft} {parent.soft}}
+  name BlurAlpha
+  xpos 614
+  ypos 627
+ }
+ Dot {
+  name Dot28
+  xpos 648
+  ypos 663
+ }
+set N3385c4a0 [stack 0]
+ Dot {
+  name Dot10
+  xpos 742
+  ypos 663
+ }
+ Expression {
+  expr0 -min(r,0)
+  expr1 -min(g,0)
+  name NegativeValues
+  xpos 708
+  ypos 693
+ }
+ Invert {
+  channels rgb
+  name Invert1
+  xpos 708
+  ypos 717
+ }
+ Gamma {
+  channels rgb
+  value {{parent.Gamma2.value}}
+  name Gamma1
+  xpos 708
+  ypos 741
+ }
+ Invert {
+  channels rgb
+  name Invert4
+  xpos 708
+  ypos 765
+ }
+ Dot {
+  name Dot9
+  xpos 742
+  ypos 826
+ }
+push $N3385c4a0
+ Expression {
+  expr0 max(r,0)
+  expr1 max(g,0)
+  name PositiveValues
+  xpos 614
+  ypos 693
+ }
+ Invert {
+  channels rgb
+  name Invert2
+  xpos 614
+  ypos 717
+ }
+ Gamma {
+  channels rgb
+  value {{parent.falloff}}
+  name Gamma2
+  xpos 614
+  ypos 741
+ }
+ Invert {
+  channels rgb
+  name Invert3
+  xpos 614
+  ypos 765
+ }
+ MergeExpression {
+  inputs 2
+  expr0 Br-Ar
+  expr1 Bg-Ag
+  expr2 0
+  name MergeExpression7
+  xpos 614
+  ypos 823
+ }
+ Multiply {
+  channels {rgba.red rgba.green -rgba.blue none}
+  value {{parent.value}}
+  name MultiplyValue
+  xpos 614
+  ypos 847
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge5
+  xpos 614
+  ypos 871
+ }
+set N33899c80 [stack 0]
+ Expression {
+  expr0 max(abs(r),abs(g))
+  expr1 0
+  expr2 0
+  expr3 0
+  name ExpressionPrvw
+  xpos 739
+  ypos 871
+ }
+push $N33831c50
+ Dot {
+  name Dot29
+  xpos 385
+  ypos 898
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  mix 0.5
+  name MergePrvw
+  xpos 739
+  ypos 895
+ }
+ Dot {
+  name Dot2
+  xpos 773
+  ypos 1057
+ }
+push $N33899c80
+push $N33804b10
+add_layer {ap_edgepush ap_edgepush.u ap_edgepush.v}
+ ShuffleCopy {
+  inputs 2
+  in2 none
+  red red
+  green green
+  blue black
+  alpha black
+  out ap_edgepush
+  name ShuffleCopy1
+  xpos 614
+  ypos 926
+ }
+ Unpremult {
+  name Unpremult3
+  xpos 614
+  ypos 950
+  disable {{parent.premultiplied==0}}
+ }
+ IDistort {
+  channels rgba
+  uv ap_edgepush
+  uv_scale -1
+  name IDistort
+  xpos 614
+  ypos 974
+ }
+ Premult {
+  name Premult4
+  xpos 614
+  ypos 998
+  disable {{parent.premultiplied==0}}
+ }
+ Remove {
+  channels ap_edgepush
+  name Remove1
+  xpos 614
+  ypos 1022
+ }
+ Switch {
+  inputs 2
+  which {{parent.theOutput}}
+  name SwitchPreview
+  xpos 614
+  ypos 1054
+ }
+ Keymix {
+  inputs 3
+  name Keymix1
+  xpos 614
+  ypos 1078
+  disable {{"!\[exists parent.input2]"}}
+ }
+ Dissolve {
+  inputs 2
+  which {{1-parent.mix}}
+  name Dissolve1
+  xpos 614
+  ypos 1110
+  disable {{parent.mix==1}}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 614
+  ypos 1142
+  disable {{!parent.crop_to_format}}
+ }
+ Output {
+  name Output1
+  xpos 614
+  ypos 1166
+ }
+end_group

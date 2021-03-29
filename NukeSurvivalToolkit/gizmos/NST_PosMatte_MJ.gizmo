@@ -1,0 +1,417 @@
+Group {
+ name PosMatte
+ tile_color 0x5f3f7fff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {41 geo_select T geoCTRL.geo_select}
+ addUserKnob {41 transform T geoCTRL.transform}
+ addUserKnob {41 position l "world position" t "Select position (world space) channel.\nIf position is camera space, use 'ConvertPNZ' to convert to world space." T shuffle_pos.in}
+ addUserKnob {6 unpremult_src l "unpremult source" t "Anti-aliasing edge will process improper matte on the edge. Unpremult the data with alpha will fix this issue.\n\n* input must contain alpha in alpha channel.\n** uncheck this box if position data is un-filtered.\n*** this can be fix the external edge, but not the intersect edge." +STARTLINE}
+ addUserKnob {6 premult_result l "premult result" t "Toggle the premult result." -STARTLINE}
+ premult_result true
+ addUserKnob {26 title_matte l <b>MATTE</b>}
+ addUserKnob {41 mat_shape l shape T menu02.mat_shape}
+ addUserKnob {6 invert_matte l "invert matte" t "Invert the matte of the shape. Same as deepHoldout but with falloff support (soften matte)." -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 pos2D l "2D pos" t "Select the matte spot in 2D space." T menu03.pos2D}
+ addUserKnob {41 mat_translate l "3D pos" T geoCTRL.translate}
+ addUserKnob {41 file_menu l @FolderIcon T geoCTRL.file_menu}
+ addUserKnob {41 snap_menu l @AxisIcon -STARTLINE T geoCTRL.snap_menu}
+ addUserKnob {26 ""}
+ addUserKnob {41 mat_rot_order l "rotation order" T geoCTRL.rot_order}
+ addUserKnob {41 mat_rotate l rotate T geoCTRL.rotate}
+ addUserKnob {41 mat_scaling l scale T geoCTRL.scaling}
+ addUserKnob {41 mat_uniform_scale l "uniform scale" T geoCTRL.uniform_scale}
+ addUserKnob {41 mat_skew l skew T geoCTRL.skew}
+ addUserKnob {41 mat_pivot l pivot T geoCTRL.pivot}
+ addUserKnob {22 set_link l "link to selected axis/geo" t "Select any 3D nodes and link the node with this button. It gives you a control in 3D for transformation." T "def getLevel() :\n    ### level define ###\n    if len(nuke.thisNode().fullName().split('.')) == 1 :\n          ggLevel = nuke.root()\n    else :\n          nodePath = nuke.thisNode().fullName().split('.')\n          nodePath.pop()\n          ggLevel = nuke.toNode('.'.join(nodePath))\n    return ggLevel\n\nroot = getLevel()\nthisGRP = nuke.thisGroup()\nmainKnobs = \['mat_rot_order','mat_translate','mat_rotate','mat_scaling','mat_uniform_scale','mat_skew','mat_pivot']\n\naxWhiteList = \['Axis','Axis2','Cube','Sphere','Cylinder','Card','Card2','ReadGeo','ReadGeo2','TransformGeo']\n\ntry :\n    with root :\n        selNode = nuke.selectedNode()\n    \n    with thisGRP :\n        if axWhiteList.count(selNode.Class()) != 0 :\n            for knob in mainKnobs :\n                thisGRP\[knob].clearAnimated()\n            \n            thisGRP\[mainKnobs\[0]].setExpression( '\{0\}.rot_order'.format(selNode.name()) )\n            thisGRP\[mainKnobs\[1]].setExpression( '\{0\}.translate'.format(selNode.name()) )\n            thisGRP\[mainKnobs\[2]].setExpression( '\{0\}.rotate'.format(selNode.name()) )\n            thisGRP\[mainKnobs\[3]].setExpression( '\{0\}.scaling'.format(selNode.name()) )\n            thisGRP\[mainKnobs\[4]].setExpression( '\{0\}.uniform_scale'.format(selNode.name()) )\n            thisGRP\[mainKnobs\[5]].setExpression( '\{0\}.skew'.format(selNode.name()) )\n            thisGRP\[mainKnobs\[6]].setExpression( '\{0\}.pivot'.format(selNode.name()) )\n        else :\n            nuke.message('No support node selected.')\nexcept :\n    nuke.message('no node selected.')" +STARTLINE}
+ addUserKnob {22 remove_link l "remove linked expression" t "Remove the expression link but won't reset any data. So the transformation data still works if input doesn't contain any movement." -STARTLINE T "thisGRP = nuke.thisGroup()\nmainKnobs = \['mat_rot_order','mat_translate','mat_rotate','mat_scaling','mat_uniform_scale','mat_skew','mat_pivot']\n\nfor i in range (0, len(mainKnobs), 1) :\n    thisGRP\[mainKnobs\[i]].clearAnimated()"}
+ addUserKnob {22 bake_link l "bake expression link" t "Baked out the existing expression link back to this node itself. After that, the linked node is not required for this node anymore. Baked value is base on the frame range in project setting of the nuke script.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." T "thisGRP = nuke.thisGroup()\n\nframeST = nuke.root().firstFrame()\nframeED = nuke.root().lastFrame()\n\nallknobs = \['mat_translate','mat_rotate','mat_scaling','mat_uniform_scale','mat_skew','mat_pivot']\nalldata = \{\}\n\nchknobs = 0\nfor knob in allknobs :\n\tif thisGRP\[knob].hasExpression() :\n\t\tchknobs = 1\n\nif chknobs :\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\ttry :\n\t\t\t\talldata\[knob].append( thisGRP\[knob].getValueAt(t) )\n\t\t\texcept :\n\t\t\t\talldata\[knob] = \[ thisGRP\[knob].getValueAt(t) ]\n\n\tfor knob in allknobs :\n\t\tthisGRP\[knob].clearAnimated()\n\t\tthisGRP\[knob].setAnimated()\n\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is float :\n\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST] , t )\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is list :\n\t\t\t\tfor i in range( len( alldata\[knob]\[t-frameST] ) ) :\n\t\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST]\[i] , t , i )\nelse :\n\tnuke.message('no expression link found.')" +STARTLINE}
+ addUserKnob {22 copy_data l "copy from selected axis/geo" t "Select the axis/geo, then this will process 'link to selected axis/geo' and 'bake expression link' in once.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." -STARTLINE T "thisGRP = nuke.thisGroup()\nthisGRP\['set_link'].execute()\nthisGRP\['bake_link'].execute()"}
+ addUserKnob {20 grp_3dpreview l "Pointcloud preview" n 1}
+ grp_3dpreview 0
+ addUserKnob {4 display_ptc_type l "display type" t "When you open this node's panel, you can check the pointcloud under 3D view.\n\n<b>none</b>\nwill not show the pointcloud in 3D\n\n<b>raw pointcloud</b>\nshow the pointcloud from input data, without any effects from this node\n\n<b>with matte applied</b>\nThis can show the instant result of the projection. Since it feedback in real time, it might slow down the progress in 3D space." M {"no pointcloud preview" "raw pointcloud" "with matte applied" ""}}
+ display_ptc_type "raw pointcloud"
+ addUserKnob {41 detail l "point detail" T PositionToPoints.detail}
+ addUserKnob {41 pointSize l "point size" T PositionToPoints.pointSize}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 spacer l "" +STARTLINE T <br>}
+ addUserKnob {26 title_falloff l <b>FALLOFF</b>}
+ addUserKnob {13 cube3d_falloff l "cube3D falloff" +DISABLED}
+ cube3d_falloff {1 1 1}
+ addUserKnob {41 falloff_type l "falloff type" T menu01.falloff_type}
+ addUserKnob {7 uniform_falloff l "uniform falloff" t "This is a globel falloff value. Support for any shape of matte." R 0.001 1}
+ uniform_falloff 0.5
+ addUserKnob {7 exp_in l "exponential in" +DISABLED R 0.1 10}
+ exp_in 1
+ addUserKnob {7 exp_out l out -STARTLINE +DISABLED R 0.1 10}
+ exp_out 4
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 1.2}
+ addUserKnob {26 l_DATE l "Date Modified" T 2020-09-04}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"v1.2<br>'PosMatte'<br>&nbsp;&nbsp;-&nbsp;fix&nbsp;'2D&nbsp;sample'&nbsp;will&nbsp;break&nbsp;animated&nbsp;'3D&nbsp;pos'&nbsp;knob<br>&nbsp;&nbsp;-&nbsp;fix&nbsp;'cube3D&nbsp;falloff'&nbsp;separation<br>&nbsp;&nbsp;-&nbsp;fix&nbsp;matte:&nbsp;cube&nbsp;pivot,&nbsp;also&nbsp;in&nbsp;3D&nbsp;preview<br>'PosProjection'<br>&nbsp;&nbsp;-&nbsp;support&nbsp;overscan<br><br>1.1<br>'PosMatte'<br>&nbsp;&nbsp;-&nbsp;corrected&nbsp;pivot&nbsp;result<br>&nbsp;&nbsp;-&nbsp;'position'&nbsp;knob&nbsp;label&nbsp;changed&nbsp;to&nbsp;'world&nbsp;position'<br><br>1.0<br>-&nbsp;using&nbsp;Deep2VP&nbsp;setup&nbsp;in&nbsp;2D&nbsp;comp\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -1509
+  ypos 255
+  bdwidth 270
+  bdheight 479
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x7f7f7fff
+  label bin
+  note_font_size 42
+  xpos -1164
+  ypos 257
+  bdwidth 452
+  bdheight 1357
+ }
+ Input {
+  inputs 0
+  name CG
+  xpos 0
+  ypos -32
+ }
+ Dot {
+  name Dot1
+  xpos 34
+  ypos 86
+ }
+set N1e8ac800 [stack 0]
+ Unpremult {
+  channels all
+  name Unpremult1
+  xpos -524
+  ypos 79
+  disable {{!parent.unpremult_src}}
+ }
+set N1e8ac400 [stack 0]
+ Shuffle {
+  in none
+  in2 alpha
+  alpha red2
+  name shuffle_pos
+  xpos -524
+  ypos 167
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove3
+  xpos -524
+  ypos 247
+ }
+ Add {
+  channels rgb
+  value {{-geoCTRL.translate} {-geoCTRL.translate} {-geoCTRL.translate} {curve}}
+  name Add1
+  xpos -524
+  ypos 313
+ }
+ Add {
+  channels rgb
+  value {{-parent.mat_pivot} {-parent.mat_pivot} {-parent.mat_pivot} {curve}}
+  name Add3
+  xpos -524
+  ypos 395
+ }
+ ColorMatrix {
+  matrix {
+      {{ax_data.world_matrix.0} {ax_data.world_matrix.1} {ax_data.world_matrix.2}}
+      {{ax_data.world_matrix.4} {ax_data.world_matrix.5} {ax_data.world_matrix.6}}
+      {{ax_data.world_matrix.8} {ax_data.world_matrix.9} {ax_data.world_matrix.10}}
+    }
+  invert true
+  name ColorMatrix1
+  xpos -524
+  ypos 523
+ }
+ Add {
+  channels rgb
+  value {{parent.mat_pivot} {parent.mat_pivot} {parent.mat_pivot} {curve}}
+  name Add2
+  xpos -524
+  ypos 627
+ }
+ Dot {
+  name Dot2
+  xpos -490
+  ypos 707
+ }
+set N1e8d4800 [stack 0]
+ Expression {
+  temp_name0 circle
+  temp_expr0 "sqrt( pow2( red ) + pow2( blue ) )"
+  temp_name1 height
+  temp_expr1 "abs( green )"
+  expr3 "( \[value parent.invert_matte] ? clamp( max( circle , height ) ) : 1 - clamp( max( circle , height ) ) ) * alpha"
+  name Expression3
+  label cylinder
+  xpos -404
+  ypos 782
+ }
+push $N1e8d4800
+ Expression {
+  temp_name0 newR
+  temp_expr0 "clamp( 1-(1-abs(red)) * (1/ clamp(\[value parent.cube3d_falloff.x],0.00001,1) ) )"
+  temp_name1 newG
+  temp_expr1 "clamp( 1-(1-abs(green)) * (1/ clamp(\[value parent.cube3d_falloff.y],0.00001,1) ) )"
+  temp_name2 newB
+  temp_expr2 "clamp( 1-(1-abs(blue)) * (1/ clamp(\[value parent.cube3d_falloff.z],0.00001,1) ) )"
+  expr3 "( \[value parent.invert_matte] ? clamp(max(abs(newR),abs(newG),abs(newB))) : 1 - clamp(max(abs(newR),abs(newG),abs(newB))) ) * alpha"
+  name Expression7
+  label cube
+  xpos -524
+  ypos 781
+ }
+push $N1e8d4800
+ Expression {
+  temp_name0 shape
+  temp_expr0 "clamp( sqrt( pow2(red) + pow2(green) + pow2(blue) ) )"
+  expr3 "( \[value parent.invert_matte] ? shape : 1 - shape ) * alpha"
+  name Expression9
+  label sphere
+  xpos -633
+  ypos 782
+  addUserKnob {20 User}
+  addUserKnob {3 type}
+  addUserKnob {1 sphere}
+  sphere "clamp( sqrt( pow2(red) + pow2(green) + pow2(blue) ) )"
+ }
+ Switch {
+  inputs 3
+  which {{parent.mat_shape}}
+  name Switch1
+  xpos -524
+  ypos 882
+ }
+ Expression {
+  temp_name0 gfo
+  temp_expr0 "alpha * (1/ clamp(\[value parent.uniform_falloff],0.00001,1) )"
+  expr3 "\[value type] == 0 ? ( gfo > 0 ? 1 : 0 ) : \[value type] == 1 ? gfo : \[value type] == 2 ? smoothstep( 0 , 1 , gfo ) : \[value type] == 3 ? clamp( pow2 ( gfo ) ) : \[value type] == 4 ? clamp( gfo ** 3 ) : pow( 1 - pow( 1 - gfo , \[value parent.exp_in] ) , \[value parent.exp_out] )"
+  name Expression4
+  label falloff
+  xpos -524
+  ypos 953
+  addUserKnob {20 User}
+  addUserKnob {3 type}
+  type {{parent.falloff_type}}
+ }
+push $N1e8ac800
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 0
+  ypos 953
+ }
+ Premult {
+  channels all
+  name Premult1
+  xpos 0
+  ypos 1092
+  disable {{!parent.premult_result}}
+ }
+ Dot {
+  name Dot3
+  xpos 34
+  ypos 1186
+ }
+set N1f92a800 [stack 0]
+add_layer {ptc ptc.red ptc.green ptc.blue}
+ Shuffle {
+  in {{{shuffle_pos.in}}}
+  out ptc
+  name Shuffle3
+  xpos -525
+  ypos 1183
+ }
+ Remove {
+  operation keep
+  channels rgba
+  channels2 ptc
+  name Remove1
+  xpos -525
+  ypos 1264
+ }
+ Unpremult {
+  channels all
+  name Unpremult2
+  xpos -525
+  ypos 1346
+ }
+ Expression {
+  expr3 "alpha > 0 ? 1 : 0"
+  name Expression5
+  xpos -525
+  ypos 1440
+ }
+push $N1e8ac400
+ Dot {
+  name Dot8
+  xpos -969
+  ypos 89
+ }
+ Shuffle {
+  in {{{shuffle_pos.in}}}
+  out ptc
+  name Shuffle2
+  xpos -1003
+  ypos 1276
+ }
+ Remove {
+  operation keep
+  channels rgba
+  channels2 ptc
+  name Remove2
+  xpos -1003
+  ypos 1358
+ }
+push 0
+ Switch {
+  inputs 3
+  which {{parent.display_ptc_type}}
+  name Switch2
+  xpos -1003
+  ypos 1440
+ }
+ PositionToPoints2 {
+  display textured
+  render_mode textured
+  P_channel ptc
+  detail 0.1
+  pointSize 1
+  name PositionToPoints
+  xpos -1003
+  ypos 1499
+  disable {{!parent.display_ptc_type}}
+ }
+ Cylinder {
+  inputs 0
+  display wireframe
+  selectable false
+  render_mode off
+  rows 1
+  columns 10
+  name Cylinder1
+  xpos 631
+  ypos 222
+ }
+ Cube {
+  inputs 0
+  display wireframe
+  selectable false
+  render_mode off
+  cast_shadow false
+  receive_shadow false
+  rows 1
+  columns 1
+  separate_faces false
+  uniform_scale 2
+  name Cube1
+  xpos 508
+  ypos 220
+ }
+ Sphere {
+  inputs 0
+  display wireframe
+  selectable false
+  render_mode off
+  cast_shadow false
+  receive_shadow false
+  rows 8
+  columns 8
+  name Sphere1
+  xpos 387
+  ypos 218
+ }
+ Switch {
+  inputs 3
+  which {{mat_shape}}
+  name Switch4
+  xpos 508
+  ypos 291
+ }
+ TransformGeo {
+  name geoCTRL
+  xpos 508
+  ypos 373
+ }
+ Scene {
+  display wireframe
+  render_mode wireframe
+  name Scene1
+  xpos 518
+  ypos 1011
+ }
+push 0
+ ScanlineRender {
+  inputs 2
+  conservative_shader_sampling false
+  motion_vectors_type off
+  MB_channel none
+  name ScanlineRender1
+  xpos 508
+  ypos 1133
+ }
+push $N1f92a800
+ Switch {
+  inputs 2
+  name preview_3D
+  xpos 0
+  ypos 1337
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 1644
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['falloff_type'].getValue() == 5 :\n    thisGRP\['exp_in'].setEnabled(True)\n    thisGRP\['exp_out'].setEnabled(True)\nelse :\n    thisGRP\['exp_in'].setEnabled(False)\n    thisGRP\['exp_out'].setEnabled(False)\n"
+  xpos -1420
+  ypos 400
+  addUserKnob {20 User}
+  addUserKnob {4 falloff_type l "falloff type" M {none linear smooth quadratic cubic exponential}}
+  falloff_type linear
+ }
+ NoOp {
+  inputs 0
+  name menu02
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['mat_shape'].getValue() == 1 :\n    thisGRP\['cube3d_falloff'].setEnabled(True)\nelse :\n    thisGRP\['cube3d_falloff'].setEnabled(False)\n"
+  xpos -1421
+  ypos 461
+  addUserKnob {20 User}
+  addUserKnob {4 mat_shape l shape M {Sphere Cube Cylinder}}
+ }
+ NoOp {
+  inputs 0
+  name menu03
+  knobChanged "\nloop = \['red','green','blue']\nsamPos = nuke.thisGroup()\['pos2D'].getValue()\nfor i in range(3) :\n    nuke.thisGroup()\['mat_translate'].setValue( nuke.toNode('shuffle_pos').sample( loop\[i], samPos\[0], samPos\[1] ) , i )\n"
+  xpos -1420
+  ypos 529
+  addUserKnob {20 User}
+  addUserKnob {12 pos2D l "2D pos"}
+ }
+ Axis {
+  inputs 0
+  rot_order {{parent.mat_rot_order}}
+  rotate {{parent.mat_rotate} {parent.mat_rotate} {parent.mat_rotate}}
+  scaling {{parent.mat_scaling} {parent.mat_scaling} {parent.mat_scaling}}
+  uniform_scale {{parent.mat_uniform_scale}}
+  skew {{parent.mat_skew} {parent.mat_skew} {parent.mat_skew}}
+  pivot {{parent.mat_pivot} {parent.mat_pivot} {parent.mat_pivot}}
+  name ax_data
+  xpos -849
+  ypos 510
+ }
+end_group

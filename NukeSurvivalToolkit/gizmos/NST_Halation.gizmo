@@ -1,0 +1,316 @@
+Group {
+ name Halation
+ tile_color 0xcc804eff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 Halation}
+ addUserKnob {4 outputView l "Output View" M {"Final Output" "Luma Key" "Effect Only"}}
+ addUserKnob {26 key l Key:}
+ addUserKnob {7 black l blackpoint R 0 10}
+ black 2
+ addUserKnob {7 white l whitepoint R 0 10}
+ white 6
+ addUserKnob {41 size_1 l size T Glow1.size}
+ addUserKnob {26 ""}
+ addUserKnob {7 red R 0 4}
+ red 1
+ addUserKnob {7 green R 0 4}
+ green 0.25
+ addUserKnob {7 blue R 0 4}
+ blue 0.08
+ addUserKnob {7 globalAmount l "Global Amount" R 0 4}
+ globalAmount 1
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: T Halation}
+ addUserKnob {26 ver l Version: T v01}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -852
+  ypos 177
+ }
+ Dot {
+  name Dot45
+  note_font_size 41
+  xpos -818
+  ypos 236
+ }
+set Ne27f76c0 [stack 0]
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos -661
+  ypos 233
+ }
+ Grade {
+  blackpoint {{parent.black}}
+  whitepoint {{parent.white}}
+  white_clamp true
+  name Grade2
+  xpos -661
+  ypos 257
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle1
+  label "\[value in]"
+  xpos -661
+  ypos 291
+ }
+ Dot {
+  name Dot48
+  note_font_size 41
+  xpos -627
+  ypos 352
+ }
+set Ne2790040 [stack 0]
+push $Ne2790040
+ Dot {
+  name Dot49
+  note_font_size 41
+  xpos -420
+  ypos 352
+ }
+set Ne4e48d30 [stack 0]
+ Dot {
+  name Dot51
+  note_font_size 41
+  xpos -310
+  ypos 352
+ }
+set Ne4432470 [stack 0]
+ Dot {
+  name Dot52
+  note_font_size 41
+  xpos -200
+  ypos 352
+ }
+set Ne279cea0 [stack 0]
+ Glow2 {
+  effect_only true
+  size {{parent.Glow1.size.w*4} {parent.Glow1.size.h*4}}
+  name Glow3
+  xpos -234
+  ypos 403
+ }
+ Dot {
+  name Dot54
+  note_font_size 41
+  xpos -200
+  ypos 496
+ }
+push $Ne4432470
+ Glow2 {
+  effect_only true
+  size {{parent.Glow1.size.w*2} {parent.Glow1.size.h*2}}
+  name Glow2
+  xpos -344
+  ypos 404
+ }
+ Dot {
+  name Dot53
+  note_font_size 41
+  xpos -310
+  ypos 453
+ }
+push $Ne4e48d30
+ Glow2 {
+  effect_only true
+  size 1.2
+  name Glow1
+  xpos -454
+  ypos 401
+ }
+ Merge2 {
+  inputs 2
+  operation screen
+  name Merge8
+  xpos -454
+  ypos 449
+ }
+ Merge2 {
+  inputs 2
+  operation screen
+  name Merge13
+  xpos -454
+  ypos 492
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge9
+  xpos -661
+  ypos 492
+ }
+ Clamp {
+  channels rgba
+  maximum_enable false
+  name Clamp4
+  xpos -661
+  ypos 529
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle3
+  label "\[value in]"
+  xpos -661
+  ypos 555
+ }
+ Dot {
+  name Dot50
+  note_font_size 41
+  xpos -627
+  ypos 628
+ }
+set Ne452d3f0 [stack 0]
+ Dot {
+  name Dot55
+  note_font_size 41
+  xpos -517
+  ypos 628
+ }
+ Blur {
+  channels rgba
+  size {{parent.Glow1.size.w} {parent.Glow1.size.h}}
+  name Blur11
+  label "\[value size]"
+  xpos -551
+  ypos 681
+ }
+push $Ne452d3f0
+ Merge2 {
+  inputs 2
+  operation max
+  name Merge7
+  xpos -661
+  ypos 687
+ }
+ Grade {
+  multiply {{parent.red} {parent.green} {parent.blue} 1}
+  gamma {1 1 1 1}
+  name Grade17
+  xpos -661
+  ypos 754
+ }
+ Multiply {
+  channels rgba
+  value {{parent.globalAmount}}
+  name Multiply2
+  label "\[value value]"
+  xpos -661
+  ypos 795
+ }
+ Shuffle {
+  alpha black
+  name Shuffle2
+  label "\[value in]"
+  xpos -661
+  ypos 867
+ }
+ Dot {
+  name Dot57
+  note_font_size 41
+  xpos -627
+  ypos 961
+ }
+set Ne4ff28b0 [stack 0]
+ Multiply {
+  value {{parent.Merge1.mix}}
+  name Multiply1
+  label "\[value value]"
+  xpos -661
+  ypos 1136
+ }
+push $Ne279cea0
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 48
+  ypos 352
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 48
+  ypos 1284
+ }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -380
+  ypos 686
+  number 1
+ }
+ Dot {
+  name Dot60
+  xpos -346
+  ypos 1042
+ }
+push $Ne4ff28b0
+push $Ne27f76c0
+ Dot {
+  name Dot56
+  note_font_size 41
+  xpos -818
+  ypos 617
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  bbox B
+  name Merge14
+  xpos -852
+  ypos 957
+ }
+push $Ne27f76c0
+ Dot {
+  name Dot58
+  note_font_size 41
+  xpos -969
+  ypos 236
+ }
+ Dot {
+  name Dot59
+  note_font_size 41
+  xpos -962
+  ypos 1042
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  mix {{parent.mix}}
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  selected true
+  xpos -852
+  ypos 1039
+ }
+ Switch {
+  inputs 3
+  which {{parent.outputView}}
+  name OutputView
+  label "\[value which]"
+  xpos -852
+  ypos 1277
+ }
+ Output {
+  name Output1
+  xpos -852
+  ypos 1437
+ }
+end_group

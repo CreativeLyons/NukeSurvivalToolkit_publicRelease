@@ -1,0 +1,305 @@
+Group {
+ name Noise3D
+ inputs 2
+ help "Generate Noise in 3D space based on Position passes. It includes pre-made Position passes for some 3D primitives, or can use a custom pass. Uses a 4D noise internally so that the 4th dimension can be used to add a 'boiling' effect"
+ addUserKnob {20 noise3d l "3D Noise"}
+ addUserKnob {4 mapping l Mapping t "Generates a Noise based on a 3D shape, unfolded to fit into a UV plane.\n\nThe Custom P Input lets you input the shape of your choice. Using a pWorld pass as cutom P will generate a 3D noise as seen from the same camera as used to render the Pworld. Ensure an Alpha channel is present for Custom P." M {"Card (Flat)" Spherical "Cylindrical (Tile X)" "Cylinder 4D (Tile X and Y)" "Custom P Input" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {41 translate T Axis_3D.translate}
+ addUserKnob {41 rotate T Axis_3D.rotate}
+ addUserKnob {41 scaling l scale T Axis_3D.scaling}
+ addUserKnob {41 uniform_scale l "uniform scale" T Axis_3D.uniform_scale}
+ addUserKnob {26 ""}
+ addUserKnob {7 boiling t "Use this knob to animate the noise and create a 'boiling' effect without a visible 3D direction." R 0 10}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {4 type t "Choose between an fBm and Turbulent Noise model." M {fBm Turbulence ""}}
+ addUserKnob {7 octaves R 0 10}
+ octaves 5
+ addUserKnob {7 lacunarity R 0 10}
+ lacunarity 2
+ addUserKnob {7 contrast}
+ contrast 0.5
+ addUserKnob {7 gain}
+ gain 0.5
+ addUserKnob {7 gamma}
+ gamma 0.5
+ addUserKnob {26 spin_copyright_div l "" +STARTLINE}
+ addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nNoise_3D\nVersion 1.0\n2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.0 - 2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+ Axis2 {
+  inputs 0
+  translate {1 0 0}
+  rotate {30 30 0}
+  name Axis_3D
+  xpos 534
+  ypos 170
+ }
+ Input {
+  inputs 0
+  name P
+  label 1
+  xpos 205
+  ypos -58
+  number 1
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos 205
+  ypos 17
+ }
+ Dot {
+  name Dot14
+  tile_color 0x9e3c6300
+  xpos 239
+  ypos 57
+ }
+set Nacd90f0 [stack 0]
+ Dot {
+  name Dot5
+  tile_color 0x9e3c6300
+  xpos 239
+  ypos 568
+ }
+push $Nacd90f0
+ Shuffle {
+  alpha white
+  name Shuffle2
+  label "in \[value in]-->out \[value out]"
+  xpos 279
+  ypos 47
+ }
+ Input {
+  inputs 0
+  name img
+  label 0
+  xpos 1077
+  ypos -389
+ }
+ Dot {
+  name Dot2
+  tile_color 0xcccccc00
+  xpos 1111
+  ypos -223
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  name Constant1
+  xpos 955
+  ypos -385
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input0] "}}
+  name Switch1
+  xpos 955
+  ypos -227
+ }
+ Dot {
+  name Dot3
+  tile_color 0xcccccc00
+  xpos 989
+  ypos -187
+ }
+set Nacf7e30 [stack 0]
+ Dot {
+  name Dot1
+  tile_color 0xcccccc00
+  xpos 418
+  ypos -187
+ }
+ Crop {
+  box {0 0 {width} {height}}
+  crop false
+  name Crop2
+  xpos 384
+  ypos -146
+ }
+ Dot {
+  name Dot8
+  tile_color 0xa57aaa00
+  xpos 418
+  ypos -64
+ }
+set Nad0c430 [stack 0]
+ Dot {
+  name Dot9
+  tile_color 0xa57aaa00
+  xpos 553
+  ypos -64
+ }
+set Nad10ee0 [stack 0]
+ Dot {
+  name Dot11
+  tile_color 0xa57aaa00
+  xpos 688
+  ypos -64
+ }
+set Nad15960 [stack 0]
+ Dot {
+  name Dot7
+  tile_color 0xa57aaa00
+  xpos 839
+  ypos -64
+ }
+ Expression {
+  temp_name0 lat
+  temp_expr0 "y / height *360-180"
+  temp_name1 lon
+  temp_expr1 "x / width * 360-180"
+  temp_name2 r
+  temp_expr2 0.5
+  expr0 "(r * cos (0.017453292519943295769236907684886 * lon) +1)*1.5"
+  expr1 "(r * cos (0.017453292519943295769236907684886 * lat) +1)*1.5"
+  expr2 "(r * sin(0.017453292519943295769236907684886 * lon)+1)*1.5"
+  expr3 "(r * sin(0.017453292519943295769236907684886 * lat)+1)*1.5"
+  name Cylinder4D
+  xpos 805
+  ypos -21
+ }
+ Dot {
+  name Dot15
+  tile_color 0xcccccc00
+  xpos 839
+  ypos 57
+ }
+push $Nad15960
+ Expression {
+  temp_name0 lat
+  temp_expr0 "y / height * 180- 90"
+  temp_name1 lon
+  temp_expr1 "x / width * 360-180"
+  temp_name2 r
+  temp_expr2 0.5
+  expr0 "(r * cos (0.017453292519943295769236907684886 * lon) +1)*1.5"
+  expr1 y/height*3
+  expr2 "(r * sin(0.017453292519943295769236907684886 * lon)+1)*1.5"
+  expr3 1
+  name CylinderP
+  xpos 654
+  ypos -23
+ }
+ Dot {
+  name Dot13
+  tile_color 0xcccccc00
+  xpos 688
+  ypos 21
+ }
+push $Nad10ee0
+ Expression {
+  temp_name0 lat
+  temp_expr0 "y / height * 180- 90"
+  temp_name1 lon
+  temp_expr1 "x / width * 360-180"
+  temp_name2 r
+  temp_expr2 "cos(0.017453292519943295769236907684886 *  lat)"
+  expr0 "(r * cos (0.017453292519943295769236907684886 * lon) +1)*1.5"
+  expr1 "(sin (0.017453292519943295769236907684886 * lat)+1)*1.5"
+  expr2 "(r * sin(0.017453292519943295769236907684886 * lon)+1)*1.5"
+  expr3 1
+  name SphereP
+  xpos 519
+  ypos -21
+ }
+push $Nad0c430
+ Expression {
+  expr0 x/350
+  expr1 y/350
+  expr2 0
+  expr3 1
+  name CardP
+  xpos 384
+  ypos -21
+ }
+ Switch {
+  inputs 5
+  which {{parent.mapping}}
+  name Switch3
+  xpos 384
+  ypos 53
+ }
+ ColorMatrix {
+  matrix {
+      {{Axis_3D.world_matrix.0} {Axis_3D.world_matrix.1} {Axis_3D.world_matrix.2}}
+      {{Axis_3D.world_matrix.4} {Axis_3D.world_matrix.5} {Axis_3D.world_matrix.6}}
+      {{Axis_3D.world_matrix.8} {Axis_3D.world_matrix.9} {Axis_3D.world_matrix.10}}
+    }
+  name ColorMatrix1
+  xpos 384
+  ypos 186
+ }
+ Add {
+  channels rgba
+  value {{Axis_3D.translate.x} {Axis_3D.translate.y} {Axis_3D.translate.z} {parent.boiling}}
+  name Add1
+  xpos 384
+  ypos 229
+ }
+ BlinkScript {
+  recompileCount 27
+  ProgramGroup 1
+  KernelDescription "2 \"Noise4D\" iterate pixelWise d60f21004827daf93cc7aae3c8a9d35a464dc4075e83f5304202d888c93a31ad 2 \"src\" Read Point \"dst\" Write Point 5 \"octaves\" Int 1 CAAAAA== \"lacunarity\" Float 1 AAAAQA== \"amplitude\" Float 1 mpkZPw== \"gain\" Float 1 AAAAPw== \"mode\" Int 1 AAAAAA== 5 \"octaves\" 1 1 \"lacunarity\" 1 1 \"amplitude\" 1 1 \"gain\" 1 1 \"mode\" 1 1 0"
+  kernelSource "//Based on https://github.com/Draradech/csworldgen/blob/master/simplexnoise.cpp\n//Ported by Mads Hagbarth Lund 2014\n//Modifications (fBm and Turbulence) by Erwan Leroy 2018 at Spin VFX\n\n/* Copyright (c) 2007-2012 Eliot Eshelman\n *\n * This program is free software: you can redistribute it and/or modify\n * it under the terms of the GNU General Public License as published by\n * the Free Software Foundation, either version 3 of the License, or\n * (at your option) any later version.\n *\n * This program is distributed in the hope that it will be useful,\n * but WITHOUT ANY WARRANTY; without even the implied warranty of\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n * GNU General Public License for more details.\n *\n * You should have received a copy of the GNU General Public License\n * along with this program. If not, see <http://www.gnu.org/licenses/>.\n *\n */\n\n\nint fastfloor( const float x ) \{ return x > 0 ? (int) x : (int) x - 1; \}\n\ninline float raw_noise_4d(const float4 coord)\n\{\n  int simplex\[64]\[4] =\n  \{\n    \{0,1,2,3\},\{0,1,3,2\},\{0,0,0,0\},\{0,2,3,1\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{1,2,3,0\},\n    \{0,2,1,3\},\{0,0,0,0\},\{0,3,1,2\},\{0,3,2,1\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{1,3,2,0\},\n    \{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\n    \{1,2,0,3\},\{0,0,0,0\},\{1,3,0,2\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{2,3,0,1\},\{2,3,1,0\},\n    \{1,0,2,3\},\{1,0,3,2\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{2,0,3,1\},\{0,0,0,0\},\{2,1,3,0\},\n    \{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\n    \{2,0,1,3\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{3,0,1,2\},\{3,0,2,1\},\{0,0,0,0\},\{3,1,2,0\},\n    \{2,1,0,3\},\{0,0,0,0\},\{0,0,0,0\},\{0,0,0,0\},\{3,1,0,2\},\{0,0,0,0\},\{3,2,0,1\},\{3,2,1,0\}\n  \};\n\n  int perm\[512] =\n  \{\n    151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,\n    8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,\n    35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,\n    134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,\n    55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208, 89,\n    18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,\n    250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,\n    189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,\n    172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,\n    228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,\n    107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,\n    138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180,\n\n    151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,\n    8,99,37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,\n    35,11,32,57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,\n    134,139,48,27,166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,\n    55,46,245,40,244,102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208, 89,\n    18,169,200,196,135,130,116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,\n    250,124,123,5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,\n    189,28,42,223,183,170,213,119,248,152,2,44,154,163,70,221,153,101,155,167,43,\n    172,9,129,22,39,253,19,98,108,110,79,113,224,232,178,185,112,104,218,246,97,\n    228,251,34,242,193,238,210,144,12,191,179,162,241,81,51,145,235,249,14,239,\n    107,49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254,\n    138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180\n  \};\n\n  int grad4\[32]\[4]=\n  \{\n    \{0,1,1,1\},  \{0,1,1,-1\},  \{0,1,-1,1\},  \{0,1,-1,-1\},\n    \{0,-1,1,1\}, \{0,-1,1,-1\}, \{0,-1,-1,1\}, \{0,-1,-1,-1\},\n    \{1,0,1,1\},  \{1,0,1,-1\},  \{1,0,-1,1\},  \{1,0,-1,-1\},\n    \{-1,0,1,1\}, \{-1,0,1,-1\}, \{-1,0,-1,1\}, \{-1,0,-1,-1\},\n    \{1,1,0,1\},  \{1,1,0,-1\},  \{1,-1,0,1\},  \{1,-1,0,-1\},\n    \{-1,1,0,1\}, \{-1,1,0,-1\}, \{-1,-1,0,1\}, \{-1,-1,0,-1\},\n    \{1,1,1,0\},  \{1,1,-1,0\},  \{1,-1,1,0\},  \{1,-1,-1,0\},\n    \{-1,1,1,0\}, \{-1,1,-1,0\}, \{-1,-1,1,0\}, \{-1,-1,-1,0\}\n  \};\n  float x = coord.x;\n  float y = coord.y;\n  float z = coord.z;\n  float w = coord.w;\n  float F4 = (sqrt(5.0f)-1.0)/4.0;\n  float G4 = (5.0-sqrt(5.0f))/20.0;\n  float n0, n1, n2, n3, n4;\n  float s = (x + y + z + w) * F4;\n  int i = fastfloor(x + s);\n  int j = fastfloor(y + s);\n  int k = fastfloor(z + s);\n  int l = fastfloor(w + s);\n  float t = (i + j + k + l) * G4;\n  float X0 = i - t;\n  float Y0 = j - t;\n  float Z0 = k - t;\n  float W0 = l - t;\n  float x0 = x - X0;\n  float y0 = y - Y0;\n  float z0 = z - Z0;\n  float w0 = w - W0;\n  int c1 = (x0 > y0) ? 32 : 0;\n  int c2 = (x0 > z0) ? 16 : 0;\n  int c3 = (y0 > z0) ? 8 : 0;\n  int c4 = (x0 > w0) ? 4 : 0;\n  int c5 = (y0 > w0) ? 2 : 0;\n  int c6 = (z0 > w0) ? 1 : 0;\n  int c = c1 + c2 + c3 + c4 + c5 + c6;\n  int i1, j1, k1, l1;\n  int i2, j2, k2, l2;\n  int i3, j3, k3, l3;\n  i1 = simplex\[c]\[0]>=3 ? 1 : 0;\n  j1 = simplex\[c]\[1]>=3 ? 1 : 0;\n  k1 = simplex\[c]\[2]>=3 ? 1 : 0;\n  l1 = simplex\[c]\[3]>=3 ? 1 : 0;\n  i2 = simplex\[c]\[0]>=2 ? 1 : 0;\n  j2 = simplex\[c]\[1]>=2 ? 1 : 0;\n  k2 = simplex\[c]\[2]>=2 ? 1 : 0;\n  l2 = simplex\[c]\[3]>=2 ? 1 : 0;\n  i3 = simplex\[c]\[0]>=1 ? 1 : 0;\n  j3 = simplex\[c]\[1]>=1 ? 1 : 0;\n  k3 = simplex\[c]\[2]>=1 ? 1 : 0;\n  l3 = simplex\[c]\[3]>=1 ? 1 : 0;\n  float x1 = x0 - i1 + G4;\n  float y1 = y0 - j1 + G4;\n  float z1 = z0 - k1 + G4;\n  float w1 = w0 - l1 + G4;\n  float x2 = x0 - i2 + 2.0*G4;\n  float y2 = y0 - j2 + 2.0*G4;\n  float z2 = z0 - k2 + 2.0*G4;\n  float w2 = w0 - l2 + 2.0*G4;\n  float x3 = x0 - i3 + 3.0*G4;\n  float y3 = y0 - j3 + 3.0*G4;\n  float z3 = z0 - k3 + 3.0*G4;\n  float w3 = w0 - l3 + 3.0*G4;\n  float x4 = x0 - 1.0 + 4.0*G4;\n  float y4 = y0 - 1.0 + 4.0*G4;\n  float z4 = z0 - 1.0 + 4.0*G4;\n  float w4 = w0 - 1.0 + 4.0*G4;\n  int ii = i & 255;\n  int jj = j & 255;\n  int kk = k & 255;\n  int ll = l & 255;\n  int gi0 = perm\[ii+perm\[jj+perm\[kk+perm\[ll]]]] % 32;\n  int gi1 = perm\[ii+i1+perm\[jj+j1+perm\[kk+k1+perm\[ll+l1]]]] % 32;\n  int gi2 = perm\[ii+i2+perm\[jj+j2+perm\[kk+k2+perm\[ll+l2]]]] % 32;\n  int gi3 = perm\[ii+i3+perm\[jj+j3+perm\[kk+k3+perm\[ll+l3]]]] % 32;\n  int gi4 = perm\[ii+1+perm\[jj+1+perm\[kk+1+perm\[ll+1]]]] % 32;\n\n  float t0 = 0.6 - x0*x0 - y0*y0 - z0*z0 - w0*w0;\n\n  if(t0<0) \{\n    n0 = 0.0;\n  \}\n  else\n  \{\n    t0 *= t0;\n    n0 = t0 * t0 * dot(float4(grad4\[gi0]\[0],grad4\[gi0]\[2],grad4\[gi0]\[3],grad4\[gi0]\[3]), float4(x0, y0, z0, w0));\n  \}\n\n  float t1 = 0.6 - x1*x1 - y1*y1 - z1*z1 - w1*w1;\n\n  if(t1<0) \{\n    n1 = 0.0;\n  \}\n  else \{\n    t1 *= t1;\n    n1 = t1 * t1 * dot(float4(grad4\[gi1]\[0],grad4\[gi1]\[2],grad4\[gi1]\[3],grad4\[gi1]\[3]), float4(x1, y1, z1, w1));\n  \}\n\n  float t2 = 0.6 - x2*x2 - y2*y2 - z2*z2 - w2*w2;\n\n  if(t2<0) \{\n    n2 = 0.0;\n  \}\n  else \{\n    t2 *= t2;\n    n2 = t2 * t2 * dot(float4(grad4\[gi2]\[0],grad4\[gi2]\[2],grad4\[gi2]\[3],grad4\[gi2]\[3]), float4(x2, y2, z2, w2));\n  \}\n\n  float t3 = 0.6 - x3*x3 - y3*y3 - z3*z3 - w3*w3;\n\n  if(t3<0) \{\n    n3 = 0.0;\n  \}\n  else \{\n    t3 *= t3;\n    n3 = t3 * t3 * dot(float4(grad4\[gi3]\[0],grad4\[gi3]\[2],grad4\[gi3]\[3],grad4\[gi3]\[3]), float4(x3, y3, z3, w3));\n  \}\n\n  float t4 = 0.6 - x4*x4 - y4*y4 - z4*z4 - w4*w4;\n\n  if(t4<0) \{\n    n4 = 0.0;\n  \}\n  else \{\n    t4 *= t4;\n    n4 = t4 * t4 * dot(float4(grad4\[gi4]\[0],grad4\[gi4]\[2],grad4\[gi4]\[3],grad4\[gi4]\[3]), float4(x4, y4, z4, w4));\n  \}\n  return 27.0 * (n0 + n1 + n2 + n3 + n4);\n\}\n\ninline float fBm_4d(const float octaves, const float lacunarity, const float gain, const float4 coord, float amplitude)\n\{\n  float total = 0;\n  float4 frequency = coord;\n  for( int i=0; i < octaves; i++ ) \{\n    total += (float)raw_noise_4d(frequency) * amplitude;\n    frequency *= lacunarity;\n    amplitude *= gain;\n  \}\n  return float(total)*0.5f+0.5f;\n\}\n\ninline float turbulence_4d(const float octaves, const float lacunarity, const float gain, const float4 coord, float amplitude)\n\{\n  float total = 0;\n  float4 frequency = coord;\n  for( int i=0; i < octaves; i++ ) \{\n    total += fabs((float)raw_noise_4d(frequency)) * amplitude;\n    frequency *= lacunarity;\n    amplitude *= gain;\n  \}\n  return float(total);\n\}\n\nkernel Noise4D : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;\n  Image<eWrite, eAccessPoint> dst;\nparam:\n  int octaves;\n  float lacunarity;\n  float amplitude;\n  float gain;\n  int mode;\n\n  void define() \{\n    defineParam(octaves, \"octaves\", 8);\n    defineParam(lacunarity, \"lacunarity\",  2.0f);\n    defineParam(amplitude, \"amplitude\", 0.6f);\n    defineParam(gain, \"gain\", 0.5f);\n  \}\n  void process() \{\n    float sample;\n    if (mode == 0)\{\n      sample = (float)fBm_4d(float(octaves),lacunarity,gain,src(), amplitude);\n    \} else \{\n      sample = (float)turbulence_4d(float(octaves),lacunarity,gain,src(), amplitude);\n    \}\n    dst() = float4(sample,sample,sample,sample);\n\}\n\};"
+  rebuild ""
+  Noise4D_octaves {{parent.octaves}}
+  Noise4D_lacunarity {{parent.lacunarity}}
+  Noise4D_amplitude {{parent.contrast}}
+  Noise4D_gain {{parent.gain}}
+  Noise4D_mode {{parent.type}}
+  rebuild_finalise ""
+  name BlinkScript1
+  selected true
+  xpos 384
+  ypos 332
+ }
+ Clamp {
+  name Clamp1
+  xpos 384
+  ypos 370
+ }
+ Gamma {
+  channels {rgba.red rgba.green rgba.blue none}
+  value {{parent.gamma}}
+  name Gamma1
+  xpos 384
+  ypos 417
+ }
+ Shuffle {
+  alpha blue
+  name Shuffle1
+  label "in \[value in]-->out \[value out]"
+  xpos 384
+  ypos 463
+ }
+set N20731ba0 [stack 0]
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox B
+  name Merge2
+  xpos 384
+  ypos 564
+  disable {{"parent.mapping != 4"}}
+ }
+ Dot {
+  name Dot4
+  tile_color 0x4b5ec600
+  xpos 418
+  ypos 620
+ }
+push $Nacf7e30
+ Merge2 {
+  inputs 2
+  bbox B
+  name Merge1
+  xpos 955
+  ypos 616
+ }
+ Output {
+  name Output1
+  xpos 955
+  ypos 789
+ }
+end_group

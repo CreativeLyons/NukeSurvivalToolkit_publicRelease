@@ -1,0 +1,81 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+ColorWheel {
+ inputs 0
+ gamma 0.45
+ name ColorWheel2
+ selected true
+ xpos -480
+ ypos -423
+}
+Dot {
+ name Dot2
+ selected true
+ xpos -446
+ ypos -307
+}
+set N2ef0ab80 [stack 0]
+Expression {
+ expr1 g>(b+2*r)/3*LimitPercentage?(b+2*r)/3*LimitPercentage:g
+ expr3 g-(r+b)*LimitPercentage/2
+ name DoubleRedAve
+ tile_color 0xff0001
+ selected true
+ xpos -258
+ ypos -153
+ addUserKnob {20 User}
+ addUserKnob {7 LimitPercentage l "fine tune" R 0.5 1.5}
+ LimitPercentage 1
+}
+push $N2ef0ab80
+Expression {
+ expr1 g>(2*b+r)/3*LimitPercentage?(2*b+r)/3*LimitPercentage:g
+ expr3 g-(r+b)*LimitPercentage/2
+ name DoubleBlueAve
+ tile_color 0xff0001
+ selected true
+ xpos -370
+ ypos -153
+ addUserKnob {20 User}
+ addUserKnob {7 LimitPercentage l "fine tune" R 0.5 1.5}
+ LimitPercentage 1
+}
+push $N2ef0ab80
+Expression {
+ expr1 g>(b+r)/2*LimitPercentage?(b+r)/2*LimitPercentage:g
+ expr3 g-(r+b)*LimitPercentage/2
+ name AverageGreen
+ tile_color 0xff0001
+ selected true
+ xpos -480
+ ypos -153
+ addUserKnob {20 User}
+ addUserKnob {7 LimitPercentage l "fine tune" R 0.5 1.5}
+ LimitPercentage 1
+}
+push $N2ef0ab80
+Expression {
+ expr1 g>b*LimitPercentage?b*LimitPercentage:g
+ expr3 g-b*LimitPercentage
+ name BlueLimitsGreen
+ tile_color 0xff0001
+ selected true
+ xpos -590
+ ypos -153
+ addUserKnob {20 User}
+ addUserKnob {7 LimitPercentage l "fine tune" R 0.5 1.5}
+ LimitPercentage 1
+}
+push $N2ef0ab80
+Expression {
+ expr1 g>r*LimitPercentage?r*LimitPercentage:g
+ expr3 g-r*LimitPercentage
+ name RedLimitsGreen
+ tile_color 0xff0001
+ selected true
+ xpos -699
+ ypos -153
+ addUserKnob {20 User}
+ addUserKnob {7 LimitPercentage l "fine tune" R 0.5 1.5}
+ LimitPercentage 1
+}

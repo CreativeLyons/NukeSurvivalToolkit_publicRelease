@@ -1,0 +1,117 @@
+Group {
+ inputs 2
+ name IIDistort
+ help "Recursuve IDistort Node, the vectors advect themselves multiple times, creating more different patterns than a regular IDistort node."
+ addUserKnob {20 iidistort_tab l IIDistort}
+ addUserKnob {7 scale l Scale t "Amount of vector advection" R 0 10}
+ scale 1
+ addUserKnob {3 samples l "Number of Samples" t "Add samples for a smoother curve, reduce for faster results."}
+ samples 10
+ addUserKnob {26 ""}
+ addUserKnob {4 output l Output t "Choose the desired output.\n\nDistorted image: Image from img input distorted by vectors.\nModified Vectors: Vectors modified so that feeding these in a regular IDistort would produce the same result as this node's distorted image.\nSTMap: An STMap whch would match this node's distortion." M {"Distorted image" "Modified Vectors" STMap}}
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.1 -  Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+}
+ Input {
+  inputs 0
+  name vectors
+  xpos 223
+  ypos -56
+  number 1
+ }
+ BlinkScript {
+  ProgramGroup 1
+  KernelDescription "2 \"FlowKernel\" iterate pixelWise 831e6c85b5efa3aa8b859b0c422c683ec13d73f561e57321e66c972e8e807f77 2 \"vectors\" Read Random \"dst\" Write Point 2 \"samples\" Int 1 AAAAAA== \"strength\" Float 1 AAAAAA== 2 \"samples\" 1 1 \"strength\" 1 1 0"
+  kernelSource "kernel FlowKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> vectors; // the input image\n  Image<eWrite> dst; // the output image\n\n  param:\n    int samples;\n    float strength;\n\n  void process(int2 pos) \{\n    float2 fpos = float2(pos.x, pos.y);\n    float4 disp;\n\n    for (int i=0; i<samples; i++)\n    \{\n      disp = bilinear(vectors, fpos.x, fpos.y);\n      fpos += float2(disp.x, disp.y)*strength/samples;\n    \}\n\n    // Write the result to the output image\n    float2 result = fpos - float2(pos.x, pos.y);\n    dst() = float4(result.x, result.y, 0.0f, 0.0f);\n  \}\n\};\n"
+  rebuild ""
+  FlowKernel_samples {{parent.samples}}
+  FlowKernel_strength {{parent.scale}}
+  rebuild_finalise ""
+  name BlinkScript1
+  xpos 223
+  ypos 59
+ }
+set Ne07e6000 [stack 0]
+ Group {
+  name Vector2ToSTMap
+  xpos 362
+  ypos 65
+  addUserKnob {20 VtoU l "Vector2 to STMap"}
+  addUserKnob {41 in l Vector_Layer t "Pick the layer containing your motion vectors." T UV_Channel.in}
+  addUserKnob {26 ""}
+  addUserKnob {26 copyright l "" +STARTLINE T "v1.0 -  Mathieu Goulet-Aubin & Erwan Leroy - <a href=\"https://github.com/mapoga/nuke-vector-matrix\" style=\"color:#aaa\">Github</a>"}
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos -303
+   ypos 114
+  }
+set Ne07e7c00 [stack 0]
+  Shuffle {
+   name UV_Channel
+   xpos -163
+   ypos 114
+  }
+  Expression {
+   expr0 (r+x+0.5)/width
+   expr1 (g+y+0.5)/height
+   channel2 {-rgba.red -rgba.green -rgba.blue none}
+   channel3 {none none none -rgba.alpha}
+   name Vectors_to_UV
+   xpos -163
+   ypos 228
+  }
+push $Ne07e7c00
+  ShuffleCopy {
+   inputs 2
+   in2 none
+   red red
+   green green
+   alpha black
+   out {{{parent.UV_Channel.in}}}
+   name ShuffleCopy1
+   xpos -303
+   ypos 228
+  }
+  Output {
+   name Output1
+   xpos -303
+   ypos 299
+  }
+ end_group
+set Nf9650480 [stack 0]
+push $Nf9650480
+push $Ne07e6000
+ Dot {
+  name Dot1
+  xpos 257
+  ypos 171
+ }
+push $Nf9650480
+ Input {
+  inputs 0
+  name img
+  xpos 515
+  ypos -53
+ }
+ STMap {
+  inputs 2
+  uv rgb
+  name STMap1
+  xpos 515
+  ypos 59
+ }
+ Switch {
+  inputs 3
+  which {{parent.output}}
+  name Switch1
+  xpos 515
+  ypos 167
+ }
+ Output {
+  name Output1
+  xpos 515
+  ypos 249
+ }
+end_group

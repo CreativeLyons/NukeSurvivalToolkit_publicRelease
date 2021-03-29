@@ -1,0 +1,79 @@
+Group {
+ name DistanceBetween_CS
+ tile_color 0x9c0000ff
+ label "Distance2D: \[value Distance2D]\nDistance3D: \[value Distance3D]"
+ selected true
+ addUserKnob {20 CS_DistanceBetween}
+ addUserKnob {41 ObjectAPosition l "Object A Position" T Reconcile3DA.output}
+ addUserKnob {41 ObjectBPosition l "Object B Position" T Reconcile3DB.output}
+ addUserKnob {7 Distance2D t "Distance between ObjectA and ObjectB in 2D space (X and Y)." R 0 100}
+ Distance2D {{"sqrt( pow2( Reconcile3DB.output.x - Reconcile3DA.output.x ) + pow2( Reconcile3DB.output.y - Reconcile3DA.output.y ) )"}}
+ addUserKnob {7 Distance3D t "Distance between ObjectA and ObjectB in 3D space (X, Y and Z)." R 0 100}
+ Distance3D {{"sqrt( pow2( AxisB.world_matrix.3 - AxisA.world_matrix.3 ) + pow2( AxisB.world_matrix.7 - AxisA.world_matrix.7 ) + pow2( AxisB.world_matrix.11 - AxisA.world_matrix.11 ) )"}}
+ addUserKnob {22 UpdateLabel t "Updates the label of this node in the Node Graph. This could be necessary when values are linked via expressions. The update is executed automatically on frame changes." T nuke.updateUI() +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 Creator l "" +STARTLINE T "CS_DistanceBetween v1.1 by Christian Schulze - www.christian-schulze.eu"}
+}
+ Output {
+  inputs 0
+  name Output1
+  xpos -40
+  ypos 302
+ }
+ Input {
+  inputs 0
+  name ObjectA
+  xpos -260
+  ypos 86
+  number 1
+ }
+ Axis2 {
+  name AxisA
+  xpos -250
+  ypos 162
+ }
+ Input {
+  inputs 0
+  name InputCam
+  xpos -150
+  ypos 86
+  number 2
+ }
+set N4b027c30 [stack 0]
+ Input {
+  inputs 0
+  name InputFormat
+  xpos 70
+  ypos 86
+  number 3
+ }
+set N4b05d300 [stack 0]
+ Reconcile3D {
+  inputs 3
+  calc_output true
+  name Reconcile3DA
+  xpos -150
+  ypos 176
+ }
+ Input {
+  inputs 0
+  name ObjectB
+  xpos 180
+  ypos 86
+ }
+ Axis2 {
+  name AxisB
+  xpos 190
+  ypos 162
+ }
+push $N4b027c30
+push $N4b05d300
+ Reconcile3D {
+  inputs 3
+  calc_output true
+  name Reconcile3DB
+  selected true
+  xpos 70
+  ypos 176
+ }
+end_group

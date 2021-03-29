@@ -1,0 +1,843 @@
+Group {
+ name AdditiveKeyerPro
+ tile_color 0x5200ff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 AdditiveKeyer}
+ addUserKnob {6 useSC l "Use Screen Color as CleanPlate" +STARTLINE}
+ addUserKnob {41 screenColor l "Screen Color" T Keylight1.screenColour}
+ addUserKnob {6 despillSat l "Despill Screen Color from Saturation?" +STARTLINE}
+ despillSat true
+ addUserKnob {26 ""}
+ addUserKnob {7 DarkValue l "Dark Value" R 0 5}
+ DarkValue 1
+ addUserKnob {7 satDarks l "Saturate Darks"}
+ satDarks 0.2
+ addUserKnob {18 darkTint l "Dark Tint"}
+ darkTint 1
+ addUserKnob {6 darkTint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {6 lightTint_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {7 ExtraLightValue l "Light Value Plus" R 0 2}
+ ExtraLightValue 1
+ addUserKnob {7 satLights l "Saturate Lights"}
+ satLights 0.2
+ addUserKnob {18 lightTint l "Light Tint"}
+ lightTint 1
+ addUserKnob {6 lightTint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 LightValue l "Light Value BG Mult" R 0 5}
+ LightValue 0.25
+ addUserKnob {26 ""}
+ addUserKnob {6 darkTint_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {6 lightTint_panelDropped_1_1_1_1_1_1_1_1_1_1_1_1 l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {6 compositeSwitch l "Output Difference to RGB" +STARTLINE}
+ addUserKnob {6 outputDiffAlpha l "Output Difference Matte to Alpha" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask T MergeKeymix.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T MergeKeymix.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T MergeKeymix.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T MergeKeymix.fringe}
+ addUserKnob {41 mix T MergeKeymix.mix}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 creator l "Modified By:" T "<b><big>Tony Lyons"}
+ addUserKnob {26 desc l Description: t "adds the difference between cleanplate and key plate to the BG\n\nGood for hair details and shadows and sensitive edge treatment" T AdditiveKeyer}
+ addUserKnob {26 ver l Version: T v04}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 685
+  ypos 1141
+  number 3
+ }
+ Dot {
+  name Dot10
+  label Mask
+  note_font_size 41
+  xpos 719
+  ypos 1883
+ }
+ Dot {
+  name Dot11
+  note_font_size 41
+  xpos 719
+  ypos 1983
+ }
+ Input {
+  inputs 0
+  name fg
+  label "\[value number]"
+  xpos -500
+  ypos -221
+  number 1
+ }
+ Remove {
+  channels alpha
+  name Remove2
+  xpos -500
+  ypos -147
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels2
+  xpos -500
+  ypos -109
+ }
+ Dot {
+  name Dot26
+  note_font_size 41
+  xpos -466
+  ypos 5
+ }
+set Ne63218b0 [stack 0]
+ OFXuk.co.thefoundry.keylight.keylight_v201 {
+  show "Final Result"
+  unPreMultiply false
+  screenColour {0 0 0}
+  screenGain 1
+  screenBalance 0.5
+  alphaBias {0.5 0.5 0.5}
+  despillBias {0.5 0.5 0.5}
+  gangBiases true
+  preBlur 0
+  "Screen Matte" 0
+  screenClipMin 0
+  screenClipMax 1
+  screenClipRollback 0
+  screenGrowShrink 0
+  screenSoftness 0
+  screenDespotBlack 0
+  screenDespotWhite 0
+  screenReplaceMethod "Soft Colour"
+  screenReplaceColour {0.5 0.5 0.5}
+  Tuning 0
+  midPoint 0.5
+  lowGain 1
+  midGain 1
+  highGain 1
+  "Inside Mask" 0
+  sourceAlphaHandling Ignore
+  insideReplaceMethod "Soft Colour"
+  insideReplaceColour {0.5 0.5 0.5}
+  Crops 0
+  SourceXMethod Colour
+  SourceYMethod Colour
+  SourceEdgeColour 0
+  SourceCropL 0
+  SourceCropR 1
+  SourceCropB 0
+  SourceCropT 1
+  balanceSet false
+  insideComponent None
+  outsideComponent None
+  cacheBreaker true
+  name Keylight1
+  xpos -500
+  ypos 73
+ }
+set Nda7c91c0 [stack 0]
+push $Ne63218b0
+ Dot {
+  name Dot27
+  note_font_size 41
+  xpos -356
+  ypos 5
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge3
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -390
+  ypos 73
+ }
+ Clamp {
+  channels rgba
+  name Clamp1
+  xpos -390
+  ypos 99
+ }
+ Saturation {
+  saturation 0
+  name Saturation4
+  xpos -390
+  ypos 125
+ }
+push $Nda7c91c0
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge7
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -500
+  ypos 125
+ }
+push $Ne63218b0
+ Dot {
+  name Dot30
+  note_font_size 41
+  xpos -598
+  ypos 5
+ }
+ Dot {
+  name Dot31
+  note_font_size 41
+  xpos -598
+  ypos 218
+ }
+ Switch {
+  inputs 2
+  which {{parent.despillSat}}
+  name DespillSwitch1
+  label "\[value which]"
+  xpos -500
+  ypos 208
+ }
+ Dot {
+  name Dot8
+  xpos -466
+  ypos 373
+ }
+set Ne61ad600 [stack 0]
+ Input {
+  inputs 0
+  name clean
+  label "\[value number]"
+  xpos 126
+  ypos -175
+  number 2
+ }
+ Remove {
+  channels alpha
+  name Remove3
+  xpos 126
+  ypos -101
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels1
+  xpos 126
+  ypos -63
+ }
+ Grade {
+  multiply 0
+  add {{parent.Keylight1.screenColour} {parent.Keylight1.screenColour} {parent.Keylight1.screenColour} {parent.Keylight1.screenColour}}
+  name ScreenColor
+  xpos 126
+  ypos -14
+  disable {{!parent.useSC}}
+ }
+ Dot {
+  name Dot28
+  note_font_size 41
+  xpos 160
+  ypos 50
+ }
+set Ne61d0820 [stack 0]
+ OFXuk.co.thefoundry.keylight.keylight_v201 {
+  show "Final Result"
+  unPreMultiply false
+  screenColour {{parent.Keylight1.screenColour} {parent.Keylight1.screenColour} {parent.Keylight1.screenColour}}
+  screenGain 1
+  screenBalance 0.5
+  alphaBias {0.5 0.5 0.5}
+  despillBias {0.5 0.5 0.5}
+  gangBiases true
+  preBlur 0
+  "Screen Matte" 0
+  screenClipMin 0
+  screenClipMax 1
+  screenClipRollback 0
+  screenGrowShrink 0
+  screenSoftness 0
+  screenDespotBlack 0
+  screenDespotWhite 0
+  screenReplaceMethod "Soft Colour"
+  screenReplaceColour {0.5 0.5 0.5}
+  Tuning 0
+  midPoint 0.5
+  lowGain 1
+  midGain 1
+  highGain 1
+  "Inside Mask" 0
+  sourceAlphaHandling Ignore
+  insideReplaceMethod "Soft Colour"
+  insideReplaceColour {0.5 0.5 0.5}
+  Crops 0
+  SourceXMethod Colour
+  SourceYMethod Colour
+  SourceEdgeColour 0
+  SourceCropL 0
+  SourceCropR 1
+  SourceCropB 0
+  SourceCropT 1
+  balanceSet false
+  insideComponent None
+  outsideComponent None
+  cacheBreaker true
+  name Keylight2
+  xpos 126
+  ypos 118
+ }
+set Ne61d4760 [stack 0]
+push $Ne61d0820
+ Dot {
+  name Dot29
+  note_font_size 41
+  xpos 270
+  ypos 50
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge8
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 236
+  ypos 118
+ }
+ Clamp {
+  channels rgba
+  name Clamp2
+  xpos 236
+  ypos 144
+ }
+ Saturation {
+  saturation 0
+  name Saturation5
+  xpos 236
+  ypos 170
+ }
+push $Ne61d4760
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge9
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 126
+  ypos 170
+ }
+push $Ne61d0820
+ Dot {
+  name Dot33
+  note_font_size 41
+  xpos 28
+  ypos 50
+ }
+ Dot {
+  name Dot34
+  note_font_size 41
+  xpos 28
+  ypos 230
+ }
+ Switch {
+  inputs 2
+  which {{parent.despillSat}}
+  name DespillSwitch2
+  label "\[value which]"
+  xpos 126
+  ypos 223
+ }
+ Dot {
+  name Dot35
+  note_font_size 41
+  xpos 160
+  ypos 320
+ }
+set Ndc6e9920 [stack 0]
+ Dot {
+  name Dot6
+  xpos 412
+  ypos 320
+ }
+ Merge2 {
+  inputs 2
+  operation difference
+  Achannels rgb
+  Bchannels rgb
+  name Merge6
+  xpos 378
+  ypos 370
+ }
+ Group {
+  name ChannelControl_v3
+  label "\[value channel_selector.in]"
+  note_font "Bitstream Vera Sans"
+  xpos 378
+  ypos 440
+  mapsize {0.15 0.15}
+  addUserKnob {20 channelControl}
+  addUserKnob {41 Channel_Selection T channel_selector.in}
+  addUserKnob {26 Description l "" +STARTLINE T ":Channel Control:\n\nChannel math with choice of merge operation"}
+  addUserKnob {26 ""}
+  addUserKnob {7 redGain}
+  redGain 0.3
+  addUserKnob {7 greenGain}
+  greenGain 0.59
+  addUserKnob {7 blueGain}
+  blueGain 0.11
+  addUserKnob {7 alphaGain}
+  addUserKnob {41 operation T Merge1.operation}
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos 558
+   ypos -694
+  }
+  Shuffle {
+   name channel_selector
+   label "\[value in]"
+   xpos 558
+   ypos -668
+  }
+set Ne600a100 [stack 0]
+  Shuffle {
+   green red
+   blue red
+   alpha red
+   name Shuffle1
+   xpos 386
+   ypos -536
+  }
+  Grade {
+   channels rgba
+   white {{parent.redGain i}}
+   name Grade12
+   xpos 386
+   ypos -492
+  }
+push $Ne600a100
+  Shuffle {
+   red green
+   blue green
+   alpha green
+   name Shuffle2
+   xpos 499
+   ypos -534
+  }
+  Grade {
+   channels rgba
+   white {{parent.greenGain i}}
+   name Grade13
+   xpos 499
+   ypos -493
+  }
+  Merge2 {
+   inputs 2
+   operation plus
+   name Merge1
+   xpos 411
+   ypos -428
+  }
+  set C310f6910 [stack 0]
+push $Ne600a100
+  Shuffle {
+   red blue
+   green blue
+   alpha blue
+   name Shuffle3
+   xpos 610
+   ypos -538
+  }
+  Grade {
+   channels rgba
+   white {{parent.blueGain i}}
+   name Grade14
+   xpos 610
+   ypos -494
+  }
+clone $C310f6910 {
+   inputs 2
+   xpos 486
+   ypos -369
+   selected false
+  }
+push $Ne600a100
+  Shuffle {
+   red alpha
+   green alpha
+   blue alpha
+   name Shuffle4
+   selected true
+   xpos 725
+   ypos -535
+  }
+  Grade {
+   channels rgba
+   white {{parent.alphaGain i}}
+   name Grade15
+   xpos 725
+   ypos -494
+  }
+clone $C310f6910 {
+   inputs 2
+   xpos 580
+   ypos -307
+   selected false
+  }
+  Output {
+   name Output1
+   xpos 600
+   ypos -210
+  }
+ end_group
+ Dot {
+  name Dot14
+  note_font_size 41
+  xpos 412
+  ypos 1768
+ }
+ Input {
+  inputs 0
+  name bg
+  label "\[value number]"
+  xpos -845
+  ypos -242
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels3
+  xpos -845
+  ypos -151
+ }
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos -811
+  ypos -78
+ }
+ Dot {
+  name Dot4
+  xpos -811
+  ypos 1449
+ }
+set Nd631a0b0 [stack 0]
+ Dot {
+  name Dot13
+  note_font_size 41
+  xpos -811
+  ypos 1688
+ }
+set Nd631df90 [stack 0]
+push $Ne61ad600
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos -466
+  ypos 421
+ }
+set Nd6321e60 [stack 0]
+ Saturation {
+  saturation {{parent.satDarks}}
+  name Saturation9
+  xpos -378
+  ypos 418
+ }
+push $Ndc6e9920
+ Saturation {
+  saturation {{parent.satDarks}}
+  name Saturation8
+  xpos -215
+  ypos 317
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge5
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -215
+  ypos 418
+ }
+ Dot {
+  name Dot38
+  note_font_size 41
+  xpos -181
+  ypos 674
+ }
+ Clamp {
+  channels rgba
+  minimum 1
+  minimum_enable false
+  name Clamp4
+  xpos -215
+  ypos 786
+ }
+ Add {
+  channels rgba
+  value -1
+  name Add3
+  xpos -215
+  ypos 840
+ }
+ Multiply {
+  channels rgb
+  value {{parent.DarkValue} {parent.DarkValue} {parent.DarkValue} 0}
+  name DARK_VALUE
+  xpos -215
+  ypos 892
+ }
+ Grade {
+  multiply {{parent.darkTint} {parent.darkTint} {parent.darkTint} {parent.darkTint}}
+  reverse true
+  black_clamp false
+  name DARK_TINT
+  xpos -215
+  ypos 931
+ }
+ Add {
+  channels rgba
+  value 1
+  name Add4
+  xpos -215
+  ypos 988
+ }
+ Clamp {
+  channels rgb
+  name Clamp5
+  xpos -215
+  ypos 1065
+ }
+ Dot {
+  name Dot39
+  note_font_size 41
+  xpos -181
+  ypos 1257
+ }
+push $Nd6321e60
+ Dot {
+  name Dot36
+  note_font_size 41
+  xpos -466
+  ypos 577
+ }
+ Saturation {
+  saturation {{parent.satLights}}
+  name Saturation1
+  xpos -101
+  ypos 574
+ }
+set Nb662b010 [stack 0]
+push $Ndc6e9920
+ Saturation {
+  saturation {{parent.satLights}}
+  name Saturation6
+  xpos 126
+  ypos 500
+ }
+set Nb662f000 [stack 0]
+ Merge2 {
+  inputs 2
+  operation divide
+  also_merge all
+  name Merge10
+  label all
+  xpos 126
+  ypos 568
+ }
+ Clamp {
+  channels rgba
+  minimum 1
+  maximum_enable false
+  name Clamp3
+  xpos 126
+  ypos 780
+ }
+ Add {
+  channels rgba
+  value -1
+  name Add1
+  xpos 126
+  ypos 838
+ }
+ Multiply {
+  channels rgb
+  value {{parent.LightValue} {parent.LightValue} {parent.LightValue} 0}
+  name LIGHT_VALUE
+  xpos 126
+  ypos 961
+ }
+ Multiply {
+  channels rgb
+  value {{parent.lightTint.r} {parent.lightTint.g} {parent.lightTint.b} 0}
+  name LIGHT_TINT
+  xpos 126
+  ypos 1039
+ }
+ Add {
+  channels rgba
+  value 1
+  name Add2
+  xpos 126
+  ypos 1120
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  name __CONSTRAIN_DARKS__
+  xpos 128
+  ypos 1253
+ }
+ Dot {
+  name Dot19
+  note_font_size 41
+  xpos 162
+  ypos 1354
+ }
+set Nd6028a80 [stack 0]
+ Dot {
+  name Dot3
+  xpos -8
+  ypos 1354
+ }
+ Dot {
+  name Dot16
+  note_font_size 41
+  xpos -8
+  ypos 1611
+ }
+push $Nb662f000
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 310
+  ypos 503
+ }
+push $Nb662b010
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos -67
+  ypos 691
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 276
+  ypos 688
+ }
+ Clamp {
+  channels rgba
+  maximum_enable false
+  name Clamp6
+  xpos 276
+  ypos 781
+ }
+ Multiply {
+  channels rgba
+  value {{parent.ExtraLightValue}}
+  name Multiply1
+  label "\[value value]"
+  xpos 276
+  ypos 899
+ }
+ Multiply {
+  channels rgb
+  value {{parent.lightTint.r} {parent.lightTint.g} {parent.lightTint.b} 0}
+  name LIGHT_TINT1
+  xpos 276
+  ypos 1036
+ }
+ Dot {
+  name Dot15
+  note_font_size 41
+  xpos 310
+  ypos 1513
+ }
+push $Nd6028a80
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 162
+  ypos 1449
+ }
+push $Nd631a0b0
+ Merge2 {
+  inputs 2
+  operation multiply
+  Achannels rgb
+  Bchannels rgb
+  output rgb
+  name CONSTRAIN_LIGHTS
+  xpos 128
+  ypos 1446
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge2
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 128
+  ypos 1510
+ }
+ Switch {
+  inputs 2
+  which {{parent.compositeSwitch}}
+  name Switch1
+  label "\[value which]"
+  xpos 128
+  ypos 1604
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 128
+  ypos 1678
+  disable {{parent.outputDiffAlpha}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.blue
+  to0 rgba.alpha
+  name __LUMA_INTO_ALPHA__
+  xpos 128
+  ypos 1758
+  disable {{!parent.outputDiffAlpha}}
+ }
+ Dot {
+  name Dot17
+  label A
+  note_font_size 41
+  xpos 162
+  ypos 1910
+ }
+push $Nd631df90
+ Dot {
+  name Dot18
+  label B
+  note_font_size 41
+  xpos -811
+  ypos 1895
+ }
+ Dot {
+  name Dot12
+  note_font_size 41
+  xpos -811
+  ypos 1986
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  Achannels none
+  Bchannels none
+  output none
+  also_merge rgba
+  name MergeKeymix
+  xpos 128
+  ypos 1973
+ }
+ Output {
+  name Output1
+  xpos 128
+  ypos 2235
+ }
+end_group

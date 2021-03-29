@@ -1,0 +1,372 @@
+Group {
+ name P_Project
+ help "Position Project\n\nCamera Project using only the render of the Position pass and the Camera.\n"
+ onCreate "if nuke.thisNode()\['created'].value() == False:\n    nuke.thisNode()\['created'].setValue(True)\n    nuke.thisNode().knob('project_frame').setValue(nuke.frame())"
+ knobChanged "if nuke.thisKnob().name() in ('matte', 'showPanel'):\n    inputT = nuke.exists('Alpha')\n    mode = nuke.thisNode()\['matte'].value()\n    if mode == 'rgba.alpha':\n        if str(inputT)== 'True':\n            nuke.thisNode().setInput(3,None)\n            n = nuke.toNode('Alpha')\n            nuke.delete(n)\n    else:\n        if str(inputT)== 'False':\n            #nuke.message('Add New Input in Node')\n            i = nuke.createNode('Input', inpanel=False )\n            i\['name'].setValue('Alpha')\n            n = nuke.toNode('Switch2')\n            n.setInput(0,i)"
+ tile_color 0xdda92aff
+ selected true
+ icon F_iconalpha.png
+ addUserKnob {20 User l "Position Project"}
+ addUserKnob {6 created l INVISIBLE +INVISIBLE +STARTLINE}
+ created true
+ addUserKnob {41 in l "<font color=\"green\">@b;P channel" t "Choose the position pass channel." T Shuffle_input_channel.in}
+ addUserKnob {26 ""}
+ addUserKnob {3 project_frame l "Project Frame" t "Enter the reference frame you want for the camera projection."}
+ project_frame 1
+ addUserKnob {22 setframe l " Set Current! " t "Set automatically the reference frame to the current frame." -STARTLINE T nuke.thisNode().knob('project_frame').setValue(nuke.frame())}
+ addUserKnob {6 freeze_image l "Hold Image also (same frame)" t "Hold to the same frame the input Image." +STARTLINE}
+ addUserKnob {26 S01 l " "}
+ addUserKnob {41 filter l Filter T STMap1.filter}
+ addUserKnob {6 crop l Crop t "Crop the incoming image, putting black outside the format area." -STARTLINE}
+ addUserKnob {6 antialiasing l Antialiasing t "Increase the size of the input position pass before the projection." +STARTLINE}
+ addUserKnob {26 S04 l " " T " "}
+ addUserKnob {26 ""}
+ addUserKnob {26 T01 l "   (Un)Premult by" t "The Position Pass is divide by the Alpha channel before being processed, and multiplied again afterwards. This can improve the texturing of anti-aliased edges." T ""}
+ addUserKnob {6 premult l "" t "The Position Pass is divide by the Alpha channel before being processed, and multiplied again afterwards. This can improve the texturing of anti-aliased edges." -STARTLINE}
+ addUserKnob {4 matte l "" t "Choose the Alpha channel.\nAlpha is usefull for a better result with clean edge (UnPremult / Premult).\n\nrgba.alpha: \nPick automaticaly the Alpha from the Input.\n\nrgba.alpha (New Input):\nPick the Alpha from an other Input." -STARTLINE M {rgba.alpha "rgba.alpha (New Input)" "" "" "" "" ""}}
+ addUserKnob {26 by2 l " " T "                                                                                               "}
+ addUserKnob {26 FTools l " " t "FranklinVfx.com\n" -STARTLINE T "<font color=\"#1C1C1C\"> Franklin Vfx - 2017"}
+ addUserKnob {1 output l INVISIBLE +INVISIBLE}
+ output "\[value project_frame]"
+}
+ Input {
+  inputs 0
+  name Pos
+  xpos -276
+  ypos -437
+  number 1
+ }
+ Dot {
+  name Dot2
+  xpos -242
+  ypos -229
+ }
+set N696a4710 [stack 0]
+ Dot {
+  name Dot7
+  xpos -14
+  ypos -229
+ }
+set N696c80c0 [stack 0]
+push 0
+ Switch {
+  inputs 2
+  which {{!matte i}}
+  name Switch2
+  xpos -48
+  ypos -138
+ }
+ NoOp {
+  name AlphaCheck
+  xpos -48
+  ypos -60
+  addUserKnob {20 User}
+  addUserKnob {6 alpha +STARTLINE}
+  alpha {{"\[python \"len(\\\[n for n in nuke.channels(nuke.thisNode().input(0)) if n.find(\\\".a\\\") != -1])>0\"]" i}}
+ }
+ AddChannels {
+  channels rgba
+  name AddAlpha
+  xpos -48
+  ypos -17
+ }
+ Dot {
+  name Dot4
+  xpos -14
+  ypos 74
+ }
+set N696f74a0 [stack 0]
+ Dot {
+  name Dot5
+  xpos -14
+  ypos 1201
+ }
+push $N696f74a0
+push $N696c80c0
+ Dot {
+  name Dot3
+  xpos 208
+  ypos -229
+ }
+set N69491b50 [stack 0]
+ Shuffle {
+  in rgb
+  name Shuffle_input_channel
+  xpos 174
+  ypos -27
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 174
+  ypos 64
+ }
+set N696ec8b0 [stack 0]
+push $N696ec8b0
+ Blur {
+  inputs 1+1
+  size 2
+  invert_mask true
+  name Blur1
+  xpos 386
+  ypos 64
+  disable {{!parent.antialiasing}}
+ }
+ Unpremult {
+  name Unpremult1
+  xpos 386
+  ypos 102
+ }
+ Dot {
+  name Dot1
+  xpos 420
+  ypos 198
+ }
+push $N696ec8b0
+ Switch {
+  inputs 2
+  which {{parent.premult}}
+  name Switch9
+  xpos 174
+  ypos 194
+  disable {{!AlphaCheck.alpha}}
+ }
+ Reformat {
+  type scale
+  scale 2
+  pbb true
+  name Reformat5
+  tile_color 0xff0000ff
+  xpos 174
+  ypos 294
+  disable {{!parent.antialiasing}}
+ }
+ Expression {
+  expr0 "(r - Proj_Cam.world_matrix.3)"
+  expr1 "(g - Proj_Cam.world_matrix.7)"
+  expr2 "(b - Proj_Cam.world_matrix.11)"
+  name Distance
+  xpos 174
+  ypos 417
+ }
+ Expression {
+  temp_name0 x
+  temp_expr0 "Proj_Cam.world_matrix.0 * r + Proj_Cam.world_matrix.4 * g + Proj_Cam.world_matrix.8 * b"
+  temp_name1 y
+  temp_expr1 "Proj_Cam.world_matrix.1 * r + Proj_Cam.world_matrix.5 * g + Proj_Cam.world_matrix.9 * b"
+  temp_name2 z
+  temp_expr2 "Proj_Cam.world_matrix.2 * r + Proj_Cam.world_matrix.6 * g + Proj_Cam.world_matrix.10 * b"
+  expr0 x
+  expr1 y
+  expr2 z
+  name Transform
+  xpos 174
+  ypos 452
+ }
+set N69d5f330 [stack 0]
+ Expression {
+  temp_name0 ratio
+  temp_expr0 1
+  temp_name1 focal
+  temp_expr1 Proj_Cam.focal
+  temp_name2 u
+  temp_expr2 "0.5 + (r * ((focal/(Proj_Cam.haperture))/b)) * -1"
+  temp_name3 v
+  temp_expr3 "0.5 + (g * ((focal/(Proj_Cam.vaperture * ratio))/b)) * -1"
+  expr0 "u>0 && u<1 && v>0 && v<1 ? u : 0"
+  expr1 "v>0 && v<1 && u>0 && u<1 ? v : 0"
+  channel2 none
+  channel3 none
+  name Solve
+  label ratio=1/pixel_aspect
+  xpos 100
+  ypos 538
+ }
+push $N69d5f330
+ Expression {
+  temp_name0 ratio
+  temp_expr0 1
+  temp_name1 focal
+  temp_expr1 Proj_Cam.focal
+  temp_name2 u
+  temp_expr2 "0.5 + (r * ((focal/(Proj_Cam.haperture))/b)) * -1"
+  temp_name3 v
+  temp_expr3 "0.5 + (g * ((focal/(Proj_Cam.vaperture * ratio))/b)) * -1"
+  expr0 u
+  expr1 v
+  channel2 none
+  channel3 none
+  name Solve_Crop
+  xpos 246
+  ypos 551
+ }
+ Dissolve {
+  inputs 2
+  which {{parent.crop}}
+  name Dissolve2
+  xpos 174
+  ypos 635
+ }
+ Input {
+  inputs 0
+  name Image
+  xpos 630
+  ypos -453
+ }
+ FrameHold {
+  first_frame {{parent.project_frame i x1060 1060}}
+  name FrameHold1
+  xpos 630
+  ypos -356
+  disable {{!parent.freeze_image i}}
+ }
+ Log2Lin {
+  operation lin2log
+  name Log2Lin1
+  label "\[if \{\[value operation]==\"lin2log\"\} \{return \"\[knob this.icon F_iconstart.png]\"\} \{return \"\[knob this.icon F_iconend.png]\"\}]"
+  xpos 630
+  ypos -318
+  icon F_iconstart.png
+ }
+ Reformat {
+  type "to box"
+  box_width {{parent.Crop1.box.r}}
+  box_height {{parent.Crop1.box.t}}
+  box_fixed true
+  box_pixel_aspect {{parent.Crop1.softness}}
+  resize none
+  center false
+  pbb true
+  name Reformat2
+  xpos 630
+  ypos -207
+ }
+ Reformat {
+  type scale
+  scale {{parent.Reformat5.scale}}
+  pbb {{parent.Reformat5.pbb}}
+  name Reformat7
+  tile_color 0xff0000ff
+  xpos 630
+  ypos 291
+  disable {{!parent.antialiasing}}
+ }
+ Dot {
+  name Dot12
+  xpos 664
+  ypos 773
+ }
+ STMap {
+  inputs 2
+  uv rgb
+  blur_scale 0
+  maskChannel -rgba.alpha
+  name STMap1
+  xpos 174
+  ypos 763
+ }
+ Log2Lin {
+  name Log2Lin2
+  label "\[if \{\[value operation]==\"lin2log\"\} \{return \"\[knob this.icon F_iconstart.png]\"\} \{return \"\[knob this.icon F_iconend.png]\"\}]"
+  xpos 174
+  ypos 878
+  icon F_iconend.png
+ }
+ Clamp {
+  maximum 1001
+  name Clamp1
+  xpos 174
+  ypos 969
+ }
+ Reformat {
+  type scale
+  scale {{1/parent.Reformat5.scale}}
+  pbb true
+  name Reformat8
+  tile_color 0xff0000ff
+  xpos 174
+  ypos 1094
+  disable {{!parent.antialiasing}}
+ }
+set N69baeb10 [stack 0]
+ Multiply {
+  inputs 1+1
+  value 0
+  invert_mask true
+  name Multiply1
+  xpos 77
+  ypos 1191
+  disable {{!AlphaCheck.alpha i}}
+ }
+push $N69baeb10
+ Switch {
+  inputs 2
+  which {{parent.premult}}
+  name Switch10
+  xpos 174
+  ypos 1273
+ }
+ Dot {
+  name Dot6
+  xpos 208
+  ypos 1399
+ }
+push $N696a4710
+ Copy {
+  inputs 2
+  channels rgba
+  name Copy2
+  xpos -276
+  ypos 1382
+ }
+ Output {
+  name FranklinVFX
+  xpos -276
+  ypos 1524
+ }
+ Camera2 {
+  inputs 0
+  read_from_file true
+  display off
+  selectable false
+  useMatrix true
+  matrix {
+      {{"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"}}
+      {{"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"}}
+      {{"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"}}
+      {{"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"} {"\[topnode parent.input2].world_matrix (parent.project_frame)"}}
+    }
+  focal {{"\[topnode parent.input2].focal (parent.project_frame)"}}
+  haperture {{"\[topnode parent.input2].haperture (parent.project_frame)"}}
+  vaperture {{"\[topnode parent.input2].vaperture (parent.project_frame)"}}
+  name Proj_Cam
+  xpos 430
+  ypos 397
+ }
+ Input {
+  inputs 0
+  name Cam
+  xpos 416
+  ypos 325
+  number 2
+ }
+push $N69491b50
+ Reformat {
+  resize none
+  center false
+  name Reformat11
+  xpos 487
+  ypos -233
+  disable true
+ }
+ Crop {
+  box {0 0 {input.width} {input.height}}
+  softness {{"\[python nuke.value(\"%s.pixel_aspect\" % nuke.thisNode().name())]"}}
+  name Crop1
+  knobChanged "a = nuke.thisNode()\naspectratio = a\['box_pixel_aspect'].value()\nprint aspectratio"
+  xpos 487
+  ypos -207
+ }
+end_group

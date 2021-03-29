@@ -1,0 +1,328 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name MorphDissolve
+ help "Allows to morph between two moving plates automatically, or can be used to improve manual Morphs."
+ tile_color 0x890074ff
+ label "(Plate \[value morph])"
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {7 morph l Morph t "Morphs between input 0 and input 1"}
+ addUserKnob {26 ""}
+ addUserKnob {4 method l "Morph Method" t "Pick which method to use. They may both display artifacts in different areas, try both to see which one produces the best results for your specific morph." M {iDistort Kronos ""}}
+ addUserKnob {7 vectorDetail l "Vector Detail" t "Use this to adjust the density of the calculated motion vector field. Higher details capture finer movements, but take will longer to calculate." R 0.01 1}
+ vectorDetail 0.75
+ addUserKnob {7 strength l Strength t "Match Strength : Stonger values will match larger differences between the two plates." R 0 1.5}
+ strength 1.5
+ addUserKnob {26 ""}
+ addUserKnob {26 copyright l "" +STARTLINE T "v1.0 - by Erwan Leroy - 2017"}
+}
+ BackdropNode {
+  inputs 0
+  name Backdrop1
+  tile_color 0x5b4e5658
+  label Zipping
+  note_font_size 40
+  xpos 600
+  ypos -55
+  bdwidth 180
+  bdheight 241
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos 1355
+  ypos -123
+  number 1
+ }
+ Dot {
+  name Dot3
+  tile_color 0xcccccc00
+  xpos 1389
+  ypos -72
+ }
+set Nb6609630 [stack 0]
+ Dot {
+  name Dot8
+  tile_color 0xcccccc00
+  xpos 1389
+  ypos 1115
+ }
+push $Nb6609630
+ Dot {
+  name Dot13
+  tile_color 0xcccccc00
+  xpos 1247
+  ypos -72
+ }
+ NoTimeBlur {
+  rounding floor
+  single false
+  name NoTimeBlur2
+  xpos 1213
+  ypos -15
+ }
+ Retime {
+  input.first 1001
+  input.first_lock true
+  output.first 1001
+  output.last 1002
+  speed 0.5
+  before continue
+  after continue
+  filter none
+  time ""
+  name Retime2
+  label "x\[value input.first]-->x\[value output.first]\n\[if \{\[value speed] == 1\} then \{return \"\"\} else \{return \"spd \[value speed]\"\}]"
+  xpos 1213
+  ypos 23
+ }
+ Input {
+  inputs 0
+  name Input0
+  xpos -24
+  ypos -121
+ }
+ Dot {
+  name Dot4
+  tile_color 0xcccccc00
+  xpos 10
+  ypos -75
+ }
+set N5282e270 [stack 0]
+ Dot {
+  name Dot14
+  tile_color 0xcccccc00
+  xpos 155
+  ypos -75
+ }
+ NoTimeBlur {
+  rounding floor
+  single false
+  name NoTimeBlur1
+  xpos 121
+  ypos -13
+ }
+ Retime {
+  input.first 1001
+  input.first_lock true
+  input.last 1218
+  output.first 1001
+  output.last 1436
+  speed 0.5
+  before continue
+  after continue
+  filter none
+  time ""
+  name Retime1
+  label "x\[value input.first]-->x\[value output.first]\n\[if \{\[value speed] == 1\} then \{return \"\"\} else \{return \"spd \[value speed]\"\}]"
+  xpos 121
+  ypos 23
+ }
+ Switch {
+  inputs 2
+  which {{(frame-1001)%2}}
+  name Switch1
+  xpos 650
+  ypos 35
+ }
+ Dot {
+  name Dot9
+  tile_color 0xcccccc00
+  xpos 684
+  ypos 124
+ }
+set Ndbb0ae10 [stack 0]
+ Dot {
+  name Dot2
+  tile_color 0xcccccc00
+  xpos 985
+  ypos 124
+ }
+ Kronos {
+  retimedChannels all
+  timing2 Frame
+  timingFrame2 {{(frame-1001)*2+1001+parent.morph}}
+  showLegacyMode false
+  motionEstimation Regularized
+  vectorDetailReg {{parent.vectorDetail}}
+  strengthReg {{parent.strength}}
+  legacyModeNuke9 false
+  name Kronos1
+  xpos 951
+  ypos 273
+ }
+ Dot {
+  name Dot12
+  tile_color 0xcccccc00
+  xpos 985
+  ypos 858
+ }
+push $Ndbb0ae10
+ Dot {
+  name Dot10
+  tile_color 0xcccccc00
+  xpos 415
+  ypos 124
+ }
+ VectorGenerator {
+  motionEstimation Regularized
+  vectorDetailReg {{parent.vectorDetail}}
+  strengthReg {{parent.strength}}
+  name VectorGenerator1
+  xpos 381
+  ypos 277
+ }
+ Dot {
+  name Dot1
+  tile_color 0xcccccc00
+  xpos 415
+  ypos 350
+ }
+set N2d9b5790 [stack 0]
+ Shuffle {
+  in backward
+  blue black
+  alpha black
+  name Shuffle2
+  label "in \[value in]-->out \[value out]"
+  xpos 217
+  ypos 340
+ }
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset2
+  label "\[value time_offset]"
+  xpos 217
+  ypos 484
+ }
+push $N2d9b5790
+ Shuffle {
+  in forward
+  blue black
+  alpha black
+  name Shuffle1
+  label "in \[value in]-->out \[value out]"
+  xpos 560
+  ypos 340
+ }
+ TimeOffset {
+  time_offset 1
+  time ""
+  name TimeOffset1
+  label "\[value time_offset]"
+  xpos 560
+  ypos 414
+ }
+push $N2d9b5790
+ Copy {
+  inputs 2
+  from0 forward.u
+  to0 forward.u
+  from1 forward.v
+  to1 forward.v
+  bbox B
+  name Copy1
+  xpos 381
+  ypos 408
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 backward.u
+  from1 backward.v
+  to1 backward.v
+  bbox B
+  name Copy2
+  xpos 381
+  ypos 478
+ }
+set N2070e3a0 [stack 0]
+ Retime {
+  input.first 1000
+  input.first_lock true
+  input.last 1002
+  output.first 1000
+  output.last 1001
+  speed 2
+  before continue
+  after continue
+  filter none
+  time ""
+  name Retime4
+  label "x\[value input.first]-->x\[value output.first]\n\[if \{\[value speed] == 1\} then \{return \"\"\} else \{return \"spd \[value speed]\"\}]"
+  xpos 459
+  ypos 559
+ }
+ IDistort {
+  uv forward
+  uv_scale {{1-parent.morph}}
+  name IDistort2
+  xpos 459
+  ypos 628
+ }
+push $N2070e3a0
+ Retime {
+  input.first 1001
+  input.first_lock true
+  input.last 1436
+  output.first 1001
+  output.last 1218
+  speed 2
+  before continue
+  after continue
+  filter none
+  time ""
+  name Retime3
+  label "x\[value input.first]-->x\[value output.first]\n\[if \{\[value speed] == 1\} then \{return \"\"\} else \{return \"spd \[value speed]\"\}]"
+  xpos 308
+  ypos 560
+ }
+ IDistort {
+  uv backward
+  uv_scale {{parent.morph}}
+  name IDistort1
+  xpos 308
+  ypos 625
+ }
+ Dissolve {
+  inputs 2
+  which {{parent.morph}}
+  name Dissolve1
+  xpos 379
+  ypos 710
+ }
+ Dot {
+  name Dot11
+  tile_color 0xcccccc00
+  xpos 413
+  ypos 858
+ }
+ Switch {
+  inputs 2
+  which {{parent.method}}
+  name Switch3
+  xpos 627
+  ypos 854
+ }
+push $N5282e270
+ Dot {
+  name Dot7
+  tile_color 0xcccccc00
+  xpos 10
+  ypos 1115
+ }
+ Switch {
+  inputs 3
+  which {{parent.morph<=0?0:parent.morph>=1?2:1}}
+  name Switch2
+  xpos 627
+  ypos 1111
+ }
+ Output {
+  name Output1
+  xpos 627
+  ypos 1205
+ }
+end_group

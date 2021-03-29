@@ -1,0 +1,89 @@
+Group {
+ inputs 2
+ name DeepRecolorMatte
+ help "this node creates a new single channel\n<NewChannelName>.red and injects it into the stream before a deep recolor.\n\nThis workflow is to create single channel mattes for your elements in your deep combine tree.  which you can later pull out with a shuffle node after you have pre-rendered.\n\nThe benifit: you know what your elements look like deep combined, as a sanity check reference, and the pre-render itself has all the matte channels needed to recreate the deep render.\n\nWhen replacing your alpha, remember to unpremult(all), copy the holdout alpha, and premult(all)"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == 'addPrefix':\n    if n.knob('addPrefix').value() == 1:\n        n.knob('prefix').setVisible(True)\n    else:\n        n.knob('prefix').setVisible(False)\n\nif k.name() == 'addPostfix':\n    if n.knob('addPostfix').value() == 1:\n        n.knob('postfix').setVisible(True)\n    else:\n        n.knob('postfix').setVisible(False)"
+ tile_color 0x60ff
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 DeepRecolorMatte}
+ addUserKnob {22 grabTitle l "<b><font color = lightskyblue>Grab Title</font color = lightskyblue></b>" t "grabs title from either a stamp or a read node from the 'color' stream and fills in the 'new channel name' field" T "from stamps_config import defaultTitle\n\nn = nuke.thisNode()\nncn = n.knob('newChannelName')\n\niNode = nuke.thisNode()\n\ndef upstream(iNode):\n    found = False\n    name = ''\n    while found == False:\n        \n        if iNode.input(0) != None:\n\n            if iNode.input(0).Class() in \['Read']:\n                found = True\n                name  = defaultTitle(iNode.input(0))\n                \n    \n            elif iNode.input(0).Class() in \['NoOp']:   \n                \n                try: \n                    found = True \n                    name = iNode.input(0)\['title'].value()           \n                    \n                except:\n                    iNode = iNode.input(0)\n            \n                            \n            else:\n                iNode = iNode.input(0)\n        else:\n            nuke.message('please connect a read node or a stamp')\n            found = True\n            \n    return name\n      \nname = upstream(iNode)\nncn.setValue(name)" +STARTLINE}
+ addUserKnob {22 injectNewChannel l "<b><font color = salmon>Inject New Channel</font color = salmon></b>" t "Copies the alpha from the color stream into a new channel <newChannel>.red into the stream to that it exists in your deep tree to be used as a holdout matte when pulled out later." -STARTLINE T "n = nuke.thisNode()\nncn = n.knob('newChannelName').getValue()\ncd = n.knob('channelDisplay')\n\nif n.knob('addPrefix').value() == 1 and n.knob('prefix').getValue() != '':\n    prefix = n.knob('prefix').value() + '_'\nelse:\n    prefix = ''\n    \nif n.knob('addPostfix').value() == 1 and n.knob('postfix').getValue() != '':\n    postfix = '_' + n.knob('postfix').value()\nelse:\n    postfix = ''\n\nchannelName = prefix+ncn+postfix\n\nwith n:\n    nodeName = n.name()\n    copy = nuke.toNode('CopyInjector')\n    if channelName != '':\n        channelName = ''.join(channelName.split('.'))\n        channelName = '_'.join(channelName.split(' '))\n        fullChannelName = channelName + '.red'\n        nuke.Layer('\{\}'.format(channelName), \[fullChannelName])\n        copy.knob('to0').setValue(fullChannelName)\n        copy.knob('tile_color').setValue(437918463)\n        copy.knob('note_font_color').setValue(4280090879)\n        \ncd.setValue(fullChannelName)\ncd.setVisible(True)\nn.knob('note_font_color').setValue(4280090879)\nn.knob('label').setValue('\{\} --> \{\}'.format(cs, channelName))"}
+ addUserKnob {22 reset l "<b><font color = limegreen>Reset</font color = limegreen></b>" t "resets the node to default values" -STARTLINE T "n = nuke.thisNode()\nncn = n.knob('newChannelName')\ncd = n.knob('channelDisplay')\nwith n:\n    copy = nuke.toNode('CopyInjector')\n    copy.knob('to0').setValue('rgba.alpha')\n    copy.knob('tile_color').setValue(2654757632)\n    copy.knob('note_font_color').setValue(235802367)\ncd.setValue('')\ncd.setVisible(False)\nncn.setValue('')\nn.knob('note_font_color').setValue(4294967295)\nn.knob('label').setValue('')\nn.knob('addPrefix').setValue(0)\nn.knob('addPostfix').setValue(0)\nn.knob('prefix').setValue('ID')\nn.knob('postfix').setValue('')"}
+ addUserKnob {20 channelstab l channels n 1}
+ channelstab 0
+ addUserKnob {41 channels T Remove41.channels}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {1 newChannelName l "New Channel Name"}
+ addUserKnob {41 bbox l "set bbox to " T DeepRecolor22.bbox}
+ addUserKnob {41 targetInputAlpha l "target input alpha" -STARTLINE T DeepRecolor1.targetInputAlpha}
+ addUserKnob {6 addPrefix l "Add Prefix" +STARTLINE}
+ addUserKnob {6 addPostfix l "Add Postfix" -STARTLINE}
+ addUserKnob {1 prefix +HIDDEN}
+ prefix ID
+ addUserKnob {1 postfix +HIDDEN}
+ addUserKnob {20 Info}
+ addUserKnob {1 channelDisplay l ---> +HIDDEN +INVISIBLE}
+ addUserKnob {26 creator l Creator: T "<big><b>Tony Lyons"}
+ addUserKnob {26 desc l Name: T DeepRecolorMatte}
+ addUserKnob {26 ver l Version: T v03}
+}
+ Input {
+  inputs 0
+  name Inputcolor
+  xpos 378
+  ypos 265
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels1
+  xpos 378
+  ypos 307
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove41
+  xpos 378
+  ypos 348
+ }
+set N81c76800 [stack 0]
+push $N81c76800
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name CopyInjector
+  tile_color 0x9e3c6300
+  note_font_color 0xe0e0eff
+  xpos 378
+  ypos 384
+ }
+set N81f55960 [stack 0]
+push $N81f55960
+ Input {
+  inputs 0
+  name Inputdeep
+  xpos 104
+  ypos 456
+  number 1
+ }
+ DeepRecolor {
+  inputs 2
+  name DeepRecolor1
+  xpos 247
+  ypos 456
+ }
+ DeepRecolor {
+  inputs 2
+  channels all
+  name DeepRecolor22
+  xpos 378
+  ypos 452
+ }
+ Output {
+  name Output1
+  xpos 378
+  ypos 569
+ }
+end_group

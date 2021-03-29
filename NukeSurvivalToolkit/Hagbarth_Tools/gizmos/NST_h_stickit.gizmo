@@ -1,169 +1,166 @@
-set cut_paste_input [stack 0]
-version 10.5 v1
-push $cut_paste_input
 Group {
-name StickIt5
-tile_color 0x2f66ff
-label "ref frame: \[value RefrenceFrameInput]"
-note_font Verdana
-selected true
-addUserKnob {20 Main l "Main - StickIt"}
-addUserKnob {26 Headline l "" +STARTLINE T "<img src=\"/Users/madshagbarth/.nuke/hagbarth/grapichs/h_stickitUI.png\">"}
-addUserKnob {26 range_devider l "<b><font color=#977DB7>INPUT</font><b>"}
-addUserKnob {3 RefrenceFrameInput l "Reference Frame" t "This is the frame that you want to be the origin of your animation. That is, the frame where the input is exactly the same as the output. (This frame must be within the Range defined below!)"}
-RefrenceFrameInput 126
-addUserKnob {22 RefFrameThis l "This Frame" -STARTLINE T "nuke.thisNode()\['RefrenceFrameInput'].setValue(nuke.frame())"}
-addUserKnob {3 InputFrom l "Range From" t "The first frame of the Analasis and Solve"}
-InputFrom 53
-addUserKnob {3 InputTo l To t "The last frame of the Analasis and Solve" -STARTLINE}
-InputTo 150
-addUserKnob {22 Button_SetToGlobal l "Set To Global" t "This will set the in and out points to the global comp range." -STARTLINE T "nuke.thisNode().knob(\"InputFrom\").setValue(float(nuke.knob(\"first_frame\")))\nnuke.thisNode().knob(\"InputTo\").setValue(float(nuke.knob(\"last_frame\")))"}
-addUserKnob {26 Devider_Options l "<b><font color=#977DB7>OPTIONS</font><b>"}
-addUserKnob {4 Option_Output l Output M {"Source & Overlay" Source Overlay ST-Map}}
-addUserKnob {4 FilterMethod l "Filter Method" M {Impulse "Cubic " Keys Simon Rifman Mitchell Parzen Notch Lanczos4 Lanczos6 Sinc4}}
-FilterMethod "Cubic "
-addUserKnob {6 enableMotionBlur l "Enable Motion Blur" +STARTLINE}
-addUserKnob {26 DeviderView l "<b><font color=#977DB7>DISPLAY</font><b>"}
-addUserKnob {41 previewFeatures l "Preview Features" T si_ct.previewFeatures}
-addUserKnob {41 displayTracks l "Show Features" T si_ct.displayTracks}
-addUserKnob {6 DisableWarp l "Disable Warp" +STARTLINE}
-DisableWarp true
-addUserKnob {26 devider_solve l "<b><font color=#977DB7>ANALYZE</font><b>"}
-addUserKnob {22 RunAnalyse l Analyse T "nuke.toNode(\"si_ct\").knob(\"clearTrack\").execute()\n\nnuke.toNode(\"si_ct\").knob(\"trackFeatures\").execute()\n\n\n\n" +STARTLINE}
-addUserKnob {26 next l "" -STARTLINE T "-> "}
-addUserKnob {22 STiCKiT l Solve -STARTLINE T "import stickit\nreload(stickit)\nstickit.StickIT()"}
-addUserKnob {26 ""}
-addUserKnob {41 clearTrack l "Clear Tracks" T si_ct.clearTrack}
-addUserKnob {20 Help n 1}
-Help 0
-addUserKnob {26 Info l "" +STARTLINE T "STiCKiT v2.0\n\n1) Place the footage that you want to match the motion of into the \[Source] input \n\n2) Set the frame range you want to analyse. You can use the \[Set To Global] button to set the range to the active project range.\n\n3a) If you want to overlay another image ontop of the source, but that image into the \[Overlay] input, then set the \[Reference Frame] to the frame that you have made a patch for.\n\n3a.1) Hit Solve, and now the footage should match.\nand hit Analyse.\n \nIf you want to use the \"Keyframe Assist\" features, you don't need to use the solve button, as this only affects the build in warp"}
-addUserKnob {20 endGroup n -1}
-addUserKnob {20 TABAssist l "Keyframe Assist"}
-addUserKnob {26 devider_assist l "<b><font color=#977DB7>ASSIST</font><b>"}
-addUserKnob {22 AssistTrackBack l <-- T "import stickit\nreload(stickit)\nstickit.Initializer(2)" +STARTLINE}
-addUserKnob {22 AssistTrackAll l "     \[All Frames]     " -STARTLINE T "import stickit\nreload(stickit)\nstickit.Initializer(0)"}
-addUserKnob {22 AssistTrackForward l --> -STARTLINE T "import stickit\nreload(stickit)\nstickit.Initializer(1)"}
-addUserKnob {6 assistStep l " " +STARTLINE}
-addUserKnob {3 AssistStepSize l "Only assist" -STARTLINE}
-AssistStepSize 5
-addUserKnob {26 assistCountText l "" -STARTLINE T frames}
-addUserKnob {26 devider_rotoassist l "<b><font color=#977DB7>ASSIST SETTINGS</font><b>"}
-addUserKnob {4 AssistType l "Assist Method" M {"Local (Using Solve Method)" "Global \[Median]" "Global \[Average]"}}
-addUserKnob {6 assist_rototransform l "\[Roto] Apply to element transform" t "With the setting enabled, the animation will be applied to the transform handle, rather than each point in the roto element." +STARTLINE}
-assist_rototransform true
-addUserKnob {6 RespectKeyframes l "Respect Keyframes" t "Respect exsisting keyframes as \"guides\" for the assist animation." +STARTLINE}
-addUserKnob {6 appendAnimation l "Append Animation" t "Do you want to keep any exsisting animation?" +STARTLINE}
-addUserKnob {6 AssistOnlyIntervals l "Keyframe Only Intervals" +STARTLINE}
-addUserKnob {26 ""}
-addUserKnob {20 help_assist l Help n 1}
-help_assist 0
-addUserKnob {26 assistInfo l "" +STARTLINE T "1) Select the node you want to assist in the dag\n2) Hit one of the controls below.\n(For Roto, Rotopaint and Splinewarp you must open \nand select the element(s) you want to assist.)\n"}
-addUserKnob {20 endGroup_1 l endGroup n -1}
-addUserKnob {20 Advanced}
-addUserKnob {26 Devider_Tracking l "<b><font color=#977DB7>TRACKING</font><b>"}
-addUserKnob {4 SolveMethod l "Solve Method" M {Triangulation Nearest}}
-addUserKnob {41 numberFeatures l "Number of Features" T si_ct.numberFeatures}
-addUserKnob {41 featureThreshold l "Detection Threshold" T si_ct.featureThreshold}
-addUserKnob {41 minTrackLength l "Minimum Length" T si_ct.minTrackLength}
-addUserKnob {41 matchThreshold l "Track Threshold" T si_ct.matchThreshold}
-addUserKnob {41 smoothnessThreshold l "Track Smoothness" T si_ct.smoothnessThreshold}
-addUserKnob {41 consistencyThreshold l "Track Consistency" T si_ct.consistencyThreshold}
-addUserKnob {41 featureSeparation l "Feature Separation" T si_ct.featureSeparation}
-addUserKnob {26 devider_debug l "<b><font color=#977DB7>OTHER OPTIONS</font><b>"}
-addUserKnob {6 displayMotion l "Output Motion Vectors" +STARTLINE}
-displayMotion true
-addUserKnob {6 displayDiffrence l "Output ST Map" +STARTLINE}
-displayDiffrence true
-addUserKnob {6 disableprecrop l "Disable PreCrop" +STARTLINE}
-disableprecrop true
-addUserKnob {26 info l "" +STARTLINE T "Use Diable PreCrop if your overlay footage is being cropped off. \nHowever enable it again if you want to copy / paste the node or \notherwise unplug the overlay input. Due to a bug in nuke all \nkeyframes will be removed if this is not turned on."}
+ name StickIt
+ tile_color 0x2f66ff
+ label "ref frame: \[value RefrenceFrameInput]"
+ note_font Verdana
+ selected true
+ addUserKnob {20 Main l "Main - StickIt"}
+ addUserKnob {26 Headline l "" +STARTLINE T ""}
+ addUserKnob {26 range_devider l "<b><font color=#977DB7>INPUT</font><b>"}
+ addUserKnob {3 RefrenceFrameInput l "Reference Frame" t "This is the frame that you want to be the origin of your animation. That is, the frame where the input is exactly the same as the output. (This frame must be within the Range defined below!)"}
+ RefrenceFrameInput 126
+ addUserKnob {22 RefFrameThis l "This Frame" -STARTLINE T "nuke.thisNode()\['RefrenceFrameInput'].setValue(nuke.frame())"}
+ addUserKnob {3 InputFrom l "Range From" t "The first frame of the Analasis and Solve"}
+ InputFrom 53
+ addUserKnob {3 InputTo l To t "The last frame of the Analasis and Solve" -STARTLINE}
+ InputTo 150
+ addUserKnob {22 Button_SetToGlobal l "Set To Global" t "This will set the in and out points to the global comp range." -STARTLINE T "nuke.thisNode().knob(\"InputFrom\").setValue(float(nuke.knob(\"first_frame\")))\nnuke.thisNode().knob(\"InputTo\").setValue(float(nuke.knob(\"last_frame\")))"}
+ addUserKnob {26 Devider_Options l "<b><font color=#977DB7>OPTIONS</font><b>"}
+ addUserKnob {4 Option_Output l Output M {"Source & Overlay" Source Overlay ST-Map}}
+ addUserKnob {4 FilterMethod l "Filter Method" M {Impulse "Cubic " Keys Simon Rifman Mitchell Parzen Notch Lanczos4 Lanczos6 Sinc4}}
+ FilterMethod "Cubic "
+ addUserKnob {6 enableMotionBlur l "Enable Motion Blur" +STARTLINE}
+ addUserKnob {26 DeviderView l "<b><font color=#977DB7>DISPLAY</font><b>"}
+ addUserKnob {41 previewFeatures l "Preview Features" T si_ct.previewFeatures}
+ addUserKnob {41 displayTracks l "Show Features" T si_ct.displayTracks}
+ addUserKnob {6 DisableWarp l "Disable Warp" +STARTLINE}
+ DisableWarp true
+ addUserKnob {26 devider_solve l "<b><font color=#977DB7>ANALYZE</font><b>"}
+ addUserKnob {22 RunAnalyse l Analyse T "nuke.toNode(\"si_ct\").knob(\"clearTrack\").execute()\n\nnuke.toNode(\"si_ct\").knob(\"trackFeatures\").execute()\n\n\n\n" +STARTLINE}
+ addUserKnob {26 next l "" -STARTLINE T "-> "}
+ addUserKnob {22 STiCKiT l Solve -STARTLINE T "import NST_stickit\nreload(NST_stickit)\nNST_stickit.StickIT()"}
+ addUserKnob {26 ""}
+ addUserKnob {41 clearTrack l "Clear Tracks" T si_ct.clearTrack}
+ addUserKnob {20 Help n 1}
+ Help 0
+ addUserKnob {26 Info l "" +STARTLINE T "STiCKiT v2.0\n\n1) Place the footage that you want to match the motion of into the \[Source] input \n\n2) Set the frame range you want to analyse. You can use the \[Set To Global] button to set the range to the active project range.\n\n3a) If you want to overlay another image ontop of the source, but that image into the \[Overlay] input, then set the \[Reference Frame] to the frame that you have made a patch for.\n\n3a.1) Hit Solve, and now the footage should match.\nand hit Analyse.\n \nIf you want to use the \"Keyframe Assist\" features, you don't need to use the solve button, as this only affects the build in warp"}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 TABAssist l "Keyframe Assist"}
+ addUserKnob {26 devider_assist l "<b><font color=#977DB7>ASSIST</font><b>"}
+ addUserKnob {22 AssistTrackBack l <-- T "import NST_stickit\nreload(NST_stickit)\nNST_stickit.Initializer(2)" +STARTLINE}
+ addUserKnob {22 AssistTrackAll l "     \[All Frames]     " -STARTLINE T "import NST_stickit\nreload(NST_stickit)\nNST_stickit.Initializer(0)"}
+ addUserKnob {22 AssistTrackForward l --> -STARTLINE T "import NST_stickit\nreload(NST_stickit)\nNST_stickit.Initializer(1)"}
+ addUserKnob {6 assistStep l " " +STARTLINE}
+ addUserKnob {3 AssistStepSize l "Only assist" -STARTLINE}
+ AssistStepSize 5
+ addUserKnob {26 assistCountText l "" -STARTLINE T frames}
+ addUserKnob {26 devider_rotoassist l "<b><font color=#977DB7>ASSIST SETTINGS</font><b>"}
+ addUserKnob {4 AssistType l "Assist Method" M {"Local (Using Solve Method)" "Global \[Median]" "Global \[Average]"}}
+ addUserKnob {6 assist_rototransform l "\[Roto] Apply to element transform" t "With the setting enabled, the animation will be applied to the transform handle, rather than each point in the roto element." +STARTLINE}
+ assist_rototransform true
+ addUserKnob {6 RespectKeyframes l "Respect Keyframes" t "Respect exsisting keyframes as \"guides\" for the assist animation." +STARTLINE}
+ addUserKnob {6 appendAnimation l "Append Animation" t "Do you want to keep any exsisting animation?" +STARTLINE}
+ addUserKnob {6 AssistOnlyIntervals l "Keyframe Only Intervals" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {20 help_assist l Help n 1}
+ help_assist 0
+ addUserKnob {26 assistInfo l "" +STARTLINE T "1) Select the node you want to assist in the dag\n2) Hit one of the controls below.\n(For Roto, Rotopaint and Splinewarp you must open \nand select the element(s) you want to assist.)\n"}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 Advanced}
+ addUserKnob {26 Devider_Tracking l "<b><font color=#977DB7>TRACKING</font><b>"}
+ addUserKnob {4 SolveMethod l "Solve Method" M {Triangulation Nearest}}
+ addUserKnob {41 numberFeatures l "Number of Features" T si_ct.numberFeatures}
+ addUserKnob {41 featureThreshold l "Detection Threshold" T si_ct.featureThreshold}
+ addUserKnob {41 minTrackLength l "Minimum Length" T si_ct.minTrackLength}
+ addUserKnob {41 matchThreshold l "Track Threshold" T si_ct.matchThreshold}
+ addUserKnob {41 smoothnessThreshold l "Track Smoothness" T si_ct.smoothnessThreshold}
+ addUserKnob {41 consistencyThreshold l "Track Consistency" T si_ct.consistencyThreshold}
+ addUserKnob {41 featureSeparation l "Feature Separation" T si_ct.featureSeparation}
+ addUserKnob {26 devider_debug l "<b><font color=#977DB7>OTHER OPTIONS</font><b>"}
+ addUserKnob {6 displayMotion l "Output Motion Vectors" +STARTLINE}
+ displayMotion true
+ addUserKnob {6 displayDiffrence l "Output ST Map" +STARTLINE}
+ displayDiffrence true
+ addUserKnob {6 disableprecrop l "Disable PreCrop" +STARTLINE}
+ disableprecrop true
+ addUserKnob {26 info l "" +STARTLINE T "Use Diable PreCrop if your overlay footage is being cropped off. \nHowever enable it again if you want to copy / paste the node or \notherwise unplug the overlay input. Due to a bug in nuke all \nkeyframes will be removed if this is not turned on."}
 }
-Input {
-inputs 0
-name InputOverlay
-tile_color 0xff
-xpos 776
-ypos -15
-number 1
-}
-Crop {
-box {0 0 {InputSource.width} {InputSource.height}}
-reformat true
-crop false
-name si_prec
-tile_color 0xff
-xpos 776
-ypos 20
-disable {{parent.disableprecrop}}
-}
-AdjBBox {
-numpixels 250
-name AdjBBox1
-xpos 775
-ypos 44
-disable true
-}
-Dot {
-name Dot2
-tile_color 0xff
-xpos 810
-ypos 106
-}
-set N33f48b50 [stack 0]
-Dot {
-name Dot3
-tile_color 0xff
-xpos 937
-ypos 106
-}
+ Input {
+  inputs 0
+  name InputOverlay
+  tile_color 0xff
+  xpos 776
+  ypos -15
+  number 1
+ }
+ Crop {
+  box {0 0 {InputSource.width} {InputSource.height}}
+  reformat true
+  crop false
+  name si_prec
+  tile_color 0xff
+  xpos 776
+  ypos 20
+  disable {{parent.disableprecrop}}
+ }
+ AdjBBox {
+  numpixels 250
+  name AdjBBox1
+  xpos 775
+  ypos 44
+  disable true
+ }
+ Dot {
+  name Dot2
+  tile_color 0xff
+  xpos 810
+  ypos 106
+ }
+set N725dde10 [stack 0]
+ Dot {
+  name Dot3
+  tile_color 0xff
+  xpos 937
+  ypos 106
+ }
 add_layer {si_mo si_mo.red si_mo.green}
-Expression {
-channel0 {si_mo.red -si_mo.green}
-expr0 x
-channel1 {-si_mo.red si_mo.green}
-expr1 y
-expr2 0
-name si_stgen
-tile_color 0xff
-xpos 903
-ypos 137
-}
-set N33f4d5b0 [stack 0]
-Dot {
-name Dot4
-tile_color 0xff
-xpos 937
-ypos 498
-}
-push $N33f4d5b0
-push $N33f48b50
-ShuffleCopy {
-inputs 2
-in si_mo
-alpha alpha2
-black red
-white green
-red2 red
-green2 green
-out2 motion
-name si_sh
-tile_color 0xff
-xpos 776
-ypos 137
-}
-SplineWarp3 {
-crop_to_format false
-boundary_bbox false
-colorOverlay {0 0 0 0}
-view {}
-curves {{{v x3f99999a}
+ Expression {
+  channel0 {si_mo.red -si_mo.green}
+  expr0 x
+  channel1 {-si_mo.red si_mo.green}
+  expr1 y
+  expr2 0
+  name si_stgen
+  tile_color 0xff
+  xpos 903
+  ypos 137
+ }
+set N725e5570 [stack 0]
+ Dot {
+  name Dot4
+  tile_color 0xff
+  xpos 937
+  ypos 498
+ }
+push $N725e5570
+push $N725dde10
+ ShuffleCopy {
+  inputs 2
+  in si_mo
+  alpha alpha2
+  black red
+  white green
+  red2 red
+  green2 green
+  out2 motion
+  name si_sh
+  tile_color 0xff
+  xpos 776
+  ypos 137
+ }
+ SplineWarp3 {
+  crop_to_format false
+  boundary_bbox false
+  colorOverlay {0 0 0 0}
+  view {}
+  curves {{{v x3f99999a}
   {f 0}
   {n
    {layer Root
-    {f 512}
+    {f 2097664}
     {t x44800000 x44428000}
     {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}
-    {cubiccurve Stroke1 512 bezier
+    {cubiccurve Stroke1 262656 bezier
      {cc
       {f 8224}
       {p
@@ -208,7 +205,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke2 512 bezier
+    {cubiccurve Stroke2 262656 bezier
      {cc
       {f 8224}
       {p
@@ -446,7 +443,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke3 512 bezier
+    {cubiccurve Stroke3 262656 bezier
      {cc
       {f 8224}
       {p
@@ -491,7 +488,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke4 512 bezier
+    {cubiccurve Stroke4 262656 bezier
      {cc
       {f 8224}
       {p
@@ -729,7 +726,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke5 512 bezier
+    {cubiccurve Stroke5 262656 bezier
      {cc
       {f 8224}
       {p
@@ -774,7 +771,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke6 512 bezier
+    {cubiccurve Stroke6 262656 bezier
      {cc
       {f 8224}
       {p
@@ -1012,7 +1009,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke7 512 bezier
+    {cubiccurve Stroke7 262656 bezier
      {cc
       {f 8224}
       {p
@@ -1057,7 +1054,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke8 512 bezier
+    {cubiccurve Stroke8 262656 bezier
      {cc
       {f 8224}
       {p
@@ -1295,7 +1292,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke9 512 bezier
+    {cubiccurve Stroke9 262656 bezier
      {cc
       {f 8224}
       {p
@@ -1340,7 +1337,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke10 512 bezier
+    {cubiccurve Stroke10 262656 bezier
      {cc
       {f 8224}
       {p
@@ -1578,7 +1575,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke11 512 bezier
+    {cubiccurve Stroke11 262656 bezier
      {cc
       {f 8224}
       {p
@@ -1623,7 +1620,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke12 512 bezier
+    {cubiccurve Stroke12 262656 bezier
      {cc
       {f 8224}
       {p
@@ -1861,7 +1858,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke13 512 bezier
+    {cubiccurve Stroke13 262656 bezier
      {cc
       {f 8224}
       {p
@@ -1906,7 +1903,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke14 512 bezier
+    {cubiccurve Stroke14 262656 bezier
      {cc
       {f 8224}
       {p
@@ -2144,7 +2141,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke15 512 bezier
+    {cubiccurve Stroke15 262656 bezier
      {cc
       {f 8224}
       {p
@@ -2189,7 +2186,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke16 512 bezier
+    {cubiccurve Stroke16 262656 bezier
      {cc
       {f 8224}
       {p
@@ -2427,7 +2424,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke17 512 bezier
+    {cubiccurve Stroke17 262656 bezier
      {cc
       {f 8224}
       {p
@@ -2472,7 +2469,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke18 512 bezier
+    {cubiccurve Stroke18 262656 bezier
      {cc
       {f 8224}
       {p
@@ -2710,7 +2707,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke19 512 bezier
+    {cubiccurve Stroke19 262656 bezier
      {cc
       {f 8224}
       {p
@@ -2755,7 +2752,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke20 512 bezier
+    {cubiccurve Stroke20 262656 bezier
      {cc
       {f 8224}
       {p
@@ -2993,7 +2990,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke21 512 bezier
+    {cubiccurve Stroke21 262656 bezier
      {cc
       {f 8224}
       {p
@@ -3038,7 +3035,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke22 512 bezier
+    {cubiccurve Stroke22 262656 bezier
      {cc
       {f 8224}
       {p
@@ -3276,7 +3273,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke23 512 bezier
+    {cubiccurve Stroke23 262656 bezier
      {cc
       {f 8224}
       {p
@@ -3321,7 +3318,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke24 512 bezier
+    {cubiccurve Stroke24 262656 bezier
      {cc
       {f 8224}
       {p
@@ -3559,7 +3556,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke25 512 bezier
+    {cubiccurve Stroke25 262656 bezier
      {cc
       {f 8224}
       {p
@@ -3604,7 +3601,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke26 512 bezier
+    {cubiccurve Stroke26 262656 bezier
      {cc
       {f 8224}
       {p
@@ -3842,7 +3839,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke27 512 bezier
+    {cubiccurve Stroke27 262656 bezier
      {cc
       {f 8224}
       {p
@@ -3887,7 +3884,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke28 512 bezier
+    {cubiccurve Stroke28 262656 bezier
      {cc
       {f 8224}
       {p
@@ -4125,7 +4122,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke29 512 bezier
+    {cubiccurve Stroke29 262656 bezier
      {cc
       {f 8224}
       {p
@@ -4170,7 +4167,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke30 512 bezier
+    {cubiccurve Stroke30 262656 bezier
      {cc
       {f 8224}
       {p
@@ -4408,7 +4405,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke31 512 bezier
+    {cubiccurve Stroke31 262656 bezier
      {cc
       {f 8224}
       {p
@@ -4453,7 +4450,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke32 512 bezier
+    {cubiccurve Stroke32 262656 bezier
      {cc
       {f 8224}
       {p
@@ -4691,7 +4688,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke33 512 bezier
+    {cubiccurve Stroke33 262656 bezier
      {cc
       {f 8224}
       {p
@@ -4736,7 +4733,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke34 512 bezier
+    {cubiccurve Stroke34 262656 bezier
      {cc
       {f 8224}
       {p
@@ -4974,7 +4971,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke35 512 bezier
+    {cubiccurve Stroke35 262656 bezier
      {cc
       {f 8224}
       {p
@@ -5019,7 +5016,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke36 512 bezier
+    {cubiccurve Stroke36 262656 bezier
      {cc
       {f 8224}
       {p
@@ -5257,7 +5254,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke37 512 bezier
+    {cubiccurve Stroke37 262656 bezier
      {cc
       {f 8224}
       {p
@@ -5302,7 +5299,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke38 512 bezier
+    {cubiccurve Stroke38 262656 bezier
      {cc
       {f 8224}
       {p
@@ -5540,7 +5537,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke39 512 bezier
+    {cubiccurve Stroke39 262656 bezier
      {cc
       {f 8224}
       {p
@@ -5585,7 +5582,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke40 512 bezier
+    {cubiccurve Stroke40 262656 bezier
      {cc
       {f 8224}
       {p
@@ -5823,7 +5820,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke41 512 bezier
+    {cubiccurve Stroke41 262656 bezier
      {cc
       {f 8224}
       {p
@@ -5868,7 +5865,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke42 512 bezier
+    {cubiccurve Stroke42 262656 bezier
      {cc
       {f 8224}
       {p
@@ -6106,7 +6103,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke43 512 bezier
+    {cubiccurve Stroke43 262656 bezier
      {cc
       {f 8224}
       {p
@@ -6151,7 +6148,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke44 512 bezier
+    {cubiccurve Stroke44 262656 bezier
      {cc
       {f 8224}
       {p
@@ -6389,7 +6386,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke45 512 bezier
+    {cubiccurve Stroke45 262656 bezier
      {cc
       {f 8224}
       {p
@@ -6434,7 +6431,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke46 512 bezier
+    {cubiccurve Stroke46 262656 bezier
      {cc
       {f 8224}
       {p
@@ -6672,7 +6669,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke47 512 bezier
+    {cubiccurve Stroke47 262656 bezier
      {cc
       {f 8224}
       {p
@@ -6717,7 +6714,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke48 512 bezier
+    {cubiccurve Stroke48 262656 bezier
      {cc
       {f 8224}
       {p
@@ -6955,7 +6952,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke49 512 bezier
+    {cubiccurve Stroke49 262656 bezier
      {cc
       {f 8224}
       {p
@@ -7000,7 +6997,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke50 512 bezier
+    {cubiccurve Stroke50 262656 bezier
      {cc
       {f 8224}
       {p
@@ -7238,7 +7235,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke51 512 bezier
+    {cubiccurve Stroke51 262656 bezier
      {cc
       {f 8224}
       {p
@@ -7283,7 +7280,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke52 512 bezier
+    {cubiccurve Stroke52 262656 bezier
      {cc
       {f 8224}
       {p
@@ -7521,7 +7518,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke53 512 bezier
+    {cubiccurve Stroke53 262656 bezier
      {cc
       {f 8224}
       {p
@@ -7566,7 +7563,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke54 512 bezier
+    {cubiccurve Stroke54 262656 bezier
      {cc
       {f 8224}
       {p
@@ -7804,7 +7801,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke55 512 bezier
+    {cubiccurve Stroke55 262656 bezier
      {cc
       {f 8224}
       {p
@@ -7849,7 +7846,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke56 512 bezier
+    {cubiccurve Stroke56 262656 bezier
      {cc
       {f 8224}
       {p
@@ -8087,7 +8084,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke57 512 bezier
+    {cubiccurve Stroke57 262656 bezier
      {cc
       {f 8224}
       {p
@@ -8132,7 +8129,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke58 512 bezier
+    {cubiccurve Stroke58 262656 bezier
      {cc
       {f 8224}
       {p
@@ -8370,7 +8367,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke59 512 bezier
+    {cubiccurve Stroke59 262656 bezier
      {cc
       {f 8224}
       {p
@@ -8415,7 +8412,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke60 512 bezier
+    {cubiccurve Stroke60 262656 bezier
      {cc
       {f 8224}
       {p
@@ -8653,7 +8650,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke61 512 bezier
+    {cubiccurve Stroke61 262656 bezier
      {cc
       {f 8224}
       {p
@@ -8698,7 +8695,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke62 512 bezier
+    {cubiccurve Stroke62 262656 bezier
      {cc
       {f 8224}
       {p
@@ -8936,7 +8933,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke63 512 bezier
+    {cubiccurve Stroke63 262656 bezier
      {cc
       {f 8224}
       {p
@@ -8981,7 +8978,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke64 512 bezier
+    {cubiccurve Stroke64 262656 bezier
      {cc
       {f 8224}
       {p
@@ -9219,7 +9216,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke65 512 bezier
+    {cubiccurve Stroke65 262656 bezier
      {cc
       {f 8224}
       {p
@@ -9264,7 +9261,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke66 512 bezier
+    {cubiccurve Stroke66 262656 bezier
      {cc
       {f 8224}
       {p
@@ -9502,7 +9499,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke67 512 bezier
+    {cubiccurve Stroke67 262656 bezier
      {cc
       {f 8224}
       {p
@@ -9547,7 +9544,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke68 512 bezier
+    {cubiccurve Stroke68 262656 bezier
      {cc
       {f 8224}
       {p
@@ -9785,7 +9782,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke69 512 bezier
+    {cubiccurve Stroke69 262656 bezier
      {cc
       {f 8224}
       {p
@@ -9830,7 +9827,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke70 512 bezier
+    {cubiccurve Stroke70 262656 bezier
      {cc
       {f 8224}
       {p
@@ -10068,7 +10065,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke71 512 bezier
+    {cubiccurve Stroke71 262656 bezier
      {cc
       {f 8224}
       {p
@@ -10113,7 +10110,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke72 512 bezier
+    {cubiccurve Stroke72 262656 bezier
      {cc
       {f 8224}
       {p
@@ -10351,7 +10348,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke73 512 bezier
+    {cubiccurve Stroke73 262656 bezier
      {cc
       {f 8224}
       {p
@@ -10396,7 +10393,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke74 512 bezier
+    {cubiccurve Stroke74 262656 bezier
      {cc
       {f 8224}
       {p
@@ -10634,7 +10631,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke75 512 bezier
+    {cubiccurve Stroke75 262656 bezier
      {cc
       {f 8224}
       {p
@@ -10679,7 +10676,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke76 512 bezier
+    {cubiccurve Stroke76 262656 bezier
      {cc
       {f 8224}
       {p
@@ -10917,7 +10914,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke77 512 bezier
+    {cubiccurve Stroke77 262656 bezier
      {cc
       {f 8224}
       {p
@@ -10962,7 +10959,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke78 512 bezier
+    {cubiccurve Stroke78 262656 bezier
      {cc
       {f 8224}
       {p
@@ -11200,7 +11197,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke79 512 bezier
+    {cubiccurve Stroke79 262656 bezier
      {cc
       {f 8224}
       {p
@@ -11245,7 +11242,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke80 512 bezier
+    {cubiccurve Stroke80 262656 bezier
      {cc
       {f 8224}
       {p
@@ -11483,7 +11480,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke81 512 bezier
+    {cubiccurve Stroke81 262656 bezier
      {cc
       {f 8224}
       {p
@@ -11528,7 +11525,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke82 512 bezier
+    {cubiccurve Stroke82 262656 bezier
      {cc
       {f 8224}
       {p
@@ -11766,7 +11763,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke83 512 bezier
+    {cubiccurve Stroke83 262656 bezier
      {cc
       {f 8224}
       {p
@@ -11811,7 +11808,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke84 512 bezier
+    {cubiccurve Stroke84 262656 bezier
      {cc
       {f 8224}
       {p
@@ -12049,7 +12046,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke85 512 bezier
+    {cubiccurve Stroke85 262656 bezier
      {cc
       {f 8224}
       {p
@@ -12094,7 +12091,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke86 512 bezier
+    {cubiccurve Stroke86 262656 bezier
      {cc
       {f 8224}
       {p
@@ -12332,7 +12329,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke87 512 bezier
+    {cubiccurve Stroke87 262656 bezier
      {cc
       {f 8224}
       {p
@@ -12377,7 +12374,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke88 512 bezier
+    {cubiccurve Stroke88 262656 bezier
      {cc
       {f 8224}
       {p
@@ -12615,7 +12612,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke89 512 bezier
+    {cubiccurve Stroke89 262656 bezier
      {cc
       {f 8224}
       {p
@@ -12660,7 +12657,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke90 512 bezier
+    {cubiccurve Stroke90 262656 bezier
      {cc
       {f 8224}
       {p
@@ -12898,7 +12895,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke91 512 bezier
+    {cubiccurve Stroke91 262656 bezier
      {cc
       {f 8224}
       {p
@@ -12943,7 +12940,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke92 512 bezier
+    {cubiccurve Stroke92 262656 bezier
      {cc
       {f 8224}
       {p
@@ -13181,7 +13178,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke93 512 bezier
+    {cubiccurve Stroke93 262656 bezier
      {cc
       {f 8224}
       {p
@@ -13226,7 +13223,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke94 512 bezier
+    {cubiccurve Stroke94 262656 bezier
      {cc
       {f 8224}
       {p
@@ -13464,7 +13461,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke95 512 bezier
+    {cubiccurve Stroke95 262656 bezier
      {cc
       {f 8224}
       {p
@@ -13509,7 +13506,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke96 512 bezier
+    {cubiccurve Stroke96 262656 bezier
      {cc
       {f 8224}
       {p
@@ -13747,7 +13744,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke97 512 bezier
+    {cubiccurve Stroke97 262656 bezier
      {cc
       {f 8224}
       {p
@@ -13792,7 +13789,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke98 512 bezier
+    {cubiccurve Stroke98 262656 bezier
      {cc
       {f 8224}
       {p
@@ -14030,7 +14027,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke99 512 bezier
+    {cubiccurve Stroke99 262656 bezier
      {cc
       {f 8224}
       {p
@@ -14075,7 +14072,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke100 512 bezier
+    {cubiccurve Stroke100 262656 bezier
      {cc
       {f 8224}
       {p
@@ -14313,7 +14310,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke101 512 bezier
+    {cubiccurve Stroke101 262656 bezier
      {cc
       {f 8224}
       {p
@@ -14358,7 +14355,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke102 512 bezier
+    {cubiccurve Stroke102 262656 bezier
      {cc
       {f 8224}
       {p
@@ -14596,7 +14593,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke103 512 bezier
+    {cubiccurve Stroke103 262656 bezier
      {cc
       {f 8224}
       {p
@@ -14641,7 +14638,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke104 512 bezier
+    {cubiccurve Stroke104 262656 bezier
      {cc
       {f 8224}
       {p
@@ -14879,7 +14876,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke105 512 bezier
+    {cubiccurve Stroke105 262656 bezier
      {cc
       {f 8224}
       {p
@@ -14924,7 +14921,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke106 512 bezier
+    {cubiccurve Stroke106 262656 bezier
      {cc
       {f 8224}
       {p
@@ -15162,7 +15159,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke107 512 bezier
+    {cubiccurve Stroke107 262656 bezier
      {cc
       {f 8224}
       {p
@@ -15207,7 +15204,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke108 512 bezier
+    {cubiccurve Stroke108 262656 bezier
      {cc
       {f 8224}
       {p
@@ -15445,7 +15442,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke109 512 bezier
+    {cubiccurve Stroke109 262656 bezier
      {cc
       {f 8224}
       {p
@@ -15490,7 +15487,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke110 512 bezier
+    {cubiccurve Stroke110 262656 bezier
      {cc
       {f 8224}
       {p
@@ -15728,7 +15725,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke111 512 bezier
+    {cubiccurve Stroke111 262656 bezier
      {cc
       {f 8224}
       {p
@@ -15773,7 +15770,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke112 512 bezier
+    {cubiccurve Stroke112 262656 bezier
      {cc
       {f 8224}
       {p
@@ -16011,7 +16008,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke113 512 bezier
+    {cubiccurve Stroke113 262656 bezier
      {cc
       {f 8224}
       {p
@@ -16056,7 +16053,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke114 512 bezier
+    {cubiccurve Stroke114 262656 bezier
      {cc
       {f 8224}
       {p
@@ -16294,7 +16291,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke115 512 bezier
+    {cubiccurve Stroke115 262656 bezier
      {cc
       {f 8224}
       {p
@@ -16339,7 +16336,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke116 512 bezier
+    {cubiccurve Stroke116 262656 bezier
      {cc
       {f 8224}
       {p
@@ -16577,7 +16574,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke117 512 bezier
+    {cubiccurve Stroke117 262656 bezier
      {cc
       {f 8224}
       {p
@@ -16622,7 +16619,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke118 512 bezier
+    {cubiccurve Stroke118 262656 bezier
      {cc
       {f 8224}
       {p
@@ -16860,7 +16857,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke119 512 bezier
+    {cubiccurve Stroke119 262656 bezier
      {cc
       {f 8224}
       {p
@@ -16905,7 +16902,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke120 512 bezier
+    {cubiccurve Stroke120 262656 bezier
      {cc
       {f 8224}
       {p
@@ -17143,7 +17140,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke121 512 bezier
+    {cubiccurve Stroke121 262656 bezier
      {cc
       {f 8224}
       {p
@@ -17188,7 +17185,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke122 512 bezier
+    {cubiccurve Stroke122 262656 bezier
      {cc
       {f 8224}
       {p
@@ -17426,7 +17423,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke123 512 bezier
+    {cubiccurve Stroke123 262656 bezier
      {cc
       {f 8224}
       {p
@@ -17471,7 +17468,7 @@ curves {{{v x3f99999a}
       {{x429e0000 0}}
       {{x429e0000 1}}}
      {a ro 0 go 0 bo 0 ao 0 mbo 0 mb 1 mbs x3f000000 mbsot 0 mbso 0 fo 1 fx 0 fy 0 ff 1 ft 0 osw x41200000 osf 0 str 1 ltn x429e0000 ltm x429e0000 pt 0 ab 1}}
-    {cubiccurve Stroke124 512 bezier
+    {cubiccurve Stroke124 262656 bezier
      {cc
       {f 8224}
       {p
@@ -17718,7 +17715,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke3 Stroke4
    {cp 0 0 0 0 1
@@ -17729,7 +17730,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke5 Stroke6
    {cp 0 0 0 0 1
@@ -17740,7 +17745,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke7 Stroke8
    {cp 0 0 0 0 1
@@ -17751,7 +17760,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke9 Stroke10
    {cp 0 0 0 0 1
@@ -17762,7 +17775,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke11 Stroke12
    {cp 0 0 0 0 1
@@ -17773,7 +17790,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke13 Stroke14
    {cp 0 0 0 0 1
@@ -17784,7 +17805,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke15 Stroke16
    {cp 0 0 0 0 1
@@ -17795,7 +17820,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke17 Stroke18
    {cp 0 0 0 0 1
@@ -17806,7 +17835,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke19 Stroke20
    {cp 0 0 0 0 1
@@ -17817,7 +17850,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke21 Stroke22
    {cp 0 0 0 0 1
@@ -17828,7 +17865,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke23 Stroke24
    {cp 0 0 0 0 1
@@ -17839,7 +17880,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke25 Stroke26
    {cp 0 0 0 0 1
@@ -17850,7 +17895,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke27 Stroke28
    {cp 0 0 0 0 1
@@ -17861,7 +17910,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke29 Stroke30
    {cp 0 0 0 0 1
@@ -17872,7 +17925,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke31 Stroke32
    {cp 0 0 0 0 1
@@ -17883,7 +17940,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke33 Stroke34
    {cp 0 0 0 0 1
@@ -17894,7 +17955,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke35 Stroke36
    {cp 0 0 0 0 1
@@ -17905,7 +17970,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke37 Stroke38
    {cp 0 0 0 0 1
@@ -17916,7 +17985,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke39 Stroke40
    {cp 0 0 0 0 1
@@ -17927,7 +18000,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke41 Stroke42
    {cp 0 0 0 0 1
@@ -17938,7 +18015,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke43 Stroke44
    {cp 0 0 0 0 1
@@ -17949,7 +18030,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke45 Stroke46
    {cp 0 0 0 0 1
@@ -17960,7 +18045,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke47 Stroke48
    {cp 0 0 0 0 1
@@ -17971,7 +18060,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke49 Stroke50
    {cp 0 0 0 0 1
@@ -17982,7 +18075,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke51 Stroke52
    {cp 0 0 0 0 1
@@ -17993,7 +18090,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke53 Stroke54
    {cp 0 0 0 0 1
@@ -18004,7 +18105,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke55 Stroke56
    {cp 0 0 0 0 1
@@ -18015,7 +18120,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke57 Stroke58
    {cp 0 0 0 0 1
@@ -18026,7 +18135,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke59 Stroke60
    {cp 0 0 0 0 1
@@ -18037,7 +18150,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke61 Stroke62
    {cp 0 0 0 0 1
@@ -18048,7 +18165,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke63 Stroke64
    {cp 0 0 0 0 1
@@ -18059,7 +18180,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke65 Stroke66
    {cp 0 0 0 0 1
@@ -18070,7 +18195,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke67 Stroke68
    {cp 0 0 0 0 1
@@ -18081,7 +18210,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke69 Stroke70
    {cp 0 0 0 0 1
@@ -18092,7 +18225,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke71 Stroke72
    {cp 0 0 0 0 1
@@ -18103,7 +18240,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke73 Stroke74
    {cp 0 0 0 0 1
@@ -18114,7 +18255,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke75 Stroke76
    {cp 0 0 0 0 1
@@ -18125,7 +18270,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke77 Stroke78
    {cp 0 0 0 0 1
@@ -18136,7 +18285,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke79 Stroke80
    {cp 0 0 0 0 1
@@ -18147,7 +18300,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke81 Stroke82
    {cp 0 0 0 0 1
@@ -18158,7 +18315,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke83 Stroke84
    {cp 0 0 0 0 1
@@ -18169,7 +18330,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke85 Stroke86
    {cp 0 0 0 0 1
@@ -18180,7 +18345,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke87 Stroke88
    {cp 0 0 0 0 1
@@ -18191,7 +18360,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke89 Stroke90
    {cp 0 0 0 0 1
@@ -18202,7 +18375,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke91 Stroke92
    {cp 0 0 0 0 1
@@ -18213,7 +18390,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke93 Stroke94
    {cp 0 0 0 0 1
@@ -18224,7 +18405,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke95 Stroke96
    {cp 0 0 0 0 1
@@ -18235,7 +18420,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke97 Stroke98
    {cp 0 0 0 0 1
@@ -18246,7 +18435,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke99 Stroke100
    {cp 0 0 0 0 1
@@ -18257,7 +18450,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke101 Stroke102
    {cp 0 0 0 0 1
@@ -18268,7 +18465,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke103 Stroke104
    {cp 0 0 0 0 1
@@ -18279,7 +18480,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke105 Stroke106
    {cp 0 0 0 0 1
@@ -18290,7 +18495,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke107 Stroke108
    {cp 0 0 0 0 1
@@ -18301,7 +18510,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke109 Stroke110
    {cp 0 0 0 0 1
@@ -18312,7 +18525,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke111 Stroke112
    {cp 0 0 0 0 1
@@ -18323,7 +18540,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke113 Stroke114
    {cp 0 0 0 0 1
@@ -18334,7 +18555,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke115 Stroke116
    {cp 0 0 0 0 1
@@ -18345,7 +18570,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke117 Stroke118
    {cp 0 0 0 0 1
@@ -18356,7 +18585,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke119 Stroke120
    {cp 0 0 0 0 1
@@ -18367,7 +18600,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke121 Stroke122
    {cp 0 0 0 0 1
@@ -18378,7 +18615,11 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}
   {edge Stroke123 Stroke124
    {cp 0 0 0 0 1
@@ -18389,368 +18630,273 @@ curves {{{v x3f99999a}
      {{{x429e0000 x3f000000}}
       {{x429e0000 x3f000000}}}
      {{{x429e0000 x3f000000}}
-      {{x429e0000 x3f000000}}}}}
+      {{x429e0000 x3f000000}}}}   cache
+    {{xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}
+     {xff7fffff x7f7fffff x7f7fffff}}}
    {a}}}}
-toolbar_autokey false
-toolbar_preview_mode "persistent preview"
-filter {{parent.FilterMethod}}
-name si_sw
-tile_color 0xff
-xpos 776
-ypos 183
-disable {{parent.DisableWarp}}
-}
-set N33f5d000 [stack 0]
-Dot {
-name Dot5
-tile_color 0xff
-xpos 810
-ypos 263
-}
-set N34423df0 [stack 0]
-Dot {
-name Dot7
-tile_color 0xff
-xpos 810
-ypos 359
-}
-set N34426270 [stack 0]
-Merge2 {
-inputs 2
-operation minus
-Achannels si_mo
-Bchannels si_mo
-output si_mo
-name si_calcdif
-tile_color 0xff
-xpos 776
-ypos 491
-disable true
-}
-push $N34426270
+  toolbar_autokey false
+  toolbar_preview_mode "persistent preview"
+  filter {{parent.FilterMethod}}
+  name si_sw
+  tile_color 0xff
+  selected true
+  xpos 776
+  ypos 183
+  disable {{parent.DisableWarp}}
+ }
+set N72705e40 [stack 0]
+ Dot {
+  name Dot5
+  tile_color 0xff
+  xpos 810
+  ypos 263
+ }
+set N73fd1d70 [stack 0]
+ Dot {
+  name Dot7
+  tile_color 0xff
+  xpos 810
+  ypos 359
+ }
+set N73fd4240 [stack 0]
+ Merge2 {
+  inputs 2
+  operation minus
+  Achannels si_mo
+  Bchannels si_mo
+  output si_mo
+  name si_calcdif
+  tile_color 0xff
+  xpos 776
+  ypos 491
+  disable true
+ }
+push $N73fd4240
 add_layer {si_trans si_trans.red si_trans.green si_trans.blue si_trans.alpha}
-Expression {
-channel0 {si_trans.red -si_trans.green -si_trans.blue -si_trans.alpha}
-expr0 (forward.u+.5)/width
-channel1 {-si_trans.red si_trans.green -si_trans.blue -si_trans.alpha}
-expr1 (forward.v+.5)/height
-channel2 {-rgba.red -rgba.green -rgba.blue none}
-name si_norm
-tile_color 0xff
-xpos 679
-ypos 495
-}
-Dot {
-name Dot10
-xpos 519
-ypos 497
-}
-push $N33f5d000
-Dot {
-name Dot8
-xpos 700
-ypos 190
-}
-set N344377a0 [stack 0]
-Dot {
-name Dot9
-xpos 603
-ypos 190
-}
-TimeOffset {
-time_offset -1
-time ""
-name si_to1
-tile_color 0xff
-xpos 569
-ypos 232
-}
-Dot {
-name Dot11
-xpos 603
-ypos 328
-}
-push $N34423df0
-push $N344377a0
-TimeOffset {
-time_offset 1
-time ""
-name si_to
-tile_color 0xff
-xpos 666
-ypos 232
-}
-Merge2 {
-inputs 2
-operation minus
-Achannels forward
-Bchannels forward
-output forward
-name si_calcdisp1
-tile_color 0xff
-xpos 666
-ypos 289
-}
-Merge2 {
-inputs 2
-operation minus
-Achannels backward
-Bchannels backward
-output backward
-name si_calcdisp3
-tile_color 0xff
-xpos 666
-ypos 321
-}
-set N3444d180 [stack 0]
-Dot {
-name Dot6
-tile_color 0xff
-xpos 700
-ypos 439
-}
-push $N3444d180
-push $N34426270
-ShuffleCopy {
-inputs 2
-in motion
-alpha alpha2
-black red
-white green
-red2 blue
-green2 alpha
-out2 motion
-name si_sh2
-tile_color 0xff
-xpos 600
-ypos 358
-}
-VectorBlur {
-uv motion
-scale 0.5
-name si_mb
-tile_color 0xff
-xpos 427
-ypos 354
-disable {{1-parent.enableMotionBlur}}
-}
-Input {
-inputs 0
-name InputMask
-tile_color 0xff
-xpos 409
-ypos -8
-number 2
-}
-Dot {
-name Dot1
-tile_color 0xff
-xpos 443
-ypos 41
-}
-Input {
-inputs 0
-name InputSource
-tile_color 0xff
-xpos 300
-ypos -7
-}
-CameraTracker {
-inputs 2
-serializeKnob "22 serialization::archive 9 0 4 0 2 0 0 99 0 4 1 1
-0 0 1 53 0.35190615057945251 0 0 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-1 0 1 54 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-2 0 1 55 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-3 0 1 56 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-4 0 1 57 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-5 0 1 58 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-6 0 1 59 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-7 0 1 60 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-8 0 1 61 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-9 0 1 62 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-10 0 1 63 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-11 0 1 64 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-12 0 1 65 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-13 0 1 66 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-14 0 1 67 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-15 0 1 68 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-16 0 1 69 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-17 0 1 70 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-18 0 1 71 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-19 0 1 72 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-20 0 1 73 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-21 0 1 74 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-22 0 1 75 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-23 0 1 76 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-24 0 1 77 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-25 0 1 78 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-26 0 1 79 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-27 0 1 80 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-28 0 1 81 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-29 0 1 82 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-30 0 1 83 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-31 0 1 84 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-32 0 1 85 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-33 0 1 86 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-34 0 1 87 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-35 0 1 88 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-36 0 1 89 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-37 0 1 90 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-38 0 1 91 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-39 0 1 92 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-40 0 1 93 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-41 0 1 94 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-42 0 1 95 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-43 0 1 96 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-44 0 1 97 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-45 0 1 98 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-46 0 1 99 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-47 0 1 100 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-48 0 1 101 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-49 0 1 102 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-50 0 1 103 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-51 0 1 104 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-52 0 1 105 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-53 0 1 106 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-54 0 1 107 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-55 0 1 108 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-56 0 1 109 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-57 0 1 110 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-58 0 1 111 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-59 0 1 112 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-60 0 1 113 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-61 0 1 114 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-62 0 1 115 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-63 0 1 116 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-64 0 1 117 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-65 0 1 118 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-66 0 1 119 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-67 0 1 120 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-68 0 1 121 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-69 0 1 122 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-70 0 1 123 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-71 0 1 124 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-72 0 1 125 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-73 0 1 126 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-74 0 1 127 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-75 0 1 128 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-76 0 1 129 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-77 0 1 130 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-78 0 1 131 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-79 0 1 132 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-80 0 1 133 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-81 0 1 134 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-82 0 1 135 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-83 0 1 136 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-84 0 1 137 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-85 0 1 138 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-86 0 1 139 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-87 0 1 140 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-88 0 1 141 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-89 0 1 142 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-90 0 1 143 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-91 0 1 144 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-92 0 1 145 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-93 0 1 146 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-94 0 1 147 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-95 0 1 148 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-96 0 1 149 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-97 0 1 150 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 4
-98 0 1 151 0.35190615057945251 0 0 2045 1079 1.000980019569397 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3 0 0 0 3 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 -1 0 1 0 4 1 2 0 4 0 4 2 2 0 4 1 4 3 2 0 4 2 4 4 2 0 4 3 4 5 2 0 4 4 4 6 2 0 4 5 4 7 2 0 4 6 4 8 2 0 4 7 4 9 2 0 4 8 4 10 2 0 4 9 4 11 2 0 4 10 4 12 2 0 4 11 4 13 2 0 4 12 4 14 2 0 4 13 4 15 2 0 4 14 4 16 2 0 4 15 4 17 2 0 4 16 4 18 2 0 4 17 4 19 2 0 4 18 4 20 2 0 4 19 4 21 2 0 4 20 4 22 2 0 4 21 4 23 2 0 4 22 4 24 2 0 4 23 4 25 2 0 4 24 4 26 2 0 4 25 4 27 2 0 4 26 4 28 2 0 4 27 4 29 2 0 4 28 4 30 2 0 4 29 4 31 2 0 4 30 4 32 2 0 4 31 4 33 2 0 4 32 4 34 2 0 4 33 4 35 2 0 4 34 4 36 2 0 4 35 4 37 2 0 4 36 4 38 2 0 4 37 4 39 2 0 4 38 4 40 2 0 4 39 4 41 2 0 4 40 4 42 2 0 4 41 4 43 2 0 4 42 4 44 2 0 4 43 4 45 2 0 4 44 4 46 2 0 4 45 4 47 2 0 4 46 4 48 2 0 4 47 4 49 2 0 4 48 4 50 2 0 4 49 4 51 2 0 4 50 4 52 2 0 4 51 4 53 2 0 4 52 4 54 2 0 4 53 4 55 2 0 4 54 4 56 2 0 4 55 4 57 2 0 4 56 4 58 2 0 4 57 4 59 2 0 4 58 4 60 2 0 4 59 4 61 2 0 4 60 4 62 2 0 4 61 4 63 2 0 4 62 4 64 2 0 4 63 4 65 2 0 4 64 4 66 2 0 4 65 4 67 2 0 4 66 4 68 2 0 4 67 4 69 2 0 4 68 4 70 2 0 4 69 4 71 2 0 4 70 4 72 2 0 4 71 4 73 2 0 4 72 4 74 2 0 4 73 4 75 2 0 4 74 4 76 2 0 4 75 4 77 2 0 4 76 4 78 2 0 4 77 4 79 2 0 4 78 4 80 2 0 4 79 4 81 2 0 4 80 4 82 2 0 4 81 4 83 2 0 4 82 4 84 2 0 4 83 4 85 2 0 4 84 4 86 2 0 4 85 4 87 2 0 4 86 4 88 2 0 4 87 4 89 2 0 4 88 4 90 2 0 4 89 4 91 2 0 4 90 4 92 2 0 4 91 4 93 2 0 4 92 4 94 2 0 4 93 4 95 2 0 4 94 4 96 2 0 4 95 4 97 2 0 4 96 4 98 1 0 4 97 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 1 0 0 0 0 0 99 0 0 0 0 0 53 0 0 0 1 0 54 0 54 0 2 0 53 0 55 0 55 0 2 0 54 0 56 0 56 0 2 0 55 0 57 0 57 0 2 0 56 0 58 0 58 0 2 0 57 0 59 0 59 0 2 0 58 0 60 0 60 0 2 0 59 0 61 0 61 0 2 0 60 0 62 0 62 0 2 0 61 0 63 0 63 0 2 0 62 0 64 0 64 0 2 0 63 0 65 0 65 0 2 0 64 0 66 0 66 0 2 0 65 0 67 0 67 0 2 0 66 0 68 0 68 0 2 0 67 0 69 0 69 0 2 0 68 0 70 0 70 0 2 0 69 0 71 0 71 0 2 0 70 0 72 0 72 0 2 0 71 0 73 0 73 0 2 0 72 0 74 0 74 0 2 0 73 0 75 0 75 0 2 0 74 0 76 0 76 0 2 0 75 0 77 0 77 0 2 0 76 0 78 0 78 0 2 0 77 0 79 0 79 0 2 0 78 0 80 0 80 0 2 0 79 0 81 0 81 0 2 0 80 0 82 0 82 0 2 0 81 0 83 0 83 0 2 0 82 0 84 0 84 0 2 0 83 0 85 0 85 0 2 0 84 0 86 0 86 0 2 0 85 0 87 0 87 0 2 0 86 0 88 0 88 0 2 0 87 0 89 0 89 0 2 0 88 0 90 0 90 0 2 0 89 0 91 0 91 0 2 0 90 0 92 0 92 0 2 0 91 0 93 0 93 0 2 0 92 0 94 0 94 0 2 0 93 0 95 0 95 0 2 0 94 0 96 0 96 0 2 0 95 0 97 0 97 0 2 0 96 0 98 0 98 0 2 0 97 0 99 0 99 0 2 0 98 0 100 0 100 0 2 0 99 0 101 0 101 0 2 0 100 0 102 0 102 0 2 0 101 0 103 0 103 0 2 0 102 0 104 0 104 0 2 0 103 0 105 0 105 0 2 0 104 0 106 0 106 0 2 0 105 0 107 0 107 0 2 0 106 0 108 0 108 0 2 0 107 0 109 0 109 0 2 0 108 0 110 0 110 0 2 0 109 0 111 0 111 0 2 0 110 0 112 0 112 0 2 0 111 0 113 0 113 0 2 0 112 0 114 0 114 0 2 0 113 0 115 0 115 0 2 0 114 0 116 0 116 0 2 0 115 0 117 0 117 0 2 0 116 0 118 0 118 0 2 0 117 0 119 0 119 0 2 0 118 0 120 0 120 0 2 0 119 0 121 0 121 0 2 0 120 0 122 0 122 0 2 0 121 0 123 0 123 0 2 0 122 0 124 0 124 0 2 0 123 0 125 0 125 0 2 0 124 0 126 0 126 0 2 0 125 0 127 0 127 0 2 0 126 0 128 0 128 0 2 0 127 0 129 0 129 0 2 0 128 0 130 0 130 0 2 0 129 0 131 0 131 0 2 0 130 0 132 0 132 0 2 0 131 0 133 0 133 0 2 0 132 0 134 0 134 0 2 0 133 0 135 0 135 0 2 0 134 0 136 0 136 0 2 0 135 0 137 0 137 0 2 0 136 0 138 0 138 0 2 0 137 0 139 0 139 0 2 0 138 0 140 0 140 0 2 0 139 0 141 0 141 0 2 0 140 0 142 0 142 0 2 0 141 0 143 0 143 0 2 0 142 0 144 0 144 0 2 0 143 0 145 0 145 0 2 0 144 0 146 0 146 0 2 0 145 0 147 0 147 0 2 0 146 0 148 0 148 0 2 0 147 0 149 0 149 0 2 0 148 0 150 0 150 0 2 0 149 0 151 0 151 0 1 0 150 0 0 0 0 0"
-trackDisplay "Points only"
-ignore "Mask Alpha"
-trackRange Custom
-trackStart {{parent.InputFrom}}
-trackStop {{parent.InputTo+1}}
-referenceFrames {{curve x53 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150}}
-filenameSalt 9831
-userTrackViews {left right}
-trackCurves {"num tracks" {curve}
-  "track len - min" {curve}
-  "track len - avg" {curve}
-  "track len - max" {curve}
-  "Min Length" {curve x53 0 x151 0}
-  "Solve Error" {curve x53 0 x151 0}
-  "error - min" {curve}
-  "error - rms" {curve}
-  "error - track" {curve}
-  "error - max" {curve}
-  "Max Track Error" {curve x53 0 x151 0}
-  "Max Error" {curve x53 0 x151 0}}
-numberFeatures 75
-featureThreshold 1e-05
-featureSeparation 9
-minTrackLength 5
-matchThreshold 0.09
-smoothnessThreshold 0.04
-consistencyThreshold 0.054
-name si_ct
-tile_color 0xff
-selected true
-xpos 300
-ypos 38
-}
-Shuffle {
-red black
-green black
-blue black
-alpha black
-name si_switch
-tile_color 0xff
-xpos 300
-ypos 274
-disable {{parent.Option_Output!=2 x63 0}}
-}
-Merge2 {
-inputs 2
-Bchannels {rgba.red rgba.green rgba.blue -rgba.alpha}
-name si_mrg
-tile_color 0xff
-xpos 300
-ypos 358
-disable {{parent.Option_Output==1}}
-}
-ShuffleCopy {
-inputs 2
-in motion
-alpha alpha2
-black red
-white green
-red2 blue
-green2 alpha
-out2 motion
-name si_mrg_mv
-tile_color 0xff
-xpos 300
-ypos 436
-disable {{1-parent.displayMotion}}
-}
-ShuffleCopy {
-inputs 2
-in si_trans
-alpha alpha2
-black red
-white green
-red2 black
-green2 black
-out2 si_trans
-name si_mrg_st
-tile_color 0xff
-xpos 300
-ypos 495
-disable {{1-parent.displayDiffrence}}
-}
-Shuffle {
-in si_trans
-name Shuffle1
-xpos 300
-ypos 540
-disable {{parent.Option_Output!=3}}
-}
-Output {
-name Output1
-tile_color 0xff
-xpos 300
-ypos 578
-}
+ Expression {
+  channel0 {si_trans.red -si_trans.green -si_trans.blue -si_trans.alpha}
+  expr0 (forward.u+.5)/width
+  channel1 {-si_trans.red si_trans.green -si_trans.blue -si_trans.alpha}
+  expr1 (forward.v+.5)/height
+  channel2 {-rgba.red -rgba.green -rgba.blue none}
+  name si_norm
+  tile_color 0xff
+  xpos 679
+  ypos 495
+ }
+ Dot {
+  name Dot10
+  xpos 519
+  ypos 497
+ }
+push $N72705e40
+ Dot {
+  name Dot8
+  xpos 700
+  ypos 190
+ }
+set N73ff34e0 [stack 0]
+ Dot {
+  name Dot9
+  xpos 603
+  ypos 190
+ }
+ TimeOffset {
+  time_offset -1
+  time ""
+  name si_to1
+  tile_color 0xff
+  xpos 569
+  ypos 232
+ }
+ Dot {
+  name Dot11
+  xpos 603
+  ypos 328
+ }
+push $N73fd1d70
+push $N73ff34e0
+ TimeOffset {
+  time_offset 1
+  time ""
+  name si_to
+  tile_color 0xff
+  xpos 666
+  ypos 232
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  Achannels forward
+  Bchannels forward
+  output forward
+  name si_calcdisp1
+  tile_color 0xff
+  xpos 666
+  ypos 289
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  Achannels backward
+  Bchannels backward
+  output backward
+  name si_calcdisp3
+  tile_color 0xff
+  xpos 666
+  ypos 321
+ }
+set N73c93570 [stack 0]
+ Dot {
+  name Dot6
+  tile_color 0xff
+  xpos 700
+  ypos 439
+ }
+push $N73c93570
+push $N73fd4240
+ ShuffleCopy {
+  inputs 2
+  in motion
+  alpha alpha2
+  black red
+  white green
+  red2 blue
+  green2 alpha
+  out2 motion
+  name si_sh2
+  tile_color 0xff
+  xpos 600
+  ypos 358
+ }
+ VectorBlur {
+  uv motion
+  scale 0.5
+  name si_mb
+  tile_color 0xff
+  xpos 427
+  ypos 354
+  disable {{1-parent.enableMotionBlur}}
+ }
+ Input {
+  inputs 0
+  name InputMask
+  tile_color 0xff
+  xpos 409
+  ypos -8
+  number 2
+ }
+ Dot {
+  name Dot1
+  tile_color 0xff
+  xpos 443
+  ypos 41
+ }
+ Input {
+  inputs 0
+  name InputSource
+  tile_color 0xff
+  xpos 300
+  ypos -7
+ }
+ CameraTracker {
+  inputs 2
+  serializeKnob "22 serialization::archive 14 0 4 0 2 0 0 0 0 0 0 0 0 0 0 0 0 -1 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0"
+  trackDisplay "Points only"
+  ignore "Mask Alpha"
+  trackRange Custom
+  trackStart {{parent.InputFrom}}
+  trackStop {{parent.InputTo+1}}
+  referenceFrames {{curve x53 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100}}
+  filenameSalt 9831
+  userTrackViews {left right}
+  trackCurves {"num tracks" {curve}
+    "track len - min" {curve}
+    "track len - avg" {curve}
+    "track len - max" {curve}
+    "Min Length" {curve x53 0 x151 0}
+    "Solve Error" {curve x53 0 x151 0}
+    "error - min" {curve}
+    "error - rms" {curve}
+    "error - track" {curve}
+    "error - max" {curve}
+    "Max Track Error" {curve x53 0 x151 0}
+    "Max Error" {curve x53 0 x151 0}}
+  numberFeatures 75
+  featureThreshold 1e-05
+  featureSeparation 9
+  minTrackLength 5
+  matchThreshold 0.09
+  smoothnessThreshold 0.04
+  consistencyThreshold 0.054
+  name si_ct
+  tile_color 0xff
+  xpos 300
+  ypos 38
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name si_switch
+  tile_color 0xff
+  xpos 300
+  ypos 274
+  disable {{parent.Option_Output!=2 x63 0}}
+ }
+ Merge2 {
+  inputs 2
+  Bchannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name si_mrg
+  tile_color 0xff
+  xpos 300
+  ypos 358
+  disable {{parent.Option_Output==1}}
+ }
+ ShuffleCopy {
+  inputs 2
+  in motion
+  alpha alpha2
+  black red
+  white green
+  red2 blue
+  green2 alpha
+  out2 motion
+  name si_mrg_mv
+  tile_color 0xff
+  xpos 300
+  ypos 436
+  disable {{1-parent.displayMotion}}
+ }
+ ShuffleCopy {
+  inputs 2
+  in si_trans
+  alpha alpha2
+  black red
+  white green
+  red2 black
+  green2 black
+  out2 si_trans
+  name si_mrg_st
+  tile_color 0xff
+  xpos 300
+  ypos 495
+  disable {{1-parent.displayDiffrence}}
+ }
+ Shuffle {
+  in si_trans
+  name Shuffle1
+  xpos 300
+  ypos 540
+  disable {{parent.Option_Output!=3}}
+ }
+ Output {
+  name Output1
+  tile_color 0xff
+  xpos 300
+  ypos 578
+ }
 end_group

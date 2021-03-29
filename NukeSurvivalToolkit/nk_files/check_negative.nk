@@ -1,0 +1,23 @@
+set cut_paste_input [stack 0]
+version 10.5 v2
+push $cut_paste_input
+Expression {
+ expr0 "r < 0 ? 1000 : 0"
+ expr1 "g < 0 ? 1000 : 0"
+ expr2 "b < 0 ? 1000 : 0"
+ expr3 "a < 0 ? 1000 : 0"
+ name Expression3
+ label NEGATIVE
+ selected true
+ xpos 2976
+ ypos -519
+}
+Blur {
+ channels rgba
+ size 20
+ name Blur3
+ label "\[value size]"
+ selected true
+ xpos 2976
+ ypos -487
+}

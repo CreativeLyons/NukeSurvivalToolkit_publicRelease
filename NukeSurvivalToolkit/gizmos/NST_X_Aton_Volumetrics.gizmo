@@ -1,0 +1,386 @@
+Group {
+ name X_Aton_Volumetrics
+ knobChanged "n = nuke.thisNode()\nif n\[\"use_3d\"].value()==1:\n    n\[\"center\"].setEnabled(False)\nelse:\n    n\[\"center\"].setEnabled(True)\nn\[\"iterations\"].setValue(int(n\[\"iterations\"].value()))\nif n\[\"mode\"].value()==\"Diffuse\":\n    n\[\"diffuse\"].setEnabled(True)\nelse:\n    n\[\"diffuse\"].setEnabled(False)\nn\[\"diffuse\"].setValue(max(n\[\"diffuse\"].value(),0))\nn\[\"iterations\"].setValue(max(n\[\"iterations\"].value(),1))"
+ tile_color 0xcc804eff
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 X_Aton}
+ addUserKnob {41 "Local GPU: " T BlinkScript1.gpuName}
+ addUserKnob {41 "Use GPU if Available" T BlinkScript1.useGPUIfAvailable}
+ addUserKnob {26 ""}
+ addUserKnob {12 center t "The point from which rays will be emitted."}
+ center {960 540}
+ addUserKnob {6 use_3d l "use 3d input" t "Use a <b>3D light</b> and a <b>3D camera</b> to calculate the center of the light. When enabled the <b>center</b> parameter will be disabled. Make sure both inputs (Light and Camera) are connected in order for this to work properly." -STARTLINE}
+ addUserKnob {7 length t "This controls zoom of the final iteration. A value of 0 won't have any effect. A value of -1 will converge all rays in the centre point. All positive values will create rays projected outwards." R 0 10}
+ length 2
+ addUserKnob {26 ""}
+ addUserKnob {4 mode t "- <b>Regular</b>, old school God Ray algorithm. All samples get added together. Fast and simple.\n- <b>Brighter</b>, samples only contribute to the ray if they are brighter than the ray at that step. This creates unshadowed rays.\n- <b>Darker</b>, samples only contribute to the ray if they are darker than the say at that step. This generate only shadow rays.\n- <b>Diffused</b>, different model of ray generation where rays can defocus as they travel further. This is more expensive but often generates more natural results." M {Regular Darkest Brightest Diffuse ""}}
+ addUserKnob {7 decay t "The rate by which rays loose intensity and become darker. At 0 rays intensity will remain constant. Values between 1 and 2 generate realistic results. Denser atmospheres create shorter rays (more decay)." R 0 10}
+ decay 1
+ addUserKnob {7 diffuse t "This parameter is only enabled when <b>Diffuse</b> is selected as the <b>mode</b>.<br>Controls the rate of dispersion of the ray of light. Higher values create softer results. <br>Keep in mind in the real world this value is dependent on the shape of the light source. Wide light sources (like a campfire) generate very diffused rays, whereas concentrated lights (like a cellphone light) cast very sharp light rays. <br>The speed of the algorithm is independent of the value of diffusion." +DISABLED R 0 100}
+ diffuse 50
+ addUserKnob {26 ""}
+ addUserKnob {18 multiply t "Makes everything brighter or darker in a linear fashion." R 0.2 4}
+ multiply 1
+ addUserKnob {6 multiply_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {18 gamma t "This works slightly different than just a regular gamma. This is both a pre-process and a post-process.\n\nFirst, the image gets applied the inverse of the gamma. After the rays have been generated, the value of gamma gets applied again.\n\nWith a little bit of practise this allows you to drive the colours of the rays as they decay." R 0.2 4}
+ gamma 1
+ addUserKnob {6 gamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 iterations t "The number of steps the light ray will take. The more <b>iterations</b>, the softer the ray will be. It is a good practice to raise this value to a high number (100-500) and gradually decreasing it until artifacts start to appear. Sometimes artifacts can be fixed in a more optimized way by keeping iterations low and enabling <b>bilinear interpolation</b>.<br>The more iterations, the slower the algorithm." R 1 100}
+ iterations 20
+ addUserKnob {6 bilinear_interpolation l "bilinear interpolation" t "By default each ray will sample the nearest pixel from the image. This often causes grid artifacts. Enabling this filtering should fix most of these issues. If it's not enough, you may need to increase the number of <b>iterations</b>. This is usually only needed when using <b>Diffuse</b> rays, altough the option is also available for the rest of modes." +STARTLINE}
+ addUserKnob {6 normalize l "normalize luma" t "Many settings can affect the final brightness of the rays: their length, their decay, the number of iterations,etc.\n\nThis tries to make the controls more intuitive by compensating those brightness changes. You can disable this to have a more direct control of the tool." -STARTLINE}
+ normalize true
+ addUserKnob {26 ""}
+ addUserKnob {20 GPU_Settings l "GPU Settings"}
+ addUserKnob {20 about l About}
+ addUserKnob {26 about_1 l "" t "A bunny:\n(\\(\\ \n( - -)\n((') (')" +STARTLINE T "<br>\n<b>Xavier Martín © 2017</b>"}
+ addUserKnob {26 ""}
+ addUserKnob {26 website l "" +STARTLINE T "<a href=\"http://www.xaviermartinvfx.com\"><span style=\"color:#C8C8C8;\">www.xaviermartinvfx.com</span></a>"}
+ addUserKnob {26 space4_1 l "" +STARTLINE T <br>}
+ addUserKnob {22 version l <center>version</center> T "nuke.message('X_Aton Gizmo <i>v1.1</i><br><b>Xavier Martín © 2017</b>')" +STARTLINE}
+ addUserKnob {22 help_documentation l <center>?</center> -STARTLINE T "nuke.message('You can find more documentation<br>on <a href=\"http://www.nukepedia.com/blink/filter/x_aton\"><span style=\"color:#BCBCBC;\">Nukepedia</span></a> or my <a href=\"http://www.xaviermartinvfx.com/x_aton/\"><span style=\"color:#BCBCBC;\">website</span></a>.')"}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos -740
+  ypos -558
+ }
+ Dot {
+  name Dot3
+  xpos -706
+  ypos -506
+ }
+set N9a5b94a0 [stack 0]
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos -740
+  ypos -460
+ }
+ Gamma {
+  channels rgb
+  value {{1/parent.gamma} {1/parent.gamma} {1/parent.gamma} 1}
+  name Gamma1
+  xpos -740
+  ypos -410
+ }
+set N9a5bd330 [stack 0]
+ Dot {
+  name Dot2
+  xpos -706
+  ypos -356
+ }
+set N9a5c6de0 [stack 0]
+ Dot {
+  name Dot1
+  xpos -706
+  ypos -306
+ }
+set N9a5ca9d0 [stack 0]
+push $N9a5c6de0
+ Blur {
+  channels rgba
+  size {{diffuse*sqrt(length)}}
+  name Blur5
+  xpos -240
+  ypos -313
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox2
+  xpos -240
+  ypos -258
+ }
+ Reformat {
+  type scale
+  scale 0.125
+  pbb true
+  name Reformat1
+  xpos -240
+  ypos -210
+ }
+set N9a711630 [stack 0]
+push $N9a5ca9d0
+push $N9a5c6de0
+ Blur {
+  channels rgba
+  size {{parent.Blur5.size/2}}
+  name Blur4
+  xpos -340
+  ypos -310
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox3
+  xpos -340
+  ypos -258
+ }
+ Reformat {
+  type scale
+  scale 0.25
+  pbb true
+  name Reformat5
+  xpos -340
+  ypos -210
+ }
+set N9a72e0a0 [stack 0]
+push $N9a5ca9d0
+push $N9a5c6de0
+ Blur {
+  channels rgba
+  size {{parent.Blur4.size/2}}
+  name Blur3
+  xpos -440
+  ypos -310
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox4
+  xpos -440
+  ypos -258
+ }
+ Reformat {
+  type scale
+  scale 0.5
+  pbb true
+  name Reformat4
+  xpos -440
+  ypos -210
+ }
+set N9a74aaf0 [stack 0]
+push $N9a5ca9d0
+push $N9a5c6de0
+ Blur {
+  channels rgba
+  size {{parent.Blur3.size/2}}
+  name Blur2
+  xpos -540
+  ypos -310
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox5
+  xpos -540
+  ypos -258
+ }
+ Reformat {
+  type scale
+  scale 0.6
+  pbb true
+  name Reformat3
+  xpos -540
+  ypos -210
+ }
+set N9a767570 [stack 0]
+push $N9a5ca9d0
+push $N9a5c6de0
+ Blur {
+  channels rgb
+  size {{parent.Blur2.size/2}}
+  name Blur1
+  xpos -640
+  ypos -310
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -640
+  ypos -258
+ }
+ Reformat {
+  type scale
+  scale 0.8
+  pbb true
+  name Reformat2
+  xpos -640
+  ypos -210
+ }
+set N9a784d80 [stack 0]
+push $N9a5ca9d0
+ BlinkScript {
+  inputs 6
+  ProgramGroup 1
+  KernelDescription "2 \"X_Aton\" iterate componentWise 5140e5ada3150b5b17997b391784be72a8515242eff97b63a728e1d29924494f 7 \"src\" Read Random \"blr1\" Read Random \"blr2\" Read Random \"blr3\" Read Random \"blr4\" Read Random \"blr5\" Read Random \"dst\" Write Point 5 \"size\" Float 1 AAAAAA== \"center\" Float 2 AAAAAAAAAAA= \"iterations\" Int 1 AAAAAA== \"decay\" Float 1 AAAAAA== \"normalize_output\" Int 1 AAAAAA== 5 \"size\" 1 1 \"center\" 2 1 \"iterations\" 1 1 \"decay\" 1 1 \"normalize_output\" 1 1 1 \"normal\" Float 1 1 AAAAAA=="
+  kernelSource "kernel X_Aton : ImageComputationKernel<eComponentWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> blr1; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> blr2; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> blr3; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> blr4; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> blr5; // the input image\n\n  Image<eWrite> dst; // the output image\n\n  param:\n    float size;\n    float2 center;\n    int iterations;\n    float decay;\n    int normalize_output;\n\n  local:\n    float normal = 0.0f;\n\n  void init() \{\n    if(normalize_output == 1) \{\n      normal =0.0;\n      for (int i = 0; i < iterations; i++) \{\n        normal += (pow(1.0f-float(i)/iterations,decay));\n      \}\n    \}\n    else \{\n      normal = iterations;\n    \}\n  \}\n\n  void process(int2 pos) \{\n    float total = 0.0;\n    float scale = 0.0;\n    int posx = 0;\n    int posy = 0;\n    int2 currentpos = int2(pos.x-center.x,pos.y-center.y);\n \n    float step = 0.0;\n    for (int i = 0; i < iterations; i++) \{\n      step = float(i)/iterations;\n      scale = 1+size*step*step;\n      posx = ((currentpos.x)/scale+center.x);\n      posy = ((currentpos.y)/scale+center.y);\n      if (step < 0.1)\n        total += bilinear(src,posx,posy)*pow((1-step),decay);\n      else if (step < 0.2)\n        total += bilinear(blr1,posx*0.8,posy*0.8)*pow((1-step),decay);\n      else if (step < 0.4)\n        total += bilinear(blr2,posx*0.6,posy*0.6)*pow((1-step),decay);\n      else if (step < 0.6)\n        total += bilinear(blr3,posx*0.5,posy*0.5)*pow((1-step),decay);\n      else if (step < 0.8)\n        total += bilinear(blr4,posx*0.25,posy*0.25)*pow((1-step),decay);\n      else\n        total += bilinear(blr5,posx*0.125,posy*0.125)*pow((1-step),decay);\n    \}\n    dst() = total/normal;\n  \}\n\};"
+  useGPUIfAvailable {{parent.BlinkScript1.useGPUIfAvailable}}
+  rebuild ""
+  X_Aton_size {{parent.length}}
+  X_Aton_center {{parent.use_3d==1?Reconcile3D1.output:parent.center} {parent.use_3d==1?Reconcile3D1.output:parent.center}}
+  X_Aton_iterations {{parent.iterations}}
+  X_Aton_decay {{parent.decay}}
+  X_Aton_normalize_output {{parent.normalize}}
+  rebuild_finalise ""
+  name BlinkScript2
+  xpos -640
+  ypos -116
+ }
+push $N9a711630
+push $N9a72e0a0
+push $N9a74aaf0
+push $N9a767570
+push $N9a784d80
+push $N9a5ca9d0
+ BlinkScript {
+  inputs 6
+  ProgramGroup 1
+  KernelDescription "2 \"X_Aton\" iterate componentWise e94f08f291fbc4837d066b1a66504220d926ab715f7f89378491e8b275e0f94c 7 \"src\" Read Random \"blr1\" Read Random \"blr2\" Read Random \"blr3\" Read Random \"blr4\" Read Random \"blr5\" Read Random \"dst\" Write Point 5 \"size\" Float 1 AAAAAA== \"center\" Float 2 AAAAAAAAAAA= \"iterations\" Int 1 AAAAAA== \"decay\" Float 1 AAAAAA== \"normalize_output\" Int 1 AAAAAA== 5 \"size\" 1 1 \"center\" 2 1 \"iterations\" 1 1 \"decay\" 1 1 \"normalize_output\" 1 1 1 \"normal\" Float 1 1 AAAAAA=="
+  kernelSource "kernel X_Aton : ImageComputationKernel<eComponentWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> blr1; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> blr2; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> blr3; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> blr4; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> blr5; // the input image\n\n  Image<eWrite> dst; // the output image\n\n  param:\n    float size;\n    float2 center;\n    int iterations;\n    float decay;\n    int normalize_output;\n\n  local:\n    float normal = 0.0f;\n\n  void init() \{\n    if(normalize_output == 1) \{\n      normal =0.0;\n      for (int i = 0; i < iterations; i++) \{\n        normal += (pow(1.0f-float(i)/iterations,decay));\n      \}\n    \}\n    else \{\n      normal = iterations;\n    \}\n  \}\n\n  void process(int2 pos) \{\n    float total = 0.0;\n    float scale = 0.0;\n    int posx = 0;\n    int posy = 0;\n    int2 currentpos = int2(pos.x-center.x,pos.y-center.y);\n \n    float step = 0.0;\n    for (int i = 0; i < iterations; i++) \{\n      step = float(i)/iterations;\n      scale = 1+size*step*step;\n      posx = ((currentpos.x)/scale+center.x);\n      posy = ((currentpos.y)/scale+center.y);\n      if (step < 0.1)\n        total += src(posx,posy)*pow((1-step),decay);\n      else if (step < 0.2)\n        total += blr1((posx*0.8),(posy*0.8))*pow((1-step),decay);\n      else if (step < 0.4)\n        total += blr2((posx*0.6),(posy*0.6))*pow((1-step),decay);\n      else if (step < 0.6)\n        total += blr3((posx*0.5),(posy*0.5))*pow((1-step),decay);\n      else if (step < 0.8)\n        total += blr4((posx*0.25),(posy*0.25))*pow((1-step),decay);\n      else\n        total += blr5((posx*0.125),(posy*0.125))*pow((1-step),decay);\n    \}\n    dst() = total/normal;\n  \}\n\};"
+  rebuild ""
+  X_Aton_size {{length}}
+  X_Aton_center {{parent.use_3d==1?Reconcile3D1.output:parent.center} {parent.use_3d==1?Reconcile3D1.output:parent.center}}
+  X_Aton_iterations {{iterations}}
+  X_Aton_decay {{decay}}
+  X_Aton_normalize_output {{normalize}}
+  rebuild_finalise ""
+  name BlinkScript1
+  onCreate "n = nuke.thisNode()\nn\[\"X_Aton_center\"].setFlag(0x00008000)"
+  selected true
+  xpos -740
+  ypos -116
+ }
+ Switch {
+  inputs 2
+  which {{parent.bilinear_interpolation}}
+  name Switch2
+  xpos -740
+  ypos -60
+ }
+push $N9a5bd330
+ Dot {
+  name Dot6
+  xpos -806
+  ypos -406
+ }
+ Dot {
+  name Dot8
+  xpos -806
+  ypos -156
+ }
+set N9b07a8b0 [stack 0]
+ Dot {
+  name Dot7
+  xpos -906
+  ypos -156
+ }
+ BlinkScript {
+  ProgramGroup 1
+  KernelDescription "2 \"X_Aton\" iterate componentWise 487f2268501f808ca51782f791e12713f7866399dc695919d23851a93187e87b 2 \"src\" Read Random \"dst\" Write Point 6 \"size\" Float 1 AAAAAA== \"center\" Float 2 AAAAAAAAAAA= \"iterations\" Int 1 AAAAAA== \"decay\" Float 1 AAAAAA== \"normalize_output\" Int 1 AAAAAA== \"mode\" Int 1 AAAAAA== 6 \"size\" 1 1 \"center\" 2 1 \"iterations\" 1 1 \"decay\" 1 1 \"normalize_output\" 1 1 \"mode\" 1 1 1 \"normal\" Float 1 1 AAAAAA=="
+  kernelSource "kernel X_Aton : ImageComputationKernel<eComponentWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src; // the input image\n\n\n  Image<eWrite> dst; // the output image\n\n  param:\n    float size;\n    float2 center;\n    int iterations;\n    float decay;\n    int normalize_output;\n    int mode;\n  local:\n    float normal = 0.0f;\n\n  void init() \{\n    if(mode==0) \{\n      if(normalize_output == 1) \{\n        normal =0.0;\n        for (int i = 0; i < iterations; i++) \{\n          normal += (pow(1.0f-float(i)/iterations,decay));\n        \}\n      \}\n      else \{\n        normal = iterations;\n      \}\n    \}\n  \}\n\n  void process(int2 pos) \{\n    float total = 0.0f;\n    float scale = 0.0f;\n    float posx = 0.0f;\n    float posy = 0.0f;\n    float2 currentpos = float2(pos.x-center.x,pos.y-center.y);\n\n    if(mode==0)\{\n      for (int i = 0; i < iterations; i++) \{\n        scale = 1+size*i*i/iterations/iterations;\n        posx = ((currentpos.x)/scale+center.x);\n        posy = ((currentpos.y)/scale+center.y);\n        total += bilinear(src,posx,posy)*pow((1-float(i)/iterations),decay);\n      \}\n      dst() = total/normal;\n    \}\n    else if(mode==1)\{\n      float sample;\n      float norm = 1.0;\n      total += src(pos.x,pos.y);\n      for (int i = 1; i < iterations; i++) \{\n        scale = 1+size*i*i/iterations/iterations;\n        posx = ((currentpos.x)/scale+center.x);\n        posy = ((currentpos.y)/scale+center.y);\n        sample = bilinear(src,posx,posy);\n        if(sample<total/norm) \{\n          total += sample*pow((1-float(i)/iterations),decay);\n        \}\n        else\n          total += (total/norm)*pow((1-float(i)/iterations),decay);\n        norm += 1.0*pow((1-float(i)/iterations),decay);\n      \}\n      if(normalize_output==0)\n        dst() = total/iterations;\n      else\n        dst() = total/norm;\n    \}\n    else \{\n      float sample;\n      float norm = 1.0;\n      total += src(pos.x,pos.y);\n      for (int i = 1; i < iterations; i++) \{\n        scale = 1+size*i*i/iterations/iterations;\n        posx = ((currentpos.x)/scale+center.x);\n        posy = ((currentpos.y)/scale+center.y);\n        sample = bilinear(src,posx,posy);\n        if(sample>total/norm) \{\n          total += sample*pow((1-float(i)/iterations),decay);\n        \}\n        else\n          total += (total/norm)*pow((1-float(i)/iterations),decay);\n        norm += 1.0*pow((1-float(i)/iterations),decay);\n      \}\n      if(normalize_output==0)\n        dst() = total/iterations;\n      else\n        dst() = total/norm;\n    \}\n  \}\n\};\n"
+  useGPUIfAvailable {{parent.BlinkScript1.useGPUIfAvailable}}
+  rebuild ""
+  X_Aton_size {{length}}
+  X_Aton_center {{parent.use_3d==1?Reconcile3D1.output:parent.center} {parent.use_3d==1?Reconcile3D1.output:parent.center}}
+  X_Aton_iterations {{iterations}}
+  X_Aton_decay {{decay}}
+  X_Aton_normalize_output {{normalize}}
+  X_Aton_mode {{(parent.mode!=3)?parent.mode:parent.mode*(parent.diffuse!=0)}}
+  rebuild_finalise ""
+  name BlinkScript4
+  xpos -940
+  ypos -116
+ }
+push $N9b07a8b0
+ BlinkScript {
+  ProgramGroup 1
+  KernelDescription "2 \"X_Aton\" iterate componentWise 8ab15b8bdd9694a8f64ba7270da748947d286719d2fadccab9e45b58ec1aa1dd 2 \"src\" Read Random \"dst\" Write Point 6 \"size\" Float 1 AAAAAA== \"center\" Float 2 AAAAAAAAAAA= \"iterations\" Int 1 AAAAAA== \"decay\" Float 1 AAAAAA== \"normalize_output\" Int 1 AAAAAA== \"mode\" Int 1 AAAAAA== 6 \"size\" 1 1 \"center\" 2 1 \"iterations\" 1 1 \"decay\" 1 1 \"normalize_output\" 1 1 \"mode\" 1 1 1 \"normal\" Float 1 1 AAAAAA=="
+  kernelSource "kernel X_Aton : ImageComputationKernel<eComponentWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src; // the input image\n\n\n  Image<eWrite> dst; // the output image\n\n  param:\n    float size;\n    float2 center;\n    int iterations;\n    float decay;\n    int normalize_output;\n    int mode;\n  local:\n    float normal = 0.0f;\n\n  void init() \{\n    if(mode==0) \{\n      if(normalize_output == 1) \{\n        normal =0.0;\n        for (int i = 0; i < iterations; i++) \{\n          normal += (pow(1.0f-float(i)/iterations,decay));\n        \}\n      \}\n      else \{\n        normal = iterations;\n      \}\n    \}\n  \}\n\n  void process(int2 pos) \{\n    float total = 0.0;\n    float scale = 0.0;\n    int posx = 0;\n    int posy = 0;\n    int2 currentpos = int2(pos.x-center.x,pos.y-center.y);\n\n    if(mode==0)\{\n      for (int i = 0; i < iterations; i++) \{\n        scale = 1+size*i*i/iterations/iterations;\n        posx = ((currentpos.x)/scale+center.x);\n        posy = ((currentpos.y)/scale+center.y);\n        total += src(posx,posy)*pow((1-float(i)/iterations),decay);\n      \}\n      dst() = total/normal;\n    \}\n    else if(mode==1)\{\n      float sample;\n      float norm = 1.0;\n      total += src(pos.x,pos.y);\n      for (int i = 1; i < iterations; i++) \{\n        scale = 1+size*i*i/iterations/iterations;\n        posx = ((currentpos.x)/scale+center.x);\n        posy = ((currentpos.y)/scale+center.y);\n        sample = src(posx,posy);\n        if(sample<total/norm) \{\n          total += sample*pow((1-float(i)/iterations),decay);\n        \}\n        else\n          total += (total/norm)*pow((1-float(i)/iterations),decay);\n        norm += pow((1.0f-float(i)/iterations),decay);\n      \}\n      if(normalize_output==0)\n        dst() = total/iterations;\n      else\n        dst() = total/norm;\n    \}\n    else \{\n      float sample;\n      float norm = 1.0;\n      total += src(pos.x,pos.y);\n      for (int i = 1; i < iterations; i++) \{\n        scale = 1+size*i*i/iterations/iterations;\n        posx = ((currentpos.x)/scale+center.x);\n        posy = ((currentpos.y)/scale+center.y);\n        sample = src(posx,posy);\n        if(sample>total/norm) \{\n          total += sample*pow((1-float(i)/iterations),decay);\n        \}\n        else\n          total += (total/norm)*pow((1-float(i)/iterations),decay);\n        norm += pow((1.0f-float(i)/iterations),decay);\n      \}\n      if(normalize_output==0)\n        dst() = total/iterations;\n      else\n        dst() = total/norm;\n    \}\n  \}\n\};\n"
+  useGPUIfAvailable {{parent.BlinkScript1.useGPUIfAvailable}}
+  rebuild ""
+  X_Aton_size {{length}}
+  X_Aton_center {{parent.use_3d==1?Reconcile3D1.output:parent.center} {parent.use_3d==1?Reconcile3D1.output:parent.center}}
+  X_Aton_iterations {{iterations}}
+  X_Aton_decay {{decay}}
+  X_Aton_normalize_output {{normalize}}
+  X_Aton_mode {{(parent.mode!=3)?parent.mode:parent.mode*(parent.diffuse!=0)}}
+  rebuild_finalise ""
+  name BlinkScript3
+  xpos -840
+  ypos -116
+ }
+ Switch {
+  inputs 2
+  which {{parent.bilinear_interpolation}}
+  name Switch3
+  xpos -840
+  ypos -60
+ }
+ Switch {
+  inputs 2
+  which {{(mode==3)*(diffuse!=0)}}
+  name Switch1
+  xpos -740
+  ypos -10
+ }
+ Grade {
+  multiply {{1/parent.multiply} {1/parent.multiply} {1/parent.multiply} 1}
+  gamma {{1/parent.gamma} {1/parent.gamma} {1/parent.gamma} 1}
+  reverse true
+  name Grade1
+  xpos -740
+  ypos 40
+ }
+push $N9a5b94a0
+ Dot {
+  name Dot5
+  xpos -1006
+  ypos -506
+ }
+ Dot {
+  name Dot4
+  xpos -1006
+  ypos 94
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  name Merge1
+  xpos -740
+  ypos 88
+ }
+ Output {
+  name Output1
+  xpos -740
+  ypos 140
+ }
+ Input {
+  inputs 0
+  name InputLight
+  xpos -540
+  ypos -560
+  number 1
+ }
+ Input {
+  inputs 0
+  name InputCamera
+  xpos -440
+  ypos -560
+  number 2
+ }
+ Dot {
+  name Dot11
+  xpos -406
+  ypos -456
+ }
+push $N9a5b94a0
+ Dot {
+  name Dot9
+  xpos -606
+  ypos -506
+ }
+ Dot {
+  name Dot10
+  xpos -606
+  ypos -456
+ }
+ Reconcile3D {
+  inputs 3
+  calc_output true
+  name Reconcile3D1
+  xpos -540
+  ypos -466
+ }
+end_group

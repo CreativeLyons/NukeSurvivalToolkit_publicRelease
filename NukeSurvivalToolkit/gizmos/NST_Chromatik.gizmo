@@ -1,0 +1,286 @@
+Group {
+ name Chromatik
+ help "Chromatic aberration node using a real spectral gradient."
+ addUserKnob {20 User l Chromatik}
+ addUserKnob {41 center l "Center Point" T RadialVectorGenerator1.center}
+ addUserKnob {41 ratio l "Aspect Ratio" T RadialVectorGenerator1.ratio}
+ addUserKnob {26 ""}
+ addUserKnob {41 Multiplier l Size T Vector_Chromatic.Multiplier}
+ addUserKnob {26 ""}
+ addUserKnob {41 protect l "Protect Center" T RadialVectorGenerator1.protect}
+ addUserKnob {41 gamma l "Falloff Hardness" T RadialVectorGenerator1.gamma}
+ addUserKnob {41 rotate l Swirl T RadialVectorGenerator1.rotate}
+ addUserKnob {26 ""}
+ addUserKnob {41 saturation l Saturation T Vector_Chromatic.saturation}
+ addUserKnob {41 offset l Offset T Vector_Chromatic.offset}
+ addUserKnob {26 ""}
+ addUserKnob {41 min l "Min Samples" T Vector_Chromatic.min}
+ addUserKnob {41 max l "Max Samples" -STARTLINE T Vector_Chromatic.max}
+ addUserKnob {26 ""}
+ addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nChromatik\nVersion 1.1\n2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.1 - 2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 829
+  ypos -285
+ }
+ Dot {
+  name Dot52
+  tile_color 0xcccccc00
+  xpos 863
+  ypos -181
+ }
+set Nbfccea0 [stack 0]
+ Group {
+  name RadialVectorGenerator1
+  xpos 985
+  ypos -184
+  disable {{"!\[exists parent.input]"}}
+  addUserKnob {20 genTab l Generator}
+  addUserKnob {12 center l "Center Point" t "Center of the Radial vectors"}
+  center {960 540}
+  addUserKnob {7 ratio l "Aspect Ratio" t "Distort the circle to a different aspect ratio." R 0.5 2}
+  ratio 1
+  addUserKnob {26 ""}
+  addUserKnob {7 protect l "Protect Center" t "Create an area around your center that won't be affected by vectors. (0,0 vectors)\nOther vectors will be spread around that center so that there isn't a sharp transition.\n\nA value of 1 or above would protect the whole image, not producting any vectors."}
+  addUserKnob {7 gamma l Gamma t "Gamma the magnitude of the vectors, to create a sharper or smoother transition between the center and the outskirt areas." R 0.1 2}
+  gamma 1
+  addUserKnob {26 ""}
+  addUserKnob {7 rotate l Rotate t "Rotating the vectors can create either a zoom type of vectors (0, 180 rotation), a spin (90, 270 rotation) or a swirl for any value in between." R 0 360}
+  addUserKnob {7 multiply l Multiply t "Multpilies the overall value/length of the vectors." R 0 10}
+  multiply 1
+ }
+  Input {
+   inputs 0
+   name Input1
+   xpos -908
+   ypos 131
+  }
+  Expression {
+   expr0 x/width
+   expr1 y/height
+   expr2 0
+   name Expression1
+   xpos -908
+   ypos 182
+  }
+  BlinkScript {
+   recompileCount 28
+   ProgramGroup 1
+   KernelDescription "2 \"RadialVectors\" iterate pixelWise 022dfefcb578cac450e99b3e9eaa966ae848c25352f9d35bd31e5f1e18b9e87e 2 \"src\" Read Point \"dst\" Write Point 7 \"Aspect Ratio\" Float 1 AACAPw== \"Center\" Float 2 AACAPwAAgD8= \"Protect Center\" Float 1 AAAAAA== \"Rotate Vectors\" Float 1 AAAAAA== \"Gamma\" Float 1 AACAPw== \"Multiply\" Float 1 AACAPw== \"size\" Float 2 AAAAAAAAAAA= 7 \"ratio\" 1 1 \"center\" 2 1 \"protect\" 1 1 \"rotate\" 1 1 \"gamma\" 1 1 \"multiply\" 1 1 \"size\" 2 1 1 \"_imgDiag\" Float 1 1 AAAAAA=="
+   kernelSource "kernel RadialVectors : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;  //the input image\n  Image<eWrite> dst;  //the output image\n\n  param:\n    float ratio;  //This parameter is made available to the user.\n    float2 center;\n    float protect;\n    float rotate;\n    float gamma;\n    float multiply;\n    float2 size;\n\n  local:\n\n    float _imgDiag; //Image diagonal\n\n  //In define(), parameters can be given labels and default values.\n  void define() \{\n    defineParam(ratio, \"Aspect Ratio\", 1.0f);\n    defineParam(center, \"Center\", float2(1.0f,1.0f));\n    defineParam(protect, \"Protect Center\", 0.0f);\n    defineParam(rotate, \"Rotate Vectors\", 0.0f);\n    defineParam(gamma, \"Gamma\", 1.0f);\n    defineParam(multiply, \"Multiply\", 1.0f);\n  \}\n\n  //The init() function is run before any calls to kernel().\n  void init() \{\n    _imgDiag = length(size);\n  \}\n\n  //The kernel function is run at every pixel to produce the output.\n  void process(int2 pos) \{\n    //float2 posf = float2(pos.x, pos.y);\n    float2 posf = float2(src(0)*size.x, src(1)*size.y);\n    float2 v = posf-center;\n    v = v/(_imgDiag/2.0f);\n    \n    // Edit vector magnitude: Blackpoint+clamp for protecting center\n    if (protect < (1.0f))\{ //If we protect the whole image then we don't need to output any vectors\n      // Edit aspect Ratio\n      v = float2(v.x, v.y * ratio);\n      // Find vector Magnitude so that can be edited \n      float magv = length(v);\n\n      magv = max((magv - protect) / (1-protect),0.0f);\n      magv = pow(magv, 1/gamma);\n      float2 normv;\n      if (magv>0)\{\n        normv = normalize(v);\n      \}\n      else \{\n        normv = float2(1.0f, 0.0f);\n      \}\n      v = normv * magv;\n      // Rotate Normals\n      if (rotate != 0.0f)\{\n        float r = rotate * 3.141592653589793f / 180.0f;\n        v = float2( v.x * cos(r) - v.y * sin(r), v.x * sin(r) + v.y * cos(r));\n      \}\n      // Multiply Output\n      //v = v * (_imgDiag/4) * multiply;\n      v = v * multiply;\n      dst() = float4(v.x, v.y, 0.0f, 0.0f);\n      //dst() = float4(magv, magv, magv, 0.0f);\n    \}\n    else\{\n      dst() = float4(0.0f);\n    \}\n\n   \}\n\};\n\n"
+   rebuild ""
+   "RadialVectors_Aspect Ratio" {{parent.ratio}}
+   RadialVectors_Center {{parent.center} {parent.center}}
+   "RadialVectors_Protect Center" {{parent.protect}}
+   "RadialVectors_Rotate Vectors" {{parent.rotate}}
+   RadialVectors_Gamma {{parent.gamma}}
+   RadialVectors_Multiply {{parent.multiply}}
+   RadialVectors_size {{width} {height}}
+   rebuild_finalise ""
+   name BlinkScript8
+   xpos -908
+   ypos 271
+  }
+  Output {
+   name Output1
+   xpos -908
+   ypos 340
+  }
+  StickyNote {
+   inputs 0
+   name StickyNote1
+   label "We base the calculation on a modified STMAP instead of actual x/y because blinkscript doesn't handle proxy res very well"
+   xpos -797
+   ypos 180
+  }
+ end_group
+ Dot {
+  name Dot1
+  tile_color 0xcccccc00
+  xpos 1019
+  ypos -41
+ }
+push $Nbfccea0
+ Group {
+  inputs 2
+  name Vector_Chromatic
+  xpos 829
+  ypos -44
+  disable {{"!\[exists parent.input]"}}
+  addUserKnob {20 Chromatik}
+  addUserKnob {26 title l "Generate Gradient"}
+  addUserKnob {41 lut l "" -STARTLINE T ColorLookup1.lut}
+  addUserKnob {6 clampg l "Clamp Gradient" +STARTLINE}
+  clampg true
+  addUserKnob {7 saturation l Saturation R 0 2}
+  saturation 1
+  addUserKnob {26 ""}
+  addUserKnob {7 Multiplier R 0 250}
+  Multiplier 50
+  addUserKnob {7 offset l Offset t "Negate Vectors (-1)\nCenter Vectors (0)\nRegular Vectors (1)" R -1 1}
+  addUserKnob {26 ""}
+  addUserKnob {3 min l "Min Samples" t "How many times the operation will be run.\nHigher Values = Smoother result = Slower render"}
+  min 5
+  addUserKnob {3 max l "Max Samples" t "How many times the operation will be run.\nHigher Values = Smoother result = Slower render" -STARTLINE}
+  max 150
+  addUserKnob {6 normalize l Normalize t "Conserves original color better" +STARTLINE}
+  normalize true
+  addUserKnob {6 XYZ_space t "Process in XYZ space." -STARTLINE}
+  addUserKnob {6 bbox l "BBox Union" t "Union the BBox of the image and the vectormap rather than using the image's bbox" -STARTLINE}
+ }
+  BackdropNode {
+   inputs 0
+   name BackdropNode1
+   tile_color 0x71c67100
+   label "Gradient Generator"
+   note_font_size 42
+   xpos 368
+   ypos -422
+   bdheight 293
+  }
+  Input {
+   inputs 0
+   name Img
+   xpos 206
+   ypos -530
+  }
+  Dot {
+   name Dot3
+   xpos 240
+   ypos -448
+  }
+set Nc02b6d0 [stack 0]
+  Input {
+   inputs 0
+   name Vector_Map
+   xpos 587
+   ypos -533
+   number 1
+  }
+  CopyBBox {
+   inputs 2
+   name CopyBBox1
+   xpos 587
+   ypos -452
+   disable {{parent.bbox}}
+  }
+  Dot {
+   name Dot1
+   tile_color 0x9e3c6300
+   xpos 621
+   ypos 18
+  }
+  Reformat {
+   inputs 0
+   type "to box"
+   box_width 100
+   box_height 4
+   box_fixed true
+   name Reformat2
+   xpos 378
+   ypos -342
+  }
+  Ramp {
+   p0 {0 0}
+   p1 {99 0}
+   name Ramp1
+   xpos 378
+   ypos -316
+  }
+  ColorLookup {
+   lut {master {}
+     red {curve C x-0.05884177983 -0.004536509514 x0.01015070826 0 s0.1400000006 x0.1017729789 0.1076634228 x0.1737238914 0 x0.4376193285 0 x0.6908689141 0.9834897519 S x0.7745882273 0.8638155506 C x0.871829927 0.2472041845 S x1.006029606 0 C x1.015911102 0}
+     green {curve x0.0120717017 0 x0.1647586226 0 x0.2049030662 0 x0.5025014281 0.9204615951 x0.6684435606 0.3995269537 x0.7975517511 0 x0.905554533 0 x1.027772069 0 x1.02872479 0}
+     blue {curve x-0.06189316511 0 s0 x0.01178315841 0 x0.06641255319 0.1264923215 C x0.1299110055 0.6372379661 x0.3119857609 0.7685220838 S x0.360124141 0.3393670321 x0.5631426573 0 C x0.7848843336 0 S x0.9272136688 0 x1.066449285 0 x1.069784403 0}
+     alpha {}}
+   name ColorLookup1
+   xpos 378
+   ypos -290
+  }
+  Clamp {
+   minimum_enable {{parent.clampg}}
+   maximum_enable false
+   name Clamp4
+   xpos 378
+   ypos -264
+  }
+  Saturation {
+   saturation {{parent.saturation}}
+   name Saturation1
+   xpos 378
+   ypos -226
+  }
+  Expression {
+   expr3 clamp(.2126*r+.7152*g+0.0722*b)
+   name Luma_to_Alpha
+   xpos 378
+   ypos -159
+  }
+  Colorspace {
+   colorspace_out CIE-XYZ
+   name Colorspace2
+   label "input \[value colorspace_in]\noutput \[value colorspace_out]"
+   xpos 378
+   ypos -91
+   disable {{1-parent.XYZ_space}}
+  }
+push $Nc02b6d0
+  Colorspace {
+   colorspace_out CIE-XYZ
+   name Colorspace1
+   label "input \[value colorspace_in]\noutput \[value colorspace_out]"
+   xpos 206
+   ypos -90
+   disable {{1-parent.XYZ_space}}
+  }
+  Dot {
+   name Dot2
+   xpos 240
+   ypos 18
+  }
+  BlinkScript {
+   inputs 3
+   recompileCount 8
+   ProgramGroup 1
+   KernelDescription "2 \"Chromatic\" iterate pixelWise 6f453a157371752868a37327fbdb66c1856663f8af8ccd497d5f5f6edc9785cd 4 \"src\" Read Random \"gradient\" Read Random \"vector\" Read Point \"dst\" Write Point 6 \"Multiply\" Float 1 AACAPw== \"Min Samples\" Int 1 BAAAAA== \"Max Samples\" Int 1 UAAAAA== \"Offset\" Float 1 AAAAAA== \"Normalize\" Bool 1 AQ== \"proxy\" Float 1 AAAAAA== 6 \"multiply\" 1 1 \"min_samples\" 1 1 \"max_samples\" 1 1 \"offset\" 1 1 \"normalize\" 1 1 \"proxy\" 1 1 0"
+   kernelSource "kernel Chromatic : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src;  //the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> gradient;  //color gradient\n  Image<eRead, eAccessPoint, eEdgeClamped> vector;  //VectorMap\n  Image<eWrite> dst;  //the output image\n\n  param:\n    float multiply;  //This parameter is made available to the user.\n    int min_samples;\n    int max_samples;\n    float offset;\n    bool normalize;\n    float proxy;\n\n  local:\n\n\n  //In define(), parameters can be given labels and default values.\n  void define() \{\n    defineParam(multiply, \"Multiply\", 1.0f);\n    defineParam(min_samples, \"Min Samples\", 4); \n    defineParam(max_samples, \"Max Samples\", 80); \n    defineParam(offset, \"Offset\", 0.0f);\n    defineParam(normalize, \"Normalize\", true);\n  \}\n\n  //The kernel function is run at every pixel to produce the output.\n  void process(int2 pos) \{\n    SampleType(src) valueSum(0);\n    SampleType(src) curVal(0);\n    float2 fpos = float2(pos.x,pos.y);  \n    float nSample;\n    int l;\n\n\n    //Read Vector value\n    float2 v = float2(vector(0), vector(1));\n    // Take into account the proxy scale\n    v = v*proxy;\n    //Vector Length int\n    l = int(floor(length(v)*fabs(multiply)+0.5));\n    \n\n    //Define Adaptive Sampling\n    int samples;\n    if (l < min_samples)\{samples = min_samples;\}\n    else if (l > max_samples)\{samples = max_samples;\}\n    else \{samples = l;\}\n\n\n    //Init value for normalization \n    float4 normSum = float4(0.0f) ;\n\n    // Loop through Samples\n    for( int a = 0; a < samples; a ++ )\n    \{\n      // Define normalised index of this sample (0-1 range)\n      nSample = float(a)/samples;\n\n      // Define the vector value for this pass (depending on offset)\n      float2 Ofs = ((v*nSample)-(v*(offset/2.0f+0.5f)))*multiply+fpos;\n\n      curVal = bilinear(src,Ofs.x,Ofs.y); //This function does a bilinear sampling of the scr image\n      int gIndex = int(99.0f*proxy*nSample+0.5f);\n      float4 gradVal = gradient(gIndex,0);\n      valueSum += curVal*gradVal;\n      normSum += float4(gradVal);\n    \}\n\n    if (normalize)\{\n      dst() = (valueSum/float(samples))/(normSum/float(samples));\n    \}\n    else \{\n      dst() = (valueSum/float(samples));\n    \}\n  \}\n\};\n\n"
+   rebuild ""
+   Chromatic_Multiply {{parent.Multiplier}}
+   "Chromatic_Min Samples" {{parent.min}}
+   "Chromatic_Max Samples" {{parent.max}}
+   Chromatic_Offset {{parent.offset}}
+   Chromatic_Normalize {{parent.normalize x50 0}}
+   Chromatic_proxy {{"proxy ? (proxy_type ? proxy_scale : \[lindex \[value proxy_format] 0] / \[lindex \[value format] 0]) : 1"}}
+   rebuild_finalise ""
+   name BlinkScript10
+   xpos 378
+   ypos 8
+  }
+  Colorspace {
+   colorspace_in CIE-XYZ
+   name Colorspace3
+   label "input \[value colorspace_in]\noutput \[value colorspace_out]"
+   xpos 378
+   ypos 116
+   disable {{1-parent.XYZ_space}}
+  }
+  Clamp {
+   maximum_enable false
+   name Clamp1
+   xpos 378
+   ypos 204
+  }
+  Output {
+   name Output1
+   xpos 378
+   ypos 272
+  }
+ end_group
+ Output {
+  name Output1
+  xpos 829
+  ypos 56
+ }
+end_group

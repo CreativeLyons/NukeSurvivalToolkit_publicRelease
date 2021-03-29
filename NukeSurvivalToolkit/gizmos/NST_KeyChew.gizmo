@@ -1,0 +1,120 @@
+Group {
+ name KeyChew
+ help "Cheaply dilates and erodes a matte"
+ onCreate "n = nuke.thisNode()\nn.knob(\"shrinkDilate\").setRange(-50,50)\n"
+ tile_color 0x878787ff
+ selected true
+ addUserKnob {20 User l Keychew}
+ addUserKnob {14 shrinkDilate l "Shrink / Dilate" R -50 50}
+ addUserKnob {41 filter l "" -STARTLINE T Blur1.filter}
+ addUserKnob {7 contrast l Contrast R 0 10}
+ addUserKnob {14 postBlur l "Post Blur" R 0 100}
+ addUserKnob {41 filter_1 l "" -STARTLINE T Blur11.filter}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 mix T Merge1.mix}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 created l created: T "1/1/2015 by <a href=\\'http://movingimagearts.com'> Rafal Kaniewski</a>"}
+ addUserKnob {26 adjustments l "adjustments by:" T "Igor Gama + Tony Lyons"}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 327
+  ypos 707
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 180
+  ypos 104
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 214
+  ypos 161
+ }
+set Nea18d320 [stack 0]
+ Blur {
+  channels alpha
+  size {{abs(shrinkDilate) x1004 8} {abs(shrinkDilate) x1004 8}}
+  filter quadratic
+  crop false
+  name Blur1
+  xpos 180
+  ypos 221
+  addUserKnob {20 User}
+  addUserKnob {7 Chew R -300 300}
+  Chew 106
+ }
+ Invert {
+  channels alpha
+  name Invert2
+  xpos 180
+  ypos 320
+  disable {{parent.Invert3.disable}}
+ }
+ Grade {
+  channels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+  white {{abs(shrinkDilate)+1 x1004 1.32}}
+  gamma {{1/abs(abs(shrinkDilate)/(1-contrast+10)+1)}}
+  black_clamp false
+  name Grade3
+  xpos 180
+  ypos 371
+ }
+ Invert {
+  channels alpha
+  name Invert3
+  xpos 180
+  ypos 424
+  disable {{shrinkDilate>0?1:0}}
+ }
+ Clamp {
+  channels alpha
+  name Clamp5
+  xpos 180
+  ypos 494
+ }
+ Blur {
+  channels alpha
+  size {{parent.postBlur} {parent.postBlur}}
+  crop false
+  name Blur11
+  xpos 180
+  ypos 594
+ }
+push $Nea18d320
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 63
+  ypos 161
+ }
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos 63
+  ypos 710
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  also_merge rgba
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 180
+  ypos 707
+ }
+ Output {
+  name Output1
+  xpos 180
+  ypos 772
+ }
+end_group

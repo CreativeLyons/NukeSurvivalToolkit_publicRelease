@@ -1,0 +1,123 @@
+Group {
+ name iConvolve
+ help "iConvolve v0.1 - apEssentials by Adrian Pueyo\n\nQuick tool to convolve an image though a kernel, based on a ctrlMask channel. The ctrlMask must go from 0 to 1..\n\nmin size and max size define the maximum and minimum size in pixels that the kernel will have. Multiplier is an easy way to resize both together.\n\nadrianpueyo.com, 2019"
+ onCreate "n = nuke.thisNode()\nn\['black'].setFlag(0x00000004)\nn\['white'].setFlag(0x00000004)"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"auto_steps\":\n    n\[\"steps\"].setEnabled(not k.value())"
+ tile_color 0xe88543ff
+ selected true
+ addUserKnob {20 iConvolve}
+ addUserKnob {41 channels T ZDefocus.channels}
+ addUserKnob {26 "" l "Local GPU:" T ""}
+ addUserKnob {26 "" -STARTLINE T "GeForce GTX 580"}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T ZDefocus.useGPUIfAvailable}
+ addUserKnob {26 ""}
+ addUserKnob {41 ctrlMask_channel l ctrlMask T ChannelMerge1.A}
+ addUserKnob {3 steps +DISABLED}
+ steps 10
+ addUserKnob {6 auto_steps l auto -STARTLINE}
+ auto_steps true
+ addUserKnob {7 black l "min size (black)" R 0 100}
+ black 1
+ addUserKnob {7 white l "max size (white)" R 0 100}
+ white 20
+ addUserKnob {41 multiplier T ZDefocus.size}
+ addUserKnob {26 ""}
+ addUserKnob {41 filter_channel l "filter channel" T ZDefocus.filter_channel}
+ addUserKnob {41 use_input_channels l "use input channels" -STARTLINE T ZDefocus.use_input_channels}
+ addUserKnob {41 image_filter l "image filter" T ZDefocus.image_filter}
+ addUserKnob {41 clamp_image_filter l "clamp image filter" -STARTLINE T ZDefocus.clamp_image_filter}
+ addUserKnob {26 version_author l " " t "iConvolve v0.1\n2019" T "<span style=\"color:#666\"><br/><b>iConvolve v0.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019</span>"}
+}
+ Input {
+  inputs 0
+  name Inputfilter
+  xpos -152
+  ypos 64
+  number 1
+ }
+ Input {
+  inputs 0
+  name InputctrlMask
+  xpos -152
+  ypos -141
+  number 2
+ }
+set Nd1202bf0 [stack 0]
+push $Nd1202bf0
+ ChannelMerge {
+  inputs 2
+  B none
+  output rgba.red
+  bbox A
+  name ChannelMerge1
+  xpos -152
+  ypos -115
+ }
+add_layer {iConvolve iConvolve.red iConvolve.green iConvolve.blue iConvolve.alpha}
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  out iConvolve
+  name ShuffleI
+  xpos -152
+  ypos -65
+ }
+ Clamp {
+  channels iConvolve
+  name ClampI
+  xpos -152
+  ypos -39
+ }
+ Grade {
+  channels iConvolve
+  black {{parent.black}}
+  white {{parent.white}}
+  name GradeI
+  xpos -152
+  ypos -1
+ }
+ Input {
+  inputs 0
+  name Inputimage
+  xpos 0
+  ypos -58
+ }
+ Copy {
+  inputs 2
+  from0 iConvolve.red
+  to0 iConvolve.red
+  bbox B
+  name CopyI
+  xpos 0
+  ypos -1
+ }
+ ZDefocus2 {
+  inputs 2
+  channels rgba
+  z_channel iConvolve.red
+  math direct
+  focal_point {350 260}
+  size 1
+  max_size {{parent.white*size.w} {parent.white*size.h}}
+  filter_type {{"\[exists parent.input1] ? 2 : 0"}}
+  legacy_resize_mode false
+  show_legacy_resize_mode false
+  name ZDefocus
+  onCreate "n = nuke.thisNode()\nn.knob('focal_point').setFlag(0x00008000)\n"
+  selected true
+  xpos 0
+  ypos 60
+ }
+ Remove {
+  channels iConvolve
+  name RemoveI
+  xpos 0
+  ypos 98
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 161
+ }
+end_group

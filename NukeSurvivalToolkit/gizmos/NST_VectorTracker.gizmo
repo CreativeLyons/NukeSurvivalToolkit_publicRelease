@@ -1,0 +1,39 @@
+Group {
+name VectorTracker
+help "A tracker that uses vector information rather than image data to generate tracking points."
+inputs 2
+addUserKnob {20 VectorTracker}
+addUserKnob {3 count l INVISIBLE +INVISIBLE}
+addUserKnob {22 trackbackward l <b>◄</b> t "Track backwards range" T "current = nuke.frame()\nstart = int(nuke.root()\['first_frame'].value())\n\nretu = nuke.getFramesAndViews('track backward', str(current) + '-' + str(start))\n\nif retu is not  None:\n    try:\n        Frange = \[int(i) for i in retu\[0].split('-')]\n\n        J_VTT_Track(Frange\[0], Frange\[1])\n    except ValueError:\n        nuke.critical('Invalid frame range')" +STARTLINE}
+addUserKnob {22 trackbackwardone l "<b>◄ ▎</b>" t "Track backwards one frame" -STARTLINE T "currentFrame = nuke.frame()\n\nJ_VTT_Track(currentFrame, currentFrame - 1, False)"}
+addUserKnob {22 trackforwardone l <b>▎►</b> t "Track forwards one frame" -STARTLINE T "currentFrame = nuke.frame()\n\nJ_VTT_Track(currentFrame, currentFrame +1, False)"}
+addUserKnob {22 trackforward l <b>►</b> t "Track forwards range" -STARTLINE T "current = nuke.frame()\nend = int(nuke.root()\['last_frame'].value())\n\nretu = nuke.getFramesAndViews('track forward', str(current) + '-' + str(end))\n\nif retu is not  None:\n    try:\n        Frange = \[int(i) for i in retu\[0].split('-')]\n\n        J_VTT_Track(Frange\[0], Frange\[1])\n    except ValueError:\n        nuke.critical('Invalid frame range')"}
+addUserKnob {26 spacer l "" -STARTLINE T "                        "}
+addUserKnob {22 export l "<b>export trackers</b>" t "Export trackers to a Nuke Tracker node" -STARTLINE T J_VTT_Export()}
+addUserKnob {22 about l <b>?</b> -STARTLINE T "nuke.message('VectorTracker v1.0 by Jorrit Schulte\\n\\n<a href=\"http://www.JorritSchulte.com\">www.JorritSchulte.com</a>')"}
+addUserKnob {26 trackdivider l @Tracker}
+addUserKnob {22 add l "add tracker" t "Add tracker to interface" -STARTLINE T J_VTT_AddTracker()}
+addUserKnob {22 removeall l "remove all trackers" t "Remove all trackers from interface and reset tracker counter" -STARTLINE T "if nuke.ask('Are you sure you want to remove all trackers?'):\n    node = nuke.thisNode()\n\n    tk = \[i for i in node.allKnobs() if 'tracker' in i.name()]\n\n    for knob in tk:\n        node.removeKnob(knob)\n\n    node\['count'].setValue(0)"}
+addUserKnob {22 enableall l "enable all" t "Enable all trackers for tracking" -STARTLINE T "node = nuke.thisNode()\n\ntk = \[i for i in node.allKnobs() if 'enable_' in i.name()]\n\nfor knob in tk:\n    knob.setValue(True)"}
+addUserKnob {22 disableall l "disable all" t "Disable all trackers for tracking" -STARTLINE T "node = nuke.thisNode()\n\ntk = \[i for i in node.allKnobs() if 'enable_' in i.name()]\n\nfor knob in tk:\n    knob.setValue(False)"}
+addUserKnob {26 blank l "" +STARTLINE T "  "}
+}
+Input {
+inputs 0
+name Image
+xpos -40
+ypos -10
+}
+Output {
+name Output1
+xpos -40
+ypos 16
+}
+Input {
+inputs 0
+name Vectors
+xpos 70
+ypos -10
+number 1
+}
+end_group

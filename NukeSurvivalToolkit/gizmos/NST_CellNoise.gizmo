@@ -1,0 +1,244 @@
+set cut_paste_input [stack 0]
+push $cut_paste_input
+Group {
+ name CellNoise
+ onCreate "\nheight = nuke.root().format().height()\nwidth  = nuke.root().format().width()\nnuke.thisNode()\['center'].setValue(\[width/2.0, height/2.0])\n"
+ knobChanged "\nknob = nuke.thisKnob()\nif knob.name() == 'skew_order':\n    nuke.toNode('NoiseTransform')\['rot_order'].setValue('Z' + knob.value())\nif knob.name() == 'noise_type':\n    if knob.value() in \['Voronoi', 'Manhattan', 'Chebyshev', 'Euclidian']:\n        nuke.thisNode()\['range'].clearFlag(0x00040000)\n    else:\n        nuke.thisNode()\['range'].setFlag(0x00040000)\n"
+ tile_color 0x5f5f5fff
+ note_font "Bitstream Vera Sans Bold Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 cellnoise l "Cell Noise"}
+ addUserKnob {41 format T WorleyNoise.format}
+ addUserKnob {4 noise_type l "noise type" M {Worley "Worley Inverse" Voronoi Manhattan Euclidian Chebyshev ""}}
+ addUserKnob {6 use_gpu l "use gpu" t "Faster calculations, may not work on all computers. Disable to switch to CPU." -STARTLINE}
+ use_gpu true
+ addUserKnob {7 range t "Changes how much of the noise effect applies.\nOnly applies to Manhattan, Chebyshev, Euclidian and Voronoi." +HIDDEN R 0 10}
+ addUserKnob {6 replace +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {7 size R 1 1000}
+ size 30
+ addUserKnob {7 z t "This knob must be animated if you want it to change over time."}
+ addUserKnob {7 gain R 0 2}
+ gain 1
+ addUserKnob {7 gamma R 0 2}
+ gamma 1
+ addUserKnob {20 transform l Transform}
+ addUserKnob {12 translate}
+ addUserKnob {7 rotate R -180 180}
+ addUserKnob {14 scale R 0 100}
+ scale 1
+ addUserKnob {7 skewX l "skew X" R -1 1}
+ addUserKnob {7 skewY l "skew Y" R -1 1}
+ addUserKnob {4 skew_order l "skew order" t "Specifies which order the skew values should be applied in.\n" M {XY YX}}
+ addUserKnob {12 center}
+ center {960 540}
+ addUserKnob {7 xrotate t "Rotation about X axis in 3D noise space." R 0 90}
+ addUserKnob {7 yrotate t "Rotation about Y axis in 3D noise space." R 0 90}
+ addUserKnob {20 colour l Colour}
+ addUserKnob {19 colour0 l "colour 0"}
+ colour0 {0 0 0 0}
+ addUserKnob {6 colour0_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 colour0_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 colour0_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 colour0_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {19 colour1 l "colour 1"}
+ colour1 1
+ addUserKnob {6 colour1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 colour1_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 colour1_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 colour1_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Axis2 {
+  inputs 0
+  xform_order TRS
+  translate {{parent.translate.x} {parent.translate.y} {parent.z}}
+  rotate {{parent.xrotate} {parent.yrotate} {parent.rotate}}
+  scaling {{parent.scale.w} {parent.scale.h} 1}
+  uniform_scale {{parent.size}}
+  skew {{"parent.skewX * 45"} {"parent.skewY * 45"} 0}
+  pivot {{parent.center.x} {parent.center.y} 0}
+  name NoiseTransform
+  xpos 651
+  ypos -75
+  addUserKnob {20 "Ppos Locator"}
+  addUserKnob {18 pointPosition l "Point Position"}
+  pointPosition {0 0 0}
+  addUserKnob {6 pointPosition_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 pointPosition_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 pointPosition_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 pointPosition_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 221
+  ypos 381
+  number 1
+ }
+set N24698360 [stack 0]
+ BlinkScript {
+  inputs 0
+  ProgramGroup 1
+  KernelDescription "1 \"ChebyshevNoise\" iterate pixelWise a3199759b15669186cdda7e034095d513217f6595a3ec9e87bbc46847c6731f5 1 \"dst\" Write Point 6 \"Range\" Float 1 AABAQA== \"Gain\" Float 1 AACAPw== \"Gamma\" Float 1 AACAPw== \"Dark Colour\" Float 4 AAAAAAAAAAAAAAAAAACAPw== \"Light Colour\" Float 4 AACAPwAAgD8AAIA/AACAPw== \"transform\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "// https://aftbit.com/cell-noise-2/\n\n# define MAX_DISTANCE_ARRAY 12\n\n// C++11\nconst uint rand_multiplier = 48271;\nconst uint rand_increment  = 0;\nconst uint rand_modulus    = 2147483647;\n\nstatic int lcgRandom(int seed)\n\{\n  return abs((seed * rand_multiplier + rand_increment) % rand_modulus);\n\}\n\n// FNV Hash\nconst uint OFFSET_BASIS = 2166136261;\nconst uint FNV_PRIME = 16777619;\n\nstatic uint hash(uint i, uint j, uint k)\n\{\n  return ((((((OFFSET_BASIS ^ i) * FNV_PRIME) ^ j) * FNV_PRIME) ^ k) * FNV_PRIME);\n\}\n\n// Poisson Distribution\nconst uint one   =  393325350;\nconst uint two   = 1022645910;\nconst uint three = 1861739990;\nconst uint four  = 2700834071;\nconst uint five  = 3372109335;\nconst uint six   = 3819626178;\nconst uint seven = 4075350088;\nconst uint eight = 4203212043;\n\nstatic uint probLookup(uint value)\n\{\n  if (value < one) return 1;\n  if (value < two) return 2;\n  if (value < three) return 3;\n  if (value < four) return 4;\n  if (value < five) return 5;\n  if (value < six) return 6;\n  if (value < seven) return 7;\n  if (value < eight) return 8;\n  return 9;\n\}\n\n// Distance Function\nstatic float ChebyshevDistanceFunc(float3 p1, float3 p2)\n\{\n  float3 diff = p1 - p2;\n  return max(max(fabs(diff.x), fabs(diff.y)), fabs(diff.z));\n\}\n\n// Insertion Array\nstatic void insert(float arr\[], float value)\n\{\n  float temp;\n  for (int i = MAX_DISTANCE_ARRAY - 1; i >= 0; i--)\n  \{\n    if (value > arr\[i])\n      break;\n    temp = arr\[i];\n    arr\[i] = value;\n    if (i + 1 < MAX_DISTANCE_ARRAY)\n    \{\n      arr\[i + 1] = temp;\n    \}\n  \}\n\}\n\n\n// Blink Kernel\nkernel ChebyshevNoise : ImageComputationKernel<ePixelWise>\n\{\n  Image<eWrite> dst;\n\n  param:\n    float range;\n    float gain;\n    float gamma;\n    float4 dark_col;\n    float4 light_col;\n    float4x4 transform;\n\n  local:\n    float fRange;\n    int iRange;\n    float4x4 transform_inv;\n    float z;\n\n  void define()\n  \{\n    defineParam(range, \"Range\", 3.0f);\n    defineParam(gain, \"Gain\", 1.0f);\n    defineParam(gamma, \"Gamma\", 1.0f);\n    defineParam(dark_col, \"Dark Colour\", float4(0.0f, 0.0f, 0.0f, 1.0f));\n    defineParam(light_col, \"Light Colour\", float4(1.0f, 1.0f, 1.0f, 1.0f));\n  \}\n\n  void init()\n  \{\n    fRange = clamp(range, 0.0f, float(MAX_DISTANCE_ARRAY - 2));\n    iRange = int(fRange);\n    transform_inv = transform.invert();\n    z = transform_inv\[2]\[3];\n  \}\n\n  static float3 multVectMatrix(float3 vec, float4x4 M)\n  \{\n    float3 out = float3(\n      vec.x * M\[0]\[0] + vec.y * M\[0]\[1] + vec.z * M\[0]\[2] + M\[0]\[3],\n      vec.x * M\[1]\[0] + vec.y * M\[1]\[1] + vec.z * M\[1]\[2] + M\[1]\[3],\n      vec.x * M\[2]\[0] + vec.y * M\[2]\[1] + vec.z * M\[2]\[2] + M\[2]\[3]\n    );\n\n    return out;\n  \}\n\n  float4 getColour(float a) \{\n    return dark_col * (1 - a) + light_col * a;\n  \}\n\n  void process(int2 pos)\n  \{\n\n    //Declare some values for later use\n    int lastRandom, numberFeaturePoints;\n    float3 randomDiff, featurePoint;\n    int cubeX, cubeY, cubeZ;\n\n    float distanceArray\[MAX_DISTANCE_ARRAY];\n\n    // Initialize values in distance array to large values\n    for (int i = 0; i < MAX_DISTANCE_ARRAY; i++)\n        distanceArray\[i] = 6666;\n\n    float3 input = float3(float(pos.x), float(pos.y), z);\n    input = multVectMatrix(input, transform_inv);\n\n    // Determine which cube the evaluation point is in\n    int evalCubeX = floor(input.x);\n    int evalCubeY = floor(input.y);\n    int evalCubeZ = floor(input.z);\n\n    for (int i = -1; i < 2; ++i)\n    \{\n      for (int j = -1; j < 2; ++j)\n      \{\n        for (int k = -1; k < 2; ++k)\n        \{\n            cubeX = evalCubeX + i;\n            cubeY = evalCubeY + j;\n            cubeZ = evalCubeZ + k;\n\n            // Generate a reproducible random number generator for the cube\n            lastRandom = lcgRandom(hash(cubeX, cubeY, cubeZ));\n            // Determine how many feature points are in the cube\n            numberFeaturePoints = probLookup(lastRandom);\n            // Check each feature point\n            for (uint l = 0; l < numberFeaturePoints; ++l)\n            \{\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.x = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.y = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.z = float(lastRandom) / rand_modulus;\n\n              featurePoint = float3(randomDiff.x + float(cubeX), randomDiff.y + float(cubeY), randomDiff.z + float(cubeZ));\n\n              insert(distanceArray, ChebyshevDistanceFunc(input, featurePoint));\n            \}\n        \}\n      \}\n    \}\n\n    float color = (distanceArray\[ iRange + 2 ] - distanceArray\[ iRange + 1 ]) * fmod(fRange, 1.0f) + distanceArray\[ iRange + 1] - distanceArray\[0];\n    color = pow( color * gain, gamma );\n    dst() = getColour(clamp(color, 0.0f, 1.0f));\n\n  \}\n\n\};"
+  useGPUIfAvailable {{parent.use_gpu}}
+  rebuild ""
+  ChebyshevNoise_Range {{parent.range}}
+  ChebyshevNoise_Gain {{parent.gain}}
+  ChebyshevNoise_Gamma {{parent.gamma}}
+  "ChebyshevNoise_Dark Colour" {{parent.colour0.r} {parent.colour0.g} {parent.colour0.b} {parent.colour0.a}}
+  "ChebyshevNoise_Light Colour" {{parent.colour1.r} {parent.colour1.g} {parent.colour1.b} {parent.colour1.a}}
+  ChebyshevNoise_transform {
+      {{parent.NoiseTransform.world_matrix.0} {parent.NoiseTransform.world_matrix.1} {parent.NoiseTransform.world_matrix.2} {parent.NoiseTransform.world_matrix.3}}
+      {{parent.NoiseTransform.world_matrix.4} {parent.NoiseTransform.world_matrix.5} {parent.NoiseTransform.world_matrix.6} {parent.NoiseTransform.world_matrix.7}}
+      {{parent.NoiseTransform.world_matrix.8} {parent.NoiseTransform.world_matrix.9} {parent.NoiseTransform.world_matrix.10} {parent.NoiseTransform.world_matrix.11}}
+      {{parent.NoiseTransform.world_matrix.12} {parent.NoiseTransform.world_matrix.13} {parent.NoiseTransform.world_matrix.14} {parent.NoiseTransform.world_matrix.15}}
+    }
+  format {{{WorleyNoise.format}}}
+  rebuild_finalise ""
+  name ChebyShevNoise
+  xpos 645
+  ypos 243
+ }
+ BlinkScript {
+  inputs 0
+  ProgramGroup 1
+  KernelDescription "1 \"EuclidianNoise\" iterate pixelWise d1aadc298abbb75c06cdae49489c52619d77cd167b514ac77a000bdc98098443 1 \"dst\" Write Point 6 \"Range\" Float 1 AABAQA== \"Gain\" Float 1 AACAPw== \"Gamma\" Float 1 AACAPw== \"Dark Colour\" Float 4 AAAAAAAAAAAAAAAAAACAPw== \"Light Colour\" Float 4 AACAPwAAgD8AAIA/AACAPw== \"transform\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "// https://aftbit.com/cell-noise-2/\n\n# define MAX_DISTANCE_ARRAY 12\n\n// C++11\nconst uint rand_multiplier = 48271;\nconst uint rand_increment  = 0;\nconst uint rand_modulus    = 2147483647;\n\nstatic int lcgRandom(int seed)\n\{\n  return abs((seed * rand_multiplier + rand_increment) % rand_modulus);\n\}\n\n// FNV Hash\nconst uint OFFSET_BASIS = 2166136261;\nconst uint FNV_PRIME = 16777619;\n\nstatic uint hash(uint i, uint j, uint k)\n\{\n  return ((((((OFFSET_BASIS ^ i) * FNV_PRIME) ^ j) * FNV_PRIME) ^ k) * FNV_PRIME);\n\}\n\n// Poisson Distribution\nconst uint one   =  393325350;\nconst uint two   = 1022645910;\nconst uint three = 1861739990;\nconst uint four  = 2700834071;\nconst uint five  = 3372109335;\nconst uint six   = 3819626178;\nconst uint seven = 4075350088;\nconst uint eight = 4203212043;\n\nstatic uint probLookup(uint value)\n\{\n  if (value < one) return 1;\n  if (value < two) return 2;\n  if (value < three) return 3;\n  if (value < four) return 4;\n  if (value < five) return 5;\n  if (value < six) return 6;\n  if (value < seven) return 7;\n  if (value < eight) return 8;\n  return 9;\n\}\n\n// Distance Functions\nstatic float EuclidianDistanceFunc(float3 p1, float3 p2)\n\{\n  return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y) + (p1.z - p2.z) * (p1.z - p2.z);\n\}\n\n\n// Insertion Array\nstatic void insert(float arr\[], float value)\n\{\n  float temp;\n  for (int i = MAX_DISTANCE_ARRAY - 1; i >= 0; i--)\n  \{\n    if (value > arr\[i])\n      break;\n    temp = arr\[i];\n    arr\[i] = value;\n    if (i + 1 < MAX_DISTANCE_ARRAY)\n    \{\n      arr\[i + 1] = temp;\n    \}\n  \}\n\}\n\n\n// Blink Kernel\nkernel EuclidianNoise : ImageComputationKernel<ePixelWise>\n\{\n  Image<eWrite> dst;\n\n  param:\n    float range;\n    float gain;\n    float gamma;\n    float4 dark_col;\n    float4 light_col;\n    float4x4 transform;\n\n  local:\n    float fRange;\n    int iRange;\n    float4x4 transform_inv;\n    float z;\n\n  void define()\n  \{\n    defineParam(range, \"Range\", 3.0f);\n    defineParam(gain, \"Gain\", 1.0f);\n    defineParam(gamma, \"Gamma\", 1.0f);\n    defineParam(dark_col, \"Dark Colour\", float4(0.0f, 0.0f, 0.0f, 1.0f));\n    defineParam(light_col, \"Light Colour\", float4(1.0f, 1.0f, 1.0f, 1.0f));\n  \}\n\n  void init()\n  \{\n    fRange = clamp(range, 0.0f, float(MAX_DISTANCE_ARRAY - 2));\n    iRange = int(fRange);\n    transform_inv = transform.invert();\n    z = transform_inv\[2]\[3];\n  \}\n\n  static float3 multVectMatrix(float3 vec, float4x4 M)\n  \{\n    float3 out = float3(\n      vec.x * M\[0]\[0] + vec.y * M\[0]\[1] + vec.z * M\[0]\[2] + M\[0]\[3],\n      vec.x * M\[1]\[0] + vec.y * M\[1]\[1] + vec.z * M\[1]\[2] + M\[1]\[3],\n      vec.x * M\[2]\[0] + vec.y * M\[2]\[1] + vec.z * M\[2]\[2] + M\[2]\[3]\n    );\n\n    return out;\n  \}\n\n  float4 getColour(float a) \{\n    return dark_col * (1 - a) + light_col * a;\n  \}\n\n  void process(int2 pos)\n  \{\n\n    //Declare some values for later use\n    int lastRandom, numberFeaturePoints;\n    float3 randomDiff, featurePoint;\n    int cubeX, cubeY, cubeZ;\n\n    float distanceArray\[MAX_DISTANCE_ARRAY];\n\n    // Initialize values in distance array to large values\n    for (int i = 0; i < MAX_DISTANCE_ARRAY; i++)\n        distanceArray\[i] = 6666;\n\n    float3 input = float3(float(pos.x), float(pos.y), z);\n    input = multVectMatrix(input, transform_inv);\n\n    // Determine which cube the evaluation point is in\n    int evalCubeX = floor(input.x);\n    int evalCubeY = floor(input.y);\n    int evalCubeZ = floor(input.z);\n\n    for (int i = -1; i < 2; ++i)\n    \{\n      for (int j = -1; j < 2; ++j)\n      \{\n        for (int k = -1; k < 2; ++k)\n        \{\n            cubeX = evalCubeX + i;\n            cubeY = evalCubeY + j;\n            cubeZ = evalCubeZ + k;\n\n            // Generate a reproducible random number generator for the cube\n            lastRandom = lcgRandom(hash(cubeX, cubeY, cubeZ));\n            // Determine how many feature points are in the cube\n            numberFeaturePoints = probLookup(lastRandom);\n            // Check each feature point\n            for (uint l = 0; l < numberFeaturePoints; ++l)\n            \{\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.x = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.y = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.z = float(lastRandom) / rand_modulus;\n\n              featurePoint = float3(randomDiff.x + float(cubeX), randomDiff.y + float(cubeY), randomDiff.z + float(cubeZ));\n\n              insert(distanceArray, EuclidianDistanceFunc(input, featurePoint));\n            \}\n        \}\n      \}\n    \}\n\n\n    float color = (distanceArray\[ iRange + 2 ] - distanceArray\[ iRange + 1 ]) * fmod(fRange, 1.0f) + distanceArray\[ iRange + 1] - distanceArray\[0];\n    color = pow( color * gain, gamma );\n    dst() = getColour(clamp(color, 0.0f, 1.0f));\n\n  \}\n\n\};"
+  useGPUIfAvailable {{parent.use_gpu}}
+  rebuild ""
+  EuclidianNoise_Range {{parent.range}}
+  EuclidianNoise_Gain {{parent.gain}}
+  EuclidianNoise_Gamma {{parent.gamma}}
+  "EuclidianNoise_Dark Colour" {{parent.colour0.r} {parent.colour0.g} {parent.colour0.b} {parent.colour0.a}}
+  "EuclidianNoise_Light Colour" {{parent.colour1.r} {parent.colour1.g} {parent.colour1.b} {parent.colour1.a}}
+  EuclidianNoise_transform {
+      {{parent.NoiseTransform.world_matrix.0} {parent.NoiseTransform.world_matrix.1} {parent.NoiseTransform.world_matrix.2} {parent.NoiseTransform.world_matrix.3}}
+      {{parent.NoiseTransform.world_matrix.4} {parent.NoiseTransform.world_matrix.5} {parent.NoiseTransform.world_matrix.6} {parent.NoiseTransform.world_matrix.7}}
+      {{parent.NoiseTransform.world_matrix.8} {parent.NoiseTransform.world_matrix.9} {parent.NoiseTransform.world_matrix.10} {parent.NoiseTransform.world_matrix.11}}
+      {{parent.NoiseTransform.world_matrix.12} {parent.NoiseTransform.world_matrix.13} {parent.NoiseTransform.world_matrix.14} {parent.NoiseTransform.world_matrix.15}}
+    }
+  format {{{WorleyNoise.format}}}
+  rebuild_finalise ""
+  name EuclidianNoise
+  xpos 546
+  ypos 153
+ }
+ BlinkScript {
+  inputs 0
+  ProgramGroup 1
+  KernelDescription "1 \"ManhattanNoise\" iterate pixelWise 1d35c614c0525bae7a8ffa70d6c29b98748325506ab7e1dd613b42fef2bd1443 1 \"dst\" Write Point 6 \"Range\" Float 1 AABAQA== \"Gain\" Float 1 AACAPw== \"Gamma\" Float 1 AACAPw== \"Dark Colour\" Float 4 AAAAAAAAAAAAAAAAAACAPw== \"Light Colour\" Float 4 AACAPwAAgD8AAIA/AACAPw== \"transform\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "// https://aftbit.com/cell-noise-2/\n\n# define MAX_DISTANCE_ARRAY 12\n\n// C++11\nconst uint rand_multiplier = 48271;\nconst uint rand_increment  = 0;\nconst uint rand_modulus    = 2147483647;\n\nstatic int lcgRandom(int seed)\n\{\n  return abs((seed * rand_multiplier + rand_increment) % rand_modulus);\n\}\n\n// FNV Hash\nconst uint OFFSET_BASIS = 2166136261;\nconst uint FNV_PRIME = 16777619;\n\nstatic uint hash(uint i, uint j, uint k)\n\{\n  return ((((((OFFSET_BASIS ^ i) * FNV_PRIME) ^ j) * FNV_PRIME) ^ k) * FNV_PRIME);\n\}\n\n// Poisson Distribution\nconst uint one   =  393325350;\nconst uint two   = 1022645910;\nconst uint three = 1861739990;\nconst uint four  = 2700834071;\nconst uint five  = 3372109335;\nconst uint six   = 3819626178;\nconst uint seven = 4075350088;\nconst uint eight = 4203212043;\n\nstatic uint probLookup(uint value)\n\{\n  if (value < one) return 1;\n  if (value < two) return 2;\n  if (value < three) return 3;\n  if (value < four) return 4;\n  if (value < five) return 5;\n  if (value < six) return 6;\n  if (value < seven) return 7;\n  if (value < eight) return 8;\n  return 9;\n\}\n\n// Distance Function\nstatic float ManhattanDistanceFunc(float3 p1, float3 p2)\n\{\n  return fabs(p1.x - p2.x) + fabs(p1.y - p2.y) + fabs(p1.z - p2.z);\n\}\n\n// Insertion Array\nstatic void insert(float arr\[], float value)\n\{\n  float temp;\n  for (int i = MAX_DISTANCE_ARRAY - 1; i >= 0; i--)\n  \{\n    if (value > arr\[i])\n      break;\n    temp = arr\[i];\n    arr\[i] = value;\n    if (i + 1 < MAX_DISTANCE_ARRAY)\n    \{\n      arr\[i + 1] = temp;\n    \}\n  \}\n\}\n\n\n// Blink Kernel\nkernel ManhattanNoise : ImageComputationKernel<ePixelWise>\n\{\n  Image<eWrite> dst;\n\n  param:\n    float range;\n    float gain;\n    float gamma;\n    float4 dark_col;\n    float4 light_col;\n    float4x4 transform;\n\n  local:\n    float fRange;\n    int iRange;\n    float4x4 transform_inv;\n    float z;\n\n  void define()\n  \{\n    defineParam(range, \"Range\", 3.0f);\n    defineParam(gain, \"Gain\", 1.0f);\n    defineParam(gamma, \"Gamma\", 1.0f);\n    defineParam(dark_col, \"Dark Colour\", float4(0.0f, 0.0f, 0.0f, 1.0f));\n    defineParam(light_col, \"Light Colour\", float4(1.0f, 1.0f, 1.0f, 1.0f));\n  \}\n\n  void init()\n  \{\n    fRange = clamp(range, 0.0f, float(MAX_DISTANCE_ARRAY - 2));\n    iRange = int(fRange);\n    transform_inv = transform.invert();\n    z = transform_inv\[2]\[3];\n  \}\n\n  static float3 multVectMatrix(float3 vec, float4x4 M)\n  \{\n    float3 out = float3(\n      vec.x * M\[0]\[0] + vec.y * M\[0]\[1] + vec.z * M\[0]\[2] + M\[0]\[3],\n      vec.x * M\[1]\[0] + vec.y * M\[1]\[1] + vec.z * M\[1]\[2] + M\[1]\[3],\n      vec.x * M\[2]\[0] + vec.y * M\[2]\[1] + vec.z * M\[2]\[2] + M\[2]\[3]\n    );\n\n    return out;\n  \}\n\n  float4 getColour(float a) \{\n    return dark_col * (1 - a) + light_col * a;\n  \}\n\n  void process(int2 pos)\n  \{\n\n    //Declare some values for later use\n    int lastRandom, numberFeaturePoints;\n    float3 randomDiff, featurePoint;\n    int cubeX, cubeY, cubeZ;\n\n    float distanceArray\[MAX_DISTANCE_ARRAY];\n\n    // Initialize values in distance array to large values\n    for (int i = 0; i < MAX_DISTANCE_ARRAY; i++)\n        distanceArray\[i] = 6666;\n\n    float3 input = float3(float(pos.x), float(pos.y), z);\n    input = multVectMatrix(input, transform_inv);\n\n    // Determine which cube the evaluation point is in\n    int evalCubeX = floor(input.x);\n    int evalCubeY = floor(input.y);\n    int evalCubeZ = floor(input.z);\n\n    for (int i = -1; i < 2; ++i)\n    \{\n      for (int j = -1; j < 2; ++j)\n      \{\n        for (int k = -1; k < 2; ++k)\n        \{\n            cubeX = evalCubeX + i;\n            cubeY = evalCubeY + j;\n            cubeZ = evalCubeZ + k;\n\n            // Generate a reproducible random number generator for the cube\n            lastRandom = lcgRandom(hash(cubeX, cubeY, cubeZ));\n            // Determine how many feature points are in the cube\n            numberFeaturePoints = probLookup(lastRandom);\n            // Check each feature point\n            for (uint l = 0; l < numberFeaturePoints; ++l)\n            \{\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.x = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.y = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.z = float(lastRandom) / rand_modulus;\n\n              featurePoint = float3(randomDiff.x + float(cubeX), randomDiff.y + float(cubeY), randomDiff.z + float(cubeZ));\n\n              insert(distanceArray, ManhattanDistanceFunc(input, featurePoint));\n            \}\n        \}\n      \}\n    \}\n\n    float color = (distanceArray\[ iRange + 2 ] - distanceArray\[ iRange + 1 ]) * fmod(fRange, 1.0f) + distanceArray\[ iRange + 1] - distanceArray\[0];\n    color = pow( color * gain, gamma );\n    dst() = getColour(clamp(color, 0.0f, 1.0f));\n\n  \}\n\n\};"
+  useGPUIfAvailable {{parent.use_gpu}}
+  rebuild ""
+  ManhattanNoise_Range {{parent.range}}
+  ManhattanNoise_Gain {{parent.gain}}
+  ManhattanNoise_Gamma {{parent.gamma}}
+  "ManhattanNoise_Dark Colour" {{parent.colour0.r} {parent.colour0.g} {parent.colour0.b} {parent.colour0.a}}
+  "ManhattanNoise_Light Colour" {{parent.colour1.r} {parent.colour1.g} {parent.colour1.b} {parent.colour1.a}}
+  ManhattanNoise_transform {
+      {{parent.NoiseTransform.world_matrix.0} {parent.NoiseTransform.world_matrix.1} {parent.NoiseTransform.world_matrix.2} {parent.NoiseTransform.world_matrix.3}}
+      {{parent.NoiseTransform.world_matrix.4} {parent.NoiseTransform.world_matrix.5} {parent.NoiseTransform.world_matrix.6} {parent.NoiseTransform.world_matrix.7}}
+      {{parent.NoiseTransform.world_matrix.8} {parent.NoiseTransform.world_matrix.9} {parent.NoiseTransform.world_matrix.10} {parent.NoiseTransform.world_matrix.11}}
+      {{parent.NoiseTransform.world_matrix.12} {parent.NoiseTransform.world_matrix.13} {parent.NoiseTransform.world_matrix.14} {parent.NoiseTransform.world_matrix.15}}
+    }
+  format {{{WorleyNoise.format}}}
+  rebuild_finalise ""
+  name ManhattanNoise
+  xpos 459
+  ypos 63
+ }
+ BlinkScript {
+  inputs 0
+  ProgramGroup 1
+  KernelDescription "1 \"VoronoiNoise\" iterate pixelWise 1b53c166801ea17d0619d5f85ca955c827fd3c1e639128218c64fea2e471be9e 1 \"dst\" Write Point 6 \"Range\" Float 1 AABAQA== \"Gain\" Float 1 AACAPw== \"Gamma\" Float 1 AACAPw== \"Dark Colour\" Float 4 AAAAAAAAAAAAAAAAAACAPw== \"Light Colour\" Float 4 AACAPwAAgD8AAIA/AACAPw== \"transform\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "// https://aftbit.com/cell-noise-2/\n\n# define MAX_DISTANCE_ARRAY 12\n\n// C++11\nconst uint rand_multiplier = 48271;\nconst uint rand_increment  = 0;\nconst uint rand_modulus    = 2147483647;\n\nstatic int lcgRandom(int seed)\n\{\n  return abs((seed * rand_multiplier + rand_increment) % rand_modulus);\n\}\n\n// FNV Hash\nconst uint OFFSET_BASIS = 2166136261;\nconst uint FNV_PRIME = 16777619;\n\nstatic uint hash(uint i, uint j, uint k)\n\{\n  return ((((((OFFSET_BASIS ^ i) * FNV_PRIME) ^ j) * FNV_PRIME) ^ k) * FNV_PRIME);\n\}\n\n// Poisson Distribution\nconst uint one   =  393325350;\nconst uint two   = 1022645910;\nconst uint three = 1861739990;\nconst uint four  = 2700834071;\nconst uint five  = 3372109335;\nconst uint six   = 3819626178;\nconst uint seven = 4075350088;\nconst uint eight = 4203212043;\n\nstatic uint probLookup(uint value)\n\{\n  if (value < one) return 1;\n  if (value < two) return 2;\n  if (value < three) return 3;\n  if (value < four) return 4;\n  if (value < five) return 5;\n  if (value < six) return 6;\n  if (value < seven) return 7;\n  if (value < eight) return 8;\n  return 9;\n\}\n\n// Insertion Array\nstatic void insert(float arr\[], int idArr\[], float value, int id)\n\{\n  float temp;\n  int tempID;\n  for (int i = MAX_DISTANCE_ARRAY - 1; i >= 0; i--)\n  \{\n    if (value > arr\[i])\n      break;\n    temp = arr\[i];\n    tempID = idArr\[i];\n    arr\[i] = value;\n    idArr\[i] = id;\n    if (i + 1 < MAX_DISTANCE_ARRAY)\n    \{\n      arr\[i + 1] = temp;\n      idArr\[i + 1] = tempID;\n    \}\n  \}\n\}\n\n\n// Blink Kernel\nkernel VoronoiNoise : ImageComputationKernel<ePixelWise>\n\{\n  Image<eWrite> dst;\n\n  param:\n    float range;\n    float gain;\n    float gamma;\n    float4 dark_col;\n    float4 light_col;\n    float4x4 transform;\n\n  local:\n    float fRange;\n    int iRange;\n    float4x4 transform_inv;\n    float z;\n\n  void define()\n  \{\n    defineParam(range, \"Range\", 3.0f);\n    defineParam(gain, \"Gain\", 1.0f);\n    defineParam(gamma, \"Gamma\", 1.0f);\n    defineParam(dark_col, \"Dark Colour\", float4(0.0f, 0.0f, 0.0f, 1.0f));\n    defineParam(light_col, \"Light Colour\", float4(1.0f, 1.0f, 1.0f, 1.0f));\n  \}\n\n  void init()\n  \{\n    fRange = clamp(range, 0.0f, float(MAX_DISTANCE_ARRAY - 2));\n    iRange = int(fRange);\n    transform_inv = transform.invert();\n    z = transform_inv\[2]\[3];\n  \}\n\n  static float3 multVectMatrix(float3 vec, float4x4 M)\n  \{\n    float3 out = float3(\n      vec.x * M\[0]\[0] + vec.y * M\[0]\[1] + vec.z * M\[0]\[2] + M\[0]\[3],\n      vec.x * M\[1]\[0] + vec.y * M\[1]\[1] + vec.z * M\[1]\[2] + M\[1]\[3],\n      vec.x * M\[2]\[0] + vec.y * M\[2]\[1] + vec.z * M\[2]\[2] + M\[2]\[3]\n    );\n\n    return out;\n  \}\n\n  float4 getColour(float a) \{\n    return dark_col * (1 - a) + light_col * a;\n  \}\n\n  void process(int2 pos)\n  \{\n\n    //Declare some values for later use\n    int lastRandom, id, numberFeaturePoints;\n    float3 randomDiff, featurePoint;\n    int cubeX, cubeY, cubeZ;\n\n    float distanceArray\[MAX_DISTANCE_ARRAY];\n    int idArray\[MAX_DISTANCE_ARRAY];\n\n    // Initialize values in distance array to large values\n    for (int i = 0; i < MAX_DISTANCE_ARRAY; i++)\n        distanceArray\[i] = 6666;\n\n    float3 input = float3(float(pos.x), float(pos.y), z);\n    input = multVectMatrix(input, transform_inv);\n\n    // Determine which cube the evaluation point is in\n    int evalCubeX = floor(input.x);\n    int evalCubeY = floor(input.y);\n    int evalCubeZ = floor(input.z);\n\n    for (int i = -1; i < 2; ++i)\n    \{\n      for (int j = -1; j < 2; ++j)\n      \{\n        for (int k = -1; k < 2; ++k)\n        \{\n            cubeX = evalCubeX + i;\n            cubeY = evalCubeY + j;\n            cubeZ = evalCubeZ + k;\n\n            // Generate a reproducible random number generator for the cube\n            lastRandom = lcgRandom(hash(cubeX, cubeY, cubeZ));\n            id = lastRandom;\n            // Determine how many feature points are in the cube\n            numberFeaturePoints = probLookup(lastRandom);\n            // Check each feature point\n            for (uint l = 0; l < numberFeaturePoints; ++l)\n            \{\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.x = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.y = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.z = float(lastRandom) / rand_modulus;\n\n              featurePoint = float3(randomDiff.x + float(cubeX), randomDiff.y + float(cubeY), randomDiff.z + float(cubeZ));\n\n              insert(distanceArray, idArray, length(input - featurePoint), id+l);\n            \}\n        \}\n      \}\n    \}\n\n    float3 col = float3(float(idArray\[iRange]) / rand_modulus, 0.0f, 0.0f);\n    lastRandom = lcgRandom(idArray\[iRange]);\n    col.y = float(lastRandom) / rand_modulus;\n    lastRandom = lcgRandom(lastRandom);\n    col.z = float(lastRandom) / rand_modulus;\n\n    for(int component = 0; component < 3; component++)\n      dst(component) = pow( col\[component] * gain, gamma);\n    dst(3) = 1.0f;\n  \}\n\n\};"
+  useGPUIfAvailable {{parent.use_gpu}}
+  rebuild ""
+  VoronoiNoise_Range {{parent.range}}
+  VoronoiNoise_Gain {{parent.gain}}
+  VoronoiNoise_Gamma {{parent.gamma}}
+  "VoronoiNoise_Dark Colour" {{parent.colour0.r} {parent.colour0.g} {parent.colour0.b} {parent.colour0.a}}
+  "VoronoiNoise_Light Colour" {{parent.colour1.r} {parent.colour1.g} {parent.colour1.b} {parent.colour1.a}}
+  VoronoiNoise_transform {
+      {{parent.NoiseTransform.world_matrix.0} {parent.NoiseTransform.world_matrix.1} {parent.NoiseTransform.world_matrix.2} {parent.NoiseTransform.world_matrix.3}}
+      {{parent.NoiseTransform.world_matrix.4} {parent.NoiseTransform.world_matrix.5} {parent.NoiseTransform.world_matrix.6} {parent.NoiseTransform.world_matrix.7}}
+      {{parent.NoiseTransform.world_matrix.8} {parent.NoiseTransform.world_matrix.9} {parent.NoiseTransform.world_matrix.10} {parent.NoiseTransform.world_matrix.11}}
+      {{parent.NoiseTransform.world_matrix.12} {parent.NoiseTransform.world_matrix.13} {parent.NoiseTransform.world_matrix.14} {parent.NoiseTransform.world_matrix.15}}
+    }
+  format {{{WorleyNoise.format}}}
+  rebuild_finalise ""
+  name VoronoiNoise
+  xpos 315
+  ypos -1
+ }
+ BlinkScript {
+  inputs 0
+  ProgramGroup 1
+  KernelDescription "1 \"Worley\" iterate pixelWise 92b94530192011feae18a63400ce40dd1c828de463a428e45921ce9da3f88e94 1 \"dst\" Write Point 6 \"Invert\" Bool 1 AA== \"Gain\" Float 1 AACAPw== \"Gamma\" Float 1 AACAPw== \"Dark Colour\" Float 4 AAAAAAAAAAAAAAAAAACAPw== \"Light Colour\" Float 4 AACAPwAAgD8AAIA/AACAPw== \"transform\" Float 16 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "// https://aftbit.com/cell-noise-2/\n\n// C++11\nconst uint rand_multiplier = 48271;\nconst uint rand_increment  = 0;\nconst uint rand_modulus    = 2147483647;\n\nstatic int lcgRandom(int seed)\n\{\n  return abs((seed * rand_multiplier + rand_increment) % rand_modulus);\n\}\n\n// FNV Hash\nconst uint OFFSET_BASIS = 2166136261;\nconst uint FNV_PRIME = 16777619;\n\nstatic uint hash(uint i, uint j, uint k)\n\{\n  return ((((((OFFSET_BASIS ^ i) * FNV_PRIME) ^ j) * FNV_PRIME) ^ k) * FNV_PRIME);\n\}\n\n// Poisson Distribution\nconst uint one   =  393325350;\nconst uint two   = 1022645910;\nconst uint three = 1861739990;\nconst uint four  = 2700834071;\nconst uint five  = 3372109335;\nconst uint six   = 3819626178;\nconst uint seven = 4075350088;\nconst uint eight = 4203212043;\n\nstatic uint probLookup(uint value)\n\{\n  if (value < one) return 1;\n  if (value < two) return 2;\n  if (value < three) return 3;\n  if (value < four) return 4;\n  if (value < five) return 5;\n  if (value < six) return 6;\n  if (value < seven) return 7;\n  if (value < eight) return 8;\n  return 9;\n\}\n\n// Distance Functions\nstatic float EuclidianDistanceFunc(float3 p1, float3 p2)\n\{\n  return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y) + (p1.z - p2.z) * (p1.z - p2.z);\n\}\n\nstatic float ManhattanDistanceFunc(float3 p1, float3 p2)\n\{\n  return fabs(p1.x - p2.x) + fabs(p1.y - p2.y) + fabs(p1.z - p2.z);\n\}\n\nstatic float ChebyshevDistanceFunc(float3 p1, float3 p2)\n\{\n  float3 diff = p1 - p2;\n  return max(max(fabs(diff.x), fabs(diff.y)), fabs(diff.z));\n\}\n\n\n// Blink Kernel\nkernel Worley : ImageComputationKernel<ePixelWise>\n\{\n  Image<eWrite> dst;\n\n  param:\n    bool invert;\n    float gain;\n    float gamma;\n    float4 dark_col;\n    float4 light_col;\n    float4x4 transform;\n\n  local:\n    float4x4 transform_inv;\n    float z;\n\n  void define()\n  \{\n    defineParam(invert, \"Invert\", false);\n    defineParam(gain, \"Gain\", 1.0f);\n    defineParam(gamma, \"Gamma\", 1.0f);\n    defineParam(dark_col, \"Dark Colour\", float4(0.0f, 0.0f, 0.0f, 1.0f));\n    defineParam(light_col, \"Light Colour\", float4(1.0f, 1.0f, 1.0f, 1.0f));\n  \}\n\n  void init()\n  \{\n    transform_inv = transform.invert();\n    z = transform_inv\[2]\[3];\n  \}\n\n  static float3 multVectMatrix(float3 vec, float4x4 M)\n  \{\n    float3 out = float3(\n      vec.x * M\[0]\[0] + vec.y * M\[0]\[1] + vec.z * M\[0]\[2] + M\[0]\[3],\n      vec.x * M\[1]\[0] + vec.y * M\[1]\[1] + vec.z * M\[1]\[2] + M\[1]\[3],\n      vec.x * M\[2]\[0] + vec.y * M\[2]\[1] + vec.z * M\[2]\[2] + M\[2]\[3]\n    );\n\n    return out;\n  \}\n\n  float4 getColour(float a) \{\n    return dark_col * (1 - a) + light_col * a;\n  \}\n\n  void process(int2 pos)\n  \{\n\n    //Declare some values for later use\n    int lastRandom, numberFeaturePoints;\n    float distance = 6666.0f;\n    float3 randomDiff, featurePoint;\n    int cubeX, cubeY, cubeZ;\n\n    float3 input = float3(float(pos.x), float(pos.y), z);\n    input = multVectMatrix(input, transform_inv);\n\n    // Determine which cube the evaluation point is in\n    int evalCubeX = floor(input.x);\n    int evalCubeY = floor(input.y);\n    int evalCubeZ = floor(input.z);\n\n    for (int i = -1; i < 2; ++i)\n    \{\n      for (int j = -1; j < 2; ++j)\n      \{\n        for (int k = -1; k < 2; ++k)\n        \{\n            cubeX = evalCubeX + i;\n            cubeY = evalCubeY + j;\n            cubeZ = evalCubeZ + k;\n\n            // Generate a reproducible random number generator for the cube\n            lastRandom = lcgRandom(hash(cubeX, cubeY, cubeZ));\n            // Determine how many feature points are in the cube\n            numberFeaturePoints = probLookup(lastRandom);\n            // Check each feature point\n            for (uint l = 0; l < numberFeaturePoints; ++l)\n            \{\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.x = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.y = float(lastRandom) / rand_modulus;\n\n              lastRandom = lcgRandom(lastRandom);\n              randomDiff.z = float(lastRandom) / rand_modulus;\n\n              featurePoint = float3(randomDiff.x + float(cubeX), randomDiff.y + float(cubeY), randomDiff.z + float(cubeZ));\n\n              distance = min(distance, dot(input - featurePoint, input - featurePoint));\n            \}\n        \}\n      \}\n    \}\n\n    distance = sqrt(distance);\n    if (invert)\n      distance = 1.0f - distance;\n    distance = pow(distance * gain, gamma);\n    dst() = getColour(clamp(distance, 0.0f, 1.0f));\n\n  \}\n\n\};"
+  useGPUIfAvailable {{parent.use_gpu}}
+  rebuild ""
+  Worley_Invert {{"parent.noise_type == 1"}}
+  Worley_Gain {{parent.gain}}
+  Worley_Gamma {{parent.gamma}}
+  "Worley_Dark Colour" {{parent.colour0.r} {parent.colour0.g} {parent.colour0.b} {parent.colour0.a}}
+  "Worley_Light Colour" {{parent.colour1.r} {parent.colour1.g} {parent.colour1.b} {parent.colour1.a}}
+  Worley_transform {
+      {{parent.NoiseTransform.world_matrix.0} {parent.NoiseTransform.world_matrix.1} {parent.NoiseTransform.world_matrix.2} {parent.NoiseTransform.world_matrix.3}}
+      {{parent.NoiseTransform.world_matrix.4} {parent.NoiseTransform.world_matrix.5} {parent.NoiseTransform.world_matrix.6} {parent.NoiseTransform.world_matrix.7}}
+      {{parent.NoiseTransform.world_matrix.8} {parent.NoiseTransform.world_matrix.9} {parent.NoiseTransform.world_matrix.10} {parent.NoiseTransform.world_matrix.11}}
+      {{parent.NoiseTransform.world_matrix.12} {parent.NoiseTransform.world_matrix.13} {parent.NoiseTransform.world_matrix.14} {parent.NoiseTransform.world_matrix.15}}
+    }
+  rebuild_finalise ""
+  name WorleyNoise
+  selected true
+  xpos 177
+  ypos -54
+ }
+ Switch {
+  inputs 5
+  which {{"max(parent.noise_type - 1,0)"}}
+  name Switch1
+  xpos 177
+  ypos 249
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 211
+  ypos 314
+ }
+set N251094e0 [stack 0]
+push $N24698360
+push $N251094e0
+ Input {
+  inputs 0
+  name Input
+  xpos 10
+  ypos -78
+ }
+ Merge2 {
+  inputs 2+1
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 10
+  ypos 381
+  disable {{replace}}
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge2
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 10
+  ypos 426
+  disable {{!replace}}
+ }
+ Output {
+  name Output1
+  xpos 10
+  ypos 533
+ }
+end_group

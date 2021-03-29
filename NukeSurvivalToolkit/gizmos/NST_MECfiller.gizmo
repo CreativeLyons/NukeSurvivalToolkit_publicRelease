@@ -1,0 +1,6352 @@
+Group {
+ inputs 0
+ name MECfiller
+ tile_color 0xff00ffff
+ addUserKnob {20 User}
+ addUserKnob {26 name_1 l "" +STARTLINE T "MECfiller v001"}
+ addUserKnob {26 ""}
+ addUserKnob {4 mode M {fast rough complex "" ""}}
+ mode fast
+ addUserKnob {12 center}
+ addUserKnob {7 axismultiplier l "axis multiplier"}
+ axismultiplier 0.1
+ addUserKnob {6 axismultipliercheck l "multiplier visualisation" +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 madeby l "" +STARTLINE T "Matthias Eckhardt\npoly-by-poly.com\n\n\nbased on Mads Hagbarth's FFfiller"}
+}
+ StickyNote {
+  inputs 0
+  name StickyNote4
+  label 1
+  note_font_size 110
+  xpos -2381
+  ypos 53
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote5
+  label 2
+  note_font_size 110
+  xpos -2381
+  ypos 732
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote6
+  label 3
+  note_font_size 110
+  xpos -2375
+  ypos 1376
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote7
+  label 4
+  note_font_size 110
+  xpos -2363
+  ypos 2015
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote8
+  label 5
+  note_font_size 110
+  xpos -2372
+  ypos 2637
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote9
+  label 6
+  note_font_size 110
+  xpos -2385
+  ypos 3344
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote10
+  label 7
+  note_font_size 110
+  xpos -2411
+  ypos 3988
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote11
+  label 8
+  note_font_size 110
+  xpos -2421
+  ypos 4628
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote12
+  label 9
+  note_font_size 110
+  xpos -2398
+  ypos 5337
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote13
+  label 10
+  note_font_size 110
+  xpos -2393
+  ypos 6051
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote14
+  label 11
+  note_font_size 110
+  xpos -2395
+  ypos 6753
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote15
+  label 12
+  note_font_size 110
+  xpos -2400
+  ypos 7477
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote16
+  label 13
+  note_font_size 110
+  xpos -2400
+  ypos 8201
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label complex
+  note_font_size 100
+  xpos 272
+  ypos 8407
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos -2535
+  ypos -1597
+ }
+ Dot {
+  name Dot22
+  xpos -2501
+  ypos -1432
+ }
+set Nfa633c0 [stack 0]
+ Dot {
+  name Dot24
+  xpos -2501
+  ypos -1316
+ }
+set Nfa67de0 [stack 0]
+ Dot {
+  name Dot33
+  xpos -2501
+  ypos -1210
+ }
+set Nfa6c940 [stack 0]
+ Dot {
+  name Dot2
+  xpos -2501
+  ypos -1166
+ }
+set Nfa713c0 [stack 0]
+ Dot {
+  name Dot32
+  xpos -2501
+  ypos -1106
+ }
+set Nfa75e70 [stack 0]
+ Dot {
+  name Dot3
+  xpos -2501
+  ypos -1062
+ }
+set Nfa7a920 [stack 0]
+ Dot {
+  name Dot34
+  xpos -2501
+  ypos -988
+ }
+set Nfa7f340 [stack 0]
+ Dot {
+  name Dot4
+  xpos -2501
+  ypos -944
+ }
+set Nfa83d30 [stack 0]
+ Dot {
+  name Dot29
+  xpos -2501
+  ypos -882
+ }
+set Nfa88a00 [stack 0]
+ Dot {
+  name Dot5
+  xpos -2501
+  ypos -838
+ }
+set N161fbd80 [stack 0]
+ Dot {
+  name Dot204
+  xpos -2501
+  ypos -767
+ }
+set N16200900 [stack 0]
+ Dot {
+  name Dot7
+  xpos -2501
+  ypos -719
+ }
+set N162053b0 [stack 0]
+ Dot {
+  name Dot234
+  xpos -2501
+  ypos -660
+ }
+set N16209dd0 [stack 0]
+ Dot {
+  name Dot111
+  xpos -2501
+  ypos -612
+ }
+ Expression {
+  temp_name0 point
+  temp_expr0 parent.center.x
+  temp_name1 area
+  temp_expr1 width/5
+  temp_name2 axismultiplier
+  temp_expr2 parent.axismultiplier
+  channel0 rgba
+  expr0 x>(point-(area*axismultiplier)/2)&&x<(point+(area*axismultiplier)/2)?1:0
+  name Expression52
+  xpos -2425
+  ypos -616
+ }
+push $N16209dd0
+ Expression {
+  channel0 rgba
+  expr0 x>width*0.4&&x<width*0.6?1:0
+  channel1 {-rgba.red rgba.green -rgba.blue none}
+  name Expression51
+  xpos -2425
+  ypos -664
+ }
+ Switch {
+  inputs 2
+  which {{parent.center.x==0&&parent.center.y==0?0:1}}
+  name Switch43
+  label "INPUT \[value which]"
+  xpos -2269
+  ypos -622
+ }
+ Blur {
+  size {{NoOp1.height/(6/parent.axismultiplier)}}
+  name Blur2
+  xpos -2138
+  ypos -622
+ }
+set N16237480 [stack 0]
+push $N162053b0
+ Expression {
+  temp_name0 point
+  temp_expr0 parent.center.y
+  temp_name1 area
+  temp_expr1 height/5
+  temp_name2 axismultiplier
+  temp_expr2 parent.axismultiplier
+  channel0 rgba
+  expr0 y>(point-(area*axismultiplier)/2)&&y<(point+(area*axismultiplier)/2)?1:0
+  name Expression49
+  xpos -2426
+  ypos -723
+ }
+push $N16200900
+ Expression {
+  channel0 rgba
+  expr0 y>height*0.4&&y<height*0.6?1:0
+  channel1 {-rgba.red rgba.green -rgba.blue none}
+  name Expression50
+  xpos -2425
+  ypos -771
+ }
+ Switch {
+  inputs 2
+  which {{parent.center.x==0&&parent.center.y==0?0:1}}
+  name Switch42
+  label "INPUT \[value which]"
+  xpos -2268
+  ypos -729
+ }
+ Blur {
+  size {{NoOp1.height/(8/parent.axismultiplier)}}
+  name Blur1
+  xpos -2138
+  ypos -729
+ }
+set N16268d10 [stack 0]
+push $N161fbd80
+ Expression {
+  channel0 rgba
+  expr0 x>parent.center.x&&y<parent.center.y?1:0
+  channel1 {-rgba.red -rgba.green -rgba.blue none}
+  name Expression4
+  xpos -2428
+  ypos -842
+ }
+push $Nfa88a00
+ Expression {
+  channel0 rgba
+  expr0 x>width/2&&y<height/2?1:0
+  name Expression5
+  xpos -2422
+  ypos -886
+ }
+ Switch {
+  inputs 2
+  which {{parent.center.x==0&&parent.center.y==0?0:1}}
+  name Switch4
+  label "INPUT \[value which]"
+  xpos -2264
+  ypos -848
+ }
+push $Nfa83d30
+ Expression {
+  channel0 rgba
+  expr0 x<parent.center.x&&y<parent.center.y?1:0
+  channel1 {-rgba.red -rgba.green -rgba.blue none}
+  name Expression3
+  xpos -2424
+  ypos -948
+ }
+push $Nfa7f340
+ Expression {
+  channel0 rgba
+  expr0 x<width/2&&y<height/2?1:0
+  name Expression8
+  xpos -2424
+  ypos -992
+ }
+ Switch {
+  inputs 2
+  which {{parent.center.x==0&&parent.center.y==0?0:1}}
+  name Switch3
+  label "INPUT \[value which]"
+  xpos -2260
+  ypos -954
+ }
+push $Nfa7a920
+ Expression {
+  channel0 rgba
+  expr0 x>parent.center.x&&y>parent.center.y?1:0
+  channel1 {-rgba.red -rgba.green -rgba.blue none}
+  name Expression2
+  xpos -2420
+  ypos -1066
+ }
+push $Nfa75e70
+ Expression {
+  channel0 rgba
+  expr0 x>width/2&&y>height/2?1:0
+  name Expression6
+  xpos -2422
+  ypos -1110
+ }
+ Switch {
+  inputs 2
+  which {{parent.center.x==0&&parent.center.y==0?0:1}}
+  name Switch2
+  label "INPUT \[value which]"
+  xpos -2260
+  ypos -1072
+ }
+push $Nfa713c0
+ Expression {
+  channel0 rgba
+  expr0 x<parent.center.x&&y>parent.center.y?1:0
+  channel1 {-rgba.red -rgba.green -rgba.blue none}
+  name Expression1
+  xpos -2421
+  ypos -1170
+ }
+push $Nfa6c940
+ Expression {
+  channel0 rgba
+  expr0 x<width/2&&y>height/2?1:0
+  name Expression7
+  xpos -2423
+  ypos -1214
+ }
+ Switch {
+  inputs 2
+  which {{parent.center.x==0&&parent.center.y==0?0:1}}
+  name Switch1
+  label "INPUT \[value which]"
+  xpos -2255
+  ypos -1176
+ }
+push $Nfa67de0
+ Dot {
+  name Dot6
+  xpos -1953
+  ypos -1316
+ }
+add_layer {topleft topleft.alpha}
+ ShuffleCopy {
+  inputs 2
+  alpha alpha2
+  black alpha
+  out2 topleft
+  name ShuffleCopy4
+  xpos -1987
+  ypos -1170
+ }
+add_layer {topright topright.alpha}
+ ShuffleCopy {
+  inputs 2
+  alpha alpha2
+  black alpha
+  out2 topright
+  name ShuffleCopy5
+  xpos -1987
+  ypos -1066
+ }
+add_layer {bottomleft bottomleft.alpha}
+ ShuffleCopy {
+  inputs 2
+  alpha alpha2
+  black alpha
+  out2 bottomleft
+  name ShuffleCopy6
+  xpos -1987
+  ypos -948
+ }
+add_layer {bottomright bottomright.alpha}
+ ShuffleCopy {
+  inputs 2
+  alpha alpha2
+  black alpha
+  out2 bottomright
+  name ShuffleCopy7
+  xpos -1987
+  ypos -842
+ }
+add_layer {horizontal horizontal.alpha}
+ ShuffleCopy {
+  inputs 2
+  alpha alpha2
+  black alpha
+  out2 horizontal
+  name ShuffleCopy1
+  xpos -1987
+  ypos -723
+ }
+add_layer {vertical vertical.alpha}
+ ShuffleCopy {
+  inputs 2
+  alpha alpha2
+  black alpha
+  out2 vertical
+  name ShuffleCopy2
+  xpos -1987
+  ypos -616
+ }
+ Dot {
+  name Dot10
+  xpos -1953
+  ypos -442
+ }
+set N163643d0 [stack 0]
+ LayerContactSheet {
+  showLayerNames true
+  name LayerContactSheet1
+  xpos -1882
+  ypos -446
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote3
+  label rough
+  note_font_size 100
+  xpos -882
+  ypos 8402
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote2
+  label fast
+  note_font_size 100
+  xpos -2027
+  ypos 8405
+ }
+push $Nfa633c0
+ NoOp {
+  name NoOp1
+  xpos -2434
+  ypos -1436
+  addUserKnob {20 User}
+  addUserKnob {3 sizechecker}
+  sizechecker {{Input1.height}}
+ }
+push $N16237480
+push $N16268d10
+ Merge2 {
+  inputs 2
+  name Merge6
+  xpos -2138
+  ypos -667
+ }
+ Dot {
+  name Dot208
+  tile_color 0xff000000
+  xpos -2016
+  ypos -663
+ }
+ Dot {
+  name Dot209
+  xpos -2348
+  ypos 9121
+  hide_input true
+ }
+ Shuffle {
+  green black
+  blue black
+  name Shuffle1
+  xpos -2382
+  ypos 9172
+ }
+push $N163643d0
+ Dot {
+  name Dot114
+  xpos -1953
+  ypos -390
+ }
+set N163aacd0 [stack 0]
+ Dot {
+  name Dot115
+  xpos -1519
+  ypos -390
+ }
+set N163af4a0 [stack 0]
+ Dot {
+  name Dot11
+  xpos -874
+  ypos -390
+ }
+set N163b3f90 [stack 0]
+ Dot {
+  name Dot13
+  xpos -427
+  ypos -390
+ }
+set N163b8ad0 [stack 0]
+ Dot {
+  name Dot35
+  xpos 324
+  ypos -390
+ }
+set N163bd4f0 [stack 0]
+ Dot {
+  name Dot12
+  xpos 758
+  ypos -390
+ }
+set N163c1b50 [stack 0]
+push $N163bd4f0
+ Dot {
+  name Dot41
+  xpos 324
+  ypos -342
+ }
+set N163c6b00 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix1
+  xpos 556
+  ypos -352
+ }
+push $N163c1b50
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix1
+  xpos 724
+  ypos -352
+ }
+set N163d6ae0 [stack 0]
+push $N163c6b00
+ Dot {
+  name Dot39
+  xpos 324
+  ypos -265
+ }
+set N163dfc00 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix2
+  xpos 560
+  ypos -275
+ }
+push $N163d6ae0
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix2
+  xpos 724
+  ypos -275
+ }
+set N163ef5e0 [stack 0]
+push $N163dfc00
+ Dot {
+  name Dot42
+  xpos 324
+  ypos -185
+ }
+set N163f8b60 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix3
+  xpos 560
+  ypos -195
+ }
+push $N163ef5e0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix3
+  xpos 724
+  ypos -195
+ }
+set N163f86d0 [stack 0]
+push $N163f8b60
+ Dot {
+  name Dot43
+  xpos 324
+  ypos -101
+ }
+set N16411ba0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix4
+  xpos 557
+  ypos -111
+ }
+push $N163f86d0
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix4
+  xpos 724
+  ypos -111
+ }
+set N164116e0 [stack 0]
+push $N16411ba0
+ Dot {
+  name Dot206
+  xpos 324
+  ypos -26
+ }
+set N1642ab80 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix118
+  xpos 554
+  ypos -36
+ }
+push $N164116e0
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix105
+  xpos 724
+  ypos -36
+ }
+set N1643ab30 [stack 0]
+push $N1642ab80
+ Dot {
+  name Dot207
+  xpos 324
+  ypos 17
+ }
+set N16443cb0 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix119
+  xpos 554
+  ypos 7
+ }
+push $N1643ab30
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix106
+  xpos 724
+  ypos 7
+ }
+ Transform {
+  translate {0.015 0.015}
+  center {2160 1440}
+  filter Impulse
+  shutteroffset centred
+  name Transform6
+  xpos 724
+  ypos 45
+ }
+ set C1645cca0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.50000000001
+  resize height
+  filter Impulse
+  name Reformat1
+  xpos 724
+  ypos 111
+ }
+ set C164535e0 [stack 0]
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression9
+  xpos 724
+  ypos 145
+ }
+ Reformat {
+  type "to box"
+  box_width {{Input1.width}}
+  box_height {{Input1.height}}
+  box_fixed true
+  resize height
+  filter Parzen
+  name Reformat2
+  xpos 558
+  ypos 145
+ }
+ set C16487210 [stack 0]
+push $N16443cb0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge5
+  xpos 290
+  ypos 145
+ }
+set N16495e30 [stack 0]
+ Dot {
+  name Dot113
+  xpos 143
+  ypos 149
+ }
+push $N16495e30
+ Dot {
+  name Dot45
+  xpos 324
+  ypos 323
+ }
+set N164a9e30 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  resize height
+  filter Impulse
+  name Reformat5
+  xpos 417
+  ypos 319
+ }
+set N16486ca0 [stack 0]
+ Dot {
+  name Dot44
+  xpos 771
+  ypos 323
+ }
+set N164bcc70 [stack 0]
+push $N16486ca0
+ Dot {
+  name Dot46
+  xpos 451
+  ypos 360
+ }
+set N164c1cb0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix5
+  xpos 561
+  ypos 350
+ }
+push $N164bcc70
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix5
+  xpos 737
+  ypos 350
+ }
+set N164d15f0 [stack 0]
+push $N164c1cb0
+ Dot {
+  name Dot47
+  xpos 451
+  ypos 437
+ }
+set N164dad50 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix6
+  xpos 561
+  ypos 427
+ }
+push $N164d15f0
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix6
+  xpos 737
+  ypos 427
+ }
+set N164eacf0 [stack 0]
+push $N164dad50
+ Dot {
+  name Dot48
+  xpos 451
+  ypos 517
+ }
+set N164f3e00 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix7
+  xpos 561
+  ypos 507
+ }
+push $N164eacf0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix7
+  xpos 737
+  ypos 507
+ }
+set N164da710 [stack 0]
+push $N164f3e00
+ Dot {
+  name Dot49
+  xpos 451
+  ypos 601
+ }
+set N1650cda0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix8
+  xpos 561
+  ypos 591
+ }
+push $N164da710
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix8
+  xpos 737
+  ypos 591
+ }
+set N1651cd40 [stack 0]
+push $N1650cda0
+ Dot {
+  name Dot205
+  xpos 451
+  ypos 652
+ }
+set N16525e60 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix144
+  xpos 561
+  ypos 642
+ }
+push $N1651cd40
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix131
+  xpos 737
+  ypos 642
+ }
+set N1650c700 [stack 0]
+push $N16525e60
+ Dot {
+  name Dot210
+  xpos 451
+  ypos 695
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix145
+  xpos 561
+  ypos 685
+ }
+push $N1650c700
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix132
+  xpos 737
+  ypos 685
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 742
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 773
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression10
+  xpos 737
+  ypos 809
+ }
+clone $C16487210 {
+  xpos 557
+  ypos 809
+  selected false
+ }
+push $N164a9e30
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge12
+  xpos 290
+  ypos 809
+ }
+set N16590f40 [stack 0]
+ Switch {
+  inputs 2
+  which {{Reformat5.height>=2?0:1}}
+  name Switch30
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 803
+ }
+push $N16590f40
+ Dot {
+  name Dot40
+  xpos 324
+  ypos 971
+ }
+set N165a87f0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.25
+  resize height
+  filter Impulse
+  name Reformat6
+  xpos 417
+  ypos 967
+ }
+set N165ad360 [stack 0]
+ Dot {
+  name Dot50
+  xpos 771
+  ypos 971
+ }
+set N165bbc90 [stack 0]
+push $N165ad360
+ Dot {
+  name Dot51
+  xpos 451
+  ypos 1008
+ }
+set N165c07f0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix9
+  xpos 561
+  ypos 998
+ }
+push $N165bbc90
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix9
+  xpos 737
+  ypos 998
+ }
+set N165d0630 [stack 0]
+push $N165c07f0
+ Dot {
+  name Dot52
+  xpos 451
+  ypos 1085
+ }
+set N165d9730 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix10
+  xpos 561
+  ypos 1075
+ }
+push $N165d0630
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix10
+  xpos 737
+  ypos 1075
+ }
+set N165e9a60 [stack 0]
+push $N165d9730
+ Dot {
+  name Dot53
+  xpos 451
+  ypos 1165
+ }
+set N165f2be0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix11
+  xpos 561
+  ypos 1155
+ }
+push $N165e9a60
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix11
+  xpos 737
+  ypos 1155
+ }
+set N16602ac0 [stack 0]
+push $N165f2be0
+ Dot {
+  name Dot54
+  xpos 451
+  ypos 1249
+ }
+set N1660bc40 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix12
+  xpos 561
+  ypos 1239
+ }
+push $N16602ac0
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix12
+  xpos 737
+  ypos 1239
+ }
+set N1661b240 [stack 0]
+push $N1660bc40
+ Dot {
+  name Dot211
+  xpos 451
+  ypos 1302
+ }
+set N16624bb0 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix120
+  xpos 561
+  ypos 1292
+ }
+push $N1661b240
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix107
+  xpos 737
+  ypos 1292
+ }
+set N16624360 [stack 0]
+push $N16624bb0
+ Dot {
+  name Dot212
+  xpos 451
+  ypos 1345
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix121
+  xpos 561
+  ypos 1335
+ }
+push $N16624360
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix108
+  xpos 737
+  ypos 1335
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 1373
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 1422
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression12
+  xpos 737
+  ypos 1457
+ }
+clone $C16487210 {
+  xpos 557
+  ypos 1457
+  selected false
+ }
+push $N165a87f0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge17
+  xpos 290
+  ypos 1457
+ }
+set N166566d0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch30.which==0?(Reformat6.height>=2?0:1):1}}
+  name Switch31
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 1451
+ }
+push $N166566d0
+ Dot {
+  name Dot55
+  xpos 324
+  ypos 1608
+ }
+set N166a76f0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.125
+  resize height
+  filter Impulse
+  name Reformat3
+  xpos 417
+  ypos 1604
+ }
+set N166ac180 [stack 0]
+ Dot {
+  name Dot56
+  xpos 771
+  ypos 1608
+ }
+set N166baa10 [stack 0]
+push $N166ac180
+ Dot {
+  name Dot57
+  xpos 451
+  ypos 1645
+ }
+set N166bf570 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix13
+  xpos 561
+  ypos 1635
+ }
+push $N166baa10
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix13
+  xpos 737
+  ypos 1635
+ }
+set N1669eb60 [stack 0]
+push $N166bf570
+ Dot {
+  name Dot58
+  xpos 451
+  ypos 1722
+ }
+set N166d84d0 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix14
+  xpos 561
+  ypos 1712
+ }
+push $N1669eb60
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix14
+  xpos 737
+  ypos 1712
+ }
+set N166e7a80 [stack 0]
+push $N166d84d0
+ Dot {
+  name Dot59
+  xpos 451
+  ypos 1802
+ }
+set N166f1500 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix15
+  xpos 561
+  ypos 1792
+ }
+push $N166e7a80
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix15
+  xpos 737
+  ypos 1792
+ }
+set N167014d0 [stack 0]
+push $N166f1500
+ Dot {
+  name Dot60
+  xpos 451
+  ypos 1886
+ }
+set N1670a650 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix16
+  xpos 561
+  ypos 1876
+ }
+push $N167014d0
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix16
+  xpos 737
+  ypos 1876
+ }
+set N1671a520 [stack 0]
+push $N1670a650
+ Dot {
+  name Dot213
+  xpos 451
+  ypos 1941
+ }
+set N167235d0 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix122
+  xpos 561
+  ypos 1931
+ }
+push $N1671a520
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix109
+  xpos 737
+  ypos 1931
+ }
+set N16700ad0 [stack 0]
+push $N167235d0
+ Dot {
+  name Dot214
+  xpos 451
+  ypos 1984
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix123
+  xpos 561
+  ypos 1974
+ }
+push $N16700ad0
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix110
+  xpos 737
+  ypos 1974
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 2009
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 2059
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression11
+  xpos 737
+  ypos 2094
+ }
+clone $C16487210 {
+  xpos 557
+  ypos 2094
+  selected false
+ }
+push $N166a76f0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge20
+  xpos 290
+  ypos 2094
+ }
+set N16754ed0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch31.which==0?(Reformat3.height>=2?0:1):1}}
+  name Switch32
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 2088
+ }
+push $N16754ed0
+ Dot {
+  name Dot61
+  xpos 324
+  ypos 2233
+ }
+set N167a6040 [stack 0]
+ Reformat {
+  type scale
+  scale 0.0625
+  resize height
+  filter Impulse
+  name Reformat4
+  xpos 417
+  ypos 2229
+ }
+set N167a54a0 [stack 0]
+ Dot {
+  name Dot62
+  xpos 771
+  ypos 2233
+ }
+set N167b9470 [stack 0]
+push $N167a54a0
+ Dot {
+  name Dot72
+  xpos 451
+  ypos 2270
+ }
+set N167bdf40 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix17
+  xpos 561
+  ypos 2260
+ }
+push $N167b9470
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix17
+  xpos 737
+  ypos 2260
+ }
+set N167cde20 [stack 0]
+push $N167bdf40
+ Dot {
+  name Dot76
+  xpos 451
+  ypos 2347
+ }
+set N167d6fa0 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix18
+  xpos 561
+  ypos 2337
+ }
+push $N167cde20
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix18
+  xpos 737
+  ypos 2337
+ }
+set N167cd300 [stack 0]
+push $N167d6fa0
+ Dot {
+  name Dot79
+  xpos 451
+  ypos 2427
+ }
+set N167efee0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix19
+  xpos 561
+  ypos 2417
+ }
+push $N167cd300
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix19
+  xpos 737
+  ypos 2417
+ }
+set N167ef390 [stack 0]
+push $N167efee0
+ Dot {
+  name Dot80
+  xpos 451
+  ypos 2511
+ }
+set N16808f00 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix20
+  xpos 561
+  ypos 2501
+ }
+push $N167ef390
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix20
+  xpos 737
+  ypos 2501
+ }
+set N16808350 [stack 0]
+push $N16808f00
+ Dot {
+  name Dot215
+  xpos 451
+  ypos 2577
+ }
+set N16821f60 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix124
+  xpos 561
+  ypos 2567
+ }
+push $N16808350
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix111
+  xpos 737
+  ypos 2567
+ }
+set N16831ef0 [stack 0]
+push $N16821f60
+ Dot {
+  name Dot216
+  xpos 451
+  ypos 2620
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix125
+  xpos 561
+  ypos 2610
+ }
+push $N16831ef0
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix112
+  xpos 737
+  ypos 2610
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 2648
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 2684
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression13
+  xpos 737
+  ypos 2719
+ }
+clone $C16487210 {
+  xpos 557
+  ypos 2719
+  selected false
+ }
+push $N167a6040
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge8
+  xpos 290
+  ypos 2719
+ }
+set N1687e050 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch32.which==0?(Reformat4.height>=2?0:1):1}}
+  name Switch33
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 2713
+ }
+push $N1687e050
+ Dot {
+  name Dot81
+  xpos 324
+  ypos 2906
+ }
+set N168a4ab0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.03125
+  resize height
+  filter Impulse
+  name Reformat7
+  xpos 417
+  ypos 2902
+ }
+set N168a94b0 [stack 0]
+ Dot {
+  name Dot82
+  xpos 771
+  ypos 2906
+ }
+set N1689bb90 [stack 0]
+push $N168a94b0
+ Dot {
+  name Dot83
+  xpos 451
+  ypos 2943
+ }
+set N168bc910 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix21
+  xpos 561
+  ypos 2933
+ }
+push $N1689bb90
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix21
+  xpos 737
+  ypos 2933
+ }
+set N168cc890 [stack 0]
+push $N168bc910
+ Dot {
+  name Dot84
+  xpos 451
+  ypos 3020
+ }
+set N168d59b0 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix22
+  xpos 561
+  ypos 3010
+ }
+push $N168cc890
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix22
+  xpos 737
+  ypos 3010
+ }
+set N168e4b00 [stack 0]
+push $N168d59b0
+ Dot {
+  name Dot88
+  xpos 451
+  ypos 3100
+ }
+set N168ee900 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix23
+  xpos 561
+  ypos 3090
+ }
+push $N168e4b00
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix23
+  xpos 737
+  ypos 3090
+ }
+set N168fe8e0 [stack 0]
+push $N168ee900
+ Dot {
+  name Dot89
+  xpos 451
+  ypos 3184
+ }
+set N16907a00 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix24
+  xpos 561
+  ypos 3174
+ }
+push $N168fe8e0
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix24
+  xpos 737
+  ypos 3174
+ }
+set N16916b10 [stack 0]
+push $N16907a00
+ Dot {
+  name Dot217
+  xpos 451
+  ypos 3244
+ }
+set N16920990 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix126
+  xpos 561
+  ypos 3234
+ }
+push $N16916b10
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix113
+  xpos 737
+  ypos 3234
+ }
+set N1691fc30 [stack 0]
+push $N16920990
+ Dot {
+  name Dot218
+  xpos 451
+  ypos 3287
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix127
+  xpos 561
+  ypos 3277
+ }
+push $N1691fc30
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix114
+  xpos 737
+  ypos 3277
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 3315
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 3355
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression14
+  xpos 737
+  ypos 3392
+ }
+clone $C16487210 {
+  xpos 557
+  ypos 3392
+  selected false
+ }
+push $N168a4ab0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge16
+  xpos 290
+  ypos 3392
+  disable {{logb(Input1.height)>=6?0:1}}
+ }
+ set C1698bf50 [stack 0]
+set N1698bf50 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch33.which==0?(Reformat7.height>=2?0:1):1}}
+  name Switch34
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 3386
+ }
+push $N1698bf50
+ Dot {
+  name Dot92
+  xpos 324
+  ypos 3568
+ }
+set N169a3630 [stack 0]
+ Reformat {
+  type scale
+  scale 0.015625
+  resize height
+  filter Impulse
+  name Reformat8
+  xpos 417
+  ypos 3564
+ }
+set N169a2730 [stack 0]
+ Dot {
+  name Dot93
+  xpos 771
+  ypos 3568
+ }
+set N169b5b40 [stack 0]
+push $N169a2730
+ Dot {
+  name Dot95
+  xpos 451
+  ypos 3605
+ }
+set N169bb470 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix25
+  xpos 561
+  ypos 3595
+ }
+push $N169b5b40
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix25
+  xpos 737
+  ypos 3595
+ }
+set N169cb430 [stack 0]
+push $N169bb470
+ Dot {
+  name Dot98
+  xpos 451
+  ypos 3682
+ }
+set N169d4530 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix26
+  xpos 561
+  ypos 3672
+ }
+push $N169cb430
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix26
+  xpos 737
+  ypos 3672
+ }
+set N169e4480 [stack 0]
+push $N169d4530
+ Dot {
+  name Dot100
+  xpos 451
+  ypos 3762
+ }
+set N169ed5a0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix27
+  xpos 561
+  ypos 3752
+ }
+push $N169e4480
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix27
+  xpos 737
+  ypos 3752
+ }
+set N169fd480 [stack 0]
+push $N169ed5a0
+ Dot {
+  name Dot101
+  xpos 451
+  ypos 3846
+ }
+set N16a06600 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix28
+  xpos 561
+  ypos 3836
+ }
+push $N169fd480
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix28
+  xpos 737
+  ypos 3836
+ }
+set N169fc5a0 [stack 0]
+push $N16a06600
+ Dot {
+  name Dot219
+  xpos 451
+  ypos 3909
+ }
+set N16a1f550 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix128
+  xpos 561
+  ypos 3899
+ }
+push $N169fc5a0
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix115
+  xpos 737
+  ypos 3899
+ }
+set N16a2f4e0 [stack 0]
+push $N16a1f550
+ Dot {
+  name Dot220
+  xpos 451
+  ypos 3952
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix129
+  xpos 561
+  ypos 3942
+ }
+push $N16a2f4e0
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix116
+  xpos 737
+  ypos 3942
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 3980
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 4019
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression15
+  xpos 737
+  ypos 4054
+ }
+clone $C16487210 {
+  xpos 557
+  ypos 4054
+  selected false
+ }
+push $N169a3630
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge18
+  xpos 290
+  ypos 4054
+  disable {{logb(Input1.height)>=7?0:1}}
+ }
+ set C16a6d060 [stack 0]
+set N16a6d060 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch34.which==0?(Reformat8.height>=2?0:1):1}}
+  name Switch35
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 4048
+ }
+push $N16a6d060
+ Dot {
+  name Dot102
+  xpos 324
+  ypos 4242
+ }
+set N165de270 [stack 0]
+ Reformat {
+  type scale
+  scale 0.0078125
+  resize height
+  filter Impulse
+  name Reformat9
+  xpos 417
+  ypos 4238
+ }
+set N16aa7530 [stack 0]
+ Dot {
+  name Dot103
+  xpos 771
+  ypos 4242
+ }
+set N16ab5e30 [stack 0]
+push $N16aa7530
+ Dot {
+  name Dot104
+  xpos 451
+  ypos 4279
+ }
+set N16aba880 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix29
+  xpos 561
+  ypos 4269
+ }
+push $N16ab5e30
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix29
+  xpos 737
+  ypos 4269
+ }
+set N16ac9780 [stack 0]
+push $N16aba880
+ Dot {
+  name Dot105
+  xpos 451
+  ypos 4356
+ }
+set N16ad3930 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix30
+  xpos 561
+  ypos 4346
+ }
+push $N16ac9780
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix30
+  xpos 737
+  ypos 4346
+ }
+set N16ae38d0 [stack 0]
+push $N16ad3930
+ Dot {
+  name Dot106
+  xpos 451
+  ypos 4436
+ }
+set N16aec9f0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix31
+  xpos 561
+  ypos 4426
+ }
+push $N16ae38d0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix31
+  xpos 737
+  ypos 4426
+ }
+set N16afc8c0 [stack 0]
+push $N16aec9f0
+ Dot {
+  name Dot107
+  xpos 451
+  ypos 4520
+ }
+set N16b059e0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix32
+  xpos 561
+  ypos 4510
+ }
+push $N16afc8c0
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix32
+  xpos 737
+  ypos 4510
+ }
+set N16ad28a0 [stack 0]
+push $N16b059e0
+ Dot {
+  name Dot221
+  xpos 451
+  ypos 4584
+ }
+set N16b1e8e0 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix130
+  xpos 561
+  ypos 4574
+ }
+push $N16ad28a0
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix117
+  xpos 737
+  ypos 4574
+ }
+set N16b1d7f0 [stack 0]
+push $N16b1e8e0
+ Dot {
+  name Dot222
+  xpos 451
+  ypos 4627
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix131
+  xpos 561
+  ypos 4617
+ }
+push $N16b1d7f0
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix118
+  xpos 737
+  ypos 4617
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 4655
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 4693
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression16
+  xpos 737
+  ypos 4728
+ }
+clone $C16487210 {
+  xpos 554
+  ypos 4728
+  selected false
+ }
+push $N165de270
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge25
+  xpos 290
+  ypos 4728
+ }
+set N16b6c270 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch35.which==0?(Reformat9.height>=2?0:1):1}}
+  name Switch36
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 4722
+ }
+push $N16b6c270
+ Dot {
+  name Dot170
+  xpos 324
+  ypos 4908
+ }
+set N16ba1420 [stack 0]
+ Reformat {
+  type scale
+  scale 0.00390625
+  resize height
+  filter Impulse
+  name Reformat15
+  xpos 417
+  ypos 4904
+ }
+set N16b980a0 [stack 0]
+ Dot {
+  name Dot171
+  xpos 771
+  ypos 4908
+ }
+set N16bb35d0 [stack 0]
+push $N16b980a0
+ Dot {
+  name Dot172
+  xpos 451
+  ypos 4945
+ }
+set N16bb91f0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix98
+  xpos 561
+  ypos 4935
+ }
+push $N16bb35d0
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix85
+  xpos 737
+  ypos 4935
+ }
+set N16bb8010 [stack 0]
+push $N16bb91f0
+ Dot {
+  name Dot173
+  xpos 451
+  ypos 5022
+ }
+set N16bd2250 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix99
+  xpos 561
+  ypos 5012
+ }
+push $N16bb8010
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix86
+  xpos 737
+  ypos 5012
+ }
+set N16be21f0 [stack 0]
+push $N16bd2250
+ Dot {
+  name Dot174
+  xpos 451
+  ypos 5102
+ }
+set N16beb310 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix100
+  xpos 561
+  ypos 5092
+ }
+push $N16be21f0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix87
+  xpos 737
+  ypos 5092
+ }
+set N16bfb1c0 [stack 0]
+push $N16beb310
+ Dot {
+  name Dot175
+  xpos 451
+  ypos 5186
+ }
+set N16c042c0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix101
+  xpos 561
+  ypos 5176
+ }
+push $N16bfb1c0
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix88
+  xpos 737
+  ypos 5176
+ }
+set N16c141e0 [stack 0]
+push $N16c042c0
+ Dot {
+  name Dot223
+  xpos 451
+  ypos 5249
+ }
+set N16c1d360 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix132
+  xpos 561
+  ypos 5239
+ }
+push $N16c141e0
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix119
+  xpos 737
+  ypos 5239
+ }
+set N16c2bf10 [stack 0]
+push $N16c1d360
+ Dot {
+  name Dot224
+  xpos 451
+  ypos 5292
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix133
+  xpos 561
+  ypos 5282
+ }
+push $N16c2bf10
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix120
+  xpos 737
+  ypos 5282
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 5320
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 5359
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression44
+  xpos 737
+  ypos 5394
+ }
+clone $C16487210 {
+  xpos 554
+  ypos 5394
+  selected false
+ }
+push $N16ba1420
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge38
+  xpos 290
+  ypos 5394
+ }
+set N16c78cb0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch36.which==0?(Reformat15.height>=2?0:1):1}}
+  name Switch37
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 5388
+ }
+push $N16c78cb0
+ Dot {
+  name Dot176
+  xpos 324
+  ypos 5642
+ }
+set N16c9fd90 [stack 0]
+ Reformat {
+  type scale
+  scale 0.001953125
+  resize height
+  filter Impulse
+  name Reformat16
+  xpos 417
+  ypos 5638
+ }
+set N16ca4890 [stack 0]
+ Dot {
+  name Dot177
+  xpos 771
+  ypos 5642
+ }
+set N16cb31a0 [stack 0]
+push $N16ca4890
+ Dot {
+  name Dot178
+  xpos 451
+  ypos 5679
+ }
+set N16cb7d00 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix102
+  xpos 561
+  ypos 5669
+ }
+push $N16cb31a0
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix89
+  xpos 737
+  ypos 5669
+ }
+set N16c9e910 [stack 0]
+push $N16cb7d00
+ Dot {
+  name Dot179
+  xpos 451
+  ypos 5756
+ }
+set N16cd0bd0 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix103
+  xpos 561
+  ypos 5746
+ }
+push $N16c9e910
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix90
+  xpos 737
+  ypos 5746
+ }
+set N16ce0bb0 [stack 0]
+push $N16cd0bd0
+ Dot {
+  name Dot180
+  xpos 451
+  ypos 5836
+ }
+set N16ce9c10 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix104
+  xpos 561
+  ypos 5826
+ }
+push $N16ce0bb0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix91
+  xpos 737
+  ypos 5826
+ }
+set N16cf8730 [stack 0]
+push $N16ce9c10
+ Dot {
+  name Dot181
+  xpos 451
+  ypos 5920
+ }
+set N16d04c20 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix105
+  xpos 561
+  ypos 5910
+ }
+push $N16cf8730
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix92
+  xpos 737
+  ypos 5910
+ }
+set N16d14ba0 [stack 0]
+push $N16d04c20
+ Dot {
+  name Dot225
+  xpos 451
+  ypos 5983
+ }
+set N16d1dd20 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix134
+  xpos 566
+  ypos 5973
+ }
+push $N16d14ba0
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix121
+  xpos 737
+  ypos 5973
+ }
+set N16d2dbc0 [stack 0]
+push $N16d1dd20
+ Dot {
+  name Dot226
+  xpos 451
+  ypos 6026
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix135
+  xpos 561
+  ypos 6016
+ }
+push $N16d2dbc0
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix122
+  xpos 737
+  ypos 6016
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 6054
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 6093
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression45
+  xpos 737
+  ypos 6128
+ }
+clone $C16487210 {
+  xpos 554
+  ypos 6128
+  selected false
+ }
+push $N16c9fd90
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge39
+  xpos 290
+  ypos 6128
+ }
+set N16d89230 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch37.which==0?(Reformat16.height>=2?0:1):1}}
+  name Switch38
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 6122
+ }
+push $N16d89230
+ Dot {
+  name Dot182
+  xpos 324
+  ypos 6344
+ }
+set N16da0710 [stack 0]
+ Reformat {
+  type scale
+  scale 0.00097656
+  resize height
+  filter Impulse
+  name Reformat24
+  xpos 417
+  ypos 6340
+ }
+set N16d9f150 [stack 0]
+ Dot {
+  name Dot183
+  xpos 771
+  ypos 6344
+ }
+set N16db3ab0 [stack 0]
+push $N16d9f150
+ Dot {
+  name Dot184
+  xpos 451
+  ypos 6381
+ }
+set N16db8600 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix106
+  xpos 561
+  ypos 6371
+ }
+push $N16db3ab0
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix93
+  xpos 737
+  ypos 6371
+ }
+set N16dc84e0 [stack 0]
+push $N16db8600
+ Dot {
+  name Dot185
+  xpos 451
+  ypos 6458
+ }
+set N16dd15e0 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix107
+  xpos 561
+  ypos 6448
+ }
+push $N16dc84e0
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix94
+  xpos 737
+  ypos 6448
+ }
+set N16dc6fa0 [stack 0]
+push $N16dd15e0
+ Dot {
+  name Dot186
+  xpos 451
+  ypos 6538
+ }
+set N16dea5b0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix108
+  xpos 561
+  ypos 6528
+ }
+push $N16dc6fa0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix95
+  xpos 737
+  ypos 6528
+ }
+set N16dfa570 [stack 0]
+push $N16dea5b0
+ Dot {
+  name Dot187
+  xpos 451
+  ypos 6622
+ }
+set N16e03690 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix109
+  xpos 561
+  ypos 6612
+ }
+push $N16dfa570
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix96
+  xpos 737
+  ypos 6612
+ }
+set N16e13540 [stack 0]
+push $N16e03690
+ Dot {
+  name Dot227
+  xpos 451
+  ypos 6686
+ }
+set N16e1c6c0 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix136
+  xpos 566
+  ypos 6676
+ }
+push $N16e13540
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix123
+  xpos 737
+  ypos 6676
+ }
+set N16e11f70 [stack 0]
+push $N16e1c6c0
+ Dot {
+  name Dot228
+  xpos 451
+  ypos 6729
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix137
+  xpos 561
+  ypos 6719
+ }
+push $N16e11f70
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix124
+  xpos 737
+  ypos 6719
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 6757
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 6795
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression46
+  xpos 737
+  ypos 6830
+ }
+clone $C16487210 {
+  xpos 554
+  ypos 6830
+  selected false
+ }
+push $N16da0710
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge40
+  xpos 290
+  ypos 6830
+ }
+set N16e87bb0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch38.which==0?(Reformat24.height>=2?0:1):1}}
+  name Switch39
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 6824
+ }
+push $N16e87bb0
+ Dot {
+  name Dot188
+  xpos 324
+  ypos 7065
+ }
+set N16e9f090 [stack 0]
+ Reformat {
+  type scale
+  scale 0.00048828
+  resize height
+  filter Impulse
+  name Reformat25
+  xpos 417
+  ypos 7061
+ }
+set N16ea3b90 [stack 0]
+ Dot {
+  name Dot189
+  xpos 771
+  ypos 7065
+ }
+set N16e9d880 [stack 0]
+push $N16ea3b90
+ Dot {
+  name Dot190
+  xpos 451
+  ypos 7102
+ }
+set N16eb6f20 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix110
+  xpos 561
+  ypos 7092
+ }
+push $N16e9d880
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix97
+  xpos 737
+  ypos 7092
+ }
+set N16eb5860 [stack 0]
+push $N16eb6f20
+ Dot {
+  name Dot191
+  xpos 451
+  ypos 7179
+ }
+set N16ecff20 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix111
+  xpos 561
+  ypos 7169
+ }
+push $N16eb5860
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix98
+  xpos 737
+  ypos 7169
+ }
+set N16edfeb0 [stack 0]
+push $N16ecff20
+ Dot {
+  name Dot192
+  xpos 451
+  ypos 7259
+ }
+set N16ee9030 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix112
+  xpos 561
+  ypos 7249
+ }
+push $N16edfeb0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix99
+  xpos 737
+  ypos 7249
+ }
+set N16ede790 [stack 0]
+push $N16ee9030
+ Dot {
+  name Dot193
+  xpos 451
+  ypos 7343
+ }
+set N16f01f50 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix113
+  xpos 561
+  ypos 7333
+ }
+push $N16ede790
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix100
+  xpos 737
+  ypos 7333
+ }
+set N16f007d0 [stack 0]
+push $N16f01f50
+ Dot {
+  name Dot229
+  xpos 451
+  ypos 7409
+ }
+set N16f1afb0 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix138
+  xpos 566
+  ypos 7399
+ }
+push $N16f007d0
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix125
+  xpos 737
+  ypos 7399
+ }
+set N16f2af50 [stack 0]
+push $N16f1afb0
+ Dot {
+  name Dot230
+  xpos 451
+  ypos 7452
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix139
+  xpos 561
+  ypos 7442
+ }
+push $N16f2af50
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix126
+  xpos 737
+  ypos 7442
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 7480
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 7516
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression47
+  xpos 737
+  ypos 7551
+ }
+clone $C16487210 {
+  xpos 554
+  ypos 7551
+  selected false
+ }
+push $N16e9f090
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge41
+  xpos 290
+  ypos 7551
+ }
+set N16f86560 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch39.which==0?(Reformat25.height>=2?0:1):1}}
+  name Switch40
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 7545
+ }
+push $N16f86560
+ Dot {
+  name Dot194
+  xpos 324
+  ypos 7808
+ }
+set N16f9db00 [stack 0]
+ Reformat {
+  type scale
+  scale 0.00024414
+  resize height
+  filter Impulse
+  name Reformat26
+  xpos 417
+  ypos 7804
+ }
+set N16fa2510 [stack 0]
+ Dot {
+  name Dot195
+  xpos 771
+  ypos 7808
+ }
+set N16f67ea0 [stack 0]
+push $N16fa2510
+ Dot {
+  name Dot196
+  xpos 451
+  ypos 7845
+ }
+set N16fb5960 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix114
+  xpos 561
+  ypos 7835
+ }
+push $N16f67ea0
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix101
+  xpos 737
+  ypos 7835
+ }
+set N16fc58e0 [stack 0]
+push $N16fb5960
+ Dot {
+  name Dot197
+  xpos 451
+  ypos 7922
+ }
+set N16fcea00 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix115
+  xpos 561
+  ypos 7912
+ }
+push $N16fc58e0
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix102
+  xpos 737
+  ypos 7912
+ }
+set N16fde8d0 [stack 0]
+push $N16fcea00
+ Dot {
+  name Dot198
+  xpos 451
+  ypos 8002
+ }
+set N16fe79f0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix116
+  xpos 561
+  ypos 7992
+ }
+push $N16fde8d0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix103
+  xpos 737
+  ypos 7992
+ }
+set N16ff7940 [stack 0]
+push $N16fe79f0
+ Dot {
+  name Dot199
+  xpos 451
+  ypos 8086
+ }
+set N17000a60 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix117
+  xpos 561
+  ypos 8076
+ }
+push $N16ff7940
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix104
+  xpos 737
+  ypos 8076
+ }
+set N1700ef90 [stack 0]
+push $N17000a60
+ Dot {
+  name Dot231
+  xpos 451
+  ypos 8153
+ }
+set N17019a00 [stack 0]
+ Matrix {
+  matrix {
+      {0.5 0 0.5}
+      {1 3 1}
+      {0.5 0 0.5}
+    }
+  name Matrix140
+  xpos 566
+  ypos 8143
+ }
+push $N1700ef90
+ Keymix {
+  inputs 3
+  maskChannel horizontal.alpha
+  name Keymix127
+  xpos 737
+  ypos 8143
+ }
+set N170299b0 [stack 0]
+push $N17019a00
+ Dot {
+  name Dot232
+  xpos 451
+  ypos 8196
+ }
+ Matrix {
+  matrix {
+      {0.5 1 0.5}
+      {0 3 0}
+      {0.5 1 0.5}
+    }
+  name Matrix141
+  xpos 561
+  ypos 8186
+ }
+push $N170299b0
+ Keymix {
+  inputs 3
+  maskChannel vertical.alpha
+  name Keymix128
+  xpos 737
+  ypos 8186
+ }
+clone $C1645cca0 {
+  xpos 737
+  ypos 8224
+  selected false
+ }
+clone $C164535e0 {
+  xpos 737
+  ypos 8259
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression48
+  xpos 737
+  ypos 8294
+ }
+clone $C16487210 {
+  xpos 554
+  ypos 8294
+  selected false
+ }
+push $N16f9db00
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge42
+  xpos 284
+  ypos 8294
+ }
+ Switch {
+  inputs 2
+  which {{Switch40.which==0?(Reformat26.height>=2?0:1):1}}
+  name Switch41
+  label "INPUT \[value which]"
+  xpos 109
+  ypos 8288
+ }
+ Dot {
+  name Dot203
+  xpos 143
+  ypos 8499
+ }
+push $N163b8ad0
+push $N163b3f90
+ Dot {
+  name Dot14
+  xpos -874
+  ypos -281
+ }
+set N17074a20 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix33
+  xpos -640
+  ypos -291
+ }
+push $N163b8ad0
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix33
+  xpos -461
+  ypos -291
+ }
+set N170b0f40 [stack 0]
+push $N17074a20
+ Dot {
+  name Dot15
+  xpos -874
+  ypos -204
+ }
+set N170ba060 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix34
+  xpos -638
+  ypos -214
+ }
+push $N170b0f40
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix34
+  xpos -461
+  ypos -214
+ }
+set N170c9f30 [stack 0]
+push $N170ba060
+ Dot {
+  name Dot16
+  xpos -874
+  ypos -124
+ }
+set N170d3050 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix35
+  xpos -638
+  ypos -134
+ }
+push $N170c9f30
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix35
+  xpos -461
+  ypos -134
+ }
+set N170e2ee0 [stack 0]
+push $N170d3050
+ Dot {
+  name Dot17
+  xpos -874
+  ypos -40
+ }
+set N170e14d0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix36
+  xpos -641
+  ypos -50
+ }
+push $N170e2ee0
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix36
+  xpos -461
+  ypos -50
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos -12
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 112
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression17
+  xpos -461
+  ypos 145
+ }
+set N17121b30 [stack 0]
+clone $C16487210 {
+  xpos -648
+  ypos 145
+  selected false
+ }
+push $N170e14d0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge1
+  xpos -908
+  ypos 145
+ }
+set N1713e5b0 [stack 0]
+ Dot {
+  name Dot201
+  xpos -1052
+  ypos 149
+ }
+push $N17121b30
+ Dot {
+  name Dot8
+  xpos -427
+  ypos 323
+ }
+set N17152450 [stack 0]
+push $N17152450
+ Dot {
+  name Dot9
+  xpos -747
+  ypos 323
+ }
+ Dot {
+  name Dot20
+  xpos -747
+  ypos 383
+ }
+set N1715b900 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix37
+  xpos -637
+  ypos 373
+ }
+push $N17152450
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix37
+  xpos -461
+  ypos 373
+ }
+set N17169d20 [stack 0]
+push $N1715b900
+ Dot {
+  name Dot21
+  xpos -747
+  ypos 460
+ }
+set N17174950 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix38
+  xpos -637
+  ypos 450
+ }
+push $N17169d20
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix38
+  xpos -461
+  ypos 450
+ }
+set N17184980 [stack 0]
+push $N17174950
+ Dot {
+  name Dot23
+  xpos -747
+  ypos 540
+ }
+set N1718db00 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix39
+  xpos -637
+  ypos 530
+ }
+push $N17184980
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix39
+  xpos -461
+  ypos 530
+ }
+set N1719da00 [stack 0]
+push $N1718db00
+ Dot {
+  name Dot25
+  xpos -747
+  ypos 624
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix40
+  xpos -637
+  ypos 614
+ }
+push $N1719da00
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix40
+  xpos -461
+  ypos 614
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 666
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 773
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression18
+  xpos -461
+  ypos 809
+ }
+set N17183100 [stack 0]
+clone $C16487210 {
+  xpos -641
+  ypos 809
+  selected false
+ }
+push $N1713e5b0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  xpos -908
+  ypos 809
+ }
+set N171e8ad0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Expression18.height>=2?0:1}}
+  name Switch18
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 803
+ }
+push $N17183100
+ Dot {
+  name Dot18
+  xpos -427
+  ypos 971
+ }
+set N17210540 [stack 0]
+push $N17210540
+ Dot {
+  name Dot19
+  xpos -747
+  ypos 971
+ }
+ Dot {
+  name Dot26
+  xpos -747
+  ypos 1031
+ }
+set N172066d0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix41
+  xpos -637
+  ypos 1021
+ }
+push $N17210540
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix41
+  xpos -461
+  ypos 1021
+ }
+set N17229a70 [stack 0]
+push $N172066d0
+ Dot {
+  name Dot27
+  xpos -747
+  ypos 1108
+ }
+set N17232b90 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix42
+  xpos -637
+  ypos 1098
+ }
+push $N17229a70
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix42
+  xpos -461
+  ypos 1098
+ }
+set N1721c870 [stack 0]
+push $N17232b90
+ Dot {
+  name Dot28
+  xpos -747
+  ypos 1188
+ }
+set N1724bb00 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix43
+  xpos -637
+  ypos 1178
+ }
+push $N1721c870
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix43
+  xpos -461
+  ypos 1178
+ }
+set N1725bac0 [stack 0]
+push $N1724bb00
+ Dot {
+  name Dot30
+  xpos -747
+  ypos 1272
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix44
+  xpos -637
+  ypos 1262
+ }
+push $N1725bac0
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix44
+  xpos -461
+  ypos 1262
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 1314
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 1421
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression19
+  xpos -461
+  ypos 1457
+ }
+set N1727c130 [stack 0]
+clone $C16487210 {
+  xpos -641
+  ypos 1457
+  selected false
+ }
+push $N171e8ad0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge3
+  xpos -908
+  ypos 1457
+ }
+set N172b70e0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch18.which==0?(Expression18.height>=2?0:1):1}}
+  name Switch19
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 1451
+ }
+push $N1727c130
+ Dot {
+  name Dot31
+  xpos -427
+  ypos 1603
+ }
+set N172ce620 [stack 0]
+push $N172ce620
+ Dot {
+  name Dot36
+  xpos -747
+  ypos 1603
+ }
+ Dot {
+  name Dot37
+  xpos -747
+  ypos 1663
+ }
+set N172d7bd0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix45
+  xpos -637
+  ypos 1653
+ }
+push $N172ce620
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix45
+  xpos -461
+  ypos 1653
+ }
+set N172e7b30 [stack 0]
+push $N172d7bd0
+ Dot {
+  name Dot38
+  xpos -747
+  ypos 1740
+ }
+set N172f0c50 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix46
+  xpos -637
+  ypos 1730
+ }
+push $N172e7b30
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix46
+  xpos -461
+  ypos 1730
+ }
+set N17300ae0 [stack 0]
+push $N172f0c50
+ Dot {
+  name Dot63
+  xpos -747
+  ypos 1820
+ }
+set N172fed40 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix47
+  xpos -637
+  ypos 1810
+ }
+push $N17300ae0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix47
+  xpos -461
+  ypos 1810
+ }
+set N17319b70 [stack 0]
+push $N172fed40
+ Dot {
+  name Dot64
+  xpos -747
+  ypos 1904
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix48
+  xpos -637
+  ypos 1894
+ }
+push $N17319b70
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix48
+  xpos -461
+  ypos 1894
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 1946
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 2058
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression20
+  xpos -461
+  ypos 2094
+ }
+set N173586b0 [stack 0]
+clone $C16487210 {
+  xpos -641
+  ypos 2094
+  selected false
+ }
+push $N172b70e0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge4
+  xpos -908
+  ypos 2094
+ }
+set N17347d30 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch19.which==0?(Expression19.height>=2?0:1):1}}
+  name Switch20
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 2088
+ }
+push $N173586b0
+ Dot {
+  name Dot65
+  xpos -427
+  ypos 2233
+ }
+set N1738c690 [stack 0]
+push $N1738c690
+ Dot {
+  name Dot66
+  xpos -747
+  ypos 2233
+ }
+ Dot {
+  name Dot67
+  xpos -747
+  ypos 2293
+ }
+set N17395ba0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix49
+  xpos -637
+  ypos 2283
+ }
+push $N1738c690
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix49
+  xpos -461
+  ypos 2283
+ }
+set N173a5bb0 [stack 0]
+push $N17395ba0
+ Dot {
+  name Dot68
+  xpos -747
+  ypos 2370
+ }
+set N173aecd0 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix50
+  xpos -637
+  ypos 2360
+ }
+push $N173a5bb0
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix50
+  xpos -461
+  ypos 2360
+ }
+set N17393c70 [stack 0]
+push $N173aecd0
+ Dot {
+  name Dot69
+  xpos -747
+  ypos 2450
+ }
+set N173c7bd0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix51
+  xpos -637
+  ypos 2440
+ }
+push $N17393c70
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix51
+  xpos -461
+  ypos 2440
+ }
+set N173d7b90 [stack 0]
+push $N173c7bd0
+ Dot {
+  name Dot70
+  xpos -747
+  ypos 2534
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix52
+  xpos -637
+  ypos 2524
+ }
+push $N173d7b90
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix52
+  xpos -461
+  ypos 2524
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 2576
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 2683
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression21
+  xpos -461
+  ypos 2719
+ }
+set N17417750 [stack 0]
+clone $C16487210 {
+  xpos -641
+  ypos 2719
+  selected false
+ }
+push $N17347d30
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge7
+  xpos -908
+  ypos 2719
+ }
+set N173f8050 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch20.which==0?(Expression20.height>=2?0:1):1}}
+  name Switch21
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 2713
+ }
+push $N17417750
+ Dot {
+  name Dot71
+  xpos -427
+  ypos 2909
+ }
+set N1744b700 [stack 0]
+push $N1744b700
+ Dot {
+  name Dot73
+  xpos -747
+  ypos 2909
+ }
+ Dot {
+  name Dot74
+  xpos -747
+  ypos 2969
+ }
+set N174495f0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix53
+  xpos -637
+  ypos 2959
+ }
+push $N1744b700
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix53
+  xpos -461
+  ypos 2959
+ }
+set N17464c10 [stack 0]
+push $N174495f0
+ Dot {
+  name Dot75
+  xpos -747
+  ypos 3046
+ }
+set N1746dd80 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix54
+  xpos -637
+  ypos 3036
+ }
+push $N17464c10
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix54
+  xpos -461
+  ypos 3036
+ }
+set N174576b0 [stack 0]
+push $N1746dd80
+ Dot {
+  name Dot77
+  xpos -747
+  ypos 3126
+ }
+set N17484ba0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix55
+  xpos -637
+  ypos 3116
+ }
+push $N174576b0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix55
+  xpos -461
+  ypos 3116
+ }
+set N17496cb0 [stack 0]
+push $N17484ba0
+ Dot {
+  name Dot78
+  xpos -747
+  ypos 3210
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix56
+  xpos -637
+  ypos 3200
+ }
+push $N17496cb0
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix56
+  xpos -461
+  ypos 3200
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 3252
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 3356
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression22
+  xpos -461
+  ypos 3392
+ }
+set N174d57d0 [stack 0]
+clone $C16487210 {
+  xpos -641
+  ypos 3392
+  selected false
+ }
+push $N173f8050
+clone $C1698bf50 {
+  inputs 2
+  xpos -908
+  ypos 3392
+  selected false
+ }
+set N174f2240 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch21.which==0?(Expression21.height>=2?0:1):1}}
+  name Switch22
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 3386
+ }
+push $N174d57d0
+ Dot {
+  name Dot85
+  xpos -427
+  ypos 3579
+ }
+set N17509a00 [stack 0]
+push $N17509a00
+ Dot {
+  name Dot86
+  xpos -747
+  ypos 3579
+ }
+ Dot {
+  name Dot87
+  xpos -747
+  ypos 3639
+ }
+set N17512f30 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix57
+  xpos -637
+  ypos 3629
+ }
+push $N17509a00
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix57
+  xpos -461
+  ypos 3629
+ }
+set N17522e80 [stack 0]
+push $N17512f30
+ Dot {
+  name Dot90
+  xpos -747
+  ypos 3716
+ }
+set N1752bf20 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix58
+  xpos -637
+  ypos 3706
+ }
+push $N17522e80
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix58
+  xpos -461
+  ypos 3706
+ }
+set N1753be40 [stack 0]
+push $N1752bf20
+ Dot {
+  name Dot91
+  xpos -747
+  ypos 3796
+ }
+set N17539ce0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix59
+  xpos -637
+  ypos 3786
+ }
+push $N1753be40
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix59
+  xpos -461
+  ypos 3786
+ }
+set N17554e70 [stack 0]
+push $N17539ce0
+ Dot {
+  name Dot94
+  xpos -747
+  ypos 3880
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix60
+  xpos -637
+  ypos 3870
+ }
+push $N17554e70
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix60
+  xpos -461
+  ypos 3870
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 3922
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 4018
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression23
+  xpos -461
+  ypos 4054
+ }
+set N175939a0 [stack 0]
+clone $C16487210 {
+  xpos -641
+  ypos 4054
+  selected false
+ }
+push $N174f2240
+clone $C16a6d060 {
+  inputs 2
+  xpos -908
+  ypos 4054
+  selected false
+ }
+set N175b04b0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch22.which==0?(Expression22.height>=2?0:1):1}}
+  name Switch23
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 4048
+ }
+push $N175939a0
+ Dot {
+  name Dot96
+  xpos -427
+  ypos 4245
+ }
+set N175c7bf0 [stack 0]
+push $N175c7bf0
+ Dot {
+  name Dot97
+  xpos -747
+  ypos 4245
+ }
+ Dot {
+  name Dot99
+  xpos -747
+  ypos 4305
+ }
+set N175d10e0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix61
+  xpos -637
+  ypos 4295
+ }
+push $N175c7bf0
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix61
+  xpos -461
+  ypos 4295
+ }
+set N175cee20 [stack 0]
+push $N175d10e0
+ Dot {
+  name Dot108
+  xpos -747
+  ypos 4382
+ }
+set N175ea170 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix62
+  xpos -637
+  ypos 4372
+ }
+push $N175cee20
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix62
+  xpos -461
+  ypos 4372
+ }
+set N175e7e80 [stack 0]
+push $N175ea170
+ Dot {
+  name Dot109
+  xpos -747
+  ypos 4462
+ }
+set N176031f0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix63
+  xpos -637
+  ypos 4452
+ }
+push $N175e7e80
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix63
+  xpos -461
+  ypos 4452
+ }
+set N176131b0 [stack 0]
+push $N176031f0
+ Dot {
+  name Dot110
+  xpos -747
+  ypos 4546
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix64
+  xpos -637
+  ypos 4536
+ }
+push $N176131b0
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix64
+  xpos -461
+  ypos 4536
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 4588
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 4692
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression24
+  xpos -461
+  ypos 4728
+ }
+set N17651c80 [stack 0]
+clone $C16487210 {
+  xpos -641
+  ypos 4728
+  selected false
+ }
+push $N175b04b0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge9
+  xpos -908
+  ypos 4728
+ }
+set N176011d0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch23.which==0?(Expression23.height>=2?0:1):1}}
+  name Switch24
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 4722
+ }
+push $N17651c80
+ Dot {
+  name Dot129
+  xpos -427
+  ypos 4899
+ }
+set N17685c70 [stack 0]
+push $N17685c70
+ Dot {
+  name Dot130
+  xpos -747
+  ypos 4899
+ }
+ Dot {
+  name Dot131
+  xpos -747
+  ypos 4959
+ }
+set N1768f220 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix78
+  xpos -637
+  ypos 4949
+ }
+push $N17685c70
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix65
+  xpos -461
+  ypos 4949
+ }
+set N17683750 [stack 0]
+push $N1768f220
+ Dot {
+  name Dot134
+  xpos -747
+  ypos 5036
+ }
+set N176a8210 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix79
+  xpos -637
+  ypos 5026
+ }
+push $N17683750
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix66
+  xpos -461
+  ypos 5026
+ }
+set N176b81b0 [stack 0]
+push $N176a8210
+ Dot {
+  name Dot135
+  xpos -747
+  ypos 5116
+ }
+set N176a5e30 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix80
+  xpos -637
+  ypos 5106
+ }
+push $N176b81b0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix67
+  xpos -461
+  ypos 5106
+ }
+set N176d1210 [stack 0]
+push $N176a5e30
+ Dot {
+  name Dot136
+  xpos -747
+  ypos 5200
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix81
+  xpos -637
+  ypos 5190
+ }
+push $N176d1210
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix68
+  xpos -461
+  ypos 5190
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 5242
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 5358
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression39
+  xpos -461
+  ypos 5394
+ }
+set N176f1150 [stack 0]
+clone $C16487210 {
+  xpos -641
+  ypos 5394
+  selected false
+ }
+push $N176011d0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge37
+  xpos -908
+  ypos 5394
+ }
+set N1772c810 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch24.which==0?(Expression24.height>=2?0:1):1}}
+  name Switch25
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 5388
+ }
+push $N176f1150
+ Dot {
+  name Dot137
+  xpos -427
+  ypos 5642
+ }
+set N17743d20 [stack 0]
+push $N17743d20
+ Dot {
+  name Dot140
+  xpos -747
+  ypos 5642
+ }
+ Dot {
+  name Dot141
+  xpos -747
+  ypos 5702
+ }
+set N1774d2d0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix82
+  xpos -637
+  ypos 5692
+ }
+push $N17743d20
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix69
+  xpos -461
+  ypos 5692
+ }
+set N1775d220 [stack 0]
+push $N1774d2d0
+ Dot {
+  name Dot142
+  xpos -747
+  ypos 5779
+ }
+set N177663a0 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix83
+  xpos -637
+  ypos 5769
+ }
+push $N1775d220
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix70
+  xpos -461
+  ypos 5769
+ }
+set N17776270 [stack 0]
+push $N177663a0
+ Dot {
+  name Dot143
+  xpos -747
+  ypos 5859
+ }
+set N1777f320 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix84
+  xpos -637
+  ypos 5849
+ }
+push $N17776270
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix71
+  xpos -461
+  ypos 5849
+ }
+set N1778f230 [stack 0]
+push $N1777f320
+ Dot {
+  name Dot146
+  xpos -747
+  ypos 5943
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix85
+  xpos -637
+  ypos 5933
+ }
+push $N1778f230
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix72
+  xpos -461
+  ypos 5933
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 5985
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 6092
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression40
+  xpos -461
+  ypos 6128
+ }
+set N177cddf0 [stack 0]
+clone $C16487210 {
+  xpos -641
+  ypos 6128
+  selected false
+ }
+push $N1772c810
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge36
+  xpos -908
+  ypos 6128
+ }
+set N177e8190 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch25.which==0?(Expression39.height>=2?0:1):1}}
+  name Switch26
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 6122
+ }
+push $N177cddf0
+ Dot {
+  name Dot147
+  xpos -427
+  ypos 6344
+ }
+set N17807e40 [stack 0]
+push $N17807e40
+ Dot {
+  name Dot148
+  xpos -747
+  ypos 6344
+ }
+ Dot {
+  name Dot149
+  xpos -747
+  ypos 6404
+ }
+set N17811360 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix86
+  xpos -637
+  ypos 6394
+ }
+push $N17807e40
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix73
+  xpos -461
+  ypos 6394
+ }
+set N17821370 [stack 0]
+push $N17811360
+ Dot {
+  name Dot152
+  xpos -747
+  ypos 6481
+ }
+set N1782a420 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix87
+  xpos -637
+  ypos 6471
+ }
+push $N17821370
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix74
+  xpos -461
+  ypos 6471
+ }
+set N1780ecb0 [stack 0]
+push $N1782a420
+ Dot {
+  name Dot153
+  xpos -747
+  ypos 6561
+ }
+set N17843400 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix88
+  xpos -637
+  ypos 6551
+ }
+push $N1780ecb0
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix75
+  xpos -461
+  ypos 6551
+ }
+set N178533c0 [stack 0]
+push $N17843400
+ Dot {
+  name Dot154
+  xpos -747
+  ypos 6645
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix89
+  xpos -637
+  ypos 6635
+ }
+push $N178533c0
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix76
+  xpos -461
+  ypos 6635
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 6687
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 6794
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression41
+  xpos -461
+  ypos 6830
+ }
+set N17891eb0 [stack 0]
+clone $C16487210 {
+  xpos -641
+  ypos 6830
+  selected false
+ }
+push $N177e8190
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge35
+  xpos -908
+  ypos 6830
+ }
+set N178ae930 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch26.which==0?(Expression40.height>=2?0:1):1}}
+  name Switch27
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 6824
+ }
+push $N17891eb0
+ Dot {
+  name Dot155
+  xpos -427
+  ypos 7065
+ }
+set N178c5ed0 [stack 0]
+push $N178c5ed0
+ Dot {
+  name Dot158
+  xpos -747
+  ypos 7065
+ }
+ Dot {
+  name Dot159
+  xpos -747
+  ypos 7125
+ }
+set N178ccb90 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix90
+  xpos -637
+  ypos 7115
+ }
+push $N178c5ed0
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix77
+  xpos -461
+  ypos 7115
+ }
+set N178d16d0 [stack 0]
+push $N178ccb90
+ Dot {
+  name Dot160
+  xpos -747
+  ypos 7202
+ }
+set N178e8470 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix91
+  xpos -637
+  ypos 7192
+ }
+push $N178d16d0
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix78
+  xpos -461
+  ypos 7192
+ }
+set N178e5c80 [stack 0]
+push $N178e8470
+ Dot {
+  name Dot161
+  xpos -747
+  ypos 7282
+ }
+set N178febf0 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix92
+  xpos -637
+  ypos 7272
+ }
+push $N178e5c80
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix79
+  xpos -461
+  ypos 7272
+ }
+set N17911460 [stack 0]
+push $N178febf0
+ Dot {
+  name Dot163
+  xpos -747
+  ypos 7366
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix93
+  xpos -637
+  ypos 7356
+ }
+push $N17911460
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix80
+  xpos -461
+  ypos 7356
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 7408
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 7515
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression42
+  xpos -461
+  ypos 7551
+ }
+set N1793ec50 [stack 0]
+clone $C16487210 {
+  xpos -641
+  ypos 7551
+  selected false
+ }
+push $N178ae930
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge34
+  xpos -908
+  ypos 7551
+ }
+set N1796cac0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch27.which==0?(Expression41.height>=2?0:1):1}}
+  name Switch28
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 7545
+ }
+push $N1793ec50
+ Dot {
+  name Dot164
+  xpos -427
+  ypos 7797
+ }
+set N17983fe0 [stack 0]
+push $N17983fe0
+ Dot {
+  name Dot165
+  xpos -747
+  ypos 7797
+ }
+ Dot {
+  name Dot166
+  xpos -747
+  ypos 7857
+ }
+set N1795b5e0 [stack 0]
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix94
+  xpos -637
+  ypos 7847
+ }
+push $N17983fe0
+ Keymix {
+  inputs 3
+  maskChannel topleft.alpha
+  name Keymix81
+  xpos -461
+  ypos 7847
+ }
+set N1799d480 [stack 0]
+push $N1795b5e0
+ Dot {
+  name Dot167
+  xpos -747
+  ypos 7934
+ }
+set N179a6600 [stack 0]
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix95
+  xpos -637
+  ypos 7924
+ }
+push $N1799d480
+ Keymix {
+  inputs 3
+  maskChannel topright.alpha
+  name Keymix82
+  xpos -461
+  ypos 7924
+ }
+set N179b6590 [stack 0]
+push $N179a6600
+ Dot {
+  name Dot168
+  xpos -747
+  ypos 8014
+ }
+set N179bf730 [stack 0]
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix96
+  xpos -637
+  ypos 8004
+ }
+push $N179b6590
+ Keymix {
+  inputs 3
+  maskChannel bottomleft.alpha
+  name Keymix83
+  xpos -461
+  ypos 8004
+ }
+set N179cf600 [stack 0]
+push $N179bf730
+ Dot {
+  name Dot169
+  xpos -747
+  ypos 8098
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix97
+  xpos -637
+  ypos 8088
+ }
+push $N179cf600
+ Keymix {
+  inputs 3
+  maskChannel bottomright.alpha
+  name Keymix84
+  xpos -461
+  ypos 8088
+ }
+clone $C1645cca0 {
+  xpos -461
+  ypos 8140
+  selected false
+ }
+clone $C164535e0 {
+  xpos -461
+  ypos 8247
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression43
+  xpos -461
+  ypos 8283
+ }
+clone $C16487210 {
+  xpos -641
+  ypos 8283
+  selected false
+ }
+push $N1796cac0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge19
+  xpos -908
+  ypos 8283
+ }
+ Switch {
+  inputs 2
+  which {{Switch28.which==0?(Expression42.height>=2?0:1):1}}
+  name Switch29
+  label "INPUT \[value which]"
+  xpos -1086
+  ypos 8277
+ }
+ Dot {
+  name Dot202
+  xpos -1052
+  ypos 8499
+ }
+push $N163af4a0
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix65
+  xpos -1553
+  ypos -209
+ }
+clone $C1645cca0 {
+  xpos -1553
+  ypos -12
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1553
+  ypos 98
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression25
+  xpos -1553
+  ypos 145
+ }
+clone $C16487210 {
+  xpos -1731
+  ypos 145
+  selected false
+ }
+push $N163aacd0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge10
+  xpos -1987
+  ypos 145
+ }
+set N17a6bf40 [stack 0]
+ Dot {
+  name Dot200
+  xpos -2184
+  ypos 149
+ }
+push $N17a6bf40
+ Dot {
+  name Dot120
+  xpos -1953
+  ypos 323
+ }
+set N17a9f310 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  resize height
+  filter Impulse
+  name Reformat17
+  xpos -1860
+  ypos 319
+ }
+ Dot {
+  name Dot121
+  xpos -1506
+  ypos 323
+ }
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix66
+  xpos -1540
+  ypos 488
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 666
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 774
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression26
+  xpos -1540
+  ypos 809
+ }
+clone $C16487210 {
+  xpos -1720
+  ypos 809
+  selected false
+ }
+push $N17a9f310
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge11
+  xpos -1987
+  ypos 809
+ }
+set N17afbba0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Reformat17.height>=2?0:1}}
+  name Switch6
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 803
+ }
+push $N17afbba0
+ Dot {
+  name Dot126
+  xpos -1953
+  ypos 971
+ }
+set N17b130c0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.25
+  resize height
+  filter Impulse
+  name Reformat18
+  xpos -1861
+  ypos 967
+ }
+ Dot {
+  name Dot127
+  xpos -1506
+  ypos 971
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix71
+  xpos -1540
+  ypos 1155
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 1316
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 1422
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression27
+  xpos -1540
+  ypos 1457
+ }
+clone $C16487210 {
+  xpos -1720
+  ypos 1457
+  selected false
+ }
+push $N17b130c0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge13
+  xpos -1987
+  ypos 1457
+ }
+set N17b6f890 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch6.which==0?(Reformat18.height>=2?0:1):1}}
+  name Switch7
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 1451
+ }
+push $N17b6f890
+ Dot {
+  name Dot132
+  xpos -1953
+  ypos 1608
+ }
+set N17b86dc0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.125
+  resize height
+  filter Impulse
+  name Reformat19
+  xpos -1860
+  ypos 1604
+ }
+ Dot {
+  name Dot133
+  xpos -1506
+  ypos 1608
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix72
+  xpos -1540
+  ypos 1804
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 1953
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 2059
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression28
+  xpos -1540
+  ypos 2094
+ }
+clone $C16487210 {
+  xpos -1720
+  ypos 2094
+  selected false
+ }
+push $N17b86dc0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge14
+  xpos -1987
+  ypos 2094
+ }
+set N17bd20f0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch7.which==0?(Reformat19.height>=2?0:1):1}}
+  name Switch8
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 2088
+ }
+push $N17bd20f0
+ Dot {
+  name Dot138
+  xpos -1953
+  ypos 2233
+ }
+set N17bfaac0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.0625
+  resize height
+  filter Impulse
+  name Reformat20
+  xpos -1863
+  ypos 2229
+ }
+ Dot {
+  name Dot139
+  xpos -1506
+  ypos 2233
+ }
+ Matrix {
+  matrix {
+      {1 1 0}
+      {1 3 0}
+      {0 0 0}
+    }
+  name Matrix76
+  xpos -1540
+  ypos 2401
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 2580
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 2684
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression29
+  xpos -1540
+  ypos 2719
+ }
+clone $C16487210 {
+  xpos -1720
+  ypos 2719
+  selected false
+ }
+push $N17bfaac0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge43
+  xpos -1987
+  ypos 2719
+ }
+set N17c290a0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch8.which==0?(Reformat20.height>=2?0:1):1}}
+  name Switch9
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 2713
+ }
+push $N17c290a0
+ Dot {
+  name Dot144
+  xpos -1953
+  ypos 2906
+ }
+set N17c63a30 [stack 0]
+ Reformat {
+  type scale
+  scale 0.03125
+  resize height
+  filter Impulse
+  name Reformat21
+  xpos -1861
+  ypos 2902
+ }
+ Dot {
+  name Dot145
+  xpos -1506
+  ypos 2906
+ }
+ Matrix {
+  matrix {
+      {0 1 1}
+      {0 3 1}
+      {0 0 0}
+    }
+  name Matrix73
+  xpos -1540
+  ypos 3081
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 3253
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 3357
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression30
+  xpos -1540
+  ypos 3392
+ }
+clone $C16487210 {
+  xpos -1720
+  ypos 3392
+  selected false
+ }
+push $N17c63a30
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge44
+  xpos -1987
+  ypos 3392
+ }
+set N17ccb040 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch9.which==0?(Reformat21.height>=2?0:1):1}}
+  name Switch10
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 3386
+ }
+push $N17ccb040
+ Dot {
+  name Dot150
+  xpos -1953
+  ypos 3568
+ }
+set N17c9cae0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.015625
+  resize height
+  filter Impulse
+  name Reformat22
+  xpos -1862
+  ypos 3564
+ }
+ Dot {
+  name Dot151
+  xpos -1506
+  ypos 3568
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {1 3 0}
+      {1 1 0}
+    }
+  name Matrix74
+  xpos -1540
+  ypos 3736
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 3915
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 4019
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression31
+  xpos -1540
+  ypos 4054
+ }
+clone $C16487210 {
+  xpos -1720
+  ypos 4054
+  selected false
+ }
+push $N17c9cae0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge45
+  xpos -1987
+  ypos 4054
+ }
+set N17d2d680 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch10.which==0?(Reformat22.height>=2?0:1):1}}
+  name Switch11
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 4048
+ }
+push $N17d2d680
+ Dot {
+  name Dot156
+  xpos -1953
+  ypos 4242
+ }
+set N17d56240 [stack 0]
+ Reformat {
+  type scale
+  scale 0.0078125
+  resize height
+  filter Impulse
+  name Reformat23
+  xpos -1876
+  ypos 4238
+ }
+ Dot {
+  name Dot157
+  xpos -1506
+  ypos 4242
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix75
+  xpos -1540
+  ypos 4409
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 4588
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 4692
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression32
+  xpos -1540
+  ypos 4728
+ }
+clone $C16487210 {
+  xpos -1723
+  ypos 4728
+  selected false
+ }
+push $N17d56240
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge46
+  xpos -1987
+  ypos 4728
+ }
+set N17db2aa0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch11.which==0?(Reformat23.height>=2?0:1):1}}
+  name Switch12
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 4722
+ }
+push $N17db2aa0
+ Dot {
+  name Dot112
+  xpos -1953
+  ypos 4908
+ }
+set N17d84400 [stack 0]
+ Reformat {
+  type scale
+  scale 0.00390625
+  resize height
+  filter Impulse
+  name Reformat11
+  xpos -1862
+  ypos 4904
+ }
+ Dot {
+  name Dot116
+  xpos -1506
+  ypos 4908
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix67
+  xpos -1540
+  ypos 5076
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 5255
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 5368
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression34
+  xpos -1540
+  ypos 5394
+ }
+clone $C16487210 {
+  xpos -1723
+  ypos 5394
+  selected false
+ }
+push $N17d84400
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge47
+  xpos -1987
+  ypos 5394
+ }
+set N17e26800 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch12.which==0?(Reformat11.height>=2?0:1):1}}
+  name Switch13
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 5388
+ }
+push $N17e26800
+ Dot {
+  name Dot117
+  xpos -1953
+  ypos 5642
+ }
+set N17e14d80 [stack 0]
+ Reformat {
+  type scale
+  scale 0.001953125
+  resize height
+  filter Impulse
+  name Reformat13
+  xpos -1868
+  ypos 5638
+ }
+ Dot {
+  name Dot118
+  xpos -1506
+  ypos 5642
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix68
+  xpos -1540
+  ypos 5810
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 5989
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 6093
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression35
+  xpos -1540
+  ypos 6128
+ }
+clone $C16487210 {
+  xpos -1723
+  ypos 6128
+  selected false
+ }
+push $N17e14d80
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge48
+  xpos -1987
+  ypos 6128
+ }
+set N17ea3ab0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch13.which==0?(Reformat13.height>=2?0:1):1}}
+  name Switch14
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 6122
+ }
+push $N17ea3ab0
+ Dot {
+  name Dot119
+  xpos -1953
+  ypos 6344
+ }
+set N17ebb000 [stack 0]
+ Reformat {
+  type scale
+  scale 0.00097656
+  resize height
+  filter Impulse
+  name Reformat10
+  xpos -1879
+  ypos 6340
+ }
+ Dot {
+  name Dot122
+  xpos -1506
+  ypos 6344
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix69
+  xpos -1540
+  ypos 6512
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 6691
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 6795
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression36
+  xpos -1540
+  ypos 6830
+ }
+clone $C16487210 {
+  xpos -1723
+  ypos 6830
+  selected false
+ }
+push $N17ebb000
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge49
+  xpos -1987
+  ypos 6830
+ }
+set N17ee91a0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch14.which==0?(Reformat10.height>=2?0:1):1}}
+  name Switch15
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 6824
+ }
+push $N17ee91a0
+ Dot {
+  name Dot123
+  xpos -1953
+  ypos 7065
+ }
+set N17f23be0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.00048828
+  resize height
+  filter Impulse
+  name Reformat14
+  xpos -1887
+  ypos 7061
+ }
+ Dot {
+  name Dot124
+  xpos -1506
+  ypos 7065
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix70
+  xpos -1540
+  ypos 7233
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 7412
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 7515
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression37
+  xpos -1540
+  ypos 7551
+ }
+clone $C16487210 {
+  xpos -1723
+  ypos 7551
+  selected false
+ }
+push $N17f23be0
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge50
+  xpos -1987
+  ypos 7551
+ }
+set N17f8b5c0 [stack 0]
+ Switch {
+  inputs 2
+  which {{Switch15.which==0?(Reformat14.height>=2?0:1):1}}
+  name Switch16
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 7545
+ }
+push $N17f8b5c0
+ Dot {
+  name Dot125
+  xpos -1953
+  ypos 7797
+ }
+set N17fa2b60 [stack 0]
+ Reformat {
+  type scale
+  scale 0.00024414
+  resize height
+  filter Impulse
+  name Reformat12
+  xpos -1878
+  ypos 7793
+ }
+ Dot {
+  name Dot128
+  xpos -1506
+  ypos 7797
+ }
+ Matrix {
+  matrix {
+      {0 0 0}
+      {0 3 1}
+      {0 1 1}
+    }
+  name Matrix77
+  xpos -1540
+  ypos 7965
+ }
+clone $C1645cca0 {
+  xpos -1540
+  ypos 8144
+  selected false
+ }
+clone $C164535e0 {
+  xpos -1540
+  ypos 8248
+  selected false
+ }
+ Expression {
+  expr0 a>0?r/a:0
+  expr1 a>0?g/a:0
+  expr2 a>0?b/a:0
+  expr3 a>0?a/a:0
+  name Expression38
+  xpos -1540
+  ypos 8283
+ }
+clone $C16487210 {
+  xpos -1723
+  ypos 8283
+  selected false
+ }
+push $N17fa2b60
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge21
+  xpos -1987
+  ypos 8283
+ }
+ Switch {
+  inputs 2
+  which {{Switch16.which==0?(Reformat12.height>=2?0:1):1}}
+  name Switch17
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 8277
+ }
+ Dot {
+  name Dot162
+  xpos -2184
+  ypos 8499
+ }
+ Switch {
+  inputs 3
+  which {{MECfiller.mode}}
+  name Switch5
+  label "INPUT \[value which]"
+  xpos -2218
+  ypos 9035
+ }
+ Merge2 {
+  inputs 2
+  name Merge15
+  xpos -2218
+  ypos 9172
+  disable {{1-parent.axismultipliercheck}}
+ }
+ Dot {
+  name Dot1
+  xpos -2184
+  ypos 9283
+ }
+ Output {
+  name Output1
+  xpos -2218
+  ypos 9367
+ }
+end_group
