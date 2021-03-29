@@ -115,7 +115,6 @@ Group {
   PointLighning_amplitude 0.5
   PointLighning_gain 0.5
   rebuild_finalise ""
-  maxTileLines 100
   name BlinkScript1
   xpos -456
   ypos -343

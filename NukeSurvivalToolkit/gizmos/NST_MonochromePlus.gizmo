@@ -1,0 +1,102 @@
+Group {
+ name MonochromePlus
+ tile_color 0x7aa9ffff
+ note_font "Bitstream Vera Sans"
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {41 weight T Expression1.weight}
+ addUserKnob {41 source T Expression1.source}
+ addUserKnob {41 target T Expression1.target}
+ addUserKnob {41 multiply T Expression1.multiply}
+ addUserKnob {41 sourceFromTarget l "use weighted target as source" T Expression1.sourceFromTarget}
+ addUserKnob {26 ""}
+ addUserKnob {26 _1 l "" +STARTLINE T "Chris Fryer | 2019"}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 512
+  ypos 669
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 359
+  ypos 462
+ }
+ Dot {
+  name Dot1
+  xpos 393
+  ypos 504
+ }
+set N32617400 [stack 0]
+ Expression {
+  expr0 "(weight.r*r + weight.g*g + weight.b*b) * multiply"
+  name Expression1
+  note_font "Bitstream Vera Sans"
+  xpos 359
+  ypos 549
+  addUserKnob {20 User}
+  addUserKnob {6 sourceFromTarget l "use weighted target as source" +STARTLINE}
+  sourceFromTarget true
+  addUserKnob {6 source_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 weight}
+  weight {0.2126 0.7152 0.0722}
+  addUserKnob {6 weight_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  weight_panelDropped true
+  addUserKnob {6 weight_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 source}
+  source {1 1 1}
+  addUserKnob {6 source_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 target}
+  target {1 1 1}
+  addUserKnob {6 target_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {18 multiply R 0 2}
+  multiply 1
+  addUserKnob {6 multiply_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Shuffle {
+  green red
+  blue red
+  name Shuffle1
+  tile_color 0xffffff00
+  label "\[value in]-->\[value out]"
+  note_font "Bitstream Vera Sans"
+  xpos 359
+  ypos 573
+ }
+ Grade {
+  whitepoint {{"Expression1.sourceFromTarget == 0 ? parent.Expression1.source : parent.Expression1.target.r*Expression1.weight.r+parent.Expression1.target.g*Expression1.weight.g+parent.Expression1.target.b*Expression1.weight.b"} {"Expression1.sourceFromTarget == 0 ? parent.Expression1.source : parent.Expression1.target.r*Expression1.weight.r+parent.Expression1.target.g*Expression1.weight.g+parent.Expression1.target.b*Expression1.weight.b"} {"Expression1.sourceFromTarget == 0 ? parent.Expression1.source : parent.Expression1.target.r*Expression1.weight.r+parent.Expression1.target.g*Expression1.weight.g+parent.Expression1.target.b*Expression1.weight.b"} {"Expression1.sourceFromTarget == 0 ? parent.Expression1.source : parent.Expression1.target.r*Expression1.weight.r+parent.Expression1.target.g*Expression1.weight.g+parent.Expression1.target.b*Expression1.weight.b"}}
+  white {{parent.Expression1.target} {parent.Expression1.target} {parent.Expression1.target} {parent.Expression1.target}}
+  multiply {{parent.Expression1.multiply} {parent.Expression1.multiply} {parent.Expression1.multiply} {parent.Expression1.multiply}}
+  black_clamp false
+  name Grade1
+  note_font "Bitstream Vera Sans"
+  xpos 359
+  ypos 609
+ }
+push $N32617400
+ Dot {
+  name Dot2
+  xpos 267
+  ypos 504
+ }
+ Dot {
+  name Dot3
+  xpos 267
+  ypos 672
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge1
+  xpos 359
+  ypos 669
+ }
+ Output {
+  name Output1
+  xpos 359
+  ypos 753
+ }
+end_group

@@ -358,7 +358,6 @@ push $N3a047fa0
   CatsEyeConvolve_Format {{src.width} {src.height}}
   CatsEyeConvolve_Interpolate {{parent.interpolate}}
   protectKernelWhenPublishing true
-  maxTileLines 11.4
   name BlinkScript1
   xpos 276
   ypos 515

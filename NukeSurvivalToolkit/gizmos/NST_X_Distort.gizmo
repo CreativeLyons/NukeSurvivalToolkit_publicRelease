@@ -51,8 +51,6 @@ Group {
  addUserKnob {7 mix t "Blend between the original source and the applied effect."}
  mix 1
  addUserKnob {20 Settings l "GPU Settings"}
- addUserKnob {41 maxGPUMemory l "Percentage of GPU memory to use" T BlinkScript.maxGPUMemory}
- addUserKnob {41 maxTileLines l "Percentage of image height per tile" T BlinkScript.maxTileLines}
  addUserKnob {20 about l About}
  addUserKnob {26 about_1 l "" t "A bunny:\n(\\(\\ \n( - -)\n((') (')" +STARTLINE T "<br>\n<b>Xavier Martín © 2017</b>"}
  addUserKnob {26 ""}
@@ -241,7 +239,6 @@ set N9d4aa3b0 [stack 0]
   X_Distort_stmap {{2-output_form}}
   X_Distort_format {{width} {height}}
   rebuild_finalise ""
-  maxTileLines 20
   name BlinkScript1
   xpos 260
   ypos 234
@@ -277,7 +274,6 @@ push $N9d407b20
   X_Distort_filter {{filter}}
   X_Distort_max_steps {{max_blur}}
   rebuild_finalise ""
-  maxTileLines 20
   name BlinkScript
   selected true
   xpos -140

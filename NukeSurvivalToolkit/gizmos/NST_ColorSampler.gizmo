@@ -214,7 +214,6 @@ BlinkScript {
  format "2 1 0 0 2 1 1 TwoPixels"
  specifiedFormat true
  rebuild_finalise ""
- maxTileLines 100
  name apMaxMinKernel
  xpos 401
  ypos 317
@@ -235,7 +234,6 @@ BlinkScript {
  format "1 1 0 0 1 1 1 One_pixel"
  specifiedFormat true
  rebuild_finalise ""
- maxTileLines 100
  name apWeightedAvg
  xpos 294
  ypos 223

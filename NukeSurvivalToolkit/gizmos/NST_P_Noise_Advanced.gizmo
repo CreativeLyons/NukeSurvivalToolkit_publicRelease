@@ -149,8 +149,6 @@ push $N92db82d0
   addUserKnob {41 mix T MergeOut.mix}
   addUserKnob {26 version_author l "" t "C44Kernel v1.0\n23 June, 2018" +STARTLINE T "<span style=\"color:#666\"><br/><b>C44Kernel v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2018</span>"}
   addUserKnob {20 GPU_Settings l "GPU Settings"}
-  addUserKnob {41 maxGPUMemory l "Percentage of GPU memory to use" T C44MatrixKernel.maxGPUMemory}
-  addUserKnob {41 maxTileLines l "Percentage of image height per tile" T C44MatrixKernel.maxTileLines}
  }
   Input {
    inputs 0

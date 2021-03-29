@@ -29,7 +29,7 @@ NST_FolderPath = os.path.dirname(__file__)
 NST_helper.NST_FolderPath = NST_FolderPath
 
 # give the name of the help doc .pdf in main folder
-NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v1.1.0.pdf"
+NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v2.0.0.pdf"
 
 # creating full filepath to the help doc
 NST_helpDoc_os_path = os.path.join(NST_FolderPath, NST_helpDoc)
@@ -164,7 +164,7 @@ try:
     import ColorGradientUi
     drawMenu.addCommand("GradientEditor MHD", "nuke.createNode('{}h_gradienteditor')".format(prefixNST), icon="h_gradienteditor.png")
 except:
-    print "Could not load ColorGradientUi from HagbarthTools folder"
+    print("Could not load ColorGradientUi from HagbarthTools folder")
     pass
 
 drawMenu.addSeparator()
@@ -238,11 +238,13 @@ colorMenu.addCommand('ShadowMult TL', "nuke.createNode('{}ShadowMult')".format(p
 colorMenu.addCommand('WhiteSoftClip TL', "nuke.createNode('{}WhiteSoftClip')".format(prefixNST), icon="SoftClip.png")
 colorMenu.addCommand('WhiteBalance TL', "nuke.createNode('{}WhiteBalance')".format(prefixNST), icon="HueShift.png")
 
+
 colorMenu.addSeparator()
 
 colorMenu.addCommand('apColorSampler AP', 'nuke.createNode("{}ColorSampler")'.format(prefixNST), icon='ColorSampler.png')
 colorMenu.addCommand('apVignette AP', 'nuke.createNode("{}apVignette")'.format(prefixNST), icon='apeVignette.png')
 colorMenu.addCommand('GammaPlus MJT', "nuke.createNode('{}GammaPlus')".format(prefixNST), icon="GammaPlus.png")
+colorMenu.addCommand('MonochromePlus CF', "nuke.createNode('{}MonochromePlus')".format(prefixNST), icon="Saturation.png")
 
 colorMenu.addSeparator()
 
@@ -438,7 +440,7 @@ try:
     nuke.load('{}VectorTracker.py'.format(prefixNST))
     transformMenu.addCommand('VectorTracker NKPD', "nuke.createNode('{}VectorTracker.gizmo')".format(prefixNST), icon = 'vectorTools.png')
 except:
-    print "Could not load VectorTracker.py"
+    print("Could not load VectorTracker.py")
     pass
 
 transformMenu.addSeparator()
@@ -510,7 +512,7 @@ ThreeDMenu.addCommand('Distance3D NKPD', "nuke.createNode('{}Distance3D')".forma
 ThreeDMenu.addCommand('DistanceBetween_CS NKPD', "nuke.createNode('{}DistanceBetween_CS')".format(prefixNST), icon="nukepedia_icon.png")
 ThreeDMenu.addCommand('Lightning3D EL', "nuke.createNode('{}Lightning3D')".format(prefixNST), icon="nukepedia_icon.png")
 ThreeDMenu.addCommand('Noise3DTexture NKPD', "nuke.createNode('{}Noise3DTexture')".format(prefixNST), icon="noise3dicon.png")
-
+ThreeDMenu.addCommand('GodRaysProjector CF', "nuke.createNode('{}GodRaysProjector')".format(prefixNST), icon="VolumeRays.png")
 
 ############################################################################################################
 ############################################################################################################
@@ -520,6 +522,7 @@ ThreeDMenu.addCommand('Noise3DTexture NKPD', "nuke.createNode('{}Noise3DTexture'
 particlesMenu = m.addMenu('Particles', icon = 'ToolbarParticles.png', index = 110)
 
 particlesMenu.addCommand('waterSchmutz DR', "nuke.createNode('{}waterSchmutz')".format(prefixNST), icon="WaterLens.png")
+particlesMenu.addCommand('RainMaker MR', "nuke.createNode('{}RainMaker')".format(prefixNST), icon="ParticleDrag.png")
 particlesMenu.addCommand('Sparky DB', "nuke.createNode('{}Sparky')".format(prefixNST), icon="Sparky.png")
 particlesMenu.addCommand('ParticleLights MHD', "nuke.createNode('{}ParticleLights')".format(prefixNST), icon="ToolbarParticles.png")
 particlesMenu.addCommand('ParticleKiller NKPD', "nuke.createNode('{}ParticleKiller')".format(prefixNST), icon="ToolbarParticles.png")

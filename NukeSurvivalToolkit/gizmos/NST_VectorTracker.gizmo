@@ -1,5 +1,5 @@
 Group {
-name VectorTracker1
+name VectorTracker
 help "A tracker that uses vector information rather than image data to generate tracking points."
 inputs 2
 addUserKnob {20 VectorTracker}

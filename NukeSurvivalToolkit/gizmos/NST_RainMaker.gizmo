@@ -1,0 +1,1055 @@
+Group {
+ name RainMaker
+ selected true
+ addUserKnob {20 User l RainMaker}
+ addUserKnob {6 rainonly l "Rain only (No comp)" +STARTLINE}
+ addUserKnob {6 dropspass l "Use Pre-Rendered Drops input" t "If you have pre-rendered the \"Rain only?\" outpout, you can use this instead of re-siming at rendertime. " +STARTLINE}
+ addUserKnob {20 globals_1 l Globals n 1}
+ addUserKnob {7 emissionmulti l "Emission Multiplier"}
+ emissionmulti 1
+ addUserKnob {7 res l Resolution t "This controls the resolution for the render of the effect. The default value (0.5) works well in most cases." R 0.25 1}
+ res 0.5
+ addUserKnob {41 start_frame l "Big start frame" T ParticleEmitter1.start_frame}
+ addUserKnob {41 start_frame_1 l "Med start frame" T ParticleEmitter3.start_frame}
+ addUserKnob {41 start_frame_2 l "Small start frame" T ParticleEmitter2.start_frame}
+ addUserKnob {41 lifetime T ParticleEmitter1.lifetime}
+ addUserKnob {7 ygravity l "Y Gravity Component" R -1 1}
+ ygravity -1
+ addUserKnob {7 xgravity l "X Gravity Component" R -1 1}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {20 particles l Particles n 1}
+ particles 0
+ addUserKnob {6 bigenabled l Big? +STARTLINE}
+ bigenabled true
+ addUserKnob {6 medenabled l Medium? -STARTLINE}
+ medenabled true
+ addUserKnob {6 smalenabled l Small? -STARTLINE}
+ smalenabled true
+ addUserKnob {6 trailkill l "Disable trails" t "Turning off the trails, will speed things up considerably. Its best to disable the trails while you get the drops right, then turn them back on later (if you have moving particles)" +STARTLINE}
+ addUserKnob {20 bigparts l "Big Ctrls" n 1}
+ addUserKnob {41 seed l "random seed" T ParticleEmitter1.seed}
+ addUserKnob {7 bigamount l Amount}
+ bigamount 0.1
+ addUserKnob {41 size T ParticleEmitter1.size}
+ addUserKnob {41 size_variation l "size variation" T ParticleEmitter1.size_variation}
+ addUserKnob {6 biggravity l "Gravity Enabled?" +STARTLINE}
+ biggravity true
+ addUserKnob {7 gravity l "Gravity Multiplier"}
+ gravity 0.1
+ addUserKnob {41 probability l "Gravity Probability" T ParticleGravity1.probability}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 meddrop l "Med Ctrls" n 1}
+ addUserKnob {41 seed_1 l "random seed" T ParticleEmitter3.seed}
+ addUserKnob {7 medrate l Amount R 0 5}
+ medrate 1.5
+ addUserKnob {41 size_1 l size T ParticleEmitter3.size}
+ addUserKnob {41 size_variation_1 l "size variation" T ParticleEmitter3.size_variation}
+ addUserKnob {6 medgrav l "Gravity Enabled?" +STARTLINE}
+ medgrav true
+ addUserKnob {7 medgavity l "Gravity Multiplier"}
+ medgavity 0.05
+ addUserKnob {41 probability_1 l "Gravity Probability" T ParticleGravity2.probability}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 smldrop l "Small Ctrls" n 1}
+ smldrop 0
+ addUserKnob {7 smallrate l Amount R 0 10}
+ smallrate 10
+ addUserKnob {41 seed_2 l "random seed" T ParticleEmitter2.seed}
+ addUserKnob {41 size_2 l size T ParticleEmitter2.size}
+ addUserKnob {41 size_variation_2 l "size variation" T ParticleEmitter2.size_variation}
+ addUserKnob {20 endGroup_3 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup_4 l endGroup n -1}
+ addUserKnob {20 effects l Effects n 1}
+ effects 0
+ addUserKnob {7 blobify l "blobify radius" R 0 10}
+ blobify 3.95
+ addUserKnob {7 displace l "Displace Amount"}
+ displace 0.23
+ addUserKnob {41 size_3 l "Displace Noise Size" T Noise2.size}
+ addUserKnob {3 trails l "Trail Length" t "slows it down considerably"}
+ trails 20
+ addUserKnob {20 endGroup_5 l endGroup n -1}
+ addUserKnob {20 comp l Comp n 1}
+ comp 0
+ addUserKnob {6 alpha l "Copy rain to alpha?" +STARTLINE}
+ addUserKnob {41 size_4 l "Blur Size" T Blur2.size}
+ addUserKnob {7 ringing l "Gamma Lift"}
+ ringing 0.19
+ addUserKnob {7 ringing_1 l "Ringing Ratio"}
+ ringing_1 0.25
+ addUserKnob {41 mix l "Emboss Amount" T Merge2.mix}
+ addUserKnob {41 displace_2 l Displace T Group3.displace}
+ addUserKnob {41 size_5 l Defocus T Blur1.size}
+ addUserKnob {20 endGroup_6 l endGroup n -1}
+ addUserKnob {26 txt l "" +STARTLINE T "\nMade by Matt Richardson (matt_richardson_@hotmail.com)"}
+}
+ Input {
+  inputs 0
+  name Drops
+  xpos 1107
+  ypos -58
+  number 1
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels2
+  xpos 1107
+  ypos -20
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  name Constant2
+  xpos 667
+  ypos -220
+ }
+ Reformat {
+  type scale
+  scale {{parent.res x336 1}}
+  name Reformat1
+  xpos 816
+  ypos -173
+ }
+ set C5fb5bc00 [stack 0]
+ Noise {
+  size 120
+  zoffset 1
+  octaves 4
+  center {960 410}
+  name Noise2
+  xpos 953
+  ypos -173
+ }
+ Input {
+  inputs 0
+  name BG
+  xpos 1815
+  ypos -818
+ }
+set N5fb5b000 [stack 0]
+ Camera2 {
+  translate {0 0 42.04999924}
+  name Camera1
+  xpos 1485
+  ypos -562
+ }
+set N5fb5ac00 [stack 0]
+ Constant {
+  inputs 0
+  channels rgb
+  color 1
+  format "256 256 0 0 256 256 1 square_256"
+  name Constant1
+  xpos 1043
+  ypos -719
+ }
+ Radial {
+  invert true
+  area {9.5 8.5 246.5 247.5}
+  softness 0
+  color 0
+  name Radial1
+  xpos 1043
+  ypos -597
+ }
+set N5fb5a400 [stack 0]
+ Constant {
+  inputs 0
+  channels rgb
+  name Constant3
+  xpos 1537
+  ypos -680
+ }
+set N5fb5a000 [stack 0]
+ Card2 {
+  translate {0 0 38.72000122}
+  uniform_scale 1.7
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card1
+  xpos 1327
+  ypos -656
+ }
+set N5fb59c00 [stack 0]
+push $N5fb5b000
+ ParticleEmitter {
+  inputs 3
+  emit_from faces
+  rate {{"parent.emissionmulti * parent.medrate"}}
+  rate_variation 1
+  lifetime {{parent.ParticleEmitter1.lifetime}}
+  velocity 0
+  size 0.024
+  size_variation 0.5
+  seed 2
+  name ParticleEmitter3
+  xpos 1175
+  ypos -517
+  disable {{1-parent.medenabled}}
+ }
+ ParticleGravity {
+  to {{"parent.medgavity * 0.0002 * parent.xgravity"} {"parent.medgavity * 0.0002 * parent.ygravity"} 0}
+  probability 0.1
+  name ParticleGravity2
+  xpos 1175
+  ypos -459
+  disable {{1-parent.medgrav}}
+ }
+push $N5fb5a400
+push $N5fb59c00
+push $N5fb5b000
+ ParticleEmitter {
+  inputs 3
+  emit_from faces
+  rate {{"parent.bigamount * parent.emissionmulti"}}
+  rate_variation 1
+  lifetime 100
+  velocity 0
+  size 0.05
+  size_variation 1
+  seed 1
+  name ParticleEmitter1
+  xpos 1327
+  ypos -597
+  disable {{1-parent.bigenabled}}
+ }
+ ParticleGravity {
+  to {{"parent.gravity * 0.007 * parent.xgravity"} {"parent.gravity * 0.007 * parent.ygravity"} 0}
+  probability 0.03
+  name ParticleGravity1
+  xpos 1327
+  ypos -523
+  disable {{1-parent.biggravity}}
+ }
+ ParticleMerge {
+  inputs 2
+  name ParticleMerge1
+  xpos 1327
+  ypos -418
+ }
+push $N5fb5a000
+clone $C5fb5bc00 {
+  xpos 1537
+  ypos -404
+  selected false
+ }
+set N5fb58400 [stack 0]
+ ScanlineRender {
+  inputs 3
+  ztest_enabled false
+  filter impulse
+  motion_vectors_type distance
+  name ScanlineRender1
+  xpos 1327
+  ypos -361
+ }
+ Erode {
+  channels rgb
+  size {{0-Erode3.size}}
+  name Erode2
+  xpos 1327
+  ypos -308
+ }
+set N435ab400 [stack 0]
+ Erode {
+  channels rgb
+  size -5
+  name Erode4
+  xpos 1217
+  ypos -309
+ }
+push $N5fb5ac00
+push $N5fb5a400
+push $N5fb59c00
+push $N5fb5b000
+ ParticleEmitter {
+  inputs 3
+  emit_from faces
+  rate {{"parent.smallrate * parent.emissionmulti"}}
+  rate_variation 1
+  lifetime {{parent.ParticleEmitter1.lifetime}}
+  velocity 0
+  size 0.006
+  size_variation 1
+  name ParticleEmitter2
+  xpos 1043
+  ypos -488
+  disable {{1-parent.smalenabled}}
+ }
+push $N5fb58400
+ ScanlineRender {
+  inputs 3
+  ztest_enabled false
+  filter impulse
+  motion_vectors_type distance
+  name ScanlineRender2
+  xpos 1043
+  ypos -373
+ }
+ ColorCorrect {
+  inputs 1+1
+  gain 0
+  maskChannelMask rgba.red
+  name ColorCorrect3
+  xpos 1043
+  ypos -309
+ }
+push $N435ab400
+ Erode {
+  channels rgb
+  size {{parent.blobify}}
+  name Erode3
+  xpos 1327
+  ypos -271
+ }
+ Merge2 {
+  inputs 2
+  name Merge1
+  xpos 1327
+  ypos -228
+ }
+ Group {
+  inputs 2
+  name Group1
+  xpos 1327
+  ypos -185
+  addUserKnob {20 "" l Glass}
+  addUserKnob {7 displace l Displace R 0 20}
+  displace {{parent.displace}}
+  addUserKnob {41 size_1 l "smooth vectors" T Blur1.size}
+  addUserKnob {7 abberation l Abberation}
+  addUserKnob {26 "" l Defocus}
+  addUserKnob {6 useDef l "Apply Defocus" -STARTLINE}
+  addUserKnob {41 size T ZBlur1.size}
+  addUserKnob {41 max_size l maximum T ZBlur1.max_size}
+  addUserKnob {41 shape l "filter shape" T ZBlur1.shape}
+ }
+  Input {
+   inputs 0
+   name img
+   xpos -289
+   ypos 81
+  }
+set N435a9800 [stack 0]
+  Dot {
+   name Dot1
+   xpos -255
+   ypos 634
+  }
+  Input {
+   inputs 0
+   name control
+   xpos -64
+   ypos -388
+   number 1
+  }
+set N435a9000 [stack 0]
+push $N435a9000
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 rgba.alpha
+   name Copy6
+   xpos -64
+   ypos -354
+   disable {{hasError i}}
+  }
+set N435a8c00 [stack 0]
+  Dot {
+   name Dot2
+   xpos 94
+   ypos -343
+  }
+set N435a8800 [stack 0]
+  Transform {
+   translate {0 -1}
+   center {320 240}
+   name down
+   xpos 60
+   ypos -140
+  }
+push $N435a8c00
+  Dot {
+   name Dot3
+   xpos -122
+   ypos -343
+  }
+  Dot {
+   name Dot4
+   xpos -207
+   ypos -343
+  }
+  Transform {
+   translate {0 1}
+   center {320 240}
+   name up
+   xpos -241
+   ypos -180
+  }
+push $N435a8800
+  Dot {
+   name Dot5
+   xpos 176
+   ypos -343
+  }
+  Transform {
+   translate {1 0}
+   center {320 240}
+   name right
+   xpos 142
+   ypos -221
+  }
+push $N435a8c00
+  Shuffle {
+   in alpha
+   green black
+   blue black
+   out rgb
+   name Shuffle1
+   xpos -64
+   ypos -311
+  }
+  Transform {
+   translate {-1 0}
+   center {320 240}
+   name left
+   xpos -64
+   ypos -285
+  }
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 rgba.green
+   name Copy2
+   xpos -64
+   ypos -228
+  }
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 rgba.blue
+   name Copy3
+   xpos -64
+   ypos -187
+  }
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 rgba.alpha
+   name Copy4
+   xpos -64
+   ypos -147
+  }
+  Expression {
+   temp_name0 l
+   temp_expr0 red
+   temp_name1 r
+   temp_expr1 green
+   temp_name2 u
+   temp_expr2 blue
+   temp_name3 d
+   temp_expr3 alpha
+   channel0 {forward.u -forward.v none -backward.u}
+   expr0 (l-r)*width
+   channel1 {-forward.u forward.v none -backward.u}
+   expr1 (d-u)*width
+   channel2 depth
+   expr2 (abs(l-r)+abs(d-u))*width/2
+   name Expression1
+   xpos -64
+   ypos -15
+  }
+  Blur {
+   channels motion
+   crop false
+   name Blur1
+   xpos -64
+   ypos 13
+  }
+set N60f55000 [stack 0]
+  Dot {
+   name Dot6
+   xpos 89
+   ypos 22
+  }
+  Dot {
+   name Dot7
+   xpos 89
+   ypos 193
+  }
+push $N60f55000
+push $N435a9800
+  Copy {
+   inputs 2
+   from0 -rgba.alpha
+   to0 -rgba.alpha
+   channels forward
+   name Copy1
+   xpos -64
+   ypos 67
+  }
+  Copy {
+   inputs 2
+   from0 -rgba.alpha
+   to0 -rgba.alpha
+   channels depth
+   name Copy8
+   xpos -64
+   ypos 175
+  }
+  ZBlur {
+   channels rgba
+   math -linear
+   shape 1
+   name ZBlur1
+   xpos -64
+   ypos 229
+   disable {{!parent.useDef}}
+  }
+set N60ef7800 [stack 0]
+  IDistort {
+   channels rgba
+   uv forward
+   uv_scale {{parent.displace i}}
+   name IDistort4
+   xpos 98
+   ypos 491
+  }
+push $N60ef7800
+  IDistort {
+   channels {-rgba.red -rgba.green rgba.blue rgba.alpha}
+   uv forward
+   uv_scale {{parent.displace/(1+parent.abberation/10)}}
+   name IDistort3
+   xpos 66
+   ypos 314
+  }
+push $N60ef7800
+  IDistort {
+   channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+   uv forward
+   uv_scale {{parent.displace/(1-parent.abberation/10)}}
+   name IDistort1
+   xpos -188
+   ypos 309
+  }
+push $N60ef7800
+  IDistort {
+   channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
+   uv forward
+   uv_scale {{parent.displace i}}
+   name IDistort2
+   xpos -64
+   ypos 311
+  }
+  Copy {
+   inputs 2
+   from0 rgba.red
+   to0 rgba.red
+   name Copy9
+   xpos -64
+   ypos 372
+  }
+  Copy {
+   inputs 2
+   from0 rgba.blue
+   to0 rgba.blue
+   name Copy10
+   xpos -64
+   ypos 412
+  }
+  Switch {
+   inputs 2
+   which {{parent.abberation==0}}
+   name Switch1
+   xpos -64
+   ypos 491
+   addUserKnob {20 "" l Weta}
+   addUserKnob {32 knob l "update input order" t "changes the input order according to the input nodes' horizontal order (left most node becomes input 0)" -STARTLINE T " reconnectInputs"}
+  }
+  Copy {
+   inputs 2
+   from0 -rgba.alpha
+   to0 -rgba.alpha
+   channels depth
+   name Copy5
+   xpos -64
+   ypos 616
+  }
+  Output {
+   name Output1
+   xpos -59
+   ypos 747
+  }
+ end_group
+ TimeEcho {
+  framesbehind {{parent.trails}}
+  frmaesfade {{parent.trails}}
+  name TimeEcho2
+  xpos 1327
+  ypos -124
+  disable {{parent.trailkill}}
+ }
+ Switch {
+  inputs 2
+  which {{parent.dropspass}}
+  name Switch2
+  xpos 1327
+  ypos -48
+ }
+set N61b2c800 [stack 0]
+push $N61b2c800
+ Reformat {
+  name Reformat2
+  xpos 1449
+  ypos -124
+ }
+set N60ef5000 [stack 0]
+ Shuffle {
+  alpha green
+  name Shuffle1
+  xpos 1651
+  ypos -221
+ }
+set N60ef4800 [stack 0]
+ Blur {
+  size 11
+  name Blur1
+  xpos 1982
+  ypos 88
+ }
+ set C60ef4400 [stack 0]
+set N60ef4400 [stack 0]
+push $N60ef4400
+push $N61b2c800
+ Emboss {
+  Angle 53
+  name Emboss1
+  xpos 1327
+  ypos 32
+ }
+ ColorCorrect {
+  gain 2
+  offset -1
+  name ColorCorrect2
+  xpos 1327
+  ypos 102
+ }
+ Reformat {
+  name Reformat3
+  xpos 1512
+  ypos 102
+ }
+clone $C60ef4400 {
+  xpos 1653
+  ypos 96
+  selected false
+ }
+push $N60ef5000
+push $N60ef5000
+ Erode {
+  channels rgb
+  size 0.25
+  maskChannelMask rgba.red
+  name Erode1
+  xpos 1576
+  ypos -124
+ }
+push $N60ef5000
+ ColorCorrect {
+  inputs 1+1
+  gain 0
+  maskChannelMask rgba.red
+  name ColorCorrect4
+  xpos 1576
+  ypos -64
+ }
+ Merge2 {
+  inputs 2
+  operation max
+  mix {{parent.ringing_1}}
+  name Merge3
+  xpos 1576
+  ypos 3
+ }
+clone $C60ef4400 {
+  xpos 1716
+  ypos -3
+  selected false
+ }
+push $N60ef4800
+push $N60ef5000
+clone $C60ef4400 {
+  xpos 1473
+  ypos -330
+  selected false
+ }
+push $N5fb5b000
+ AddChannels {
+  channels rgba
+  name AddChannels3
+  xpos 1815
+  ypos -780
+ }
+ AddChannels {
+  channels alpha
+  color 1
+  name AddChannels1
+  xpos 1815
+  ypos -738
+ }
+set N616a9400 [stack 0]
+ Blur {
+  inputs 1+1
+  size 8
+  maskChannelMask rgba.red
+  name Blur2
+  xpos 1815
+  ypos -330
+ }
+ Group {
+  inputs 2
+  name Group3
+  xpos 1815
+  ypos -221
+  addUserKnob {20 "" l Glass}
+  addUserKnob {7 displace l Displace R 0 20}
+  displace 0.4
+  addUserKnob {41 size_1 l "smooth vectors" T Blur1.size}
+  addUserKnob {7 abberation l Abberation}
+  abberation 1
+  addUserKnob {26 "" l Defocus}
+  addUserKnob {6 useDef l "Apply Defocus" -STARTLINE}
+  addUserKnob {41 size T ZBlur1.size}
+  addUserKnob {41 max_size l maximum T ZBlur1.max_size}
+  addUserKnob {41 shape l "filter shape" T ZBlur1.shape}
+ }
+  Input {
+   inputs 0
+   name img
+   xpos -289
+   ypos 81
+  }
+set N616a8c00 [stack 0]
+  Dot {
+   name Dot1
+   xpos -255
+   ypos 634
+  }
+  Input {
+   inputs 0
+   name control
+   xpos -64
+   ypos -388
+   number 1
+  }
+set N616a8400 [stack 0]
+push $N616a8400
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 rgba.alpha
+   name Copy6
+   xpos -64
+   ypos -354
+   disable {{hasError i}}
+  }
+set N43597c00 [stack 0]
+  Dot {
+   name Dot2
+   xpos 94
+   ypos -343
+  }
+set N43597800 [stack 0]
+  Transform {
+   translate {0 -1}
+   center {320 240}
+   name down
+   xpos 60
+   ypos -140
+  }
+push $N43597c00
+  Dot {
+   name Dot3
+   xpos -122
+   ypos -343
+  }
+  Dot {
+   name Dot4
+   xpos -207
+   ypos -343
+  }
+  Transform {
+   translate {0 1}
+   center {320 240}
+   name up
+   xpos -241
+   ypos -180
+  }
+push $N43597800
+  Dot {
+   name Dot5
+   xpos 176
+   ypos -343
+  }
+  Transform {
+   translate {1 0}
+   center {320 240}
+   name right
+   xpos 142
+   ypos -221
+  }
+push $N43597c00
+  Shuffle {
+   in alpha
+   green black
+   blue black
+   out rgb
+   name Shuffle1
+   xpos -64
+   ypos -311
+  }
+  Transform {
+   translate {-1 0}
+   center {320 240}
+   name left
+   xpos -64
+   ypos -285
+  }
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 rgba.green
+   name Copy2
+   xpos -64
+   ypos -228
+  }
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 rgba.blue
+   name Copy3
+   xpos -64
+   ypos -187
+  }
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 rgba.alpha
+   name Copy4
+   xpos -64
+   ypos -147
+  }
+  Expression {
+   temp_name0 l
+   temp_expr0 red
+   temp_name1 r
+   temp_expr1 green
+   temp_name2 u
+   temp_expr2 blue
+   temp_name3 d
+   temp_expr3 alpha
+   channel0 {forward.u -forward.v none -backward.u}
+   expr0 (l-r)*width
+   channel1 {-forward.u forward.v none -backward.u}
+   expr1 (d-u)*width
+   channel2 depth
+   expr2 (abs(l-r)+abs(d-u))*width/2
+   name Expression1
+   xpos -64
+   ypos -15
+  }
+  Blur {
+   channels motion
+   size 15
+   crop false
+   name Blur1
+   xpos -64
+   ypos 13
+  }
+set N43594400 [stack 0]
+  Dot {
+   name Dot6
+   xpos 89
+   ypos 22
+  }
+  Dot {
+   name Dot7
+   xpos 89
+   ypos 193
+  }
+push $N43594400
+push $N616a8c00
+  Copy {
+   inputs 2
+   from0 -rgba.alpha
+   to0 -rgba.alpha
+   channels forward
+   name Copy1
+   xpos -64
+   ypos 67
+  }
+  Copy {
+   inputs 2
+   from0 -rgba.alpha
+   to0 -rgba.alpha
+   channels depth
+   name Copy8
+   xpos -64
+   ypos 175
+  }
+  ZBlur {
+   channels rgba
+   math -linear
+   max_size 2.2
+   shape 1
+   name ZBlur1
+   xpos -64
+   ypos 229
+   disable {{!parent.useDef}}
+  }
+set N60e7ec00 [stack 0]
+  IDistort {
+   channels rgba
+   uv forward
+   uv_scale {{parent.displace i}}
+   name IDistort4
+   xpos 98
+   ypos 491
+  }
+push $N60e7ec00
+  IDistort {
+   channels {-rgba.red -rgba.green rgba.blue rgba.alpha}
+   uv forward
+   uv_scale {{parent.displace/(1+parent.abberation/10)}}
+   name IDistort3
+   xpos 66
+   ypos 314
+  }
+push $N60e7ec00
+  IDistort {
+   channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+   uv forward
+   uv_scale {{parent.displace/(1-parent.abberation/10)}}
+   name IDistort1
+   xpos -188
+   ypos 309
+  }
+push $N60e7ec00
+  IDistort {
+   channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
+   uv forward
+   uv_scale {{parent.displace i}}
+   name IDistort2
+   xpos -64
+   ypos 311
+  }
+  Copy {
+   inputs 2
+   from0 rgba.red
+   to0 rgba.red
+   name Copy9
+   xpos -64
+   ypos 372
+  }
+  Copy {
+   inputs 2
+   from0 rgba.blue
+   to0 rgba.blue
+   name Copy10
+   xpos -64
+   ypos 412
+  }
+  Switch {
+   inputs 2
+   which {{parent.abberation==0}}
+   name Switch1
+   xpos -64
+   ypos 491
+   addUserKnob {20 "" l Weta}
+   addUserKnob {32 knob l "update input order" t "changes the input order according to the input nodes' horizontal order (left most node becomes input 0)" -STARTLINE T " reconnectInputs"}
+  }
+  Copy {
+   inputs 2
+   from0 -rgba.alpha
+   to0 -rgba.alpha
+   channels depth
+   name Copy5
+   xpos -64
+   ypos 616
+  }
+  Output {
+   name Output1
+   xpos -59
+   ypos 747
+  }
+ end_group
+ ColorCorrect {
+  inputs 1+1
+  gamma {{"1 + parent.ringing"}}
+  maskChannelMask rgba.red
+  name ColorCorrect1
+  xpos 1815
+  ypos 3
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  sRGB true
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  mix 0.085
+  name Merge2
+  xpos 1815
+  ypos 102
+ }
+clone $C60ef4400 {
+  xpos 1815
+  ypos 178
+  selected false
+ }
+push $N616a9400
+ Dot {
+  name Dot1
+  xpos 2131
+  ypos -112
+ }
+ Merge2 {
+  inputs 2+1
+  name Merge4
+  xpos 2097
+  ypos 205
+ }
+ ShuffleCopy {
+  inputs 2
+  alpha red
+  name ShuffleCopy1
+  xpos 2097
+  ypos 310
+  disable {{1-parent.alpha}}
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch1
+  xpos 2097
+  ypos 389
+  disable {{1-parent.rainonly}}
+ }
+ Output {
+  name Output1
+  xpos 2097
+  ypos 474
+ }
+end_group

@@ -57,8 +57,6 @@ Group {
  addUserKnob {41 mix T Merge.mix}
  addUserKnob {26 version_author l "" t "apDespill v1.0\n14 March, 2017" +STARTLINE T "<span style=\"color:#666\"><br/><b>apDespill v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2014-2017</span>"}
  addUserKnob {20 GPU_Settings l "GPU Settings"}
- addUserKnob {41 maxGPUMemory l "Percentage of GPU memory to use" T apDespillKernel.maxGPUMemory}
- addUserKnob {41 maxTileLines l "Percentage of image height per tile" T apDespillKernel.maxTileLines}
 }
  Input {
   inputs 0
@@ -115,8 +113,6 @@ set Na8abcc00 [stack 0]
   apDespillKernel_prot1_falloff {{parent.prot1_falloff}}
   apDespillKernel_pickSpill {{parent.pick} {parent.pick} {parent.pick}}
   rebuild_finalise ""
-  maxGPUMemory 60
-  maxTileLines 8
   name apDespillKernel
   xpos 559
   ypos -582

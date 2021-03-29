@@ -17,7 +17,10 @@ from nukescripts import panels
 import datetime
 import operator
 
-import ConfigParser
+try:
+	import ConfigParser
+except:
+	import configparser as ConfigParser
 PresetsFile = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),'presets/GradientPresets.cfg')
 config = ConfigParser.RawConfigParser()
 config.read(PresetsFile)
@@ -43,7 +46,7 @@ class SectionPanel(nukescripts.PythonPanel):
     def __init__(self):
         nukescripts.PythonPanel.__init__(self, 'Add Custom Gradient Preset')
         self.category = nuke.String_Knob('cat', 'Preset Category')
-        self.name = nuke.String_Knob('name', 'Preset Name')        
+        self.name = nuke.String_Knob('name', 'Preset Name')
         self.addKnob(self.category)
         self.addKnob(self.name)
 
@@ -80,42 +83,42 @@ def setColorCurve(node,colorlist,parent,_object):
 	if Interpolation == "Constant":
 		interp = "K"
 		interpB = "K"
-	elif Interpolation == "Linear": 
+	elif Interpolation == "Linear":
 		interp = "L"
 		interpB = "L"
-	elif Interpolation == "Smooth": 
+	elif Interpolation == "Smooth":
 		interp = "Z"
-		interpB = "Z"	
-	elif Interpolation == "Catmull-Rom": 
-		interp = "R"	
-		interpB = "R"	
-	elif Interpolation == "Horizontal": 
+		interpB = "Z"
+	elif Interpolation == "Catmull-Rom":
+		interp = "R"
+		interpB = "R"
+	elif Interpolation == "Horizontal":
 		interp = "H"
 		interpB = "s0"
-	else: #"Default // Cubic " 
+	else: #"Default // Cubic "
 		interp = "C"
-		interpB = "C"	
+		interpB = "C"
 
-	curveR = 'curve ' 
-	curveG = 'curve ' 
-	curveB = 'curve ' 
-	curveA = 'curve ' 
+	curveR = 'curve '
+	curveG = 'curve '
+	curveB = 'curve '
+	curveA = 'curve '
 	for x,item in enumerate(colorlist):
 		if x == len(colorlist)-1:
-			curveR += "%s x%s %s %s" %("L",item[-1],item[0],interpB) 
-			curveG += "%s x%s %s %s" %("L",item[-1],item[1],interpB) 
-			curveB += "%s x%s %s %s" %("L",item[-1],item[2],interpB) 
+			curveR += "%s x%s %s %s" %("L",item[-1],item[0],interpB)
+			curveG += "%s x%s %s %s" %("L",item[-1],item[1],interpB)
+			curveB += "%s x%s %s %s" %("L",item[-1],item[2],interpB)
 			curveA += "%s x%s %s %s" %("L",item[-1],item[3],interpB)
 		elif x==0:
-			curveR += "%s x%s %s" %(interpB,item[-1],item[0]) 
-			curveG += "%s x%s %s" %(interpB,item[-1],item[1]) 
-			curveB += "%s x%s %s" %(interpB,item[-1],item[2]) 
-			curveA += "%s x%s %s" %(interpB,item[-1],item[3]) 
+			curveR += "%s x%s %s" %(interpB,item[-1],item[0])
+			curveG += "%s x%s %s" %(interpB,item[-1],item[1])
+			curveB += "%s x%s %s" %(interpB,item[-1],item[2])
+			curveA += "%s x%s %s" %(interpB,item[-1],item[3])
 		else:
-			curveR += "%s x%s %s" %(interp,item[-1],item[0]) 
-			curveG += "%s x%s %s" %(interp,item[-1],item[1]) 
-			curveB += "%s x%s %s" %(interp,item[-1],item[2]) 
-			curveA += "%s x%s %s" %(interp,item[-1],item[3])   
+			curveR += "%s x%s %s" %(interp,item[-1],item[0])
+			curveG += "%s x%s %s" %(interp,item[-1],item[1])
+			curveB += "%s x%s %s" %(interp,item[-1],item[2])
+			curveA += "%s x%s %s" %(interp,item[-1],item[3])
 	node['lut'].editCurve("red",curveR)
 	node['lut'].editCurve("green",curveG)
 	node['lut'].editCurve("blue",curveB)
@@ -140,7 +143,7 @@ def LoadCurveDataX(_curves):
 					Index = 0
 				else:
 					Index = 1
-			colorlist.append([float(red_split[x]),float(green_split[x]),float(blue_split[x]),float(alpha_split[x]),Interpolation,float(Index)])	   
+			colorlist.append([float(red_split[x]),float(green_split[x]),float(blue_split[x]),float(alpha_split[x]),Interpolation,float(Index)])
 			Interpolation = ""
 			Index = -1.0
 		else:
@@ -149,8 +152,8 @@ def LoadCurveDataX(_curves):
 			elif item[0:1] == "k":
 				Index = 0
 			else:
- 				Interpolation = item		   
-	return colorlist	 
+ 				Interpolation = item
+	return colorlist
 
 
 class ColorValue:
@@ -188,7 +191,7 @@ class GradientWidget(QtGui.QWidget):
 				ReturnItem.position = item[-1]
 				ReturnItem.color = QColor.fromRgbF(item[0], item[1], item[2], item[3])
 				self.colorList.append(ReturnItem)
-				self._update()	
+				self._update()
 
 	def sliderUpdate(self,_color):
 		for item in self.colorList:
@@ -199,7 +202,7 @@ class GradientWidget(QtGui.QWidget):
 
 	def _update(self): #A function that is being called when changes have been made that needs to reflect in the UI
 		self.colorNodeUpdate()
-		self.repaint()	
+		self.repaint()
 
 	def paintEvent(self, evt):
 		painter = QtGui.QPainter(self)
@@ -242,7 +245,7 @@ class GradientWidget(QtGui.QWidget):
 			itemB = sorted_x[-1]
 		else:
 			itemA = sorted_x[current_index-1]
-			itemB = sorted_x[current_index]	
+			itemB = sorted_x[current_index]
 
 		#Calcualte how far between the two we are and get a color value
 		_dist = itemB.position-itemA.position
@@ -281,7 +284,7 @@ class GradientWidget(QtGui.QWidget):
 			painter.setBrush(item.color)
 			painter.drawEllipse(QtCore.QPoint((item.position*self.widget_width)+self.widget_offset,self.widget_top) , 7, 7 ) #DRAW THE OUTER BLACK CIRCLE
 			painter.drawRect((item.position*self.widget_width)-self.handle_width+self.widget_offset,self.widget_top+15+self.widget_height , self.handle_width*2, self.handle_width*2 ) #DRAW THE OUTER BLACK CIRCLE
-	
+
 		painter.setBrush(gradient)
 
 		painter.drawRect(self.widget_offset, self.widget_top+10, self.widget_width-1, self.widget_height)
@@ -295,20 +298,20 @@ class GradientWidget(QtGui.QWidget):
 			if abs(posy-(self.widget_top)) <= self.handle_width: #The Main Color Handle
 				if dc:
 					#This part is triggered when you click a allready exsisting color chip (hence you want to edit the color)
-					_tempcol = sorted_x[0].color.getRgbF() 
+					_tempcol = sorted_x[0].color.getRgbF()
 					V = nuke.getColor(QColor.fromRgbF(_tempcol[1], _tempcol[2],_tempcol[3],_tempcol[0]).rgba() )
 					if V:
 						R = (255 & V >> 24) / 255.0
 						G = (255 & V >> 16) / 255.0
 						B = (255 & V >> 8) / 255.0
-						A = (255 & V >> 0) / 255.0						
-						sorted_x[0].color = QColor.fromRgbF(R, G, B, A)		
-						self._update()	
-				self.setSelection(sorted_x[0])			
+						A = (255 & V >> 0) / 255.0
+						sorted_x[0].color = QColor.fromRgbF(R, G, B, A)
+						self._update()
+				self.setSelection(sorted_x[0])
 				return sorted_x[0]
 			elif abs(posy-(self.widget_top+15+self.widget_height+self.handle_width)) <= self.handle_width: #The Deletion Handle
 				self.colorList.remove(sorted_x[0])
-				self._update()	
+				self._update()
 				return False
 			else:
 				return False
@@ -323,7 +326,7 @@ class GradientWidget(QtGui.QWidget):
 					R = (255 & V >> 24) / 255.0
 					G = (255 & V >> 16) / 255.0
 					B = (255 & V >> 8) / 255.0
-					A = (255 & V >> 0) / 255.0						
+					A = (255 & V >> 0) / 255.0
 					ReturnItem.color = QColor.fromRgbF(R, G, B, A)
 				self.colorList.append(ReturnItem)
 				self._update()
@@ -334,7 +337,7 @@ class GradientWidget(QtGui.QWidget):
 
 
 	def mousePressEvent(self, evt):
-		self.myTimer.start()	
+		self.myTimer.start()
 		self.selectedHandle = self.getNearestHandle(max(0,min(1,(evt.x()-(self.widget_offset))/float(self.widget_width))),evt.y())
 		if not self.selectedHandle:
 			#We should not do anything...
@@ -350,7 +353,7 @@ class GradientWidget(QtGui.QWidget):
 			self.colorNodeUpdate()
 
 	def mouseDoubleClickEvent(self, evt):
-		self.myTimer.start()	
+		self.myTimer.start()
 		self.selectedHandle = self.getNearestHandle(max(0,min(1,(evt.x()-(self.widget_offset))/float(self.widget_width))),evt.y(),True)
 		if not self.selectedHandle:
 			#We should not do anything...
@@ -366,8 +369,8 @@ class GradientWidget(QtGui.QWidget):
 				pass
 			else:
 				self.selectedHandle.position = max(0,min(1,(evt.x()-(self.widget_offset))/float(self.widget_width)))
-				self._update()				
-				self.myTimer.restart()			
+				self._update()
+				self.myTimer.restart()
 
 	def colorNodeUpdate(self):
 		colorList = []
@@ -447,7 +450,7 @@ class Example(QtGui.QWidget):
 
 		self.interpolationLabel = QLabel("Interpolation")
 		self.interpolationMenu = QComboBox()
-		self.interpolationMenu.addItem("Constant")  
+		self.interpolationMenu.addItem("Constant")
 		self.interpolationMenu.addItem("Linear")
 		self.interpolationMenu.addItem("Smooth")
 		self.interpolationMenu.addItem("Catmull-Rom")
@@ -541,7 +544,7 @@ class Example(QtGui.QWidget):
 		border: 1px solid #999999;
 		height: 8px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
 		background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-		stop: 0.000 rgb(255, 0, 0), 
+		stop: 0.000 rgb(255, 0, 0),
 		stop: 0.167 rgb(255, 255, 0),
 		stop: 0.333 rgb(0, 255, 0),
 		stop: 0.500 rgb(0, 255, 255),
@@ -561,7 +564,7 @@ class Example(QtGui.QWidget):
 		border: 1px solid #999999;
 		height: 8px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
 		background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-		stop: 0.000 rgb(0, 0, 0), 
+		stop: 0.000 rgb(0, 0, 0),
 		stop: 1.0 rgb(255, 0, 0));
 		margin: 2px 0;
 		}
@@ -576,7 +579,7 @@ class Example(QtGui.QWidget):
 		border: 1px solid #999999;
 		height: 8px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
 		background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-		stop: 0.000 rgb(0, 0, 0), 
+		stop: 0.000 rgb(0, 0, 0),
 		stop: 1.0 rgb(255, 255, 255));
 		margin: 2px 0;
 		}
