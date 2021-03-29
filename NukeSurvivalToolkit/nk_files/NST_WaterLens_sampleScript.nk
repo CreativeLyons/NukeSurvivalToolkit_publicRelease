@@ -128,11 +128,7 @@ RotoPaint {
 Read {
  inputs 0
  file_type jpeg
-<<<<<<< HEAD:NukeSurvivalToolkit/MJT_Labs/Draw/WaterLens_11/demo_script/NST_WaterLens_sampleScript.nk
- file <<<replace>>>/MJT_Labs/Draw/WaterLens_11/demo_script/waterLensExampleBG.jpg
-=======
  file <<<replace>>>/images/waterLensExampleBG.jpg
->>>>>>> dev:NukeSurvivalToolkit/nk_files/NST_WaterLens_sampleScript.nk
  format "1280 720 0 0 1280 720 1 HD_720"
  origset true
  name Read5
@@ -2629,11 +2625,7 @@ RotoPaint {
 Read {
  inputs 0
  file_type jpeg
-<<<<<<< HEAD:NukeSurvivalToolkit/MJT_Labs/Draw/WaterLens_11/demo_script/NST_WaterLens_sampleScript.nk
- file <<<replace>>>/MJT_Labs/Draw/WaterLens_11/demo_script/waterLensExampleBG.jpg
-=======
  file <<<replace>>>/images/waterLensExampleBG.jpg
->>>>>>> dev:NukeSurvivalToolkit/nk_files/NST_WaterLens_sampleScript.nk
  format "1280 720 0 0 1280 720 1 HD_720"
  origset true
  name Read2
@@ -3257,11 +3249,7 @@ RotoPaint {
 Read {
  inputs 0
  file_type jpeg
-<<<<<<< HEAD:NukeSurvivalToolkit/MJT_Labs/Draw/WaterLens_11/demo_script/NST_WaterLens_sampleScript.nk
- file <<<replace>>>/MJT_Labs/Draw/WaterLens_11/demo_script/waterLensExampleBG.jpg
-=======
  file <<<replace>>>/images/waterLensExampleBG.jpg
->>>>>>> dev:NukeSurvivalToolkit/nk_files/NST_WaterLens_sampleScript.nk
  format "1280 720 0 0 1280 720 1 HD_720"
  origset true
  name Read1
@@ -5730,11 +5718,7 @@ RotoPaint {
 Read {
  inputs 0
  file_type jpeg
-<<<<<<< HEAD:NukeSurvivalToolkit/MJT_Labs/Draw/WaterLens_11/demo_script/NST_WaterLens_sampleScript.nk
- file <<<replace>>>/MJT_Labs/Draw/WaterLens_11/demo_script/waterLensExampleBG.jpg
-=======
  file <<<replace>>>/images/waterLensExampleBG.jpg
->>>>>>> dev:NukeSurvivalToolkit/nk_files/NST_WaterLens_sampleScript.nk
  format "1280 720 0 0 1280 720 1 HD_720"
  origset true
  name Read4
@@ -8148,11 +8132,7 @@ Dot {
 Read {
  inputs 0
  file_type jpeg
-<<<<<<< HEAD:NukeSurvivalToolkit/MJT_Labs/Draw/WaterLens_11/demo_script/NST_WaterLens_sampleScript.nk
- file <<<replace>>>/MJT_Labs/Draw/WaterLens_11/demo_script/waterLensExampleBG.jpg
-=======
  file <<<replace>>>/images/waterLensExampleBG.jpg
->>>>>>> dev:NukeSurvivalToolkit/nk_files/NST_WaterLens_sampleScript.nk
  format "1280 720 0 0 1280 720 1 HD_720"
  origset true
  name Read3

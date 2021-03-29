@@ -9,7 +9,6 @@ import nuke
 import sys
 import os
 import webbrowser
-import NST_helper
 
 # Add PluginPaths to tools and icons
 nuke.pluginAddPath('./gizmos')
@@ -22,10 +21,7 @@ nuke.pluginAddPath('./nk_files')
 import NST_helper
 
 # This is the prefix being used to customize the gizmo's in this toolkit
-<<<<<<< HEAD
-=======
 global prefixNST
->>>>>>> dev
 prefixNST = "NST_"
 
 # Store the location of this menu.py to help with nuke.nodePaste() which requires a filepath to paste
@@ -33,11 +29,7 @@ NST_FolderPath = os.path.dirname(__file__)
 NST_helper.NST_FolderPath = NST_FolderPath
 
 # give the name of the help doc .pdf in main folder
-<<<<<<< HEAD
-NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v1.1.0.pdf"
-=======
 NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v2.0.0.pdf"
->>>>>>> dev
 
 # creating full filepath to the help doc
 NST_helpDoc_os_path = os.path.join(NST_FolderPath, NST_helpDoc)
@@ -59,11 +51,7 @@ m = toolbar.addMenu('NukeSurvivalToolkit', icon = "SurvivalToolkit.png")
 def openNSTDocumentation():
     webbrowser.open(NST_helpDocPath)
 
-<<<<<<< HEAD
-m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png")
-=======
 m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png", index = 00)
->>>>>>> dev
 
 ############################################################################################################
 ############################################################################################################
@@ -73,6 +61,7 @@ m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png", in
 imageMenu = m.addMenu('Image', icon = 'ToolbarImage.png', index = 10)
 
 imageMenu.addCommand('LabelFromRead TL', "nuke.createNode('{}LabelFromRead')".format(prefixNST), icon="LabelFromRead.png")
+
 ############################################################################################################
 ############################################################################################################
 
@@ -295,10 +284,6 @@ EdgesMenu.addCommand('Edge_RimLight AG', "nuke.createNode('{}Edge_RimLight')".fo
 EdgesMenu.addCommand('EdgeDetectPRO AG', "nuke.createNode('{}EdgeDetectPRO')".format(prefixNST), icon="nukepedia_icon.png")
 EdgesMenu.addCommand('Erode_Fine SPIN', "nuke.createNode('{}Erode_Fine')".format(prefixNST), icon="spin_tools.png")
 EdgesMenu.addCommand('Edge_Expand SPIN', "nuke.createNode('{}Edge_Expand')".format(prefixNST), icon="spin_tools.png")
-<<<<<<< HEAD
-
-=======
->>>>>>> dev
 EdgesMenu.addCommand('Edge RB', "nuke.createNode('{}Edge')".format(prefixNST), icon="nukepedia_icon.png")
 EdgesMenu.addCommand('KillOutline NKPD', "nuke.createNode('{}KillOutline')".format(prefixNST), icon="nukepedia_icon.png")
 EdgesMenu.addCommand('ColorSmear NKPD', "nuke.createNode('{}ColorSmear')".format(prefixNST), icon="nukepedia_icon.png")
@@ -698,19 +683,10 @@ templatesMenu.addSeparator()
 
 gizmoDemoMenu = templatesMenu.addMenu("Gizmo Demo Scripts", icon='Group.png')
 
-<<<<<<< HEAD
-gizmoDemoMenu.addCommand('WaterLens Demo MJT', "NST_helper.filepathCreateNode('{}/MJT_Labs/Draw/WaterLens_11/demo_script/{}WaterLens_sampleScript.nk')".format(NST_FolderPath, prefixNST), icon="WaterLens.png")
-gizmoDemoMenu.addCommand('SSMesh Demo MJT', "nuke.nodePaste('{}/MJT_Labs/3D/SSMesh_v13/demo_script/{}SSMesh_demo.nk')".format(NST_FolderPath, prefixNST), icon="SSMesh.png")
-gizmoDemoMenu.addCommand('UVEditor Demo MJT', "nuke.nodePaste('{}/MJT_Labs/3D/UVEditor_v14/demo_script/{}UVEditor_demo_clean.nk')".format(NST_FolderPath, prefixNST), icon="UVEditor.png")
-gizmoDemoMenu.addCommand('Sparky Demo DB', "nuke.nodePaste('{}/NukepediaTools/11_Particles/DB_Sparky_v1.5/ExampleScene/{}SparkyExampleScene.nk')".format(NST_FolderPath, prefixNST), icon="Sparky.png")
-gizmoDemoMenu.addCommand('ParticleLights Demo MHD', "nuke.nodePaste('{}/Hagbarth_Tools/{}ParticleLights_ExampleScript.nk')".format(NST_FolderPath, prefixNST), icon="ToolbarParticles.png")
-
-=======
 gizmoDemoMenu.addCommand('WaterLens Demo MJT', "NST_helper.filepathCreateNode('{}/nk_files/{}WaterLens_sampleScript.nk')".format(NST_FolderPath, prefixNST), icon="WaterLens.png")
 gizmoDemoMenu.addCommand('SSMesh Demo MJT', "nuke.nodePaste('{}/nk_files/{}SSMesh_demo.nk')".format(NST_FolderPath, prefixNST), icon="SSMesh.png")
 gizmoDemoMenu.addCommand('UVEditor Demo MJT', "nuke.nodePaste('{}/nk_files/{}UVEditor_demo_clean.nk')".format(NST_FolderPath, prefixNST), icon="UVEditor.png")
 gizmoDemoMenu.addCommand('Sparky Demo DB', "nuke.nodePaste('{}/nk_files/{}SparkyExampleScene.nk')".format(NST_FolderPath, prefixNST), icon="Sparky.png")
 gizmoDemoMenu.addCommand('ParticleLights Demo MHD', "nuke.nodePaste('{}/nk_files/{}ParticleLights_ExampleScript.nk')".format(NST_FolderPath, prefixNST), icon="ToolbarParticles.png")
 gizmoDemoMenu.addCommand("X_Aton Volumetric Demo XM", "nuke.nodePaste('{}/nk_files/{}X_Aton_Examples.nk')".format(NST_FolderPath, prefixNST), icon="X_Aton.png")
->>>>>>> dev
 
