@@ -3,36 +3,44 @@ Group {
  tile_color 0x7aa9ffff
  note_font "Bitstream Vera Sans"
  selected true
- addUserKnob {20 User}
+ addUserKnob {20 MonochromePlus}
  addUserKnob {41 weight T Expression1.weight}
  addUserKnob {41 source T Expression1.source}
  addUserKnob {41 target T Expression1.target}
  addUserKnob {41 multiply T Expression1.multiply}
  addUserKnob {41 sourceFromTarget l "use weighted target as source" T Expression1.sourceFromTarget}
  addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 mix T Merge1.mix}
+ addUserKnob {26 ""}
  addUserKnob {26 _1 l "" +STARTLINE T "Chris Fryer | 2019"}
 }
  Input {
   inputs 0
   name Inputmask
-  xpos 512
-  ypos 669
+  xpos 542
+  ypos 664
   number 1
  }
  Input {
   inputs 0
   name Input
   xpos 359
-  ypos 462
+  ypos 455
  }
  Dot {
   name Dot1
+  note_font_size 41
   xpos 393
-  ypos 504
+  ypos 499
  }
-set N32617400 [stack 0]
+set Nc3a7f50 [stack 0]
  Expression {
-  expr0 "(weight.r*r + weight.g*g + weight.b*b) * multiply"
+  expr0 "(weight.r*r + weight.g*g + weight.b*b)"
   name Expression1
   note_font "Bitstream Vera Sans"
   xpos 359
@@ -76,27 +84,29 @@ set N32617400 [stack 0]
   xpos 359
   ypos 609
  }
-push $N32617400
+push $Nc3a7f50
  Dot {
   name Dot2
-  xpos 267
-  ypos 504
+  note_font_size 41
+  xpos 288
+  ypos 499
  }
  Dot {
   name Dot3
-  xpos 267
-  ypos 672
+  note_font_size 41
+  xpos 288
+  ypos 668
  }
  Merge2 {
   inputs 2+1
   operation copy
   name Merge1
   xpos 359
-  ypos 669
+  ypos 664
  }
  Output {
   name Output1
   xpos 359
-  ypos 753
+  ypos 709
  }
 end_group
