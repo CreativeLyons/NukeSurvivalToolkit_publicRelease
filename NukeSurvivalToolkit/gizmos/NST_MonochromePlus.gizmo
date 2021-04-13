@@ -3,12 +3,19 @@ Group {
  tile_color 0x7aa9ffff
  note_font "Bitstream Vera Sans"
  selected true
- addUserKnob {20 User}
+ addUserKnob {20 MonochromePlus}
  addUserKnob {41 weight T Expression1.weight}
  addUserKnob {41 source T Expression1.source}
  addUserKnob {41 target T Expression1.target}
  addUserKnob {41 multiply T Expression1.multiply}
  addUserKnob {41 sourceFromTarget l "use weighted target as source" T Expression1.sourceFromTarget}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 mix T Merge1.mix}
  addUserKnob {26 ""}
  addUserKnob {26 _1 l "" +STARTLINE T "Chris Fryer | 2019"}
 }
@@ -30,7 +37,7 @@ Group {
   xpos 393
   ypos 504
  }
-set N32617400 [stack 0]
+set Nfed0d800 [stack 0]
  Expression {
   expr0 "(weight.r*r + weight.g*g + weight.b*b) * multiply"
   name Expression1
@@ -76,7 +83,7 @@ set N32617400 [stack 0]
   xpos 359
   ypos 609
  }
-push $N32617400
+push $Nfed0d800
  Dot {
   name Dot2
   xpos 267
