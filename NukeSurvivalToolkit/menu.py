@@ -202,7 +202,7 @@ timeMenu.addCommand('apLoop AP', 'nuke.createNode("{}apLoop")'.format(prefixNST)
 
 timeMenu.addSeparator()
 
-timeMenu.addCommand('Looper NKPD', "nuke.createNode('{}Looper')".format(prefixNST), icon="nukepedia_icon.png")
+timeMenu.addCommand('Looper DB', "nuke.createNode('{}Looper')".format(prefixNST), icon="nukepedia_icon.png")
 timeMenu.addCommand('FrameMedian MHD', "nuke.createNode('{}FrameMedian')".format(prefixNST), icon="FrameBlend.png")
 timeMenu.addCommand('TimeMachine NKPD', "nuke.createNode('{}TimeMachine')".format(prefixNST), icon="nukepedia_icon.png")
 timeMenu.addCommand('FrameFiller MJT', "nuke.createNode('{}FrameFiller')".format(prefixNST), icon="FrameFiller.png")
@@ -299,7 +299,7 @@ filterMenu.addSeparator()
 
 distortMenu = filterMenu.addMenu("Distortions", icon="IDistort.png")
 distortMenu.addCommand('Glass FR', "nuke.createNode('{}Glass')".format(prefixNST), icon="nukepedia_icon.png")
-distortMenu.addCommand('HeatWave NKPD', "nuke.createNode('{}HeatWave')".format(prefixNST), icon="HeatWave_Icon.png")
+distortMenu.addCommand('HeatWave DB', "nuke.createNode('{}HeatWave')".format(prefixNST), icon="HeatWave_Icon.png")
 distortMenu.addCommand("X_Distort XM", "nuke.createNode(\"{}X_Distort\")".format(prefixNST), icon="X_Distort.png")
 
 filterMenu.addSeparator()
