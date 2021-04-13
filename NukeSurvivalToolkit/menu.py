@@ -188,6 +188,9 @@ drawMenu.addCommand("X_Tesla XM", "nuke.createNode('{}X_Tesla')".format(prefixNS
 drawMenu.addCommand('SpotFlare MHD', "nuke.createNode('{}SpotFlare')".format(prefixNST), icon="Flare.png")
 drawMenu.addCommand('FlareSuperStar NKPD', "nuke.createNode('{}FlareSuperStar')".format(prefixNST), icon="nukepedia_icon.png")
 drawMenu.addCommand('AutoFlare NKPD', "NST_helper.filepathCreateNode('{}AutoFlare2')".format(prefixNST), icon="Flare.png")
+drawMenu.addCommand("BokehBuilder KB", "nuke.createNode('{}BokehBuilder')".format(prefixNST), icon="K_BokehBuilder.png")
+drawMenu.addCommand("LensEngine KB", "nuke.createNode('{}LensEngine')".format(prefixNST), icon="K_LensEngine.png")
+
 
 ############################################################################################################
 ############################################################################################################
