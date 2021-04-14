@@ -7,7 +7,7 @@
 
 For full online documentation and tool index, visit:
 
-[Nuke Survival Toolkit Documentation](https://docs.google.com/document/d/1J5NzIaX5W3s8ge-k1WJ_-0JrRDJdCJWjvWJLbOK7HHs/edit?usp=sharing)
+[Nuke Survival Toolkit Documentation](https://docs.google.com/document/d/1eyh2JIecaphItZeq0uuGxlqoASuXNQy1leJGqFI-EeU/edit?usp=sharing)
 
 The Nuke Survival Toolkit is a portable tool menu for the Foundry’s Nuke with a hand-picked selection of nuke gizmos collected from all over the web, organized into 1 easy to install toolbar.
 
