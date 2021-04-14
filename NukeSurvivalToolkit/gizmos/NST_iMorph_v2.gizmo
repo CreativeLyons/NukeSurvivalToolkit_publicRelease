@@ -1,0 +1,217 @@
+Group {
+ name iMorph
+ help "iMorph v1.0 by adrianpueyo\n\nBlinkscript-accelerated morph between two inputs based on the vectors calculated by a VectorGenerator, with an optional input mask to drive the morph amount. Useful to create morphing transitions between two plates.\n\nMorphing method based on the awesome MorphDissolve from Erwan Leroy. Tool concept and fun developed with Tony Lyons.\n\nadrianpueyo.com, 2020"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\nif kn == \"inputChange\":\n    n\[\"morph\"].setEnabled(not n.input(2))\n    "
+ tile_color 0xa57aaa00
+ selected true
+ addUserKnob {20 iMorph}
+ addUserKnob {26 gpuName l "Local GPU:" T "GeForce GT 750M"}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T iMorphKernel.useGPUIfAvailable}
+ addUserKnob {41 vectorize l "Vectorize on CPU" -STARTLINE T iMorphKernel.vectorize}
+ addUserKnob {26 ""}
+ addUserKnob {4 outMode l output M {"A warped" "B warped" "AB morph"}}
+ outMode "AB morph"
+ addUserKnob {7 morph t "Morphing amount between A and B (0=A, 1=B).\n\n<b>If a mask Input is supplied, this knob gets ignored."}
+ addUserKnob {41 mask_channel l "mask channel" T CopyMask.from0}
+ addUserKnob {26 ""}
+ addUserKnob {41 motionEstimation l Motion T VectorGenerator1.motionEstimation}
+ addUserKnob {41 vectorDetailReg l "Vector Detail" T VectorGenerator1.vectorDetailReg}
+ addUserKnob {41 strengthReg l Strength T VectorGenerator1.strengthReg}
+ addUserKnob {26 version_author l " " t "iMorph v1.0\n2020" T "<span style=\"color:#666\"><br/><b>iMorph v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2020</span>"}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -49
+  ypos 358
+  number 2
+ }
+ Input {
+  inputs 0
+  name InputA
+  xpos 240
+  ypos -45
+ }
+ Shuffle {
+  name Shuffle2
+  xpos 240
+  ypos 3
+ }
+set N2d40f400 [stack 0]
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 274
+  ypos 227
+ }
+set N2d40e000 [stack 0]
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos 113
+  ypos 227
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle1
+  xpos 79
+  ypos 270
+ }
+ Grade {
+  channels rgba
+  white 0
+  add {{parent.morph}}
+  white_clamp true
+  name Grade1
+  xpos 79
+  ypos 294
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name CopyMask
+  label "\[value from0]"
+  xpos 79
+  ypos 349
+  disable {{"\[\nif \{ \[lsearch -exact \[channels \[input this 1]] \[value from0]] >= 0\} \{\n    return 0\n\} else \{\n    if \{ \[lsearch -exact \[channels \[input this 1]] rgba.\[value from0]] >= 0\} \{\n        return 0\n    \} else \{\n        return 1\n\}\n\}\n]"}}
+ }
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 113
+  ypos 427
+ }
+ Input {
+  inputs 0
+  name InputB
+  xpos 342
+  ypos -175
+  number 1
+ }
+ Shuffle {
+  name Shuffle3
+  xpos 342
+  ypos -37
+ }
+set N2d3b7400 [stack 0]
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos 611
+  ypos -34
+ }
+ TimeWarp {
+  lookup {{floor(frame/2)}}
+  length 0
+  time ""
+  filter none
+  name TimeWarp2
+  xpos 577
+  ypos 23
+ }
+push $N2d40f400
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos 492
+  ypos 6
+ }
+ TimeWarp {
+  lookup {{floor(frame/2)}}
+  length 0
+  time ""
+  filter none
+  name TimeWarp1
+  xpos 458
+  ypos 44
+ }
+ Switch {
+  inputs 2
+  which {{frame%2}}
+  name SwitchInputs
+  xpos 516
+  ypos 107
+ }
+ VectorGenerator {
+  useGPUIfAvailable {{parent.iMorphKernel.useGPUIfAvailable}}
+  motionEstimation Regularized
+  name VectorGenerator1
+  xpos 516
+  ypos 157
+ }
+set N2d3bd400 [stack 0]
+ TimeOffset {
+  time_offset -1
+  time ""
+  name TimeOffset3
+  xpos 623
+  ypos 224
+ }
+push $N2d3bd400
+ Shuffle {
+  in forward
+  blue black
+  alpha black
+  name ShuffleVec1
+  label "\[value in]"
+  xpos 516
+  ypos 223
+ }
+ Copy {
+  inputs 2
+  from0 backward.u
+  to0 rgba.blue
+  from1 backward.v
+  to1 rgba.alpha
+  name CopyVec2
+  xpos 516
+  ypos 277
+ }
+ TimeWarp {
+  lookup {{frame*2}}
+  length 0
+  time ""
+  filter none
+  name TimeWarp3
+  xpos 516
+  ypos 338
+ }
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos 550
+  ypos 427
+ }
+push $N2d3b7400
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 376
+  ypos 346
+ }
+push $N2d40e000
+ BlinkScript {
+  inputs 4
+  recompileCount 38
+  ProgramGroup 1
+  KernelDescription "2 \"iMorphKernel\" iterate pixelWise 95859a5a1a6fac633c292e60698f7d40050aed8a6a17140616a4661f399a6b83 5 \"src1\" Read Random \"src2\" Read Random \"vec\" Read Random \"mask\" Read Random \"dst\" Write Point 3 \"useMask\" Int 1 AAAAAA== \"weight\" Float 1 AAAAAA== \"mode\" Int 1 AAAAAA== 3 \"useMask\" 1 1 \"weight\" 1 1 \"mode\" 1 1 0"
+  kernelSource "//---------------------------------------------------------\n// iMorphKernel - iMorph v1.0 by Adrian Pueyo\n// adrianpueyo.com, 2020\n// ---------------------------------------------------------\nkernel iMorphKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src1;\n  Image<eRead, eAccessRandom, eEdgeClamped> src2;\n  Image<eRead, eAccessRandom, eEdgeClamped> vec;\n  Image<eRead, eAccessRandom, eEdgeClamped> mask;\n  Image<eWrite> dst;\n  param:\n    int useMask;\n    float weight;\n    int mode; //0=A,1=B,2=morph\n\n  void process(int2 pos) \{\n    SampleType(vec) vectors = vec(pos.x,pos.y);\n    float which;\n    if(useMask==0)\{\n      which = weight;\n    \}else\{\n      which = clamp(mask(pos.x,pos.y).w,0.0f,1.0f); //alpha channel\n    \}\n    SampleType(src1) src1_warped, src2_warped;\n    if(mode!=1)\{\n      src1_warped = bilinear(src1,pos.x+vectors.z*which,pos.y+vectors.w*which);\n    \}\n    if(mode!=0)\{\n      src2_warped = bilinear(src2,pos.x+vectors.x*(1-which),pos.y+vectors.y*(1-which));\n    \}\n\n    if(mode==0)\{\n      dst() = src1_warped;\n    \}else if(mode==1)\{\n      dst() = src2_warped;\n    \}else\{\n      dst() = src1_warped*(1-which)+src2_warped*which;\n    \}\n  \}\n\};"
+  rebuild ""
+  iMorphKernel_useMask {{!CopyMask.disable}}
+  iMorphKernel_weight {{parent.morph}}
+  iMorphKernel_mode {{parent.outMode}}
+  rebuild_finalise ""
+  name iMorphKernel
+  xpos 240
+  ypos 420
+ }
+ Output {
+  name Output1
+  xpos 240
+  ypos 518
+ }
+end_group

@@ -1,0 +1,310 @@
+Group {
+ name MotionBlurPaint
+ onCreate "n = nuke.thisNode()\nn\['format'].setFlag(nuke.DISABLED)"
+ tile_color 0xcc804e00
+ note_font "Verdana Bold"
+ selected true
+ addUserKnob {20 Parameters}
+ addUserKnob {26 instructions l "" +STARTLINE T "<i>Click the button 'Select brush' below to select the right brush.<br/> Paint on the image to apply the motion blur<br/>\nClose the 'Paint' Tab to disable the node with D key"}
+ addUserKnob {26 ""}
+ addUserKnob {26 output_1_1 l "<b><font color=\"dodgerblue\">OUTPUT"}
+ addUserKnob {41 channels T VectorBlur9.channels}
+ addUserKnob {41 format T Constant1.format}
+ addUserKnob {6 img_format l "format from img" -STARTLINE}
+ img_format true
+ addUserKnob {7 overscan R 0 100}
+ addUserKnob {26 ""}
+ addUserKnob {4 output t "Select which output you want to have: the final result with the distortion or the Vector Map" M {"Final Result" Vector "" "" "" "" "" "" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {26 motion_blur l "<b><font color=\"sandybrown\">MOTION BLUR" T ""}
+ addUserKnob {41 scale l "motion amount" T VectorBlur9.scale}
+ addUserKnob {41 offset l "shutter offset" T VectorBlur9.offset}
+ addUserKnob {41 grow_bbox l "expand bbox" T VectorBlur9.grow_bbox}
+ addUserKnob {41 constant l "uv offset" T VectorBlur9.constant}
+ addUserKnob {41 method T VectorBlur9.method}
+ addUserKnob {26 line l "" +STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {22 move l "<font color=\"tomato\">Select brush" t "Select automatically the right brush" T "n = nuke.thisNode()\nn\['toolbox'].setValue(0)\nn\['toolbox'].setValue(25)" +STARTLINE}
+ addUserKnob {6 check l "check painting" t "Use the checkerboard to check your paint" -STARTLINE}
+ addUserKnob {41 size l smooth t "Smooth the paint" T Blur1.size}
+ addUserKnob {26 paint l "<b><font color=\"lightgreen\">PAINT"}
+ addUserKnob {20 paints l "" +STARTLINE n 1}
+ addUserKnob {41 opacity l INVISIBLE +INVISIBLE T RotoPaint.opacity}
+ addUserKnob {41 toolbar_opacity l opacity T RotoPaint.toolbar_opacity}
+ addUserKnob {41 brush_hardness l "brush hardness" T RotoPaint.brush_hardness}
+ addUserKnob {41 brush_spacing l "brush spacing" T RotoPaint.brush_spacing}
+ addUserKnob {26 ""}
+ addUserKnob {41 opacity_1 l opacity T RotoPaint.opacity}
+ addUserKnob {41 lifetime_type l "lifetime type" T RotoPaint.lifetime_type}
+ addUserKnob {41 lifetime_start l from -STARTLINE T RotoPaint.lifetime_start}
+ addUserKnob {41 lifetime_end l to -STARTLINE T RotoPaint.lifetime_end}
+ addUserKnob {41 toolbox l "" +STARTLINE T RotoPaint.toolbox}
+ addUserKnob {41 curves l "" -STARTLINE T RotoPaint.curves}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask -STARTLINE T VectorBlur9.maskChannelMask}
+ addUserKnob {41 invert_mask l invert -STARTLINE T VectorBlur9.invert_mask}
+ addUserKnob {26 ""}
+ addUserKnob {41 mix T VectorBlur9.mix}
+ addUserKnob {20 "" l Transform}
+ addUserKnob {41 transform T RotoPaint.transform}
+ addUserKnob {41 translate T RotoPaint.translate}
+ addUserKnob {41 rotate T RotoPaint.rotate}
+ addUserKnob {41 scale_1 l scale T RotoPaint.scale}
+ addUserKnob {41 skewX l "skew X" T RotoPaint.skewX}
+ addUserKnob {41 skewY l "skew Y" T RotoPaint.skewY}
+ addUserKnob {41 skew_order l "skew order" T RotoPaint.skew_order}
+ addUserKnob {41 center T RotoPaint.center}
+ addUserKnob {20 "extra matrix" n 2}
+ "extra matrix" 1
+ addUserKnob {41 transform_matrix l "" -STARTLINE T RotoPaint.transform_matrix}
+ addUserKnob {20 "" n -1}
+ addUserKnob {20 email l @}
+ addUserKnob {26 message l "" +STARTLINE T "<b><font color=\"SandyBrown\">MotionBlur Paint v1.0</font></b><br>\n<font size=“1”><i>by Andrea Geremia</i><br>\n<br>\nandrea.geremia89@gmail.com<br>\nwww.andreageremia.it</font>"}
+}
+ Constant {
+  inputs 0
+  channels rgb
+  format "2048 2048 0 0 2048 2048 1 square_2K"
+  name Constant1
+  xpos -178
+  ypos -455
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 178
+  ypos -568
+ }
+ Dot {
+  name Dot10
+  xpos 212
+  ypos -522
+ }
+set Nd8d4d400 [stack 0]
+ Remove {
+  name Remove1
+  xpos -7
+  ypos -529
+ }
+ Switch {
+  inputs 2
+  which {{!parent.img_format}}
+  name Switch_Format
+  label "\[value which]"
+  xpos -7
+  ypos -437
+ }
+ AdjBBox {
+  numpixels {{parent.overscan}}
+  name AdjBBox1
+  xpos -7
+  ypos -362
+ }
+ Expression {
+  expr0 x
+  expr1 y
+  expr2 0
+  expr3 1
+  name Expression6
+  xpos -7
+  ypos -314
+ }
+ Dot {
+  name Dot8
+  xpos 22
+  ypos -268
+ }
+set Nd8d4c400 [stack 0]
+ Dot {
+  name Dot3
+  xpos 23
+  ypos -107
+ }
+set Nd8857c00 [stack 0]
+push $Nd8d4c400
+ Dot {
+  name Dot9
+  xpos -125
+  ypos -268
+ }
+set Nd8857800 [stack 0]
+ RotoPaint {
+  cliptype none
+  curves {{{v x3f99999a}
+
+  {f 0}
+
+  {n
+
+   {layer Root
+
+    {f 2097664}
+
+    {t x4493a000 x440b8000}
+
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}}}}}
+  toolbox {selectAll {
+  { selectAll bs 1000 h 1 src 1 str 1 ssx 1 ssy 1 sf 1 ep1 1 }
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush bs 180 str 1 ssx 1 ssy 1 sf 1 sb 1 ltn 1034 ltm 1034 tt 17 }
+  { eraser bs 86.2 src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 ltn 1033 ltm 1033 tt 18 }
+  { clone opc 0.1 bs 44.8 src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 tt 19 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 tt 21 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 tt 22 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 ep1 5 tt 23 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 tt 24 }
+  { smear bs 1000 h 1 src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 ltn 2 ltm 2 tt 25 }
+} }
+  toolbar_brush_size 1000
+  toolbar_brush_hardness 1
+  toolbar_lifetime_type single
+  toolbar_lifetime_start 1001
+  toolbar_lifetime_end 1001
+  toolbar_effect_parameter1 1
+  toolbar_paint_source fg
+  toolbar_source_transform_scale {1 1}
+  toolbar_source_transform_center {1024 778}
+  colorOverlay {0 0 0 0}
+  paint_source foreground
+  lifetime_start 2
+  lifetime_end 2
+  view {}
+  motionblur_on true
+  motionblur_shutter_offset_type centred
+  brush_type smear
+  brush_size 1000
+  brush_spacing 0.05000000075
+  brush_hardness 1
+  effect_parameter1 1
+  source_black_outside true
+  name RotoPaint
+  xpos -154
+  ypos -226
+ }
+set Nd8857400 [stack 0]
+push $Nd8857800
+ Dot {
+  name Dot2
+  xpos -364
+  ypos -265
+ }
+ Difference {
+  inputs 2
+  gain 1000000
+  name Difference1
+  xpos -398
+  ypos -230
+ }
+ Dilate {
+  channels alpha
+  size {{parent.Blur1.size}}
+  name Dilate1
+  label "\[value size]"
+  xpos -398
+  ypos -149
+ }
+push $Nd8857400
+ Blur {
+  inputs 1+1
+  channels rgb
+  name Blur1
+  label "\[value size]"
+  xpos -154
+  ypos -144
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -153
+  ypos -21
+ }
+push $Nd8857c00
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge1
+  xpos -10
+  ypos -21
+ }
+set Nd8855c00 [stack 0]
+ Dot {
+  name Dot1
+  xpos 23
+  ypos 197
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 388
+  ypos -31
+  number 1
+ }
+ Dot {
+  name Dot7
+  xpos 417
+  ypos 52
+ }
+push $Nd8855c00
+ CheckerBoard2 {
+  inputs 0
+  format {{{parent.input.format}}}
+  name CheckerBoard1
+  selected true
+  xpos 306
+  ypos -379
+ }
+push $Nd8d4d400
+ Switch {
+  inputs 2
+  which {{parent.check}}
+  name Switch1
+  label "\[value which]"
+  xpos 179
+  ypos -361
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 forward.u
+  from1 rgba.green
+  to1 forward.v
+  name Copy28
+  xpos 179
+  ypos -30
+ }
+ VectorBlur {
+  inputs 1+1
+  channels rgba
+  uv forward
+  name VectorBlur9
+  xpos 179
+  ypos 53
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove2
+  xpos 179
+  ypos 107
+ }
+ Switch {
+  inputs 2
+  which {{parent.output}}
+  name Switch_output
+  label "\[value which]"
+  xpos 179
+  ypos 193
+ }
+ Output {
+  name Output1
+  xpos 179
+  ypos 279
+ }
+end_group

@@ -202,6 +202,7 @@ timeMenu.addCommand('apLoop AP', 'nuke.createNode("{}apLoop")'.format(prefixNST)
 
 timeMenu.addSeparator()
 
+timeMenu.addCommand('FrameHold Special AG', "nuke.createNode('{}FrameHoldSpecial')".format(prefixNST), icon="FrameHold.png")
 timeMenu.addCommand('Looper DB', "nuke.createNode('{}Looper')".format(prefixNST), icon="nukepedia_icon.png")
 timeMenu.addCommand('FrameMedian MHD', "nuke.createNode('{}FrameMedian')".format(prefixNST), icon="FrameBlend.png")
 timeMenu.addCommand('TimeMachine NKPD', "nuke.createNode('{}TimeMachine')".format(prefixNST), icon="nukepedia_icon.png")
@@ -271,8 +272,10 @@ glowMenu.addCommand('bm_OpticalGlow BM', "nuke.createNode('{}bm_OpticalGlow')".f
 filterMenu.addSeparator()
 
 BlurMenu = filterMenu.addMenu("Blurs", icon="Median.png")
+
 BlurMenu.addCommand('ExponBlurSimple TL', "nuke.createNode('{}ExponBlurSimple')".format(prefixNST), icon="Glow.png")
 BlurMenu.addCommand('DirectionalBlur TL', "nuke.createNode('{}DirectionalBlur')".format(prefixNST), icon="DirBlur.png")
+BlurMenu.addCommand('MotionBlurPaint AG', "nuke.createNode('{}MotionBlurPaint')".format(prefixNST), icon="MotionBlur2D.png")
 BlurMenu.addCommand('iBlur NKPD', "nuke.createNode('{}iBlurU')".format(prefixNST), icon="Blur.png")
 BlurMenu.addCommand("WaveletBlur MHD", "nuke.createNode('{}WaveletBlur')".format(prefixNST), icon="h_tools.png")
 
@@ -353,7 +356,7 @@ filterMenu.addCommand('MECfiller NKPD', "nuke.createNode('{}MECfiller')".format(
 # Create Keyer Menu
 keyerMenu = m.addMenu('Keyer', icon = 'ToolbarKeyer.png', index = 70)
 
-keyerMenu.addCommand('apDespill AP', 'nuke.createNode("{}apDespill")'.format(prefixNST), icon='apDespill.png')
+keyerMenu.addCommand('apDespill AP', 'nuke.createNode("{}apDespill_v2")'.format(prefixNST), icon='apDespill.png')
 keyerMenu.addCommand('SpillCorrect SPIN', "nuke.createNode('{}Spill_Correct')".format(prefixNST), icon='spin_tools.png')
 keyerMenu.addCommand('DespillToColor NKPD', "nuke.createNode('{}DespillToColor')".format(prefixNST), icon="nukepedia_icon.png")
 
@@ -456,10 +459,10 @@ transformMenu.addCommand('Matrix_Inverse TL', "nuke.createNode('{}Matrix4x4_Inve
 transformMenu.addCommand('Matrix4x4Math TL', "nuke.createNode('{}Matrix4x4Math')".format(prefixNST), icon="ColorMath.png")
 transformMenu.addCommand('MirrorBorder TL', "nuke.createNode('{}MirrorBorder')".format(prefixNST), icon="AdjBBox.png")
 transformMenu.addCommand('TransformCutOut TL', "nuke.createNode('{}TransformCutOut')".format(prefixNST), icon="MergeOut.png")
-transformMenu.addCommand('iMorph TL', "nuke.createNode('{}iMorph')".format(prefixNST), icon="Blend.png")
 
 transformMenu.addSeparator()
 
+transformMenu.addCommand('iMorph AP', "nuke.createNode('{}iMorph_v2')".format(prefixNST), icon="VectorDistort.png")
 transformMenu.addCommand('RP_Reformat MJT', "nuke.createNode('{}RP_Reformat')".format(prefixNST), icon='RP_Reformat.png')
 transformMenu.addCommand('inverseMatrix MJT', "nuke.createNode('{}inverseMatrix')".format(prefixNST), icon='inverseMatrix.png')
 
@@ -474,6 +477,7 @@ transformMenu.addSeparator()
 
 transformMenu.addCommand('TransformMatrix AG', "nuke.createNode('{}TransformMatrix')".format(prefixNST), icon="Transform.png")
 transformMenu.addCommand('CornerPin2D_Matrix AG', "nuke.createNode('{}CornerPin2D_Matrix')".format(prefixNST), icon="CornerPin.png")
+transformMenu.addCommand('RotoPaintTransform AG', "nuke.createNode('{}RotoPaintTransform')".format(prefixNST), icon="RotoPaint.png")
 
 transformMenu.addSeparator()
 
@@ -486,7 +490,6 @@ transformMenu.addCommand('STmapInverse NKPD', "nuke.createNode('{}STmapInverse')
 transformMenu.addCommand('TransformMix NKPD', "nuke.createNode('{}TransformMix')".format(prefixNST), icon="nukepedia_icon.png")
 transformMenu.addCommand('PlanarProjection NKPD', "nuke.createNode('{}PlanarProjection')".format(prefixNST), icon="nukepedia_icon.png")
 transformMenu.addCommand('Reconcile3DFast DR', "nuke.createNode('{}Reconcile3DFast')".format(prefixNST), icon="Reconcile3D.png")
-
 
 ############################################################################################################
 ############################################################################################################

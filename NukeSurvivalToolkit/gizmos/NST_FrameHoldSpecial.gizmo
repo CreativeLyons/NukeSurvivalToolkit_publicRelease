@@ -1,0 +1,115 @@
+Group {
+ name FrameHold_special
+ knobChanged "\nnk = nuke.thisNode()\nk = nuke.thisKnob()\ntype=nk\['type']\npause=nk\['pause']\nif (k.name() in \['pause', 'first', 'last','type'] ):\n    if(type.getValue() == 0):\n        nk.knob('pause').setVisible(False)\n    else:\n        nk.knob('pause').setVisible(True)\n    if(pause.getValue() == 0 or type == 1):\n        nk.knob('message').setVisible(False)\n    else:\n        nk.begin()\n        offset = int(nuke.toNode('TimeOffset1')\['time_offset'].getValue())\n        first_frame = int(nuke.toNode('FrameRange_input')\['first_frame'].getValue())\n        last_frame = int(nuke.toNode('FrameRange_input')\['last_frame'].getValue()) + offset\n        nk.end()\n\n        nk.knob('message').setValue('Now your new Frame Range is: ' + str(first_frame) + ' - ' + str(last_frame))\n        nk.knob('message').setVisible(True)\n"
+ tile_color 0xb0a254ff
+ label "(frame \[value knob.frame_hold])"
+ lifetimeStart 1
+ lifetimeEnd 100
+ addUserKnob {20 FrameHold}
+ addUserKnob {3 frame_hold l "Frame Hold"}
+ frame_hold 1001
+ addUserKnob {22 current_frame l "<i><font color=\"yellow\">Current frame" -STARTLINE T nuke.thisNode().knob('frame_hold').setValue(nuke.frame())}
+ addUserKnob {26 ""}
+ addUserKnob {4 type l "Hold this frame:" t "- Always: it's the classic FrameHold\n- Range: specify the FrameRange in the textfields. You can pause the original plate and play it again after the FrameHold." M {Always Range "" ""}}
+ type Range
+ addUserKnob {3 first l Range}
+ first 1005
+ addUserKnob {3 last l "" -STARTLINE}
+ last 1010
+ addUserKnob {6 pause l "continue plate after Framehold" t "If checked, the plate will restart from the frame after the Framehold. " +STARTLINE}
+ addUserKnob {26 message l "" +STARTLINE +HIDDEN T "Now your new Frame Range is: 1 - 106"}
+ addUserKnob {26 ""}
+ addUserKnob {26 email l "" -STARTLINE T "<b><font color=\"yellow\">FrameHold Special v2.3</font></b><br>\n<font size=“1”><i>by Andrea Geremia</i><br>\n<br>\nandrea.geremia89@gmail.com<br>\nwww.andreageremia.it</font>"}
+ addUserKnob {22 explanation l ? T "nuke.message(\"This FrameHold node is has something more compared to the classic one:\\n - You can set the frame range when the Framehold works, without using other nodes or animate keyframes\\n - Plus, you can continue the plate after the Frame Hold\\n\\n - EXAMPLE: FrameHold: 1005\\n - Range: 1005 - 1010\\n - if you NOT continue: at frame 1011 will switch back to the plate, so at the frame 1011\\n - if you continue: at the frame 1011 will restart from 1005, frame 1011 will be 1006 and so on.\")" +STARTLINE}
+ addUserKnob {22 info l Tutorial -STARTLINE T "nuke.tcl('start', 'http://www.nukepedia.com/gizmos/time/framehold-special') "}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -1030
+  ypos -226
+ }
+set Ned2886f0 [stack 0]
+ Dot {
+  name Dot1
+  xpos -996
+  ypos -150
+ }
+set Ne2d05d40 [stack 0]
+ Dot {
+  name Dot3
+  xpos -886
+  ypos -150
+ }
+ TimeOffset {
+  time_offset {{abs(last-first)+1}}
+  time ""
+  name TimeOffset1
+  xpos -917
+  ypos -81
+ }
+ Dot {
+  name Dot4
+  xpos -886
+  ypos -6
+ }
+push $Ne2d05d40
+ Dot {
+  name Dot2
+  xpos -1109
+  ypos -150
+ }
+ FrameHold {
+  first_frame {{parent.frame_hold}}
+  name FrameHold1
+  xpos -1140
+  ypos -88
+ }
+push $Ne2d05d40
+ Switch {
+  inputs 2
+  which {{parent.type?x>=min(parent.first,parent.last)&&x<=max(parent.first,parent.last):1}}
+  name Switch2
+  xpos -1030
+  ypos -82
+ }
+ Switch {
+  inputs 2
+  which {{pause&&parent.type?x>max(parent.first,parent.last):0}}
+  name Switch1
+  selected true
+  xpos -1030
+  ypos -7
+ }
+ FrameRange {
+  first_frame {{parent.FrameRange_input.knob.first_frame}}
+  last_frame {{parent.pause?parent.FrameRange_input.knob.last_frame+parent.TimeOffset1.time_offset:parent.FrameRange_input.knob.last_frame}}
+  time ""
+  name FrameRange_input1
+  xpos -1030
+  ypos 116
+ }
+set Neb47c800 [stack 0]
+ Output {
+  name Output1
+  xpos -1030
+  ypos 219
+ }
+push $Neb47c800
+ Viewer {
+  frame_range 1034-1200
+  viewerProcess None
+  name Viewer1
+  xpos -1030
+  ypos 163
+ }
+push $Ned2886f0
+ FrameRange {
+  first_frame {{input.first_frame}}
+  last_frame {{input.last_frame}}
+  time ""
+  name FrameRange_input
+  xpos -843
+  ypos -226
+ }
+end_group
