@@ -1,111 +1,256 @@
 Group {
- name AntiAliasingFilter
- autolabel "nuke.thisNode().name() + \"\\n\" + '(' + str(nuke.thisNode()\['operation'].value()) + ')' "
+ name AntialiasingFilter
+ inputs 2
  tile_color 0xc17a4aff
- label "\[value operation]"
- note_font "Verdana Bold Bold Bold"
- selected true
- addUserKnob {20 Antialiasing l Filter}
+ label "(\[value antialiasing])"
+ note_font "Verdana Bold"
+ addUserKnob {20 Antialiasing}
  addUserKnob {41 channels T Matrix3.channels}
  addUserKnob {26 ""}
- addUserKnob {4 operation M {increase reduce "" "" "" ""}}
- operation reduce
- addUserKnob {7 filter l size R 0 10}
- addUserKnob {20 tuning l TUNING n 1}
- tuning 0
- addUserKnob {41 gamma T Grade1.gamma}
- addUserKnob {20 endGroup n -1}
+ addUserKnob {4 antialiasing t "Select which filter you want to apply: you have 3 intensity for the antialiasing filter and other 3 for to tweak the aliasing and get the image sharper" M {"- aliasing high" "- aliasing medium" "- aliasing low" none "+ antialiasing low" "+ antialiasing medium" "+ antialiasing high" ""}}
+ antialiasing none
+ addUserKnob {6 blackClamp l "black clamp" t "Aliasing filter can give you negative values" +STARTLINE}
+ blackClamp true
+ addUserKnob {6 whiteClamp l "white clamp" t "Aliasing filter can give you values over 1 in the alpha channel" -STARTLINE}
+ addUserKnob {6 normalize l INVISIBLE -STARTLINE +INVISIBLE}
+ normalize true
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannel l "mask channel" T Keymix1.maskChannel}
+ addUserKnob {41 invertMask l invert -STARTLINE T Keymix1.invertMask}
+ addUserKnob {26 ""}
+ addUserKnob {41 mix T Keymix1.mix}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 email l "" +STARTLINE T "<b><font color='SandyBrown'>Antialiasing filter  v2.0</font></b><br>\n<font size=“1”><i>by Andrea Geremia</i><br>\n<br>\nandrea.geremia89@gmail.com<br>\nwww.andreageremia.it</font> "}
 }
+ Reformat {
+  inputs 0
+  type "to box"
+  box_width 10
+  box_height 10
+  box_fixed true
+  name Reformat1
+  xpos 207
+  ypos -40
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  xpos 207
+  ypos 40
+ }
  Input {
   inputs 0
-  name Input1
-  xpos -588
-  ypos -288
+  name mask
+  xpos 55
+  ypos -187
+  number 1
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input1]"}}
+  name Switch3
+  xpos 55
+  ypos 40
+ }
+ Dot {
+  name Dot8
+  xpos 88
+  ypos 432
+ }
+ Input {
+  inputs 0
+  name src
+  xpos -1152
+  ypos -390
+ }
+set N66a8cd60 [stack 0]
+ Dot {
+  name Dot3
+  xpos -1119
+  ypos -180
+ }
+set N7f720840 [stack 0]
+ Dot {
+  name Dot9
+  xpos -1005
+  ypos -180
+ }
+set N66ce7a80 [stack 0]
+ Dot {
+  name Dot10
+  xpos -858
+  ypos -180
+ }
+set N66ce9ee0 [stack 0]
+ Dot {
+  name Dot4
+  xpos -623
+  ypos -180
  }
  Matrix {
+  channels {{{parent.Matrix3.channels}}}
+  matrix {
+      {1 1 1}
+      {1 1 1}
+      {1 1 1}
+    }
+  normalize true
+  name Matrix8
+  label "ANTIALIASING HIGH"
+  xpos -656
+  ypos -34
+ }
+push $N66ce9ee0
+ Matrix {
+  channels {{{parent.Matrix3.channels}}}
+  matrix {
+      {1 2 1}
+      {2 4 2}
+      {1 2 1}
+    }
+  normalize true
+  name Matrix5
+  label "ANTIALIASING MEDIUM"
+  xpos -891
+  ypos -24
+ }
+push $N66ce7a80
+ Matrix {
+  channels {{{parent.Matrix3.channels}}}
+  matrix {
+      {0 1 0}
+      {1 2 1}
+      {0 1 0}
+    }
+  normalize true
+  name Matrix6
+  label "ANTIALIASING LOW"
+  xpos -1038
+  ypos -26
+ }
+push $N7f720840
+push $N7f720840
+ Dot {
+  name Dot12
+  xpos -1309
+  ypos -180
+ }
+set N66ce0a50 [stack 0]
+ Matrix {
+  channels {{{parent.Matrix3.channels}}}
+  matrix {
+      {0 -0.5 0}
+      {-0.5 3 -0.5}
+      {0 -0.5 0}
+    }
+  normalize {{parent.normalize}}
+  name Matrix10
+  label "ALIASING LOW"
+  xpos -1342
+  ypos -65
+ }
+push $N66ce0a50
+ Dot {
+  name Dot5
+  xpos -1464
+  ypos -180
+ }
+set N66cc8b70 [stack 0]
+ Matrix {
+  channels {{{parent.Matrix3.channels}}}
+  matrix {
+      {0 -1 0}
+      {-1 5 -1}
+      {0 -1 0}
+    }
+  normalize true
+  name Matrix7
+  label "ALIASING MEDIUM"
+  xpos -1497
+  ypos -59
+ }
+push $N66cc8b70
+ Dot {
+  name Dot13
+  xpos -1699
+  ypos -180
+ }
+ Matrix {
+  channels {{{parent.Matrix3.channels}}}
+  matrix {
+      {-1 -1 -1}
+      {-1 9 -1}
+      {-1 -1 -1}
+    }
+  normalize {{parent.normalize}}
+  name Matrix4
+  label "ALIASING HIGH"
+  xpos -1732
+  ypos -58
+ }
+ Switch {
+  inputs 7
+  which {{parent.antialiasing}}
+  name Switch1
+  xpos -1152
+  ypos 244
+ }
+ Clamp {
+  channels {{{parent.Matrix3.channels}}}
+  minimum_enable {{parent.blackClamp}}
+  maximum_enable {{parent.whiteClamp}}
+  name Clamp1
+  xpos -1152
+  ypos 323
+ }
+ Dot {
+  name Dot2
+  xpos -1119
+  ypos 432
+ }
+push $N66a8cd60
+ Dot {
+  name Dot1
+  xpos -234
+  ypos -388
+ }
+ Keymix {
+  inputs 3
+  name Keymix1
+  xpos -267
+  ypos 426
+ }
+ Output {
+  name Output1
+  xpos -267
+  ypos 516
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote2
+  label "<b>sharp        ."
+  note_font_size 20
+  xpos -1486
+  ypos -239
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "<b>antialiasing        ."
+  note_font_size 20
+  xpos -925
+  ypos -226
+ }
+ Matrix {
+  inputs 0
+  channels rgba
   matrix {
       {0 0 0}
       {0 1 0}
       {0 0 0}
     }
   name Matrix3
-  xpos -588
-  ypos -244
- }
- Dot {
-  name Dot3
-  xpos -554
-  ypos -180
- }
-set N433b7fc0 [stack 0]
- Dot {
-  name Dot5
-  xpos -487
-  ypos -180
- }
- Matrix {
-  channels {{{Matrix3.channels}}}
-  matrix {
-      {0 {"( parent.filter) == 0\n? \n0\n: \n-1\n\n"} 0}
-      {{"( parent.filter) == 0\n? \n0\n: \n-1"} {"( parent.filter) == 0\n? \n1\n: \n(15- parent.filter)"} {"( parent.filter) == 0\n? \n0\n: \n-1"}}
-      {0 {"( parent.filter) == 0\n? \n0\n: \n-1"} 0}
-    }
-  normalize true
-  name Matrix2
-  xpos -521
-  ypos -41
-  addUserKnob {20 User}
-  addUserKnob {7 antialiasing R 0 4}
-  antialiasing -0.9
- }
- Dot {
-  name Dot7
-  xpos -487
-  ypos 92
- }
-push $N433b7fc0
- Dot {
-  name Dot4
-  xpos -625
-  ypos -180
- }
- Matrix {
-  channels {{{Matrix3.channels}}}
-  matrix {
-      {{"parent.filter <= 1 ? 0 : parent.filter-1"} {parent.filter} {"parent.filter <= 1 ? 0 : parent.filter-1"}}
-      {{parent.filter} {"( parent.filter) >= 1 \n? \n( parent.filter * 2 ) \n: \n( parent.filter + 1 ) \n\n"} {parent.filter}}
-      {{"parent.filter <= 1 ? 0 : parent.filter-1"} {parent.filter} {"parent.filter <= 1 ? 0 : parent.filter-1"}}
-    }
-  normalize true
-  name Matrix1
-  xpos -659
-  ypos -41
-  addUserKnob {20 User}
-  addUserKnob {7 antialiasing R 0 4}
-  antialiasing -0.9
- }
- Dot {
-  name Dot6
-  xpos -625
-  ypos 92
- }
- Switch {
-  inputs 2
-  which {{parent.operation}}
-  name Switch1
-  xpos -587
-  ypos 88
- }
- Grade {
-  channels {{{Matrix3.channels}}}
-  white_clamp true
-  name Grade1
-  xpos -587
-  ypos 157
- }
- Output {
-  name Output1
-  xpos -587
-  ypos 279
+  xpos -1936
+  ypos -79
  }
 end_group
