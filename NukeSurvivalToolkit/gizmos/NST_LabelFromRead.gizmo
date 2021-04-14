@@ -1,37 +1,60 @@
 Group {
  name LabelFromRead
  tile_color 0x1f1f1fff
+ label "\[ expr \{ \[value splitPath] ? \[value finalFilePath] : \[] \} ]\n\[value inputDesc]"
  note_font "Verdana Bold"
  note_font_color 0xe5e500ff
  selected true
  addUserKnob {20 LabelFromRead}
- addUserKnob {1 inputName l INVISIBLE +INVISIBLE}
+ addUserKnob {1 inputName +INVISIBLE}
  inputName "\[file tail \[value \[topnode].file]] \n"
+ addUserKnob {1 fullPath +INVISIBLE}
+ fullPath "\[value \[topnode].file]"
  addUserKnob {6 filenameCheck l "Include FIle Name?" +STARTLINE}
  filenameCheck true
- addUserKnob {1 inputDesc l Description}
+ addUserKnob {4 pathType l "" -STARTLINE M {"Full Path" Tail}}
+ pathType Tail
+ addUserKnob {6 splitPath l "Split Path" -STARTLINE}
+ addUserKnob {1 whichPath +INVISIBLE}
+ whichPath "\[ expr  \{ \[value pathType] == \"Full Path\" ? \[value fullPath] : \[value inputName] \} ]"
+ addUserKnob {3 rangeStart l range}
+ rangeStart 1
+ addUserKnob {3 rangeEnd l " -  " -STARTLINE}
+ rangeEnd 2
+ addUserKnob {1 splitText l "Split with" -STARTLINE}
+ splitText _
+ addUserKnob {1 fileRange +INVISIBLE}
+ fileRange "\[ expr \{ \[value splitPath] ? \[ expr \{ \[value filenameCheck] ? \[lrange \[split \[value whichPath] \[value splitText] ] \[value rangeStart] \[value rangeEnd] ] : \[] \} ] : \[value whichPath] \} ]"
+ addUserKnob {1 finalFilePath +INVISIBLE}
+ finalFilePath "\[value fileRange]"
  addUserKnob {6 descCheck l "Include Description?" +STARTLINE}
+ addUserKnob {1 inputDesc l Description}
  addUserKnob {26 ""}
  addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
  addUserKnob {18 color l "Text Color"}
  color {1 1 0}
  addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {26 ""}
+ addUserKnob {6 color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {18 borderColor l "Border Color"}
  borderColor {0 0 0}
  addUserKnob {6 borderColor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 borderColor_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 color_rgb_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {7 borderSize l "Border Size" R 0 5}
  borderSize 2
+ addUserKnob {6 enableBackground l "Enable Background" +INVISIBLE +STARTLINE}
  addUserKnob {26 ""}
+ addUserKnob {41 xjustify l Justify T FileName.xjustify}
+ addUserKnob {41 yjustify l "" -STARTLINE T FileName.yjustify}
  addUserKnob {7 size l "Overall Size" R -50 50}
- addUserKnob {7 YPos l "Y Position" R -100 100}
+ addUserKnob {7 x_pos l "X Pos" R -100 100}
+ addUserKnob {7 YPos l "Y Pos" R -100 100}
  addUserKnob {26 ""}
  addUserKnob {41 mix T Merge1.mix}
  addUserKnob {20 info l Info}
  addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
  addUserKnob {26 desc l Description: t "Takes the last section of the filename and displays in on the top of frame\n\n- Can toggle dsiplay of a User Description\n- Can adjust size and position of Text" T LabelFromRead}
- addUserKnob {26 text l Version: T v05}
+ addUserKnob {26 text l Version: T v06}
 }
  Input {
   inputs 0
@@ -44,7 +67,7 @@ Group {
   xpos -161
   ypos -550
  }
-set Nd7407130 [stack 0]
+set N662b9c00 [stack 0]
  Remove {
   operation keep
   channels rgba
@@ -70,9 +93,11 @@ set Nd7407130 [stack 0]
   old_expression_markers {{0 -1}
     }
   box {0 {input.height-(input.height/5)} {input.width} {input.height-(input.height/37.25)}}
+  xjustify {{parent.FileName.xjustify}}
+  yjustify {{parent.FileName.yjustify}}
   transforms {{0 2}
     }
-  font {{ Arial : Regular : Arial.ttf : 0 }}
+  font {{ Arial : Regular : arial.ttf : 0 }}
   global_font_scale {{(input.width/35+parent.size)/100}}
   scale {1 1}
   cursor_initialised true
@@ -80,7 +105,7 @@ set Nd7407130 [stack 0]
   initial_cursor_position {{0 1556}
     }
   group_animations {{0} imported: 0 selected: items: "root transform"}
-  animation_layers {{1 11 0 {input.height-(input.height/7)} {input.width/40} {parent.YPos} 1 1 0 0 0 0}
+  animation_layers {{1 11 0 {input.height-(input.height/7)} {"input.width/40+ parent.x_pos"} {parent.YPos} 1 1 0 0 0 0}
     }
   color {{parent.color} {parent.color} {parent.color} 1}
   background_border_x 0
@@ -92,14 +117,14 @@ set Nd7407130 [stack 0]
   shadow_size {{parent.borderSize}}
   name Description
   xpos -339
-  ypos -433
+  ypos -453
   disable {{!parent.descCheck}}
  }
  Text2 {
   font_size_toolbar 100
   font_width_toolbar 100
   font_height_toolbar 100
-  message "\n\[value parent.inputName]"
+  message "\n\[value parent.finalFilePath]"
   old_message {{10 77 97 114 99 105 101 95 50 75 46 100 112 120 32 10}
     }
   old_expression_markers {{1 15}
@@ -107,8 +132,8 @@ set Nd7407130 [stack 0]
   box {0 {input.height-(input.height/5)} {input.width} {input.height-(input.height/37.25)}}
   transforms {{0 2}
     }
-  cursor_position 25
-  font {{ Arial : Regular : Arial.ttf : 0 }}
+  cursor_position 1
+  font {{ Arial : Regular : arial.ttf : 0 }}
   global_font_scale {{(input.width/35+parent.size)/100}}
   scale {1 1}
   cursor_initialised true
@@ -116,9 +141,10 @@ set Nd7407130 [stack 0]
   initial_cursor_position {{0 1556}
     }
   group_animations {{0} imported: 0 selected: items: "root transform"}
-  animation_layers {{1 11 0 {input.height-(input.height/7)} {input.width/40} {"descCheck == 1 ? parent.YPos : input.height/20 + parent.YPos"} 1 1 0 0 0 0}
+  animation_layers {{1 11 0 {input.height-(input.height/7)} {"input.width/40+ parent.x_pos"} {"descCheck == 1 ? parent.YPos : input.height/20 + parent.YPos"} 1 1 0 0 0 0}
     }
   color {{parent.color} {parent.color} {parent.color} 1}
+  enable_background {{parent.enableBackground}}
   background_border_x 0
   background_border_y 0
   enable_shadows true
@@ -128,7 +154,7 @@ set Nd7407130 [stack 0]
   shadow_size {{parent.borderSize}}
   name FileName
   xpos -339
-  ypos -409
+  ypos -408
   disable {{!parent.filenameCheck}}
  }
  Dot {
@@ -136,7 +162,7 @@ set Nd7407130 [stack 0]
   xpos -305
   ypos -342
  }
-push $Nd7407130
+push $N662b9c00
  Merge2 {
   inputs 2
   bbox B

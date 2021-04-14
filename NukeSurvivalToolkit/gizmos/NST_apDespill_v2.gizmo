@@ -1,0 +1,286 @@
+Group {
+ name apDespill
+ help "apDespill v2.0 by Adrian Pueyo\n\nGizmo to despill an image, with options to despill any hue (and not only the primaries), select different algorithms for de/respilling, and protect tones from the despill.\n\nIf you just want a basic despill, its default values should already be enough and the tool will avoid any extra calculations.\n\nv2 includes a new \"absolute\" mode which lets you basically perform a key, or do a \"despill to color\" operation. Also, the despill color, respill color and limit can now be plugged as image inputs if you wish, letting you perform a fully image-based despill or key, sort of iKeylight. Additionally, it allows you to perform the despill under a colorspace sandwich, for the artists who prefer to loop through different colorspaces in order to find one that works. Thanks to Tony Lyons the best feedback!\n\nadrianpueyo.com, 2014-2021"
+ onCreate "n = nuke.thisNode()\nn\['tolerance'].setRange(0,2)\nn\['prot1_tolerance'].setFlag(0x00000004)\nn\['prot1_effect'].setFlag(0x00000004)"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\nif kn == \"color\":\n    kv = k.getValue()\n    custom_weight_labels = \[\"green - blue\", \"red - blue\", \"red - green\", \" \"]\n    n\[\"custom_weight\"].setLabel(custom_weight_labels\[int(kv)])\n    n\[\"pick\"].setVisible(k.getValue() == 3)\nelif kn == \"mode\":\n    n\[\"custom_weight\"].setVisible(n\[\"mode\"].getValue()==3)\nelif kn in \[\"out\",\"output_alpha\"]:\n    n\[\"respill_math\"].setEnabled(n\[\"out\"].getValue()==0 or n\[\"output_alpha\"].getValue()==1)\n    n\[\"respill_color\"].setEnabled(n\[\"out\"].getValue()==0)\n    n\[\"inverted_spill_matte\"].setEnabled(n\[\"output_alpha\"].value())\nelif kn == \"prot1_activate\":\n    protA = n\[\"prot1_activate\"].value()\n    n\[\"prot1_preview\"].setEnabled(protA)\n    for i in \[\"prot1\", \"prot1_tolerance\", \"prot1_falloff\",\"prot1_effect\"]:\n        n\[i].setVisible(protA)\nelif kn == \"inputChange\":\n    n.knobs()\[\"limit_channel\"].setVisible(n.input(3) is not None)\n    n.knobs()\[\"invert_limit_channel\"].setVisible(n.input(3) is not None)\n    color_enabled = nuke.toNode(\"apDespillKernel\")\[\"apDespillKernel_use_color_input\"].getValue()==0\n    n\[\"color\"].setEnabled(color_enabled)\n    n.knobs()\[\"pick\"].setEnabled(color_enabled)\n    n\[\"info_using_input_color\"].setVisible(not color_enabled)\nelif kn == \"colorspace_shift\":\n    kv = k.value()\n    for i in \[\"colorspace_out\", \"illuminant_out\", \"primary_out\"]:\n        n.knobs()\[i].setEnabled(kv)\n    for i in \[\"colorspace_in\", \"illuminant_in\", \"primary_in\"]:\n        n.knobs()\[i].setEnabled(kv and n\[\"input_colorspace\"].value())\n    n\[\"input_colorspace\"].setEnabled(kv)\nelif kn == \"input_colorspace\":\n    kv = k.value()\n    for i in \[\"colorspace_in\", \"illuminant_in\", \"primary_in\"]:\n        n.knobs()\[i].setVisible(kv)\n        n.knobs()\[i].setEnabled(kv)\nelif kn == \"imagebased\":\n    kv = k.value()\n    input_names = \[\"color\",\"limit\",\"respill\"]\n    if kv:\n        for i_name in input_names:\n            i_fullname = \"Input\"+i_name\n            if not nuke.exists(i_fullname):\n                i_node = nuke.nodes.Input()\n                i_node\[\"name\"].setValue(i_fullname)\n            else:\n                i_node = nuke.toNode(i_fullname)\n            dot = nuke.toNode(\"Dot\"+i_name)\n            i_node.setXYpos(dot.xpos(),dot.ypos()-40)\n            dot.setInput(0,i_node)\n    else:\n        # If something connected, do nothing\n        if not any(\[n.input(i) for i in \[2,3,4]]):\n            for i_name in input_names:\n                if nuke.exists(\"Input\"+i_name):\n                    nuke.delete(nuke.toNode(\"Input\"+i_name))\n        else:\n            k.setValue(True)"
+ tile_color 0x8b8b8bff
+ addUserKnob {20 apDespill}
+ addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 imagebased l image-based t "Show or hide image-based inputs.\n\nThis doesn't change anything internally except hiding inputs, just to avoid intimidating arrows on the node graph.\n\nNote: While any image-based input is connected, this won't let you hide them." +STARTLINE}
+ addUserKnob {6 absolute_mode l "absolute mode" t "Absolute mode performs a keying algorithm instead of a regular despill, so that you can do a \"spill to colour\" or even use this node as an image-based Keylight." -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {4 color t "Select a primary as a starting point, or custom to show RGB controls to select any color.\n\nNote: If an image is plugged on the color input, this will get overwritten by the input." M {red green blue custom "" "" ""}}
+ color custom
+ addUserKnob {26 info_using_input_color l " " -STARTLINE +HIDDEN T "<i><font color=#AAA> (Using color from input)"}
+ addUserKnob {18 pick t "Pick the color you'd like to use for the despill. \n\nPlease use ctrl/cmd+alt+click for picking.\n\nNOTE: If a despill color image input is plugged, this value will be ignored."}
+ pick {0 1 0}
+ addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 dfg_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {4 out l output t "Quick switch to output the despilled image or the substracted one." M {despill spill}}
+ addUserKnob {6 output_alpha l "output spill matte in alpha" t "Output the spill luminance in the alpha channel." +STARTLINE}
+ output_alpha true
+ addUserKnob {6 inverted_spill_matte l inverted t "Invert the output spill matte (in the alpha channel), especially useful when the despill is set to Absolute mode, in which case this will output a keying-like alpha." -STARTLINE}
+ inverted_spill_matte true
+ addUserKnob {4 mode l "despill math" t "average = avg of other two channels\nmaximum = max of other two channels\nminimum = min of other two channels\ncustom = select custom weights" M {average maximum minimum custom ""}}
+ addUserKnob {7 custom_weight l " " t "-1 = only capped by the first channel\n0 = capped by avg of both\n1 = only capped by the second channel" -STARTLINE +HIDDEN R -1 1}
+ addUserKnob {26 ""}
+ addUserKnob {6 colorspace_shift l "alt colorspace" t "This allows for the popular artistic approach to refining the despill where you browse through colorspace conversions (mainly white point and primaries) and choose one that matches your desired despill bias.\n\n<b>Tip:</b> Double click on a dropdown and use the Page Up and Page Down keys on your keyboard to browse quickly through the items.\n\n<b>Note:</b> There's no need at all for the values of these dropdowns to match your working colorspace, so you can leave it as-is or tweak it if you prefer, regardless of the colorspace you're comping at (e.g. ACEScg). It is literally an artistic conversion prior to the despill algorithm that then gets reverted." +STARTLINE}
+ colorspace_shift true
+ addUserKnob {6 input_colorspace l "input colorspace" t "Also tweak the input colorspace for the back and forth colorspace conversion. This is generally not needed however, as this colorspace conversion is generally only used for artistic purposes." -STARTLINE}
+ addUserKnob {6 log_space l log t "Perform Lin2Log -> Despill -> Log2Lin." -STARTLINE}
+ addUserKnob {41 colorspace_in l "in colorspace" +DISABLED +HIDDEN T Colorspace1.colorspace_in}
+ addUserKnob {41 illuminant_in l "" -STARTLINE +DISABLED +HIDDEN T Colorspace1.illuminant_in}
+ addUserKnob {41 primary_in l "" -STARTLINE +DISABLED +HIDDEN T Colorspace1.primary_in}
+ addUserKnob {41 colorspace_out l "despill space" T Colorspace1.colorspace_out}
+ addUserKnob {41 illuminant_out l "" -STARTLINE T Colorspace1.illuminant_out}
+ addUserKnob {41 primary_out l "" -STARTLINE T Colorspace1.primary_out}
+ addUserKnob {26 ""}
+ addUserKnob {7 hue_offset l "hue offset" t "Rotate the despill vectors to despill an arbitrary tone other than the primaries or the picked color.\nNote: A rotation of +-120 degrees is the same as selecting a different color channel." R -30 30}
+ addUserKnob {7 tolerance l limit t "Use this to multiply the hue tolerance (the limiter value). You can move it all the way down to 0 to completely remove a hue from your image.\n\n<b>NOTE:</b> If an image is plugged into the <i>limit</i> input, this will act as a multiplier." R 0 2}
+ tolerance 1
+ addUserKnob {41 limit_channel l "limit channel" +HIDDEN T CopyLimit.from0}
+ addUserKnob {6 invert_limit_channel l invert t "The recommended workflow for the image-based limit is keeping this invert turned on, so that the higher the value of the limit channel, the lower the limit gets." -STARTLINE +HIDDEN}
+ invert_limit_channel true
+ addUserKnob {6 prot1_activate l "protect tones" t "Enable controls to select tones to protect from despilling." +STARTLINE}
+ addUserKnob {6 prot1_preview l preview t "Output the protected tones." -STARTLINE +DISABLED}
+ addUserKnob {18 prot1 l protect t "Pick the central hue to protect.\n(ctrl/cmd+alt+click)" +HIDDEN}
+ prot1 {0 0 0}
+ addUserKnob {6 prot1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 prot1_tolerance l tolerance t "Amount of hues to include in the selection." +HIDDEN}
+ prot1_tolerance 0.2
+ addUserKnob {7 prot1_falloff l falloff t "Falloff for the hue selection. A higher falloff will make hues apart from the picked one lose weight more quickly." +HIDDEN R 0 4}
+ prot1_falloff 2
+ addUserKnob {7 prot1_effect l effect t "Multiplier for the hue protection, and for the spill limit value." +HIDDEN R 0 10}
+ prot1_effect 1
+ addUserKnob {26 respill_divider l "" +STARTLINE}
+ addUserKnob {4 respill_math l "spill math" t "Settings for the math for desaturating the the spill before adding it back." M {"Rec 709" "Ccir 601" "Rec 2020" Average Maximum "" "" "" "" ""}}
+ addUserKnob {18 respill_color l "respill color" t "RGB multiplier for the desaturated spill when adding it back.\n\nIf used on non-degrained plates (which should be avoided anyway), any value other than 1 here will most likely produce grain artifacts.\n\nNOTE: If a respill image input is plugged, this value will act as a multiplier." R 0 4}
+ respill_color 1
+ addUserKnob {6 respill_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {41 maskChannelMask l mask T Merge.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge.fringe}
+ addUserKnob {41 mix T Merge.mix}
+ addUserKnob {26 version_author l "" t "apDespill v2.0\n13 April, 2021" +STARTLINE T "<span style=\"color:#666\"><br/><b>apDespill v2.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2014-2021</span>"}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 273
+  ypos -370
+  number 1
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 307
+  ypos -267
+ }
+set Nc9474c00 [stack 0]
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 307
+  ypos -237
+ }
+ Dot {
+  inputs 0
+  name Dotrespill
+  label Dotrespill
+  note_font "Verdana Bold"
+  xpos 1190
+  ypos -525
+ }
+ AddChannels {
+  channels rgba
+  format_size true
+  name AddRGBA_spill
+  xpos 1156
+  ypos -442
+ }
+ Dot {
+  inputs 0
+  name Dotcolor
+  label Dotcolor
+  note_font "Verdana Bold"
+  xpos 1080
+  ypos -593
+ }
+ AddChannels {
+  channels rgba
+  format_size true
+  name AddRGBA_color
+  xpos 1046
+  ypos -499
+ }
+ Dot {
+  inputs 0
+  name Dotlimit
+  label Dotlimit
+  note_font "Verdana Bold"
+  xpos 936
+  ypos -732
+ }
+ Shuffle {
+  red black
+  green black
+  blue black
+  alpha black
+  name Shuffle_limit
+  label "\[value in]"
+  xpos 902
+  ypos -670
+ }
+ Input {
+  inputs 0
+  name Inputimage
+  xpos 449
+  ypos -761
+ }
+set Nb8c4b800 [stack 0]
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 788
+  ypos -758
+ }
+ Shuffle {
+  alpha black
+  name Shuffle
+  xpos 754
+  ypos -694
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name CopyLimit
+  xpos 754
+  ypos -670
+ }
+ Invert {
+  channels alpha
+  name InvertLimit
+  xpos 754
+  ypos -611
+  disable {{!invert_limit_channel}}
+ }
+ Colorspace {
+  name Colorspace1
+  label "\[value colorspace_in] >> \[value colorspace_out]"
+  xpos 754
+  ypos -544
+  disable {{!parent.colorspace_shift}}
+ }
+ Log2Lin {
+  operation lin2log
+  name Log2Lin1
+  xpos 754
+  ypos -508
+  disable {{!log_space}}
+ }
+ BlinkScript {
+  inputs 3
+  recompileCount 94
+  ProgramGroup 1
+  KernelDescription "2 \"apDespillKernel\" iterate pixelWise 857ee5211c9dc340b8743026c9778403c1424a4ec1afa5c7990e55b71f93720c 4 \"src\" Read Point \"color_src\" Read Point \"spill_src\" Read Point \"dst\" Write Point 21 \"limit\" Float 1 AACAPw== \"shift\" Float 1 AAAAAA== \"weights\" Float 1 AAAAAA== \"outmode\" Int 1 AAAAAA== \"output_alpha\" Int 1 AAAAAA== \"output_alpha_inverted\" Int 1 AAAAAA== \"clr\" Int 1 AAAAAA== \"mode\" Int 1 AAAAAA== \"respill_math\" Int 1 AAAAAA== \"respill_color\" Float 4 AAAAAAAAAAAAAAAAAAAAAA== \"prot1_on\" Int 1 AAAAAA== \"prot1_preview\" Int 1 AAAAAA== \"prot1\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"prot1_tolerance\" Float 1 AAAAAA== \"prot1_mult\" Float 1 AAAAAA== \"prot1_falloff\" Float 1 AAAAAA== \"pickSpill\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"despill_method\" Int 1 AAAAAA== \"use_color_input\" Int 1 AAAAAA== \"use_spill_input\" Int 1 AAAAAA== \"use_limit_input\" Int 1 AAAAAA== 21 \"limit\" 1 1 \"shift\" 1 1 \"weights\" 1 1 \"outmode\" 1 1 \"output_alpha\" 1 1 \"output_alpha_inverted\" 1 1 \"clr\" 1 1 \"mode\" 1 1 \"respill_math\" 1 1 \"respill_color\" 4 1 \"prot1_on\" 1 1 \"prot1_preview\" 1 1 \"prot1\" 3 1 \"prot1_tolerance\" 1 1 \"prot1_mult\" 1 1 \"prot1_falloff\" 1 1 \"pickSpill\" 3 1 \"despill_method\" 1 1 \"use_color_input\" 1 1 \"use_spill_input\" 1 1 \"use_limit_input\" 1 1 7 \"_usePicked\" Int 1 1 AAAAAA== \"_clr\" Int 1 1 AAAAAA== \"_ret\" Int 1 1 AAAAAA== \"_hueShift\" Float 1 1 AAAAAA== \"_autoShift\" Float 1 1 AAAAAA== \"despillColor\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA== \"vNorm\" Float 3 1 AAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "//---------------------------------------------------------\n// apDespillKernel - apDespill v1.0 by Adrian Pueyo\n//\n// Despill an image, with options to despill any hue (and\n// not only the primaries), select different algorithms for\n// des/respilling, and protect tones from the despill.\n//\n// v2.0: Ability to plug image inputs for the controls,\n// and to perform a full key and respill.\n//\n// adrianpueyo.com, 2014-2017\n// ---------------------------------------------------------\n\ninline float y_convert_ccir601(const float4 in)\{\n  return in.x * 0.299f + in.y * 0.587f + in.z * 0.114f;\n\}\n\ninline float y_convert_rec709(const float4 in)\{\n  return in.x * 0.2125f + in.y * 0.7154f + in.z * 0.0721f;\n\}\n\ninline float y_convert_rec2020(const float4 in)\{\n  return in.x * 0.2627f + in.y * 0.678f + in.z * 0.0593f;\n\}\n\ninline float4 hueRotate(const float4 in, const float H)\{\n  if(H==0.0f)\{\n    return in;\n  \}else\{\n    float cosH = cos(H*PI/180);\n    float sinH = sin(H*PI/180);\n    float3 ret;\n    ret.x = (in.x+in.y+in.z)*(1-cosH)/3 + in.x*cosH + (-in.y/sqrt(3.0f)+in.z/sqrt(3.0f))*sinH;\n    ret.y = (in.x+in.y+in.z)*(1-cosH)/3 + in.y*cosH + (in.x/sqrt(3.0f)-in.z/sqrt(3.0f))*sinH;\n    ret.z = (in.x+in.y+in.z)*(1-cosH)/3 + in.z*cosH + (-in.x/sqrt(3.0f)+in.y/sqrt(3.0f))*sinH;\n    return float4(ret.x,ret.y,ret.z,in\[3]);\n  \}\n\}\n\nfloat3 vecToPlane(float3 v1, float3 v2 = float3(1.0f,1.0f,1.0f))\{\n  float3 v1onv2;\n  v1onv2 = v2 * float((float(dot(v2,v1))/float(dot(v2,v2)))); //Projection of vector on another (plane's normal)\n  return v1-v1onv2; //Projection of vector on plane\n\}\n\ninline float3 myCross(float3 a, float3 b)\{\n  return float3(float(a.y*b.z-a.z*b.y),float(a.z*b.x-a.x*b.z),float(a.x*b.y-a.y*b.x));\n\}\n\ninline float colorAngle(const float3 v1, const float3 v2)\{\n  const float3 vN=float3(1.0f,1.0f,1.0f);\n  float ang = acos(float(dot(v1,v2))/float(sqrt(dot(v1,v1)*dot(v2,v2))));\n  float3 crs = myCross(v1,v2);\n  if (dot(vN, crs) > 0) \{\n    ang = -ang;\n  \}\n  return ang;\n\}\n\n//Main function to calculate the despill for a float4 colour. If prot1_preview is True, returns the prot1 result instead.\ninline float4 apDespillMain(float4 src_color, float hueShift, int clr, int mode, float limit, float weights, int prot1_preview, int prot1_on, float3 prot1, float prot1_tolerance, float prot1_mult, float prot1_falloff)\{\n    //1. HueRotate IN\n    float4 despilled = hueRotate(src_color, hueShift);\n\n    //2. Calculate the limit\n    float resultLimit = 0.0f;\n    int2 others;\n    if(clr==0)\{//If red (and if _usePicked, also set red)\n      others = int2(1,2);\n    \}else if(clr==1)\{\n      others=int2(0,2);\n    \}else if(clr==2)\{\n      others=int2(0,1);\n    \}\n\n    if(mode==0)\{//average\n      resultLimit = (despilled\[others\[0]]+despilled\[others\[1]])/2;\n    \}else if(mode==1)\{//max\n      resultLimit = max(despilled\[others\[0]],despilled\[others\[1]]);\n    \}else if(mode==2)\{//min\n      resultLimit = min(despilled\[others\[0]],despilled\[others\[1]]);\n    \}else\{//custom\n      resultLimit = despilled\[others\[0]]*weights+despilled\[others\[1]]*(1-weights);\n    \}\n\n    //3. Protect tones\n    float prot1_result;\n    if(prot1_on==1&&(prot1\[0]!=prot1\[1]||prot1\[0]!=prot1\[2]||prot1\[1]!=prot1\[2]))\{\n      float cos_prot1_angle;\n      cos_prot1_angle = (src_color\[0]*prot1\[0]+src_color\[1]*prot1\[1]+src_color\[2]*prot1\[2]) / (sqrt(prot1\[0]*prot1\[0]+prot1\[1]*prot1\[1]+prot1\[2]*prot1\[2]) * sqrt(src_color\[0]*src_color\[0]+src_color\[1]*src_color\[1]+src_color\[2]*src_color\[2]));\n      prot1_result = pow(clamp(cos_prot1_angle,0.0f,1.0f),1/pow(prot1_tolerance,prot1_falloff));\n      resultLimit = resultLimit*(1+prot1_result*prot1_mult);\n    \}\n\n    //4. Calculate the despill and HueRotate OUT\n    for (int component = 0; component < 3; component++)\{\n      despilled\[component] = component==clr?min(despilled\[component],resultLimit*limit):despilled\[component];\n    \}\n    despilled = hueRotate(despilled,-hueShift);\n    despilled\[3] = prot1_result;\n    return despilled;\n\}\n\ninline float getLuma(float4 src_color, int luma_math)\{\n  float luma;\n  if(luma_math==0)\{\n    luma = y_convert_rec709(src_color);\n  \}else if(luma_math==1)\{\n    luma = y_convert_ccir601(src_color);\n  \}else if(luma_math==2)\{\n    luma = y_convert_rec2020(src_color);    \n  \}else if(luma_math==3)\{\n    luma = (src_color\[0]+src_color\[1]+src_color\[2])/3;\n  \}else\{\n    luma = max(max(src_color\[0],src_color\[1]),src_color\[2]);\n  \}\n  return luma;\n\}\n\nkernel apDespillKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;\n  Image<eRead, eAccessPoint, eEdgeClamped> color_src;\n  Image<eRead, eAccessPoint, eEdgeClamped> spill_src; //Acts as a multiplier for the respill color\n  Image<eWrite> dst;\n\n  param:\n    float limit;\n    float shift;\n    float weights;\n    int outmode;//0=despill,1=spill\n    int output_alpha;\n    int output_alpha_inverted;\n    int clr; //0=red,1=green,2=blue\n    int mode; //0=average,1=maximum,2=minimum,3=custom\n    int respill_math; //0=Rec709,1=Ccir601,2=Avg,3=Max\n    float4 respill_color;\n    int prot1_on;\n    int prot1_preview;\n    float3 prot1;\n    float prot1_tolerance;\n    float prot1_mult;\n    float prot1_falloff;\n    float3 pickSpill;\n    int despill_method; //0=despill,1=key/\"absolute\"\n\n    int use_color_input;\n    int use_spill_input;\n    int use_limit_input; //Should be shuffled in the src's alpha\n\n  local:\n    int _usePicked;\n    int _clr;\n    int _ret;\n    float _hueShift;\n    float _autoShift;\n    float3 despillColor;\n    float3 vNorm;\n\n  void define() \{\n    defineParam(limit, \"limit\", 1.0f);\n    defineParam(shift, \"shift\", 0.0f);\n  \}\n\n  void init() \{\n    //1. Calculate which color to affect\n    _ret = 0;\n    if(use_color_input==1)\{\n      _clr = 0;\n      _usePicked = 1;\n    \}else if(clr!=3)\{//red green or blue\n      _usePicked = 0;\n      _clr = clr;\n    \}else if(pickSpill.x==pickSpill.y && pickSpill.x==pickSpill.z)\{\n      _ret = 1;//if \"custom\" selected but has a gray value, avoid any calculations\n    \}else\{\n      _usePicked = 1;\n      _clr = 0;\n    \}\n    vNorm = float3(1.0f,1.0f,1.0f);\n    if(use_color_input==0)\{\n      //2. Calculate the necessary hue shift\n      _autoShift = 0.0f;\n      if(_usePicked==1)\{\n        _autoShift = colorAngle(vecToPlane(pickSpill,vNorm),vecToPlane(float3(1.0f,0.0f,0.0f),vNorm));\n        _autoShift = _autoShift*180/PI;//to deg\n      \}\n      _hueShift = shift-_autoShift;\n    \}\n  \}\n\n  void process()\{\n    if(_ret == 1)\{ dst()=src(); return; \} //Avoid any calculations if no despill selected\n\n    //0. If color from input, calculate the necessary hue shift\n    float hueShift = 0.0f, autoShift = 0.0f;\n    float3 despillColor;\n    if(use_color_input==1)\{\n      despillColor = float3(color_src(0),color_src(1),color_src(2));\n      autoShift = colorAngle(vecToPlane(despillColor,vNorm),vecToPlane(float3(1.0f,0.0f,0.0f),vNorm));\n      autoShift = autoShift*180/PI;//to deg\n      hueShift = shift-autoShift;\n    \}else\{\n      if(_usePicked == 1)\{\n        despillColor = pickSpill;\n      \}else\{\n        despillColor = float3(_clr==0?1.0f:0.0f,_clr==1?1.0f:0.0f,_clr==2?1.0f:0.0f);\n      \}\n      \n      hueShift = _hueShift;\n    \}\n\n    float limit_result = use_limit_input==1?limit*src(3):limit;\n\n    //1. Despill the source image\n    float4 despilled = apDespillMain(src(), hueShift, _clr, mode, limit_result, weights, prot1_preview, prot1_on, prot1, prot1_tolerance, prot1_mult, prot1_falloff);\n    if(prot1_preview==1 && prot1_on==1)\{\n      dst() = src()*clamp(despilled\[3]*prot1_mult,0.0f,1.0f);\n      return;\n    \}\n    float4 spill = src()-despilled;\n    float spill_luma = getLuma(spill, respill_math);\n\n    //2. Process the key if key method selected\n    float4 result;\n    float4 despilled_full, spill_full; //Will account for the key if method selected is key\n    float spill_luma_full;\n    if(despill_method==0)\{\n      //Despill Method = Despill\n      despilled_full = despilled;\n      spill_full = spill;\n      spill_luma_full = spill_luma;\n    \}else\{\n      //Despill Method = Key\n      float4 despillColor4 = float4(despillColor.x,despillColor.y,despillColor.z,1.0f); //For simplicity\n\n      //2.1. Despill the picked despill colour itself, for normalizing the spill\n      float4 pickSpill_despilled = apDespillMain(despillColor4, hueShift, _clr, mode, limit_result, weights, prot1_preview, prot1_on, prot1, prot1_tolerance, prot1_mult, prot1_falloff);\n      float4 pickSpill_spill = despillColor4-pickSpill_despilled;\n      float pickSpill_spill_luma = getLuma(pickSpill_spill, respill_math);\n\n      spill_luma_full = pickSpill_spill_luma == 0? 0:spill_luma/pickSpill_spill_luma;\n      spill_full = despillColor4*spill_luma_full;\n      despilled_full = src()-spill_full;\n    \}\n\n\n    float4 respill_color_result = use_spill_input==1?spill_src()*respill_color:respill_color;\n    //3. Output\n    if(outmode==0)\{ //Despill\n      result = despilled_full+spill_luma_full*respill_color_result;\n    \}else\{ //Spill\n      result = spill_full;\n    \}\n\n    if(output_alpha==0)\{\n      result\[3]=src(3);\n    \}else\{\n      if(output_alpha_inverted == 0)\{\n        result\[3]=spill_luma_full;\n      \}else\{\n        result\[3]=1-spill_luma_full;\n      \}\n    \}\n\n    dst() = result;\n\n  \}\n\};"
+  useGPUIfAvailable false
+  vectorize false
+  rebuild ""
+  apDespillKernel_limit {{parent.tolerance}}
+  apDespillKernel_shift {{parent.hue_offset}}
+  apDespillKernel_weights {{(parent.custom_weight+1)/2}}
+  apDespillKernel_outmode {{parent.out}}
+  apDespillKernel_output_alpha {{parent.output_alpha}}
+  apDespillKernel_output_alpha_inverted {{parent.inverted_spill_matte}}
+  apDespillKernel_clr {{parent.color}}
+  apDespillKernel_mode {{parent.mode}}
+  apDespillKernel_respill_math {{parent.respill_math}}
+  apDespillKernel_respill_color {{parent.respill_color.r} {parent.respill_color.g} {parent.respill_color.b} 1}
+  apDespillKernel_prot1_on {{parent.prot1_activate}}
+  apDespillKernel_prot1_preview {{parent.prot1_preview}}
+  apDespillKernel_prot1 {{parent.prot1} {parent.prot1} {parent.prot1}}
+  apDespillKernel_prot1_tolerance {{parent.prot1_tolerance}}
+  apDespillKernel_prot1_mult {{parent.prot1_effect}}
+  apDespillKernel_prot1_falloff {{parent.prot1_falloff}}
+  apDespillKernel_pickSpill {{parent.pick} {parent.pick} {parent.pick}}
+  apDespillKernel_despill_method {{parent.absolute_mode}}
+  apDespillKernel_use_color_input {{"\[\nif \{ \[lsearch -exact \[channels \[input this 1].input] rgba.red] >= 0\} \{\n    return 1\n\} else \{\n    return 0\n\}\n]"}}
+  apDespillKernel_use_spill_input {{"\[\nif \{ \[lsearch -exact \[channels \[input this 2].input] rgba.red] >= 0\} \{\n    return 1\n\} else \{\n    return 0\n\}\n]"}}
+  apDespillKernel_use_limit_input {{"\[exists parent.input3]"}}
+  rebuild_finalise ""
+  name apDespillKernel
+  xpos 754
+  ypos -448
+ }
+ Log2Lin {
+  name Log2Lin2
+  xpos 754
+  ypos -378
+  disable {{!log_space}}
+ }
+ Colorspace {
+  channels {{{parent.Colorspace5.channels}}}
+  colorspace_in {{parent.Colorspace1.colorspace_out}}
+  illuminant_in {{parent.Colorspace1.illuminant_out}}
+  primary_in {{parent.Colorspace1.primary_out}}
+  colorspace_out {{parent.Colorspace1.colorspace_in}}
+  illuminant_out {{parent.Colorspace1.illuminant_in}}
+  primary_out {{parent.Colorspace1.primary_in}}
+  name Colorspace2
+  label "\[value colorspace_in] >> \[value colorspace_out]"
+  xpos 754
+  ypos -354
+  disable {{!parent.colorspace_shift}}
+ }
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos 788
+  ypos -267
+ }
+set Nc9772800 [stack 0]
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos 788
+  ypos -237
+ }
+push $Nc9474c00
+push $Nc9772800
+push $Nb8c4b800
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  Achannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  Bchannels {rgba.red rgba.green rgba.blue -rgba.alpha}
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  name Merge
+  xpos 449
+  ypos -270
+ }
+ Copy {
+  inputs 2+1
+  from0 rgba.alpha
+  to0 rgba.alpha
+  bbox B
+  maskChannelMask {{{parent.Merge.maskChannelMask}}}
+  maskChannelInput {{{parent.Merge.maskChannelInput}}}
+  inject {{parent.Merge.inject}}
+  invert_mask {{parent.Merge.invert_mask}}
+  fringe {{parent.Merge.fringe}}
+  name CopyAlpha
+  xpos 449
+  ypos -246
+  disable {{!parent.output_alpha}}
+ }
+ Output {
+  name Output
+  xpos 449
+  ypos -166
+ }
+end_group
