@@ -1,0 +1,361 @@
+Group {
+ inputs 0
+ name DVP_ToonShader
+ onCreate "\nthisGRP = nuke.thisGroup()\nfor knob in thisGRP.knobs() :\n    try :\n        if thisGRP\[knob].label()\[:19] == 'panel dropped state' :\n            thisGRP.removeKnob( nuke.thisNode()\[knob] )\n    except :\n        pass\n"
+ tile_color 0x2333ff
+ addUserKnob {20 tab_general l General}
+ addUserKnob {20 title_global l Global n 1}
+ addUserKnob {7 tone_sharpness l "tone sharpness" t "This control the sharpness of the tone shading and specular defination."}
+ tone_sharpness 0.99
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {20 grp_diffuse l Diffuse n 1}
+ addUserKnob {18 diffuse}
+ diffuse 1
+ addUserKnob {4 toon_style l style t "The style setting will only apply on the interaction of 2 or more lights." M {average "color burn" "linear burn" difference exclusion geometric "soft light" "hard light" "vivid light" "pin light" max min multiply overlay plus screen color}}
+ toon_style max
+ addUserKnob {3 tone_shading l "tone shading" t "Tone shading numbers, which is how many shading layers project from the light."}
+ tone_shading 2
+ addUserKnob {7 tone_ratio l "tone ratio" t "Adjust the ratio of the illuminate area and shading." R 0.1 10}
+ tone_ratio 1
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 title_spec l Specular n 1}
+ addUserKnob {7 specular t "The opacity of the specular projected on the surface."}
+ addUserKnob {7 glossiness t "The size of specular area."}
+ addUserKnob {41 replace_specColor l "replace specular color" t "Specular color is from the light by default. This checkbox provide user to define the custom specular color." T menu01.replace_specColor}
+ addUserKnob {18 specular_color l "specular color" +DISABLED}
+ specular_color 1
+ addUserKnob {20 grp_contour l Contour n 1}
+ addUserKnob {7 contour_size l size t "Contour size. 0 is none, 1 is the max (fully cover the object)."}
+ contour_size 0.2
+ addUserKnob {18 contour_color l color}
+ contour_color {0 0 0}
+ addUserKnob {20 endGroup_3 l endGroup n -1}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 title_preview l "" +STARTLINE T <b>Preview</b>}
+ addUserKnob {12 posXY l "light position"}
+ posXY {360 360}
+ addUserKnob {18 bgcolor l "bg color"}
+ bgcolor {0.05 0.1 0.2}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 4.0}
+ addUserKnob {26 l_DATE l "Date Modified" T 2021-02-13}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"Deep2VPosition&nbsp;(Deep2VP)<br>-&nbsp;added&nbsp;camera&nbsp;setting&nbsp;to&nbsp;metadata<br>-&nbsp;remove&nbsp;bake&nbsp;and&nbsp;copy&nbsp;buttons<br>-&nbsp;rename&nbsp;to&nbsp;Deep2VP<br>-&nbsp;generate/select/import&nbsp;deepNormal&nbsp;in&nbsp;this&nbsp;node<br>-&nbsp;added&nbsp;generate&nbsp;normal&nbsp;in&nbsp;deep,&nbsp;still&nbsp;keep&nbsp;the&nbsp;previous&nbsp;one.<br><br>DVPort&nbsp;(DVPortal)<br>-&nbsp;renamed&nbsp;to&nbsp;DVPortal<br><br>DVPmatte<br>-&nbsp;removed&nbsp;'option'&nbsp;knob,&nbsp;2D&nbsp;matte&nbsp;can&nbsp;use&nbsp;'open&nbsp;matte'&nbsp;instead<br>-&nbsp;open&nbsp;matte&nbsp;can&nbsp;choose&nbsp;show&nbsp;matte&nbsp;or&nbsp;color<br><br>DVPattern<br>-&nbsp;internal&nbsp;setup&nbsp;same&nbsp;as&nbsp;DVPmatte<br>-&nbsp;added&nbsp;rotation&nbsp;knob<br>-&nbsp;support&nbsp;'open&nbsp;matte'<br><br>DVProjection<br>-&nbsp;remove&nbsp;bake&nbsp;and&nbsp;copy&nbsp;buttons<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;Deep2VP<br><br>DVPsetLight<br>-&nbsp;added&nbsp;shader&nbsp;setting&nbsp;and&nbsp;input&nbsp;shader<br>-&nbsp;not&nbsp;required&nbsp;link&nbsp;camera&nbsp;anymore<br>-&nbsp;removed&nbsp;deepNormal&nbsp;setup,&nbsp;moved&nbsp;to&nbsp;Deep2VP&nbsp;node<br><br>DVPscene<br>-&nbsp;added&nbsp;multiple&nbsp;output&nbsp;options<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;DVP's&nbsp;lighting&nbsp;system<br><br>DVPrelight<br>-&nbsp;added&nbsp;specular&nbsp;setup<br>-&nbsp;added&nbsp;toon&nbsp;shade&nbsp;setup<br>-&nbsp;fix&nbsp;pointcloud&nbsp;preview&nbsp;with&nbsp;effects<br><br>DVPrelightPT<br>-&nbsp;split&nbsp;up&nbsp;point&nbsp;light&nbsp;from&nbsp;DVPrelight<br>-&nbsp;fix&nbsp;point&nbsp;light&nbsp;duplicated&nbsp;algorithm<br><br>DVPfresnel<br>-&nbsp;not&nbsp;required&nbsp;link&nbsp;camera&nbsp;anymore<br>-&nbsp;fix&nbsp;unpremult&nbsp;process,&nbsp;the&nbsp;result&nbsp;was&nbsp;too&nbsp;dark<br><br>DVPToImage<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;Deep2VP<br>-&nbsp;same&nbsp;as&nbsp;Deep2VP&nbsp;node&nbsp;color<br><br>new&nbsp;nodes&nbsp;:<br>DVPColorCorrect<br><br>added&nbsp;shaders&nbsp;:<br>DVP&nbsp;Shader<br>DVP&nbsp;Toon&nbsp;Shader\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://youtube.com/c/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -845
+  ypos 13
+  bdwidth 244
+  bdheight 123
+ }
+ CheckerBoard2 {
+  inputs 0
+  format "512 512 0 0 512 512 1 square_512"
+  name CheckerBoard2
+  xpos 202
+  ypos 983
+ }
+ Grade {
+  white {{parent.bgcolor} {parent.bgcolor} {parent.bgcolor} {curve}}
+  add 0.001
+  white_clamp true
+  name bgcolor
+  xpos 202
+  ypos 1111
+ }
+ Camera2 {
+  inputs 0
+  display off
+  selectable false
+  translate {0 0 6}
+  haperture 22
+  vaperture 22
+  name cam
+  xpos -147
+  ypos 49
+ }
+ Constant {
+  inputs 0
+  color {0.18 0.18 0.18 1}
+  name Constant1
+  xpos -25
+  ypos -173
+ }
+ Sphere {
+  display off
+  selectable false
+  name Sphere1
+  xpos -25
+  ypos -45
+ }
+ Reformat {
+  inputs 0
+  format "512 512 0 0 512 512 1 square_512"
+  name res
+  xpos 185
+  ypos 64
+ }
+add_layer {deepPosition deepPosition.red deepPosition.green deepPosition.blue deepPosition.alpha}
+add_layer {deepNormal deepNormal.red deepNormal.green deepNormal.blue deepNormal.alpha}
+ ScanlineRender {
+  inputs 3
+  conservative_shader_sampling false
+  antialiasing low
+  motion_vectors_type distance
+  MB_channel none
+  output_shader_vectors true
+  P_channel deepPosition
+  N_channel deepNormal
+  name ScanlineRender1
+  xpos -25
+  ypos 70
+ }
+ ModifyMetaData {
+  metadata {
+   {set DVPshader 2}
+   {set sLayers "\[value parent.tone_shading]"}
+   {set sSharpness "\[value parent.tone_sharpness]"}
+   {set sRatio "\[value parent.tone_ratio]"}
+   {set sStyle "\[value style]"}
+   {set sStatus 0}
+   {set sDiffuse "\[value diffuseRGB]"}
+   {set sGlossiness "\[value parent.glossiness]"}
+   {set sSpecular "\[value parent.specular]"}
+   {set sSpecReplace "\[value reSColor]"}
+   {set sSpecColor "\[value specRGB]"}
+   {set sContourSize "\[value parent.contour_size]"}
+   {set sContourColor "\[value contourRGB]"}
+  }
+  name stShaderData
+  xpos -25
+  ypos 170
+  addUserKnob {20 User}
+  addUserKnob {3 style}
+  style {{parent.toon_style}}
+  addUserKnob {13 diffuseRGB}
+  diffuseRGB {{parent.diffuse.r} {parent.diffuse.g} {parent.diffuse.b}}
+  addUserKnob {3 reSColor}
+  reSColor {{parent.replace_specColor}}
+  addUserKnob {13 specRGB}
+  specRGB {{parent.specular_color.r} {parent.specular_color.g} {parent.specular_color.b}}
+  addUserKnob {13 contourRGB}
+  contourRGB {{parent.contour_color.r} {parent.contour_color.g} {parent.contour_color.b}}
+ }
+ Unpremult {
+  name Unpremult1
+  xpos -25
+  ypos 250
+ }
+set N4ead8800 [stack 0]
+ Dot {
+  name Dot2
+  xpos 138
+  ypos 253
+ }
+ Dot {
+  name Dot1
+  xpos 138
+  ypos 952
+ }
+push $N4ead8800
+ Shuffle {
+  in deepNormal
+  in2 alpha
+  alpha red2
+  name Shuffle1
+  xpos -135
+  ypos 250
+ }
+ Dot {
+  name Dot6
+  xpos -230
+  ypos 253
+ }
+set N4ea63400 [stack 0]
+ Dot {
+  name Dot5
+  xpos -619
+  ypos 253
+ }
+ Expression {
+  temp_name0 contourSize
+  temp_expr0 "b < clamp(\[metadata sContourSize]+0) ? 1 : 1-clamp( (b-clamp(\[metadata sContourSize]+0)) * (1/0.01) )"
+  expr0 "contourColor.x*contourSize * alpha"
+  expr1 "contourColor.y*contourSize * alpha"
+  expr2 "contourColor.z*contourSize * alpha"
+  expr3 contourSize
+  name Expression5
+  xpos -653
+  ypos 511
+  addUserKnob {20 User}
+  addUserKnob {13 contourColor}
+  contourColor {{"\[lrange \[split \[metadata sContourColor] \" \"] 0 0]+0"} {"\[lrange \[split \[metadata sContourColor] \" \"] 1 1]+0"} {"\[lrange \[split \[metadata sContourColor] \" \"] 2 2]+0"}}
+ }
+ Dot {
+  name Dot7
+  xpos -619
+  ypos 831
+ }
+push $N4ea63400
+ ColorMatrix {
+  matrix {
+      {{ax.world_matrix.0} {ax.world_matrix.1} {ax.world_matrix.2}}
+      {{ax.world_matrix.4} {ax.world_matrix.5} {ax.world_matrix.6}}
+      {{ax.world_matrix.8} {ax.world_matrix.9} {ax.world_matrix.10}}
+    }
+  invert true
+  name ColorMatrix1
+  xpos -264
+  ypos 330
+ }
+ Dot {
+  name Dot3
+  xpos -230
+  ypos 433
+ }
+set N4ea62000 [stack 0]
+ Dot {
+  name Dot4
+  xpos -423
+  ypos 433
+ }
+ Expression {
+  temp_name0 u
+  temp_expr0 "r * blend.x"
+  temp_name1 v
+  temp_expr1 "g * blend.y"
+  expr0 0
+  expr1 0
+  expr2 "clamp( ( 1 - sqrt( pow2(u) + pow2(v) ) ) * b )"
+  name Expression3
+  xpos -457
+  ypos 507
+  addUserKnob {20 User}
+  addUserKnob {12 blend}
+  blend {{"( (90-abs( ax.rotate.x ) ) / 90 )"} {"( (90-abs( ax.rotate.y ) ) / 90)"}}
+ }
+ Expression {
+  temp_name0 s01
+  temp_expr0 "( cos((1-b)*(pi/2)) ** (1/\[value gloss]) ) * 2"
+  temp_name1 lgt
+  temp_expr1 "int(s01) * clamp( (s01%1) * (1/(1-clamp(\[metadata sSharpness]))) ) * \[value spec]"
+  expr0 "\[metadata sSpecReplace] ? lgt * \[value specColor.x] : lgt"
+  expr1 "\[metadata sSpecReplace] ? lgt * \[value specColor.y] : lgt"
+  expr2 "\[metadata sSpecReplace] ? lgt * \[value specColor.z] : lgt"
+  name Expression2
+  xpos -457
+  ypos 587
+  addUserKnob {20 User}
+  addUserKnob {7 spec}
+  spec {{"clamp(\[metadata sSpecular])"}}
+  addUserKnob {7 gloss}
+  gloss {{"clamp(\[metadata sGlossiness])"}}
+  addUserKnob {13 specColor}
+  specColor {{"\[metadata sSpecReplace]+0 ? \[lrange \[split \[metadata sSpecColor] \" \"] 0 0]+0 : 1"} {"\[metadata sSpecReplace]+0 ? \[lrange \[split \[metadata sSpecColor] \" \"] 1 1]+0 : 1"} {"\[metadata sSpecReplace]+0 ? \[lrange \[split \[metadata sSpecColor] \" \"] 2 2]+0 : 1"}}
+ }
+ Premult {
+  name Premult4
+  xpos -457
+  ypos 714
+ }
+push $N4ea62000
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name Shuffle2
+  xpos -264
+  ypos 525
+ }
+ Expression {
+  temp_name0 celShade
+  temp_expr0 "clamp(red) ** \[metadata sRatio] * (\[value toonLayers]+1)"
+  temp_name1 lgt
+  temp_expr1 "( (int(celShade)-1)/\[value toonLayers]) + (clamp( (celShade%1) * (1/(1-clamp(\[metadata sSharpness]))) ) * (1/\[value toonLayers]) )"
+  expr0 "lgt * \[value parent.diffuse.r]"
+  expr1 "lgt * \[value parent.diffuse.g]"
+  expr2 "lgt * \[value parent.diffuse.b]"
+  name Expression1
+  xpos -264
+  ypos 605
+  addUserKnob {20 User}
+  addUserKnob {3 toonLayers}
+  toonLayers {{"\[metadata sLayers] <= 1 ? 1 : \[metadata sLayers]"}}
+ }
+push $N4ead8800
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge1
+  xpos -25
+  ypos 605
+ }
+ Merge2 {
+  inputs 2
+  operation max
+  name Merge5
+  xpos -25
+  ypos 714
+ }
+ Merge2 {
+  inputs 2
+  name Merge3
+  xpos -25
+  ypos 828
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos -25
+  ypos 943
+ }
+ Premult {
+  name Premult1
+  xpos -25
+  ypos 1035
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge2
+  xpos -25
+  ypos 1111
+ }
+ Crop {
+  box {0 0 {res.width} {res.height}}
+  name Crop1
+  xpos -25
+  ypos 1191
+ }
+ Output {
+  name Output1
+  xpos -25
+  ypos 1331
+ }
+ Axis {
+  inputs 0
+  display off
+  selectable false
+  rotate {{"clamp(parent.posXY.y/res.height) * -180 + 90"} {"clamp(parent.posXY.x/res.width) * 180 - 90"} 0}
+  name ax
+  xpos -452
+  ypos 52
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nnuke.thisGroup()\['specular_color'].setEnabled(nuke.thisGroup()\['replace_specColor'].value())\n"
+  xpos -762
+  ypos 95
+  addUserKnob {20 User}
+  addUserKnob {6 replace_specColor l "replace specular color" +STARTLINE}
+ }
+end_group

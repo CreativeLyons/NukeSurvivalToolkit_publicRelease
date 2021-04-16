@@ -1,0 +1,269 @@
+Group {
+ name DVPColorCorrect
+ onCreate "\nthisGRP = nuke.thisGroup()\nfor knob in thisGRP.knobs() :\n    try :\n        if thisGRP\[knob].label()\[:19] == 'panel dropped state' :\n            thisGRP.removeKnob( nuke.thisNode()\[knob] )\n    except :\n        pass\nfor knob in thisGRP.knobs() :\n    if thisGRP\[knob].Class() == 'Color_Knob' :\n        if thisGRP\[knob].getValue() == \[0,0,0] :\n            if not thisGRP\[knob].isAnimated() :\n                thisGRP\[knob].setSingleValue(True)\n"
+ tile_color 0x5182ccff
+ label "<font color=cyan>Deep Output</font>"
+ addUserKnob {20 tab_general l General}
+ addUserKnob {4 channels M {rgb deepPosition deepNormal}}
+ addUserKnob {6 red -STARTLINE}
+ red true
+ addUserKnob {6 green -STARTLINE}
+ green true
+ addUserKnob {6 blue -STARTLINE}
+ blue true
+ addUserKnob {20 title_master l master n 1}
+ addUserKnob {18 saturation R 0 4}
+ saturation {1}
+ addUserKnob {18 contrast R 0 4}
+ contrast {1}
+ addUserKnob {18 gamma R 0.2 5}
+ gamma {1}
+ addUserKnob {18 gain R 0 4}
+ gain {1}
+ addUserKnob {18 offset R -1 1}
+ offset {0}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 title_shadows l shadows n 1}
+ title_shadows 0
+ addUserKnob {18 shadows_saturation l saturation R 0 4}
+ shadows_saturation {1}
+ addUserKnob {18 shadows_contrast l contrast R 0 4}
+ shadows_contrast {1}
+ addUserKnob {18 shadows_gamma l gamma R 0.2 5}
+ shadows_gamma {1}
+ addUserKnob {18 shadows_gain l gain R 0 4}
+ shadows_gain {1}
+ addUserKnob {18 shadows_offset l offset R -1 1}
+ shadows_offset {0}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 title_midtones l midtones n 1}
+ title_midtones 0
+ addUserKnob {18 midtones_saturation l saturation R 0 4}
+ midtones_saturation {1}
+ addUserKnob {18 midtones_contrast l contrast R 0 4}
+ midtones_contrast {1}
+ addUserKnob {18 midtones_gamma l gamma R 0.2 5}
+ midtones_gamma {1}
+ addUserKnob {18 midtones_gain l gain R 0 4}
+ midtones_gain {1}
+ addUserKnob {18 midtones_offset l offset R -1 1}
+ midtones_offset {0}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {20 title_highlights l highlights n 1}
+ title_highlights 0
+ addUserKnob {18 highlights_saturation l saturation R 0 4}
+ highlights_saturation {1}
+ addUserKnob {18 highlights_contrast l contrast R 0 4}
+ highlights_contrast {1}
+ addUserKnob {18 highlights_gamma l gamma R 0.2 5}
+ highlights_gamma {1}
+ addUserKnob {18 highlights_gain l gain R 0 4}
+ highlights_gain {1}
+ addUserKnob {18 highlights_offset l offset R -1 1}
+ highlights_offset {0}
+ addUserKnob {20 endGroup_3 l endGroup n -1}
+ addUserKnob {20 tab_masking l Masking}
+ addUserKnob {41 mix T DeepCC.mix}
+ addUserKnob {26 "" l " "}
+ addUserKnob {41 zmap T DeepCC.zmap}
+ addUserKnob {41 limit_z -STARTLINE T DeepCC.limit_z}
+ addUserKnob {20 tab_ranges l Ranges}
+ addUserKnob {4 test M {none "test on full image" "test with matte" ""}}
+ addUserKnob {41 lookup l "" +STARTLINE T DeepCC.lookup}
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l Version T 4.0}
+ addUserKnob {26 l_DATE l "Date Modified" T 2021-02-13}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"Deep2VPosition&nbsp;(Deep2VP)<br>-&nbsp;added&nbsp;camera&nbsp;setting&nbsp;to&nbsp;metadata<br>-&nbsp;remove&nbsp;bake&nbsp;and&nbsp;copy&nbsp;buttons<br>-&nbsp;rename&nbsp;to&nbsp;Deep2VP<br>-&nbsp;generate/select/import&nbsp;deepNormal&nbsp;in&nbsp;this&nbsp;node<br>-&nbsp;added&nbsp;generate&nbsp;normal&nbsp;in&nbsp;deep,&nbsp;still&nbsp;keep&nbsp;the&nbsp;previous&nbsp;one.<br><br>DVPort&nbsp;(DVPortal)<br>-&nbsp;renamed&nbsp;to&nbsp;DVPortal<br><br>DVPmatte<br>-&nbsp;removed&nbsp;'option'&nbsp;knob,&nbsp;2D&nbsp;matte&nbsp;can&nbsp;use&nbsp;'open&nbsp;matte'&nbsp;instead<br>-&nbsp;open&nbsp;matte&nbsp;can&nbsp;choose&nbsp;show&nbsp;matte&nbsp;or&nbsp;color<br><br>DVPattern<br>-&nbsp;internal&nbsp;setup&nbsp;same&nbsp;as&nbsp;DVPmatte<br>-&nbsp;added&nbsp;rotation&nbsp;knob<br>-&nbsp;support&nbsp;'open&nbsp;matte'<br><br>DVProjection<br>-&nbsp;remove&nbsp;bake&nbsp;and&nbsp;copy&nbsp;buttons<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;Deep2VP<br><br>DVPsetLight<br>-&nbsp;added&nbsp;shader&nbsp;setting&nbsp;and&nbsp;input&nbsp;shader<br>-&nbsp;not&nbsp;required&nbsp;link&nbsp;camera&nbsp;anymore<br>-&nbsp;removed&nbsp;deepNormal&nbsp;setup,&nbsp;moved&nbsp;to&nbsp;Deep2VP&nbsp;node<br><br>DVPscene<br>-&nbsp;added&nbsp;multiple&nbsp;output&nbsp;options<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;DVP's&nbsp;lighting&nbsp;system<br><br>DVPrelight<br>-&nbsp;added&nbsp;specular&nbsp;setup<br>-&nbsp;added&nbsp;toon&nbsp;shade&nbsp;setup<br>-&nbsp;fix&nbsp;pointcloud&nbsp;preview&nbsp;with&nbsp;effects<br><br>DVPrelightPT<br>-&nbsp;split&nbsp;up&nbsp;point&nbsp;light&nbsp;from&nbsp;DVPrelight<br>-&nbsp;fix&nbsp;point&nbsp;light&nbsp;duplicated&nbsp;algorithm<br><br>DVPfresnel<br>-&nbsp;not&nbsp;required&nbsp;link&nbsp;camera&nbsp;anymore<br>-&nbsp;fix&nbsp;unpremult&nbsp;process,&nbsp;the&nbsp;result&nbsp;was&nbsp;too&nbsp;dark<br><br>DVPToImage<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;Deep2VP<br>-&nbsp;same&nbsp;as&nbsp;Deep2VP&nbsp;node&nbsp;color<br><br>new&nbsp;nodes&nbsp;:<br>DVPColorCorrect<br><br>added&nbsp;shaders&nbsp;:<br>DVP&nbsp;Shader<br>DVP&nbsp;Toon&nbsp;Shader\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://youtube.com/c/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ Input {
+  inputs 0
+  name deep
+  xpos -40
+  ypos 134
+ }
+ DeepExpression {
+  chans1 deep
+  name spacer
+  xpos -40
+  ypos 214
+ }
+ Dot {
+  name Dot3
+  xpos -6
+  ypos 294
+ }
+set N4c8e7c00 [stack 0]
+add_layer {deepRawColor deepRawColor.red deepRawColor.green deepRawColor.blue deepRawColor.alpha}
+ DeepExpression {
+  chans0 {deepRawColor.red deepRawColor.green deepRawColor.blue none}
+  chans1 none
+  deepRawColor.red red
+  deepRawColor.green green
+  deepRawColor.blue blue
+  name DeepExpression5
+  label "get color from upstream"
+  xpos 90
+  ypos 371
+ }
+push $N4c8e7c00
+ Switch {
+  inputs 2
+  which {{"\[metadata DVPmatte]+0==2 ? 1 : 0"}}
+  name Switch2
+  label "check from upstream"
+  xpos -40
+  ypos 448
+ }
+ DeepExpression {
+  chans0 {rgba.red rgba.green rgba.blue none}
+  chans1 none
+  rgba.red "\[value selChan] == 0 ? deepRawColor.red : \[value parent.channels].red"
+  rgba.green "\[value selChan] == 0 ? deepRawColor.green : \[value parent.channels].green"
+  rgba.blue "\[value selChan] == 0 ? deepRawColor.blue : \[value parent.channels].blue"
+  name DeepExpression1
+  label "shuffle deepRawColor"
+  xpos -40
+  ypos 545
+  addUserKnob {20 User}
+  addUserKnob {3 selChan}
+  selChan {{parent.channels}}
+ }
+ DeepColorCorrect2 {
+  saturation {{parent.saturation.r} {parent.saturation.g} {parent.saturation.b} 0}
+  contrast {{parent.contrast.r} {parent.contrast.g} {parent.contrast.b} 0}
+  gamma {{parent.gamma.r} {parent.gamma.g} {parent.gamma.b} 0}
+  gain {{parent.gain.r} {parent.gain.g} {parent.gain.b} 0}
+  offset {{parent.offset.r} {parent.offset.g} {parent.offset.b} 0}
+  shadows.saturation {{parent.shadows_saturation.r} {parent.shadows_saturation.g} {parent.shadows_saturation.b} 0}
+  shadows.contrast {{parent.shadows_contrast.r} {parent.shadows_contrast.g} {parent.shadows_contrast.b} 0}
+  shadows.gamma {{parent.shadows_gamma.r} {parent.shadows_gamma.g} {parent.shadows_gamma.b} 0}
+  shadows.gain {{parent.shadows_gain.r} {parent.shadows_gain.g} {parent.shadows_gain.b} 0}
+  shadows.offset {{parent.shadows_offset.r} {parent.shadows_offset.g} {parent.shadows_offset.b} 0}
+  midtones.saturation {{parent.midtones_saturation.r} {parent.midtones_saturation.g} {parent.midtones_saturation.b} 0}
+  midtones.contrast {{parent.midtones_contrast.r} {parent.midtones_contrast.g} {parent.midtones_contrast.b} 0}
+  midtones.gamma {{parent.midtones_gamma.r} {parent.midtones_gamma.g} {parent.midtones_gamma.b} 0}
+  midtones.gain {{parent.midtones_gain.r} {parent.midtones_gain.g} {parent.midtones_gain.b} 0}
+  midtones.offset {{parent.midtones_offset.r} {parent.midtones_offset.g} {parent.midtones_offset.b} 0}
+  highlights.saturation {{parent.highlights_saturation.r} {parent.highlights_saturation.g} {parent.highlights_saturation.b} 0}
+  highlights.contrast {{parent.highlights_contrast.r} {parent.highlights_contrast.g} {parent.highlights_contrast.b} 0}
+  highlights.gamma {{parent.highlights_gamma.r} {parent.highlights_gamma.g} {parent.highlights_gamma.b} 0}
+  highlights.gain {{parent.highlights_gain.r} {parent.highlights_gain.g} {parent.highlights_gain.b} 0}
+  highlights.offset {{parent.highlights_offset.r} {parent.highlights_offset.g} {parent.highlights_offset.b} 0}
+  mix {1}
+  zmap {0 1 1 1}
+  test {{parent.test}}
+  name DeepCC
+  xpos -40
+  ypos 637
+ }
+ Dot {
+  name Dot1
+  xpos -6
+  ypos 693
+ }
+set N4c8e6800 [stack 0]
+ Dot {
+  name Dot4
+  xpos 291
+  ypos 693
+ }
+ Dot {
+  name Dot5
+  xpos 291
+  ypos 1013
+ }
+push $N4c8e6800
+add_layer {deepNormal deepNormal.red deepNormal.green deepNormal.blue deepNormal.alpha}
+ DeepExpression {
+  chans0 rgb
+  chans1 {deepNormal.red deepNormal.green deepNormal.blue none}
+  rgba.red deepRawColor.red
+  rgba.green deepRawColor.green
+  rgba.blue deepRawColor.blue
+  deepNormal.red "\[value cr] ? deepNormal.red * (1-deepRawColor.alpha) + red * deepRawColor.alpha : deepNormal.red"
+  deepNormal.green "\[value cg] ? deepNormal.green * (1-deepRawColor.alpha) + green * deepRawColor.alpha : deepNormal.green"
+  deepNormal.blue "\[value cb] ? deepNormal.blue * (1-deepRawColor.alpha) + blue * deepRawColor.alpha : deepNormal.blue"
+  name DeepExpression2
+  label "apply matte\ndeepNormal"
+  xpos 81
+  ypos 790
+  addUserKnob {20 User}
+  addUserKnob {3 cr}
+  cr {{parent.red}}
+  addUserKnob {3 cg}
+  cg {{parent.green}}
+  addUserKnob {3 cb}
+  cb {{parent.blue}}
+ }
+push $N4c8e6800
+add_layer {deepPosition deepPosition.red deepPosition.green deepPosition.blue deepPosition.alpha}
+ DeepExpression {
+  chans0 rgb
+  chans1 {deepPosition.red deepPosition.green deepPosition.blue none}
+  rgba.red deepRawColor.red
+  rgba.green deepRawColor.green
+  rgba.blue deepRawColor.blue
+  deepPosition.red "\[value cr] ? deepPosition.red * (1-deepRawColor.alpha) + red * deepRawColor.alpha : deepPosition.red"
+  deepPosition.green "\[value cg] ? deepPosition.green * (1-deepRawColor.alpha) + green * deepRawColor.alpha : deepPosition.green"
+  deepPosition.blue "\[value cb] ? deepPosition.blue * (1-deepRawColor.alpha) + blue * deepRawColor.alpha : deepPosition.blue"
+  name DeepExpression4
+  label "apply matte\ndeepPosition"
+  xpos -40
+  ypos 788
+  addUserKnob {20 User}
+  addUserKnob {3 cr}
+  cr {{parent.red}}
+  addUserKnob {3 cg}
+  cg {{parent.green}}
+  addUserKnob {3 cb}
+  cb {{parent.blue}}
+ }
+push $N4c8e6800
+ DeepExpression {
+  chans0 rgb
+  chans1 none
+  rgba.red "\[value cr] ? deepRawColor.red * (1-deepRawColor.alpha) + red * deepRawColor.alpha : deepRawColor.red"
+  rgba.green "\[value cg] ? deepRawColor.green * (1-deepRawColor.alpha) + green * deepRawColor.alpha : deepRawColor.green"
+  rgba.blue "\[value cb] ? deepRawColor.blue * (1-deepRawColor.alpha) + blue * deepRawColor.alpha : deepRawColor.blue"
+  name DeepExpression3
+  label "apply matte\nRGB"
+  xpos -168
+  ypos 789
+  addUserKnob {20 User}
+  addUserKnob {3 cr}
+  cr {{parent.red}}
+  addUserKnob {3 cg}
+  cg {{parent.green}}
+  addUserKnob {3 cb}
+  cb {{parent.blue}}
+ }
+ Switch {
+  inputs 3
+  which {{parent.channels}}
+  name Switch1
+  xpos -40
+  ypos 924
+ }
+ Switch {
+  inputs 2
+  which {{"parent.test == 1 ? 1 : 0"}}
+  name Switch3
+  label "test selection"
+  xpos -40
+  ypos 1004
+ }
+ ModifyMetaData {
+  metadata {
+   {set DVPmatte 2}
+  }
+  name DVPmd
+  xpos -40
+  ypos 1090
+ }
+ Output {
+  name Output1
+  xpos -40
+  ypos 1170
+ }
+end_group
