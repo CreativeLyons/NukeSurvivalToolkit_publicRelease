@@ -1,0 +1,1217 @@
+Group {
+ name Deep2VP
+ tile_color 0x2866ff
+ label "<font color=cyan>Deep Output</font>"
+ addUserKnob {20 tab_general l General}
+ addUserKnob {26 title_camera_link l "" +STARTLINE T "<b><font color=#5077FF>camera link (toolset required)</font></b>"}
+ addUserKnob {22 set_link l "link to selected camera" t "Deep data is related to camera. So when convert deep data to any datas, it required the camera data.\n\nhow to use :\nSelect the camera, which can be link to any axis nodes. This tool will get the focal, haperture and world matrix from selected camera and it will generate world space position data.\n\nYou can find the world space position pass store under <b>'deepPosition'</b> channel. The pass support volumatric deep data. If want to bring the position data to 2D in downstream. Please only use <b>DVPToImage</b> which comes along with this toolset." T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\nroot = getLevel()\nthisGRP = nuke.thisGroup()\n\nmainKnobs = \['world_matrix','cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll']\ndefaultKnobs = \{\n\t\t\t'world matrix' : 'world_matrix',\n\t\t\t'focal length' : 'focal',\n\t\t\t'horiz aperture' : 'haperture',\n\t\t\t'window translate' : 'win_translate',\n\t\t\t'window scale' : 'win_scale',\n\t\t\t'window roll' : 'winroll'\n\t\t\t\}\nselNodeKnobs = \[]\nmissingKnob = \[]\n\ntry :\n\twith root :\n\t\tselNode = nuke.selectedNode()\n\n\tfor knob in selNode.knobs() :\n\t\tselNodeKnobs.append( knob )\n\n\tselNodeKnobs.sort()\n\n\tfor key,value in defaultKnobs.items() :\n\t\tif value not in selNodeKnobs :\n\t\t\tmissingKnob.append( key )\n\n\tif not len(missingKnob) :\n\t\twith root :\n\t\t\tfor knob in mainKnobs :\n\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\tCAMnode = selNode.name()\n\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.world_matrix'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.focal'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.haperture'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.win_translate'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.win_scale'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.winroll'.format(CAMnode))\n\telse :\n\t\tp = nuke.Panel('Select knobs :')\n\t\tp.addBooleanCheckBox( '<b>Unable to find the default knobs. Please use the pulldown menu below to define the knob manually.</b>' , False)\n\t\tfor rk in missingKnob :\n\t\t\tp.addEnumerationPulldown( rk, ' '.join( selNodeKnobs ) )\n\n\t\tif p.show() :\n\t\t\ttry :\n\t\t\t\tfor key,value in defaultKnobs.items() :\n\t\t\t\t\tif p.value( key ) != None :\n\t\t\t\t\t\tdefaultKnobs\[key] = p.value( key )\n\t\t\texcept :\n\t\t\t\tpass\n\n\t\t\twith root :\n\t\t\t\tfor knob in mainKnobs :\n\t\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\t\tCAMnode = selNode.name()\n\t\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['world matrix']))\n\t\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['focal length']))\n\t\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['horiz aperture']))\n\t\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window translate']))\n\t\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window scale']))\n\t\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window roll']))\nexcept :\n\tnuke.message('no node selected.')" +STARTLINE}
+ addUserKnob {22 remove_link l "remove linked expression" t "Remove the linked camera expression but won't reset any data. So the position data still works if the camera is not animated." -STARTLINE T "thisGRP = nuke.thisGroup()\nmainKnobs = \['world_matrix','cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll']\n\nfor knob in thisGRP.knobs() :\n    if mainKnobs.count(knob) != 0 :\n        thisGRP\[knob].clearAnimated()"}
+ addUserKnob {20 cam_data_grp l "CAMERA DATA" n 1}
+ cam_data_grp 0
+ addUserKnob {7 cam_focal l "focal length" R 5 100}
+ cam_focal 50
+ addUserKnob {7 cam_haperture l "horiz aperture" R 0.1 50}
+ cam_haperture 24.576
+ addUserKnob {30 cam_win_translate l "window translate"}
+ addUserKnob {30 cam_win_scale l "window scale"}
+ cam_win_scale {1 1}
+ addUserKnob {7 cam_winroll l "window roll" R -45 45}
+ addUserKnob {41 world_matrix l "world matrix" T cam_data.matrix}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 spacer l "" +STARTLINE T <br>}
+ addUserKnob {26 title_deepNormal l "" +STARTLINE T "<b><font color=#5077FF>deepNormal (relight required)</font></b>"}
+ addUserKnob {41 normal_data l "output normal data" t "Choose which normal data to use for DVP lighting system.\n\n<b>generated normal</b>\nThis will generate world space normal from deepPosition data. It is imperfect, will get artifacts on object's edge, it works fine on object's core. Give user an option without normal data. Deep data from scanlineRender will missing tesselation process. Increase subdivision of the geo will get better result.\n\n<b>input 2D normal (world space)</b>\nUse 2D normal from normal 2D input.\n\n<b>input 2D normal (camera space)</b>\nUse 2D normal from normal 2D input.\n\n<b>input deep normal (camera space)</b>\nIf deep contained normal data, type in the channel name and the tool will shuffle it for this tool." T menu01.normal_data}
+ addUserKnob {6 useGPUIfAvailable l "use GPU if available" +HIDDEN +STARTLINE}
+ useGPUIfAvailable true
+ addUserKnob {7 deep_threshold l "Deep Threshold" t "Adjust this value for better edge result.\n\ndefault value is 0.1"}
+ deep_threshold 0.5
+ addUserKnob {1 DN_channel l "input deep normal channel" +HIDDEN}
+ DN_channel deepNormal
+ addUserKnob {20 t_VERSION l Version}
+ addUserKnob {26 l_VERSION l <b>Version</b> T 4.0}
+ addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2021-02-13}
+ addUserKnob {22 btn_CHANGELOG l <b>Changlelog</b> T "log = \"Deep2VPosition&nbsp;(Deep2VP)<br>-&nbsp;added&nbsp;camera&nbsp;setting&nbsp;to&nbsp;metadata<br>-&nbsp;remove&nbsp;bake&nbsp;and&nbsp;copy&nbsp;buttons<br>-&nbsp;rename&nbsp;to&nbsp;Deep2VP<br>-&nbsp;generate/select/import&nbsp;deepNormal&nbsp;in&nbsp;this&nbsp;node<br>-&nbsp;added&nbsp;generate&nbsp;normal&nbsp;in&nbsp;deep,&nbsp;still&nbsp;keep&nbsp;the&nbsp;previous&nbsp;one.<br><br>DVPort&nbsp;(DVPortal)<br>-&nbsp;renamed&nbsp;to&nbsp;DVPortal<br><br>DVPmatte<br>-&nbsp;removed&nbsp;'option'&nbsp;knob,&nbsp;2D&nbsp;matte&nbsp;can&nbsp;use&nbsp;'open&nbsp;matte'&nbsp;instead<br>-&nbsp;open&nbsp;matte&nbsp;can&nbsp;choose&nbsp;show&nbsp;matte&nbsp;or&nbsp;color<br><br>DVPattern<br>-&nbsp;internal&nbsp;setup&nbsp;same&nbsp;as&nbsp;DVPmatte<br>-&nbsp;added&nbsp;rotation&nbsp;knob<br>-&nbsp;support&nbsp;'open&nbsp;matte'<br><br>DVProjection<br>-&nbsp;remove&nbsp;bake&nbsp;and&nbsp;copy&nbsp;buttons<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;Deep2VP<br><br>DVPsetLight<br>-&nbsp;added&nbsp;shader&nbsp;setting&nbsp;and&nbsp;input&nbsp;shader<br>-&nbsp;not&nbsp;required&nbsp;link&nbsp;camera&nbsp;anymore<br>-&nbsp;removed&nbsp;deepNormal&nbsp;setup,&nbsp;moved&nbsp;to&nbsp;Deep2VP&nbsp;node<br><br>DVPscene<br>-&nbsp;added&nbsp;multiple&nbsp;output&nbsp;options<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;DVP's&nbsp;lighting&nbsp;system<br><br>DVPrelight<br>-&nbsp;added&nbsp;specular&nbsp;setup<br>-&nbsp;added&nbsp;toon&nbsp;shade&nbsp;setup<br>-&nbsp;fix&nbsp;pointcloud&nbsp;preview&nbsp;with&nbsp;effects<br><br>DVPrelightPT<br>-&nbsp;split&nbsp;up&nbsp;point&nbsp;light&nbsp;from&nbsp;DVPrelight<br>-&nbsp;fix&nbsp;point&nbsp;light&nbsp;duplicated&nbsp;algorithm<br><br>DVPfresnel<br>-&nbsp;not&nbsp;required&nbsp;link&nbsp;camera&nbsp;anymore<br>-&nbsp;fix&nbsp;unpremult&nbsp;process,&nbsp;the&nbsp;result&nbsp;was&nbsp;too&nbsp;dark<br><br>DVPToImage<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;Deep2VP<br>-&nbsp;same&nbsp;as&nbsp;Deep2VP&nbsp;node&nbsp;color<br><br>new&nbsp;nodes&nbsp;:<br>DVPColorCorrect<br><br>added&nbsp;shaders&nbsp;:<br>DVP&nbsp;Shader<br>DVP&nbsp;Toon&nbsp;Shader\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "<b>Developed by</b>" T "<a href='https://youtube.com/c/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x7f7f7fff
+  label bin
+  note_font_size 42
+  xpos -764
+  ypos -11
+  bdwidth 249
+  bdheight 324
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0xff
+  label "dont touch"
+  note_font_size 42
+  xpos -767
+  ypos -330
+  bdwidth 252
+  bdheight 261
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x8e388e00
+  label "create deepPosition"
+  note_font_size 42
+  xpos -143
+  ypos 67
+  bdwidth 368
+  bdheight 242
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x388e8e00
+  label "create deepNormal (deep)"
+  note_font_size 42
+  xpos -147
+  ypos 541
+  bdwidth 1524
+  bdheight 2788
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode5
+  tile_color 0x388e8e00
+  label "create deepNormal (2D)"
+  note_font_size 42
+  xpos 1498
+  ypos 546
+  bdwidth 964
+  bdheight 2778
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode6
+  tile_color 0x4c3535ff
+  label "Another option, but I think not good as the previous hack result.\nYou can try it."
+  note_font_size 12
+  xpos 130
+  ypos 2537
+  bdwidth 445
+  bdheight 155
+  z_order 1
+ }
+ Group {
+  inputs 0
+  name inverseMatrix_cam
+  tile_color 0x337f4cff
+  xpos -712
+  ypos 212
+  addUserKnob {20 User}
+  addUserKnob {1 knob_path}
+  knob_path cam_data.world_matrix
+  addUserKnob {26 ""}
+  addUserKnob {41 id T id_assign.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {7 determinant}
+  determinant {{"\[value \[value knob_path].\[value id.0]] * ((\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])) - \[value \[value knob_path].\[value id.1]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]])) + \[value \[value knob_path].\[value id.2]] * ((\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]])-(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]]))"}}
+  addUserKnob {26 ""}
+  addUserKnob {41 cofactor T mtx_cofactor.matrix}
+  addUserKnob {26 ""}
+  addUserKnob {41 invMatrix T matrix_output.matrix}
+ }
+  Matrix {
+   inputs 0
+   matrix {
+       {0 1 2}
+       {4 5 6}
+       {8 9 10}
+     }
+   name id_assign
+   xpos -12
+   ypos 33
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"(\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.8]]) - (\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.7]])"} {"(\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.2]]) - (\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.1]])"} {"(\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.5]]) - (\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.4]])"}}
+       {{"(\[value \[value knob_path].\[value id.5]]*\[value \[value knob_path].\[value id.6]]) - (\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.8]])"} {"(\[value \[value knob_path].\[value id.8]]*\[value \[value knob_path].\[value id.0]]) - (\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.2]])"} {"(\[value \[value knob_path].\[value id.2]]*\[value \[value knob_path].\[value id.3]]) - (\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.5]])"}}
+       {{"(\[value \[value knob_path].\[value id.3]]*\[value \[value knob_path].\[value id.7]]) - (\[value \[value knob_path].\[value id.4]]*\[value \[value knob_path].\[value id.6]])"} {"(\[value \[value knob_path].\[value id.6]]*\[value \[value knob_path].\[value id.1]]) - (\[value \[value knob_path].\[value id.7]]*\[value \[value knob_path].\[value id.0]])"} {"(\[value \[value knob_path].\[value id.0]]*\[value \[value knob_path].\[value id.4]]) - (\[value \[value knob_path].\[value id.1]]*\[value \[value knob_path].\[value id.3]])"}}
+     }
+   name mtx_cofactor
+   xpos 86
+   ypos 32
+  }
+  Matrix {
+   inputs 0
+   matrix {
+       {{"cofactor.0 == 0 || determinant == 0 ? 0 : cofactor.0/determinant"} {"cofactor.1 == 0 || determinant == 0 ? 0 : cofactor.1/determinant"} {"cofactor.2 == 0 || determinant == 0 ? 0 : cofactor.2/determinant"}}
+       {{"cofactor.3 == 0 || determinant == 0 ? 0 : cofactor.3/determinant"} {"cofactor.4 == 0 || determinant == 0 ? 0 : cofactor.4/determinant"} {"cofactor.5 == 0 || determinant == 0 ? 0 : cofactor.5/determinant"}}
+       {{"cofactor.6 == 0 || determinant == 0 ? 0 : cofactor.6/determinant"} {"cofactor.7 == 0 || determinant == 0 ? 0 : cofactor.7/determinant"} {"cofactor.8 == 0 || determinant == 0 ? 0 : cofactor.8/determinant"}}
+     }
+   name matrix_output
+   xpos 186
+   ypos 33
+  }
+ end_group
+ Camera {
+  inputs 0
+  display off
+  selectable false
+  rot_order XYZ
+  useMatrix true
+  focal {{parent.cam_focal}}
+  haperture {{parent.cam_haperture}}
+  name cam_data
+  xpos -704
+  ypos 112
+ }
+ Camera {
+  inputs 0
+  display off
+  selectable false
+  rotate {0 0 {-parent.cam_winroll}}
+  win_translate {{parent.cam_win_translate} {parent.cam_win_translate}}
+  win_scale {{parent.cam_win_scale} {parent.cam_win_scale}}
+  name cwin_data
+  xpos -604
+  ypos 110
+ }
+add_layer {deepNormal deepNormal.red deepNormal.green deepNormal.blue deepNormal.alpha}
+ AddChannels {
+  inputs 0
+  channels {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  name addDNAC
+  xpos 3571
+  ypos 2150
+ }
+add_layer {deepRawColor deepRawColor.red deepRawColor.green deepRawColor.blue deepRawColor.alpha}
+ AddChannels {
+  inputs 0
+  channels deepRawColor
+  name addDRC
+  xpos -138
+  ypos -181
+ }
+ AddChannels {
+  inputs 0
+  channels deepNormal
+  name addDNC
+  xpos -143
+  ypos -289
+ }
+add_layer {deepPosition deepPosition.red deepPosition.green deepPosition.blue deepPosition.alpha}
+ AddChannels {
+  inputs 0
+  channels deepPosition
+  name addDPC
+  xpos -135
+  ypos -404
+ }
+ Input {
+  inputs 0
+  name deep
+  xpos 0
+  ypos -553
+ }
+ DeepRecolor {
+  inputs 2
+  channels {{{addDPC.channels}}}
+  name DeepRecolor8
+  xpos 0
+  ypos -404
+ }
+ DeepRecolor {
+  inputs 2
+  channels {{{addDNC.channels}}}
+  name DeepRecolor10
+  xpos 0
+  ypos -289
+  disable {{"parent.normal_data==3 && \[string match \[value parent.DN_channel] \"deepNormal\"] ? 1 : 0"}}
+ }
+ DeepRecolor {
+  inputs 2
+  channels {{{addDRC.channels}}}
+  name DeepRecolor9
+  xpos 0
+  ypos -181
+ }
+ ModifyMetaData {
+  metadata {
+   {set DVPmatte 0}
+   {set DVPcamMTX "\[string range \[string map \{\"\\\{\" \"\" \"\\\}\" \"\"\} \[value parent.world_matrix]] 1 end-0]"}
+   {set DVPcamAspect "\[value camAspect]"}
+   {set DVPcamWin "\[value cam_win_translate] \[value cam_win_scale] \[value cam_winroll]"}
+  }
+  name DVPmd
+  label "setup metadata"
+  xpos 0
+  ypos -89
+  addUserKnob {20 User}
+  addUserKnob {7 camAspect}
+  camAspect {{parent.cam_haperture/parent.cam_focal}}
+ }
+ DeepExpression {
+  chans1 deep
+  name spacer
+  xpos 0
+  ypos 3
+ }
+ DeepExpression {
+  temp_name0 xpos
+  temp_expr0 "( ( x/\[value input.width] ) - 0.5 ) * \[value camAspect] * deep.front )"
+  temp_name1 ypos
+  temp_expr1 "( ( y/\[value input.height] ) - 0.5 ) * ( ( \[value camAspect]*deep.front ) / ( \[value input.width]/\[value input.height] ) ) * 1 / \[value root.format.pixel_aspect]"
+  temp_name2 zpos
+  temp_expr2 -deep.front
+  chans0 {deepPosition.red deepPosition.green deepPosition.blue none}
+  chans1 none
+  deepPosition.red "( xpos * \[value cwin_data.world_matrix.0] + ypos * \[value cwin_data.world_matrix.1] ) * \[value cwin_data.win_scale.u] + ( \[value camAspect] * deep.front * \[value cwin_data.win_translate.u] / 2 )"
+  deepPosition.green "( xpos * \[value cwin_data.world_matrix.4] + ypos * \[value cwin_data.world_matrix.5] ) * \[value cwin_data.win_scale.v] + ( \[value camAspect] * deep.front * \[value cwin_data.win_translate.v] / 2 )"
+  deepPosition.blue zpos
+  name DeepExpression1
+  label "apply cam window"
+  xpos 0
+  ypos 175
+  addUserKnob {20 User}
+  addUserKnob {7 camAspect}
+  camAspect {{"\[metadata DVPcamAspect]+0"}}
+ }
+ Dot {
+  name Dot3
+  xpos 34
+  ypos 404
+ }
+set N82ee3800 [stack 0]
+ Dot {
+  name Dot12
+  xpos 215
+  ypos 404
+ }
+set N82ee3400 [stack 0]
+ Dot {
+  name Dot33
+  xpos 1868
+  ypos 404
+ }
+set N82ee3000 [stack 0]
+ Dot {
+  name Dot14
+  xpos 2742
+  ypos 404
+ }
+ DeepExpression {
+  chans0 {deepPosition.red deepPosition.green deepPosition.blue none}
+  chans1 none
+  deepPosition.red "(deepPosition.red * \[value parent.world_matrix.0] + deepPosition.green * \[value parent.world_matrix.1] + deepPosition.blue * \[value parent.world_matrix.2]) + \[value parent.world_matrix.3]"
+  deepPosition.green "(deepPosition.red * \[value parent.world_matrix.4] + deepPosition.green * \[value parent.world_matrix.5] + deepPosition.blue * \[value parent.world_matrix.6]) + \[value parent.world_matrix.7]"
+  deepPosition.blue "(deepPosition.red * \[value parent.world_matrix.8] + deepPosition.green * \[value parent.world_matrix.9] + deepPosition.blue * \[value parent.world_matrix.10]) + \[value parent.world_matrix.11]"
+  name DeepExpression3
+  label "world space position"
+  xpos 2708
+  ypos 1539
+ }
+ Dot {
+  name Dot27
+  xpos 2742
+  ypos 1777
+ }
+set N82ee2400 [stack 0]
+ Dot {
+  name Dot28
+  xpos 3150
+  ypos 1777
+ }
+set N82ee2000 [stack 0]
+ Dot {
+  name Dot13
+  xpos 3732
+  ypos 1777
+ }
+ DeepRecolor {
+  inputs 2
+  channels {{{addDNAC.channels}}}
+  name DeepRecolor1
+  xpos 3698
+  ypos 2150
+ }
+ DeepExpression {
+  chans0 {deepNormal.red deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.red "\[value parent.DN_channel].red"
+  deepNormal.green "\[value parent.DN_channel].green"
+  deepNormal.blue "\[value parent.DN_channel].blue"
+  name DeepExpression2
+  label "shuffle input deep normal channel"
+  xpos 3698
+  ypos 2242
+ }
+ Dot {
+  name Dot2
+  xpos 3732
+  ypos 3317
+ }
+ Input {
+  inputs 0
+  name normal2D
+  xpos 3306
+  ypos -189
+  number 1
+ }
+ Dot {
+  name Dot25
+  xpos 3340
+  ypos 1989
+ }
+set N82ee0800 [stack 0]
+ Remove {
+  operation keep
+  channels rgb
+  name Remove2
+  xpos 3306
+  ypos 2084
+ }
+ Shuffle {
+  alpha black
+  out deepNormal
+  name Shuffle4
+  xpos 3306
+  ypos 2158
+ }
+push $N82ee2000
+ DeepRecolor {
+  inputs 2
+  channels {deepNormal.red deepNormal.green deepNormal.blue none}
+  name DeepRecolor5
+  xpos 3116
+  ypos 2152
+ }
+ DeepExpression {
+  chans0 {deepNormal.red deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.red "deepNormal.red * (1/alpha)"
+  deepNormal.green "deepNormal.green * (1/alpha)"
+  deepNormal.blue "deepNormal.blue * (1/alpha)"
+  name DeepExpression4
+  label "deep normal should unpremult normal by samples"
+  xpos 3116
+  ypos 2244
+ }
+ Dot {
+  name Dot1
+  xpos 3150
+  ypos 3330
+ }
+push $N82ee0800
+ Remove {
+  operation keep
+  channels rgb
+  name Remove3
+  xpos 2888
+  ypos 1986
+ }
+ ColorMatrix {
+  matrix {
+      {{parent.world_matrix.0} {parent.world_matrix.1} {parent.world_matrix.2}}
+      {{parent.world_matrix.4} {parent.world_matrix.5} {parent.world_matrix.6}}
+      {{parent.world_matrix.8} {parent.world_matrix.9} {parent.world_matrix.10}}
+    }
+  name ColorMatrix1
+  label "convert camera space to world space"
+  xpos 2888
+  ypos 2068
+ }
+ Shuffle {
+  alpha black
+  out deepNormal
+  name Shuffle5
+  xpos 2888
+  ypos 2144
+ }
+push $N82ee2400
+ DeepRecolor {
+  inputs 2
+  channels {deepNormal.red deepNormal.green deepNormal.blue none}
+  name DeepRecolor6
+  xpos 2708
+  ypos 2138
+ }
+ DeepExpression {
+  chans0 {deepNormal.red deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.red "deepNormal.red * (1/alpha)"
+  deepNormal.green "deepNormal.green * (1/alpha)"
+  deepNormal.blue "deepNormal.blue * (1/alpha)"
+  name DeepExpression7
+  label "deep normal should unpremult normal by samples"
+  xpos 2708
+  ypos 2230
+ }
+ Dot {
+  name Dot31
+  xpos 2742
+  ypos 3338
+ }
+push $N82ee3000
+ Dot {
+  name Dot22
+  xpos 1868
+  ypos 1064
+ }
+set N82ea5400 [stack 0]
+ Group {
+  name DeepPositionToImage1
+  tile_color 0x3d99ff
+  label "<font color=cyan>Image Output</font>"
+  xpos 2181
+  ypos 1050
+  addUserKnob {20 t_VERSION l Version}
+  addUserKnob {26 l_VERSION l <b>Version</b> T n/a}
+  addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2019-05-23}
+  addUserKnob {26 l_CHANGELOG l <b>Changelog</b> T "for internal use"}
+  addUserKnob {26 l_DEV l "<b>Developed by</b>" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+ }
+  Input {
+   inputs 0
+   name deep
+   xpos 508
+   ypos -26
+  }
+  Dot {
+   name Dot5
+   xpos 542
+   ypos 31
+  }
+set N82ea4c00 [stack 0]
+  DeepExpression {
+   chans1 none
+   rgba.red deepPosition.red
+   rgba.green deepPosition.green
+   rgba.blue deepPosition.blue
+   rgba.alpha "alpha == 0 ? 0 : 1"
+   name DeepExpression15
+   xpos 656
+   ypos 28
+  }
+  DeepToImage {
+   name DeepToImage2
+   xpos 656
+   ypos 185
+  }
+push $N82ea4c00
+  DeepToImage {
+   name DeepToImage1
+   xpos 508
+   ypos 80
+  }
+  ShuffleCopy {
+   inputs 2
+   red red
+   green green
+   blue blue
+   alpha black
+   out deepPosition
+   name ShuffleCopy1
+   xpos 508
+   ypos 185
+  }
+  Output {
+   name Output1
+   selected true
+   xpos 508
+   ypos 265
+  }
+ end_group
+ Shuffle {
+  in deepPosition
+  in2 alpha
+  alpha red2
+  name Shuffle12
+  xpos 2181
+  ypos 1154
+ }
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos 2181
+  ypos 1236
+ }
+ Dot {
+  name Dot29
+  xpos 2215
+  ypos 1316
+ }
+set N8325e800 [stack 0]
+ Dot {
+  name Dot32
+  xpos 2080
+  ypos 1316
+ }
+ Dot {
+  name Dot30
+  xpos 2080
+  ypos 1670
+ }
+push $N8325e800
+ BlinkScript {
+  recompileCount 382
+  ProgramGroup 1
+  KernelDescription "2 \"PosToNor\" iterate pixelWise cefc15fca60ad2728a271bbc156cbd773381d51a0d034d9c392d6485e9b47f03 2 \"src\" Read Random \"dst\" Write Point 1 \"deep threshold\" Float 1 zczMPQ== 1 \"dThreshold\" 1 1 0"
+  kernelSource "//----- General function start\n\ninline float dCheck(float shiftD, float origD, float dt)\n\{\n    return fabs(shiftD-origD) > dt ;\n\}\n\ninline float nCalXY(float nxya, float nxyb, float sxya, float sxyb)\n\{\n    return atan( (sxyb-nxyb) / -(sxya-nxya) ) / (PI/2) ;\n\}\n\ninline float nCalZ( float nza ,float nzb , float nzc , float sza , float szb , float szc )\n\{\n    float temp = (PI/2) - atan( sqrt( pow(sza-nza, 2) + pow(szb-nzb, 2) ) / -(szc-nzc) ) ;\n    if ( temp > (PI/2) ) \{\n      return 1 ;\n    \}\n      return 1 - temp / (PI/2) ;\n\}\n\n//----- General function end\n\nkernel PosToNor : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src;\n  Image<eWrite, eAccessPoint> dst;\n\n  param:\n  float dThreshold;\n\n  local:\n\n  void define() \{\n    defineParam( dThreshold , \"deep threshold\", 0.1f) ;\n  \}\n\n  void init() \{\n  \}\n\n  void process(int2 pos) \{\n\n    // neighbor pixel\n    float xM = float(pos.x-1) ;\n    float yM = float(pos.y-1) ;\n    float xP = float(pos.x+1) ;\n    float yP = float(pos.y+1) ;\n\n    // position setup\n    SampleType(src) pN = src( pos.x , pos.y );\n\n    SampleType(src) pDE = src(xP, pos.y) ;\n    SampleType(src) pDS = src(pos.x, yM) ;\n    SampleType(src) pDW = src(xM, pos.y) ;\n    SampleType(src) pDN = src(pos.x, yP) ;\n\n    SampleType(src) pDNE = src(xP, yP) ;\n    SampleType(src) pDSE = src(xP, yM) ;\n    SampleType(src) pDSW = src(xM, yM) ;\n    SampleType(src) pDNW = src(xM, yP) ;\n\n    // normal\n\n    float norPX;\n    float norPY;\n    float norPZ;\n\n    // X\n    if ( dCheck(pDW.z, pN.z, dThreshold) ) \{\n      norPX = nCalXY(pN.x, pN.z, pDE.x, pDE.z) ;\n    \}\n    else \{\n      norPX = nCalXY(pN.x, pN.z, pDW.x, pDW.z) ;\n    \}\n\n    // Y\n    if ( dCheck(pDS.z, pN.z, dThreshold) ) \{\n      norPY = nCalXY(pN.y, pN.z, pDN.y, pDN.z) ;\n    \}\n    else \{\n      norPY = nCalXY(pN.y, pN.z, pDS.y, pDS.z) ;\n    \}\n\n    // Z\n    norPZ = min( 1-fabs(norPX) , 1-fabs(norPY) ) ;\n\n    if ( dCheck(pDSW.z, pN.z, dThreshold) ) \{\n      norPZ = min( norPZ, nCalZ(pN.x, pN.y, pN.z, pDNE.x, pDNE.y, pDNE.z) ) ;\n    \}\n    else \{\n      norPZ = min( norPZ, nCalZ(pN.x, pN.y, pN.z, pDSW.x, pDSW.y, pDSW.z) ) ;\n    \}\n\n    if ( dCheck(pDSE.z, pN.z, dThreshold) ) \{\n      norPZ = min( norPZ, nCalZ(pN.x, pN.y, pN.z, pDNW.x, pDNW.y, pDNW.z) ) ;\n    \}\n    else \{\n      norPZ = min( norPZ, nCalZ(pN.x, pN.y, pN.z, pDSE.x, pDSE.y, pDSE.z) ) ;\n    \}\n\n//----- write out\n    dst() = float4( norPX , norPY , norPZ , 0 ) ;\n  \}\n\};"
+  useGPUIfAvailable {{parent.useGPUIfAvailable}}
+  rebuild ""
+  "PosToNor_deep threshold" {{parent.deep_threshold}}
+  protectKernelWhenPublishing true
+  rebuild_finalise ""
+  name BlinkScript5
+  xpos 2181
+  ypos 1423
+ }
+ Expression {
+  expr0 "atan( atan(red) ) * 1.5"
+  expr2 "smoothstep( 0, 1, blue )"
+  name Expression2
+  xpos 2181
+  ypos 1544
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos 2181
+  ypos 1661
+ }
+ Premult {
+  name Premult2
+  xpos 2181
+  ypos 1754
+ }
+ Unpremult {
+  name Unpremult2
+  xpos 2181
+  ypos 1834
+ }
+ Shuffle {
+  in rgb
+  alpha black
+  out deepNormal
+  name Shuffle13
+  xpos 2181
+  ypos 1914
+ }
+ Dot {
+  name Dot23
+  xpos 2215
+  ypos 2276
+ }
+push $N82ea5400
+ DeepExpression {
+  chans0 {deepPosition.red deepPosition.green deepPosition.blue none}
+  chans1 none
+  deepPosition.red "(deepPosition.red * \[value parent.world_matrix.0] + deepPosition.green * \[value parent.world_matrix.1] + deepPosition.blue * \[value parent.world_matrix.2]) + \[value parent.world_matrix.3]"
+  deepPosition.green "(deepPosition.red * \[value parent.world_matrix.4] + deepPosition.green * \[value parent.world_matrix.5] + deepPosition.blue * \[value parent.world_matrix.6]) + \[value parent.world_matrix.7]"
+  deepPosition.blue "(deepPosition.red * \[value parent.world_matrix.8] + deepPosition.green * \[value parent.world_matrix.9] + deepPosition.blue * \[value parent.world_matrix.10]) + \[value parent.world_matrix.11]"
+  name DeepExpression19
+  label "world space position"
+  xpos 1834
+  ypos 1892
+ }
+ DeepRecolor {
+  inputs 2
+  channels {deepNormal.red deepNormal.green deepNormal.blue none}
+  name DeepRecolor15
+  xpos 1834
+  ypos 2266
+ }
+ DeepExpression {
+  chans0 {deepNormal.red deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.red "deepNormal.red * (1/alpha)"
+  deepNormal.green "deepNormal.green * (1/alpha)"
+  deepNormal.blue "deepNormal.blue * (1/alpha)"
+  name DeepExpression21
+  label "deep normal should unpremult normal by samples"
+  xpos 1834
+  ypos 2358
+ }
+ DeepExpression {
+  chans0 {deepNormal.red deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.red "\[value dx]"
+  deepNormal.green "\[value dy]"
+  deepNormal.blue "\[value dz]"
+  name DeepExpression22
+  label "world space normal"
+  xpos 1834
+  ypos 2450
+  addUserKnob {20 User}
+  addUserKnob {1 dx}
+  dx "deepNormal.red * \[value parent.world_matrix.0] + deepNormal.green * \[value parent.world_matrix.1] + deepNormal.blue * \[value parent.world_matrix.2]"
+  addUserKnob {1 dy}
+  dy "deepNormal.red * \[value parent.world_matrix.4] + deepNormal.green * \[value parent.world_matrix.5] + deepNormal.blue * \[value parent.world_matrix.6]"
+  addUserKnob {1 dz}
+  dz "deepNormal.red * \[value parent.world_matrix.8] + deepNormal.green * \[value parent.world_matrix.9] + deepNormal.blue * \[value parent.world_matrix.10]"
+ }
+ Dot {
+  name Dot26
+  xpos 1868
+  ypos 3354
+ }
+push $N82ee3400
+ Group {
+  name DeepPositionToImage2
+  tile_color 0x3d99ff
+  label "<font color=cyan>Image Output</font>"
+  xpos 181
+  ypos 639
+  addUserKnob {20 t_VERSION l Version}
+  addUserKnob {26 l_VERSION l <b>Version</b> T n/a}
+  addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2019-05-23}
+  addUserKnob {26 l_CHANGELOG l <b>Changelog</b> T "for internal use"}
+  addUserKnob {26 l_DEV l "<b>Developed by</b>" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+ }
+  Input {
+   inputs 0
+   name deep
+   xpos 508
+   ypos -26
+  }
+  Dot {
+   name Dot5
+   xpos 542
+   ypos 31
+  }
+set N83212400 [stack 0]
+  DeepExpression {
+   chans1 none
+   rgba.red deepPosition.red
+   rgba.green deepPosition.green
+   rgba.blue deepPosition.blue
+   rgba.alpha "alpha == 0 ? 0 : 1"
+   name DeepExpression15
+   xpos 656
+   ypos 28
+  }
+  DeepToImage {
+   name DeepToImage2
+   xpos 656
+   ypos 185
+  }
+push $N83212400
+  DeepToImage {
+   name DeepToImage1
+   xpos 508
+   ypos 80
+  }
+  ShuffleCopy {
+   inputs 2
+   red red
+   green green
+   blue blue
+   alpha black
+   out deepPosition
+   name ShuffleCopy1
+   xpos 508
+   ypos 185
+  }
+  Output {
+   name Output1
+   selected true
+   xpos 508
+   ypos 265
+  }
+ end_group
+ Shuffle {
+  in deepPosition
+  alpha black
+  name Shuffle3
+  xpos 181
+  ypos 770
+ }
+ Dot {
+  name Dot4
+  xpos 215
+  ypos 850
+ }
+set N83210800 [stack 0]
+ Dot {
+  name Dot5
+  xpos 342
+  ypos 850
+ }
+set N83210400 [stack 0]
+ Dot {
+  name Dot7
+  xpos 465
+  ypos 850
+ }
+set N831bfc00 [stack 0]
+ Dot {
+  name Dot8
+  xpos 592
+  ypos 850
+ }
+set N831bf800 [stack 0]
+ Dot {
+  name Dot11
+  xpos 722
+  ypos 850
+ }
+set N831bf400 [stack 0]
+ Dot {
+  name Dot16
+  xpos 848
+  ypos 850
+ }
+set N831bf000 [stack 0]
+ Dot {
+  name Dot18
+  xpos 994
+  ypos 850
+ }
+set N831bec00 [stack 0]
+ Dot {
+  name Dot20
+  xpos 1120
+  ypos 850
+ }
+ Transform {
+  translate {-1 1}
+  name Transform8
+  label nw
+  xpos 1086
+  ypos 924
+ }
+ Shuffle {
+  alpha black
+  out rgb
+  name Shuffle11
+  xpos 1086
+  ypos 1189
+ }
+ Dot {
+  name Dot21
+  xpos 1120
+  ypos 2404
+ }
+push $N831bec00
+ Transform {
+  translate {-1 1}
+  name Transform7
+  label se
+  xpos 960
+  ypos 924
+ }
+ Shuffle {
+  alpha black
+  out deepRawColor
+  name Shuffle7
+  xpos 960
+  ypos 1189
+ }
+ Dot {
+  name Dot19
+  xpos 994
+  ypos 2318
+ }
+push $N831bf000
+ Transform {
+  translate {1 1}
+  name Transform6
+  label ne
+  xpos 814
+  ypos 924
+ }
+ Shuffle {
+  alpha black
+  out rgb
+  name Shuffle6
+  xpos 814
+  ypos 1189
+ }
+ Dot {
+  name Dot17
+  xpos 848
+  ypos 2140
+ }
+push $N831bf400
+ Transform {
+  translate {-1 -1}
+  name Transform5
+  label sw
+  xpos 688
+  ypos 924
+ }
+ Shuffle {
+  alpha black
+  out deepRawColor
+  name Shuffle1
+  xpos 688
+  ypos 1189
+ }
+ Dot {
+  name Dot15
+  xpos 722
+  ypos 2054
+ }
+push $N831bf800
+ Transform {
+  translate {0 -1}
+  name Transform3
+  label s
+  xpos 558
+  ypos 924
+ }
+ Shuffle {
+  red black
+  green black
+  blue green
+  alpha blue
+  out deepRawColor
+  name Shuffle9
+  xpos 558
+  ypos 1189
+ }
+ Dot {
+  name Dot10
+  xpos 592
+  ypos 1686
+ }
+push $N831bfc00
+ Transform {
+  translate {0 1}
+  name Transform4
+  label n
+  xpos 431
+  ypos 924
+ }
+ Shuffle {
+  red green
+  green blue
+  blue black
+  alpha black
+  out deepRawColor
+  name Shuffle10
+  xpos 431
+  ypos 1189
+ }
+ Dot {
+  name Dot9
+  xpos 465
+  ypos 1573
+ }
+push $N83210400
+ Transform {
+  translate {-1 0}
+  name Transform2
+  label w
+  xpos 308
+  ypos 924
+ }
+ Shuffle {
+  red black
+  green black
+  blue red
+  alpha blue
+  out deepRawColor
+  name Shuffle8
+  xpos 308
+  ypos 1189
+ }
+ Dot {
+  name Dot6
+  xpos 342
+  ypos 1382
+ }
+push $N83210800
+ Transform {
+  translate {1 0}
+  name Transform1
+  label e
+  xpos 181
+  ypos 924
+ }
+ Shuffle {
+  green blue
+  blue black
+  alpha black
+  out deepRawColor
+  name Shuffle2
+  xpos 181
+  ypos 1189
+ }
+ Dot {
+  name Dot24
+  xpos 215
+  ypos 1269
+ }
+push $N82ee3800
+ DeepExpression {
+  chans0 {deepPosition.red deepPosition.green deepPosition.blue none}
+  chans1 none
+  deepPosition.red "deepPosition.red * alpha"
+  deepPosition.green "deepPosition.green * alpha"
+  deepPosition.blue "deepPosition.blue * alpha"
+  name DeepExpression15
+  label "premult position"
+  xpos 0
+  ypos 886
+ }
+ DeepRecolor {
+  inputs 2
+  channels {deepRawColor.red deepRawColor.green -deepRawColor.blue none}
+  name DeepRecolor2
+  xpos 0
+  ypos 1260
+ }
+ DeepRecolor {
+  inputs 2
+  channels {-deepRawColor.red -deepRawColor.green deepRawColor.blue deepRawColor.alpha}
+  name DeepRecolor4
+  xpos 0
+  ypos 1373
+ }
+ DeepExpression {
+  temp_expr0 "atan( (deepRawColor.green-deepPosition.blue)/-(deepRawColor.red-deepPosition.red) ) / (pi/2)"
+  temp_expr1 (deepRawColor.green-deepPosition.blue)
+  temp_expr2 "atan( (deepRawColor.alpha-deepPosition.blue)/-(deepRawColor.blue-deepPosition.red) ) / (pi/2)"
+  chans0 {deepNormal.red -deepNormal.green -deepNormal.blue none}
+  chans1 none
+  deepNormal.red "(deepRawColor.green-deepPosition.blue)<\[value dt] ? atan( (deepRawColor.green-deepPosition.blue)/-(deepRawColor.red-deepPosition.red) ) / (pi/2) : atan( (deepRawColor.alpha-deepPosition.blue)/-(deepRawColor.blue-deepPosition.red) ) / (pi/2)"
+  name DeepExpression14
+  tile_color 0xff0000ff
+  label "find normal.red"
+  xpos 0
+  ypos 1472
+  addUserKnob {20 User}
+  addUserKnob {7 dt}
+  dt {{deep_threshold}}
+ }
+ DeepRecolor {
+  inputs 2
+  channels {deepRawColor.red deepRawColor.green -deepRawColor.blue none}
+  name DeepRecolor7
+  xpos 0
+  ypos 1564
+ }
+ DeepRecolor {
+  inputs 2
+  channels {-deepRawColor.red -deepRawColor.green deepRawColor.blue deepRawColor.alpha}
+  name DeepRecolor11
+  xpos 0
+  ypos 1677
+ }
+ DeepExpression {
+  temp_expr0 "atan( (deepRawColor.green-deepPosition.blue)/-(deepRawColor.red-deepPosition.green) ) / (pi/2)"
+  temp_expr1 (deepRawColor.green-deepPosition.blue)
+  temp_expr2 "atan( (deepRawColor.alpha-deepPosition.blue)/-(deepRawColor.blue-deepPosition.green) ) / (pi/2)"
+  chans0 {-deepNormal.red deepNormal.green -deepNormal.blue none}
+  chans1 none
+  deepNormal.green "(deepRawColor.green-deepPosition.blue)<\[value dt] ? atan( (deepRawColor.green-deepPosition.blue)/-(deepRawColor.red-deepPosition.green) ) / (pi/2) : atan( (deepRawColor.alpha-deepPosition.blue)/-(deepRawColor.blue-deepPosition.green) ) / (pi/2)"
+  name DeepExpression5
+  tile_color 0xff00ff
+  label "find normal.green"
+  xpos 0
+  ypos 1769
+  addUserKnob {20 User}
+  addUserKnob {7 dt}
+  dt {{deep_threshold}}
+ }
+ DeepExpression {
+  chans0 {-deepPosition.red -deepPosition.green -deepPosition.blue deepPosition.alpha}
+  chans1 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans2 {-deepRawColor.red -deepRawColor.green -deepRawColor.blue deepRawColor.alpha}
+  deepPosition.alpha red
+  deepNormal.alpha green
+  deepRawColor.alpha blue
+  name DeepExpression17
+  label "shuffle channels for math"
+  xpos 0
+  ypos 1861
+ }
+ DeepExpression {
+  chans0 {-deepNormal.red -deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.blue "min( 1-abs(deepNormal.red) , 1-abs(deepNormal.green) )"
+  name DeepExpression6
+  tile_color 0xffff
+  label "get normal.blue step1"
+  xpos 0
+  ypos 1953
+ }
+ DeepRecolor {
+  inputs 2
+  channels {deepRawColor.red deepRawColor.green deepRawColor.blue none}
+  name DeepRecolor3
+  xpos 0
+  ypos 2045
+ }
+ DeepRecolor {
+  inputs 2
+  name DeepRecolor12
+  xpos 0
+  ypos 2137
+ }
+ DeepExpression {
+  temp_name0 dir1
+  temp_expr0 "\[value tempA]>(pi/2) ? 1 : 1-(\[value tempA])/(pi/2) )"
+  temp_name1 dir2
+  temp_expr1 "\[value tempB]>(pi/2) ? 1 : 1-(\[value tempB])/(pi/2) )"
+  chans0 {-deepNormal.red -deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.blue "(deepRawColor.blue-deepPosition.blue)>\[value dt] ? (deepNormal.blue<dir1 ? deepNormal.blue : dir1) : (deepNormal.blue<dir2 ? deepNormal.blue : dir2)"
+  name DeepExpression10
+  tile_color 0xffff
+  label "get normal.blue step2"
+  xpos 0
+  ypos 2217
+  addUserKnob {20 User}
+  addUserKnob {7 dt}
+  dt {{deep_threshold}}
+  addUserKnob {1 tempA}
+  tempA "(pi/2) - atan( sqrt( pow2(deepRawColor.red-deepPosition.red) + pow2(deepRawColor.green-deepPosition.green) ) / -(deepRawColor.blue-deepPosition.blue) )"
+  addUserKnob {1 tempB}
+  tempB "(pi/2) - atan( sqrt( pow2(red-deepPosition.red) + pow2(green-deepPosition.green) ) / -(blue-deepPosition.blue) )"
+ }
+ DeepRecolor {
+  inputs 2
+  channels {deepRawColor.red deepRawColor.green deepRawColor.blue none}
+  name DeepRecolor13
+  xpos 0
+  ypos 2309
+ }
+ DeepRecolor {
+  inputs 2
+  name DeepRecolor14
+  xpos 0
+  ypos 2401
+ }
+ DeepExpression {
+  temp_name0 dir1
+  temp_expr0 "\[value tempA]>(pi/2) ? 1 : 1-(\[value tempA])/(pi/2) )"
+  temp_name1 dir2
+  temp_expr1 "\[value tempB]>(pi/2) ? 1 : 1-(\[value tempB])/(pi/2) )"
+  chans0 {-deepNormal.red -deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.blue "(deepRawColor.blue-deepPosition.blue)>\[value dt] ? (deepNormal.blue<dir1 ? deepNormal.blue : dir1) : (deepNormal.blue<dir2 ? deepNormal.blue : dir2)"
+  name DeepExpression16
+  tile_color 0xffff
+  label "get normal.blue step3"
+  xpos 0
+  ypos 2481
+  addUserKnob {20 User}
+  addUserKnob {7 dt}
+  dt {{deep_threshold}}
+  addUserKnob {1 tempA}
+  tempA "(pi/2) - atan( sqrt( pow2(deepRawColor.red-deepPosition.red) + pow2(deepRawColor.green-deepPosition.green) ) / -(deepRawColor.blue-deepPosition.blue) )"
+  addUserKnob {1 tempB}
+  tempB "(pi/2) - atan( sqrt( pow2(red-deepPosition.red) + pow2(green-deepPosition.green) ) / -(blue-deepPosition.blue) )"
+ }
+set N83514400 [stack 0]
+ DeepExpression {
+  chans0 {deepNormal.red -deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.red "atan( atan(deepNormal.red) ) * 1.5"
+  deepNormal.blue "smoothstep( 0, 1, deepNormal.blue )"
+  name DeepExpression13
+  label "final adjustment\n(hacked)"
+  xpos 0
+  ypos 2609
+ }
+ DeepExpression {
+  chans0 rgb
+  chans1 none
+  rgba.red deepPosition.alpha
+  rgba.green deepNormal.alpha
+  rgba.blue deepRawColor.alpha
+  name DeepExpression18
+  label "revert RGB"
+  xpos 0
+  ypos 2828
+ }
+ DeepExpression {
+  chans0 {deepPosition.red deepPosition.green deepPosition.blue none}
+  chans1 none
+  deepPosition.red "deepPosition.red * (1/alpha)"
+  deepPosition.green "deepPosition.green * (1/alpha)"
+  deepPosition.blue "deepPosition.blue * (1/alpha)"
+  name DeepExpression8
+  label "unpremult position"
+  xpos 0
+  ypos 2920
+ }
+ DeepExpression {
+  chans0 {deepPosition.red deepPosition.green deepPosition.blue none}
+  chans1 none
+  deepPosition.red "(deepPosition.red * \[value parent.world_matrix.0] + deepPosition.green * \[value parent.world_matrix.1] + deepPosition.blue * \[value parent.world_matrix.2]) + \[value parent.world_matrix.3]"
+  deepPosition.green "(deepPosition.red * \[value parent.world_matrix.4] + deepPosition.green * \[value parent.world_matrix.5] + deepPosition.blue * \[value parent.world_matrix.6]) + \[value parent.world_matrix.7]"
+  deepPosition.blue "(deepPosition.red * \[value parent.world_matrix.8] + deepPosition.green * \[value parent.world_matrix.9] + deepPosition.blue * \[value parent.world_matrix.10]) + \[value parent.world_matrix.11]"
+  name DeepExpression11
+  label "world space position"
+  xpos 0
+  ypos 3012
+ }
+ DeepExpression {
+  chans0 {deepNormal.red deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.red "\[value dx]"
+  deepNormal.green "\[value dy]"
+  deepNormal.blue "\[value dz]"
+  name DeepExpression9
+  label "world space normal"
+  xpos 0
+  ypos 3104
+  addUserKnob {20 User}
+  addUserKnob {1 dx}
+  dx "deepNormal.red * \[value parent.world_matrix.0] + deepNormal.green * \[value parent.world_matrix.1] + deepNormal.blue * \[value parent.world_matrix.2]"
+  addUserKnob {1 dy}
+  dy "deepNormal.red * \[value parent.world_matrix.4] + deepNormal.green * \[value parent.world_matrix.5] + deepNormal.blue * \[value parent.world_matrix.6]"
+  addUserKnob {1 dz}
+  dz "deepNormal.red * \[value parent.world_matrix.8] + deepNormal.green * \[value parent.world_matrix.9] + deepNormal.blue * \[value parent.world_matrix.10]"
+ }
+ Switch {
+  inputs 5
+  which {{parent.normal_data}}
+  name Switch1
+  xpos 0
+  ypos 4187
+ }
+ DeepExpression {
+  chans0 deepRawColor
+  chans1 none
+  deepRawColor.red red
+  deepRawColor.green green
+  deepRawColor.blue blue
+  deepRawColor.alpha alpha
+  name DeepExpression12
+  label "keep input color"
+  xpos 0
+  ypos 4327
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 4510
+ }
+ NoOp {
+  inputs 0
+  name menu01
+  knobChanged "\nthisGRP = nuke.thisGroup()\nif thisGRP\['normal_data'].getValue() <= 1 :\n    thisGRP\['deep_threshold'].setVisible(True)\nelse :\n    thisGRP\['deep_threshold'].setVisible(False)\n\nif thisGRP\['normal_data'].getValue() == 1 :\n    thisGRP\['useGPUIfAvailable'].setVisible(True)\nelse :\n    thisGRP\['useGPUIfAvailable'].setVisible(False)\n\nif thisGRP\['normal_data'].getValue() == 4 :\n    thisGRP\['DN_channel'].setVisible(True)\nelse :\n    thisGRP\['DN_channel'].setVisible(False)\n"
+  xpos -710
+  ypos -188
+  addUserKnob {20 User}
+  addUserKnob {4 normal_data l "output normal data" M {"generated deep normal (est from position) " "generated 2D normal (est from position) " "input 2D normal (camera space) " "input 2D normal (world space) " "shuffle input deep normal (world space)" ""}}
+ }
+push $N83514400
+ DeepExpression {
+  chans0 {-deepNormal.red -deepNormal.green deepNormal.blue none}
+  chans1 none
+  deepNormal.blue "sin( deepNormal.blue * (pi/2) )"
+  name DeepExpression20
+  tile_color 0xffff
+  label "finalize normal.blue"
+  xpos 172
+  ypos 2619
+ }
+end_group

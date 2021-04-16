@@ -1,8 +1,8 @@
 Group {
- name DVPort
+ name DVPortal
  tile_color 0x4d00ccff
  label "<img src='Camera.png'> info"
- note_font "Bitstream Vera Sans Bold Bold Bold"
+ note_font "MS Shell Dlg 2"
  addUserKnob {20 tab_general l General}
  addUserKnob {20 cam_data_grp l "CAMERA DATA" n 1}
  cam_data_grp 0
@@ -39,10 +39,10 @@ Group {
  winroll {{"\[exists input] ? input.winroll : 0"}}
  addUserKnob {20 endGroup n -1}
  addUserKnob {20 t_VERSION l Version}
- addUserKnob {26 l_VERSION l Version T 3.8}
- addUserKnob {26 l_DATE l "Date Modified" T 2020-02-13}
- addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"3.8<br>'DVPMatte'<br>&nbsp;&nbsp;-&nbsp;fixed&nbsp;cube&nbsp;matte&nbsp;shape&nbsp;result&nbsp;when&nbsp;pivot&nbsp;changed.&nbsp;Sphere&nbsp;and&nbsp;Cylinder&nbsp;were&nbsp;fine&nbsp;in&nbsp;the&nbsp;past&nbsp;versions.<br>'DVProjection'<br>&nbsp;&nbsp;-&nbsp;link&nbsp;camera&nbsp;replaced&nbsp;transformation&nbsp;by&nbsp;world&nbsp;matrix,&nbsp;so&nbsp;it&nbsp;works&nbsp;with&nbsp;camera&nbsp;stack&nbsp;with&nbsp;axis.<br>&nbsp;&nbsp;-&nbsp;removed&nbsp;preview&nbsp;projection&nbsp;camera&nbsp;in&nbsp;3D&nbsp;view.<br><br>3.7<br>Toolset&nbsp;update&nbsp;:<br>&nbsp;&nbsp;'DVPort'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;added&nbsp;'near'&nbsp;&&nbsp;'far&nbsp;knobs<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;'DVPmatte'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;fixed&nbsp;missing&nbsp;premult&nbsp;original&nbsp;alpha&nbsp;process<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;revert&nbsp;uniform_scale&nbsp;default&nbsp;value&nbsp;back&nbsp;to&nbsp;1.0<br><br>3.6<br>'DVPsetLight'<br>-&nbsp;improved&nbsp;'generated&nbsp;normal&nbsp;(estimate&nbsp;from&nbsp;position)'&nbsp;and&nbsp;changed&nbsp;to&nbsp;blink&nbsp;script.&nbsp;Get&nbsp;better&nbsp;edges&nbsp;on&nbsp;deepNormal.\"\nnuke.message( log )" +STARTLINE}
- addUserKnob {26 l_DEV l "Developed by" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+ addUserKnob {26 l_VERSION l Version T 4.0}
+ addUserKnob {26 l_DATE l "Date Modified" T 2021-02-13}
+ addUserKnob {22 btn_CHANGELOG l Changelog T "log = \"Deep2VPosition&nbsp;(Deep2VP)<br>-&nbsp;added&nbsp;camera&nbsp;setting&nbsp;to&nbsp;metadata<br>-&nbsp;remove&nbsp;bake&nbsp;and&nbsp;copy&nbsp;buttons<br>-&nbsp;rename&nbsp;to&nbsp;Deep2VP<br>-&nbsp;generate/select/import&nbsp;deepNormal&nbsp;in&nbsp;this&nbsp;node<br>-&nbsp;added&nbsp;generate&nbsp;normal&nbsp;in&nbsp;deep,&nbsp;still&nbsp;keep&nbsp;the&nbsp;previous&nbsp;one.<br><br>DVPort&nbsp;(DVPortal)<br>-&nbsp;renamed&nbsp;to&nbsp;DVPortal<br><br>DVPmatte<br>-&nbsp;removed&nbsp;'option'&nbsp;knob,&nbsp;2D&nbsp;matte&nbsp;can&nbsp;use&nbsp;'open&nbsp;matte'&nbsp;instead<br>-&nbsp;open&nbsp;matte&nbsp;can&nbsp;choose&nbsp;show&nbsp;matte&nbsp;or&nbsp;color<br><br>DVPattern<br>-&nbsp;internal&nbsp;setup&nbsp;same&nbsp;as&nbsp;DVPmatte<br>-&nbsp;added&nbsp;rotation&nbsp;knob<br>-&nbsp;support&nbsp;'open&nbsp;matte'<br><br>DVProjection<br>-&nbsp;remove&nbsp;bake&nbsp;and&nbsp;copy&nbsp;buttons<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;Deep2VP<br><br>DVPsetLight<br>-&nbsp;added&nbsp;shader&nbsp;setting&nbsp;and&nbsp;input&nbsp;shader<br>-&nbsp;not&nbsp;required&nbsp;link&nbsp;camera&nbsp;anymore<br>-&nbsp;removed&nbsp;deepNormal&nbsp;setup,&nbsp;moved&nbsp;to&nbsp;Deep2VP&nbsp;node<br><br>DVPscene<br>-&nbsp;added&nbsp;multiple&nbsp;output&nbsp;options<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;DVP's&nbsp;lighting&nbsp;system<br><br>DVPrelight<br>-&nbsp;added&nbsp;specular&nbsp;setup<br>-&nbsp;added&nbsp;toon&nbsp;shade&nbsp;setup<br>-&nbsp;fix&nbsp;pointcloud&nbsp;preview&nbsp;with&nbsp;effects<br><br>DVPrelightPT<br>-&nbsp;split&nbsp;up&nbsp;point&nbsp;light&nbsp;from&nbsp;DVPrelight<br>-&nbsp;fix&nbsp;point&nbsp;light&nbsp;duplicated&nbsp;algorithm<br><br>DVPfresnel<br>-&nbsp;not&nbsp;required&nbsp;link&nbsp;camera&nbsp;anymore<br>-&nbsp;fix&nbsp;unpremult&nbsp;process,&nbsp;the&nbsp;result&nbsp;was&nbsp;too&nbsp;dark<br><br>DVPToImage<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;Deep2VP<br>-&nbsp;same&nbsp;as&nbsp;Deep2VP&nbsp;node&nbsp;color<br><br>new&nbsp;nodes&nbsp;:<br>DVPColorCorrect<br><br>added&nbsp;shaders&nbsp;:<br>DVP&nbsp;Shader<br>DVP&nbsp;Toon&nbsp;Shader\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "Developed by" T "<a href='https://youtube.com/c/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
 }
  BackdropNode {
   inputs 0
@@ -78,7 +78,7 @@ Group {
  NoOp {
   inputs 0
   name store
-  xpos -395
+  xpos -396
   ypos -496
   addUserKnob {20 User}
   addUserKnob {22 dev T "thisGRP = nuke.thisGroup()\nallKnobs = \['xform_order','rot_order','translate','rotate','scaling','uniform_scale','skew','pivot','world_matrix','focal','haperture','near','far','win_translate','win_scale','winroll']\nfor knob in thisGRP.knobs() :\n    if knob in allKnobs :\n        thisGRP\[knob].setEnabled( False )" +STARTLINE}

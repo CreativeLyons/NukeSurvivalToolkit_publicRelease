@@ -1,32 +1,19 @@
 Group {
  name DVPfresnel
+ onCreate "\nthisGRP = nuke.thisGroup()\nfor knob in thisGRP.knobs() :\n    try :\n        if thisGRP\[knob].label()\[:19] == 'panel dropped state' :\n            thisGRP.removeKnob( nuke.thisNode()\[knob] )\n    except :\n        pass\n"
  tile_color 0x7f65ff
  label "<font color=cyan>Deep Output</font>"
  addUserKnob {20 tab_general l General}
- addUserKnob {22 set_link l "link to selected camera" t "Deep data is related to camera. So when convert deep data to anything, it required the camera data.\n\nhow to use :\nSelect the camera, which can be link to any axis nodes. This tool will get the focal, haperture and world matrix from selected camera to generate world space position data.\n\nYou can find the world space normal pass store under <b>'deepNormal'</b> channel after this node. This function requried on 'generated normal' and 'input normal ( camera space )'. If want to bring the normal data to 2D in downstream. Please only use <b>DVPToImage</b> which comes along with this toolset.\n\nAdditional note:\nThis node will also create another channel called <b>'deepRawColor'</b> . This channel stored the original of deep data from input for any dev purposes in downstream. User not necessary to use this channel but better to keep it if this toolset occur in downstream." T "def getLevel() :\n\t### level define ###\n\tif len(nuke.thisNode().fullName().split('.')) == 1 :\n\t\t  ggLevel = nuke.root()\n\telse :\n\t\t  nodePath = nuke.thisNode().fullName().split('.')\n\t\t  nodePath.pop()\n\t\t  ggLevel = nuke.toNode('.'.join(nodePath))\n\treturn ggLevel\n\nroot = getLevel()\nthisGRP = nuke.thisGroup()\n\nmainKnobs = \['world_matrix','cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll']\ndefaultKnobs = \{\n\t\t\t'world matrix' : 'world_matrix',\n\t\t\t'focal length' : 'focal',\n\t\t\t'horiz aperture' : 'haperture',\n\t\t\t'window translate' : 'win_translate',\n\t\t\t'window scale' : 'win_scale',\n\t\t\t'window roll' : 'winroll'\n\t\t\t\}\nselNodeKnobs = \[]\nmissingKnob = \[]\n\ntry :\n\twith root :\n\t\tselNode = nuke.selectedNode()\n\n\tfor knob in selNode.knobs() :\n\t\tselNodeKnobs.append( knob )\n\n\tselNodeKnobs.sort()\n\n\tfor key,value in defaultKnobs.items() :\n\t\tif value not in selNodeKnobs :\n\t\t\tmissingKnob.append( key )\n\n\tif not len(missingKnob) :\n\t\twith root :\n\t\t\tfor knob in mainKnobs :\n\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\tCAMnode = selNode.name()\n\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.world_matrix'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.focal'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.haperture'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.win_translate'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.win_scale'.format(CAMnode))\n\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.winroll'.format(CAMnode))\n\telse :\n\t\tp = nuke.Panel('Select knobs :')\n\t\tp.addBooleanCheckBox( '<b>Unable to find the default knobs. Please use the pulldown menu below to define the knob manually.</b>' , False)\n\t\tfor rk in missingKnob :\n\t\t\tp.addEnumerationPulldown( rk, ' '.join( selNodeKnobs ) )\n\n\t\tif p.show() :\n\t\t\ttry :\n\t\t\t\tfor key,value in defaultKnobs.items() :\n\t\t\t\t\tif p.value( key ) != None :\n\t\t\t\t\t\tdefaultKnobs\[key] = p.value( key )\n\t\t\texcept :\n\t\t\t\tpass\n\n\t\t\twith root :\n\t\t\t\tfor knob in mainKnobs :\n\t\t\t\t\tthisGRP\[knob].clearAnimated()\n\t\t\t\t\n\t\t\t\tCAMnode = selNode.name()\n\t\t\t\tthisGRP\[mainKnobs\[0]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['world matrix']))\n\t\t\t\tthisGRP\[mainKnobs\[1]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['focal length']))\n\t\t\t\tthisGRP\[mainKnobs\[2]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['horiz aperture']))\n\t\t\t\tthisGRP\[mainKnobs\[3]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window translate']))\n\t\t\t\tthisGRP\[mainKnobs\[4]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window scale']))\n\t\t\t\tthisGRP\[mainKnobs\[5]].setExpression('\{0\}.\{1\}'.format(CAMnode, defaultKnobs\['window roll']))\nexcept :\n\tnuke.message('no node selected.')" +STARTLINE}
- addUserKnob {22 remove_link l "remove linked expression" t "Remove the linked camera expression but won't reset any data. So the normal data still works if input doesn't contain any camera movement." -STARTLINE T "thisGRP = nuke.thisGroup()\nmainKnobs = \['world_matrix','cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll']\n\nfor knob in thisGRP.knobs() :\n    if mainKnobs.count(knob) != 0 :\n        thisGRP\[knob].clearAnimated()"}
- addUserKnob {22 bake_link l "bake expression link" t "Baked out the existing expression link back to this node itself. After that, camera node is not required for this node anymore. Baked value is base on the frame range in project setting of the nuke script.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." T "thisGRP = nuke.thisGroup()\n\nframeST = nuke.root().firstFrame()\nframeED = nuke.root().lastFrame()\n\nallknobs = \['cam_focal','cam_haperture','cam_win_translate','cam_win_scale','cam_winroll','world_matrix']\nalldata = \{\}\n\nchknobs = 0\nfor knob in allknobs :\n\tif thisGRP\[knob].hasExpression() :\n\t\tchknobs = 1\n\nif chknobs :\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\ttry :\n\t\t\t\talldata\[knob].append( thisGRP\[knob].getValueAt(t) )\n\t\t\texcept :\n\t\t\t\talldata\[knob] = \[ thisGRP\[knob].getValueAt(t) ]\n\n\tfor knob in allknobs :\n\t\tthisGRP\[knob].clearAnimated()\n\t\tthisGRP\[knob].setAnimated()\n\n\tfor knob in allknobs :\n\t\tfor t in range( frameST, frameED+1, 1 ) :\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is float :\n\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST] , t )\n\t\t\tif type( alldata\[knob]\[t-frameST] ) is list :\n\t\t\t\tfor i in range( len( alldata\[knob]\[t-frameST] ) ) :\n\t\t\t\t\tthisGRP\[knob].setValueAt( alldata\[knob]\[t-frameST]\[i] , t , i )\nelse :\n\tnuke.message('no expression link found.')" +STARTLINE}
- addUserKnob {22 copy_data l "copy from selected camera" t "Select the camera, then this will process 'link to selected camera' and 'bake expression link' in once.\n\n* Nuke 11.2 has issue with expression link on this node. It will crash your nuke in some cases, but it will be fine when re-open the nuke script. Because of this issue, recommand to bake the value." -STARTLINE T "thisGRP = nuke.thisGroup()\nthisGRP\['set_link'].execute()\nthisGRP\['bake_link'].execute()"}
- addUserKnob {20 cam_data_grp l "CAMERA DATA" n 1}
- cam_data_grp 0
- addUserKnob {7 cam_focal l "focal length" R 5 100}
- cam_focal 50
- addUserKnob {7 cam_haperture l "horiz aperture" R 0.1 50}
- cam_haperture 24.576
- addUserKnob {30 cam_win_translate l "window translate"}
- addUserKnob {30 cam_win_scale l "window scale"}
- cam_win_scale {1 1}
- addUserKnob {7 cam_winroll l "window roll" R -45 45}
- addUserKnob {41 world_matrix l "world matrix" T cam_data.matrix}
- addUserKnob {20 endGroup_1 l endGroup n -1}
- addUserKnob {26 ""}
  addUserKnob {41 multiply T menu01.multiply}
- addUserKnob {41 gamma T menu02.gamma}
+ addUserKnob {7 exp_in l "exponential in" t "Ease out falloff from the core by exponential math." R 0.1 10}
+ exp_in 1
+ addUserKnob {7 exp_out l out t "Ease in falloff from the edge by exponential math." -STARTLINE R 0.1 10}
+ exp_out 1
  addUserKnob {20 t_VERSION l Version}
- addUserKnob {26 l_VERSION l <b>Version</b> T 3.8}
- addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2020-02-13}
- addUserKnob {22 btn_CHANGELOG l <b>Changlelog</b> T "log = \"3.8<br>'DVPMatte'<br>&nbsp;&nbsp;-&nbsp;fixed&nbsp;cube&nbsp;matte&nbsp;shape&nbsp;result&nbsp;when&nbsp;pivot&nbsp;changed.&nbsp;Sphere&nbsp;and&nbsp;Cylinder&nbsp;were&nbsp;fine&nbsp;in&nbsp;the&nbsp;past&nbsp;versions.<br>'DVProjection'<br>&nbsp;&nbsp;-&nbsp;link&nbsp;camera&nbsp;replaced&nbsp;transformation&nbsp;by&nbsp;world&nbsp;matrix,&nbsp;so&nbsp;it&nbsp;works&nbsp;with&nbsp;camera&nbsp;stack&nbsp;with&nbsp;axis.<br>&nbsp;&nbsp;-&nbsp;removed&nbsp;preview&nbsp;projection&nbsp;camera&nbsp;in&nbsp;3D&nbsp;view.<br><br>3.7<br>Toolset&nbsp;update&nbsp;:<br>&nbsp;&nbsp;'DVPort'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;added&nbsp;'near'&nbsp;&&nbsp;'far&nbsp;knobs<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;'DVPmatte'<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;fixed&nbsp;missing&nbsp;premult&nbsp;original&nbsp;alpha&nbsp;process<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;capable&nbsp;with&nbsp;'DeepBoolean'&nbsp;v1.4<br>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;revert&nbsp;uniform_scale&nbsp;default&nbsp;value&nbsp;back&nbsp;to&nbsp;1.0<br><br>3.6<br>'DVPsetLight'<br>-&nbsp;improved&nbsp;'generated&nbsp;normal&nbsp;(estimate&nbsp;from&nbsp;position)'&nbsp;and&nbsp;changed&nbsp;to&nbsp;blink&nbsp;script.&nbsp;Get&nbsp;better&nbsp;edges&nbsp;on&nbsp;deepNormal.\"\nnuke.message( log )" +STARTLINE}
- addUserKnob {26 l_DEV l "<b>Developed by</b>" T "<a href='https://facebook.com/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
+ addUserKnob {26 l_VERSION l <b>Version</b> T 4.0}
+ addUserKnob {26 l_DATE l "<b>Date Modified</b>" T 2021-02-13}
+ addUserKnob {22 btn_CHANGELOG l <b>Changlelog</b> T "log = \"Deep2VPosition&nbsp;(Deep2VP)<br>-&nbsp;added&nbsp;camera&nbsp;setting&nbsp;to&nbsp;metadata<br>-&nbsp;remove&nbsp;bake&nbsp;and&nbsp;copy&nbsp;buttons<br>-&nbsp;rename&nbsp;to&nbsp;Deep2VP<br>-&nbsp;generate/select/import&nbsp;deepNormal&nbsp;in&nbsp;this&nbsp;node<br>-&nbsp;added&nbsp;generate&nbsp;normal&nbsp;in&nbsp;deep,&nbsp;still&nbsp;keep&nbsp;the&nbsp;previous&nbsp;one.<br><br>DVPort&nbsp;(DVPortal)<br>-&nbsp;renamed&nbsp;to&nbsp;DVPortal<br><br>DVPmatte<br>-&nbsp;removed&nbsp;'option'&nbsp;knob,&nbsp;2D&nbsp;matte&nbsp;can&nbsp;use&nbsp;'open&nbsp;matte'&nbsp;instead<br>-&nbsp;open&nbsp;matte&nbsp;can&nbsp;choose&nbsp;show&nbsp;matte&nbsp;or&nbsp;color<br><br>DVPattern<br>-&nbsp;internal&nbsp;setup&nbsp;same&nbsp;as&nbsp;DVPmatte<br>-&nbsp;added&nbsp;rotation&nbsp;knob<br>-&nbsp;support&nbsp;'open&nbsp;matte'<br><br>DVProjection<br>-&nbsp;remove&nbsp;bake&nbsp;and&nbsp;copy&nbsp;buttons<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;Deep2VP<br><br>DVPsetLight<br>-&nbsp;added&nbsp;shader&nbsp;setting&nbsp;and&nbsp;input&nbsp;shader<br>-&nbsp;not&nbsp;required&nbsp;link&nbsp;camera&nbsp;anymore<br>-&nbsp;removed&nbsp;deepNormal&nbsp;setup,&nbsp;moved&nbsp;to&nbsp;Deep2VP&nbsp;node<br><br>DVPscene<br>-&nbsp;added&nbsp;multiple&nbsp;output&nbsp;options<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;DVP's&nbsp;lighting&nbsp;system<br><br>DVPrelight<br>-&nbsp;added&nbsp;specular&nbsp;setup<br>-&nbsp;added&nbsp;toon&nbsp;shade&nbsp;setup<br>-&nbsp;fix&nbsp;pointcloud&nbsp;preview&nbsp;with&nbsp;effects<br><br>DVPrelightPT<br>-&nbsp;split&nbsp;up&nbsp;point&nbsp;light&nbsp;from&nbsp;DVPrelight<br>-&nbsp;fix&nbsp;point&nbsp;light&nbsp;duplicated&nbsp;algorithm<br><br>DVPfresnel<br>-&nbsp;not&nbsp;required&nbsp;link&nbsp;camera&nbsp;anymore<br>-&nbsp;fix&nbsp;unpremult&nbsp;process,&nbsp;the&nbsp;result&nbsp;was&nbsp;too&nbsp;dark<br><br>DVPToImage<br>-&nbsp;remove&nbsp;all&nbsp;metadata&nbsp;created&nbsp;from&nbsp;Deep2VP<br>-&nbsp;same&nbsp;as&nbsp;Deep2VP&nbsp;node&nbsp;color<br><br>new&nbsp;nodes&nbsp;:<br>DVPColorCorrect<br><br>added&nbsp;shaders&nbsp;:<br>DVP&nbsp;Shader<br>DVP&nbsp;Toon&nbsp;Shader\"\nnuke.message( log )" +STARTLINE}
+ addUserKnob {26 l_DEV l "<b>Developed by</b>" T "<a href='https://youtube.com/c/MJTLab'><font color='orange'>Mark Joey Tang</font></a>"}
 }
  BackdropNode {
   inputs 0
@@ -36,8 +23,8 @@ Group {
   note_font_size 42
   xpos -608
   ypos -200
-  bdwidth 415
-  bdheight 392
+  bdwidth 411
+  bdheight 282
  }
  BackdropNode {
   inputs 0
@@ -50,43 +37,23 @@ Group {
   bdwidth 416
   bdheight 199
  }
- Input {
+ NoOp {
   inputs 0
-  name deep
-  xpos 0
-  ypos -432
- }
-add_layer {deepNormal deepNormal.red deepNormal.green deepNormal.blue deepNormal.alpha}
- DeepExpression {
-  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
-  chans1 none
-  deepNormal.alpha "1 - ( deepNormal.red  * \[value inverseMatrix_cam.invMatrix.6] + deepNormal.green  * \[value inverseMatrix_cam.invMatrix.7] + deepNormal.blue  * \[value inverseMatrix_cam.invMatrix.8] )"
-  name DeepExpression1
-  label "cam space"
-  xpos 0
-  ypos -316
- }
- DeepExpression {
-  chans0 {rgba.red rgba.green rgba.blue none}
-  chans1 none
-  rgba.red "red + pow( clamp( deepNormal.alpha ) , 1 / \[value parent.gamma.r] ) * \[value parent.multiply.r] )"
-  rgba.green "green + pow( clamp( deepNormal.alpha ) , 1 / \[value parent.gamma.g] ) * \[value parent.multiply.g] )"
-  rgba.blue "blue + pow( clamp( deepNormal.alpha ) , 1 / \[value parent.gamma.b] ) * \[value parent.multiply.b] )"
-  name DeepExpression2
-  xpos 0
-  ypos -222
- }
- Output {
-  name Output1
-  xpos 0
-  ypos -80
+  name menu01
+  knobChanged "\nthisN = nuke.thisNode()\nfor knob in thisN.knobs() :\n    try :\n        if knob.split('_')\[1] == 'panelDropped' :\n            thisN.removeKnob( thisN\[knob] )\n    except :\n        pass\n"
+  xpos -524
+  ypos -342
+  addUserKnob {20 User}
+  addUserKnob {18 multiply t "Constant to multiply result by" R 0 4}
+  multiply 1
+  addUserKnob {6 multiply_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  }
  Group {
   inputs 0
   name inverseMatrix_cam
   tile_color 0x337f4cff
-  xpos -479
-  ypos 74
+  xpos -540
+  ypos 9
   addUserKnob {20 User}
   addUserKnob {1 knob_path}
   knob_path cam_data.world_matrix
@@ -140,36 +107,139 @@ add_layer {deepNormal deepNormal.red deepNormal.green deepNormal.blue deepNormal
   selectable false
   rot_order XYZ
   useMatrix true
-  focal {{parent.cam_focal}}
-  haperture {{parent.cam_haperture}}
+  matrix {
+      {{getCam.cmr01.x} {getCam.cmr01.y} {getCam.cmr01.z} 0}
+      {{getCam.cmr02.x} {getCam.cmr02.y} {getCam.cmr02.z} 0}
+      {{getCam.cmr03.x} {getCam.cmr03.y} {getCam.cmr03.z} 0}
+      {0 0 0 1}
+    }
   name cam_data
-  xpos -470
-  ypos -32
+  xpos -529
+  ypos -97
  }
- NoOp {
+ Input {
   inputs 0
-  name menu02
-  knobChanged "\nthisN = nuke.thisNode()\nfor knob in thisN.knobs() :\n    try :\n        if knob.split('_')\[1] == 'panelDropped' :\n            thisN.removeKnob( thisN\[knob] )\n    except :\n        pass\n"
-  xpos -390
-  ypos -339
-  addUserKnob {20 User}
-  addUserKnob {18 gamma R 0.2 5}
-  gamma 1
-  addUserKnob {6 gamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
-  addUserKnob {6 gamma_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
-  addUserKnob {6 gamma_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  name deep
+  xpos -4
+  ypos -235
  }
- NoOp {
-  inputs 0
-  name menu01
-  knobChanged "\nthisN = nuke.thisNode()\nfor knob in thisN.knobs() :\n    try :\n        if knob.split('_')\[1] == 'panelDropped' :\n            thisN.removeKnob( thisN\[knob] )\n    except :\n        pass\n"
-  xpos -524
-  ypos -342
+ DeepExpression {
+  chans1 deep
+  name spacer
+  xpos -4
+  ypos -155
+ }
+ Dot {
+  name Dot2
+  xpos 30
+  ypos -75
+ }
+set N4e88c00 [stack 0]
+add_layer {deepNormal deepNormal.red deepNormal.green deepNormal.blue deepNormal.alpha}
+ DeepExpression {
+  temp_name0 uMult
+  temp_expr0 "abs( (x+0.5)/input.width-0.5 ) *2"
+  temp_name1 vMult
+  temp_expr1 "abs( (y+0.5)/input.height-0.5 ) *2"
+  temp_name2 hHalfAOV
+  temp_expr2 "degrees( atan( ( ( \[value getCam.aspect] ) * abs( deep.front ) /2 ) / abs( deep.front ) ) )"
+  temp_name3 vHalfAOV
+  temp_expr3 "degrees( atan( ( ( \[value getCam.aspect] ) * (input.height/input.width) * abs( deep.front ) /2 ) / abs( deep.front ) ) )"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "clamp( x<input.width/2 && y<input.height/2 ? \[value cx]*-cos(radians(vHalfAOV*vMult))*sin(radians(-hHalfAOV*uMult)) + \[value cy]*sin(radians(vHalfAOV*vMult)) + \[value cz]*cos(radians(vHalfAOV*vMult))*cos(radians(-hHalfAOV*uMult)) : x>input.width/2 && y>input.height/2 ? \[value cx]*-cos(radians(-vHalfAOV*vMult))*sin(radians(hHalfAOV*uMult)) + \[value cy]*sin(radians(-vHalfAOV*vMult)) + \[value cz]*cos(radians(-vHalfAOV*vMult))*cos(radians(hHalfAOV*uMult)) : x<input.width/2 && y>input.height/2 ? \[value cx]*-cos(radians(-vHalfAOV*vMult))*sin(radians(-hHalfAOV*uMult)) + \[value cy]*sin(radians(-vHalfAOV*vMult)) + \[value cz]*cos(radians(-vHalfAOV*vMult))*cos(radians(-hHalfAOV*uMult)) : \[value cx]*-cos(radians(vHalfAOV*vMult))*sin(radians(hHalfAOV*uMult)) + \[value cy]*sin(radians(vHalfAOV*vMult)) + \[value cz]*cos(radians(vHalfAOV*vMult))*cos(radians(hHalfAOV*uMult)) )"
+  name DeepExpression3
+  label "screen space"
+  xpos -4
+  ypos -1
   addUserKnob {20 User}
-  addUserKnob {18 multiply R 0 4}
-  multiply 1
-  addUserKnob {6 multiply_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
-  addUserKnob {6 multiply_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
-  addUserKnob {6 multiply_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {1 cx}
+  cx "(deepNormal.red*\[value inverseMatrix_cam.invMatrix.0] + deepNormal.green*\[value inverseMatrix_cam.invMatrix.1] + deepNormal.blue*\[value inverseMatrix_cam.invMatrix.2])"
+  addUserKnob {1 cy}
+  cy "(deepNormal.red*\[value inverseMatrix_cam.invMatrix.3] + deepNormal.green*\[value inverseMatrix_cam.invMatrix.4] + deepNormal.blue*\[value inverseMatrix_cam.invMatrix.5])"
+  addUserKnob {1 cz}
+  cz "(deepNormal.red*\[value inverseMatrix_cam.invMatrix.6] + deepNormal.green*\[value inverseMatrix_cam.invMatrix.7] + deepNormal.blue*\[value inverseMatrix_cam.invMatrix.8])"
+ }
+ DeepExpression {
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "1- deepNormal.alpha"
+  name DeepExpression7
+  label invert
+  xpos -4
+  ypos 79
+ }
+ DeepExpression {
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "pow( 1 - pow( 1 - deepNormal.alpha , \[value parent.exp_in] ) , \[value parent.exp_out] ) )"
+  name DeepExpression1
+  label exponential
+  xpos -4
+  ypos 159
+ }
+ Dot {
+  name Dot1
+  xpos 30
+  ypos 301
+ }
+set Na337800 [stack 0]
+ DeepExpression {
+  temp_name0 celShade
+  temp_expr0 "clamp(deepNormal.alpha) ** \[value toonRatio] * (\[value toonLayers]+1)"
+  chans0 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  chans1 none
+  deepNormal.alpha "( (int(celShade)-1)/\[value toonLayers]) + (clamp( (celShade%1) * (1/(1-clamp(\[value toonSharpness]))) ) * (1/\[value toonLayers]) )"
+  name DeepExpression40
+  label "toon shade"
+  xpos 128
+  ypos 360
+  addUserKnob {20 User}
+  addUserKnob {3 toonLayers}
+  toonLayers {{"\[metadata sLayers]+0 <= 1 ? 1 : \[metadata sLayers]+0"}}
+  addUserKnob {7 toonSharpness}
+  toonSharpness {{"\[metadata sSharpness]+0"}}
+  addUserKnob {7 toonRatio}
+  toonRatio {{"\[metadata sRatio]+0"}}
+ }
+push $Na337800
+ Switch {
+  inputs 2
+  which {{"\[metadata DVPshader]+0==2 ? 1 : 0"}}
+  name Switch1
+  xpos -4
+  ypos 417
+ }
+ DeepExpression {
+  chans0 {rgba.red rgba.green rgba.blue none}
+  chans1 {-deepNormal.red -deepNormal.green -deepNormal.blue deepNormal.alpha}
+  rgba.red "red + deepNormal.alpha * \[value parent.multiply.r]"
+  rgba.green "green + deepNormal.alpha * \[value parent.multiply.g]"
+  rgba.blue "blue + deepNormal.alpha * \[value parent.multiply.b]"
+  deepNormal.alpha 0
+  name DeepExpression2
+  label "apply color"
+  xpos -4
+  ypos 497
+ }
+ Output {
+  name Output1
+  xpos -4
+  ypos 577
+ }
+push $N4e88c00
+ NoOp {
+  name getCam
+  xpos -374
+  ypos -78
+  addUserKnob {20 User}
+  addUserKnob {13 cmr01}
+  cmr01 {{"\[lrange \[split \[metadata DVPcamMTX] \" \"] 0 0]+0"} {"\[lrange \[split \[metadata DVPcamMTX] \" \"] 1 1]+0"} {"\[lrange \[split \[metadata DVPcamMTX] \" \"] 2 2]+0"}}
+  addUserKnob {13 cmr02}
+  cmr02 {{"\[lrange \[split \[metadata DVPcamMTX] \" \"] 4 4]+0"} {"\[lrange \[split \[metadata DVPcamMTX] \" \"] 5 5]+0"} {"\[lrange \[split \[metadata DVPcamMTX] \" \"] 6 6]+0"}}
+  addUserKnob {13 cmr03}
+  cmr03 {{"\[lrange \[split \[metadata DVPcamMTX] \" \"] 8 8]+0"} {"\[lrange \[split \[metadata DVPcamMTX] \" \"] 9 9]+0"} {"\[lrange \[split \[metadata DVPcamMTX] \" \"] 10 10]+0"}}
+  addUserKnob {7 aspect}
+  aspect {{"\[metadata DVPcamAspect]+0"}}
  }
 end_group

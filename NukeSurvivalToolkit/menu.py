@@ -541,17 +541,31 @@ particlesMenu.addCommand('ParticleKiller NKPD', "nuke.createNode('{}ParticleKill
 
 deepMenu = m.addMenu('Deep', icon = 'ToolbarDeep.png', index = 120)
 
-deep2VP_suite = deepMenu.addMenu("Deep2VP Suite MJT", icon='Deep2VPosition.png')
-deep2VP_suite.addCommand('Deep2VPosition MJT', "nuke.createNode('{}Deep2VPosition')".format(prefixNST), icon="Deep2VPosition.png")
-deep2VP_suite.addCommand('DVPattern MJT', "nuke.createNode('{}DVPattern')".format(prefixNST), icon="DVPattern.png")
+deep2VP_suite = deepMenu.addMenu("Deep2VP Suite MJT", icon='Deep2VP.png')
+
+deep2VP_suite.addCommand('Deep2VP MJT', "nuke.createNode('{}Deep2VP')".format(prefixNST), icon="Deep2VP.png")
+deep2VP_suite.addCommand('DVPColorCorrect MJT', "nuke.createNode('{}DVPColorCorrect')".format(prefixNST), icon="DVPColorCorrect.png")
+deep2VP_suite.addCommand('DVPortal MJT', "nuke.createNode('{}DVPortal')".format(prefixNST), icon="DVPortal.png")
+deep2VP_suite.addCommand('DVPToImage MJT', "nuke.createNode('{}DVPToImage')".format(prefixNST), icon="DVPToImage.png")
+
+deep2VP_suite.addSeparator()
+
 deep2VP_suite.addCommand('DVPfresnel MJT', "nuke.createNode('{}DVPfresnel')".format(prefixNST), icon="DVPfresnel.png")
-deep2VP_suite.addCommand('DVPmatte MJT', "nuke.createNode('{}DVPmatte')".format(prefixNST), icon="DVPmatte.png")
-deep2VP_suite.addCommand('DVPort MJT', "nuke.createNode('{}DVPort')".format(prefixNST), icon="DVPort.png")
 deep2VP_suite.addCommand('DVPrelight MJT', "nuke.createNode('{}DVPrelight')".format(prefixNST), icon="DVPrelight.png")
-deep2VP_suite.addCommand('DVProjection MJT', "nuke.createNode('{}DVProjection')".format(prefixNST), icon="DVProjection.png")
+deep2VP_suite.addCommand('DVPrelightPT MJT', "nuke.createNode('{}DVPrelightPT')".format(prefixNST), icon="DVPrelightPT.png")
 deep2VP_suite.addCommand('DVPscene MJT', "nuke.createNode('{}DVPscene')".format(prefixNST), icon="DVPscene.png")
 deep2VP_suite.addCommand('DVPsetLight MJT', "nuke.createNode('{}DVPsetLight')".format(prefixNST), icon="DVPsetLight.png")
-deep2VP_suite.addCommand('DVPToImage MJT', "nuke.createNode('{}DVPToImage')".format(prefixNST), icon="DVPToImage.png")
+
+deep2VP_suite.addSeparator()
+
+deep2VP_suite.addCommand('DVPattern MJT', "nuke.createNode('{}DVPattern')".format(prefixNST), icon="DVPattern.png")
+deep2VP_suite.addCommand('DVPmatte MJT', "nuke.createNode('{}DVPmatte')".format(prefixNST), icon="DVPmatte.png")
+deep2VP_suite.addCommand('DVProjection MJT', "nuke.createNode('{}DVProjection')".format(prefixNST), icon="DVProjection.png")
+
+deep2VP_suite.addSeparator()
+
+deep2VP_suite.addCommand('DVP_ToonShader MJT', "nuke.createNode('{}DVP_ToonShader')".format(prefixNST), icon="DVP_ToonShader.png")
+deep2VP_suite.addCommand('DVP_Shader MJT', "nuke.createNode('{}DVP_Shader')".format(prefixNST), icon="DVP_Shader.png")
 
 deepMenu.addSeparator()
 
