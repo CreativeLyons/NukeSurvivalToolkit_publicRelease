@@ -2,7 +2,8 @@ Group {
  name iMorph
  help "iMorph v1.0 by adrianpueyo\n\nBlinkscript-accelerated morph between two inputs based on the vectors calculated by a VectorGenerator, with an optional input mask to drive the morph amount. Useful to create morphing transitions between two plates.\n\nMorphing method based on the awesome MorphDissolve from Erwan Leroy. Tool concept and fun developed with Tony Lyons.\n\nadrianpueyo.com, 2020"
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\nif kn == \"inputChange\":\n    n\[\"morph\"].setEnabled(not n.input(2))\n    "
- tile_color 0xa57aaa00
+ tile_color 0x890074ff
+ note_font "Bitstream Vera Sans Bold"
  selected true
  addUserKnob {20 iMorph}
  addUserKnob {26 gpuName l "Local GPU:" T "GeForce GT 750M"}
@@ -12,11 +13,14 @@ Group {
  addUserKnob {4 outMode l output M {"A warped" "B warped" "AB morph"}}
  outMode "AB morph"
  addUserKnob {7 morph t "Morphing amount between A and B (0=A, 1=B).\n\n<b>If a mask Input is supplied, this knob gets ignored."}
+ morph 1
  addUserKnob {41 mask_channel l "mask channel" T CopyMask.from0}
  addUserKnob {26 ""}
- addUserKnob {41 motionEstimation l Motion T VectorGenerator1.motionEstimation}
- addUserKnob {41 vectorDetailReg l "Vector Detail" T VectorGenerator1.vectorDetailReg}
- addUserKnob {41 strengthReg l Strength T VectorGenerator1.strengthReg}
+ addUserKnob {4 motionEstimation l Motion M {Regularized Local "" ""}}
+ addUserKnob {7 vectorDetailReg l "Vector Detail" R 0.01 1}
+ vectorDetailReg 0.3
+ addUserKnob {7 strengthReg l Strength R 0 1.5}
+ strengthReg 1.5
  addUserKnob {26 version_author l " " t "iMorph v1.0\n2020" T "<span style=\"color:#666\"><br/><b>iMorph v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2020</span>"}
 }
  Input {
@@ -37,14 +41,14 @@ Group {
   xpos 240
   ypos 3
  }
-set N2d40f400 [stack 0]
+set N4d33070 [stack 0]
  Dot {
   name Dot1
   note_font_size 41
   xpos 274
   ypos 227
  }
-set N2d40e000 [stack 0]
+set N8bb00080 [stack 0]
  Dot {
   name Dot7
   note_font_size 41
@@ -97,7 +101,7 @@ set N2d40e000 [stack 0]
   xpos 342
   ypos -37
  }
-set N2d3b7400 [stack 0]
+set N71c81eb0 [stack 0]
  Dot {
   name Dot3
   note_font_size 41
@@ -113,7 +117,7 @@ set N2d3b7400 [stack 0]
   xpos 577
   ypos 23
  }
-push $N2d40f400
+push $N4d33070
  Dot {
   name Dot6
   note_font_size 41
@@ -138,12 +142,14 @@ push $N2d40f400
  }
  VectorGenerator {
   useGPUIfAvailable {{parent.iMorphKernel.useGPUIfAvailable}}
-  motionEstimation Regularized
+  motionEstimation {{parent.motionEstimation}}
+  vectorDetailReg {{parent.vectorDetailReg}}
+  strengthReg {{parent.strengthReg}}
   name VectorGenerator1
   xpos 516
   ypos 157
  }
-set N2d3bd400 [stack 0]
+set N268df2c0 [stack 0]
  TimeOffset {
   time_offset -1
   time ""
@@ -151,7 +157,7 @@ set N2d3bd400 [stack 0]
   xpos 623
   ypos 224
  }
-push $N2d3bd400
+push $N268df2c0
  Shuffle {
   in forward
   blue black
@@ -186,26 +192,27 @@ push $N2d3bd400
   xpos 550
   ypos 427
  }
-push $N2d3b7400
+push $N71c81eb0
  Dot {
   name Dot2
   note_font_size 41
   xpos 376
   ypos 346
  }
-push $N2d40e000
+push $N8bb00080
  BlinkScript {
   inputs 4
-  recompileCount 38
+  recompileCount 39
   ProgramGroup 1
-  KernelDescription "2 \"iMorphKernel\" iterate pixelWise 95859a5a1a6fac633c292e60698f7d40050aed8a6a17140616a4661f399a6b83 5 \"src1\" Read Random \"src2\" Read Random \"vec\" Read Random \"mask\" Read Random \"dst\" Write Point 3 \"useMask\" Int 1 AAAAAA== \"weight\" Float 1 AAAAAA== \"mode\" Int 1 AAAAAA== 3 \"useMask\" 1 1 \"weight\" 1 1 \"mode\" 1 1 0"
-  kernelSource "//---------------------------------------------------------\n// iMorphKernel - iMorph v1.0 by Adrian Pueyo\n// adrianpueyo.com, 2020\n// ---------------------------------------------------------\nkernel iMorphKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src1;\n  Image<eRead, eAccessRandom, eEdgeClamped> src2;\n  Image<eRead, eAccessRandom, eEdgeClamped> vec;\n  Image<eRead, eAccessRandom, eEdgeClamped> mask;\n  Image<eWrite> dst;\n  param:\n    int useMask;\n    float weight;\n    int mode; //0=A,1=B,2=morph\n\n  void process(int2 pos) \{\n    SampleType(vec) vectors = vec(pos.x,pos.y);\n    float which;\n    if(useMask==0)\{\n      which = weight;\n    \}else\{\n      which = clamp(mask(pos.x,pos.y).w,0.0f,1.0f); //alpha channel\n    \}\n    SampleType(src1) src1_warped, src2_warped;\n    if(mode!=1)\{\n      src1_warped = bilinear(src1,pos.x+vectors.z*which,pos.y+vectors.w*which);\n    \}\n    if(mode!=0)\{\n      src2_warped = bilinear(src2,pos.x+vectors.x*(1-which),pos.y+vectors.y*(1-which));\n    \}\n\n    if(mode==0)\{\n      dst() = src1_warped;\n    \}else if(mode==1)\{\n      dst() = src2_warped;\n    \}else\{\n      dst() = src1_warped*(1-which)+src2_warped*which;\n    \}\n  \}\n\};"
+  KernelDescription "2 \"iMorphKernel\" iterate pixelWise f73cb735e959d6b7677ca59a811ae605a17d00706c4cd292f2677544fd90aa0a 5 \"src1\" Read Random \"src2\" Read Random \"vec\" Read Random \"mask\" Read Random \"dst\" Write Point 3 \"useMask\" Int 1 AAAAAA== \"weight\" Float 1 AAAAAA== \"mode\" Int 1 AAAAAA== 3 \"useMask\" 1 1 \"weight\" 1 1 \"mode\" 1 1 0"
+  kernelSource "//---------------------------------------------------------\n// iMorphKernel - iMorph v1.0 by Adrian Pueyo\n// adrianpueyo.com, 2020\n// ---------------------------------------------------------\nkernel iMorphKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src1;\n  Image<eRead, eAccessRandom, eEdgeClamped> src2;\n  Image<eRead, eAccessRandom, eEdgeClamped> vec;\n  Image<eRead, eAccessRandom, eEdgeClamped> mask;\n  Image<eWrite> dst;\n  param:\n    int useMask;\n    float weight;\n    int mode; //0=A,1=B,2=morph\n\n  void process(int2 pos) \{\n    SampleType(vec) vectors = vec(pos.x,pos.y);\n    float which;\n    if(useMask==0)\{\n      which = weight;\n    \}else\{\n      which = clamp(bilinear(mask,pos.x,pos.y).w,0.0f,1.0f); //alpha channel\n    \}\n    SampleType(src1) src1_warped, src2_warped;\n    if(mode!=1)\{\n      src1_warped = bilinear(src1,pos.x+vectors.z*which,pos.y+vectors.w*which);\n    \}\n    if(mode!=0)\{\n      src2_warped = bilinear(src2,pos.x+vectors.x*(1-which),pos.y+vectors.y*(1-which));\n    \}\n\n    if(mode==0)\{\n      dst() = src1_warped;\n    \}else if(mode==1)\{\n      dst() = src2_warped;\n    \}else\{\n      dst() = src1_warped*(1-which)+src2_warped*which;\n    \}\n  \}\n\};"
   rebuild ""
   iMorphKernel_useMask {{!CopyMask.disable}}
   iMorphKernel_weight {{parent.morph}}
   iMorphKernel_mode {{parent.outMode}}
   rebuild_finalise ""
   name iMorphKernel
+  selected true
   xpos 240
   ypos 420
  }
@@ -215,3 +222,4 @@ push $N2d40e000
   ypos 518
  }
 end_group
+
