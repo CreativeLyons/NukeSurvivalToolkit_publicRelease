@@ -459,12 +459,13 @@ transformMenu.addCommand('Matrix_Inverse TL', "nuke.createNode('{}Matrix4x4_Inve
 transformMenu.addCommand('Matrix4x4Math TL', "nuke.createNode('{}Matrix4x4Math')".format(prefixNST), icon="ColorMath.png")
 transformMenu.addCommand('MirrorBorder TL', "nuke.createNode('{}MirrorBorder')".format(prefixNST), icon="AdjBBox.png")
 transformMenu.addCommand('TransformCutOut TL', "nuke.createNode('{}TransformCutOut')".format(prefixNST), icon="MergeOut.png")
+transformMenu.addCommand('iMorph AP', "nuke.createNode('{}iMorph_v2')".format(prefixNST), icon="VectorDistort.png")
 
 transformMenu.addSeparator()
 
-transformMenu.addCommand('iMorph AP', "nuke.createNode('{}iMorph_v2')".format(prefixNST), icon="VectorDistort.png")
 transformMenu.addCommand('RP_Reformat MJT', "nuke.createNode('{}RP_Reformat')".format(prefixNST), icon='RP_Reformat.png')
-transformMenu.addCommand('inverseMatrix MJT', "nuke.createNode('{}inverseMatrix')".format(prefixNST), icon='inverseMatrix.png')
+transformMenu.addCommand('InverseMatrix3x3 MJT', "nuke.createNode('{}InverseMatrix33')".format(prefixNST), icon='iMatrix33.png')
+transformMenu.addCommand('InverseMatrix4x4 MJT', "nuke.createNode('{}InverseMatrix44')".format(prefixNST), icon='iMatrix44.png')
 
 transformMenu.addSeparator()
 
@@ -487,7 +488,7 @@ transformMenu.addCommand('ITransform FR', "nuke.createNode('{}ITransformU')".for
 transformMenu.addCommand('MorphDissolve SPIN', "nuke.createNode('{}MorphDissolve')".format(prefixNST), icon="spin_tools.png")
 transformMenu.addCommand('RotoCentroid NKPD', "nuke.createNode('{}RotoCentroid')".format(prefixNST), icon="nukepedia_icon.png")
 transformMenu.addCommand('STmapInverse NKPD', "nuke.createNode('{}STmapInverse')".format(prefixNST), icon="nukepedia_icon.png")
-transformMenu.addCommand('TransformMix NKPD', "nuke.createNode('{}TransformMix')".format(prefixNST), icon="nukepedia_icon.png")
+transformMenu.addCommand('TransformMix NKPD', "nuke.createNode('{}TransformMix')".format(prefixNST), icon="Transform.png")
 transformMenu.addCommand('PlanarProjection NKPD', "nuke.createNode('{}PlanarProjection')".format(prefixNST), icon="nukepedia_icon.png")
 transformMenu.addCommand('Reconcile3DFast DR', "nuke.createNode('{}Reconcile3DFast')".format(prefixNST), icon="Reconcile3D.png")
 
