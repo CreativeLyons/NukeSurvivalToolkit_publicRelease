@@ -346,6 +346,7 @@ filterMenu.addCommand('Chromatik SPIN', "nuke.createNode('{}Chromatik')".format(
 filterMenu.addCommand('CatsEyeDefocus NKPD', "nuke.createNode('{}CatsEyeDefocus')".format(prefixNST), icon="nukepedia_icon.png")
 filterMenu.addCommand('DefocusSwirlyBokeh NKPD', "nuke.createNode('{}DefocusSwirlyBokeh')".format(prefixNST), icon="nukepedia_icon.png")
 filterMenu.addCommand('deHaze NKPD', "nuke.createNode('{}deHaze')".format(prefixNST), icon="nukepedia_icon.png")
+filterMenu.addCommand('RankFilter JP', "nuke.createNode('{}RankFilter')".format(prefixNST), icon="Median.png")
 filterMenu.addCommand('DeflickerVelocity NKPD', "nuke.createNode('{}DeflickerVelocity')".format(prefixNST), icon="nukepedia_icon.png")
 filterMenu.addCommand('FillSampler NKPD', "nuke.createNode('{}FillSampler')".format(prefixNST), icon="nukepedia_icon.png")
 filterMenu.addCommand('MECfiller NKPD', "nuke.createNode('{}MECfiller')".format(prefixNST), icon="nukepedia_icon.png")

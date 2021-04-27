@@ -44,6 +44,11 @@ Group {
  borderSize 2
  addUserKnob {6 enableBackground l "Enable Background" +INVISIBLE +STARTLINE}
  addUserKnob {26 ""}
+ addUserKnob {20 font n 1}
+ font 0
+ addUserKnob {41 fileFront l "File Font" T FileName.font}
+ addUserKnob {41 descFont l "Description Font" T Description.font}
+ addUserKnob {20 endGroup n -1}
  addUserKnob {41 xjustify l Justify T FileName.xjustify}
  addUserKnob {41 yjustify l "" -STARTLINE T FileName.yjustify}
  addUserKnob {7 size l "Overall Size" R -50 50}
@@ -67,7 +72,7 @@ Group {
   xpos -161
   ypos -550
  }
-set N662b9c00 [stack 0]
+set N36754800 [stack 0]
  Remove {
   operation keep
   channels rgba
@@ -116,6 +121,7 @@ set N662b9c00 [stack 0]
   shadow_distance 0
   shadow_size {{parent.borderSize}}
   name Description
+  selected true
   xpos -339
   ypos -453
   disable {{!parent.descCheck}}
@@ -125,9 +131,9 @@ set N662b9c00 [stack 0]
   font_width_toolbar 100
   font_height_toolbar 100
   message "\n\[value parent.finalFilePath]"
-  old_message {{10 77 97 114 99 105 101 95 50 75 46 100 112 120 32 10}
+  old_message {{10 78 111 116 104 105 110 103 32 105 115 32 110 97 109 101 100 32 34 110 111 100 101 49 51 54 55 55 54 98 48 48 46 102 105 108 101 34}
     }
-  old_expression_markers {{1 15}
+  old_expression_markers {{1 37}
     }
   box {0 {input.height-(input.height/5)} {input.width} {input.height-(input.height/37.25)}}
   transforms {{0 2}
@@ -162,7 +168,7 @@ set N662b9c00 [stack 0]
   xpos -305
   ypos -342
  }
-push $N662b9c00
+push $N36754800
  Merge2 {
   inputs 2
   bbox B
