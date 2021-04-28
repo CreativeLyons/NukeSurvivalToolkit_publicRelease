@@ -460,7 +460,7 @@ transformMenu.addCommand('Matrix_Inverse TL', "nuke.createNode('{}Matrix4x4_Inve
 transformMenu.addCommand('Matrix4x4Math TL', "nuke.createNode('{}Matrix4x4Math')".format(prefixNST), icon="ColorMath.png")
 transformMenu.addCommand('MirrorBorder TL', "nuke.createNode('{}MirrorBorder')".format(prefixNST), icon="AdjBBox.png")
 transformMenu.addCommand('TransformCutOut TL', "nuke.createNode('{}TransformCutOut')".format(prefixNST), icon="MergeOut.png")
-transformMenu.addCommand('iMorph AP', "nuke.createNode('{}iMorph_v2')".format(prefixNST), icon="VectorDistort.png")
+transformMenu.addCommand('iMorph AP', "nuke.createNode('{}iMorph')".format(prefixNST), icon="VectorDistort.png")
 
 transformMenu.addSeparator()
 
