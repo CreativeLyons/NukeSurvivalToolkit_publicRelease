@@ -29,7 +29,7 @@ NST_FolderPath = os.path.dirname(__file__)
 NST_helper.NST_FolderPath = NST_FolderPath
 
 # give the name of the help doc .pdf in main folder
-NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v2.0.0.pdf"
+NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v2.1.0.pdf"
 
 # creating full filepath to the help doc
 NST_helpDoc_os_path = os.path.join(NST_FolderPath, NST_helpDoc)
