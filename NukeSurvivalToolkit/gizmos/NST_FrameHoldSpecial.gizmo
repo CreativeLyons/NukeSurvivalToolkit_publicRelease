@@ -96,13 +96,6 @@ set Neb47c800 [stack 0]
   ypos 219
  }
 push $Neb47c800
- Viewer {
-  frame_range 1034-1200
-  viewerProcess None
-  name Viewer1
-  xpos -1030
-  ypos 163
- }
 push $Ned2886f0
  FrameRange {
   first_frame {{input.first_frame}}
