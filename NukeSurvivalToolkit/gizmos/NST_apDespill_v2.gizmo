@@ -124,12 +124,11 @@ set Nc9474c00 [stack 0]
   ypos -732
  }
  Shuffle {
-  red black
-  green black
-  blue black
-  alpha black
+  red red
+  green green
+  blue blue
+  alpha alpha
   name Shuffle_limit
-  label "\[value in]"
   xpos 902
   ypos -670
  }
