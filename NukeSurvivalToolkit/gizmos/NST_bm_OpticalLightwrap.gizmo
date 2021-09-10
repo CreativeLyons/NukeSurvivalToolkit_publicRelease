@@ -1,0 +1,387 @@
+Group {
+ name bm_OpticalLightwrap
+ help "bm_OpticalLightwrap uses common algorithms to produce an optically-correct exponential-glow-based lightwrap.\n\nCompletely rebuilt from v3.1 to be light-weight and easier to use."
+ tile_color 0x222222ff
+ selected true
+ xpos -33
+ ypos 350
+ addUserKnob {20 Options}
+ addUserKnob {52 algorithm_code l "" +STARTLINE T "def change_algorithm():\n\n\t# Get this node\n\tnode = nuke.thisNode()\n\n\t# Number sequences to drive iterative blur values.\n\talgorithm_double = \[2, 4, 6, 8, 16, 32, 64, 128, 256, 512, 1024]\n\talgorithm_fibonacci = \[3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377]\n\n\t# Set algorithm based off user selection\n\tif node.knob('algorithm_choice').value() == \"Double\":\n\t\talgorithm = algorithm_double\n\telif node.knob('algorithm_choice').value() == \"Double\":\n\t\talgorithm = algorithm_fibonacci\n\telse:\n\t\tnuke.message(\"No algorithm selected\")\n\t\tbreak\n\n\t# Dive inside the ground and get the blur node controlling the glow.\n\tnuke.toNode(\"Group1\").begin()\n\tglow_blur = nuke.toNode(\"glow_blur\")\n\n\t# Make some space in the script editor...\n\tprint \"\\n\\n\\n\"\n\n\t# Find the glow_blur's keyframes\n\tkeyframes = glow_blur.knob('size').a.nimation(0).keys()\n\titeration = 0\n\n\t# Loop through the pre-set 11 keyframes and set the values to correspond with the number sequences we defined above.\n\tfor keyframe in keyframes:\n\t    n.knob('size').animation(0).setKey(keyframe.x, algorithm\[iteration])\n\t    iteration = iteration+1\n\n\t    # Print what is going on for visibility.\n\t    print \"keyframe at frame %s changed to value: %s\" % (round(keyframe.x, 1), round(keyframe.y, 1))\n\n\t# End being inside the group.\n\tnuke.toNode(\"Group1\").end()" +STARTLINE}
+ addUserKnob {4 algorithm_choice l "Glow Math" t "Glow is built with a sequence of exponentially-increasing sub-frame values on a Blur node, which are then combined with a TimeBlur to produce the end result." M {Inverse-Square Fibonacci Double Distributed "" "" "" "" "" "" ""}}
+ addUserKnob {26 spacer2 l "" -STARTLINE T "  "}
+ addUserKnob {6 effect_only l "effect only" t "Display the glow only." -STARTLINE}
+ addUserKnob {3 glow_divisions l Divisions t "How many glow layers to add up. A higher number will result in a smoother glow, but a slower processing time."}
+ glow_divisions 10
+ addUserKnob {26 spacer1 l "" -STARTLINE T "             "}
+ addUserKnob {6 use_threshold l "use luminance threshold" t "Enable the luminance threshold option, which allows you to isolate and only glow the highlights." -STARTLINE}
+ use_threshold true
+ addUserKnob {26 ""}
+ addUserKnob {20 threshold l "Luminance Threshold Selector" n 1}
+ threshold 0
+ addUserKnob {6 view_luminance l "view luminance threshold" t "Internally shuffles the alpha to RGB for easy viewing." +STARTLINE}
+ addUserKnob {41 range l "" t "Use this to isolate the highlights in your image." +STARTLINE T Keyer1.range}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {14 preblur_BG l "pre-blur BG" t "Blur the background before the lightwrap bets generated. This can help remove any high-contrast, detailed edges ghosting through." R 0 100}
+ preblur_BG 20
+ addUserKnob {26 ""}
+ addUserKnob {7 glow_size l size t "Radius of the blur." R 0 300}
+ glow_size 200
+ addUserKnob {7 glow_intensity l intensity t "A multiplier to control the brightness of your blur." R 0 5}
+ glow_intensity 1
+ addUserKnob {19 glow_gamma l gamma t "Increase gamma to pump up the midtones.\n\nChanging the gamma will change the \"glow math\" algorithm, resulting in a less photorealistic glow. You probably only want to use this subtly in foggy, night-time shots." R 0 2}
+ glow_gamma 1
+ addUserKnob {6 glow_gamma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 aspect t "Change the aspect ratio of your glow.\n• Higher value = horizontal stretch\n• Lower value = vertical stretch" R 0.5 2}
+ aspect 1
+ addUserKnob {26 ""}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {26 ""}
+ addUserKnob {26 info l "" +STARTLINE T "<font color='#777'><b>bm_OpticalLightwrap v4.1</b></font><font color='#555'> created by </font><b><a href=\"https://github.com/BenMcEwan/nuke_public\" style=\"color:#777;\">Ben McEwan</a></b>.<br>\n<font color='#555'><b>Last updated:</b> 9th September, 2021.</font>"}
+}
+ Input {
+  inputs 0
+  name fg
+  xpos 585
+  ypos -246
+ }
+ NoTimeBlur {
+  name NoTimeBlur3
+  xpos 585
+  ypos -220
+ }
+ Expression {
+  expr3 a
+  name Expression3
+  xpos 585
+  ypos -178
+ }
+ Dot {
+  name Dot12
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 619
+  ypos -17
+ }
+set Nc5c9a400 [stack 0]
+ Dot {
+  name Dot13
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 619
+  ypos 316
+ }
+set Nc5c99d00 [stack 0]
+ Dot {
+  name Dot14
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 619
+  ypos 522
+ }
+set Nc5c99600 [stack 0]
+ Dot {
+  name Dot15
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 619
+  ypos 598
+ }
+set Nc5c98f00 [stack 0]
+ Input {
+  inputs 0
+  name bg
+  xpos -259
+  ypos -252
+  number 1
+ }
+ NoTimeBlur {
+  name NoTimeBlur1
+  xpos -259
+  ypos -226
+ }
+ Blur {
+  channels rgba
+  size {{preblur_BG} {preblur_BG}}
+  name Blur1
+  xpos -259
+  ypos -167
+ }
+ Dot {
+  name Dot2
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -226
+  ypos -115
+ }
+set Nc5c6f200 [stack 0]
+ Keyer {
+  operation "luminance key"
+  range {0.5 1 1 1}
+  name Keyer1
+  xpos -260
+  ypos -50
+ }
+set Nc5c6eb00 [stack 0]
+push $Nc5c6eb00
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.red
+  from1 rgba.alpha
+  to1 rgba.green
+  from2 rgba.alpha
+  to2 rgba.blue
+  name Copy1
+  xpos -260
+  ypos -14
+ }
+ Dot {
+  name Dot6
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos -226
+  ypos 418
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 796
+  ypos -246
+  number 3
+ }
+ NoTimeBlur {
+  name NoTimeBlur4
+  selected true
+  xpos 796
+  ypos -220
+ }
+ Expression {
+  expr3 a
+  name Expression1
+  xpos 796
+  ypos -182
+ }
+ Dot {
+  name Dot1
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 830
+  ypos 351
+ }
+push $Nc5c99d00
+push $Nc5c9a400
+push $Nc5c6eb00
+ Input {
+  inputs 0
+  name area
+  xpos 27
+  ypos -252
+  number 2
+ }
+ NoTimeBlur {
+  name NoTimeBlur2
+  xpos 27
+  ypos -226
+ }
+ Expression {
+  expr3 a
+  name Expression2
+  xpos 27
+  ypos -194
+ }
+push $Nc5c6f200
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox A
+  name Merge3
+  xpos 27
+  ypos -118
+  disable {{"!\[exists parent.input2]"}}
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox B
+  name Merge5
+  xpos 27
+  ypos -44
+  disable {{!use_threshold}}
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  bbox B
+  name Merge8
+  xpos 27
+  ypos -20
+ }
+ Dot {
+  name Dot11
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 61
+  ypos 60
+ }
+set Nc5c48f00 [stack 0]
+ Dot {
+  name Dot10
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 177
+  ypos 60
+ }
+set Nc5c48800 [stack 0]
+ Dot {
+  name Dot9
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 283
+  ypos 60
+ }
+set Nc5c48100 [stack 0]
+ Dot {
+  name Dot8
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 399
+  ypos 60
+ }
+ Blur {
+  channels rgba
+  size {{aspect>1?curve(((frame-1)%(1-1+1))+1)*glow_size/25*aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 x1 2.5 x1.100000024 7.5 15 x1.299999952 35 x1.399999976 70 150 350 750 x1.799999952 1250 x1.899999976 1500 2000} {aspect<1?curve(((frame-1)%(1-1+1))+1)*glow_size/25/aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 x1 2.5 x1.100000024 7.5 15 x1.299999952 35 x1.399999976 70 150 350 750 x1.799999952 1250 x1.899999976 1500 2000}}
+  crop false
+  name glow_distributed
+  xpos 365
+  ypos 108
+ }
+push $Nc5c48100
+ Blur {
+  channels rgba
+  size {{aspect>1?curve(((frame-1)%(1-1+1))+1)*glow_size/25*aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 2 x1.100000024 4 8 x1.299999952 16 x1.399999976 32 64 128 256 x1.799999952 512 x1.899999976 1024 2048} {aspect<1?curve(((frame-1)%(1-1+1))+1)*glow_size/25/aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 2 x1.100000024 4 8 x1.299999952 16 x1.399999976 32 64 128 256 x1.799999952 512 x1.899999976 1024 2048}}
+  crop false
+  name glow_double
+  xpos 249
+  ypos 108
+ }
+push $Nc5c48800
+ Blur {
+  channels rgba
+  size {{aspect>1?curve(((frame-1)%(1-1+1))+1)*glow_size/25*aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 3 x1.100000024 5 8 x1.299999952 13 x1.399999976 21 34 55 89 x1.799999952 144 x1.899999976 233 377} {aspect<1?curve(((frame-1)%(1-1+1))+1)*glow_size/25/aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 3 x1.100000024 5 8 x1.299999952 13 x1.399999976 21 34 55 89 x1.799999952 144 x1.899999976 233 377}}
+  crop false
+  name glow_fibonacci
+  xpos 143
+  ypos 108
+ }
+push $Nc5c48f00
+ Blur {
+  channels rgba
+  size {{aspect>1?curve(((frame-1)%(1-1+1))+1)*glow_size/25*aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 1 x1.100000024 4 9 x1.299999952 16 x1.399999976 25 36 49 64 x1.799999952 81 x1.899999976 100 121} {aspect<1?curve(((frame-1)%(1-1+1))+1)*glow_size/25/aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 1 x1.100000024 4 9 x1.299999952 16 x1.399999976 25 36 49 64 x1.799999952 81 x1.899999976 100 121}}
+  crop false
+  name glow_inverseSquare
+  xpos 27
+  ypos 106
+ }
+ Switch {
+  inputs 4
+  which {{algorithm_choice}}
+  name Switch2
+  xpos 27
+  ypos 166
+ }
+ TimeBlur {
+  divisions {{glow_divisions}}
+  shutteroffset start
+  shuttercustomoffset 0.5
+  name TimeBlur1
+  xpos 27
+  ypos 202
+ }
+ Multiply {
+  value {{glow_intensity**2/2}}
+  name Multiply2
+  xpos 27
+  ypos 240
+ }
+ Gamma {
+  value {{glow_gamma}}
+  name Gamma1
+  xpos 27
+  ypos 276
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox A
+  name Merge7
+  xpos 27
+  ypos 313
+ }
+ Merge2 {
+  inputs 2
+  operation mask
+  bbox B
+  name Merge4
+  xpos 27
+  ypos 348
+  disable {{"!\[exists parent.input3]"}}
+ }
+ Dot {
+  name Dot5
+  label "  "
+  note_font "Arial Black"
+  note_font_size 16
+  xpos 61
+  ypos 405
+ }
+set Nc079dd00 [stack 0]
+push $Nc079dd00
+push $Nc5c99600
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels rgb
+  name Merge1
+  xpos 266
+  ypos 519
+ }
+ Switch {
+  inputs 3
+  which {{"view_luminance == 1?2:effect_only"}}
+  name Switch1
+  xpos -260
+  ypos 519
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -260
+  ypos 595
+ }
+push $Nc5c98f00
+ Dissolve {
+  inputs 2
+  which {{parent.mix}}
+  name Dissolve2
+  xpos -260
+  ypos 619
+ }
+ Output {
+  name Output1
+  xpos -260
+  ypos 684
+ }
+end_group
