@@ -219,7 +219,6 @@ set N63ccf900 [stack 0]
   label "(\[value output2])"
   note_font "Verdana Bold"
   note_font_color 0xffffffff
-  selected true
   xpos 1700
   ypos 1012
   addUserKnob {20 ExponBlurSimple}
@@ -1510,9 +1509,10 @@ set N4725cf00 [stack 0]
  Merge2 {
   inputs 2
   operation mask
+  bbox A
   name Merge14
   xpos 1530
-  ypos 3274
+  ypos 3273
  }
 push $Na0604100
 push $N4725cf00
@@ -1527,9 +1527,10 @@ push $N4725cf00
  Merge2 {
   inputs 2
   operation mask
+  bbox A
   name Merge7
   xpos 1025
-  ypos 3221
+  ypos 3220
  }
 push $Na0604800
 push $N2d219600
@@ -1544,9 +1545,10 @@ push $N2d219600
  Merge2 {
   inputs 2
   operation mask
+  bbox A
   name Merge13
   xpos 1708
-  ypos 3104
+  ypos 3103
  }
 push $N63ccf900
  Dot {
@@ -1959,7 +1961,7 @@ push $N1ea21d00
   to0 rgba.alpha
   name Copy1
   xpos -407
-  ypos 2552
+  ypos 2549
  }
  Dot {
   name Dot6
