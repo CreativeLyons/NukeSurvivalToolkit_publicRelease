@@ -1,5 +1,4 @@
 set cut_paste_input [stack 0]
-version 12.2 v8
 BackdropNode {
  inputs 0
  name BackdropNode4
