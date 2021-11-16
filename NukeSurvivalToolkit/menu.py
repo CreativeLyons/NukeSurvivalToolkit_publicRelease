@@ -249,6 +249,7 @@ colorMenu.addCommand('apColorSampler AP', 'nuke.createNode("{}ColorSampler")'.fo
 colorMenu.addCommand('apVignette AP', 'nuke.createNode("{}apVignette")'.format(prefixNST), icon='apeVignette.png')
 colorMenu.addCommand('GammaPlus MJT', "nuke.createNode('{}GammaPlus')".format(prefixNST), icon="GammaPlus.png")
 colorMenu.addCommand('MonochromePlus CF', "nuke.createNode('{}MonochromePlus')".format(prefixNST), icon="Saturation.png")
+colorMenu.addCommand('aeRelight2D AE', "nuke.createNode('{}aeRelight2D')".format(prefixNST), icon="ReLight.png")
 
 colorMenu.addSeparator()
 
