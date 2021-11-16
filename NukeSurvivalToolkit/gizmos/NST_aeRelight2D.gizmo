@@ -1,0 +1,413 @@
+Group {
+ name aeRelight2D
+ onCreate "n = nuke.thisNode()\nw = n.format().width()/2\nh = n.format().height()/2\ncenter = \[w,h]\n\nif n.knob('create').value()==False:\n    n.knob('light').setValue(center)\n    n.knob('create').setValue(1)"
+ tile_color 0xa0500ff
+ label "\[value Operations.menu2]"
+ note_font "Verdana Bold"
+ addUserKnob {20 aeRelight2D}
+ addUserKnob {41 channels T Grade2.channels}
+ addUserKnob {4 outputView l "Output View" M {"Final Output" "Light Only" Preview "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {26 text_6_1_1 l "<b><font color=#ffffff>Light</font><b>"}
+ addUserKnob {12 light l position t "Position of the light."}
+ light {1712 1101}
+ addUserKnob {7 lightsize l height t "Height of the light, you can illuminate the side of the image with values near to 0."}
+ lightsize 0.1
+ addUserKnob {7 intensity t "The power of the light."}
+ intensity 0.1
+ addUserKnob {7 falloff l soft t "Choose the falloff of the light."}
+ falloff 0.5
+ addUserKnob {18 color l tint}
+ color {1 1 1}
+ addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 color_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 color_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {26 text_6_1_2 l "<b><font color=#ffffff>Rotate</font><b>"}
+ addUserKnob {7 yoffset l horizontal t "Rotate the normals." R -90 90}
+ addUserKnob {7 xzrot l vertical t "Rotate the normals." R -90 90}
+ addUserKnob {26 _1_1 l "" +STARTLINE T " "}
+ addUserKnob {26 text_6_1 l "<b><font color=#ffffff>Emboss</font><b>"}
+ addUserKnob {7 emboss l amount t "Control the emboss of the image, choose negative or positive values depends on the directionality of the light from your plate." R -5 5}
+ emboss 5
+ addUserKnob {7 smooth t "Smooth the bump of the image." R 0 100}
+ smooth 10
+ addUserKnob {7 blur t "Blurring the final result." R 0 100}
+ blur 10
+ addUserKnob {26 _1_3 l "" +STARTLINE T " "}
+ addUserKnob {26 ""}
+ addUserKnob {26 _1 l "" +STARTLINE T " "}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask_1 l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {26 _1_2 l "" +STARTLINE T " "}
+ addUserKnob {6 create +INVISIBLE +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 about_1 l "" +STARTLINE T "<span style=\"color:#666\"><br/><b>aeRelight2D v1.5</b> - <a  style=\"color:#666;text-decoration: none;\">Aitor Echeveste</a>  © 2021</span>"}
+ addUserKnob {20 About}
+ addUserKnob {26 text_1 l "" +STARTLINE T "   "}
+ addUserKnob {26 text_2 l "" +STARTLINE T "   "}
+ addUserKnob {26 text_4 l "" +STARTLINE T "<font color=#ffffff><font size=\"6\">aeRelight2D</font><font size=6\"> v1.5</font>\n"}
+ addUserKnob {26 about_1_1 l "" +STARTLINE T "by Aitor Echeveste © 2021"}
+ addUserKnob {26 text_1_1 l "" +STARTLINE T "   "}
+ addUserKnob {26 ""}
+ addUserKnob {26 text_3 l "" +STARTLINE T "   "}
+ addUserKnob {26 website l "" +STARTLINE T "<b><a href=\"http://www.aitorecheveste.com\"><span style=\"color:#C8C8C8;\">www.aitorecheveste.com</span></a><b>"}
+}
+ Axis2 {
+  inputs 0
+  rot_order YXZ
+  rotate {{parent.xzrot} {-degrees(parent.Plane.picked.g)} {parent.xzrot}}
+  name Axis2
+  label V
+  xpos 773
+  ypos -13
+ }
+ Axis2 {
+  inputs 0
+  rot_order YXZ
+  rotate {0 {-parent.Axis2.rotate.y} 0}
+  name Axis5
+  label V
+  xpos 773
+  ypos 86
+ }
+ Axis2 {
+  inputs 0
+  rot_order YXZ
+  rotate {0 {-parent.yoffset} 0}
+  name Axis10
+  label H
+  xpos 772
+  ypos -92
+ }
+ Specular {
+  inputs 0
+  white {{lerp(0.5,0.01,falloff)}}
+  min_shininess 2
+  max_shininess 5
+  name Specular2
+  xpos 767
+  ypos 199
+ }
+ Diffuse {
+  white 0
+  name Diffuse1
+  xpos 767
+  ypos 223
+ }
+ Camera2 {
+  inputs 0
+  translate {{Operations.lpos*2/Operations.iformat} {Operations.lpos*2/Operations.iformat} {lerp(-0.99,0.5,lightsize)}}
+  name Camera1
+  xpos 1041
+  ypos 202
+ }
+ Light2 {
+  inputs 0
+  light_type directional
+  color {1 1 1}
+  color_panelDropped true
+  intensity {{lerp(0,50,parent.intensity)}}
+  cone_angle 56
+  cone_penumbra_angle 60
+  depthmap_slope_bias 0.01
+  name Light2
+  xpos 969
+  ypos 136
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 429
+  ypos -500
+  addUserKnob {20 User}
+ }
+set N4c49ab00 [stack 0]
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos 877
+  ypos -500
+  disable {{"!\[exists parent.input]"}}
+ }
+ Multiply {
+  value {{-emboss}}
+  name Multiply3
+  xpos 877
+  ypos -476
+ }
+ NoOp {
+  name Operations
+  xpos 877
+  ypos -435
+  addUserKnob {20 User}
+  addUserKnob {4 menu2 M {" " "(Light Only)" (Preview) (Emboss) "" ""}}
+  menu2 {{parent.outputView}}
+  addUserKnob {12 iformat}
+  iformat {{input.width} {input.height}}
+  addUserKnob {12 light2 l light}
+  light2 {{parent.light} {parent.light}}
+  addUserKnob {12 lpos}
+  lpos {{light2-(iformat/2)} {light2-(iformat/2)}}
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 911
+  ypos -404
+ }
+set N4c498800 [stack 0]
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos 1016
+  ypos -404
+ }
+ Matrix {
+  matrix {
+      {1 2 1}
+      {0 0 0}
+      {-1 -2 -1}
+    }
+  name Matrix2
+  xpos 982
+  ypos -275
+ }
+ Blur {
+  channels rgba
+  size {{parent.smooth}}
+  name Blur1
+  label "\[value size]"
+  xpos 982
+  ypos -239
+ }
+push $N4c498800
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 817
+  ypos -404
+ }
+ Matrix {
+  matrix {
+      {-1 0 1}
+      {-2 0 2}
+      {-1 0 1}
+    }
+  name Matrix1
+  xpos 783
+  ypos -325
+ }
+ Blur {
+  channels rgba
+  size {{parent.smooth}}
+  name Blur4
+  label "\[value size]"
+  xpos 783
+  ypos -289
+ }
+push $N4c498800
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.red
+  name Copy1
+  xpos 877
+  ypos -289
+  disable {{"!\[exists parent.input]"}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.green
+  to0 rgba.green
+  name Copy2
+  xpos 877
+  ypos -239
+  disable {{"!\[exists parent.input]" x163 1}}
+ }
+ Expression {
+  temp_name0 magnitude
+  temp_expr0 1-sqrt(r*r+g*g)
+  expr2 magnitude
+  name Expression2
+  xpos 877
+  ypos -195
+ }
+ NoOp {
+  name Plane
+  xpos 877
+  ypos -171
+  addUserKnob {20 User}
+  addUserKnob {18 pick l "User Picked Plane" R -1 1}
+  pick {1 1 1}
+  addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 pick_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 pick_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 pick_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {20 calc l "Internal Conversions"}
+  addUserKnob {18 picked}
+  picked {0 {"(atan2(pick.r, pick.b))"} 0}
+  addUserKnob {6 picked_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 picked_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 picked_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 picked_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ ColorMatrix {
+  matrix {
+      {{parent.Axis10.world_matrix.0} {parent.Axis10.world_matrix.1} {parent.Axis10.world_matrix.2}}
+      {{parent.Axis10.world_matrix.4} {parent.Axis10.world_matrix.5} {parent.Axis10.world_matrix.6}}
+      {{parent.Axis10.world_matrix.8} {parent.Axis10.world_matrix.9} {parent.Axis10.world_matrix.10}}
+    }
+  name ColorMatrix2
+  xpos 877
+  ypos -72
+ }
+ ColorMatrix {
+  matrix {
+      {{parent.Axis2.world_matrix.0} {parent.Axis2.world_matrix.1} {parent.Axis2.world_matrix.2}}
+      {{parent.Axis2.world_matrix.4} {parent.Axis2.world_matrix.5} {parent.Axis2.world_matrix.6}}
+      {{parent.Axis2.world_matrix.8} {parent.Axis2.world_matrix.9} {parent.Axis2.world_matrix.10}}
+    }
+  name ColorMatrix3
+  xpos 877
+  ypos 7
+  disable {{parent.xzrot==0 x65 1}}
+ }
+ ColorMatrix {
+  matrix {
+      {{parent.Axis5.world_matrix.0} {parent.Axis5.world_matrix.1} {parent.Axis5.world_matrix.2}}
+      {{parent.Axis5.world_matrix.4} {parent.Axis5.world_matrix.5} {parent.Axis5.world_matrix.6}}
+      {{parent.Axis5.world_matrix.8} {parent.Axis5.world_matrix.9} {parent.Axis5.world_matrix.10}}
+    }
+  name ColorMatrix5
+  xpos 877
+  ypos 105
+  disable {{parent.xzrot==0 x65 1}}
+ }
+ ReLight {
+  inputs 4
+  normal rgb
+  name ReLight1
+  xpos 877
+  ypos 223
+ }
+ Shuffle {
+  in rgb
+  in2 alpha
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle4
+  xpos 877
+  ypos 301
+ }
+ Blur {
+  channels rgba
+  size {{blur}}
+  name Blur2
+  label "\[value size]"
+  xpos 877
+  ypos 325
+ }
+ Multiply {
+  value {{parent.mix}}
+  name Multiply1
+  xpos 877
+  ypos 361
+ }
+ Dot {
+  name Dot8
+  xpos 911
+  ypos 447
+ }
+ Dot {
+  name Dot6
+  xpos 751
+  ypos 447
+ }
+set N318b6400 [stack 0]
+push $N4c49ab00
+ Dot {
+  name Dot4
+  xpos 463
+  ypos 352
+ }
+set N318b5d00 [stack 0]
+ Dot {
+  name Dot5
+  xpos 564
+  ypos 352
+ }
+ Grade {
+  inputs 1+1
+  channels all
+  multiply {3 1 1 1}
+  multiply_panelDropped true
+  name Grade1
+  xpos 530
+  ypos 444
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 842
+  ypos 602
+  number 1
+ }
+push $N318b6400
+ Merge2 {
+  inputs 2
+  operation mask
+  also_merge all
+  maskChannelInput -rgba.alpha
+  name Merge1
+  xpos 717
+  ypos 596
+  disable {{"!\[exists parent.input1]" x65 1}}
+ }
+ Dot {
+  name Dot7
+  xpos 751
+  ypos 686
+ }
+set Na4158800 [stack 0]
+ Grade {
+  channels rgba
+  multiply {{parent.color+1} {parent.color+1} {parent.color+1} 1}
+  name Grade2
+  xpos 717
+  ypos 796
+ }
+ set Ca4158100 [stack 0]
+push $Na4158800
+push $N318b5d00
+clone $Ca4158100 {
+  inputs 1+1
+  xpos 429
+  ypos 683
+  selected false
+ }
+ Dot {
+  name Dot13
+  xpos 463
+  ypos 823
+ }
+ Switch {
+  inputs 3
+  which {{outputView}}
+  name Switch1
+  xpos 717
+  ypos 820
+ }
+ Output {
+  name Output1
+  xpos 717
+  ypos 844
+ }
+end_group
