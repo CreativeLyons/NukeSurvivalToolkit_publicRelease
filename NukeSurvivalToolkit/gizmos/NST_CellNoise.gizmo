@@ -1,5 +1,6 @@
 Group {
 name CellNoise
+onCreate "n = nuke.thisNode()\nw = n.format().width()/2\nh = n.format().height()/2\n\ncenter = \[w,h]    \n\nif n.knob('create').value()==False:\n    n.knob('center').setValue(center)\n    n.knob('create').setValue(1)"
 knobChanged "\nknob = nuke.thisKnob()\nif knob.name() == 'skew_order':\n    nuke.toNode('NoiseTransform')\['rot_order'].setValue('Z' + knob.value())\nif knob.name() == 'noise_type':\n    if knob.value() in \['Voronoi', 'Manhattan', 'Chebyshev', 'Euclidian']:\n        nuke.thisNode()\['range'].clearFlag(0x00040000)\n    else:\n        nuke.thisNode()\['range'].setFlag(0x00040000)\n"
 tile_color 0x5f5f5fff
 note_font "Bitstream Vera Sans Bold"
@@ -74,7 +75,7 @@ xpos 221
 ypos 381
 number 1
 }
-set N487d9d00 [stack 0]
+set N55edd600 [stack 0]
 BlinkScript {
 inputs 0
 ProgramGroup 1
@@ -208,9 +209,9 @@ note_font_size 41
 xpos 211
 ypos 314
 }
-set N487b0100 [stack 0]
-push $N487d9d00
-push $N487b0100
+set Nd287b900 [stack 0]
+push $N55edd600
+push $Nd287b900
 Input {
 inputs 0
 name Input
