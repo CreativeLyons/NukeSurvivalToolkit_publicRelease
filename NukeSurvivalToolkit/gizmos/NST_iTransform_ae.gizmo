@@ -5,7 +5,6 @@ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"smart\":
 tile_color 0xa57aaaff
 note_font "Verdana Bold"
 note_font_color 0xffffffff
-selected true
 addUserKnob {20 iTransform}
 addUserKnob {41 channels T STMap.channels}
 addUserKnob {26 ""}
@@ -53,7 +52,7 @@ xpos 606
 ypos 531
 number 1
 }
-set Nbe4b8f00 [stack 0]
+set N897bdd00 [stack 0]
 NoOp {
 name mattebbox
 xpos 606
@@ -103,7 +102,7 @@ xpos 121
 ypos 370
 disable {{!blackoutsideBefore}}
 }
-set N5b09dd00 [stack 0]
+set N6d2aab00 [stack 0]
 Crop {
 box {{-input.format.width} {-input.format.height} {(input.format.width*2)} {(input.format.height*2)}}
 crop false
@@ -120,28 +119,23 @@ name Expression1
 xpos 474
 ypos 418
 }
-set N5b09cf00 [stack 0]
+set N6d2a9d00 [stack 0]
 Dot {
 name Dot2
 xpos 343
 ypos 421
 }
-push $Nbe4b8f00
-push $N5b09cf00
+push $N897bdd00
+push $N6d2a9d00
 Transform {
-translate {{parent.Transform2.translate} {parent.Transform2.translate}}
-rotate {{parent.Transform2.rotate}}
-scale {{parent.Transform2.scale}}
-skewX {{parent.Transform2.skewX}}
-skewY {{parent.Transform2.skewY}}
 center {1712 1101}
-black_outside false
-name Transform1
-selected true
-xpos 609
+shutteroffset centred
+name Transform2
+xpos 584
 ypos 418
 }
-push $N5b09cf00
+set C6d278800 [stack 0]
+push $N6d2a9d00
 Keymix {
 inputs 3
 name Keymix1
@@ -163,7 +157,7 @@ name mix
 xpos 309
 ypos 563
 }
-push $N5b09dd00
+push $N6d2aab00
 NoOp {
 name inputbbox
 xpos 126
@@ -205,12 +199,10 @@ name Output1
 xpos 309
 ypos 823
 }
-Transform {
+clone $C6d278800 {
 inputs 0
-center {1243 865}
-shutteroffset centred
-name Transform2
 xpos 707
 ypos 416
+selected false
 }
 end_group
