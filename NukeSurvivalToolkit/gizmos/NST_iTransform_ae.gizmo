@@ -9,18 +9,19 @@ addUserKnob {20 iTransform}
 addUserKnob {41 channels T STMap.channels}
 addUserKnob {26 ""}
 addUserKnob {6 blackoutsideBefore l "black outside before" +STARTLINE}
-addUserKnob {41 translate T Transform2.translate}
-addUserKnob {41 rotate T Transform2.rotate}
-addUserKnob {41 scale T Transform2.scale}
-addUserKnob {41 skewX l "skew X" T Transform2.skewX}
-addUserKnob {41 skewY l "skew Y" T Transform2.skewY}
-addUserKnob {41 skew_order_1 l "skew order" T Transform1.skew_order}
-addUserKnob {41 center T Transform2.center}
+addUserKnob {41 translate T inTransform2.translate}
+addUserKnob {41 rotate_1 l rotate T inTransform2.rotate}
+addUserKnob {41 scale_1 l scale T inTransform2.scale}
+addUserKnob {41 skewX_1 l "skew X" T inTransform2.skewX}
+addUserKnob {41 skewY_1 l "skew Y" T inTransform2.skewY}
+addUserKnob {4 skewOrder l "skew order" M {XY YX}}
+addUserKnob {41 center T inTransform2.center}
 addUserKnob {22 set_center l "set center" -STARTLINE T "n = nuke.thisNode()\nw= n.width()\nh=n.height()\nn\['center'].setValue(\[w/2,h/2])"}
-addUserKnob {41 filter_1 l filter T Transform1.filter}
+addUserKnob {4 filterN l filter M {impulse cubic keys Simon Rifman Mitchell Parzen Notch Lanczos4 Lanczos6 sinc4 "" "" "" ""}}
+filterN cubic
 addUserKnob {26 text_5_1 l "" -STARTLINE T "  "}
 addUserKnob {26 text_5_1_1 l "" -STARTLINE T "  "}
-addUserKnob {41 clamp -STARTLINE T Transform2.clamp}
+addUserKnob {41 clamp -STARTLINE T inTransform2.clamp}
 addUserKnob {26 ""}
 addUserKnob {6 cropformat l "crop to format" +STARTLINE}
 addUserKnob {26 text_5_2 l "" -STARTLINE T "     "}
@@ -33,7 +34,6 @@ addUserKnob {6 smart l "smart mask  " -STARTLINE}
 smart true
 addUserKnob {26 ""}
 addUserKnob {6 create +INVISIBLE +STARTLINE}
-create true
 addUserKnob {26 about_1 l "" +STARTLINE T "<span style=\"color:#666\"><br/><b>iTransform v2.0</b> - <a  style=\"color:#666;text-decoration: none;\">Aitor Echeveste</a>  © 2021</span>"}
 addUserKnob {20 About}
 addUserKnob {26 text_1 l "" +STARTLINE T "   "}
@@ -52,7 +52,7 @@ xpos 606
 ypos 531
 number 1
 }
-set N897bdd00 [stack 0]
+set N94ecc100 [stack 0]
 NoOp {
 name mattebbox
 xpos 606
@@ -102,7 +102,7 @@ xpos 121
 ypos 370
 disable {{!blackoutsideBefore}}
 }
-set N6d2aab00 [stack 0]
+set N94ea0f00 [stack 0]
 Crop {
 box {{-input.format.width} {-input.format.height} {(input.format.width*2)} {(input.format.height*2)}}
 crop false
@@ -119,23 +119,32 @@ name Expression1
 xpos 474
 ypos 418
 }
-set N6d2a9d00 [stack 0]
+set N94ea0100 [stack 0]
 Dot {
 name Dot2
 xpos 343
 ypos 421
 }
-push $N897bdd00
-push $N6d2a9d00
+push $N94ecc100
+push $N94ea0100
 Transform {
-center {1712 1101}
+translate {{parent.inTransform2.translate} {parent.inTransform2.translate}}
+rotate {{parent.inTransform2.rotate}}
+scale {{parent.inTransform2.scale}}
+skewX {{parent.inTransform2.skewX}}
+skewY {{parent.inTransform2.skewY}}
+skew_order {{parent.skewOrder}}
+center {{parent.inTransform2.center} {parent.inTransform2.center}}
+invert_matrix {{parent.inTransform2.invert_matrix}}
+filter {{parent.filterN}}
+clamp {{parent.inTransform2.clamp}}
 shutteroffset centred
-name Transform2
-xpos 584
+name inTransform1
+selected true
+xpos 599
 ypos 418
 }
-set C6d278800 [stack 0]
-push $N6d2a9d00
+push $N94ea0100
 Keymix {
 inputs 3
 name Keymix1
@@ -157,7 +166,7 @@ name mix
 xpos 309
 ypos 563
 }
-push $N6d2aab00
+push $N94ea0f00
 NoOp {
 name inputbbox
 xpos 126
@@ -199,10 +208,14 @@ name Output1
 xpos 309
 ypos 823
 }
-clone $C6d278800 {
+Transform {
 inputs 0
-xpos 707
-ypos 416
-selected false
+skew_order {{parent.skewOrder}}
+center {1024 778}
+filter {{parent.filterN}}
+shutteroffset centred
+name inTransform2
+xpos 715
+ypos 417
 }
 end_group
