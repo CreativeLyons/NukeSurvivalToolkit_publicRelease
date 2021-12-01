@@ -1,0 +1,838 @@
+Group {
+ name GuidedBlur
+ help "Description:\n\nThe guided filter is an edge-preserving blur,\nuseful to add details to the edges of a roto/matte\nusing a second image as a guide. \n\nHow to use:\n\nConnect the alpha to the 'matte' input\nand the 'guide' image to the 'img' input.\n\nControl the amount of detail using\nthe 'edge detail' slider.\n\n---\n\nThe filter is an implementation of the\n 'Guided Image Filtering', by Kaiming He. \nMore details at http://kaiminghe.com/eccv10/\n"
+ tile_color 0xcc804eff
+ note_font "Bitstream Vera Sans Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 GuidedBlur}
+ addUserKnob {6 replaceRGB l "Replace RGB with img" +STARTLINE}
+ addUserKnob {41 blur_size l "blur size" T Blur1.size}
+ addUserKnob {41 tolerance l "edge detail" t "Control the amount of detail that will be preserved. \n\nA value close to 0 makes the filter behave like a regular blur. \n\nValues close to 6 or 7 can introduce artifacts, identifying grain \"as edges\". \n\nRecommended values are between 2.5 and 4." T Constant_eps.multiplier}
+ addUserKnob {41 filter T Blur1.filter}
+ addUserKnob {41 quality l "" -STARTLINE T Blur1.quality}
+ addUserKnob {26 ""}
+ addUserKnob {41 amount l "sharpen amount" T Sharpen1.amount}
+ addUserKnob {41 size l "sharpen size" T Sharpen1.size}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 versionInfo l "" +STARTLINE T "\nCreated by Rafael Silva\nwww.rafael.ai\nrafael@rafael.ai\n\nVersion 1.3\nLast Updated: August 16th, 2020\n\nUpdated by Nikolai Wüstemann 2021\n\nToronto, Canada\n\n---\n\nHelp and more information:\nwww.rafael.ai/guided_blur"}
+ addUserKnob {26 ""}
+}
+ Input {
+  inputs 0
+  name matte
+  label p
+  xpos 2050
+  ypos 95
+ }
+set N7bf79600 [stack 0]
+ Dot {
+  name Dot21
+  note_font_size 41
+  xpos 1737
+  ypos 3701
+ }
+set N76b77900 [stack 0]
+ Blur {
+  size 10
+  filter box
+  name Blur1
+  xpos 289
+  ypos 3691
+ }
+ set C7bf78100 [stack 0]
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 644
+  ypos 3893
+  number 2
+ }
+ Input {
+  inputs 0
+  name img
+  label i
+  xpos -40
+  ypos 5
+  number 1
+ }
+ Sharpen {
+  amount 0
+  name Sharpen1
+  xpos -40
+  ypos 158
+ }
+ Clamp {
+  maximum 1000
+  name Clamp1
+  xpos -40
+  ypos 194
+ }
+ Dot {
+  name Dot16
+  xpos -6
+  ypos 330
+ }
+set N78f94f00 [stack 0]
+ Dot {
+  name Dot4
+  xpos 544
+  ypos 498
+ }
+set N78f94800 [stack 0]
+ Dot {
+  name Dot6
+  xpos 654
+  ypos 498
+ }
+set N78f94100 [stack 0]
+ Dot {
+  name Dot7
+  xpos 874
+  ypos 498
+ }
+set N7bf7b900 [stack 0]
+ Dot {
+  name Dot8
+  xpos 984
+  ypos 498
+ }
+set N7bf7b200 [stack 0]
+ Dot {
+  name Dot15
+  xpos 2194
+  ypos 498
+ }
+set N7bf7ab00 [stack 0]
+ Dot {
+  name Dot3
+  xpos 2744
+  ypos 498
+ }
+ NoOp {
+  name I1
+  xpos 2710
+  ypos 1695
+ }
+push $N7bf79600
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name Shuffle5
+  xpos 2050
+  ypos 543
+ }
+set N7bf78f00 [stack 0]
+push $N7bf7ab00
+ Merge {
+  inputs 2
+  operation mult
+  name Merge5
+  xpos 2160
+  ypos 591
+ }
+clone $C7bf78100 {
+  xpos 2160
+  ypos 635
+  selected false
+ }
+ NoOp {
+  name mean_Ip
+  xpos 2160
+  ypos 711
+ }
+push $N78f94800
+clone $C7bf78100 {
+  xpos 510
+  ypos 659
+  selected false
+ }
+ NoOp {
+  name mean_I
+  xpos 510
+  ypos 735
+ }
+ Dot {
+  name Dot9
+  xpos 544
+  ypos 786
+ }
+set N78956400 [stack 0]
+ Dot {
+  name Dot13
+  xpos 874
+  ypos 810
+ }
+set N78955d00 [stack 0]
+ Dot {
+  name Dot14
+  xpos 1424
+  ypos 834
+ }
+set N78955600 [stack 0]
+push $N7bf78f00
+clone $C7bf78100 {
+  xpos 2050
+  ypos 635
+  selected false
+ }
+ NoOp {
+  name mean_p
+  xpos 2050
+  ypos 687
+ }
+set N78954800 [stack 0]
+ Merge {
+  inputs 2
+  operation mult
+  name Merge8
+  xpos 1940
+  ypos 951
+ }
+ Merge {
+  inputs 2
+  operation minus
+  name Merge9
+  xpos 1940
+  ypos 1023
+ }
+ NoOp {
+  name cov_Ip
+  xpos 1940
+  ypos 1095
+ }
+set N786d3200 [stack 0]
+ Constant {
+  inputs 0
+  channels rgb
+  color {{"1/pow(10, multiplier)"}}
+  name Constant_eps
+  xpos 400
+  ypos 1095
+  addUserKnob {20 User}
+  addUserKnob {7 multiplier R 1 6}
+  multiplier 5
+ }
+set N786d2b00 [stack 0]
+push $N78f94100
+push $N7bf7b900
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge18
+  label I*I
+  xpos 730
+  ypos 611
+ }
+clone $C7bf78100 {
+  xpos 730
+  ypos 683
+  selected false
+ }
+set N786d1600 [stack 0]
+ Dot {
+  name Dot5
+  xpos 2634
+  ypos 834
+ }
+ NoOp {
+  name mean_II
+  xpos 2600
+  ypos 1023
+ }
+push $N78955600
+ Dot {
+  name Dot1
+  xpos 2524
+  ypos 882
+ }
+set N786d0100 [stack 0]
+push $N786d0100
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge4
+  label "mean I * mean I"
+  xpos 2490
+  ypos 1019
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge2
+  xpos 2490
+  ypos 1095
+ }
+ NoOp {
+  name var_I
+  xpos 2490
+  ypos 1167
+ }
+ Merge {
+  inputs 2
+  operation plus
+  bbox B
+  name Merge13
+  xpos 2490
+  ypos 1287
+ }
+ Merge {
+  inputs 2
+  operation divide
+  bbox B
+  name Merge14
+  xpos 2490
+  ypos 1407
+ }
+ NoOp {
+  name a_mono
+  label a
+  xpos 2490
+  ypos 1475
+ }
+set N6eb99600 [stack 0]
+clone $C7bf78100 {
+  xpos 2600
+  ypos 1691
+  selected false
+ }
+ Merge {
+  inputs 2
+  operation mult
+  bbox B
+  name Merge17
+  xpos 2600
+  ypos 1815
+ }
+push $N78954800
+ Dot {
+  name Dot19
+  xpos 2084
+  ypos 1410
+ }
+set N6eb98100 [stack 0]
+push $N78955600
+push $N6eb99600
+ Merge {
+  inputs 2
+  operation mult
+  bbox B
+  name Merge15
+  xpos 2490
+  ypos 1551
+ }
+ Merge {
+  inputs 2
+  operation minus
+  bbox B
+  name Merge7
+  xpos 2490
+  ypos 1671
+ }
+ NoOp {
+  name b_mono
+  xpos 2490
+  ypos 1743
+ }
+clone $C7bf78100 {
+  xpos 2490
+  ypos 1811
+  selected false
+ }
+ NoOp {
+  name mean_b_mono_
+  xpos 2490
+  ypos 1887
+ }
+ Merge {
+  inputs 2
+  operation plus
+  bbox B
+  name Merge16
+  xpos 2490
+  ypos 1959
+ }
+ Dot {
+  name Dot18
+  xpos 2524
+  ypos 2922
+ }
+push $N6eb98100
+ Dot {
+  name Dot10
+  xpos 1314
+  ypos 2346
+ }
+ Dot {
+  name Dot2
+  xpos 1314
+  ypos 2562
+ }
+push $N786d2b00
+push $N786d1600
+push $N78956400
+ Expression {
+  expr0 r*r
+  expr1 g*g
+  expr2 b*b
+  name Expression3
+  label "I*I (rr, gg, bb)"
+  xpos 510
+  ypos 995
+ }
+ Merge {
+  inputs 2
+  operation minus
+  name Merge11
+  xpos 730
+  ypos 1119
+ }
+ Merge {
+  inputs 2
+  operation plus
+  bbox B
+  name Merge12
+  xpos 730
+  ypos 1215
+ }
+ NoOp {
+  name I___
+  label "rr, gg, bb"
+  xpos 730
+  ypos 1283
+ }
+set N4824e400 [stack 0]
+push $N7bf7b200
+ Expression {
+  expr0 r*g
+  expr1 r*b
+  expr2 g*b
+  name Expression2
+  label "rg, rb, gb"
+  xpos 950
+  ypos 611
+ }
+clone $C7bf78100 {
+  xpos 950
+  ypos 683
+  selected false
+ }
+push $N78955d00
+ Expression {
+  expr0 r*g
+  expr1 r*b
+  expr2 g*b
+  name Expression4
+  label "rg, rb, gb"
+  xpos 840
+  ypos 1019
+ }
+ Merge {
+  inputs 2
+  operation minus
+  name Merge10
+  xpos 950
+  ypos 1095
+ }
+ NoOp {
+  name I____
+  label "rg, rb, gb"
+  xpos 950
+  ypos 1283
+ }
+set N4824c100 [stack 0]
+ MergeExpression {
+  inputs 2
+  expr0 Ar*Ab-Bg*Bg
+  expr1 Bg*Br-Ar*Bb
+  expr2 Ar*Ag-Br*Br
+  name MergeExpression2
+  label "invgg, invgb, invbb"
+  xpos 730
+  ypos 1691
+ }
+push $N4824e400
+push $N4824c100
+ MergeExpression {
+  inputs 2
+  expr0 Ag*Ab-Bb*Bb
+  expr1 Bb*Bg-Br*Ab
+  expr2 Br*Bb-Ag*Bg
+  name MergeExpression1
+  label "invrr, invrg, invrb"
+  xpos 510
+  ypos 1403
+ }
+set N3437b200 [stack 0]
+push $N4824c100
+ MergeExpression {
+  inputs 2
+  expr0 Ab*Bg
+  expr1 0
+  expr2 0
+  name MergeExpression5
+  label invrb*I_rb
+  xpos 1170
+  ypos 1475
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle8
+  xpos 1170
+  ypos 1551
+ }
+push 0
+push $N3437b200
+push $N4824e400
+ MergeExpression {
+  inputs 2
+  expr0 Ar*Br
+  expr1 0
+  expr2 0
+  name MergeExpression3
+  label invrr*I_rr
+  xpos 620
+  ypos 1475
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle2
+  xpos 620
+  ypos 1527
+ }
+push $N3437b200
+push $N4824c100
+ MergeExpression {
+  inputs 2
+  expr0 Ag*Br
+  expr1 0
+  expr2 0
+  name MergeExpression4
+  label invrg*I_rg
+  xpos 950
+  ypos 1499
+ }
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name Shuffle3
+  xpos 950
+  ypos 1551
+ }
+ Merge2 {
+  inputs 3+1
+  operation plus
+  name Merge1
+  label covDet
+  xpos 950
+  ypos 1691
+ }
+set N34378100 [stack 0]
+ MergeExpression {
+  inputs 2
+  expr0 Ar/Br
+  expr1 Ag/Bg
+  expr2 Ab/Bb
+  expr3 0
+  name MergeExpression7
+  label "invgg, invgb, invbb"
+  xpos 730
+  ypos 1883
+ }
+set N5b47f900 [stack 0]
+push $N3437b200
+push $N34378100
+ MergeExpression {
+  inputs 2
+  expr0 Ar/Br
+  expr1 Ag/Bg
+  expr2 Ab/Bb
+  expr3 0
+  name MergeExpression6
+  label "invrr, invrg, invrb"
+  xpos 510
+  ypos 1883
+ }
+set N5b47f200 [stack 0]
+ ShuffleCopy {
+  inputs 2
+  red blue2
+  green green
+  blue blue
+  alpha black
+  name ShuffleCopy1
+  label "invrb, invgb, invbb"
+  xpos 840
+  ypos 2099
+ }
+push $N786d3200
+ NoOp {
+  name cov_Ip1
+  xpos 950
+  ypos 1887
+ }
+ Dot {
+  name Dot17
+  xpos 984
+  ypos 1986
+ }
+set N5b47dd00 [stack 0]
+ MergeExpression {
+  inputs 2
+  expr0 Ar*Bb
+  expr1 Ag*Bb
+  expr2 Ab*Bb
+  name MergeExpression10
+  xpos 840
+  ypos 2175
+ }
+push 0
+push $N5b47f200
+push $N5b47dd00
+ MergeExpression {
+  inputs 2
+  expr0 Ar*Br
+  expr1 Ag*Br
+  expr2 Ab*Br
+  name MergeExpression8
+  xpos 620
+  ypos 2175
+ }
+push $N5b47f900
+push $N5b47f200
+ ShuffleCopy {
+  inputs 2
+  red green2
+  green red
+  blue green
+  alpha black
+  name ShuffleCopy2
+  label "invrg, invgg, invgb"
+  xpos 730
+  ypos 2099
+ }
+push $N5b47dd00
+ MergeExpression {
+  inputs 2
+  expr0 Ar*Bg
+  expr1 Ag*Bg
+  expr2 Ab*Bg
+  name MergeExpression9
+  xpos 730
+  ypos 2175
+ }
+ Merge2 {
+  inputs 3+1
+  operation plus
+  name A
+  label "a_r, a_g, a_b\n-"
+  xpos 730
+  ypos 2262
+ }
+set Na6063900 [stack 0]
+push $N78955600
+ NoOp {
+  name NoOp2
+  label mean_I
+  xpos 1390
+  ypos 2411
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge22
+  xpos 1390
+  ypos 2487
+ }
+set Na6062b00 [stack 0]
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name a_r_mult_mean_I_r
+  xpos 1390
+  ypos 2559
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge6
+  xpos 1390
+  ypos 2679
+ }
+push $Na6062b00
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name a_g_mult_mean_I_g
+  xpos 1500
+  ypos 2559
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge19
+  xpos 1500
+  ypos 2727
+ }
+push $Na6062b00
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name a_b_mult_mean_I_b
+  xpos 1610
+  ypos 2559
+ }
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge20
+  xpos 1610
+  ypos 2775
+ }
+ NoOp {
+  name NoOp4
+  label B
+  xpos 1610
+  ypos 2819
+ }
+clone $C7bf78100 {
+  xpos 1610
+  ypos 2915
+  selected false
+ }
+ NoOp {
+  name NoOp5
+  label boxfilter(b)
+  xpos 1610
+  ypos 2987
+ }
+push $Na6063900
+clone $C7bf78100 {
+  xpos 730
+  ypos 2363
+  selected false
+ }
+push $N78f94f00
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge3
+  xpos -40
+  ypos 2799
+ }
+ NoOp {
+  name NoOp6
+  label "boxfilter(a_\[rgb])"
+  xpos -40
+  ypos 3227
+ }
+set N7809d600 [stack 0]
+ Shuffle {
+  red blue
+  green blue
+  alpha blue
+  name ab2
+  xpos 180
+  ypos 3327
+ }
+push 0
+push $N7809d600
+ Shuffle {
+  green red
+  blue red
+  alpha red
+  name ar2
+  label "boxfiler(a_r,r) * I_r"
+  xpos -40
+  ypos 3323
+ }
+push $N7809d600
+ Shuffle {
+  red green
+  blue green
+  alpha green
+  name ag2
+  xpos 70
+  ypos 3327
+ }
+ Merge2 {
+  inputs 4+1
+  operation plus
+  name Merge25
+  xpos -40
+  ypos 3448
+ }
+ Dot {
+  name Dot11
+  xpos -6
+  ypos 3546
+ }
+ Switch {
+  inputs 2
+  name Switch1
+  xpos -40
+  ypos 3616
+ }
+set N7ad6eb00 [stack 0]
+push $N78f94f00
+ Dot {
+  name Dot12
+  xpos -172
+  ypos 450
+ }
+ Dot {
+  name Dot20
+  xpos -189
+  ypos 3610
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos -124
+  ypos 3685
+ }
+push $N7ad6eb00
+ Switch {
+  inputs 2
+  which {{replaceRGB}}
+  name Switch2
+  label "\[value which]"
+  selected true
+  xpos -40
+  ypos 3757
+ }
+push $N76b77900
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge21
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -40
+  ypos 3848
+  addUserKnob {20 TRX}
+  addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "\nntn = nuke.thisNode()\nall = nuke.allNodes()\na = ntn.input(1)\nx = int(ntn\['xpos'].value())\nb = ntn.input(0)\ny = int(ntn\['ypos'].value())\nwith nuke.Root():\n    ma = nuke.nodes.NST_MergeAll()\n    ma.setXYpos(x,y)\n    # copy all values\n    ak = ntn.knobs()\n    for knoB in ma.knobs():\n      try:\n        if knoB not in \[\"name\",\"tile_color\", \"also_merge\"]:\n          ma\[knoB].setValue(ntn\[knoB].value())\n          with ma:\n            newMerge = nuke.toNode(\"MergeAllChannels\")\n            if ntn\[\"mix\"].isAnimated():\n                newMerge\[\"mix\"].copyAnimations(ntn\[\"mix\"].animations())\n            else:\n                newMerge\['mix'].setValue(ntn\['mix'].value())\n            newMerge.knob('also_merge').setValue('all')\n\n      except:\n        pass\n  \n    # try to reconnect\n    try:\n        ma.setInput(0,b);ma.setInput(1,a)\n        for one in all:\n            for i in range(one.inputs()):\n                if one.input(i) == ntn:\n                    one.setInput(i,ma)\n    except:\n        pass\n    nuke.delete(ntn)\n"}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -40
+  ypos 3929
+  disable {{replaceRGB}}
+ }
+ Output {
+  name Output1
+  xpos -40
+  ypos 4032
+ }
+end_group
