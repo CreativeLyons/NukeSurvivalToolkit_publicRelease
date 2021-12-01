@@ -1,0 +1,2204 @@
+Group {
+ name iErode
+ onCreate "n = nuke.thisNode()\nn.knob('blur').setRange(-100, 100)"
+ tile_color 0xcc804e00
+ note_font "Bitstream Vera Sans Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 controls l Controls}
+ addUserKnob {41 channels T Erode_master.channels}
+ addUserKnob {14 blur l size R -100 100}
+ addUserKnob {41 filter T Erode_master.filter}
+ addUserKnob {26 ""}
+ addUserKnob {3 quality l Quality}
+ quality 12
+ addUserKnob {6 exp l Expo +STARTLINE}
+ exp true
+ addUserKnob {20 info}
+ addUserKnob {26 author l Author: T "Phil Prates - pratesphil@gmail.com"}
+ addUserKnob {26 ver l Version: T 1.0}
+ addUserKnob {26 changelog l "" +STARTLINE +INVISIBLE T "1.0 - First \npublic release of pp_erode"}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -992
+  ypos 451
+  number 1
+ }
+ Shuffle {
+  alpha white
+  name add_alpha
+  xpos -992
+  ypos 643
+  disable {{"\[string first \".a\" \[channels \[input this 0]]]>-1"}}
+ }
+ Dot {
+  name Dot8
+  xpos -961
+  ypos 797
+ }
+ Dot {
+  name Dot6
+  xpos -642
+  ypos 797
+ }
+set N7ea400 [stack 0]
+ Dot {
+  name Dot1
+  xpos -453
+  ypos 797
+ }
+set N7e9d00 [stack 0]
+ Dot {
+  name Dot7
+  xpos -251
+  ypos 797
+ }
+set N7e9600 [stack 0]
+ Dot {
+  name Dot10
+  xpos -51
+  ypos 797
+ }
+set N7e8f00 [stack 0]
+ Dot {
+  name Dot16
+  xpos 133
+  ypos 797
+ }
+set N7e8800 [stack 0]
+ Dot {
+  name Dot15
+  xpos 333
+  ypos 797
+ }
+set N7e8100 [stack 0]
+ Dot {
+  name Dot13
+  xpos 535
+  ypos 797
+ }
+set Nf4ce7900 [stack 0]
+ Dot {
+  name Dot12
+  xpos 724
+  ypos 797
+ }
+set Nf4ce7200 [stack 0]
+ Dot {
+  name Dot28
+  xpos 918
+  ypos 797
+ }
+set Nf4ce6b00 [stack 0]
+ Dot {
+  name Dot27
+  xpos 1107
+  ypos 797
+ }
+set Nf4ce6400 [stack 0]
+ Dot {
+  name Dot26
+  xpos 1309
+  ypos 797
+ }
+set Nf4ce5d00 [stack 0]
+ Dot {
+  name Dot25
+  xpos 1509
+  ypos 797
+ }
+set Nf4ce5600 [stack 0]
+ Dot {
+  name Dot24
+  xpos 1693
+  ypos 797
+ }
+set Nf4ce4f00 [stack 0]
+ Dot {
+  name Dot23
+  xpos 1893
+  ypos 797
+ }
+set Nf4ce4800 [stack 0]
+ Dot {
+  name Dot22
+  xpos 2095
+  ypos 797
+ }
+set Nf4ce4100 [stack 0]
+ Dot {
+  name Dot21
+  xpos 2284
+  ypos 797
+ }
+set Nf4ccf900 [stack 0]
+ Dot {
+  name Dot37
+  xpos 2465
+  ypos 797
+ }
+set Nf4ccf200 [stack 0]
+ Dot {
+  name Dot39
+  xpos 2654
+  ypos 797
+ }
+set Nf4cceb00 [stack 0]
+ Dot {
+  name Dot41
+  xpos 2856
+  ypos 797
+ }
+set Nf4cce400 [stack 0]
+ Dot {
+  name Dot43
+  xpos 3056
+  ypos 797
+ }
+set Nf4ccdd00 [stack 0]
+ Dot {
+  name Dot45
+  xpos 3240
+  ypos 797
+ }
+set Nf4ccd600 [stack 0]
+ Dot {
+  name Dot47
+  xpos 3440
+  ypos 797
+ }
+set Nf4cccf00 [stack 0]
+ Dot {
+  name Dot49
+  xpos 3642
+  ypos 797
+ }
+set Nf4ccc800 [stack 0]
+ Dot {
+  name Dot51
+  xpos 3831
+  ypos 797
+ }
+set Nf4ccc100 [stack 0]
+ Dot {
+  name Dot53
+  xpos 4013
+  ypos 797
+ }
+set Nf4cab900 [stack 0]
+ Dot {
+  name Dot55
+  xpos 4202
+  ypos 797
+ }
+set Nf4cab200 [stack 0]
+ Dot {
+  name Dot57
+  xpos 4404
+  ypos 797
+ }
+set Nf4caab00 [stack 0]
+ Dot {
+  name Dot59
+  xpos 4604
+  ypos 797
+ }
+set Nf4caa400 [stack 0]
+ Dot {
+  name Dot61
+  xpos 4788
+  ypos 797
+ }
+set Nf4ca9d00 [stack 0]
+ Dot {
+  name Dot63
+  xpos 4988
+  ypos 797
+ }
+set Nf4ca9600 [stack 0]
+ Dot {
+  name Dot65
+  xpos 5190
+  ypos 797
+ }
+set Nf4ca8f00 [stack 0]
+ Dot {
+  name Dot67
+  xpos 5379
+  ypos 797
+ }
+set Nf4ca8800 [stack 0]
+ Dot {
+  name Dot76
+  xpos 5562
+  ypos 797
+ }
+set Nf4ca8100 [stack 0]
+ Dot {
+  name Dot75
+  xpos 5751
+  ypos 797
+ }
+set Nf4c93900 [stack 0]
+ Dot {
+  name Dot74
+  xpos 5953
+  ypos 797
+ }
+set Nf4c93200 [stack 0]
+ Dot {
+  name Dot73
+  xpos 6153
+  ypos 797
+ }
+set Nf4c92b00 [stack 0]
+ Dot {
+  name Dot72
+  xpos 6337
+  ypos 797
+ }
+set Nf4c92400 [stack 0]
+ Dot {
+  name Dot71
+  xpos 6537
+  ypos 797
+ }
+set Nf4c91d00 [stack 0]
+ Dot {
+  name Dot70
+  xpos 6739
+  ypos 797
+ }
+set Nf4c91600 [stack 0]
+ Dot {
+  name Dot69
+  xpos 6928
+  ypos 797
+ }
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_40
+  xpos 6897
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -815
+  ypos 452
+ }
+ Dot {
+  name Dot2
+  xpos -784
+  ypos 704
+ }
+set Nf4df0800 [stack 0]
+ Dot {
+  name Dot3
+  xpos -593
+  ypos 704
+ }
+set Nf4df0100 [stack 0]
+ Dot {
+  name Dot5
+  xpos -404
+  ypos 704
+ }
+set Nf4de3900 [stack 0]
+ Dot {
+  name Dot9
+  xpos -202
+  ypos 704
+ }
+set Nf4de3200 [stack 0]
+ Dot {
+  name Dot11
+  xpos -2
+  ypos 704
+ }
+set Nf4de2b00 [stack 0]
+ Dot {
+  name Dot20
+  xpos 170
+  ypos 704
+ }
+set Nf4de2400 [stack 0]
+ Dot {
+  name Dot19
+  xpos 370
+  ypos 704
+ }
+set Nf4de1d00 [stack 0]
+ Dot {
+  name Dot18
+  xpos 572
+  ypos 704
+ }
+set Nf4de1600 [stack 0]
+ Dot {
+  name Dot17
+  xpos 761
+  ypos 704
+ }
+set Nf4de0f00 [stack 0]
+ Dot {
+  name Dot36
+  xpos 937
+  ypos 704
+ }
+set Nf4de0800 [stack 0]
+ Dot {
+  name Dot35
+  xpos 1126
+  ypos 704
+ }
+set Nf4de0100 [stack 0]
+ Dot {
+  name Dot34
+  xpos 1328
+  ypos 704
+ }
+set Nf4dcb900 [stack 0]
+ Dot {
+  name Dot33
+  xpos 1528
+  ypos 704
+ }
+set Nf4dcb200 [stack 0]
+ Dot {
+  name Dot32
+  xpos 1700
+  ypos 704
+ }
+set Nf4dcab00 [stack 0]
+ Dot {
+  name Dot31
+  xpos 1900
+  ypos 704
+ }
+set Nf4dca400 [stack 0]
+ Dot {
+  name Dot30
+  xpos 2102
+  ypos 704
+ }
+set Nf4dc9d00 [stack 0]
+ Dot {
+  name Dot29
+  xpos 2291
+  ypos 704
+ }
+set Nf4dc9600 [stack 0]
+ Dot {
+  name Dot38
+  xpos 2514
+  ypos 704
+ }
+set Nf4dc8f00 [stack 0]
+ Dot {
+  name Dot40
+  xpos 2703
+  ypos 704
+ }
+set Nf4dc8800 [stack 0]
+ Dot {
+  name Dot42
+  xpos 2905
+  ypos 704
+ }
+set Nf4dc8100 [stack 0]
+ Dot {
+  name Dot44
+  xpos 3105
+  ypos 704
+ }
+set Nf4db3900 [stack 0]
+ Dot {
+  name Dot46
+  xpos 3277
+  ypos 704
+ }
+set Nf4db3200 [stack 0]
+ Dot {
+  name Dot48
+  xpos 3477
+  ypos 704
+ }
+set Nf4db2b00 [stack 0]
+ Dot {
+  name Dot50
+  xpos 3679
+  ypos 704
+ }
+set Nf4db2400 [stack 0]
+ Dot {
+  name Dot52
+  xpos 3868
+  ypos 704
+ }
+set Nf4db1d00 [stack 0]
+ Dot {
+  name Dot54
+  xpos 4062
+  ypos 704
+ }
+set Nf4db1600 [stack 0]
+ Dot {
+  name Dot56
+  xpos 4251
+  ypos 704
+ }
+set Nf4db0f00 [stack 0]
+ Dot {
+  name Dot58
+  xpos 4453
+  ypos 704
+ }
+set Nf4db0800 [stack 0]
+ Dot {
+  name Dot60
+  xpos 4653
+  ypos 704
+ }
+set Nf4db0100 [stack 0]
+ Dot {
+  name Dot62
+  xpos 4825
+  ypos 704
+ }
+set Nf4d9f900 [stack 0]
+ Dot {
+  name Dot64
+  xpos 5025
+  ypos 704
+ }
+set Nf4d9f200 [stack 0]
+ Dot {
+  name Dot66
+  xpos 5227
+  ypos 704
+ }
+set Nf4d9eb00 [stack 0]
+ Dot {
+  name Dot68
+  xpos 5416
+  ypos 704
+ }
+set Nf4d9e400 [stack 0]
+ Dot {
+  name Dot84
+  xpos 5589
+  ypos 704
+ }
+set Nf4d9dd00 [stack 0]
+ Dot {
+  name Dot83
+  xpos 5778
+  ypos 704
+ }
+set Nf4d9d600 [stack 0]
+ Dot {
+  name Dot82
+  xpos 5980
+  ypos 704
+ }
+set Nf4d9cf00 [stack 0]
+ Dot {
+  name Dot81
+  xpos 6180
+  ypos 704
+ }
+set Nf4d9c800 [stack 0]
+ Dot {
+  name Dot80
+  xpos 6352
+  ypos 704
+ }
+set Nf4d9c100 [stack 0]
+ Dot {
+  name Dot79
+  xpos 6552
+  ypos 704
+ }
+set Nf4d7b900 [stack 0]
+ Dot {
+  name Dot78
+  xpos 6754
+  ypos 704
+ }
+set Nf4d7b200 [stack 0]
+ Dot {
+  name Dot77
+  xpos 6943
+  ypos 704
+ }
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_40
+  xpos 6975
+  ypos 737
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4c91600
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_39
+  xpos 6708
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4d7b200
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_39
+  xpos 6786
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4c91d00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_38
+  xpos 6506
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4d7b900
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_38
+  xpos 6584
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4c92400
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_37
+  xpos 6306
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4d9c100
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_37
+  xpos 6384
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4c92b00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_36
+  xpos 6122
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4d9c800
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_36
+  xpos 6211
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4c93200
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_35
+  xpos 5922
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4d9cf00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_35
+  xpos 6011
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4c93900
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_34
+  xpos 5720
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4d9d600
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_34
+  xpos 5809
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ca8100
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_33
+  xpos 5531
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4d9dd00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_33
+  xpos 5620
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ca8800
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_32
+  xpos 5348
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4d9e400
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_32
+  xpos 5440
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ca8f00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_31
+  xpos 5159
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4d9eb00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_31
+  xpos 5251
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ca9600
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_30
+  xpos 4957
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4d9f200
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_30
+  xpos 5049
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ca9d00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_29
+  xpos 4757
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4d9f900
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_29
+  xpos 4849
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4caa400
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_28
+  xpos 4573
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4db0100
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_28
+  xpos 4676
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4caab00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_27
+  xpos 4373
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4db0800
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_27
+  xpos 4476
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4cab200
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_26
+  xpos 4171
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4db0f00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_26
+  xpos 4274
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4cab900
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_25
+  xpos 3982
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4db1600
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_25
+  xpos 4085
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ccc100
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_24
+  xpos 3800
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4db1d00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_24
+  xpos 3892
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ccc800
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_23
+  xpos 3611
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4db2400
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_23
+  xpos 3703
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4cccf00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_22
+  xpos 3409
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4db2b00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_22
+  xpos 3501
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ccd600
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_21
+  xpos 3209
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4db3200
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_21
+  xpos 3301
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ccdd00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_20
+  xpos 3025
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4db3900
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_20
+  xpos 3128
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4cce400
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_19
+  xpos 2825
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4dc8100
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_19
+  xpos 2928
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4cceb00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_18
+  xpos 2623
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4dc8800
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_18
+  xpos 2726
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ccf200
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_17
+  xpos 2434
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4dc8f00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_17
+  xpos 2537
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ccf900
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_16
+  xpos 2253
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4dc9600
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_16
+  xpos 2334
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ce4100
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_15
+  xpos 2064
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4dc9d00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_15
+  xpos 2145
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ce4800
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_14
+  xpos 1862
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4dca400
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_14
+  xpos 1943
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ce4f00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_13
+  xpos 1662
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4dcab00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_13
+  xpos 1743
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ce5600
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_12
+  xpos 1478
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4dcb200
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_12
+  xpos 1570
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ce5d00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_11
+  xpos 1278
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4dcb900
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_11
+  xpos 1370
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ce6400
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_10
+  xpos 1076
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4de0100
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_10
+  xpos 1168
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ce6b00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_9
+  xpos 887
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4de0800
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_9
+  xpos 979
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ce7200
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_8
+  xpos 693
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4de0f00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_8
+  xpos 785
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4ce7900
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_7
+  xpos 504
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4de1600
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_7
+  xpos 596
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $N7e8100
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_6
+  xpos 302
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4de1d00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_6
+  xpos 394
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $N7e8800
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_5
+  xpos 102
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4de2400
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_5
+  xpos 194
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $N7e8f00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_4
+  xpos -82
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4de2b00
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_4
+  xpos 21
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $N7e9600
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_3
+  xpos -282
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4de3200
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_3
+  xpos -179
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $N7e9d00
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_2
+  xpos -484
+  ypos 850
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4de3900
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_2
+  xpos -381
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $N7ea400
+ Grade {
+  channels alpha
+  blackpoint {{parent.exp==1?expAmnt.x:linAmnt.x}}
+  whitepoint {{parent.exp==1?expAmnt.y:linAmnt.y}}
+  name Grade_1
+  xpos -676
+  ypos 851
+  addUserKnob {20 User}
+  addUserKnob {12 linAmnt l "" +STARTLINE}
+  linAmnt {{(ittNum-1)/parent.Erode_master.quality} {ittNum/parent.Erode_master.quality}}
+  addUserKnob {12 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum-1)/pow2(parent.Erode_master.quality)} {pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4df0100
+ FilterErode {
+  channels {{{parent.Erode_master.channels}}}
+  size {{parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt} {parent.exp==1?-parent.blur*expAmnt:-parent.blur*linAmnt}}
+  filter {{parent.Erode_master.filter}}
+  name FilterErode_1
+  xpos -570
+  ypos 738
+  addUserKnob {20 User}
+  addUserKnob {7 linAmnt l "" +STARTLINE}
+  linAmnt {{ittNum/parent.Erode_master.quality}}
+  addUserKnob {7 expAmnt l "" +STARTLINE}
+  expAmnt {{pow2(ittNum)/pow2(parent.Erode_master.quality)}}
+  addUserKnob {3 ittNum l "" +STARTLINE}
+  ittNum {{"\[lrange \[split \[value name] _] 1 1]"}}
+ }
+push $Nf4df0800
+ Dot {
+  name Dot4
+  xpos -784
+  ypos 939
+ }
+set Nf4898100 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix1
+  xpos -570
+  ypos 932
+ }
+set Nf4883900 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix2
+  xpos -381
+  ypos 932
+ }
+set Nf4883200 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix3
+  xpos -179
+  ypos 932
+ }
+set Nf4882b00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix4
+  xpos 21
+  ypos 932
+ }
+set Nf4882400 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix8
+  xpos 194
+  ypos 932
+ }
+set Nf4881d00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix7
+  xpos 394
+  ypos 932
+ }
+set Nf4881600 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix6
+  xpos 596
+  ypos 932
+ }
+set Nf4880f00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix5
+  xpos 785
+  ypos 932
+ }
+set Nf4880800 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix16
+  xpos 979
+  ypos 932
+ }
+set Nf4880100 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix15
+  xpos 1168
+  ypos 932
+ }
+set Nf4853900 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix14
+  xpos 1370
+  ypos 932
+ }
+set Nf4853200 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix13
+  xpos 1570
+  ypos 932
+ }
+set Nf4852b00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix12
+  xpos 1743
+  ypos 932
+ }
+set Nf4852400 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix11
+  xpos 1943
+  ypos 932
+ }
+set Nf4851d00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix10
+  xpos 2145
+  ypos 932
+ }
+set Nf4851600 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix9
+  xpos 2334
+  ypos 932
+ }
+set Nf4850f00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix17
+  xpos 2537
+  ypos 932
+ }
+set Nf4850800 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix18
+  xpos 2726
+  ypos 932
+ }
+set Nf4850100 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix19
+  xpos 2928
+  ypos 932
+ }
+set Nf482b900 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix20
+  xpos 3128
+  ypos 932
+ }
+set Nf482b200 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix21
+  xpos 3301
+  ypos 932
+ }
+set Nf482ab00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix22
+  xpos 3501
+  ypos 932
+ }
+set Nf482a400 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix23
+  xpos 3703
+  ypos 932
+ }
+set Nf4829d00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix24
+  xpos 3892
+  ypos 932
+ }
+set Nf4829600 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix25
+  xpos 4085
+  ypos 932
+ }
+set Nf4828f00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix26
+  xpos 4274
+  ypos 932
+ }
+set Nf4828800 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix27
+  xpos 4476
+  ypos 932
+ }
+set Nf4828100 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix28
+  xpos 4676
+  ypos 932
+ }
+set Nf49f3900 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix29
+  xpos 4849
+  ypos 932
+ }
+set Nf49f3200 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix30
+  xpos 5049
+  ypos 932
+ }
+set Nf49f2b00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix31
+  xpos 5251
+  ypos 932
+ }
+set Nf49f2400 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix32
+  xpos 5440
+  ypos 932
+ }
+set Nf49f1d00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix40
+  xpos 5620
+  ypos 932
+ }
+set Nf49f1600 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix39
+  xpos 5809
+  ypos 932
+ }
+set Nf49f0f00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix38
+  xpos 6011
+  ypos 932
+ }
+set Nf49f0800 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix37
+  xpos 6211
+  ypos 932
+ }
+set Nf49f0100 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix36
+  xpos 6384
+  ypos 932
+ }
+set Nf49c3900 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix35
+  xpos 6584
+  ypos 932
+ }
+set Nf49c3200 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix34
+  xpos 6786
+  ypos 932
+ }
+set Nf49c2b00 [stack 0]
+ Keymix {
+  inputs 3
+  bbox A
+  name Keymix33
+  xpos 6975
+  ypos 932
+ }
+push $Nf49c2b00
+push $Nf49c3200
+push $Nf49c3900
+push $Nf49f0100
+push $Nf49f0800
+push $Nf49f0f00
+push $Nf49f1600
+push $Nf49f1d00
+push $Nf49f2400
+push $Nf49f2b00
+push $Nf49f3200
+push $Nf49f3900
+push $Nf4828100
+push $Nf4828800
+push $Nf4828f00
+push $Nf4829600
+push $Nf4829d00
+push $Nf482a400
+push $Nf482ab00
+push $Nf482b200
+push $Nf482b900
+push $Nf4850100
+push $Nf4850800
+push $Nf4850f00
+push $Nf4851600
+push $Nf4851d00
+push $Nf4852400
+push $Nf4852b00
+push $Nf4853200
+push $Nf4853900
+push $Nf4880100
+push $Nf4880800
+push $Nf4880f00
+push $Nf4881600
+push $Nf4881d00
+push $Nf4882400
+push $Nf4882b00
+push $Nf4883200
+push 0
+push $Nf4883900
+push $Nf4898100
+ Dot {
+  name Dot14
+  xpos -784
+  ypos 1002
+ }
+ Dissolve {
+  inputs 41+1
+  which {{parent.Erode_master.quality}}
+  name Dissolve1
+  xpos 3128
+  ypos 2149
+ }
+ Output {
+  name Output1
+  xpos 3128
+  ypos 2338
+ }
+ FilterErode {
+  inputs 0
+  channels rgba
+  filter gaussian
+  name Erode_master
+  xpos 2876
+  ypos -169
+  addUserKnob {20 User}
+  addUserKnob {7 quality l Qualitty}
+  quality {{parent.add_alpha.disable==1?parent.quality:1}}
+ }
+end_group
