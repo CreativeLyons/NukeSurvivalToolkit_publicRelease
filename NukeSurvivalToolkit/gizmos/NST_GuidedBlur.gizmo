@@ -1,4 +1,5 @@
 Group {
+ inputs 2
  name GuidedBlur
  help "Description:\n\nThe guided filter is an edge-preserving blur,\nuseful to add details to the edges of a roto/matte\nusing a second image as a guide. \n\nHow to use:\n\nConnect the alpha to the 'matte' input\nand the 'guide' image to the 'img' input.\n\nControl the amount of detail using\nthe 'edge detail' slider.\n\n---\n\nThe filter is an implementation of the\n 'Guided Image Filtering', by Kaiming He. \nMore details at http://kaiminghe.com/eccv10/\n"
  tile_color 0xcc804eff
@@ -14,6 +15,13 @@ Group {
  addUserKnob {26 ""}
  addUserKnob {41 amount l "sharpen amount" T Sharpen1.amount}
  addUserKnob {41 size l "sharpen size" T Sharpen1.size}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge21.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge21.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge21.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge21.fringe}
+ addUserKnob {41 mix T Merge21.mix}
  addUserKnob {20 info l Info}
  addUserKnob {26 versionInfo l "" +STARTLINE T "\nCreated by Rafael Silva\nwww.rafael.ai\nrafael@rafael.ai\n\nVersion 1.3\nLast Updated: August 16th, 2020\n\nUpdated by Nikolai Wüstemann 2021\n\nToronto, Canada\n\n---\n\nHelp and more information:\nwww.rafael.ai/guided_blur"}
  addUserKnob {26 ""}
@@ -808,7 +816,6 @@ push $N7ad6eb00
   which {{replaceRGB}}
   name Switch2
   label "\[value which]"
-  selected true
   xpos -40
   ypos 3757
  }
@@ -818,8 +825,9 @@ push $N76b77900
   operation copy
   name Merge21
   label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  selected true
   xpos -40
-  ypos 3848
+  ypos 3847
   addUserKnob {20 TRX}
   addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "\nntn = nuke.thisNode()\nall = nuke.allNodes()\na = ntn.input(1)\nx = int(ntn\['xpos'].value())\nb = ntn.input(0)\ny = int(ntn\['ypos'].value())\nwith nuke.Root():\n    ma = nuke.nodes.NST_MergeAll()\n    ma.setXYpos(x,y)\n    # copy all values\n    ak = ntn.knobs()\n    for knoB in ma.knobs():\n      try:\n        if knoB not in \[\"name\",\"tile_color\", \"also_merge\"]:\n          ma\[knoB].setValue(ntn\[knoB].value())\n          with ma:\n            newMerge = nuke.toNode(\"MergeAllChannels\")\n            if ntn\[\"mix\"].isAnimated():\n                newMerge\[\"mix\"].copyAnimations(ntn\[\"mix\"].animations())\n            else:\n                newMerge\['mix'].setValue(ntn\['mix'].value())\n            newMerge.knob('also_merge').setValue('all')\n\n      except:\n        pass\n  \n    # try to reconnect\n    try:\n        ma.setInput(0,b);ma.setInput(1,a)\n        for one in all:\n            for i in range(one.inputs()):\n                if one.input(i) == ntn:\n                    one.setInput(i,ma)\n    except:\n        pass\n    nuke.delete(ntn)\n"}
  }
