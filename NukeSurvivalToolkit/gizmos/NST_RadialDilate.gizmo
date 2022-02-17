@@ -1,0 +1,90 @@
+Group {
+ name RadialDilate
+ tile_color 0xcc804eff
+ note_font_color 0xffffffff
+
+ addUserKnob {20 RadialDilate}
+ addUserKnob {41 "Local GPU: " T BlinkScript4.gpuName}
+ addUserKnob {41 "Use GPU if Available" T BlinkScript4.useGPUIfAvailable}
+ addUserKnob {26 ""}
+ addUserKnob {41 size_wh l size T BlinkScript4.size_wh}
+ addUserKnob {41 blackoutside l "black outside" -STARTLINE T BlinkScript4.blackoutside}
+ addUserKnob {26 _1 l "" +STARTLINE}
+ addUserKnob {41 maskChannelMask l mask -STARTLINE T Merge1.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 mix T Merge1.mix}
+ addUserKnob {26 ""}
+ addUserKnob {26 credit l "" +STARTLINE T "Chris Fryer | 2021\n"}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -54
+  ypos 43
+  number 1
+ }
+ Dot {
+  name Dot1
+  xpos -20
+  ypos 106
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -270
+  ypos -100
+ }
+ AdjBBox {
+  numpixels {{ceil(abs(parent.BlinkScript4.size_wh.w))} {ceil(abs(parent.BlinkScript4.size_wh.h))}}
+  name AdjBBox1
+  xpos -270
+  ypos -45
+ }
+set N6b5f9400 [stack 0]
+ BlackOutside {
+  name BlackOutside1
+  xpos -195
+  ypos -5
+  disable {{1-parent.BlinkScript4.blackoutside}}
+ }
+ BlinkScript {
+  recompileCount 69
+  ProgramGroup 1
+  KernelDescription "2 \"RadialDilate\" iterate pixelWise 575f702e36ae4a4540fceb6e0eb10c07d958cba14a62650f9022854aca2b2c0d 2 \"src\" Read Ranged2D \"dst\" Write Point 2 \"size\" Float 2 AAAAAAAAAAA= \"invert\" Bool 1 AA== 2 \"size\" 2 1 \"invert\" 1 1 3 \"srcrangeMin\" Int 2 1 AAAAAAAAAAA= \"srcrangeMax\" Int 2 1 AAAAAAAAAAA= \"output\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA=="
+  kernelSource "\nkernel RadialDilate : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRanged2D, eEdgeClamped> src; // the input image\n  \n  Image<eWrite> dst; // the output image\n\n  param:\n\n    //user controls for size\n    float2 size;\n    //hidden control to decide min vs max\n    bool invert;\n  local:\n    // will become our output image\n    float4 output = 0;\n\n  void define() \{\n\n  \}\n\n  void init() \{\n\n    src.setRange(-size.x, -size.y, size.x, size.y);\n\n  \}\n\n  void process() \{\n\n    //this applies a foundation for our output (stops us getting minimum values of zero unless they're in the image)\n    output = src(0,0);\n\n    for(int X = -size.x; X <= size.x; X++)\{\n      for(int Y = -size.y; Y <= size.y; Y++)\{        \n\n        //only includes values inside out virtual radial\n        if( (size.x -   pow((pow(float(X),2)+pow(float(Y*(float(size.x)/float(size.y))),2)),0.5f)) > 0)\{\n\n          //assigns min vs max output depending on whether or not the input size is negative \n          output = invert ? min(output,src(X,Y)) : max(output,src(X,Y));\n\n        \}\n      \}\n\n    \}\n\n    dst() = output;\n  \n  \}\n\};\n"
+  rebuild ""
+  RadialDilate_size {{abs(size_wh.w)+1} {abs(size_wh.h)+1}}
+  RadialDilate_invert {{"size_wh.w < 0 || size_wh.h < 0 "}}
+  rebuild_finalise ""
+  name BlinkScript4
+  selected true
+  xpos -195
+  ypos 44
+  addUserKnob {20 User}
+  addUserKnob {6 blackoutside l "black outside" +STARTLINE}
+  addUserKnob {14 size_wh R -100 100}
+ }
+push $N6b5f9400
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge1
+  xpos -270
+  ypos 103
+ }
+set N6b5f8800 [stack 0]
+ Output {
+  name Output1
+  xpos -270
+  ypos 180
+ }
+push $N6b5f8800
+ Viewer {
+  frame_range 1-100
+  name Viewer1
+  xpos -270
+  ypos 127
+ }
+end_group
