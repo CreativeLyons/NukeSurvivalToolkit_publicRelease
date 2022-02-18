@@ -2,7 +2,6 @@ Group {
  name RadialDilate
  tile_color 0xcc804eff
  note_font_color 0xffffffff
-
  addUserKnob {20 RadialDilate}
  addUserKnob {41 "Local GPU: " T BlinkScript4.gpuName}
  addUserKnob {41 "Use GPU if Available" T BlinkScript4.useGPUIfAvailable}

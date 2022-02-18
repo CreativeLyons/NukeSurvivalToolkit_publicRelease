@@ -1,0 +1,68 @@
+Group {
+ inputs 0
+ name HexColor
+ knobChanged "\ndef int2hex(x):\n    val = hex(x)\[2:]\n    val = \"0\"+val if len(val)<2 else val \n    return val.upper()\n\nn = nuke.thisNode()\nk = nuke.thisKnob()\n\nwith n:\n    sample_forth = nuke.toNode(\"ColorspaceForth\")\n    sample_back = nuke.toNode(\"ColorspaceBack\")\n    \nif k.name() == \"color_float\":\n    corrected_forth_r = nuke.sample(sample_forth, 'red', 0, 0)\n    corrected_forth_g = nuke.sample(sample_forth, 'green', 0, 0)\n    corrected_forth_b = nuke.sample(sample_forth, 'blue', 0, 0)\n    \n    n\['color_8bit_r'].setValue(int(round(corrected_forth_r*255)))\n    n\['color_8bit_g'].setValue(int(round(corrected_forth_g*255)))\n    n\['color_8bit_b'].setValue(int(round(corrected_forth_b*255)))\n    \n    n\['color_hex'].setValue(\"#\" + int2hex(int(round(255*corrected_forth_r))) + int2hex(int(round(255*corrected_forth_g))) + int2hex(int(round(255*corrected_forth_b))))\n    \nelif k.name() == \"color_8bit_r\":\n    corrected_back_r = nuke.sample(sample_back, 'red', 0, 0)\n    n\['color_float'].setValue(corrected_back_r, 0)\n    n\['color_hex'].setValue(\"#\" + int2hex(int(n\['color_8bit_r'].getValue())) + int2hex(int(n\['color_8bit_g'].getValue())) + int2hex(int(n\['color_8bit_b'].getValue())))\n    \nelif k.name() == \"color_8bit_g\":\n    corrected_back_g = nuke.sample(sample_back, 'green', 0, 0)\n    n\['color_float'].setValue(corrected_back_g, 1)\n    n\['color_hex'].setValue(\"#\" + int2hex(int(n\['color_8bit_r'].getValue())) + int2hex(int(n\['color_8bit_g'].getValue())) + int2hex(int(n\['color_8bit_b'].getValue())))\n    \nelif k.name() == \"color_8bit_b\":\n    corrected_back_b = nuke.sample(sample_back, 'blue', 0, 0)\n    n\['color_float'].setValue(corrected_back_b, 2)\n    n\['color_hex'].setValue(\"#\" + int2hex(int(n\['color_8bit_r'].getValue())) + int2hex(int(n\['color_8bit_g'].getValue())) + int2hex(int(n\['color_8bit_b'].getValue())))\n\nelif k.name() == \"color_hex\":\n    hex_r = n\['color_hex'].getValue()\[1:3]\n    hex_g = n\['color_hex'].getValue()\[3:5]\n    hex_b = n\['color_hex'].getValue()\[5:7]\n    \n    int_r = int(hex_r, 16)\n    int_g = int(hex_g, 16)\n    int_b = int(hex_b, 16)\n    \n    n\['color_8bit_r'].setValue(int_r)\n    n\['color_8bit_g'].setValue(int_g)\n    n\['color_8bit_b'].setValue(int_b)\n    \n    corrected_back_r = nuke.sample(sample_back, 'red', 0, 0)\n    corrected_back_g = nuke.sample(sample_back, 'green', 0, 0)\n    corrected_back_b = nuke.sample(sample_back, 'blue', 0, 0)\n    \n    n\['color_float'].setValue(corrected_back_r, 0)\n    n\['color_float'].setValue(corrected_back_g, 1)\n    n\['color_float'].setValue(corrected_back_b, 2)\n\nmyHex = n\['color_hex'].getValue()\[1:] + \"00\"\nnukeHex = int(myHex, 16)\nn.knob('tile_color').setValue(nukeHex)\n"
+ tile_color 0xff000000
+ label "\[value this.color_hex]"
+ note_font_color 0xff
+ selected true
+ addUserKnob {20 User l "Color Modes"}
+ addUserKnob {26 title l "" +STARTLINE T "<font color=#ff8300 size=\"5\">HexColor</font><font color=#ff8300 size=\"2\"> v1.0</font>"}
+ addUserKnob {26 divider_general l " "}
+ addUserKnob {41 format l Format T OutputColor.format}
+ addUserKnob {41 colorspace l Colorspace t "sRGB should work in the most cases. I.E. converting a web #hex color to Nuke's linear workspace.\nChanging the colorspace does not update the colors immediately since the reference point is missing. Change a color value to apply the changes to the other color values respectively." T ColorspaceForth.colorspace_out}
+ addUserKnob {26 divider_color l " "}
+ addUserKnob {1 color_hex l Hex t "requires a hashtag # at the beginning"}
+ color_hex #FF0000
+ addUserKnob {18 color_float l Float t "This value is used to color the output image"}
+ color_float {1 0 0}
+ addUserKnob {6 color_float_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 color_8bit_label l 8bit T ""}
+ addUserKnob {3 color_8bit_r l "<font color=#c34b4b>R</font>" -STARTLINE}
+ color_8bit_r 255
+ addUserKnob {3 color_8bit_g l "<font color=#5b9c5b>G</font>" -STARTLINE}
+ addUserKnob {3 color_8bit_b l "<font color=#3367a9>B</font>" -STARTLINE}
+ addUserKnob {20 About}
+ addUserKnob {26 title_1 l "" +STARTLINE T "<font color=#ff8300 size=\"5\">HexColor</font><font color=#ff8300 size=\"2\"> v1.0</font>"}
+ addUserKnob {26 author l "" +STARTLINE T "by Nikolai Wüstemann"}
+ addUserKnob {26 ""}
+ addUserKnob {26 description l Description T "- This Node workes like a regular Constant.\n- Changing one color value changes all other values respectively \n- Colorspace conversions are taken into consideration\n- This is necessary to produce a valid represtation of  i.E. web #hex colors in Nuke."}
+}
+ Constant {
+  inputs 0
+  channels rgb
+  color {{"\[value this.parent.color_8bit_r]/255"} {"\[value this.parent.color_8bit_g]/255"} {"\[value this.parent.color_8bit_b]/255"} 0}
+  name ConversionColor
+  xpos 394
+  ypos -112
+ }
+ Colorspace {
+  colorspace_in sRGB
+  name ColorspaceBack
+  selected true
+  xpos 394
+  ypos 9
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{"\[value this.parent.color_float.r]"} {"\[value this.parent.color_float.g]"} {"\[value this.parent.color_float.b]"} {"\[value this.parent.color_float.a]"}}
+  name OutputColor
+  xpos 557
+  ypos -116
+ }
+set Nfbef7900 [stack 0]
+ Colorspace {
+  colorspace_out sRGB
+  name ColorspaceForth
+  knobChanged "id = nuke.thisNode().knob(\"colorspace_out\").getValue()\nnuke.toNode(\"ColorspaceBack\").knob(\"colorspace_in\").setValue(int(id))"
+  xpos 557
+  ypos 11
+ }
+push $Nfbef7900
+ Output {
+  name Output1
+  xpos 741
+  ypos 14
+ }
+end_group

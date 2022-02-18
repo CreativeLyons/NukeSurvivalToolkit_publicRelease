@@ -129,7 +129,6 @@ expressionMenu.addCommand('Transform/STMap_invert', "nuke.nodePaste(\"" + os.pat
 #3D and DEEP
 expressionMenu.addCommand('3D and Deep/Normal Pass - Relight', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/normalPass_relight.nk") + "\")")
 expressionMenu.addCommand('3D and Deep/C4x4', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/C4x4.nk") + "\")")
-expressionMenu.addCommand('3D and Deep/Deep Thickness', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/deepThickness.nk") + "\")")
 expressionMenu.addCommand('3D and Deep/Deep to Depth', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/deepToDepth.nk") + "\")")
 expressionMenu.addCommand('3D and Deep/Depth normalize', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/depth_normalize.nk") + "\")")
 
@@ -149,6 +148,8 @@ expressionMenu.addCommand('Info e Tutorial', "nuke.tcl('start', 'http://www.andr
 
 drawMenu.addSeparator()
 
+drawMenu.addCommand('ConstantPro TL', "nuke.createNode('{}ConstantPro')".format(prefixNST), icon="Constant.png")
+drawMenu.addCommand('HexColor NW', "nuke.createNode('{}HexColor')".format(prefixNST), icon="Constant.png")
 drawMenu.addCommand('GradMagic TL', "nuke.createNode('{}GradMagic')".format(prefixNST), icon="GradMagic.png")
 drawMenu.addCommand('NoiseAdvanced TL', "nuke.createNode('{}NoiseAdvanced')".format(prefixNST), icon="Noise.png")
 drawMenu.addCommand('RadialAdvanced TL', "nuke.createNode('{}RadialAdvanced')".format(prefixNST), icon="Radial.png")
@@ -587,7 +588,7 @@ deepMenu.addCommand('DeepToPosition TL', "nuke.createNode('{}DeepToPosition')".f
 deepMenu.addCommand('DeepRecolorMatte TL', "nuke.createNode('{}DeepRecolorMatte')".format(prefixNST), icon="DeepRecolor.png")
 
 deepMenu.addSeparator()
-
+deepMenu.addCommand('Deep Thickness AG', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/deepThickness.nk") + "\")")
 deepMenu.addCommand('DeepMerge_Advanced BM', "nuke.createNode('{}DeepMerge_Advanced')".format(prefixNST), icon="DeepMerge.png")
 deepMenu.addCommand('DeepCropSoft NKPD', "nuke.createNode('{}DeepCropSoft')".format(prefixNST), icon="DeepCrop.png")
 deepMenu.addCommand('DeepKeyMix NKPD', "nuke.createNode('{}DeepKeyMix')".format(prefixNST), icon="DeepMerge.png")
