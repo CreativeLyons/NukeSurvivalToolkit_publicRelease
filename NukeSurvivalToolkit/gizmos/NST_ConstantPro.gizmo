@@ -3,7 +3,6 @@ Group {
  tile_color 0xff
  note_font "Bitstream Vera Sans Bold"
  note_font_size 12
- selected true
  addUserKnob {20 ConstantPro}
  addUserKnob {41 channels T Constant2.channels}
  addUserKnob {41 format T Constant2.format}
@@ -11,27 +10,31 @@ Group {
  addUserKnob {41 last l "" -STARTLINE T Constant2.last}
  addUserKnob {6 fillBBox l "Fill BBox" +STARTLINE}
  fillBBox true
- addUserKnob {41 overscanPercent l "| Overscan Percent" -STARTLINE T BBoxToFormat.overscanPercent}
+ addUserKnob {6 combineBBox l "Combine with Input BBox" -STARTLINE}
+ combineBBox true
+ addUserKnob {6 blackOutside l "Black Outside" +STARTLINE}
+ addUserKnob {41 overscanPercent l "Overscan Percent" T BBoxToFormat.overscanPercent}
  addUserKnob {26 ""}
  addUserKnob {26 text_1 l <b>RGB T " "}
- addUserKnob {22 white l "<font color=\"White\">&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(\[1,1,1,1])\n\nnuke.thisNode()\['tile_color'].setValue(4294967040)\n"}
- addUserKnob {22 red l "<font color=\"Red\">&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(\[1,0,0,1])\n\nnuke.thisNode()\['tile_color'].setValue(4278190335)\n"}
- addUserKnob {22 yellow l "<font color=\"Yellow\">&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(\[1,1,0,1])\n\nnuke.thisNode()\['tile_color'].setValue(4294902015)\n"}
- addUserKnob {22 green l "<font color=\"Green\">&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(\[0,1,0,1])\n\nnuke.thisNode()\['tile_color'].setValue(16711935)\n"}
- addUserKnob {22 gray l "<font color=\"Gray\">&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(\[.5,.5,.5,1])\n\nnuke.thisNode()\['tile_color'].setValue(2139062271)\n"}
- addUserKnob {22 cyan l "<font color=\"Cyan\">&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(\[0,1,1,1])\n\nnuke.thisNode()\['tile_color'].setValue(16777215)\n"}
- addUserKnob {22 blue l "<font color=\"Blue\">&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(\[0,0,1,1])\n\nnuke.thisNode()\['tile_color'].setValue(65535)\n"}
- addUserKnob {22 magenta l "<font color=\"Magenta\">&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(\[1,0,1,1])\n\nnuke.thisNode()\['tile_color'].setValue(4278255615)\n"}
- addUserKnob {22 black l "<font color=\"Black\">&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(\[0,0,0,1])\n\nnuke.thisNode()\['tile_color'].setValue(255)\n"}
+ addUserKnob {22 white l "<font color=\"White\"><big>&#9632;" -STARTLINE T "n = nuke.thisNode()\na = n\['color'].getValue()\[3]\nn\['color'].setValue(\[1,1,1,a])\n\nn\['tile_color'].setValue(4294967040)\n"}
+ addUserKnob {22 red l "<font color=\"Red\"><big>&#9632;" -STARTLINE T "n = nuke.thisNode()\na = n\['color'].getValue()\[3]\nn\['color'].setValue(\[1,0,0,a])\n\nn\['tile_color'].setValue(4278190335)\n"}
+ addUserKnob {22 yellow l "<font color=\"Yellow\"><big>&#9632;" -STARTLINE T "n = nuke.thisNode()\na = n\['color'].getValue()\[3]\nn\['color'].setValue(\[1,1,0,a])\n\nn\['tile_color'].setValue(4294902015)\n"}
+ addUserKnob {22 green l "<font color=#00FF00><big>&#9632;" -STARTLINE T "n = nuke.thisNode()\na = n\['color'].getValue()\[3]\nn\['color'].setValue(\[0,1,0,a])\n\nn\['tile_color'].setValue(16711935)\n"}
+ addUserKnob {22 gray l "<font color=\"Gray\"><big>&#9632;" -STARTLINE T "n = nuke.thisNode()\na = n\['color'].getValue()\[3]\nn\['color'].setValue(\[.5,.5,.5,a])\n\nn\['tile_color'].setValue(2139062271)\n"}
+ addUserKnob {22 cyan l "<font color=\"Cyan\"><big>&#9632;" -STARTLINE T "n = nuke.thisNode()\na = n\['color'].getValue()\[3]\nn\['color'].setValue(\[0,1,1,a])\n\nn\['tile_color'].setValue(16777215)\n"}
+ addUserKnob {22 blue l "<font color=\"Blue\"><big>&#9632;" -STARTLINE T "n = nuke.thisNode()\na = n\['color'].getValue()\[3]\nn\['color'].setValue(\[0,0,1,a])\n\nn\['tile_color'].setValue(65535)\n"}
+ addUserKnob {22 magenta l "<font color=\"Magenta\"><big>&#9632;" -STARTLINE T "n = nuke.thisNode()\na = n\['color'].getValue()\[3]\nn\['color'].setValue(\[1,0,1,a])\n\nn\['tile_color'].setValue(4278255615)\n"}
+ addUserKnob {22 greyEighteenPercent l "<font color=#2E2E2E><big>&#9632;" -STARTLINE T "n = nuke.thisNode()\na = n\['color'].getValue()\[3]\nn\['color'].setValue(\[.18,.18,.18,a])\n\nn\['tile_color'].setValue(774778623)"}
+ addUserKnob {22 black l "<font color=\"Black\"><big>&#9632;" -STARTLINE T "n = nuke.thisNode()\na = n\['color'].getValue()\[3]\nn\['color'].setValue(\[0,0,0,a])\n\nn\['tile_color'].setValue(255)\n"}
  addUserKnob {26 text l <b>Alpha: T " "}
- addUserKnob {22 whiteAlpha l "<font color=\"White\">&#9632;" -STARTLINE T nuke.thisNode().knob('color').setValue(1,3)}
- addUserKnob {22 grayAlpha l "<font color=\"Gray\">&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(0.5,3)"}
- addUserKnob {22 blackAlpha l "<font color=\"Black\">&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(0, 3)"}
+ addUserKnob {22 whiteAlpha l "<font color=\"White\"><big>&#9632;" -STARTLINE T nuke.thisNode().knob('color').setValue(1,3)}
+ addUserKnob {22 grayAlpha l "<font color=\"Gray\"><big>&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(0.5,3)"}
+ addUserKnob {22 blackAlpha l "<font color=\"Black\"><big>&#9632;" -STARTLINE T "nuke.thisNode()\['color'].setValue(0, 3)"}
  addUserKnob {26 ""}
  addUserKnob {6 color_rgba_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  color_rgba_panelDropped true
  addUserKnob {19 color}
- color {0 0 0 1}
+ color {0 0 0 0}
  addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {26 ""}
  addUserKnob {26 "" l mask T ""}
@@ -45,7 +48,7 @@ Group {
   inputs 0
   name Inputmask
   xpos -403
-  ypos -114
+  ypos -17
   number 1
  }
  Constant {
@@ -69,6 +72,7 @@ Group {
   xpos -545
   ypos -227
  }
+set N7dcf3200 [stack 0]
  Group {
   name BBoxToFormat
   onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
@@ -77,7 +81,7 @@ Group {
   note_font "Verdana Bold"
   note_font_color 0xffffffff
   xpos -545
-  ypos -178
+  ypos -179
   disable {{!parent.fillBBox}}
   addUserKnob {20 CropBBox}
   addUserKnob {4 type l Type +INVISIBLE M {"To Format" "To BBox"}}
@@ -116,15 +120,15 @@ Group {
    xpos 295
    ypos 462
   }
-set N8411e400 [stack 0]
+set N7dcf1d00 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
    xpos -160
    ypos 462
   }
-set N8411e000 [stack 0]
-push $N8411e400
+set N7dcf1600 [stack 0]
+push $N7dcf1d00
   Crop {
    box {{curve} {curve} {input.width} {input.height}}
    crop {{parent.blackOutside}}
@@ -134,7 +138,7 @@ push $N8411e400
    addUserKnob {20 User}
    addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
   }
-set N8411dc00 [stack 0]
+set N7dcf0f00 [stack 0]
   Remove {
    operation keep
    channels none
@@ -142,7 +146,7 @@ set N8411dc00 [stack 0]
    xpos 120
    ypos 504
   }
-set N8411d800 [stack 0]
+set N7dcf0800 [stack 0]
   Transform {
    scale {{parent.overscanPercent} {parent.overscanPercent}}
    center {{input.bbox.r/2} {input.bbox.t/2}}
@@ -151,7 +155,7 @@ set N8411d800 [stack 0]
    xpos 120
    ypos 555
   }
-push $N8411d800
+push $N7dcf0800
   AdjBBox {
    numpixels {{parent.overscan} {parent.overscan}}
    name AdjBBox1
@@ -177,7 +181,7 @@ push $N8411d800
    ypos 647
    disable {{!parent.Crop6.intersect}}
   }
-push $N8411e000
+push $N7dcf1600
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -196,7 +200,7 @@ push $N8411e000
    xpos -160
    ypos 769
   }
-push $N8411dc00
+push $N7dcf0f00
   Switch {
    inputs 2
    which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -205,13 +209,13 @@ push $N8411dc00
    xpos 261
    ypos 759
   }
-set N7c2ff900 [stack 0]
+set N7dcc8f00 [stack 0]
   Output {
    name Output1
    xpos 261
    ypos 921
   }
-push $N7c2ff900
+push $N7dcc8f00
   NoOp {
    name OutputBBox1
    selected true
@@ -224,12 +228,39 @@ push $N7c2ff900
    outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
   }
  end_group
+set N7dcf2b00 [stack 0]
+push $N7dcf3200
+ Merge2 {
+  inputs 2
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -695
+  ypos -102
+  addUserKnob {20 TRX}
+  addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "\nntn = nuke.thisNode()\nall = nuke.allNodes()\na = ntn.input(1)\nx = int(ntn\['xpos'].value())\nb = ntn.input(0)\ny = int(ntn\['ypos'].value())\nwith nuke.Root():\n    ma = nuke.nodes.NST_MergeAll()\n    ma.setXYpos(x,y)\n    # copy all values\n    ak = ntn.knobs()\n    for knoB in ma.knobs():\n      try:\n        if knoB not in \[\"name\",\"tile_color\", \"also_merge\"]:\n          ma\[knoB].setValue(ntn\[knoB].value())\n          with ma:\n            newMerge = nuke.toNode(\"MergeAllChannels\")\n            if ntn\[\"mix\"].isAnimated():\n                newMerge\[\"mix\"].copyAnimations(ntn\[\"mix\"].animations())\n            else:\n                newMerge\['mix'].setValue(ntn\['mix'].value())\n            newMerge.knob('also_merge').setValue('all')\n\n      except:\n        pass\n  \n    # try to reconnect\n    try:\n        ma.setInput(0,b);ma.setInput(1,a)\n        for one in all:\n            for i in range(one.inputs()):\n                if one.input(i) == ntn:\n                    one.setInput(i,ma)\n    except:\n        pass\n    nuke.delete(ntn)\n"}
+ }
+push $N7dcf2b00
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -545
+  ypos -102
+  disable {{!parent.combineBBox}}
+ }
  Fill {
   inputs 1+1
+  output {{{parent.Constant2.channels}}}
   color {{parent.color} {parent.color} {parent.color} {parent.color}}
   name fillColor
   xpos -545
-  ypos -114
+  ypos -17
+ }
+ BlackOutside {
+  name BlackOutside1
+  selected true
+  xpos -545
+  ypos 33
+  disable {{!parent.blackOutside}}
  }
  Output {
   name Output1
