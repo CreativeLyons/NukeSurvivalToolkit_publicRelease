@@ -1,7 +1,7 @@
 Group {
  name ConstantPro
- knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() in \[\"hue\", \"saturation\", \"brightness\", \"color\"]:\n    import colorsys\n    \n    def lin2srgb(lin):\n        if lin > 0.0031308:\n            s = 1.055 * (pow(lin, (1.0 / 2.4))) - 0.055\n        else:\n            s = 12.92 * lin\n        return s\n    \n    if k.name() in \[\"hue\", \"saturation\", \"brightness\"]:\n        alpha = n\[\"color\"].getValue(3)\n        h = ((n\[\"hue\"].value())%360)/360\n        r,g,b = colorsys.hsv_to_rgb(h,n\[\"saturation\"].value(),n\[\"brightness\"].value())\n        rgb_color = \[r,g,b,alpha]\n        n\[\"color\"].setValue(rgb_color)\n        rs,gs,bs = lin2srgb(r),lin2srgb(g),lin2srgb(b)\n        n\[\"tile_color\"].setValue(int('%02x%02x%02x%02x' % (rs*255,gs*255,bs*255,1),16))\n        \n    if k.name() in \[\"color\"]:\n        r,g,b = n.knob('color').getValue(0),n.knob('color').getValue(1),n.knob('color').getValue(2)\n        h,s,v = colorsys.rgb_to_hsv(r,g,b)\n        n\[\"hue\"].setValue(int(h*360))\n        n\[\"saturation\"].setValue(s)\n        n\[\"brightness\"].setValue(v)\n        rs,gs,bs = lin2srgb(r),lin2srgb(g),lin2srgb(b)\n        n\[\"tile_color\"].setValue(int('%02x%02x%02x%02x' % (rs*255,gs*255,bs*255,1),16))"
- tile_color 1
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() in \[\"hue\", \"saturation\", \"brightness\", \"color\"]:\n    import colorsys\n    \n    def lin2srgb(lin):\n        if lin > 0.0031308:\n            s = 1.055 * (pow(lin, (1.0 / 2.4))) - 0.055\n        else:\n            s = 12.92 * lin\n        return s\n    \n    if k.name() in \[\"hue\", \"saturation\", \"brightness\"]:\n        alpha = n\[\"color\"].getValue(3)\n        h = ((n\[\"hue\"].value())%360)/360\n        r,g,b = colorsys.hsv_to_rgb(h,n\[\"saturation\"].value(),n\[\"brightness\"].value())\n        rgb_color = \[r,g,b,alpha]\n        n\[\"color\"].setValue(rgb_color)\n        if r==0 and g==0 and b==0:\n            n\[\"tile_color\"].setValue(255)\n        else:\n            rs,gs,bs = lin2srgb(r),lin2srgb(g),lin2srgb(b)\n            n\[\"tile_color\"].setValue(int('%02x%02x%02x%02x' % (rs*255,gs*255,bs*255,1),16))\n        \n    if k.name() in \[\"color\"]:\n        r,g,b = n.knob('color').getValue(0),n.knob('color').getValue(1),n.knob('color').getValue(2)\n        h,s,v = colorsys.rgb_to_hsv(r,g,b)\n        n\[\"hue\"].setValue(int(h*360))\n        n\[\"saturation\"].setValue(s)\n        n\[\"brightness\"].setValue(v)\n        if r==0 and g==0 and b==0:\n            n\[\"tile_color\"].setValue(255)\n        else:\n            rs,gs,bs = lin2srgb(r),lin2srgb(g),lin2srgb(b)\n        n\[\"tile_color\"].setValue(int('%02x%02x%02x%02x' % (rs*255,gs*255,bs*255,1),16))"
+ tile_color 0xff
  note_font "Bitstream Vera Sans Bold"
  note_font_size 12
  selected true
@@ -39,7 +39,7 @@ Group {
  addUserKnob {19 color l Color}
  color {0 0 0 0}
  addUserKnob {6 color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 ""}
  addUserKnob {7 hue l Hue R 0 360}
  addUserKnob {7 saturation l Saturation}
  addUserKnob {7 brightness l Value}
@@ -79,7 +79,7 @@ Group {
   xpos -545
   ypos -227
  }
-set N639d2b00 [stack 0]
+set N34f7200 [stack 0]
  Group {
   name BBoxToFormat
   onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
@@ -127,15 +127,15 @@ set N639d2b00 [stack 0]
    xpos 295
    ypos 462
   }
-set N639cb000 [stack 0]
+set N34f5d00 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
    xpos -160
    ypos 462
   }
-set N639cac00 [stack 0]
-push $N639cb000
+set N34f5600 [stack 0]
+push $N34f5d00
   Crop {
    box {{curve} {curve} {input.width} {input.height}}
    crop {{parent.blackOutside}}
@@ -145,7 +145,7 @@ push $N639cb000
    addUserKnob {20 User}
    addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
   }
-set N639ca800 [stack 0]
+set N34f4f00 [stack 0]
   Remove {
    operation keep
    channels none
@@ -153,7 +153,7 @@ set N639ca800 [stack 0]
    xpos 120
    ypos 504
   }
-set N639ca400 [stack 0]
+set N34f4800 [stack 0]
   Transform {
    scale {{parent.overscanPercent} {parent.overscanPercent}}
    center {{input.bbox.r/2} {input.bbox.t/2}}
@@ -162,7 +162,7 @@ set N639ca400 [stack 0]
    xpos 120
    ypos 555
   }
-push $N639ca400
+push $N34f4800
   AdjBBox {
    numpixels {{parent.overscan} {parent.overscan}}
    name AdjBBox1
@@ -188,7 +188,7 @@ push $N639ca400
    ypos 647
    disable {{!parent.Crop6.intersect}}
   }
-push $N639cac00
+push $N34f5600
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -207,7 +207,7 @@ push $N639cac00
    xpos -160
    ypos 769
   }
-push $N639ca800
+push $N34f4f00
   Switch {
    inputs 2
    which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -216,13 +216,13 @@ push $N639ca800
    xpos 261
    ypos 759
   }
-set N639d1600 [stack 0]
+set Nfc184f00 [stack 0]
   Output {
    name Output1
    xpos 261
    ypos 921
   }
-push $N639d1600
+push $Nfc184f00
   NoOp {
    name OutputBBox1
    selected true
@@ -235,8 +235,8 @@ push $N639d1600
    outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
   }
  end_group
-set N639d2400 [stack 0]
-push $N639d2b00
+set N34f6b00 [stack 0]
+push $N34f7200
  Merge2 {
   inputs 2
   name Merge1
@@ -246,7 +246,7 @@ push $N639d2b00
   addUserKnob {20 TRX}
   addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "\nntn = nuke.thisNode()\nall = nuke.allNodes()\na = ntn.input(1)\nx = int(ntn\['xpos'].value())\nb = ntn.input(0)\ny = int(ntn\['ypos'].value())\nwith nuke.Root():\n    ma = nuke.nodes.NST_MergeAll()\n    ma.setXYpos(x,y)\n    # copy all values\n    ak = ntn.knobs()\n    for knoB in ma.knobs():\n      try:\n        if knoB not in \[\"name\",\"tile_color\", \"also_merge\"]:\n          ma\[knoB].setValue(ntn\[knoB].value())\n          with ma:\n            newMerge = nuke.toNode(\"MergeAllChannels\")\n            if ntn\[\"mix\"].isAnimated():\n                newMerge\[\"mix\"].copyAnimations(ntn\[\"mix\"].animations())\n            else:\n                newMerge\['mix'].setValue(ntn\['mix'].value())\n            newMerge.knob('also_merge').setValue('all')\n\n      except:\n        pass\n  \n    # try to reconnect\n    try:\n        ma.setInput(0,b);ma.setInput(1,a)\n        for one in all:\n            for i in range(one.inputs()):\n                if one.input(i) == ntn:\n                    one.setInput(i,ma)\n    except:\n        pass\n    nuke.delete(ntn)\n"}
  }
-push $N639d2400
+push $N34f6b00
  CopyBBox {
   inputs 2
   name CopyBBox1
