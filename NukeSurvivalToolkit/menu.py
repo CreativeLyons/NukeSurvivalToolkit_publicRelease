@@ -220,7 +220,7 @@ channelMenu.addCommand('ChannelCombiner TL', "nuke.createNode('{}ChannelCombiner
 channelMenu.addCommand('ChannelControl TL', "nuke.createNode('{}ChannelControl')".format(prefixNST), icon="LayerChannel.png")
 channelMenu.addCommand('ChannelCreator TL', "nuke.createNode('{}ChannelCreator')".format(prefixNST), icon="Add.png")
 channelMenu.addCommand('InjectMatteChannel TL', "nuke.createNode('{}InjectMatteChannel')".format(prefixNST), icon="ChannelMerge.png")
-
+channelMenu.addCommand('ID_Extractor TL', "nuke.createNode('{}ID_Extractor')".format(prefixNST), icon="Shuffle.png")
 
 channelMenu.addSeparator()
 
