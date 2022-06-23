@@ -4,6 +4,7 @@ Group {
  onCreate "n = nuke.thisNode()\nn\['tolerance'].setRange(0,2)\nn\['prot1_tolerance'].setFlag(0x00000004)\nn\['prot1_effect'].setFlag(0x00000004)"
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\nif kn == \"color\":\n    kv = k.getValue()\n    custom_weight_labels = \[\"green - blue\", \"red - blue\", \"red - green\", \" \"]\n    n\[\"custom_weight\"].setLabel(custom_weight_labels\[int(kv)])\n    n\[\"pick\"].setVisible(k.getValue() == 3)\nelif kn == \"mode\":\n    n\[\"custom_weight\"].setVisible(n\[\"mode\"].getValue()==3)\nelif kn in \[\"out\",\"output_alpha\"]:\n    n\[\"respill_math\"].setEnabled(n\[\"out\"].getValue()==0 or n\[\"output_alpha\"].getValue()==1)\n    n\[\"respill_color\"].setEnabled(n\[\"out\"].getValue()==0)\n    n\[\"inverted_spill_matte\"].setEnabled(n\[\"output_alpha\"].value())\nelif kn == \"prot1_activate\":\n    protA = n\[\"prot1_activate\"].value()\n    n\[\"prot1_preview\"].setEnabled(protA)\n    for i in \[\"prot1\", \"prot1_tolerance\", \"prot1_falloff\",\"prot1_effect\"]:\n        n\[i].setVisible(protA)\nelif kn == \"inputChange\":\n    n.knobs()\[\"limit_channel\"].setVisible(n.input(3) is not None)\n    n.knobs()\[\"invert_limit_channel\"].setVisible(n.input(3) is not None)\n    color_enabled = nuke.toNode(\"apDespillKernel\")\[\"apDespillKernel_use_color_input\"].getValue()==0\n    n\[\"color\"].setEnabled(color_enabled)\n    n.knobs()\[\"pick\"].setEnabled(color_enabled)\n    n\[\"info_using_input_color\"].setVisible(not color_enabled)\nelif kn == \"colorspace_shift\":\n    kv = k.value()\n    for i in \[\"colorspace_out\", \"illuminant_out\", \"primary_out\"]:\n        n.knobs()\[i].setEnabled(kv)\n    for i in \[\"colorspace_in\", \"illuminant_in\", \"primary_in\"]:\n        n.knobs()\[i].setEnabled(kv and n\[\"input_colorspace\"].value())\n    n\[\"input_colorspace\"].setEnabled(kv)\nelif kn == \"input_colorspace\":\n    kv = k.value()\n    for i in \[\"colorspace_in\", \"illuminant_in\", \"primary_in\"]:\n        n.knobs()\[i].setVisible(kv)\n        n.knobs()\[i].setEnabled(kv)\nelif kn == \"imagebased\":\n    kv = k.value()\n    input_names = \[\"color\",\"limit\",\"respill\"]\n    if kv:\n        for i_name in input_names:\n            i_fullname = \"Input\"+i_name\n            if not nuke.exists(i_fullname):\n                i_node = nuke.nodes.Input()\n                i_node\[\"name\"].setValue(i_fullname)\n            else:\n                i_node = nuke.toNode(i_fullname)\n            dot = nuke.toNode(\"Dot\"+i_name)\n            i_node.setXYpos(dot.xpos(),dot.ypos()-40)\n            dot.setInput(0,i_node)\n    else:\n        # If something connected, do nothing\n        if not any(\[n.input(i) for i in \[2,3,4]]):\n            for i_name in input_names:\n                if nuke.exists(\"Input\"+i_name):\n                    nuke.delete(nuke.toNode(\"Input\"+i_name))\n        else:\n            k.setValue(True)"
  tile_color 0x8b8b8bff
+ selected true
  addUserKnob {20 apDespill}
  addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 imagebased l image-based t "Show or hide image-based inputs.\n\nThis doesn't change anything internally except hiding inputs, just to avoid intimidating arrows on the node graph.\n\nNote: While any image-based input is connected, this won't let you hide them." +STARTLINE}
@@ -15,6 +16,7 @@ Group {
  addUserKnob {18 pick t "Pick the color you'd like to use for the despill. \n\nPlease use ctrl/cmd+alt+click for picking.\n\nNOTE: If a despill color image input is plugged, this value will be ignored."}
  pick {0 1 0}
  addUserKnob {6 pick_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 pick_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 dfg_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {4 out l output t "Quick switch to output the despilled image or the substracted one." M {despill spill}}
  addUserKnob {6 output_alpha l "output spill matte in alpha" t "Output the spill luminance in the alpha channel." +STARTLINE}
@@ -46,6 +48,7 @@ Group {
  addUserKnob {18 prot1 l protect t "Pick the central hue to protect.\n(ctrl/cmd+alt+click)" +HIDDEN}
  prot1 {0 0 0}
  addUserKnob {6 prot1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 prot1_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {7 prot1_tolerance l tolerance t "Amount of hues to include in the selection." +HIDDEN}
  prot1_tolerance 0.2
  addUserKnob {7 prot1_falloff l falloff t "Falloff for the hue selection. A higher falloff will make hues apart from the picked one lose weight more quickly." +HIDDEN R 0 4}
@@ -57,6 +60,7 @@ Group {
  addUserKnob {18 respill_color l "respill color" t "RGB multiplier for the desaturated spill when adding it back.\n\nIf used on non-degrained plates (which should be avoided anyway), any value other than 1 here will most likely produce grain artifacts.\n\nNOTE: If a respill image input is plugged, this value will act as a multiplier." R 0 4}
  respill_color 1
  addUserKnob {6 respill_color_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 respill_color_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {26 ""}
  addUserKnob {41 maskChannelMask l mask T Merge.maskChannelMask}
  addUserKnob {41 inject -STARTLINE T Merge.inject}
@@ -69,21 +73,60 @@ Group {
   inputs 0
   name Inputmask
   xpos 273
-  ypos -370
+  ypos -250
   number 1
  }
  Dot {
   name Dot1
   note_font_size 41
   xpos 307
-  ypos -267
+  ypos -147
  }
-set Nc9474c00 [stack 0]
+set Nc6c65d00 [stack 0]
  Dot {
   name Dot5
   note_font_size 41
   xpos 307
-  ypos -237
+  ypos -117
+ }
+ Input {
+  inputs 0
+  name Inputimage
+  xpos 449
+  ypos -949
+ }
+set Nc6c64f00 [stack 0]
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos 788
+  ypos -877
+ }
+ Dot {
+  name Dot6
+  xpos 788
+  ypos -814
+ }
+set Nc6c64100 [stack 0]
+ Expression {
+  temp_name0 minval
+  temp_expr0 min(r,g,b)
+  temp_name1 lift
+  temp_expr1 minval<0
+  expr0 lift?r+abs(minval):r
+  expr1 lift?g+abs(minval):g
+  expr2 lift?b+abs(minval):b
+  expr3 lift?abs(minval):0
+  name Expression1
+  xpos 617
+  ypos -778
+ }
+set Nc6c5b900 [stack 0]
+ Dot {
+  name Dot7
+  selected true
+  xpos 651
+  ypos -256
  }
  Dot {
   inputs 0
@@ -124,26 +167,27 @@ set Nc9474c00 [stack 0]
   ypos -732
  }
  Shuffle {
-  red red
-  green green
-  blue blue
-  alpha alpha
+  red black
+  green black
+  blue black
+  alpha black
   name Shuffle_limit
+  label "\[value in]"
   xpos 902
   ypos -670
  }
- Input {
-  inputs 0
-  name Inputimage
-  xpos 449
-  ypos -761
- }
-set Nb8c4b800 [stack 0]
- Dot {
-  name Dot2
-  note_font_size 41
-  xpos 788
-  ypos -758
+push $Nc6c5b900
+push $Nc6c64100
+ Shuffle2 {
+  inputs 2
+  fromInput1 {{1} B A}
+  fromInput2 {{0} B A}
+  in2 rgba
+  mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.blue 0 2 rgba.alpha 1 3 rgba.alpha 0 3"
+  name Shuffle1
+  label "\[value in1]"
+  xpos 754
+  ypos -774
  }
  Shuffle {
   alpha black
@@ -170,7 +214,7 @@ set Nb8c4b800 [stack 0]
   name Colorspace1
   label "\[value colorspace_in] >> \[value colorspace_out]"
   xpos 754
-  ypos -544
+  ypos -557
   disable {{!parent.colorspace_shift}}
  }
  Log2Lin {
@@ -235,22 +279,32 @@ set Nb8c4b800 [stack 0]
   ypos -354
   disable {{!parent.colorspace_shift}}
  }
+ MergeExpression {
+  inputs 2
+  expr0 Br-Aa
+  expr1 Bg-Aa
+  expr2 Bb-Aa
+  name MergeExpression1
+  selected true
+  xpos 754
+  ypos -238
+ }
  Dot {
   name Dot3
   note_font_size 41
   xpos 788
-  ypos -267
+  ypos -147
  }
-set Nc9772800 [stack 0]
+set Nc6bf3200 [stack 0]
  Dot {
   name Dot4
   note_font_size 41
   xpos 788
-  ypos -237
+  ypos -117
  }
-push $Nc9474c00
-push $Nc9772800
-push $Nb8c4b800
+push $Nc6c65d00
+push $Nc6bf3200
+push $Nc6c64f00
  Merge2 {
   inputs 2+1
   operation copy
@@ -260,7 +314,7 @@ push $Nb8c4b800
   output {rgba.red rgba.green rgba.blue -rgba.alpha}
   name Merge
   xpos 449
-  ypos -270
+  ypos -150
  }
  Copy {
   inputs 2+1
@@ -274,12 +328,12 @@ push $Nb8c4b800
   fringe {{parent.Merge.fringe}}
   name CopyAlpha
   xpos 449
-  ypos -246
+  ypos -126
   disable {{!parent.output_alpha}}
  }
  Output {
   name Output
   xpos 449
-  ypos -166
+  ypos -46
  }
 end_group
