@@ -1,0 +1,64 @@
+Group {
+ name ID_Extractor
+ tile_color 0x3d3d3dff
+ label "<big><font color=\"white\">\[value Achannels]\n<font color=\"Red\">\[value Red]\n<font color=\"Green\">\[value Green]\n<font color=\"royal blue\">\[value Blue]"
+ note_font "Verdana Bold"
+ note_font_color 0xb8d2dfff
+ selected true
+ addUserKnob {20 ID_Extract}
+ addUserKnob {41 Achannels l "ID channel" t "Pick the layer you want to extract from" T ID2.Achannels}
+ addUserKnob {26 text l " " T "<font color = gray>Name your channels something:"}
+ addUserKnob {1 Red l "<font color = orangered>Red" t "Enter a name for your red channel"}
+ addUserKnob {1 Green l "<font color = limegreen>Green" t "Enter a name for your green channel"}
+ addUserKnob {1 Blue l "<font color = dodgerblue>Blue" t "Enter a name for your blue channel"}
+ addUserKnob {26 text_1 l " " T "<font color = gray>Extract your channels into Stamps:"}
+ addUserKnob {22 extractRed l "<font color = orangered>Extract Red" t "Extract Red Channel into Stamp" T "import NST_ID_Extractor\nNST_ID_Extractor.extractRed()" +STARTLINE}
+ addUserKnob {22 extractGreen l " <font color = limegreen>Extract Green" t "Extract Blue Channel into Stamp" -STARTLINE T "import NST_ID_Extractor\nNST_ID_Extractor.extractGreen()"}
+ addUserKnob {22 extractBlue l "<font color = dodgerblue>Extract Blue" t "Extract Blue Channel into Stamp" -STARTLINE T "import NST_ID_Extractor\nNST_ID_Extractor.extractBlue()"}
+ addUserKnob {26 ""}
+ addUserKnob {22 extractAll l "<big><font color = limegreen>Extract All" t "Extract all 3 Channels at once" T "import NST_ID_Extractor\nNST_ID_Extractor.extractAll()" +STARTLINE}
+ addUserKnob {22 set l "<big><font color = skyblue>Set Names" t "Reset the names of Existing Stamp outputs" -STARTLINE T "import NST_ID_Extractor\nNST_ID_Extractor.set()"}
+ addUserKnob {22 reset l "<font color = orange><big>Clear Names" t "Clear all 3 name text input fields" -STARTLINE T "import NST_ID_Extractor\nNST_ID_Extractor.reset()"}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -576
+  ypos -418
+ }
+ Dot {
+  name Dot1
+  xpos -542
+  ypos -354
+ }
+set N4be96400 [stack 0]
+push $N4be96400
+ Dot {
+  name Dot2
+  xpos -667
+  ypos -354
+ }
+ Remove {
+  name Remove1
+  xpos -701
+  ypos -209
+ }
+ Merge2 {
+  inputs 2
+  Achannels rgb
+  Bchannels none
+  output rgb
+  name ID2
+  tile_color 0xffffffff
+  label "R=\[value Red]\nG=\[value Green]\nB=\[value Blue]\nframe \[value postage_stamp_frame]"
+  note_font_size 15
+  xpos -576
+  ypos -234
+  postage_stamp_frame 1001
+ }
+ Output {
+  name Output1
+  xpos -576
+  ypos -124
+ }
+end_group
