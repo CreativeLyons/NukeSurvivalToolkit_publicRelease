@@ -365,7 +365,7 @@ push $N69491b50
   box {0 0 {input.width} {input.height}}
   softness {{"\[python nuke.value(\"%s.pixel_aspect\" % nuke.thisNode().name())]"}}
   name Crop1
-  knobChanged "a = nuke.thisNode()\naspectratio = a\['box_pixel_aspect'].value()\nprint aspectratio"
+  knobChanged "a = nuke.thisNode()\naspectratio = a\['box_pixel_aspect'].value()\nprint(aspectratio)"
   xpos 487
   ypos -207
  }
