@@ -1,13 +1,11 @@
-set cut_paste_input [stack 0]
-push $cut_paste_input
 Group {
  name PlanarProjection
  help "<b>Planar Projection</b>\nGenerates 2D coordinates for points in 3D space. Type in 3D point coordinates, or use vertex selection in 3D viewer and click set to pick average of selected points, or set points to set all four points at once. \n\nYou can connect node output to scene together with your pointcloud or geometry and see where your points are located in 3d space. Double click any of them to move it in 3d space like any traditional nuke transform control. \n\nA matrix transform is also generated to be used with RotoPaint, SplineWarp and GridWarp nodes. If you are using matrix in GridWarp, points have to be in clockwise order, pick them one by one! \n\nCommand set points doesn't respect selection order! \n\nCheck out the demo video on my website! Kudos to Ivan Busquets for help with matrix math. \n\n-- developed by Vit Sedlacek 2012 www.vitsedlacek.com \n\n-- Modified by Jed Smith to make calculation time nearly instantaneous, fix some bugs and create a BG input so that the sampled format could be easily specified instead of using nuke.root() format. Also enabled animated 3d input points, and added some functionality in the set knobs to snarf data from axis nodes.\nhttp://gist.github.com/jedypod"
+ selected true
  addUserKnob {20 PlanarProjection}
  addUserKnob {26 ""}
  addUserKnob {26 usage_label_header l " " T "<font size=4>\n<b>Input 3D Positions</b>"}
  addUserKnob {20 usage_label_grp l "       help" n 1}
- usage_label_grp 0
  addUserKnob {26 usage_label l " " T "<font size=3>\nSelect any number of points in the 3D view, in vertex selection mode.<br/>\n<b>Set from Selection</b>: 4 points will be set based on the selection bounds.<br/>\n<b>Set from Axes</b>: Gets position from 4 axis nodes with or without animation.<br/>\n<b>Set Animated</b>: Set the target point. For animated geometry.<br/>\n<b>Set Point</b>: Set point from vertex selection. If no vertex selection,<br/>\n set from selected Axis. If no axis, set from selected pixel value (for PWorld).<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"}
  addUserKnob {20 endGroup n -1}
  addUserKnob {22 set_from_selection l "Set from Selection" t "Set value of all points If Axis nodes are selected, it grabs translate values from them. If not, the first 4 selected vertexes in the 3D viewport is used instead. " T "## Set points to selected\nfrom __future__ import with_statement\nfrom nukescripts import snap3d as sn\n\n\nnode = nuke.thisNode()\nnode.begin()\nmatch_sel = nuke.toNode('_MATCH_SELECTION_')\n\nsn.translateRotateScaleToPoints(match_sel)\n\naxes = \[nuke.toNode('LL'), nuke.toNode('LR'), nuke.toNode('UR'), nuke.toNode('UL')]\nfor i, axis in enumerate(axes):\n    matrix = axis\['world_matrix']\n    translate = \[matrix.getValue(3), matrix.getValue(7), matrix.getValue(11)]\n    node\['ip\{0\}'.format(i+1)].setValue(translate)" +STARTLINE}
@@ -40,7 +38,7 @@ Group {
  addUserKnob {41 matrix t "Calculated matrix." T Matrix_original.matrix}
  addUserKnob {26 identity_frame_label l " " T "\nIdentity Frame"}
  addUserKnob {3 identity_frame l " " t "If a frame is specified here, the matrix calculated will be relative to this frame. On the reference frame the matrix will be a null transformation."}
- identity_frame {1001}
+ identity_frame 1001
  addUserKnob {22 set_current l Current -STARTLINE T nuke.thisNode().knob('identity_frame').setValue(nuke.frame())}
  addUserKnob {26 ""}
  addUserKnob {26 link_tracking_label l " " T "<font size=4><b>Link Tracking Data to Nodes</b>"}
@@ -122,28 +120,28 @@ Group {
   addUserKnob {7 plane_size l "" +STARTLINE R 0.1 100}
   plane_size 1
  }
-set N3193a750 [stack 0]
+set Ne36e6400 [stack 0]
  Axis2 {
   translate {{parent.CENTER.plane_size/2} {parent.CENTER.plane_size/2} 0}
   name UR
   xpos -131
   ypos 222
  }
-push $N3193a750
+push $Ne36e6400
  Axis2 {
   translate {{-parent.CENTER.plane_size/2} {parent.CENTER.plane_size/2} 0}
   name UL
   xpos -23
   ypos 222
  }
-push $N3193a750
+push $Ne36e6400
  Axis2 {
   translate {{parent.CENTER.plane_size/2} {-parent.CENTER.plane_size/2} 0}
   name LR
   xpos -241
   ypos 222
  }
-push $N3193a750
+push $Ne36e6400
  Axis2 {
   translate {{-parent.CENTER.plane_size/2} {-parent.CENTER.plane_size/2} 0}
   name LL

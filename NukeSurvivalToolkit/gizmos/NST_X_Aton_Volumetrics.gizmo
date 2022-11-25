@@ -1,5 +1,5 @@
 Group {
- name X_Aton_Volumetrics
+ name NST_X_Aton_Volumetrics
  knobChanged "n = nuke.thisNode()\nif n\[\"use_3d\"].value()==1:\n    n\[\"center\"].setEnabled(False)\nelse:\n    n\[\"center\"].setEnabled(True)\nn\[\"iterations\"].setValue(int(n\[\"iterations\"].value()))\nif n\[\"mode\"].value()==\"Diffuse\":\n    n\[\"diffuse\"].setEnabled(True)\nelse:\n    n\[\"diffuse\"].setEnabled(False)\nn\[\"diffuse\"].setValue(max(n\[\"diffuse\"].value(),0))\nn\[\"iterations\"].setValue(max(n\[\"iterations\"].value(),1))"
  tile_color 0xcc804eff
  note_font_color 0xffffffff
