@@ -287,7 +287,7 @@ Merge2 {
  xpos 581
  ypos -158
 }
-X_Aton_Volumetrics {
+NST_X_Aton_Volumetrics {
  inputs 3
  name X_Aton1
  xpos 581
@@ -518,7 +518,7 @@ Crop {
  xpos 1715
  ypos -328
 }
-X_Aton_Volumetrics {
+NST_X_Aton_Volumetrics {
  inputs 3
  name X_Aton2
  xpos 1715
@@ -962,7 +962,7 @@ Dot {
  ypos 249
 }
 set N51f83400 [stack 0]
-X_Aton_Volumetrics {
+NST_X_Aton_Volumetrics {
  inputs 3
  name X_Aton4
  xpos 3025
@@ -978,7 +978,7 @@ X_Aton_Volumetrics {
 push $N36b9400
 push $N36b8c00
 push $N51f83400
-X_Aton_Volumetrics {
+NST_X_Aton_Volumetrics {
  inputs 3
  name X_Aton5
  xpos 3154
