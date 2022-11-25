@@ -31,7 +31,7 @@ def J_VTT_Track(first, last, pb = True):
     forward = last > first
 
     #get number of frames
-    totalFrames = max(first, last) - min(first, last)
+    totalFrames = int(max(first, last) - min(first, last))
 
     #check vector type
     if vectors is not None:
@@ -84,9 +84,9 @@ def J_VTT_Track(first, last, pb = True):
 
         #set frame list
         if forward:
-            rangeList = xrange(first, last+1)
+            rangeList = range(first, last+1)
         else:
-            rangeList = reversed(xrange(last, first+1))
+            rangeList = reversed(range(last, first+1))
 
         #set up pogress window
         if pb:
@@ -238,7 +238,7 @@ def J_VTT_Export():
                     last = int(keys[len(keys)-1].x)
 
                     #set value at each frame
-                    framerange = xrange(first, last+1)
+                    framerange = range(first, last+1)
                     for frame in framerange:
                         #check if current frame is tracked before setting key
                         if tracker.isKeyAt(frame):
