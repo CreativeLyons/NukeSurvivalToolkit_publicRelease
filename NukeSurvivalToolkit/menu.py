@@ -475,7 +475,13 @@ transformMenu.addCommand('InverseMatrix4x4 MJT', "nuke.createNode('{}InverseMatr
 
 transformMenu.addSeparator()
 
-transformMenu.addCommand('CardToTrack AK', "nuke.createNode('{}CardToTrack')".format(prefixNST), icon='Card.png')
+try:
+    import NST_cardToTrack
+    transformMenu.addCommand('CardToTrack AK', "nuke.createNode('{}CardToTrack')".format(prefixNST), icon='Card.png')
+except:
+    print("Could not load NST_cardToTrack.py")
+    pass
+
 transformMenu.addCommand('CProject AK', "nuke.createNode('{}CProject')".format(prefixNST), icon='CornerPin.png')
 transformMenu.addCommand('TProject AK', "nuke.createNode('{}TProject')".format(prefixNST), icon='Transform.png')
 
