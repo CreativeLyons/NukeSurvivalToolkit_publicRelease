@@ -1,0 +1,8932 @@
+Group {
+name SkyMatte
+tile_color 0x3c9cd8ff
+note_font "Bitstream Vera Sans Bold"
+note_font_color 0xffffffff
+selected true
+addUserKnob {20 SkyMatteINGI l "Sky MatteINGI"}
+addUserKnob {41 type l Channel T channelstype.type}
+addUserKnob {7 bpmin l Blackpoint t "Set like a normal blackpoint from a keyer, there is no whitepoint to set however." R 0.0005 1}
+bpmin 0.15
+addUserKnob {6 inverted l Invert +STARTLINE}
+inverted true
+addUserKnob {26 Slices}
+addUserKnob {41 on l "(RGB)Preview Slices" t "RGB only" T showslices.on}
+addUserKnob {7 previewgamma l /Gamma t "Gamma of the plate under the red slices." -STARTLINE}
+previewgamma 1.8
+addUserKnob {7 previewgain l Gain t "Gain of the plate under the red slices." -STARTLINE}
+previewgain 0.15
+addUserKnob {7 spread l Spread t "Keep as low as possible (more precision). If you are missing slices in the higher values increase the value to spread them." R 0.002 1}
+spread 0.1
+addUserKnob {26 Refine}
+addUserKnob {7 offsets l offset t "Repeats the process 4 times with slight offsets to make the slices seamless. The bigger the value, the more different each repetition is." R 0 0.4}
+offsets 0.03
+addUserKnob {26 alert l "" -STARTLINE T "0=No refine"}
+addUserKnob {4 refine t "Depends on offset. Min offers higher precision but can have lines appearing, average is smoother." M {Min Average ""}}
+refine Average
+addUserKnob {26 Contrast}
+addUserKnob {41 blackpoint T Contrastpost.blackpoint}
+addUserKnob {41 whitepoint T Contrastpost.whitepoint}
+addUserKnob {26 ""}
+addUserKnob {26 "" l mask T ""}
+addUserKnob {41 maskChannelMask l "" -STARTLINE T Merge11.maskChannelMask}
+addUserKnob {41 inject -STARTLINE T Merge11.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T Merge11.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Merge11.fringe}
+addUserKnob {41 mix T Merge11.mix}
+addUserKnob {26 _1 l "" +STARTLINE T "<span style=\"color:#666\"><br/><b>Sky Matte INGI V1</b> by Corentin Fievet </span>"}
+}
+BackdropNode {
+inputs 0
+name BackdropNode1
+tile_color 0x332d6801
+note_font "Helvetica Bold"
+note_font_size 20
+xpos -1179
+ypos -726
+bookmark false
+bdwidth 611
+bdheight 396
+}
+BackdropNode {
+inputs 0
+name BackdropNode2
+tile_color 0x35543a01
+note_font "Helvetica Bold"
+note_font_size 20
+xpos 126
+ypos 301
+bookmark false
+bdwidth 388
+bdheight 322
+}
+BackdropNode {
+inputs 0
+name BackdropNode3
+tile_color 0x664c6d01
+note_font "Helvetica Bold"
+note_font_size 50
+xpos -1253
+ypos 57
+bookmark false
+bdwidth 1305
+bdheight 556
+}
+BackdropNode {
+inputs 0
+name BackdropNode4
+tile_color 0x663d6801
+note_font "Helvetica Bold"
+note_font_size 50
+xpos 3904
+ypos 3942
+bookmark false
+bdwidth 534
+bdheight 629
+}
+StickyNote {
+inputs 0
+name StickyNote1
+tile_color 0xffffffff
+label "<b>Channels                ."
+note_font "Helvetica Bold"
+note_font_size 20
+xpos -1179
+ypos -765
+}
+StickyNote {
+inputs 0
+name StickyNote2
+tile_color 0xffffffff
+label "<b>edgefix                ."
+note_font "Helvetica Bold"
+note_font_size 20
+xpos 126
+ypos 263
+}
+StickyNote {
+inputs 0
+name StickyNote3
+tile_color 0xffffffff
+label "<b>Slice_prep                ."
+note_font "Helvetica Bold"
+note_font_size 50
+xpos -1253
+ypos -13
+}
+StickyNote {
+inputs 0
+name StickyNote4
+tile_color 0xffffffff
+label "<b>Preview Slices                ."
+note_font "Helvetica Bold"
+note_font_size 50
+xpos 3904
+ypos 3872
+}
+Input {
+inputs 0
+name mask
+xpos 3916
+ypos 5739
+number 1
+}
+Input {
+inputs 0
+name Input
+xpos -832
+ypos -1060
+}
+Remove {
+operation keep
+channels rgb
+name Remove2
+xpos -832
+ypos -993
+}
+Dot {
+name Dot78
+xpos -798
+ypos -944
+}
+set N3bfdb200 [stack 0]
+Reformat {
+type scale
+resize none
+name Reformat1
+xpos -832
+ypos -670
+}
+Dot {
+name Dot23
+xpos -798
+ypos -578
+}
+set N3bfda400 [stack 0]
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle5
+label "\[value in]"
+xpos -680
+ypos -505
+}
+push $N3bfda400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle1
+label "\[value in]"
+xpos -790
+ypos -501
+}
+push $N3bfda400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle2
+label "\[value in]"
+xpos -885
+ypos -506
+}
+push $N3bfda400
+Saturation {
+saturation 0
+name Saturation1
+xpos -991
+ypos -522
+}
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle41
+label "\[value in]"
+xpos -991
+ypos -494
+}
+Switch {
+inputs 4
+which {{parent.channelstype.type}}
+name Switch2
+label "\[value which]"
+xpos -826
+ypos -403
+}
+Reformat {
+type scale
+resize none
+name Reformat2
+xpos -826
+ypos -158
+}
+Clamp {
+channels rgba
+maximum {{parent.ControlsD.thirty}}
+name Clamp2
+xpos -826
+ypos -117
+}
+set N3bf9eb00 [stack 0]
+Dot {
+name Dot52
+xpos -1855
+ypos -112
+}
+Dot {
+name Dot68
+xpos -1850
+ypos 946
+}
+push $N3bf9eb00
+Dot {
+name Dot60
+xpos 318
+ypos -118
+}
+Shuffle {
+red white
+green white
+blue white
+alpha white
+name Shuffle4
+label "\[value in]"
+xpos 284
+ypos 386
+}
+set N3bf87200 [stack 0]
+Transform {
+translate {0 {parent.Main_dilate.size*-2}}
+center {1112 774}
+shutteroffset centred
+name Transform4
+xpos 419
+ypos 460
+}
+push $N3bf87200
+Transform {
+translate {0 {parent.Main_dilate.size*2}}
+center {1112 774}
+shutteroffset centred
+name Transform3
+xpos 333
+ypos 461
+}
+push 0
+push $N3bf87200
+Transform {
+translate {{parent.Main_dilate.size*2} 0}
+center {1112 774}
+shutteroffset centred
+name Transform1
+xpos 138
+ypos 464
+}
+push $N3bf87200
+Transform {
+translate {{parent.Main_dilate.size*-2} 0}
+center {1112 774}
+shutteroffset centred
+name Transform2
+xpos 234
+ypos 460
+}
+Merge2 {
+inputs 4+1
+operation min
+name Merge1
+xpos 279
+ypos 520
+}
+Blur {
+channels rgba
+size {{parent.Transform1.translate.x*0.5}}
+name Blur1
+label "\[value size]"
+xpos 279
+ypos 548
+}
+Dot {
+name Dot2
+xpos 313
+ypos 771
+}
+push $N3bf9eb00
+Dot {
+name Dot12
+xpos -792
+ypos 142
+}
+set N3bf53900 [stack 0]
+Dot {
+name Dot36
+xpos -291
+ypos 142
+}
+set N3bf53200 [stack 0]
+Dilate {
+channels rgba
+size {{parent.Dilate1.size/2}}
+name Dilate4
+xpos -112
+ypos 256
+}
+Dot {
+name Dot77
+xpos -78
+ypos 552
+}
+push $N3bf53900
+Dot {
+name Dot34
+xpos -1115
+ypos 142
+}
+set N3bf51d00 [stack 0]
+Grade {
+channels rgba
+blackpoint {{parent.Controls1.min*8}}
+whitepoint {{parent.Controls1.min*16}}
+white_clamp true
+name Grade14
+xpos -1243
+ypos 484
+}
+push $N3bf53200
+Dilate {
+channels rgba
+size {{parent.Main_dilate.size*0.4}}
+name Dilate1
+xpos -215
+ypos 255
+}
+Dot {
+name Dot24
+xpos -181
+ypos 489
+}
+push $N3bf51d00
+Grade {
+channels rgba
+blackpoint {{parent.Controls1.min*4}}
+whitepoint {{parent.Controls1.min*8}}
+white_clamp true
+name Grade13
+xpos -1124
+ypos 435
+}
+push $N3bf53200
+Dilate {
+channels rgba
+size {{parent.Main_dilate.size*0.7}}
+name Dilate2
+xpos -325
+ypos 253
+}
+Dot {
+name Dot61
+xpos -291
+ypos 440
+}
+push $N3bf51d00
+Grade {
+channels rgba
+blackpoint {{parent.Controls1.min*2}}
+whitepoint {{parent.Controls1.min*4}}
+white_clamp true
+name Grade12
+xpos -1026
+ypos 385
+}
+push $N3bf53200
+Dilate {
+channels rgba
+size {{width/88.9}}
+name Main_dilate
+xpos -425
+ypos 253
+}
+Dot {
+name Dot62
+xpos -391
+ypos 390
+}
+push $N3bf51d00
+Grade {
+channels rgba
+blackpoint {{parent.Controls1.min}}
+whitepoint {{parent.Controls1.min*2}}
+white_clamp true
+name Grade11
+xpos -949
+ypos 324
+}
+push $N3bf53200
+Dilate {
+channels rgba
+size {{parent.Main_dilate.size*1.5}}
+name Dilate3
+xpos -525
+ypos 256
+}
+Dot {
+name Dot85
+xpos -491
+ypos 329
+}
+push $N3bf53200
+Dilate {
+channels rgba
+size {{parent.Main_dilate.size*2}}
+name Dilate5
+xpos -639
+ypos 256
+}
+Merge2 {
+inputs 2+1
+operation copy
+name Merge2
+xpos -796
+ypos 324
+}
+Merge2 {
+inputs 2+1
+operation copy
+name Merge3
+xpos -796
+ypos 385
+}
+Merge2 {
+inputs 2+1
+operation copy
+name Merge4
+xpos -796
+ypos 435
+}
+Merge2 {
+inputs 2+1
+operation copy
+name Merge5
+xpos -796
+ypos 484
+}
+Keymix {
+inputs 3
+channels rgba
+invertMask true
+name Keymix1
+xpos -565
+ypos 766
+}
+Blur {
+channels rgba
+size {{parent.Main_dilate.size}}
+name Blur14
+label "\[value size]"
+xpos -565
+ypos 806
+}
+Reformat {
+type scale
+resize none
+name Reformat3
+xpos -565
+ypos 848
+}
+Input {
+inputs 0
+name CleanPlateOptional
+xpos -710
+ypos 896
+number 2
+}
+Switch {
+inputs 2
+which {{"!\[exists parent.input2]"}}
+name SwitchDefault
+xpos -565
+ypos 896
+}
+add_layer {input input.red input.green input.blue input.alpha}
+ShuffleCopy {
+inputs 2
+red red
+green green
+blue blue
+out input
+name ShuffleCopy1
+xpos -565
+ypos 944
+}
+Dot {
+name Dot1
+xpos -531
+ypos 998
+}
+set N3beaeb00 [stack 0]
+Shuffle {
+in input
+name Shuffle30
+label "\[value in]"
+xpos -1594
+ypos 1743
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.ControlsA.one*0.9} {parent.ControlsB.one*0.9} {parent.ControlsC.one*0.9} {parent.ControlsD.one*0.9}}
+white_clamp true
+name Grade60
+xpos -1594
+ypos 1785
+}
+push $N3beaeb00
+Dot {
+name Dot17
+xpos -1397
+ypos 1700
+}
+set N6766a400 [stack 0]
+Shuffle {
+in input
+name Shuffle29
+label "\[value in]"
+xpos -1479
+ypos 1746
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice.whitepoint} {parent.slice.whitepoint} {parent.slice.whitepoint} {parent.slice.whitepoint}}
+white_clamp true
+name Grade59
+xpos -1479
+ypos 1824
+addUserKnob {20 User}
+}
+push $N6766a400
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice
+xpos -1386
+ypos 1773
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus one
+addUserKnob {1 number}
+number two
+}
+Dot {
+name Dot16
+xpos -1349
+ypos 1820
+}
+Group {
+inputs 3
+name MultiMaskKeyMix22
+tile_color 0x495bc4ff
+xpos -1479
+ypos 1880
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N6764cf00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N67637900 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N67636400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N6764cf00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N67637900
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N67636400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N6764cf00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N67637900
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N67636400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N6764cf00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N67637900
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N67636400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3beaeb00
+Dot {
+name Dot18
+xpos -1216
+ypos 1798
+}
+set N675cdd00 [stack 0]
+Shuffle {
+in input
+name Shuffle28
+label "\[value in]"
+xpos -1323
+ypos 1834
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice2.whitepoint} {parent.slice2.whitepoint} {parent.slice2.whitepoint} {parent.slice2.whitepoint}}
+white_clamp true
+name Grade58
+xpos -1323
+ypos 1915
+addUserKnob {20 User}
+}
+push $N675cdd00
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice2
+xpos -1227
+ypos 1853
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus two
+addUserKnob {1 number}
+number three
+}
+Dot {
+name Dot15
+xpos -1193
+ypos 1908
+}
+Group {
+inputs 3
+name MultiMaskKeyMix21
+tile_color 0x495bc4ff
+xpos -1323
+ypos 1968
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N675a4800 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N6758f200 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N6758dd00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N675a4800
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N6758f200
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N6758dd00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N675a4800
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N6758f200
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N6758dd00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N675a4800
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N6758f200
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N6758dd00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3beaeb00
+Dot {
+name Dot19
+xpos -1060
+ypos 1916
+}
+set N67521600 [stack 0]
+Shuffle {
+in input
+name Shuffle27
+label "\[value in]"
+xpos -1174
+ypos 1952
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice3.whitepoint} {parent.slice3.whitepoint} {parent.slice3.whitepoint} {parent.slice3.whitepoint}}
+white_clamp true
+name Grade57
+xpos -1174
+ypos 2032
+addUserKnob {20 User}
+}
+push $N67521600
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice3
+xpos -1078
+ypos 1974
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus three
+addUserKnob {1 number}
+number four
+}
+Dot {
+name Dot14
+xpos -1044
+ypos 2026
+}
+Group {
+inputs 3
+name MultiMaskKeyMix20
+tile_color 0x495bc4ff
+xpos -1174
+ypos 2086
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N674f0100 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N674e2b00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N674e1600 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N674f0100
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N674e2b00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N674e1600
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N674f0100
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N674e2b00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N674e1600
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N674f0100
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N674e2b00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N674e1600
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3beaeb00
+Dot {
+name Dot22
+xpos -899
+ypos 1988
+}
+set N6748cf00 [stack 0]
+Shuffle {
+in input
+name Shuffle26
+label "\[value in]"
+xpos -1009
+ypos 2026
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice4.whitepoint} {parent.slice4.whitepoint} {parent.slice4.whitepoint} {parent.slice4.whitepoint}}
+white_clamp true
+name Grade56
+xpos -1009
+ypos 2108
+addUserKnob {20 User}
+}
+push $N6748cf00
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice4
+xpos -913
+ypos 2046
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus four
+addUserKnob {1 number}
+number five
+}
+Dot {
+name Dot13
+xpos -879
+ypos 2100
+}
+Group {
+inputs 3
+name MultiMaskKeyMix19
+tile_color 0x495bc4ff
+xpos -1009
+ypos 2160
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N6743b900 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N6743a400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N67438f00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N6743b900
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N6743a400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N67438f00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N6743b900
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N6743a400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N67438f00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N6743b900
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N6743a400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N67438f00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3beaeb00
+Dot {
+name Dot21
+xpos -741
+ypos 2082
+}
+set N673e0800 [stack 0]
+Shuffle {
+in input
+name Shuffle25
+label "\[value in]"
+xpos -837
+ypos 2125
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice5.whitepoint} {parent.slice5.whitepoint} {parent.slice5.whitepoint} {parent.slice5.whitepoint}}
+white_clamp true
+name Grade55
+xpos -837
+ypos 2207
+addUserKnob {20 User}
+}
+push $N673e0800
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice5
+xpos -741
+ypos 2147
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus five
+addUserKnob {1 number}
+number six
+}
+Dot {
+name Dot11
+xpos -707
+ypos 2200
+}
+Group {
+inputs 3
+name MultiMaskKeyMix18
+tile_color 0x495bc4ff
+xpos -837
+ypos 2260
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N67393200 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N67391d00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N67390800 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N67393200
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N67391d00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N67390800
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N67393200
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N67391d00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N67390800
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N67393200
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N67391d00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N67390800
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3beaeb00
+Dot {
+name Dot20
+xpos -579
+ypos 2181
+}
+set N6733c100 [stack 0]
+Shuffle {
+in input
+name Shuffle24
+label "\[value in]"
+xpos -676
+ypos 2216
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice6.whitepoint} {parent.slice6.whitepoint} {parent.slice6.whitepoint} {parent.slice6.whitepoint}}
+white_clamp true
+name Grade54
+xpos -676
+ypos 2294
+addUserKnob {20 User}
+}
+push $N6733c100
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice6
+xpos -580
+ypos 2231
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus six
+addUserKnob {1 number}
+number seven
+}
+Dot {
+name Dot10
+xpos -546
+ypos 2288
+}
+Group {
+inputs 3
+name MultiMaskKeyMix17
+tile_color 0x495bc4ff
+xpos -676
+ypos 2348
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N672eab00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N672e9600 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N672e8100 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N672eab00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N672e9600
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N672e8100
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N672eab00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N672e9600
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N672e8100
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N672eab00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N672e9600
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N672e8100
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3beaeb00
+Dot {
+name Dot25
+xpos -417
+ypos 2241
+}
+set N3ff8f900 [stack 0]
+Shuffle {
+in input
+name Shuffle23
+label "\[value in]"
+xpos -500
+ypos 2290
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice7.whitepoint} {parent.slice7.whitepoint} {parent.slice7.whitepoint} {parent.slice7.whitepoint}}
+white_clamp true
+name Grade53
+xpos -500
+ypos 2371
+addUserKnob {20 User}
+}
+push $N3ff8f900
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice7
+xpos -404
+ypos 2307
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus seven
+addUserKnob {1 number}
+number eight
+}
+Dot {
+name Dot9
+xpos -370
+ypos 2364
+}
+Group {
+inputs 3
+name MultiMaskKeyMix16
+tile_color 0x495bc4ff
+xpos -500
+ypos 2424
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N3ff82400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N3ff80f00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N3ff57900 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N3ff82400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N3ff80f00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N3ff57900
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N3ff82400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N3ff80f00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N3ff57900
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N3ff82400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N3ff80f00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N3ff57900
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3beaeb00
+Dot {
+name Dot26
+xpos -241
+ypos 2300
+}
+set N3feef200 [stack 0]
+Shuffle {
+in input
+name Shuffle22
+label "\[value in]"
+xpos -324
+ypos 2364
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice8.whitepoint} {parent.slice8.whitepoint} {parent.slice8.whitepoint} {parent.slice8.whitepoint}}
+white_clamp true
+name Grade52
+xpos -324
+ypos 2444
+addUserKnob {20 User}
+}
+push $N3feef200
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice8
+xpos -228
+ypos 2384
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus eight
+addUserKnob {1 number}
+number nine
+}
+Dot {
+name Dot8
+xpos -194
+ypos 2438
+}
+Group {
+inputs 3
+name MultiMaskKeyMix15
+tile_color 0x495bc4ff
+xpos -324
+ypos 2498
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N3fed9d00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N3fed8800 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N3feaf200 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N3fed9d00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N3fed8800
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N3feaf200
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N3fed9d00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N3fed8800
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N3feaf200
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N3fed9d00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N3fed8800
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N3feaf200
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3beaeb00
+Dot {
+name Dot43
+xpos 1079
+ypos 1540
+}
+set N3fe52b00 [stack 0]
+Dot {
+name Dot27
+xpos -61
+ypos 2368
+}
+set N3fe52400 [stack 0]
+Shuffle {
+in input
+name Shuffle21
+label "\[value in]"
+xpos -152
+ypos 2434
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice9.whitepoint} {parent.slice9.whitepoint} {parent.slice9.whitepoint} {parent.slice9.whitepoint}}
+white_clamp true
+name Grade51
+xpos -152
+ypos 2513
+addUserKnob {20 User}
+}
+push $N3fe52400
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice9
+xpos -56
+ypos 2453
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus nine
+addUserKnob {1 number}
+number ten
+}
+Dot {
+name Dot7
+xpos -22
+ypos 2507
+}
+Group {
+inputs 3
+name MultiMaskKeyMix14
+tile_color 0x495bc4ff
+xpos -152
+ypos 2567
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N3fe24f00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N3fe07900 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N3fe06400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N3fe24f00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N3fe07900
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N3fe06400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N3fe24f00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N3fe07900
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N3fe06400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N3fe24f00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N3fe07900
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N3fe06400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3fe52b00
+Dot {
+name Dot28
+xpos 122
+ypos 2440
+}
+set N3fda5d00 [stack 0]
+Shuffle {
+in input
+name Shuffle17
+label "\[value in]"
+xpos 27
+ypos 2509
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice10.whitepoint} {parent.slice10.whitepoint} {parent.slice10.whitepoint} {parent.slice10.whitepoint}}
+white_clamp true
+name Grade50
+xpos 27
+ypos 2589
+addUserKnob {20 User}
+}
+push $N3fda5d00
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice10
+xpos 123
+ypos 2521
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus ten
+addUserKnob {1 number}
+number eleven
+}
+Dot {
+name Dot6
+xpos 157
+ypos 2583
+}
+Group {
+inputs 3
+name MultiMaskKeyMix13
+tile_color 0x495bc4ff
+xpos 27
+ypos 2643
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N3fd80800 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N3fd6b200 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N3fd69d00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N3fd80800
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N3fd6b200
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N3fd69d00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N3fd80800
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N3fd6b200
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N3fd69d00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N3fd80800
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N3fd6b200
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N3fd69d00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3fe52b00
+Dot {
+name Dot29
+xpos 304
+ypos 2515
+}
+set N3fcfd600 [stack 0]
+Shuffle {
+in input
+name Shuffle14
+label "\[value in]"
+xpos 210
+ypos 2599
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice11.whitepoint} {parent.slice11.whitepoint} {parent.slice11.whitepoint} {parent.slice11.whitepoint}}
+white_clamp true
+name Grade49
+xpos 210
+ypos 2679
+addUserKnob {20 User}
+}
+push $N3fcfd600
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice11
+xpos 306
+ypos 2615
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus eleven
+addUserKnob {1 number}
+number twelve
+}
+Dot {
+name Dot5
+xpos 340
+ypos 2673
+}
+Group {
+inputs 3
+name MultiMaskKeyMix12
+tile_color 0x495bc4ff
+xpos 210
+ypos 2733
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N3fccc100 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N3fcbeb00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N3fcbd600 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N3fccc100
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N3fcbeb00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N3fcbd600
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N3fccc100
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N3fcbeb00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N3fcbd600
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N3fccc100
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N3fcbeb00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N3fcbd600
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3fe52b00
+Dot {
+name Dot30
+xpos 488
+ypos 2613
+}
+set N3fc60f00 [stack 0]
+Shuffle {
+in input
+name Shuffle20
+label "\[value in]"
+xpos 387
+ypos 2674
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice12.whitepoint} {parent.slice12.whitepoint} {parent.slice12.whitepoint} {parent.slice12.whitepoint}}
+white_clamp true
+name Grade48
+xpos 387
+ypos 2754
+addUserKnob {20 User}
+}
+push $N3fc60f00
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice12
+xpos 483
+ypos 2689
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus twelve
+addUserKnob {1 number}
+number thirteen
+}
+Dot {
+name Dot4
+xpos 517
+ypos 2748
+}
+Group {
+inputs 3
+name MultiMaskKeyMix11
+tile_color 0x495bc4ff
+xpos 387
+ypos 2808
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N3fc17900 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N3fc16400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N3fc14f00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N3fc17900
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N3fc16400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N3fc14f00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N3fc17900
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N3fc16400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N3fc14f00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N3fc17900
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N3fc16400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N3fc14f00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3fe52b00
+Dot {
+name Dot3
+xpos 669
+ypos 2675
+}
+set Na03ac800 [stack 0]
+Shuffle {
+in input
+name Shuffle6
+label "\[value in]"
+xpos 568
+ypos 2737
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice13.whitepoint} {parent.slice13.whitepoint} {parent.slice13.whitepoint} {parent.slice13.whitepoint}}
+white_clamp true
+name Grade10
+xpos 568
+ypos 2815
+addUserKnob {20 User}
+}
+push $Na03ac800
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice13
+xpos 664
+ypos 2752
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus thirteen
+addUserKnob {1 number}
+number fourteen
+}
+Dot {
+name Dot31
+xpos 698
+ypos 2810
+}
+Group {
+inputs 3
+name MultiMaskKeyMix1
+tile_color 0x495bc4ff
+xpos 568
+ypos 2870
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set Na0363200 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set Na0361d00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set Na0360800 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $Na0363200
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $Na0361d00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $Na0360800
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $Na0363200
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $Na0361d00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $Na0360800
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $Na0363200
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $Na0361d00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $Na0360800
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3fe52b00
+Dot {
+name Dot32
+xpos 836
+ypos 2754
+}
+set Na0308100 [stack 0]
+Shuffle {
+in input
+name Shuffle7
+label "\[value in]"
+xpos 735
+ypos 2815
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice14.whitepoint} {parent.slice14.whitepoint} {parent.slice14.whitepoint} {parent.slice14.whitepoint}}
+white_clamp true
+name Grade15
+xpos 735
+ypos 2894
+addUserKnob {20 User}
+}
+push $Na0308100
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice14
+xpos 831
+ypos 2829
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus fourteen
+addUserKnob {1 number}
+number fifteen
+}
+Dot {
+name Dot33
+xpos 865
+ypos 2889
+}
+Group {
+inputs 3
+name MultiMaskKeyMix2
+tile_color 0x495bc4ff
+xpos 735
+ypos 2949
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set Na02c2b00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set Na02c1600 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set Na02c0100 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $Na02c2b00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $Na02c1600
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $Na02c0100
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $Na02c2b00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $Na02c1600
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $Na02c0100
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $Na02c2b00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $Na02c1600
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $Na02c0100
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3fe52b00
+Dot {
+name Dot35
+xpos 1018
+ypos 2808
+}
+set Na022f900 [stack 0]
+Shuffle {
+in input
+name Shuffle8
+label "\[value in]"
+xpos 917
+ypos 2871
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice15.whitepoint} {parent.slice15.whitepoint} {parent.slice15.whitepoint} {parent.slice15.whitepoint}}
+white_clamp true
+name Grade24
+xpos 917
+ypos 2946
+addUserKnob {20 User}
+}
+push $Na022f900
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice15
+xpos 1013
+ypos 2882
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus fifteen
+addUserKnob {1 number}
+number sixteen
+}
+Dot {
+name Dot37
+xpos 1047
+ypos 2943
+}
+Group {
+inputs 3
+name MultiMaskKeyMix3
+tile_color 0x495bc4ff
+xpos 917
+ypos 3003
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set Na020e400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set Na020cf00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set Na01ef900 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $Na020e400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $Na020cf00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $Na01ef900
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $Na020e400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $Na020cf00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $Na01ef900
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $Na020e400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $Na020cf00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $Na01ef900
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3fe52b00
+Dot {
+name Dot38
+xpos 1192
+ypos 2869
+}
+set Na0187200 [stack 0]
+Shuffle {
+in input
+name Shuffle9
+label "\[value in]"
+xpos 1091
+ypos 2931
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice16.whitepoint} {parent.slice16.whitepoint} {parent.slice16.whitepoint} {parent.slice16.whitepoint}}
+white_clamp true
+name Grade25
+xpos 1091
+ypos 3009
+addUserKnob {20 User}
+}
+push $Na0187200
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice16
+xpos 1187
+ypos 2946
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus sixteen
+addUserKnob {1 number}
+number seventeen
+}
+Dot {
+name Dot39
+xpos 1221
+ypos 3004
+}
+Group {
+inputs 3
+name MultiMaskKeyMix4
+tile_color 0x495bc4ff
+xpos 1091
+ypos 3064
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set Na016dd00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set Na016c800 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set Na0147200 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $Na016dd00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $Na016c800
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $Na0147200
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $Na016dd00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $Na016c800
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $Na0147200
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $Na016dd00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $Na016c800
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $Na0147200
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N3fe52b00
+Dot {
+name Dot45
+xpos 2337
+ypos 1947
+}
+set Na00e2b00 [stack 0]
+Dot {
+name Dot40
+xpos 1366
+ypos 2938
+}
+set Na00e2400 [stack 0]
+Shuffle {
+in input
+name Shuffle10
+label "\[value in]"
+xpos 1265
+ypos 2998
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice17.whitepoint} {parent.slice17.whitepoint} {parent.slice17.whitepoint} {parent.slice17.whitepoint}}
+white_clamp true
+name Grade26
+xpos 1265
+ypos 3078
+addUserKnob {20 User}
+}
+push $Na00e2400
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice17
+xpos 1361
+ypos 3014
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus seventeen
+addUserKnob {1 number}
+number eighteen
+}
+Dot {
+name Dot41
+xpos 1395
+ypos 3073
+}
+Group {
+inputs 3
+name MultiMaskKeyMix5
+tile_color 0x495bc4ff
+xpos 1265
+ypos 3133
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set Na00bcf00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set Na009f900 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set Na009e400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $Na00bcf00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $Na009f900
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $Na009e400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $Na00bcf00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $Na009f900
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $Na009e400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $Na00bcf00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $Na009f900
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $Na009e400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $Na00e2b00
+Dot {
+name Dot42
+xpos 1555
+ypos 2991
+}
+set Na003dd00 [stack 0]
+Shuffle {
+in input
+name Shuffle11
+label "\[value in]"
+xpos 1454
+ypos 3052
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice18.whitepoint} {parent.slice18.whitepoint} {parent.slice18.whitepoint} {parent.slice18.whitepoint}}
+white_clamp true
+name Grade27
+xpos 1454
+ypos 3132
+addUserKnob {20 User}
+}
+push $Na003dd00
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice18
+xpos 1550
+ypos 3072
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus eighteen
+addUserKnob {1 number}
+number nineteen
+}
+Dot {
+name Dot44
+xpos 1584
+ypos 3126
+}
+Group {
+inputs 3
+name MultiMaskKeyMix6
+tile_color 0x495bc4ff
+xpos 1454
+ypos 3186
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set Na0018800 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N8b3f3200 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N8b3f1d00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $Na0018800
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N8b3f3200
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N8b3f1d00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $Na0018800
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N8b3f3200
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N8b3f1d00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $Na0018800
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N8b3f3200
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N8b3f1d00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $Na00e2b00
+Dot {
+name Dot46
+xpos 1748
+ypos 3038
+}
+set N8b385600 [stack 0]
+Shuffle {
+in input
+name Shuffle12
+label "\[value in]"
+xpos 1647
+ypos 3098
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice19.whitepoint} {parent.slice19.whitepoint} {parent.slice19.whitepoint} {parent.slice19.whitepoint}}
+white_clamp true
+name Grade28
+xpos 1647
+ypos 3178
+addUserKnob {20 User}
+}
+push $N8b385600
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice19
+xpos 1743
+ypos 3119
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus nineteen
+addUserKnob {1 number}
+number twenty
+}
+Dot {
+name Dot48
+xpos 1777
+ypos 3173
+}
+Group {
+inputs 3
+name MultiMaskKeyMix7
+tile_color 0x495bc4ff
+xpos 1647
+ypos 3233
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N8b35c100 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N8b352b00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N8b351600 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N8b35c100
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N8b352b00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N8b351600
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N8b35c100
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N8b352b00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N8b351600
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N8b35c100
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N8b352b00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N8b351600
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $Na00e2b00
+Dot {
+name Dot49
+xpos 1943
+ypos 3091
+}
+set N8b2e8f00 [stack 0]
+Shuffle {
+in input
+name Shuffle13
+label "\[value in]"
+xpos 1842
+ypos 3152
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice20.whitepoint} {parent.slice20.whitepoint} {parent.slice20.whitepoint} {parent.slice20.whitepoint}}
+white_clamp true
+name Grade29
+xpos 1842
+ypos 3233
+addUserKnob {20 User}
+}
+push $N8b2e8f00
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice20
+xpos 1938
+ypos 3173
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus twenty
+addUserKnob {1 number}
+number twentyone
+}
+Dot {
+name Dot50
+xpos 1972
+ypos 3226
+}
+Group {
+inputs 3
+name MultiMaskKeyMix8
+tile_color 0x495bc4ff
+xpos 1842
+ypos 3286
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N8b2ab900 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N8b2aa400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N8b2a8f00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N8b2ab900
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N8b2aa400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N8b2a8f00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N8b2ab900
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N8b2aa400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N8b2a8f00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N8b2ab900
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N8b2aa400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N8b2a8f00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $Na00e2b00
+Dot {
+name Dot51
+xpos 2147
+ypos 3140
+}
+set N8b23c800 [stack 0]
+Shuffle {
+in input
+name Shuffle15
+label "\[value in]"
+xpos 2046
+ypos 3200
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice21.whitepoint} {parent.slice21.whitepoint} {parent.slice21.whitepoint} {parent.slice21.whitepoint}}
+white_clamp true
+name Grade30
+xpos 2046
+ypos 3279
+addUserKnob {20 User}
+}
+push $N8b23c800
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice21
+xpos 2142
+ypos 3217
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus twentyone
+addUserKnob {1 number}
+number twentytwo
+}
+Dot {
+name Dot53
+xpos 2176
+ypos 3275
+}
+Group {
+inputs 3
+name MultiMaskKeyMix9
+tile_color 0x495bc4ff
+xpos 2046
+ypos 3335
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N8b1fb200 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N8b1f9d00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N8b1f8800 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N8b1fb200
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N8b1f9d00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N8b1f8800
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N8b1fb200
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N8b1f9d00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N8b1f8800
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N8b1fb200
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N8b1f9d00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N8b1f8800
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $Na00e2b00
+Dot {
+name Dot54
+xpos 2337
+ypos 3188
+}
+set N8b194100 [stack 0]
+Shuffle {
+in input
+name Shuffle16
+label "\[value in]"
+xpos 2236
+ypos 3248
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice22.whitepoint} {parent.slice22.whitepoint} {parent.slice22.whitepoint} {parent.slice22.whitepoint}}
+white_clamp true
+name Grade34
+xpos 2236
+ypos 3328
+addUserKnob {20 User}
+}
+push $N8b194100
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice22
+xpos 2332
+ypos 3270
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus twentytwo
+addUserKnob {1 number}
+number twentythree
+}
+Dot {
+name Dot55
+xpos 2366
+ypos 3323
+}
+Group {
+inputs 3
+name MultiMaskKeyMix10
+tile_color 0x495bc4ff
+xpos 2236
+ypos 3383
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N8b15ab00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N8b159600 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N8b158100 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N8b15ab00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N8b159600
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N8b158100
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N8b15ab00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N8b159600
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N8b158100
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N8b15ab00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N8b159600
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N8b158100
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $Na00e2b00
+Dot {
+name Dot56
+xpos 2539
+ypos 3224
+}
+set N8b0cb900 [stack 0]
+Shuffle {
+in input
+name Shuffle18
+label "\[value in]"
+xpos 2434
+ypos 3286
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice23.whitepoint} {parent.slice23.whitepoint} {parent.slice23.whitepoint} {parent.slice23.whitepoint}}
+white_clamp true
+name Grade35
+xpos 2438
+ypos 3364
+addUserKnob {20 User}
+}
+push $N8b0cb900
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice23
+xpos 2534
+ypos 3304
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus twentythree
+addUserKnob {1 number}
+number twentyfour
+}
+Dot {
+name Dot57
+xpos 2568
+ypos 3359
+}
+Group {
+inputs 3
+name MultiMaskKeyMix23
+tile_color 0x495bc4ff
+xpos 2438
+ypos 3419
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N8b0b2400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N8b0b0f00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set N8b087900 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N8b0b2400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N8b0b0f00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $N8b087900
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N8b0b2400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N8b0b0f00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $N8b087900
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N8b0b2400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N8b0b0f00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $N8b087900
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $Na00e2b00
+Dot {
+name Dot47
+xpos 3573
+ypos 2358
+}
+set N8b01f200 [stack 0]
+Dot {
+name Dot58
+xpos 2740
+ypos 3281
+}
+set N8b01eb00 [stack 0]
+Shuffle {
+in input
+name Shuffle19
+label "\[value in]"
+xpos 2639
+ypos 3343
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice24.whitepoint} {parent.slice24.whitepoint} {parent.slice24.whitepoint} {parent.slice24.whitepoint}}
+white_clamp true
+name Grade36
+xpos 2639
+ypos 3422
+addUserKnob {20 User}
+}
+push $N8b01eb00
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice24
+xpos 2735
+ypos 3360
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus twentyfour
+addUserKnob {1 number}
+number twentyfive
+}
+Dot {
+name Dot59
+xpos 2769
+ypos 3416
+}
+Group {
+inputs 3
+name MultiMaskKeyMix24
+tile_color 0x495bc4ff
+xpos 2639
+ypos 3476
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set N8b009600 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set N8b008100 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set Na13ceb00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $N8b009600
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $N8b008100
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $Na13ceb00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $N8b009600
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $N8b008100
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $Na13ceb00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $N8b009600
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $N8b008100
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $Na13ceb00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N8b01f200
+Dot {
+name Dot63
+xpos 2929
+ypos 3334
+}
+set Na1372400 [stack 0]
+Shuffle {
+in input
+name Shuffle31
+label "\[value in]"
+xpos 2828
+ypos 3396
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice25.whitepoint} {parent.slice25.whitepoint} {parent.slice25.whitepoint} {parent.slice25.whitepoint}}
+white_clamp true
+name Grade37
+xpos 2828
+ypos 3474
+addUserKnob {20 User}
+}
+push $Na1372400
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice25
+xpos 2924
+ypos 3414
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus twentyfive
+addUserKnob {1 number}
+number twentysix
+}
+Dot {
+name Dot64
+xpos 2958
+ypos 3469
+}
+Group {
+inputs 3
+name MultiMaskKeyMix25
+tile_color 0x495bc4ff
+xpos 2828
+ypos 3529
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set Na1348f00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set Na132b900 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set Na132a400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $Na1348f00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $Na132b900
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $Na132a400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $Na1348f00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $Na132b900
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $Na132a400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $Na1348f00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $Na132b900
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $Na132a400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N8b01f200
+Dot {
+name Dot65
+xpos 3128
+ypos 3374
+}
+set Na12d1d00 [stack 0]
+Shuffle {
+in input
+name Shuffle32
+label "\[value in]"
+xpos 3027
+ypos 3435
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice26.whitepoint} {parent.slice26.whitepoint} {parent.slice26.whitepoint} {parent.slice26.whitepoint}}
+white_clamp true
+name Grade38
+xpos 3027
+ypos 3514
+addUserKnob {20 User}
+}
+push $Na12d1d00
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice26
+xpos 3119
+ypos 3451
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus twentysix
+addUserKnob {1 number}
+number twentyseven
+}
+Dot {
+name Dot66
+xpos 3157
+ypos 3509
+}
+Group {
+inputs 3
+name MultiMaskKeyMix26
+tile_color 0x495bc4ff
+xpos 3027
+ypos 3569
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set Na12a0800 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set Na127f200 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set Na127dd00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $Na12a0800
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $Na127f200
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $Na127dd00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $Na12a0800
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $Na127f200
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $Na127dd00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $Na12a0800
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $Na127f200
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $Na127dd00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N8b01f200
+Dot {
+name Dot67
+xpos 3315
+ypos 3432
+}
+set Na1229600 [stack 0]
+Shuffle {
+in input
+name Shuffle33
+label "\[value in]"
+xpos 3214
+ypos 3493
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice27.whitepoint} {parent.slice27.whitepoint} {parent.slice27.whitepoint} {parent.slice27.whitepoint}}
+white_clamp true
+name Grade39
+xpos 3214
+ypos 3572
+addUserKnob {20 User}
+}
+push $Na1229600
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice27
+xpos 3310
+ypos 3514
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus twentyseven
+addUserKnob {1 number}
+number twentyeight
+}
+Dot {
+name Dot69
+xpos 3344
+ypos 3567
+}
+Group {
+inputs 3
+name MultiMaskKeyMix27
+tile_color 0x495bc4ff
+xpos 3214
+ypos 3627
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set Na11f4100 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set Na11deb00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set Na11dd600 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $Na11f4100
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $Na11deb00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $Na11dd600
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $Na11f4100
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $Na11deb00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $Na11dd600
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $Na11f4100
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $Na11deb00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $Na11dd600
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N8b01f200
+Dot {
+name Dot70
+xpos 3503
+ypos 3491
+}
+set Na117cf00 [stack 0]
+Shuffle {
+in input
+name Shuffle34
+label "\[value in]"
+xpos 3402
+ypos 3553
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice28.whitepoint} {parent.slice28.whitepoint} {parent.slice28.whitepoint} {parent.slice28.whitepoint}}
+white_clamp true
+name Grade40
+xpos 3402
+ypos 3631
+addUserKnob {20 User}
+}
+push $Na117cf00
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice28
+xpos 3494
+ypos 3572
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus twentyeight
+addUserKnob {1 number}
+number twentynine
+}
+Dot {
+name Dot71
+xpos 3532
+ypos 3626
+}
+Group {
+inputs 3
+name MultiMaskKeyMix28
+tile_color 0x495bc4ff
+xpos 3402
+ypos 3686
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set Na113b900 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set Na113a400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set Na1138f00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $Na113b900
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $Na113a400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $Na1138f00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $Na113b900
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $Na113a400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $Na1138f00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $Na113b900
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $Na113a400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $Na1138f00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+push $N8b01f200
+Dot {
+name Dot72
+xpos 3698
+ypos 3545
+}
+set Na10e0800 [stack 0]
+Shuffle {
+in input
+name Shuffle35
+label "\[value in]"
+xpos 3597
+ypos 3606
+disable {{showslices.on}}
+}
+Grade {
+channels rgba
+blackpoint {{parent.ControlsA.min} {parent.ControlsB.min} {parent.ControlsC.min} {parent.ControlsD.min}}
+whitepoint {{parent.slice29.whitepoint} {parent.slice29.whitepoint} {parent.slice29.whitepoint} {parent.slice29.whitepoint}}
+white_clamp true
+name Grade41
+xpos 3597
+ypos 3687
+addUserKnob {20 User}
+}
+push $Na10e0800
+Grade {
+channels rgba
+blackpoint {{"parent.ControlsA.\[value this.numberminus]"} {"parent.ControlsB.\[value this.numberminus]"} {"parent.ControlsC.\[value this.numberminus]"} {"parent.ControlsD.\[value this.numberminus]"}}
+whitepoint {{"parent.ControlsA.\[value this.number]"} {"parent.ControlsB.\[value this.number]"} {"parent.ControlsC.\[value this.number]"} {"parent.ControlsD.\[value this.number]"}}
+white_clamp true
+name slice29
+xpos 3693
+ypos 3628
+addUserKnob {20 User}
+addUserKnob {1 numberminus}
+numberminus twentynine
+addUserKnob {1 number}
+number thirty
+}
+Dot {
+name Dot73
+xpos 3727
+ypos 3680
+}
+Group {
+inputs 3
+name MultiMaskKeyMix29
+tile_color 0x495bc4ff
+xpos 3597
+ypos 3740
+}
+Input {
+inputs 0
+name masks
+xpos -588
+ypos 316
+}
+Dot {
+name Dot16
+xpos -554
+ypos 355
+}
+set Na1093200 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle19
+label "\[value in]"
+xpos -491
+ypos 516
+}
+Input {
+inputs 0
+name A
+xpos -854
+ypos 309
+number 1
+}
+Dot {
+name Dot14
+xpos -820
+ypos 375
+}
+set Na1091d00 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle27
+label "\[value in]"
+xpos -813
+ypos 632
+}
+Input {
+inputs 0
+name B
+xpos -950
+ypos 268
+number 2
+}
+Dot {
+name Dot15
+xpos -916
+ypos 310
+}
+set Na1090800 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle26
+label "\[value in]"
+xpos -903
+ypos 638
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix3
+xpos -854
+ypos 703
+}
+push $Na1093200
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle18
+label "\[value in]"
+xpos -588
+ypos 479
+}
+push $Na1091d00
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle25
+label "\[value in]"
+xpos -955
+ypos 573
+}
+push $Na1090800
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle24
+label "\[value in]"
+xpos -1038
+ypos 585
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix2
+xpos -1038
+ypos 665
+}
+push $Na1093200
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle16
+label "\[value in]"
+xpos -687
+ypos 426
+}
+push $Na1091d00
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle23
+label "\[value in]"
+xpos -1103
+ypos 517
+}
+push $Na1090800
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle22
+label "\[value in]"
+xpos -1147
+ypos 459
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix1
+xpos -1147
+ypos 588
+}
+push $Na1093200
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle15
+label "\[value in]"
+xpos -746
+ypos 383
+}
+push $Na1091d00
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle21
+label "\[value in]"
+xpos -1204
+ypos 407
+}
+push $Na1090800
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle20
+label "\[value in]"
+xpos -1283
+ypos 373
+}
+Keymix {
+inputs 3
+channels rgba
+name MultiMaskMix
+xpos -1267
+ypos 552
+}
+ShuffleCopy {
+inputs 2
+red alpha2
+green alpha
+blue black
+alpha black
+name ShuffleCopy2
+xpos -1218
+ypos 701
+}
+ShuffleCopy {
+inputs 2
+blue alpha
+alpha black
+name ShuffleCopy3
+xpos -1038
+ypos 783
+}
+ShuffleCopy {
+inputs 2
+name ShuffleCopy4
+xpos -863
+ypos 824
+}
+Output {
+name Output1
+xpos -863
+ypos 924
+}
+end_group
+set Na10a8100 [stack 0]
+push $Na10a8100
+Invert {
+channels rgba
+name Invert2
+xpos 3496
+ypos 3876
+}
+set Na1038100 [stack 0]
+Merge2 {
+inputs 2
+operation copy
+name Merge8
+xpos 3597
+ypos 3951
+disable {{parent.inverted}}
+}
+Dot {
+name Dot81
+xpos 3631
+ypos 4027
+}
+Dot {
+name Dot87
+xpos 3631
+ypos 4368
+}
+set Na1006b00 [stack 0]
+Dot {
+name Dot74
+xpos 3631
+ypos 4809
+}
+set Na1006400 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle39
+label "\[value in]"
+xpos 3717
+ypos 4870
+}
+set Na1005d00 [stack 0]
+push $Na1006400
+Shuffle {
+red blue
+green blue
+alpha blue
+name Shuffle38
+label "\[value in]"
+xpos 3630
+ypos 4871
+}
+set Na1005600 [stack 0]
+push 0
+push $Na1006400
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle36
+label "\[value in]"
+xpos 3450
+ypos 4869
+}
+set Na1004f00 [stack 0]
+push $Na1006400
+Shuffle {
+red green
+blue green
+alpha green
+name Shuffle37
+label "\[value in]"
+xpos 3540
+ypos 4870
+}
+set Na1004800 [stack 0]
+Merge2 {
+inputs 4+1
+operation plus
+name Merge6
+xpos 3501
+ypos 4975
+}
+Grade {
+channels rgba
+white 0.25
+white_clamp true
+name Grade2
+xpos 3501
+ypos 5003
+}
+push $Na1005d00
+push $Na1005600
+push 0
+push $Na1004f00
+push $Na1004800
+Merge2 {
+inputs 4+1
+operation min
+name Merge7
+xpos 3663
+ypos 4984
+}
+Switch {
+inputs 2
+which {{parent.refine}}
+name averageorminswitch
+label "\[value which]"
+xpos 3579
+ypos 5080
+}
+Grade {
+channels rgba
+name Contrastpost
+xpos 3579
+ypos 5254
+}
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle3
+label "\[value in]"
+xpos 3579
+ypos 5401
+}
+push $N3bfdb200
+Dot {
+name Dot79
+xpos 4227
+ypos -920
+}
+Dot {
+name Dot83
+xpos 4235
+ypos 4035
+}
+set N90f9eb00 [stack 0]
+Dot {
+name Dot84
+xpos 4328
+ypos 4087
+}
+Keyer {
+operation "luminance key"
+range {0.2 1 1 1}
+name Keyer1
+xpos 4290
+ypos 4205
+}
+push $Na1038100
+Dot {
+name Dot82
+xpos 4107
+ypos 4027
+}
+Grade {
+channels rgba
+gamma 2
+white_clamp true
+name Grade3
+xpos 4073
+ypos 4231
+}
+ColorLookup {
+lut {master {curve C k 0 s0 l x0.400000006 1 k 0 s0}
+  red {}
+  green {}
+  blue {}
+  alpha {}}
+name ColorLookup1
+xpos 4073
+ypos 4259
+}
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle40
+label "\[value in]"
+xpos 4073
+ypos 4287
+}
+push $Na1006b00
+Constant {
+inputs 0
+channels rgb
+color {1 0 0 0}
+color_panelDropped true
+name Constant1
+xpos 3939
+ypos 4289
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 3939
+ypos 4363
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+xpos 4073
+ypos 4353
+}
+push $N90f9eb00
+Grade {
+white {{parent.previewgain}}
+gamma {{parent.previewgamma}}
+name Grade4
+xpos 4197
+ypos 4117
+}
+Merge2 {
+inputs 2+1
+operation matte
+name Merge9
+xpos 4197
+ypos 4360
+}
+Shuffle {
+alpha black
+name Shuffle42
+label "\[value in]"
+xpos 4197
+ypos 4448
+}
+Dot {
+name Dot80
+xpos 4235
+ypos 5600
+}
+Merge2 {
+inputs 2
+operation copy
+name Merge10
+xpos 3579
+ypos 5595
+disable {{showslices.on x1442 0}}
+}
+push $N3bfdb200
+Dot {
+name Dot76
+xpos -2306
+ypos -944
+}
+Dot {
+name Dot75
+xpos -2301
+ypos 5744
+}
+Remove {
+operation keep
+channels rgba
+name Remove1
+xpos 3103
+ypos 5739
+}
+Grade {
+channels rgba
+white 0
+name Grade6
+xpos 3276
+ypos 5739
+}
+Merge2 {
+inputs 2+1
+operation copy
+name Merge11
+xpos 3579
+ypos 5739
+}
+Remove {
+operation keep
+channels rgba
+name Remove3
+xpos 3579
+ypos 5838
+}
+Output {
+name Output1
+xpos 3579
+ypos 5916
+}
+NoOp {
+inputs 0
+name ControlsA
+xpos -1580
+ypos 4146
+addUserKnob {20 User}
+addUserKnob {7 min}
+min {{Controls1.offsetA}}
+addUserKnob {7 one}
+one {{this.min*2}}
+addUserKnob {7 two}
+two {{this.one+(this.one)*(decrease+curved_decrease*0)}}
+addUserKnob {7 three}
+three {{this.two+(this.one)*(decrease+curved_decrease*1)}}
+addUserKnob {7 four}
+four {{this.three+(this.one)*(decrease+curved_decrease*2)}}
+addUserKnob {7 five}
+five {{this.four+(this.one)*(decrease+curved_decrease*3)}}
+addUserKnob {7 six}
+six {{this.five+(this.one)*(decrease+curved_decrease*4)}}
+addUserKnob {7 seven}
+seven {{this.six+(this.one)*(decrease+curved_decrease*5)}}
+addUserKnob {7 eight}
+eight {{this.seven+(this.one)*(decrease+curved_decrease*6)}}
+addUserKnob {7 nine}
+nine {{this.eight+(this.one)*(decrease+curved_decrease*7)}}
+addUserKnob {7 ten}
+ten {{this.nine+(this.one)*(decrease+curved_decrease*8)}}
+addUserKnob {7 eleven}
+eleven {{this.ten+(this.one)*(decrease+curved_decrease*9)}}
+addUserKnob {7 twelve}
+twelve {{this.eleven+(this.one)*(decrease+curved_decrease*10)}}
+addUserKnob {7 thirteen}
+thirteen {{this.twelve+(this.one)*(decrease+curved_decrease*11)}}
+addUserKnob {7 fourteen}
+fourteen {{this.thirteen+(this.one)*(decrease+curved_decrease*12)}}
+addUserKnob {7 fifteen}
+fifteen {{this.fourteen+(this.one)*(decrease+curved_decrease*13)}}
+addUserKnob {7 sixteen}
+sixteen {{this.fifteen+(this.one)*(decrease+curved_decrease*14)}}
+addUserKnob {7 seventeen}
+seventeen {{this.sixteen+(this.one)*(decrease+curved_decrease*15)}}
+addUserKnob {7 eighteen}
+eighteen {{this.seventeen+(this.one)*(decrease+curved_decrease*16)}}
+addUserKnob {7 nineteen}
+nineteen {{this.eighteen+(this.one)*(decrease+curved_decrease*17)}}
+addUserKnob {7 twenty}
+twenty {{this.nineteen+(this.one)*(decrease+curved_decrease*18)}}
+addUserKnob {7 twentyone}
+twentyone {{this.twenty+(this.one)*(decrease+curved_decrease*19)}}
+addUserKnob {7 twentytwo}
+twentytwo {{this.twentyone+(this.one)*(decrease+curved_decrease*20)}}
+addUserKnob {7 twentythree}
+twentythree {{this.twentytwo+(this.one)*(decrease+curved_decrease*21)}}
+addUserKnob {7 twentyfour}
+twentyfour {{this.twentythree+(this.one)*(decrease+curved_decrease*22)}}
+addUserKnob {7 twentyfive}
+twentyfive {{this.twentyfour+(this.one)*(decrease+curved_decrease*23)}}
+addUserKnob {7 twentysix}
+twentysix {{this.twentyfive+(this.one)*(decrease+curved_decrease*24)}}
+addUserKnob {7 twentyseven}
+twentyseven {{this.twentysix+(this.one)*(decrease+curved_decrease*25)}}
+addUserKnob {7 twentyeight}
+twentyeight {{this.twentyseven+(this.one)*(decrease+curved_decrease*26)}}
+addUserKnob {7 twentynine}
+twentynine {{this.twentyeight+(this.one)*(decrease+curved_decrease*27)}}
+addUserKnob {7 thirty}
+thirty {{this.twentynine+(this.one)*(decrease+curved_decrease*28)}}
+addUserKnob {7 decrease}
+decrease {{parent.Controls1.decrease}}
+addUserKnob {7 curved_decrease}
+curved_decrease {{this.decrease*0.8}}
+}
+NoOp {
+inputs 0
+name ControlsB
+xpos -711
+ypos 4538
+addUserKnob {20 User}
+addUserKnob {7 min}
+min {{parent.Controls1.offsetB}}
+addUserKnob {7 one}
+one {{this.min*2}}
+addUserKnob {7 two}
+two {{this.one+(this.one)*(decrease+curved_decrease*0)}}
+addUserKnob {7 three}
+three {{this.two+(this.one)*(decrease+curved_decrease*1)}}
+addUserKnob {7 four}
+four {{this.three+(this.one)*(decrease+curved_decrease*2)}}
+addUserKnob {7 five}
+five {{this.four+(this.one)*(decrease+curved_decrease*3)}}
+addUserKnob {7 six}
+six {{this.five+(this.one)*(decrease+curved_decrease*4)}}
+addUserKnob {7 seven}
+seven {{this.six+(this.one)*(decrease+curved_decrease*5)}}
+addUserKnob {7 eight}
+eight {{this.seven+(this.one)*(decrease+curved_decrease*6)}}
+addUserKnob {7 nine}
+nine {{this.eight+(this.one)*(decrease+curved_decrease*7)}}
+addUserKnob {7 ten}
+ten {{this.nine+(this.one)*(decrease+curved_decrease*8)}}
+addUserKnob {7 eleven}
+eleven {{this.ten+(this.one)*(decrease+curved_decrease*9)}}
+addUserKnob {7 twelve}
+twelve {{this.eleven+(this.one)*(decrease+curved_decrease*10)}}
+addUserKnob {7 thirteen}
+thirteen {{this.twelve+(this.one)*(decrease+curved_decrease*11)}}
+addUserKnob {7 fourteen}
+fourteen {{this.thirteen+(this.one)*(decrease+curved_decrease*12)}}
+addUserKnob {7 fifteen}
+fifteen {{this.fourteen+(this.one)*(decrease+curved_decrease*13)}}
+addUserKnob {7 sixteen}
+sixteen {{this.fifteen+(this.one)*(decrease+curved_decrease*14)}}
+addUserKnob {7 seventeen}
+seventeen {{this.sixteen+(this.one)*(decrease+curved_decrease*15)}}
+addUserKnob {7 eighteen}
+eighteen {{this.seventeen+(this.one)*(decrease+curved_decrease*16)}}
+addUserKnob {7 nineteen}
+nineteen {{this.eighteen+(this.one)*(decrease+curved_decrease*17)}}
+addUserKnob {7 twenty}
+twenty {{this.nineteen+(this.one)*(decrease+curved_decrease*18)}}
+addUserKnob {7 twentyone}
+twentyone {{this.twenty+(this.one)*(decrease+curved_decrease*19)}}
+addUserKnob {7 twentytwo}
+twentytwo {{this.twentyone+(this.one)*(decrease+curved_decrease*20)}}
+addUserKnob {7 twentythree}
+twentythree {{this.twentytwo+(this.one)*(decrease+curved_decrease*21)}}
+addUserKnob {7 twentyfour}
+twentyfour {{this.twentythree+(this.one)*(decrease+curved_decrease*22)}}
+addUserKnob {7 twentyfive}
+twentyfive {{this.twentyfour+(this.one)*(decrease+curved_decrease*23)}}
+addUserKnob {7 twentysix}
+twentysix {{this.twentyfive+(this.one)*(decrease+curved_decrease*24)}}
+addUserKnob {7 twentyseven}
+twentyseven {{this.twentysix+(this.one)*(decrease+curved_decrease*25)}}
+addUserKnob {7 twentyeight}
+twentyeight {{this.twentyseven+(this.one)*(decrease+curved_decrease*26)}}
+addUserKnob {7 twentynine}
+twentynine {{this.twentyeight+(this.one)*(decrease+curved_decrease*27)}}
+addUserKnob {7 thirty}
+thirty {{this.twentynine+(this.one)*(decrease+curved_decrease*28)}}
+addUserKnob {7 decrease}
+decrease {{parent.Controls1.decrease}}
+addUserKnob {7 curved_decrease}
+curved_decrease {{this.decrease*0.8}}
+}
+NoOp {
+inputs 0
+name ControlsC
+xpos 421
+ypos 4754
+addUserKnob {20 User}
+addUserKnob {7 min}
+min {{parent.Controls1.offsetC}}
+addUserKnob {7 one}
+one {{this.min*2}}
+addUserKnob {7 two}
+two {{this.one+(this.one)*(decrease+curved_decrease*0)}}
+addUserKnob {7 three}
+three {{this.two+(this.one)*(decrease+curved_decrease*1)}}
+addUserKnob {7 four}
+four {{this.three+(this.one)*(decrease+curved_decrease*2)}}
+addUserKnob {7 five}
+five {{this.four+(this.one)*(decrease+curved_decrease*3)}}
+addUserKnob {7 six}
+six {{this.five+(this.one)*(decrease+curved_decrease*4)}}
+addUserKnob {7 seven}
+seven {{this.six+(this.one)*(decrease+curved_decrease*5)}}
+addUserKnob {7 eight}
+eight {{this.seven+(this.one)*(decrease+curved_decrease*6)}}
+addUserKnob {7 nine}
+nine {{this.eight+(this.one)*(decrease+curved_decrease*7)}}
+addUserKnob {7 ten}
+ten {{this.nine+(this.one)*(decrease+curved_decrease*8)}}
+addUserKnob {7 eleven}
+eleven {{this.ten+(this.one)*(decrease+curved_decrease*9)}}
+addUserKnob {7 twelve}
+twelve {{this.eleven+(this.one)*(decrease+curved_decrease*10)}}
+addUserKnob {7 thirteen}
+thirteen {{this.twelve+(this.one)*(decrease+curved_decrease*11)}}
+addUserKnob {7 fourteen}
+fourteen {{this.thirteen+(this.one)*(decrease+curved_decrease*12)}}
+addUserKnob {7 fifteen}
+fifteen {{this.fourteen+(this.one)*(decrease+curved_decrease*13)}}
+addUserKnob {7 sixteen}
+sixteen {{this.fifteen+(this.one)*(decrease+curved_decrease*14)}}
+addUserKnob {7 seventeen}
+seventeen {{this.sixteen+(this.one)*(decrease+curved_decrease*15)}}
+addUserKnob {7 eighteen}
+eighteen {{this.seventeen+(this.one)*(decrease+curved_decrease*16)}}
+addUserKnob {7 nineteen}
+nineteen {{this.eighteen+(this.one)*(decrease+curved_decrease*17)}}
+addUserKnob {7 twenty}
+twenty {{this.nineteen+(this.one)*(decrease+curved_decrease*18)}}
+addUserKnob {7 twentyone}
+twentyone {{this.twenty+(this.one)*(decrease+curved_decrease*19)}}
+addUserKnob {7 twentytwo}
+twentytwo {{this.twentyone+(this.one)*(decrease+curved_decrease*20)}}
+addUserKnob {7 twentythree}
+twentythree {{this.twentytwo+(this.one)*(decrease+curved_decrease*21)}}
+addUserKnob {7 twentyfour}
+twentyfour {{this.twentythree+(this.one)*(decrease+curved_decrease*22)}}
+addUserKnob {7 twentyfive}
+twentyfive {{this.twentyfour+(this.one)*(decrease+curved_decrease*23)}}
+addUserKnob {7 twentysix}
+twentysix {{this.twentyfive+(this.one)*(decrease+curved_decrease*24)}}
+addUserKnob {7 twentyseven}
+twentyseven {{this.twentysix+(this.one)*(decrease+curved_decrease*25)}}
+addUserKnob {7 twentyeight}
+twentyeight {{this.twentyseven+(this.one)*(decrease+curved_decrease*26)}}
+addUserKnob {7 twentynine}
+twentynine {{this.twentyeight+(this.one)*(decrease+curved_decrease*27)}}
+addUserKnob {7 thirty}
+thirty {{this.twentynine+(this.one)*(decrease+curved_decrease*28)}}
+addUserKnob {7 decrease}
+decrease {{parent.Controls1.decrease}}
+addUserKnob {7 curved_decrease}
+curved_decrease {{this.decrease*0.8}}
+}
+NoOp {
+inputs 0
+name ControlsD
+xpos 1332
+ypos 4935
+addUserKnob {20 User}
+addUserKnob {7 min}
+min {{parent.Controls1.offsetD}}
+addUserKnob {7 one}
+one {{this.min*2}}
+addUserKnob {7 two}
+two {{this.one+(this.one)*(decrease+curved_decrease*0)}}
+addUserKnob {7 three}
+three {{this.two+(this.one)*(decrease+curved_decrease*1)}}
+addUserKnob {7 four}
+four {{this.three+(this.one)*(decrease+curved_decrease*2)}}
+addUserKnob {7 five}
+five {{this.four+(this.one)*(decrease+curved_decrease*3)}}
+addUserKnob {7 six}
+six {{this.five+(this.one)*(decrease+curved_decrease*4)}}
+addUserKnob {7 seven}
+seven {{this.six+(this.one)*(decrease+curved_decrease*5)}}
+addUserKnob {7 eight}
+eight {{this.seven+(this.one)*(decrease+curved_decrease*6)}}
+addUserKnob {7 nine}
+nine {{this.eight+(this.one)*(decrease+curved_decrease*7)}}
+addUserKnob {7 ten}
+ten {{this.nine+(this.one)*(decrease+curved_decrease*8)}}
+addUserKnob {7 eleven}
+eleven {{this.ten+(this.one)*(decrease+curved_decrease*9)}}
+addUserKnob {7 twelve}
+twelve {{this.eleven+(this.one)*(decrease+curved_decrease*10)}}
+addUserKnob {7 thirteen}
+thirteen {{this.twelve+(this.one)*(decrease+curved_decrease*11)}}
+addUserKnob {7 fourteen}
+fourteen {{this.thirteen+(this.one)*(decrease+curved_decrease*12)}}
+addUserKnob {7 fifteen}
+fifteen {{this.fourteen+(this.one)*(decrease+curved_decrease*13)}}
+addUserKnob {7 sixteen}
+sixteen {{this.fifteen+(this.one)*(decrease+curved_decrease*14)}}
+addUserKnob {7 seventeen}
+seventeen {{this.sixteen+(this.one)*(decrease+curved_decrease*15)}}
+addUserKnob {7 eighteen}
+eighteen {{this.seventeen+(this.one)*(decrease+curved_decrease*16)}}
+addUserKnob {7 nineteen}
+nineteen {{this.eighteen+(this.one)*(decrease+curved_decrease*17)}}
+addUserKnob {7 twenty}
+twenty {{this.nineteen+(this.one)*(decrease+curved_decrease*18)}}
+addUserKnob {7 twentyone}
+twentyone {{this.twenty+(this.one)*(decrease+curved_decrease*19)}}
+addUserKnob {7 twentytwo}
+twentytwo {{this.twentyone+(this.one)*(decrease+curved_decrease*20)}}
+addUserKnob {7 twentythree}
+twentythree {{this.twentytwo+(this.one)*(decrease+curved_decrease*21)}}
+addUserKnob {7 twentyfour}
+twentyfour {{this.twentythree+(this.one)*(decrease+curved_decrease*22)}}
+addUserKnob {7 twentyfive}
+twentyfive {{this.twentyfour+(this.one)*(decrease+curved_decrease*23)}}
+addUserKnob {7 twentysix}
+twentysix {{this.twentyfive+(this.one)*(decrease+curved_decrease*24)}}
+addUserKnob {7 twentyseven}
+twentyseven {{this.twentysix+(this.one)*(decrease+curved_decrease*25)}}
+addUserKnob {7 twentyeight}
+twentyeight {{this.twentyseven+(this.one)*(decrease+curved_decrease*26)}}
+addUserKnob {7 twentynine}
+twentynine {{this.twentyeight+(this.one)*(decrease+curved_decrease*27)}}
+addUserKnob {7 thirty}
+thirty {{this.twentynine+(this.one)*(decrease+curved_decrease*28)}}
+addUserKnob {7 decrease}
+decrease {{parent.Controls1.decrease}}
+addUserKnob {7 curved_decrease}
+curved_decrease {{this.decrease*0.8}}
+}
+NoOp {
+inputs 0
+name showslices
+xpos 2955
+ypos 2368
+addUserKnob {20 User}
+addUserKnob {6 on l "" t "RGB only" +STARTLINE +STARTLINE}
+}
+NoOp {
+inputs 0
+name Controls1
+xpos -308
+ypos 5196
+addUserKnob {20 User}
+addUserKnob {7 offset R 1 1.3}
+offset {{parent.offsets}}
+addUserKnob {7 offsetlimit}
+offsetlimit {{offset<0?0:offset}}
+addUserKnob {7 offsetA}
+offsetA {{offsetB/((offsetlimit)+1)}}
+addUserKnob {7 offsetB}
+offsetB {{this.min/((offsetlimit/2)+1)}}
+addUserKnob {7 offsetC}
+offsetC {{this.min*((offsetlimit/2)+1)}}
+addUserKnob {7 offsetD}
+offsetD {{this.offsetC*((offsetlimit+1))}}
+addUserKnob {7 min}
+min {{parent.bpmin==0?0.0005:parent.bpmin}}
+addUserKnob {7 one R 0 20}
+one {{this.min*2}}
+addUserKnob {7 two R 0 20}
+two {{this.one+(this.one)*(decrease+curved_decrease*0)}}
+addUserKnob {7 three R 0 20}
+three {{this.two+(this.one)*(decrease+curved_decrease*1)}}
+addUserKnob {7 four R 0 20}
+four {{this.three+(this.one)*(decrease+curved_decrease*2)}}
+addUserKnob {7 five R 0 20}
+five {{this.four+(this.one)*(decrease+curved_decrease*3)}}
+addUserKnob {7 six R 0 20}
+six {{this.five+(this.one)*(decrease+curved_decrease*4)}}
+addUserKnob {7 seven R 0 20}
+seven {{this.six+(this.one)*(decrease+curved_decrease*5)}}
+addUserKnob {7 eight R 0 20}
+eight {{this.seven+(this.one)*(decrease+curved_decrease*6)}}
+addUserKnob {7 nine R 0 20}
+nine {{this.eight+(this.one)*(decrease+curved_decrease*7)}}
+addUserKnob {7 ten R 0 20}
+ten {{this.nine+(this.one)*(decrease+curved_decrease*8)}}
+addUserKnob {7 eleven R 0 20}
+eleven {{this.ten+(this.one)*(decrease+curved_decrease*9)}}
+addUserKnob {7 twelve R 0 20}
+twelve {{this.eleven+(this.one)*(decrease+curved_decrease*10)}}
+addUserKnob {7 thirteen R 0 20}
+thirteen {{this.twelve+(this.one)*(decrease+curved_decrease*11)}}
+addUserKnob {7 fourteen R 0 20}
+fourteen {{this.thirteen+(this.one)*(decrease+curved_decrease*12)}}
+addUserKnob {7 fifteen R 0 20}
+fifteen {{this.fourteen+(this.one)*(decrease+curved_decrease*13)}}
+addUserKnob {7 sixteen R 0 20}
+sixteen {{this.fifteen+(this.one)*(decrease+curved_decrease*14)}}
+addUserKnob {7 seventeen R 0 20}
+seventeen {{this.sixteen+(this.one)*(decrease+curved_decrease*15)}}
+addUserKnob {7 eighteen R 0 20}
+eighteen {{this.seventeen+(this.one)*(decrease+curved_decrease*16)}}
+addUserKnob {7 nineteen R 0 20}
+nineteen {{this.eighteen+(this.one)*(decrease+curved_decrease*17)}}
+addUserKnob {7 twenty R 0 20}
+twenty {{this.nineteen+(this.one)*(decrease+curved_decrease*18)}}
+addUserKnob {7 twentyone R 0 20}
+twentyone {{this.twenty+(this.one)*(decrease+curved_decrease*19)}}
+addUserKnob {7 twentytwo R 0 20}
+twentytwo {{this.twentyone+(this.one)*(decrease+curved_decrease*20)}}
+addUserKnob {7 twentythree R 0 20}
+twentythree {{this.twentytwo+(this.one)*(decrease+curved_decrease*21)}}
+addUserKnob {7 twentyfour R 0 20}
+twentyfour {{this.twentythree+(this.one)*(decrease+curved_decrease*22)}}
+addUserKnob {7 twentyfive R 0 20}
+twentyfive {{this.twentyfour+(this.one)*(decrease+curved_decrease*23)}}
+addUserKnob {7 twentysix R 0 20}
+twentysix {{this.twentyfive+(this.one)*(decrease+curved_decrease*24)}}
+addUserKnob {7 twentyseven R 0 20}
+twentyseven {{this.twentysix+(this.one)*(decrease+curved_decrease*25)}}
+addUserKnob {7 twentyeight R 0 20}
+twentyeight {{this.twentyseven+(this.one)*(decrease+curved_decrease*26)}}
+addUserKnob {7 twentynine R 0 20}
+twentynine {{this.twentyeight+(this.one)*(decrease+curved_decrease*27)}}
+addUserKnob {7 thirty R 0 20}
+thirty {{this.twentynine+(this.one)*(decrease+curved_decrease*28)}}
+addUserKnob {7 decrease}
+decrease {{parent.spread}}
+addUserKnob {7 curved_decrease}
+curved_decrease {{this.decrease*0.8}}
+}
+PostageStamp {
+inputs 0
+name channelstype
+xpos -1007
+ypos -399
+addUserKnob {20 User}
+addUserKnob {4 type M {Luminance Red Green Blue}}
+type Blue
+}
+end_group
