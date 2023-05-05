@@ -154,6 +154,8 @@ drawMenu.addCommand('GradMagic TL', "nuke.createNode('{}GradMagic')".format(pref
 drawMenu.addCommand('NoiseAdvanced TL', "nuke.createNode('{}NoiseAdvanced')".format(prefixNST), icon="Noise.png")
 drawMenu.addCommand('RadialAdvanced TL', "nuke.createNode('{}RadialAdvanced')".format(prefixNST), icon="Radial.png")
 drawMenu.addCommand('UV Map AG', "nuke.createNode('{}UV_Map')".format(prefixNST), icon="AG_UVMap.png")
+drawMenu.addCommand("SpotLight TL", "nuke.createNode('{}SpotLight')".format(prefixNST), icon="Radial.png")
+drawMenu.addCommand("Rings of Power TL", "nuke.createNode('{}Rings_of_Power')".format(prefixNST), icon="MergeIn.png")
 
 drawMenu.addSeparator()
 
@@ -466,6 +468,7 @@ transformMenu.addCommand('Matrix4x4Math TL', "nuke.createNode('{}Matrix4x4Math')
 transformMenu.addCommand('MirrorBorder TL', "nuke.createNode('{}MirrorBorder')".format(prefixNST), icon="AdjBBox.png")
 transformMenu.addCommand('TransformCutOut TL', "nuke.createNode('{}TransformCutOut')".format(prefixNST), icon="MergeOut.png")
 transformMenu.addCommand('iMorph AP', "nuke.createNode('{}iMorph')".format(prefixNST), icon="VectorDistort.png")
+transformMenu.addCommand('Symmetry TL', "nuke.createNode('{}Symmetry')".format(prefixNST), icon="Convolve.png")
 
 transformMenu.addSeparator()
 
