@@ -1,0 +1,112 @@
+set cut_paste_input [stack 0]
+version 12.2 v10
+push $cut_paste_input
+Group {
+ name Symmetry
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"steps\":\n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    \n    else:\n        with n:\n            start = nuke.toNode(\"Start\")\n            end = nuke.toNode(\"End\")\n            side = nuke.toNode(\"side\")\n            merge = nuke.toNode(\"Merge1\")\n            \n            startX = side.xpos()\n            startY = side.ypos()\n            \n            \n            steps = int( n.knob(\"steps\").getValue() )\n            \n            for i in range(1,merge.inputs()):\n                merge.setInput(i,None)\n                merge.setInput(0, side)\n                \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>start.xpos()]\n            for i in range(1,steps):\n            \n                t = nuke.nodes.Transform()\n                t.setXYpos(startX+i*100,startY)                \n                t.setInput(0,start)\n                fr = (360/steps)\n                t\['center'].setExpression(\"width/2\", 0)\n                t\['center'].setExpression(\"height/2\", 1)\n\n                t\['rotate'].setValue(fr*i)\n                merge.setInput(i if i<2 else i+1, t)"
+ tile_color 0xa57aaaff
+ note_font "Bitstream Vera Sans Bold"
+ note_font_color 0xffffffff
+ selected true
+ xpos -2605
+ ypos 4458
+ addUserKnob {20 Symmetry}
+ addUserKnob {41 operation T Merge1.operation}
+ addUserKnob {3 steps -STARTLINE}
+ steps 6
+ addUserKnob {26 ""}
+ addUserKnob {20 addTransform l "Additional Pre-Transform" n 1}
+ addTransform 0
+ addUserKnob {41 translate T Transform10.translate}
+ addUserKnob {41 rotate T Transform10.rotate}
+ addUserKnob {41 scale T Transform10.scale}
+ addUserKnob {41 skewX l "skew X" T Transform10.skewX}
+ addUserKnob {41 skewY l "skew Y" T Transform10.skewY}
+ addUserKnob {41 skew_order l "skew order" T Transform10.skew_order}
+ addUserKnob {41 center T Transform10.center}
+ addUserKnob {22 setCenter l "Set Center" -STARTLINE T "n = nuke.thisNode()\nw= n.width()\nh=n.height()\nn\['center'].setValue(\[w/2,h/2])"}
+ addUserKnob {20 endGroup n -1}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 742
+  ypos -567
+ }
+ Transform {
+  center {1024 1024}
+  name Transform10
+  selected true
+  xpos 742
+  ypos -437
+ }
+ NoOp {
+  name Start
+  xpos 742
+  ypos -353
+ }
+set Na81fb900 [stack 0]
+ Transform {
+  rotate 300
+  center {{width/2} {height/2}}
+  name Transform5
+  xpos 1242
+  ypos -270
+ }
+push $Na81fb900
+ Transform {
+  rotate 240
+  center {{width/2} {height/2}}
+  name Transform4
+  xpos 1142
+  ypos -270
+ }
+push $Na81fb900
+ Transform {
+  rotate 180
+  center {{width/2} {height/2}}
+  name Transform3
+  xpos 1042
+  ypos -270
+ }
+push $Na81fb900
+ Transform {
+  rotate 120
+  center {{width/2} {height/2}}
+  name Transform2
+  xpos 942
+  ypos -270
+ }
+push 0
+push $Na81fb900
+ Transform {
+  rotate 60
+  center {{width/2} {height/2}}
+  name Transform1
+  xpos 842
+  ypos -270
+ }
+push $Na81fb900
+ NoOp {
+  name side
+  xpos 742
+  ypos -270
+ }
+ Merge2 {
+  inputs 6+1
+  operation plus
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 742
+  ypos -174
+ }
+ NoOp {
+  name End
+  xpos 742
+ }
+ Output {
+  name Output1
+  xpos 742
+  ypos 58
+ }
+end_group
