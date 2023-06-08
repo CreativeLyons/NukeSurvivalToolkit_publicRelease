@@ -4,14 +4,17 @@ Group {
  onCreate "n = nuke.thisNode()\nfor i in \['intensity','response','max_size','src_black','src_white','response']:\n    n\[i].setFlag(0x00000004)\nn\['max_size'].setRange(0,10000)\nn\['overscan'].setRange(0,1000)"
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() in \[\"crop\",\"enableOverscan\"]:\n    kcv = n\[\"crop\"].value()\n    kov = n\[\"enableOverscan\"].value()\n    n\[\"enableOverscan\"].setEnabled(not kcv)\n    n\['overscan'].setEnabled(not kcv and kov)\nelif k.name() == \"s\":\n    s = int(k.value())\n    if s<1:\n        k.setValue(1)\n    else:\n        nd = nuke.toNode(\"DP\")\n        nm = nuke.toNode(\"MergeBlurs\")\n        b0 = nuke.toNode(\"Blur0\")\n        b0x = b0.xpos()\n        b0y = b0.ypos()\n        b0n = b0.name()\n        for i in range(1,nm.inputs()):\n            nm.setInput(i,None)\n        \[nuke.delete(i) for i in nuke.allNodes() if i.xpos()>nd.xpos()]\n        for i in range(1,s):\n            # Blur\n            b = nuke.nodes.Blur()\n            b.setXYpos(b0x+i*100,b0y)\n            b.setInput(0,nd)\n            b\[\"channels\"].setValue(\"all\")\n            for bk in \[\"filter\",\"quality\"]:\n                b\[bk].setExpression(b0n+\".\"+bk)\n            b\[\"crop\"].setValue(0)\n            b\[\"size\"].setValue(\[0,0])\n            b\[\"size\"].setExpression(\"DP.j((1/parent.s)*%s)/ parent.f\"%(i+1))\n            # Multiply\n            m = nuke.nodes.Multiply()\n            m.setXYpos(b0x+i*100,b0y+38)\n            m.setInput(0,b)\n            m\[\"channels\"].setValue(\"all\")\n            m\[\"value\"].setValue(\[0,0,0,0])\n            m\[\"value\"].setExpression( \"parent.p*%s+%s\"%((i+1)/(s),1-(i+1)/(s)))\n            # Merge\n            nm.setInput(i if i<2 else i+1, m)"
  tile_color 0xe88543ff
+ selected true
  addUserKnob {20 apeGlow}
  addUserKnob {41 channels T KeepWhat.channels}
  addUserKnob {7 intensity t "Intensity multiplier for the resulting glow." R 0 10}
  intensity 1
  addUserKnob {18 p l persistance t "Color gain of the largest step. Affects the other steps progressively, with the least effect on the smallest one.\n\nUse as an inverse falloff or as a progressive color tint." R 0 10}
  p 1
+ addUserKnob {6 p_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {18 tint t "Overall color multiplier for the intensity."}
  tint 1
+ addUserKnob {6 tint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 effect_only l "effect only" +STARTLINE}
  effect_only true
  addUserKnob {26 ""}
@@ -72,13 +75,13 @@ Group {
   xpos -739
   ypos 308
  }
-set N3c98e7f0 [stack 0]
+set N64670800 [stack 0]
  Dot {
   name Dot8
   xpos -494
   ypos 308
  }
-set N3c993260 [stack 0]
+set N64670100 [stack 0]
  Remove {
   name RemoveAll
   xpos -528
@@ -103,7 +106,7 @@ set N3c993260 [stack 0]
   ypos 409
   disable {{"\[exists parent.input1]"}}
  }
-push $N3c993260
+push $N64670100
  Dot {
   name Dot7
   xpos -384
@@ -146,7 +149,7 @@ add_layer {apGlowArea apGlowArea.red}
   xpos -384
   ypos 538
  }
-set N3bfb0600 [stack 0]
+set Ndeeec100 [stack 0]
  Dot {
   name Dot1
   xpos -494
@@ -159,7 +162,7 @@ set N3bfb0600 [stack 0]
   xpos -528
   ypos 556
  }
-set N3bfba3c0 [stack 0]
+set Ndeec3200 [stack 0]
  Grade {
   channels all
   blackpoint {{parent.src_black}}
@@ -169,8 +172,8 @@ set N3bfba3c0 [stack 0]
   xpos -528
   ypos 594
  }
-push $N3bfb0600
-push $N3bfba3c0
+push $Ndeeec100
+push $Ndeec3200
  Merge2 {
   inputs 2
   operation divide
@@ -195,7 +198,7 @@ push $N3bfba3c0
   addUserKnob {14 j R 0 100}
   j {{"pow(2, t*(log(parent.max_size*parent.f)/log(2)) )"} {"pow(2, t*(log(parent.max_size*parent.f)/log(2)) )"}}
  }
-set N3ccdda10 [stack 0]
+set Ndeeb2400 [stack 0]
  Blur {
   size {{"DP.j((1/parent.s)*10)/ parent.f"} {"DP.j((1/parent.s)*10)/ parent.f"}}
   filter {{Blur0.filter}}
@@ -211,7 +214,7 @@ set N3ccdda10 [stack 0]
   xpos 482
   ypos 767
  }
-push $N3ccdda10
+push $Ndeeb2400
  Blur {
   size {{"DP.j((1/parent.s)*9)/ parent.f"} {"DP.j((1/parent.s)*9)/ parent.f"}}
   filter {{Blur0.filter}}
@@ -227,7 +230,7 @@ push $N3ccdda10
   xpos 382
   ypos 767
  }
-push $N3ccdda10
+push $Ndeeb2400
  Blur {
   size {{"DP.j((1/parent.s)*8)/ parent.f"} {"DP.j((1/parent.s)*8)/ parent.f"}}
   filter {{Blur0.filter}}
@@ -243,7 +246,7 @@ push $N3ccdda10
   xpos 282
   ypos 767
  }
-push $N3ccdda10
+push $Ndeeb2400
  Blur {
   size {{"DP.j((1/parent.s)*7)/ parent.f"} {"DP.j((1/parent.s)*7)/ parent.f"}}
   filter {{Blur0.filter}}
@@ -259,7 +262,7 @@ push $N3ccdda10
   xpos 182
   ypos 767
  }
-push $N3ccdda10
+push $Ndeeb2400
  Blur {
   size {{"DP.j((1/parent.s)*6)/ parent.f"} {"DP.j((1/parent.s)*6)/ parent.f"}}
   filter {{Blur0.filter}}
@@ -275,7 +278,7 @@ push $N3ccdda10
   xpos 82
   ypos 767
  }
-push $N3ccdda10
+push $Ndeeb2400
  Blur {
   size {{"DP.j((1/parent.s)*5)/ parent.f"} {"DP.j((1/parent.s)*5)/ parent.f"}}
   filter {{Blur0.filter}}
@@ -291,7 +294,7 @@ push $N3ccdda10
   xpos -18
   ypos 767
  }
-push $N3ccdda10
+push $Ndeeb2400
  Blur {
   size {{"DP.j((1/parent.s)*4)/ parent.f"} {"DP.j((1/parent.s)*4)/ parent.f"}}
   filter {{Blur0.filter}}
@@ -307,7 +310,7 @@ push $N3ccdda10
   xpos -118
   ypos 767
  }
-push $N3ccdda10
+push $Ndeeb2400
  Blur {
   size {{"DP.j((1/parent.s)*3)/ parent.f"} {"DP.j((1/parent.s)*3)/ parent.f"}}
   filter {{Blur0.filter}}
@@ -324,7 +327,7 @@ push $N3ccdda10
   ypos 767
  }
 push 0
-push $N3ccdda10
+push $Ndeeb2400
  Blur {
   size {{"DP.j((1/parent.s)*2)/ parent.f"} {"DP.j((1/parent.s)*2)/ parent.f"}}
   filter {{Blur0.filter}}
@@ -340,7 +343,7 @@ push $N3ccdda10
   xpos -318
   ypos 767
  }
-push $N3ccdda10
+push $Ndeeb2400
  Blur {
   size {{"DP.j(1/parent.s + 0) / parent.f"} {"DP.j(1/parent.s + 0) / parent.f"}}
   crop false
@@ -376,13 +379,13 @@ push $N3ccdda10
   xpos -418
   ypos 928
  }
-push $N3c98e7f0
+push $N64670800
  Dot {
   name Dot4
   xpos -739
   ypos 769
  }
-set N3bdcd360 [stack 0]
+set Ndefeeb00 [stack 0]
  Dot {
   name Dot2
   xpos -629
@@ -419,7 +422,7 @@ set N3bdcd360 [stack 0]
   xpos -629
   ypos 978
  }
-push $N3bdcd360
+push $Ndefeeb00
  Merge2 {
   inputs 2+1
   operation copy
@@ -430,12 +433,15 @@ push $N3bdcd360
   ypos 974
  }
  Crop {
-  box {{parent.crop?0:-parent.overscan} {parent.crop?0:-parent.overscan} {parent.crop?width:width+parent.overscan} {parent.crop?height:height+parent.overscan}}
+  box {{parent.crop?0:-parent.overscan} {parent.crop?0:-parent.overscan} {parent.crop?width:width+parent.overscan.w} {parent.crop?height:height+parent.overscan.h}}
   intersect true
   name CropOverscan
+  selected true
   xpos -773
   ypos 1000
   disable {{"!parent.enableOverscan && !parent.crop"}}
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
  }
  Output {
   name Output
