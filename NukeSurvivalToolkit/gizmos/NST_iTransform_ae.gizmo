@@ -1,221 +1,222 @@
 Group {
-name iTransform_ae
-onCreate "n = nuke.thisNode()\nw = n.format().width()/2\nh = n.format().height()/2\n\ncenter = \[w,h]    \n\nif n.knob('create').value()==False:\n    n.knob('center').setValue(center)\n    n.knob('create').setValue(1)\n"
-knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"smart\":\n    s = n.knob('smart').getValue()\n    if s == 0: \n        groupNode = nuke.thisNode()\n        with groupNode:\n            m = nuke.toNode('mask')\n            s = nuke.toNode('STMap')\n            s.setInput(2, m)\n    else:\n        groupNode = nuke.thisNode()\n        with groupNode:\n            m = nuke.toNode('no_filter')\n            s = nuke.toNode('STMap')\n            s.setInput(2, m)"
-tile_color 0xa57aaaff
-note_font "Verdana Bold"
-note_font_color 0xffffffff
-addUserKnob {20 iTransform}
-addUserKnob {41 channels T STMap.channels}
-addUserKnob {26 ""}
-addUserKnob {6 blackoutsideBefore l "black outside before" +STARTLINE}
-addUserKnob {41 translate T inTransform2.translate}
-addUserKnob {41 rotate_1 l rotate T inTransform2.rotate}
-addUserKnob {41 scale_1 l scale T inTransform2.scale}
-addUserKnob {41 skewX_1 l "skew X" T inTransform2.skewX}
-addUserKnob {41 skewY_1 l "skew Y" T inTransform2.skewY}
-addUserKnob {4 skewOrder l "skew order" M {XY YX}}
-addUserKnob {41 center T inTransform2.center}
-addUserKnob {22 set_center l "set center" -STARTLINE T "n = nuke.thisNode()\nw= n.width()\nh=n.height()\nn\['center'].setValue(\[w/2,h/2])"}
-addUserKnob {4 filterN l filter M {impulse cubic keys Simon Rifman Mitchell Parzen Notch Lanczos4 Lanczos6 sinc4 "" "" "" ""}}
-filterN cubic
-addUserKnob {26 text_5_1 l "" -STARTLINE T "  "}
-addUserKnob {26 text_5_1_1 l "" -STARTLINE T "  "}
-addUserKnob {41 clamp -STARTLINE T inTransform2.clamp}
-addUserKnob {26 ""}
-addUserKnob {6 cropformat l "crop to format" +STARTLINE}
-addUserKnob {26 text_5_2 l "" -STARTLINE T "     "}
-addUserKnob {6 blackoutsideafter l "black outside after" -STARTLINE}
-addUserKnob {14 addpixels R 0 100}
-addUserKnob {7 mix}
-mix 1
-addUserKnob {26 text_5 l "" -STARTLINE T "    "}
-addUserKnob {6 smart l "smart mask  " -STARTLINE}
-smart true
-addUserKnob {26 ""}
-addUserKnob {6 create +INVISIBLE +STARTLINE}
-addUserKnob {26 about_1 l "" +STARTLINE T "<span style=\"color:#666\"><br/><b>iTransform v2.0</b> - <a  style=\"color:#666;text-decoration: none;\">Aitor Echeveste</a>  © 2021</span>"}
-addUserKnob {20 About}
-addUserKnob {26 text_1 l "" +STARTLINE T "   "}
-addUserKnob {26 text_2 l "" +STARTLINE T "   "}
-addUserKnob {26 text_4 l "" +STARTLINE T "<font color=#ffffff><font size=\"7\">iTransform </font><font size=\"6\"> v2.0</font>\n"}
-addUserKnob {26 about_1_1 l "" +STARTLINE T "by Aitor Echeveste Izquierdo © 2021"}
-addUserKnob {26 text_1_1 l "" +STARTLINE T "   "}
-addUserKnob {26 ""}
-addUserKnob {26 text_3 l "" +STARTLINE T "   "}
-addUserKnob {26 website l "" +STARTLINE T "<b><a href=\"http://www.aitorecheveste.com\"><span style=\"color:#C8C8C8;\">www.aitorecheveste.com</span></a><b>"}
+ name iTransform_ae
+ onCreate "n = nuke.thisNode()\nif n.knob('create').value() == False:\n    format = n.format()\n    center = \[format.width() / 2, format.height() / 2]\n    n.knob('center').setValue(center)\n    n.knob('create').setValue(1)"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"smart\":\n    s = n.knob('smart').getValue()\n    if s == 0: \n        groupNode = nuke.thisNode()\n        with groupNode:\n            m = nuke.toNode('mask')\n            s = nuke.toNode('STMap')\n            s.setInput(2, m)\n    else:\n        groupNode = nuke.thisNode()\n        with groupNode:\n            m = nuke.toNode('no_filter')\n            s = nuke.toNode('STMap')\n            s.setInput(2, m)"
+ tile_color 0xa57aaaff
+ note_font "Verdana Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 iTransform}
+ addUserKnob {41 channels T STMap.channels}
+ addUserKnob {26 ""}
+ addUserKnob {6 blackoutsideBefore l "black outside before" +STARTLINE}
+ addUserKnob {41 translate T inTransform2.translate}
+ addUserKnob {41 rotate_1 l rotate T inTransform2.rotate}
+ addUserKnob {41 scale_1 l scale T inTransform2.scale}
+ addUserKnob {41 skewX_1 l "skew X" T inTransform2.skewX}
+ addUserKnob {41 skewY_1 l "skew Y" T inTransform2.skewY}
+ addUserKnob {4 skewOrder l "skew order" M {XY YX}}
+ addUserKnob {41 center T inTransform2.center}
+ addUserKnob {22 set_center l "set center" -STARTLINE T "n = nuke.thisNode()\nw= n.width()\nh=n.height()\nn\['center'].setValue(\[w/2,h/2])"}
+ addUserKnob {4 filterN l filter M {impulse cubic keys Simon Rifman Mitchell Parzen Notch Lanczos4 Lanczos6 sinc4 "" "" "" ""}}
+ filterN cubic
+ addUserKnob {26 text_5_1 l "" -STARTLINE T "  "}
+ addUserKnob {26 text_5_1_1 l "" -STARTLINE T "  "}
+ addUserKnob {41 clamp -STARTLINE T inTransform2.clamp}
+ addUserKnob {26 ""}
+ addUserKnob {6 cropformat l "crop to format" +STARTLINE}
+ addUserKnob {26 text_5_2 l "" -STARTLINE T "     "}
+ addUserKnob {6 blackoutsideafter l "black outside after" -STARTLINE}
+ addUserKnob {14 addpixels R 0 100}
+ addUserKnob {7 mix}
+ mix 1
+ addUserKnob {26 text_5 l "" -STARTLINE T "    "}
+ addUserKnob {6 smart l "smart mask  " -STARTLINE}
+ smart true
+ addUserKnob {26 ""}
+ addUserKnob {6 create +INVISIBLE +STARTLINE}
+ create true
+ addUserKnob {26 about_1 l "" +STARTLINE T "<span style=\"color:#666\"><br/><b>iTransform v2.0</b> - <a  style=\"color:#666;text-decoration: none;\">Aitor Echeveste</a>  © 2021</span>"}
+ addUserKnob {20 About}
+ addUserKnob {26 text_1 l "" +STARTLINE T "   "}
+ addUserKnob {26 text_2 l "" +STARTLINE T "   "}
+ addUserKnob {26 text_4 l "" +STARTLINE T "<font color=#ffffff><font size=\"7\">iTransform </font><font size=\"6\"> v2.0</font>\n"}
+ addUserKnob {26 about_1_1 l "" +STARTLINE T "by Aitor Echeveste Izquierdo © 2021"}
+ addUserKnob {26 text_1_1 l "" +STARTLINE T "   "}
+ addUserKnob {26 ""}
+ addUserKnob {26 text_3 l "" +STARTLINE T "   "}
+ addUserKnob {26 website l "" +STARTLINE T "<b><a href=\"http://www.aitorecheveste.com\"><span style=\"color:#C8C8C8;\">www.aitorecheveste.com</span></a><b>"}
 }
-Input {
-inputs 0
-name crtlMask
-xpos 606
-ypos 531
-number 1
-}
-set N94ecc100 [stack 0]
-NoOp {
-name mattebbox
-xpos 606
-ypos 555
-addUserKnob {20 User}
-addUserKnob {15 bbox}
-bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
-}
-Expression {
-temp_name0 alpha_an
-temp_expr0 a!=0?1:0
-expr0 alpha_an
-expr1 alpha_an
-expr2 alpha_an
-expr3 alpha_an
-name no_filter
-xpos 606
-ypos 579
-}
-Dot {
-name Dot1
-xpos 640
-ypos 727
-}
-Input {
-inputs 0
-name mask
-xpos 221
-ypos 507
-number 2
-}
-Expression {
-expr3 (1-a)
-name invert
-xpos 221
-ypos 531
-}
-Input {
-inputs 0
-name img
-xpos 121
-ypos 344
-}
-BlackOutside {
-name BlackOutsideBefore
-xpos 121
-ypos 370
-disable {{!blackoutsideBefore}}
-}
-set N94ea0f00 [stack 0]
-Crop {
-box {{-input.format.width} {-input.format.height} {(input.format.width*2)} {(input.format.height*2)}}
-crop false
-name Crop1
-xpos 474
-ypos 370
-addUserKnob {20 User}
-addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
-}
-Expression {
-expr0 (x+0.5)/width
-expr1 (y+.5)/height
-name Expression1
-xpos 474
-ypos 418
-}
-set N94ea0100 [stack 0]
-Dot {
-name Dot2
-xpos 343
-ypos 421
-}
-push $N94ecc100
-push $N94ea0100
-Transform {
-translate {{parent.inTransform2.translate} {parent.inTransform2.translate}}
-rotate {{parent.inTransform2.rotate}}
-scale {{parent.inTransform2.scale}}
-skewX {{parent.inTransform2.skewX}}
-skewY {{parent.inTransform2.skewY}}
-skew_order {{parent.skewOrder}}
-center {{parent.inTransform2.center} {parent.inTransform2.center}}
-invert_matrix {{parent.inTransform2.invert_matrix}}
-filter {{parent.filterN}}
-clamp {{parent.inTransform2.clamp}}
-shutteroffset centred
-name inTransform1
-selected true
-xpos 599
-ypos 418
-}
-push $N94ea0100
-Keymix {
-inputs 3
-name Keymix1
-xpos 474
-ypos 525
-}
-Keymix {
-inputs 3
-name Keymix2
-xpos 309
-ypos 525
-disable {{"\[exists parent.input2]==1?smart==1?0:1:1" x1 0 x1001 1}}
-}
-Expression {
-expr0 ((x+0.5)/width)
-expr1 ((y+0.5)/height)
-mix {{1-parent.mix}}
-name mix
-xpos 309
-ypos 563
-}
-push $N94ea0f00
-NoOp {
-name inputbbox
-xpos 126
-ypos 723
-addUserKnob {20 User}
-addUserKnob {15 bbox}
-bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
-}
-STMap {
-inputs 2+1
-channels rgba
-uv rgb
-name STMap
-xpos 309
-ypos 723
-}
-Crop {
-box {{"inputbbox.bbox<mattebbox.bbox?\n\ninputbbox.bbox-addpixels\n\n:inputbbox.bbox+(mattebbox.bbox- inputbbox.bbox)-addpixels\n\n"} {"inputbbox.bbox<mattebbox.bbox?\n\ninputbbox.bbox-addpixels\n\n:inputbbox.bbox+(mattebbox.bbox- inputbbox.bbox)-addpixels"} {"inputbbox.bbox>mattebbox.bbox?\n\ninputbbox.bbox+addpixels\n\n:inputbbox.bbox+(mattebbox.bbox- inputbbox.bbox)+addpixels"} {"inputbbox.bbox>mattebbox.bbox?\n\ninputbbox.bbox+addpixels\n:inputbbox.bbox+(mattebbox.bbox- inputbbox.bbox)+addpixels"}}
-name Crop3
-xpos 309
-ypos 747
-addUserKnob {20 User}
-addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
-}
-Reformat {
-name Reformat2
-xpos 309
-ypos 771
-disable {{!cropformat}}
-}
-BlackOutside {
-name BlackOutsideAfter
-xpos 309
-ypos 797
-disable {{!blackoutsideafter}}
-}
-Output {
-name Output1
-xpos 309
-ypos 823
-}
-Transform {
-inputs 0
-skew_order {{parent.skewOrder}}
-center {1024 778}
-filter {{parent.filterN}}
-shutteroffset centred
-name inTransform2
-xpos 715
-ypos 417
-}
+ Input {
+  inputs 0
+  name crtlMask
+  xpos 606
+  ypos 531
+  number 1
+ }
+set Na054ab00 [stack 0]
+ NoOp {
+  name mattebbox
+  xpos 606
+  ypos 555
+  addUserKnob {20 User}
+  addUserKnob {15 bbox}
+  bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+ }
+ Expression {
+  temp_name0 alpha_an
+  temp_expr0 a!=0?1:0
+  expr0 alpha_an
+  expr1 alpha_an
+  expr2 alpha_an
+  expr3 alpha_an
+  name no_filter
+  xpos 606
+  ypos 579
+ }
+ Dot {
+  name Dot1
+  xpos 640
+  ypos 727
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos 221
+  ypos 507
+  number 2
+ }
+ Expression {
+  expr3 (1-a)
+  name invert
+  xpos 221
+  ypos 531
+ }
+ Input {
+  inputs 0
+  name img
+  xpos 121
+  ypos 344
+ }
+ BlackOutside {
+  name BlackOutsideBefore
+  xpos 121
+  ypos 370
+  disable {{!blackoutsideBefore}}
+ }
+set Ncbcf900 [stack 0]
+ Crop {
+  box {{-input.format.width} {-input.format.height} {(input.format.width*2)} {(input.format.height*2)}}
+  crop false
+  name Crop1
+  xpos 474
+  ypos 370
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Expression {
+  expr0 (x+0.5)/width
+  expr1 (y+.5)/height
+  name Expression1
+  xpos 474
+  ypos 418
+ }
+set Ncbceb00 [stack 0]
+ Dot {
+  name Dot2
+  xpos 343
+  ypos 421
+ }
+push $Na054ab00
+push $Ncbceb00
+ Transform {
+  translate {{parent.inTransform2.translate} {parent.inTransform2.translate}}
+  rotate {{parent.inTransform2.rotate}}
+  scale {{parent.inTransform2.scale} {parent.inTransform2.scale}}
+  skewX {{parent.inTransform2.skewX}}
+  skewY {{parent.inTransform2.skewY}}
+  skew_order {{parent.skewOrder}}
+  center {{parent.inTransform2.center} {parent.inTransform2.center}}
+  invert_matrix {{parent.inTransform2.invert_matrix}}
+  filter {{parent.filterN}}
+  clamp {{parent.inTransform2.clamp}}
+  shutteroffset centred
+  name inTransform1
+  xpos 599
+  ypos 418
+ }
+push $Ncbceb00
+ Keymix {
+  inputs 3
+  name Keymix1
+  xpos 474
+  ypos 525
+ }
+ Keymix {
+  inputs 3
+  name Keymix2
+  xpos 309
+  ypos 525
+  disable {{"\[exists parent.input2]==1?smart==1?0:1:1" x1 0 x1001 1}}
+ }
+ Expression {
+  expr0 ((x+0.5)/width)
+  expr1 ((y+0.5)/height)
+  mix {{1-parent.mix}}
+  name mix
+  xpos 309
+  ypos 563
+ }
+push $Ncbcf900
+ NoOp {
+  name inputbbox
+  xpos 126
+  ypos 723
+  addUserKnob {20 User}
+  addUserKnob {15 bbox}
+  bbox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+ }
+ STMap {
+  inputs 2+1
+  channels rgba
+  uv rgb
+  name STMap
+  xpos 309
+  ypos 723
+ }
+ Crop {
+  box {{"inputbbox.bbox<mattebbox.bbox?\n\ninputbbox.bbox-addpixels\n\n:inputbbox.bbox+(mattebbox.bbox- inputbbox.bbox)-addpixels\n\n"} {"inputbbox.bbox<mattebbox.bbox?\n\ninputbbox.bbox-addpixels\n\n:inputbbox.bbox+(mattebbox.bbox- inputbbox.bbox)-addpixels"} {"inputbbox.bbox>mattebbox.bbox?\n\ninputbbox.bbox+addpixels\n\n:inputbbox.bbox+(mattebbox.bbox- inputbbox.bbox)+addpixels"} {"inputbbox.bbox>mattebbox.bbox?\n\ninputbbox.bbox+addpixels\n:inputbbox.bbox+(mattebbox.bbox- inputbbox.bbox)+addpixels"}}
+  name Crop3
+  xpos 309
+  ypos 747
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+ }
+ Reformat {
+  name Reformat2
+  xpos 309
+  ypos 771
+  disable {{!cropformat}}
+ }
+ BlackOutside {
+  name BlackOutsideAfter
+  xpos 309
+  ypos 797
+  disable {{!blackoutsideafter}}
+ }
+ Output {
+  name Output1
+  xpos 309
+  ypos 823
+ }
+ Transform {
+  inputs 0
+  skew_order {{parent.skewOrder}}
+  center {1203 568}
+  filter {{parent.filterN}}
+  shutteroffset centred
+  name inTransform2
+  xpos 715
+  ypos 417
+ }
 end_group
