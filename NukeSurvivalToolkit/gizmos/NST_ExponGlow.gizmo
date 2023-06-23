@@ -100,7 +100,7 @@ Group {
   xpos 34
   ypos -1282
  }
-set Ndb46a400 [stack 0]
+set N6c251600 [stack 0]
  Dot {
   name Dot2
   note_font_size 41
@@ -126,14 +126,14 @@ set Ndb46a400 [stack 0]
   xpos -367
   ypos 767
  }
-set Ndb468800 [stack 0]
+set Nd49eb900 [stack 0]
  Dot {
   name Dot3
   note_font_size 41
   xpos -367
   ypos 819
  }
-set Ndb468100 [stack 0]
+set Nd49eb200 [stack 0]
  Dot {
   name Dot8
   note_font_size 41
@@ -163,7 +163,7 @@ set Ndb468100 [stack 0]
   xpos 210
   ypos -980
  }
-push $Ndb46a400
+push $N6c251600
  Merge2 {
   inputs 2
   name Merge3
@@ -205,7 +205,7 @@ push $Ndb46a400
   xpos 289
   ypos -759
  }
-push $Ndb46a400
+push $N6c251600
  Dot {
   name Dot1
   note_font_size 41
@@ -233,30 +233,30 @@ push $Ndb46a400
   xpos 461
   ypos -1026
  }
-set N4b504f00 [stack 0]
+set Nd49c4100 [stack 0]
  Invert {
   name Invert1
   xpos 864
   ypos -1033
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-set N4b504800 [stack 0]
+set Nd49a7900 [stack 0]
  Keyer {
   operation "luminance key"
   range {{parent.tolerance} {range.A+parent.tolerance+1} {range.B} {range.B}}
   name Keyer1
-  xpos 948
-  ypos -978
+  xpos 774
+  ypos -967
   disable {{!tolerance_2}}
  }
  Premult {
   channels all
   name Premult1
-  xpos 948
-  ypos -921
+  xpos 774
+  ypos -910
   disable {{!tolerance_2}}
  }
-push $N4b504800
+push $Nd49a7900
  Dissolve {
   inputs 2
   channels rgba
@@ -274,13 +274,13 @@ push $N4b504800
   xpos 864
   ypos -768
  }
-set N53ecf200 [stack 0]
+set Nd49a5d00 [stack 0]
  NoOp {
   name Start
   xpos 864
   ypos -706
  }
-set N53ece400 [stack 0]
+set Nd49a4f00 [stack 0]
  Blur {
   size {{"(width/25*pow(parent.size*10, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*10, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
   crop false
@@ -295,7 +295,7 @@ set N53ece400 [stack 0]
   xpos 1764
   ypos -477
  }
-push $N53ece400
+push $Nd49a4f00
  Blur {
   size {{"(width/25*pow(parent.size*9, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*9, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
   crop false
@@ -310,7 +310,7 @@ push $N53ece400
   xpos 1664
   ypos -477
  }
-push $N53ece400
+push $Nd49a4f00
  Blur {
   size {{"(width/25*pow(parent.size*8, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*8, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
   crop false
@@ -325,7 +325,7 @@ push $N53ece400
   xpos 1564
   ypos -477
  }
-push $N53ece400
+push $Nd49a4f00
  Blur {
   size {{"(width/25*pow(parent.size*7, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*7, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
   crop false
@@ -340,7 +340,7 @@ push $N53ece400
   xpos 1464
   ypos -477
  }
-push $N53ece400
+push $Nd49a4f00
  Blur {
   size {{"(width/25*pow(parent.size*6, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*6, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
   crop false
@@ -355,7 +355,7 @@ push $N53ece400
   xpos 1364
   ypos -477
  }
-push $N53ece400
+push $Nd49a4f00
  Blur {
   size {{"(width/25*pow(parent.size*5, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*5, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
   crop false
@@ -370,7 +370,7 @@ push $N53ece400
   xpos 1264
   ypos -477
  }
-push $N53ece400
+push $Nd49a4f00
  Blur {
   size {{"(width/25*pow(parent.size*4, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*4, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
   crop false
@@ -385,7 +385,7 @@ push $N53ece400
   xpos 1164
   ypos -477
  }
-push $N53ece400
+push $Nd49a4f00
  Blur {
   size {{"(width/25*pow(parent.size*3, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*3, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
   crop false
@@ -401,7 +401,7 @@ push $N53ece400
   ypos -477
  }
 push 0
-push $N53ece400
+push $Nd49a4f00
  Blur {
   size {{"(width/25*pow(parent.size*2, parent.exp.w))*((aspectCalc.aspect.w/100))"} {"(height/25*pow(parent.size*2, parent.exp.h))*((aspectCalc.aspect.h/100))"}}
   crop false
@@ -416,7 +416,7 @@ push $N53ece400
   xpos 964
   ypos -477
  }
-push $N53ece400
+push $Nd49a4f00
  Blur {
   size {{(width/10*parent.size*(aspectCalc.aspect.w/100))} {(height/10*parent.size*(aspectCalc.aspect.h/100))}}
   crop false
@@ -445,7 +445,7 @@ push $N53ece400
   xpos 864
   ypos -279
  }
-set Nb845c100 [stack 0]
+set Nd4af2b00 [stack 0]
  CopyBBox {
   inputs 2
   name CopyBBox1
@@ -497,15 +497,15 @@ set Nb845c100 [stack 0]
    xpos 295
    ypos 462
   }
-set N53b8e400 [stack 0]
+set Nd4af0f00 [stack 0]
   Dot {
    name Dot1
    note_font_size 41
    xpos -160
    ypos 462
   }
-set N53b8dd00 [stack 0]
-push $N53b8e400
+set Nd4af0800 [stack 0]
+push $Nd4af0f00
   Crop {
    box {{parent.inputBBox} {parent.inputBBox} {parent.inputBBox} {parent.inputBBox}}
    crop {{parent.blackOutside}}
@@ -515,7 +515,7 @@ push $N53b8e400
    addUserKnob {20 User}
    addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
   }
-set N53b8d600 [stack 0]
+set Nd4af0100 [stack 0]
   Remove {
    operation keep
    channels none
@@ -523,7 +523,7 @@ set N53b8d600 [stack 0]
    xpos 120
    ypos 504
   }
-set N53b8cf00 [stack 0]
+set Nd4ac7900 [stack 0]
   Transform {
    scale {{parent.overscanPercent} {parent.overscanPercent}}
    center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -533,7 +533,7 @@ set N53b8cf00 [stack 0]
    xpos 120
    ypos 553
   }
-push $N53b8cf00
+push $Nd4ac7900
   AdjBBox {
    numpixels {{parent.overscan} {parent.overscan}}
    name AdjBBox1
@@ -559,7 +559,7 @@ push $N53b8cf00
    ypos 647
    disable {{!parent.Crop6.intersect}}
   }
-push $N53b8dd00
+push $Nd4af0800
   CopyBBox {
    inputs 2
    name CopyBBox1
@@ -578,7 +578,7 @@ push $N53b8dd00
    xpos -160
    ypos 769
   }
-push $N53b8d600
+push $Nd4af0100
   Switch {
    inputs 2
    which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
@@ -587,13 +587,13 @@ push $N53b8d600
    xpos 261
    ypos 759
   }
-set N92f05600 [stack 0]
+set Nd4ac4100 [stack 0]
   Output {
    name Output1
    xpos 261
    ypos 921
   }
-push $N92f05600
+push $Nd4ac4100
   NoOp {
    name OutputBBox1
    xpos 378
@@ -605,7 +605,7 @@ push $N92f05600
    outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
   }
  end_group
-push $Nb845c100
+push $Nd4af2b00
  Merge2 {
   inputs 2
   bbox intersection
@@ -613,15 +613,15 @@ push $Nb845c100
   xpos 585
   ypos -66
  }
-push $Nb845c100
+push $Nd4af2b00
  CopyBBox {
   inputs 2
   name CopyBBox2
   xpos 585
   ypos -21
  }
-set N6689f900 [stack 0]
-push $N53ecf200
+set Nd4aa2400 [stack 0]
+push $Nd49a5d00
  Dot {
   name Dot4
   note_font_size 41
@@ -639,8 +639,8 @@ push $N53ecf200
   xpos 540
   ypos 78
  }
-push $N6689f900
-push $Nb845c100
+push $Nd4aa2400
+push $Nd4af2b00
  Switch {
   inputs 2
   which {{"parent.safeBBox && ((BBoxResult.bbox.x < BBoxInput.bbox.x || BBoxResult.bbox.y < BBoxInput.bbox.y || BBoxResult.bbox.r > BBoxInput.bbox.r || BBoxResult.bbox.t > BBoxInput.bbox.t))"}}
@@ -692,7 +692,7 @@ push $Nb845c100
   ypos 283
   disable {{"parent.size < 0 ? 0 : 1"}}
  }
-push $N4b504f00
+push $Nd49c4100
  Switch {
   inputs 2
   which {{"parent.size == 0 ? 0 : 1"}}
@@ -701,7 +701,7 @@ push $N4b504f00
   xpos 427
   ypos 283
  }
-push $Ndb46a400
+push $N6c251600
  Dot {
   name Dot22
   note_font_size 41
@@ -738,7 +738,7 @@ push $Ndb46a400
   xpos 34
   ypos 729
  }
-set N67a00800 [stack 0]
+set Nd4a37200 [stack 0]
  Dot {
   name Dot12
   note_font_size 41
@@ -751,7 +751,7 @@ set N67a00800 [stack 0]
   xpos -260
   ypos 943
  }
-push $Ndb468800
+push $Nd49eb900
  Input {
   inputs 0
   name Inputmask
@@ -766,14 +766,14 @@ push $Ndb468800
   xpos 380
   ypos 582
  }
-set N64ba6b00 [stack 0]
+set Nd4a35600 [stack 0]
  Dot {
   name Dot20
   note_font_size 41
   xpos 270
   ypos 582
  }
-push $N67a00800
+push $Nd4a37200
  Merge2 {
   inputs 2
   bbox intersection
@@ -803,15 +803,15 @@ push $N67a00800
   xpos 270
   ypos 917
  }
-push $N64ba6b00
+push $Nd4a35600
  Dot {
   name Dot10
   note_font_size 41
   xpos 380
   ypos 819
  }
-push $N67a00800
-push $Ndb468100
+push $Nd4a37200
+push $Nd49eb200
  Merge2 {
   inputs 2+1
   operation copy
@@ -829,8 +829,8 @@ push $Ndb468100
   xpos 34
   ypos 891
  }
-set Na3f73900 [stack 0]
-push $Ndb468100
+set Nd4a1a400 [stack 0]
+push $Nd49eb200
  CopyBBox {
   inputs 2
   name CopyBBoxUnion
@@ -869,7 +869,7 @@ push $Ndb468100
   addUserKnob {20 User}
   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
  }
-set Na3f71600 [stack 0]
+set Nd4a18100 [stack 0]
  Transform {
   scale {{parent.adjustBBoxPercent} {parent.adjustBBoxPercent}}
   center {{((input.bbox.r-input.bbox.x)/2)+input.bbox.x} {((input.bbox.t-input.bbox.y)/2)+input.bbox.y}}
@@ -879,7 +879,7 @@ set Na3f71600 [stack 0]
   xpos -516
   ypos 1042
  }
-push $Na3f71600
+push $Nd4a18100
  AdjBBox {
   numpixels {{parent.adjustBBoxPixels} {parent.adjustBBoxPixels}}
   name AdjBBoxPixels
@@ -899,7 +899,7 @@ push $Na3f71600
   xpos -367
   ypos 1137
  }
-push $Na3f73900
+push $Nd4a1a400
  CopyBBox {
   inputs 2
   name CopyBBox
@@ -917,7 +917,7 @@ push $Na3f73900
   xpos 0
   ypos 1299
  }
-push $Nb845c100
+push $Nd4af2b00
  NoOp {
   name BBoxResult
   xpos 714
