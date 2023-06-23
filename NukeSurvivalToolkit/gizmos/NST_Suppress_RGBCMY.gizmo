@@ -1,6 +1,7 @@
 Group {
  name Suppress_RGBCMY
  help "Suppress specific colors in RGBCMY space"
+ tile_color 0xa3bbe6ff
  selected true
  addUserKnob {20 colorSuppress l "Color Suppression"}
  addUserKnob {7 red l Red t "Suppress this color"}
@@ -39,8 +40,22 @@ Group {
  yellow_luma 1
  addUserKnob {6 yellow_luma_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge7.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge7.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge7.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge7.fringe}
+ addUserKnob {41 mix T Merge7.mix}
+ addUserKnob {26 "" +STARTLINE}
  addUserKnob {26 spin_copyright l "" t "© <b>SPIN<span style=\"color:#b32026\">VFX</span></b>\nSuppress_RGBCMY\nVersion 1.2\n2017-2018" +STARTLINE T "<span style=\"color:#aaa;font-family:sans-serif;font-size:8pt\"><b>SPIN<span style=\"color:#b32026\">VFX</span></b> - Version 1.2 - 2017-2018 - <a href=\"https://github.com/SpinVFX/spin_nuke_gizmos/\" style=\"color:#aaa\">Github Page</a></span>"}
 }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -267
+  ypos 1207
+  number 1
+ }
  Input {
   inputs 0
   name img
@@ -52,7 +67,7 @@ Group {
   xpos -355
   ypos -137
  }
-set N7c0a840 [stack 0]
+set N4b898800 [stack 0]
  Dot {
   name Dot3
   xpos -106
@@ -63,31 +78,31 @@ set N7c0a840 [stack 0]
   xpos -106
   ypos 11
  }
-set N7a8c230 [stack 0]
+set N4a04f900 [stack 0]
  Dot {
   name Dot1
   xpos -106
   ypos 211
  }
-set N7b99d90 [stack 0]
+set N4a04f200 [stack 0]
  Dot {
   name Dot6
   xpos -106
   ypos 399
  }
-set N7af0400 [stack 0]
+set N4a04eb00 [stack 0]
  Dot {
   name Dot5
   xpos -106
   ypos 585
  }
-set N7b5c4f0 [stack 0]
+set N4a04e400 [stack 0]
  Dot {
   name Dot4
   xpos -106
   ypos 783
  }
-set N7b297d0 [stack 0]
+set N4a04dd00 [stack 0]
  Dot {
   name Dot2
   xpos -106
@@ -103,7 +118,7 @@ set N7b297d0 [stack 0]
   xpos -258
   ypos 985
  }
-set N79f7d40 [stack 0]
+set N4a04cf00 [stack 0]
  Saturation {
   saturation {{parent.yellow}}
   name Saturation6
@@ -122,8 +137,8 @@ set N79f7d40 [stack 0]
   xpos -258
   ypos 1114
  }
-push $N79f7d40
-push $N7b297d0
+push $N4a04cf00
+push $N4a04dd00
  Expression {
   temp_name0 mag
   temp_expr0 "max(min(r-g, b-g),0)"
@@ -134,7 +149,7 @@ push $N7b297d0
   xpos -258
   ypos 779
  }
-set N7c37d40 [stack 0]
+set N5a838f00 [stack 0]
  Saturation {
   saturation {{parent.magenta}}
   name Saturation5
@@ -153,8 +168,8 @@ set N7c37d40 [stack 0]
   xpos -258
   ypos 896
  }
-push $N7c37d40
-push $N7b5c4f0
+push $N5a838f00
+push $N4a04e400
  Expression {
   temp_name0 cyan
   temp_expr0 "max(min(g-r, b-r),0)"
@@ -165,7 +180,7 @@ push $N7b5c4f0
   xpos -258
   ypos 581
  }
-set N7b4a0e0 [stack 0]
+set N4c5a0f00 [stack 0]
  Saturation {
   saturation {{parent.cyan}}
   name Saturation4
@@ -184,8 +199,8 @@ set N7b4a0e0 [stack 0]
   xpos -258
   ypos 698
  }
-push $N7b4a0e0
-push $N7af0400
+push $N4c5a0f00
+push $N4a04eb00
  Expression {
   expr0 0
   expr1 0
@@ -194,7 +209,7 @@ push $N7af0400
   xpos -258
   ypos 395
  }
-set N7a2e7e0 [stack 0]
+set N4718cf00 [stack 0]
  Saturation {
   saturation {{parent.blue}}
   name Saturation3
@@ -213,8 +228,8 @@ set N7a2e7e0 [stack 0]
   xpos -258
   ypos 512
  }
-push $N7a2e7e0
-push $N7b99d90
+push $N4718cf00
+push $N4a04f200
  Expression {
   expr0 0
   expr1 g-min(max(r,b),g)
@@ -223,7 +238,7 @@ push $N7b99d90
   xpos -258
   ypos 207
  }
-set N7a40b30 [stack 0]
+set N6b16cf00 [stack 0]
  Saturation {
   saturation {{parent.green}}
   name Saturation2
@@ -242,8 +257,8 @@ set N7a40b30 [stack 0]
   xpos -258
   ypos 324
  }
-push $N7a40b30
-push $N7a8c230
+push $N6b16cf00
+push $N4a04f900
  Expression {
   expr0 r-min(max(g,b),r)
   expr1 0
@@ -252,7 +267,7 @@ push $N7a8c230
   xpos -257
   ypos 7
  }
-set N700d020 [stack 0]
+set Na9ae0f00 [stack 0]
  Saturation {
   saturation {{parent.red}}
   name Saturation1
@@ -271,8 +286,8 @@ set N700d020 [stack 0]
   xpos -257
   ypos 146
  }
-push $N700d020
-push $N7c0a840
+push $Na9ae0f00
+push $N4b898800
  Merge2 {
   inputs 2
   operation from
@@ -369,9 +384,33 @@ push $N7c0a840
   xpos -389
   ypos 1120
  }
+push $N4b898800
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos -553
+  ypos -137
+ }
+ Dot {
+  name Dot10
+  note_font_size 41
+  xpos -553
+  ypos 1211
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge7
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  selected true
+  xpos -389
+  ypos 1207
+  addUserKnob {20 TRX}
+  addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "import convertMergeToMergeAll;convertMergeToMergeAll.convertMergeToMergeAll()"}
+ }
  Output {
   name Output2
   xpos -389
-  ypos 1205
+  ypos 1401
  }
 end_group
