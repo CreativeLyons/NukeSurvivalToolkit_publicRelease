@@ -1,15 +1,15 @@
-set cut_paste_input [stack 0]
-push $cut_paste_input
 Group {
  name MorphDissolve
  help "Allows to morph between two moving plates automatically, or can be used to improve manual Morphs."
  tile_color 0x890074ff
  label "(Plate \[value morph])"
  selected true
- addUserKnob {20 User}
+ addUserKnob {20 MorphDissolve}
  addUserKnob {7 morph l Morph t "Morphs between input 0 and input 1"}
  addUserKnob {26 ""}
  addUserKnob {4 method l "Morph Method" t "Pick which method to use. They may both display artifacts in different areas, try both to see which one produces the best results for your specific morph." M {iDistort Kronos ""}}
+ addUserKnob {4 direction l Direction -STARTLINE M {In-Between "0 --> 1" "1 --> 0" ""}}
+ addUserKnob {4 result l Result -STARTLINE M {Morph STmap "" "" "" ""}}
  addUserKnob {7 vectorDetail l "Vector Detail" t "Use this to adjust the density of the calculated motion vector field. Higher details capture finer movements, but take will longer to calculate." R 0.01 1}
  vectorDetail 0.75
  addUserKnob {7 strength l Strength t "Match Strength : Stonger values will match larger differences between the two plates." R 0 1.5}
@@ -41,14 +41,14 @@ Group {
   xpos 1389
   ypos -72
  }
-set Nb6609630 [stack 0]
+set N26d71d00 [stack 0]
  Dot {
   name Dot8
   tile_color 0xcccccc00
   xpos 1389
   ypos 1115
  }
-push $Nb6609630
+push $N26d71d00
  Dot {
   name Dot13
   tile_color 0xcccccc00
@@ -89,7 +89,7 @@ push $Nb6609630
   xpos 10
   ypos -75
  }
-set N5282e270 [stack 0]
+set Ncdbcb900 [stack 0]
  Dot {
   name Dot14
   tile_color 0xcccccc00
@@ -132,7 +132,7 @@ set N5282e270 [stack 0]
   xpos 684
   ypos 124
  }
-set Ndbb0ae10 [stack 0]
+set Ncdbc9600 [stack 0]
  Dot {
   name Dot2
   tile_color 0xcccccc00
@@ -156,9 +156,9 @@ set Ndbb0ae10 [stack 0]
   name Dot12
   tile_color 0xcccccc00
   xpos 985
-  ypos 858
+  ypos 903
  }
-push $Ndbb0ae10
+push $Ncdbc9600
  Dot {
   name Dot10
   tile_color 0xcccccc00
@@ -179,7 +179,7 @@ push $Ndbb0ae10
   xpos 415
   ypos 350
  }
-set N2d9b5790 [stack 0]
+set Ncdba2400 [stack 0]
  Shuffle {
   in backward
   blue black
@@ -197,7 +197,7 @@ set N2d9b5790 [stack 0]
   xpos 217
   ypos 484
  }
-push $N2d9b5790
+push $Ncdba2400
  Shuffle {
   in forward
   blue black
@@ -215,7 +215,7 @@ push $N2d9b5790
   xpos 560
   ypos 414
  }
-push $N2d9b5790
+push $Ncdba2400
  Copy {
   inputs 2
   from0 forward.u
@@ -238,7 +238,96 @@ push $N2d9b5790
   xpos 381
   ypos 478
  }
-set N2070e3a0 [stack 0]
+ Group {
+  name UV_Map
+  help "Create an uvmap from the input format or the selected format that can be used for example for baking transformations and applying them through a STmap node.\nUse the overscan to create values outside of the viewing window and the 0-1 range."
+  tile_color 0x578100ff
+  note_font "Bitstream Vera Sans"
+  note_font_color 0xffffffff
+  xpos 381
+  ypos 549
+  disable {{!result}}
+  mapsize {0.15 0.15}
+  addUserKnob {20 tab l "UV Map"}
+  addUserKnob {41 format T Constant1.format}
+  addUserKnob {41 scale l overscan T Reformat1.scale}
+  addUserKnob {6 alpha l "alpha 1" +STARTLINE}
+  addUserKnob {41 black_outside l "black outside" -STARTLINE T Reformat2.black_outside}
+ }
+  Input {
+   inputs 0
+   name Input
+   xpos 620
+   ypos -370
+  }
+  Shuffle {
+   red black
+   green black
+   blue black
+   alpha black
+   name Shuffle1
+   xpos 620
+   ypos -309
+  }
+  Constant {
+   inputs 0
+   name Constant1
+   xpos 479
+   ypos -214
+  }
+  Switch {
+   inputs 2
+   which {{"\[exists parent.input0]"}}
+   name Switch1
+   xpos 620
+   ypos -190
+  }
+  Reformat {
+   type scale
+   pbb true
+   name Reformat1
+   xpos 620
+   ypos -71
+  }
+  Reformat {
+   type scale
+   scale {{1/Reformat1.scale} {1/Reformat1.scale}}
+   resize none
+   black_outside true
+   pbb true
+   name Reformat2
+   xpos 620
+   ypos -37
+  }
+  Shuffle {
+   alpha white
+   name Shuffle13
+   tile_color 0xffffff00
+   label "\[value in]"
+   xpos 620
+   ypos 12
+   disable {{!parent.alpha}}
+  }
+  Expression {
+   expr0 (x+0.5)/width
+   expr1 (y+0.5)/height
+   name Expression2
+   xpos 620
+   ypos 75
+  }
+  Output {
+   name Output1
+   xpos 620
+   ypos 127
+  }
+ end_group
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 415
+  ypos 601
+ }
+set Ncdb3e400 [stack 0]
  Retime {
   input.first 1000
   input.first_lock true
@@ -253,16 +342,17 @@ set N2070e3a0 [stack 0]
   name Retime4
   label "x\[value input.first]-->x\[value output.first]\n\[if \{\[value speed] == 1\} then \{return \"\"\} else \{return \"spd \[value speed]\"\}]"
   xpos 459
-  ypos 559
+  ypos 672
  }
  IDistort {
   uv forward
   uv_scale {{1-parent.morph}}
   name IDistort2
   xpos 459
-  ypos 628
+  ypos 741
  }
-push $N2070e3a0
+set Ncdb3d600 [stack 0]
+push $Ncdb3e400
  Retime {
   input.first 1001
   input.first_lock true
@@ -277,36 +367,48 @@ push $N2070e3a0
   name Retime3
   label "x\[value input.first]-->x\[value output.first]\n\[if \{\[value speed] == 1\} then \{return \"\"\} else \{return \"spd \[value speed]\"\}]"
   xpos 308
-  ypos 560
+  ypos 673
  }
  IDistort {
   uv backward
   uv_scale {{parent.morph}}
   name IDistort1
   xpos 308
-  ypos 625
+  ypos 738
  }
+set Ncdb3c800 [stack 0]
+push $Ncdb3d600
+push $Ncdb3c800
  Dissolve {
   inputs 2
   which {{parent.morph}}
   name Dissolve1
   xpos 379
-  ypos 710
+  ypos 823
  }
  Dot {
   name Dot11
   tile_color 0xcccccc00
   xpos 413
-  ypos 858
+  ypos 903
+ }
+ Switch {
+  inputs 3
+  which {{direction}}
+  name Switch4
+  label "\[value which]"
+  xpos 491
+  ypos 893
  }
  Switch {
   inputs 2
   which {{parent.method}}
   name Switch3
   xpos 627
-  ypos 854
+  ypos 899
  }
-push $N5282e270
+set Ncdb12b00 [stack 0]
+push $Ncdbcb900
  Dot {
   name Dot7
   tile_color 0xcccccc00
@@ -315,14 +417,34 @@ push $N5282e270
  }
  Switch {
   inputs 3
-  which {{parent.morph<=0?0:parent.morph>=1?2:1}}
+  which {{"parent.morph<=0?0:parent.morph>=1  ?2:1"}}
   name Switch2
-  xpos 627
+  xpos 547
   ypos 1111
+ }
+set Ncdb11600 [stack 0]
+push $Ncdb12b00
+push $Ncdb12b00
+push $Ncdb11600
+ Switch {
+  inputs 3
+  which {{"result + direction"}}
+  name Switch5
+  label "\[value which]"
+  xpos 627
+  ypos 1181
+ }
+ Switch {
+  inputs 2
+  which {{method}}
+  name Switch6
+  label "\[value which]"
+  xpos 627
+  ypos 1257
  }
  Output {
   name Output1
   xpos 627
-  ypos 1205
+  ypos 1333
  }
 end_group
