@@ -2,14 +2,13 @@ Group {
  inputs 2
  name DeepKeyMix
  tile_color 0x59ff
- selected true
  addUserKnob {20 User l DeepKeyMix}
- addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 ""}
  addUserKnob {41 matte_channel l matte T Controller.matte_channel}
  addUserKnob {41 Invert_Mask l invert T Controller.Invert_Mask}
- addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 ""}
  addUserKnob {26 text l "" -STARTLINE T "               DeepKeyMix 1.00     ©    "}
- addUserKnob {22 Luc_Julien l "Luc Julien" -STARTLINE T "import os\nimport sys\n\ntry:\n    import subprocess\n    def _run(cmd, shell, wait):\n        opener = subprocess.Popen(cmd, shell=shell)\n        if wait:\n            opener.wait()\n        return opener.pid\nexcept ImportError:\n    import popen2\n    def _run(cmd, shell, wait):\n        opener = popen2.Popen3(cmd)\n        if wait:\n            opener.wait()\n        return opener.pid\n\ndef _open(url, wait=0):\n    if sys.platform == \"darwin\":\n        cmd = \[\"open\", url]\n    elif hasattr(os, \"startfile\"):\n        return os.startfile(url)\n    elif os.environ.has_key(\"KDE_FULL_SESSION\") or os.environ.has_key(\"KDE_MULTIHEAD\") or \\\n        os.environ.has_key(\"GNOME_DESKTOP_SESSION_ID\") or os.environ.has_key(\"GNOME_KEYRING_SOCKET\"):\n        cmd = \[\"xdg-open\", url]\n    else:\n        raise OSError, \"Desktop not supported.\"\n\n    return _run(cmd, 0, wait)\n\n_open('http://www.linkedin.com/in/lucjulien')"}
+ addUserKnob {22 Luc_Julien l "Luc Julien" -STARTLINE T "import os\nimport sys\n\ntry:\n    import subprocess\n    def _run(cmd, shell, wait):\n        opener = subprocess.Popen(cmd, shell=shell)\n        if wait:\n            opener.wait()\n        return opener.pid\nexcept ImportError:\n    import popen2\n    def _run(cmd, shell, wait):\n        opener = popen2.Popen3(cmd)\n        if wait:\n            opener.wait()\n        return opener.pid\n\ndef _open(url, wait=0):\n    if sys.platform == \"darwin\":\n        cmd = \[\"open\", url]\n    elif hasattr(os, \"startfile\"):\n        return os.startfile(url)\n    elif \"KDE_FULL_SESSION\" in os.environ or \"KDE_MULTIHEAD\" in os.environ or \\\n        \"GNOME_DESKTOP_SESSION_ID\" in os.environ or \"GNOME_KEYRING_SOCKET\" in os.environ:\n        cmd = \[\"xdg-open\", url]\n    else:\n        raise OSError(\"Desktop not supported.\")\n\n    return _run(cmd, 0, wait)\n\n_open('http://www.linkedin.com/in/lucjulien')"}
 }
  NoOp {
   inputs 0
@@ -27,7 +26,7 @@ Group {
   ypos -43
   number 2
  }
-set N2f1be3d0 [stack 0]
+set Ndc1eca0 [stack 0]
  Keyer {
   operation "max keyer"
   name Keyer1
@@ -42,7 +41,7 @@ set N2f1be3d0 [stack 0]
   xpos 499
   ypos 127
  }
-push $N2f1be3d0
+push $Ndc1eca0
  Shuffle {
   red alpha
   green alpha
@@ -71,7 +70,7 @@ push $N2f1be3d0
   xpos 583
   ypos 355
  }
-set N1b895a10 [stack 0]
+set Ndea6440 [stack 0]
  Shuffle {
   red alpha
   black white
@@ -81,7 +80,7 @@ set N1b895a10 [stack 0]
   xpos 549
   ypos 631
  }
-set N2f2c1390 [stack 0]
+set Ndeb8ed0 [stack 0]
  DeepFromImage {
   z 1
   name DeepFromImage3
@@ -99,7 +98,7 @@ set N2f2c1390 [stack 0]
   xpos 1138
   ypos 172
  }
-set N2f56a3a0 [stack 0]
+set Ndf4ad70 [stack 0]
  DeepMerge {
   inputs 2
   operation holdout
@@ -107,7 +106,7 @@ set N2f56a3a0 [stack 0]
   xpos 1104
   ypos 738
  }
-push $N2f2c1390
+push $Ndeb8ed0
  Invert {
   channels depth
   clamp true
@@ -133,7 +132,7 @@ push $N2f2c1390
   xpos 1231
   ypos 219
  }
-set N2f53a490 [stack 0]
+set Ndf12880 [stack 0]
  DeepMerge {
   inputs 2
   operation holdout
@@ -148,14 +147,14 @@ set N2f53a490 [stack 0]
   xpos 1197
   ypos 792
  }
-push $N1b895a10
+push $Ndea6440
  Dot {
   name Dot2
   xpos 782
   ypos 355
  }
-set N2f8d8350 [stack 0]
-push $N2f8d8350
+set Ndf4ea90 [stack 0]
+push $Ndf4ea90
  Merge2 {
   inputs 2
   operation xor
@@ -179,8 +178,8 @@ push $N2f8d8350
   xpos 748
   ypos 456
  }
-push $N2f8d8350
-push $N2f53a490
+push $Ndf4ea90
+push $Ndf12880
  Dot {
   name Dot6
   xpos 1008
@@ -191,7 +190,7 @@ push $N2f53a490
   xpos 974
   ypos 273
  }
-push $N2f56a3a0
+push $Ndf4ad70
  Dot {
   name Dot5
   xpos 884
