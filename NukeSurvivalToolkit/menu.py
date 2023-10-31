@@ -378,6 +378,7 @@ keyerMenu.addSeparator()
 
 keyerMenu.addCommand('KeyChew NKPD', "nuke.createNode('{}KeyChew')".format(prefixNST), icon="Keyer.png")
 keyerMenu.addCommand('LumaKeyer DR', "nuke.createNode('{}LumaKeyer')".format(prefixNST), icon="Keyer.png")
+keyerMenu.addCommand('PointCloudKeyer IS', "nuke.createNode('{}PointCloudKeyer')".format(prefixNST), icon="PointCloudGenerator.png")
 
 ############################################################################################################
 ############################################################################################################
