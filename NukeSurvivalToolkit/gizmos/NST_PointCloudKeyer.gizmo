@@ -1,0 +1,417 @@
+Group {
+ name PointCloudKeyer
+ onCreate "try: \n    n = nuke.thisNode()\n    n\['translate'].setFlag(0x0000002000000000)\nexcept:\n    print('failed to set flag')"
+ tile_color 0xff00ff
+ selected true
+ addUserKnob {20 PointCloudKeyer}
+ addUserKnob {4 view l View t "Point Cloud - plots the x,y values from the selected color space\nComposite - premulted Fg over Bg\nFinal Result - unpremulted Fg with alpha from the key\n" M {"Point Cloud" Composite "Final Result" "" "" "" "" "" "" "" "" ""}}
+ view Composite
+ addUserKnob {6 overlayPointCloud l "overlay point cloud" +STARTLINE}
+ addUserKnob {26 _2 l "<b>Point Cloud</b>"}
+ addUserKnob {4 colorspace l "color space" t "Chroma Red/Blue - YCbCr colorspace. Plots chroma difference blue vs chroma different red. Generally gives the most predictable results.\n\nChroma x/y - CIE-Yxy colorspace. Plots choma red vs chroma blue. Similar to the Chroma Red/Blue but different math. \n\nChroma/Hue - CIE-LCH colorspace. Plots choma vs hue.\n\nRed/Blue Average - Plots the g channel vs  (r+b)/2\n\nCustom - use the channels input" M {"Chroma Red/Blue" "Chroma x/y" Chroma/Hue "Red/Blue Average" Custom "" "" "" "" "" "" "" "" "" "" "" "" ""}}
+ addUserKnob {12 translate}
+ addUserKnob {14 scale t "Increasing this value by a large amount will mirror the point cloud" R 0 100}
+ scale 1
+ addUserKnob {6 densePointCloud l "dense point cloud" t "Merges additional points under the generated point cloud. " +STARTLINE}
+ addUserKnob {6 mirror l "swap axis" -STARTLINE}
+ addUserKnob {41 disable_1 l "invert alpha" T Invert1.disable}
+ addUserKnob {20 about}
+ addUserKnob {26 _4 l "" +STARTLINE T "instructions and demo at "}
+ addUserKnob {26 _3 l "" -STARTLINE T "<a href=\"http://www.isaacspiegel.com/blog\">isaacspiegel.com/blog</a>"}
+ addUserKnob {26 ""}
+ addUserKnob {26 _1 l "" +STARTLINE T "by isaac spiegel\nisaacspiegel.com\n\nfeedback on this tool? email me!\nisaacspiegel.freelance@gmail.com"}
+}
+ Input {
+  inputs 0
+  name custom
+  xpos -150
+  ypos 62
+  number 3
+ }
+ Dot {
+  name Dot12
+  note_font_size 25
+  xpos -119
+  ypos 183
+ }
+ Input {
+  inputs 0
+  name Src
+  xpos -590
+  ypos -106
+ }
+ Dot {
+  name Dot7
+  label "input footage"
+  note_font_size 25
+  xpos -559
+  ypos -57
+ }
+ Dot {
+  name Dot2
+  note_font_size 25
+  xpos -559
+  ypos 63
+ }
+set N10d16a50 [stack 0]
+ Expression {
+  expr0 g
+  expr1 (r+b)/2
+  name Expression1
+  label "red/blue average"
+  xpos -260
+  ypos 104
+ }
+push $N10d16a50
+ Colorspace {
+  colorspace_out CIE-LCH
+  name Colorspace2
+  label CIE-LCH
+  xpos -370
+  ypos 104
+ }
+push $N10d16a50
+ Colorspace {
+  colorspace_out CIE-Yxy
+  name Colorspace1
+  label CIE_Yxy
+  xpos -480
+  ypos 104
+ }
+push $N10d16a50
+ Colorspace {
+  colorspace_out YCbCr
+  name Colorspace3
+  label yCbCr
+  xpos -590
+  ypos 104
+ }
+ Switch {
+  inputs 5
+  which {{parent.colorspace}}
+  name colorspace
+  xpos -590
+  ypos 182
+ }
+ Dot {
+  name Dot8
+  note_font_size 25
+  xpos -559
+  ypos 279
+ }
+set N10d8cf40 [stack 0]
+ Shuffle {
+  red blue
+  blue alpha
+  name Shuffle_horiz
+  xpos -480
+  ypos 326
+ }
+push $N10d8cf40
+ Shuffle {
+  red green
+  green blue
+  blue alpha
+  name Shuffle_vert
+  xpos -590
+  ypos 326
+ }
+set N1155d430 [stack 0]
+ Switch {
+  inputs 2
+  which {{parent.mirror}}
+  name layout
+  xpos -590
+  ypos 398
+ }
+ Grade {
+  blackpoint {{(parent.scale.0-1)/scaleDiv} {(parent.scale.1-1)/scaleDiv} 0 0}
+  whitepoint {{1-((parent.scale.0-1))/scaleDiv} {1-((parent.scale.1-1))/scaleDiv} 1 1}
+  add {{parent.translate.0/width} {parent.translate.1/height} 0 0}
+  black_clamp false
+  name Grade_translate
+  label "offset: L/R/Up/Dn"
+  xpos -590
+  ypos 440
+  addUserKnob {20 User}
+  addUserKnob {3 scaleDiv}
+  scaleDiv 200
+ }
+set N1158be90 [stack 0]
+ Input {
+  inputs 0
+  name Shape
+  xpos -40
+  ypos -106
+  number 1
+ }
+ Dot {
+  name Dot4
+  label "input roto"
+  note_font_size 25
+  xpos -9
+  ypos -57
+ }
+ STMap {
+  inputs 2
+  uv rgb
+  name STMap1
+  xpos -40
+  ypos 440
+ }
+ Invert {
+  name Invert1
+  xpos -40
+  ypos 488
+ }
+push $N10d16a50
+ Dot {
+  name Dot3
+  note_font_size 25
+  xpos -669
+  ypos 63
+ }
+ Dot {
+  name Dot1
+  note_font_size 25
+  xpos -669
+  ypos 543
+ }
+set N115c2870 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos -40
+  ypos 536
+ }
+set N115c7780 [stack 0]
+ Dot {
+  name Dot6
+  label "output alpha + rgba"
+  note_font_size 25
+  xpos -9
+  ypos 711
+ }
+set N115d5d00 [stack 0]
+ Dot {
+  name Dot17
+  note_font_size 25
+  xpos 101
+  ypos 879
+ }
+push $N1158be90
+push $N115c2870
+ BlinkScript {
+  inputs 2
+  recompileCount 2
+  ProgramGroup 1
+  KernelDescription "2 \"InverseSTKernel\" iterate pixelWise 79737837f0b8f5ef5ba9dd8c86c9e76f184ef0da76c94577b5431d3e3e08b063 3 \"src\" Read Point \"stmap\" Read Point \"dst\" Write Random 1 \"resolution\" Float 2 AAAAAAAAAAA= 1 \"resolution\" 2 1 0"
+  kernelSource "// Original Kernel by Mads Hagbarth, modified to use STMaps by Erwan Leroy\n\nkernel InverseSTKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessPoint, eEdgeClamped> src;\n  Image<eRead, eAccessPoint, eEdgeClamped> stmap;\n  Image<eWrite, eAccessRandom> dst;\n\n  param:\n    float2 resolution;\n\n  void process() \{\n    float2 uv;\n    uv.x = stmap().x * resolution.x - 0.5f;\n    uv.y = stmap().y * resolution.y - 0.5f;\n    //always make sure that you don't write outside bounds\n    //as it will usually crash nuke.\n    if (dst.bounds.inside(uv.x,uv.y)) \{ \n      dst(uv.x,uv.y) = src(); \n    \}\n  \}\n\};"
+  useGPUIfAvailable false
+  rebuild ""
+  InverseSTKernel_resolution {{width} {height}}
+  rebuild_finalise ""
+  name BlinkScript1
+  xpos -590
+  ypos 608
+ }
+ Dot {
+  name Dot14
+  note_font_size 25
+  xpos -559
+  ypos 663
+ }
+set N115fcac0 [stack 0]
+ Blur {
+  channels rgba
+  size 1.5
+  name Blur3
+  xpos -810
+  ypos 662
+ }
+set N116015d0 [stack 0]
+ Expression {
+  expr0 r/a
+  expr1 g/a
+  expr2 b/a
+  expr3 "a > 0 ? 1 : a"
+  name Expression2
+  xpos -810
+  ypos 708
+ }
+ Premult {
+  name Premult3
+  xpos -810
+  ypos 734
+ }
+push $N115fcac0
+ Merge2 {
+  inputs 2
+  operation under
+  bbox B
+  name Merge4
+  xpos -590
+  ypos 734
+  disable {{!parent.densePointCloud}}
+ }
+ Dot {
+  name Dot15
+  note_font_size 25
+  xpos -559
+  ypos 783
+ }
+set N12a097d0 [stack 0]
+ Dot {
+  name Dot16
+  note_font_size 25
+  xpos -119
+  ypos 783
+ }
+set N12a0e480 [stack 0]
+push $N115d5d00
+ Merge2 {
+  inputs 2
+  bbox B
+  name Merge3
+  xpos -40
+  ypos 830
+  disable {{!parent.overlayPointCloud}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos -40
+  ypos 872
+ }
+push $N115c7780
+ Premult {
+  name Premult1
+  xpos 180
+  ypos 542
+ }
+set N12a32630 [stack 0]
+ Input {
+  inputs 0
+  name Bg
+  xpos 400
+  ypos 302
+  number 2
+ }
+ Dot {
+  name Dot10
+  label "BG input"
+  note_font_size 25
+  xpos 431
+  ypos 375
+ }
+ Merge2 {
+  inputs 2
+  bbox B
+  name Merge1
+  xpos 400
+  ypos 542
+ }
+push $N12a32630
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input2]"}}
+  name Switch_BgInput
+  xpos 400
+  ypos 602
+ }
+ Dot {
+  name Dot18
+  note_font_size 25
+  xpos 431
+  ypos 711
+ }
+set N12a5d4b0 [stack 0]
+ Dot {
+  name Dot19
+  note_font_size 25
+  xpos 541
+  ypos 879
+ }
+push $N12a0e480
+push $N12a5d4b0
+ Merge2 {
+  inputs 2
+  bbox B
+  name Merge2
+  xpos 400
+  ypos 782
+  disable {{!parent.overlayPointCloud}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy3
+  xpos 400
+  ypos 872
+ }
+ Dot {
+  name Dot11
+  label composite
+  note_font_size 25
+  xpos 431
+  ypos 927
+ }
+set N12a864b0 [stack 0]
+push $N12a097d0
+ Dot {
+  name Dot5
+  label "output view help"
+  note_font_size 25
+  xpos -559
+  ypos 879
+ }
+ Dot {
+  name Dot9
+  note_font_size 25
+  xpos -559
+  ypos 927
+ }
+ Switch {
+  inputs 3
+  which {{parent.view}}
+  name output_toggle
+  xpos -40
+  ypos 926
+ }
+ Output {
+  name Output1
+  xpos -40
+  ypos 998
+ }
+push $N12a864b0
+push $N116015d0
+push $N1155d430
+ Viewer {
+  inputs 3
+  frame_range 1-37
+  colour_sample_bbox {-0.2989583313 -0.08749999851 -0.2979166806 -0.08645833284}
+  name Viewer1
+  xpos 220
+  ypos 1214
+  hide_input true
+  addUserKnob {20 Lock}
+  addUserKnob {6 lock_all_buffers l "lock all buffers" -STARTLINE}
+  addUserKnob {6 lock_buffer_1 l "lock buffer 1" +STARTLINE}
+  addUserKnob {6 lock_buffer_2 l "lock buffer 2" +STARTLINE}
+  addUserKnob {6 lock_buffer_3 l "lock buffer 3" +STARTLINE}
+  addUserKnob {6 lock_buffer_4 l "lock buffer 4" +STARTLINE}
+  addUserKnob {6 lock_buffer_5 l "lock buffer 5" +STARTLINE}
+  addUserKnob {6 lock_buffer_6 l "lock buffer 6" +STARTLINE}
+  addUserKnob {6 lock_buffer_7 l "lock buffer 7" +STARTLINE}
+  addUserKnob {6 lock_buffer_8 l "lock buffer 8" +STARTLINE}
+  addUserKnob {6 lock_buffer_9 l "lock buffer 9" +STARTLINE}
+  addUserKnob {6 lock_buffer_0 l "lock buffer 0" +STARTLINE}
+  addUserKnob {6 toAddBtn -STARTLINE}
+  toAddBtn true
+ }
+end_group
