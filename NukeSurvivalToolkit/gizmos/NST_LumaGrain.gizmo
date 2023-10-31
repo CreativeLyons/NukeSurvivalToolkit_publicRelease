@@ -1,5 +1,3 @@
-set cut_paste_input [stack 0]
-push $cut_paste_input
 Group {
  name LumaGrain
  help "<b><u>L_Grain_v04\t</b></u>\t\nAdded functionality to Nuke's default grain node.\n \n<b>\"High” - </b>allows control to reduce the grain being added to the brighter parts of the image. \n\n<b>\"Softness” - </b>will blur the grain being added to the image. \n\n<b>\"Saturation\"</b> and <b>\"Luminance” - </b> sliders allow you to reduce either of these values from your grain. \n\n<i>(For any questions, comments or suggestions please email gizmos@luma-pictures.com)</i>"
