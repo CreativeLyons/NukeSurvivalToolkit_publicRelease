@@ -1,7 +1,7 @@
 add_layer {P P.red P.green P.blue P.alpha}
 Group {
  name aPCard
- knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\nif kn in \[\"in_vectors\",\"inputChange\"]:\n    kv = n\[\"in_vectors\"].value()\n    for i in nuke.allNodes(\"Input\"):\n        if i\[\"label\"].value() == \"dyn\":\n            inp = i\n    options = \{\"position\":\"pos\",\"depth\":\"depth\",\"deep\":\"deep\",\"geometry\":\"geo\"\}\n    inp\[\"name\"].setValue(\"Input\"+options\[kv])\n    if kv in \[\"position\",\"geometry\"]:\n        n\[\"p_channels\"].setValue(\"P\")\n    else:\n        n\[\"p_channels\"].setValue(\"depth\")\n    if kv==\"deep\":\n        nuke.toNode(\"ShuffleP\").setInput(0,nuke.toNode(\"DeepToImage\"))\n        nuke.toNode(\"DeepToImage\").setInput(0,nuke.toNode(\"DotDeep\"))\n        #nuke.toNode(\"DotDeep\").setInput(0,nuke.toNode(\"DotInput\"))\n    elif kv==\"geometry\":\n        nuke.toNode(\"ShuffleP\").setInput(0,nuke.toNode(\"SRGeo\"))\n        nuke.toNode(\"ApplyMat\").setInput(0,nuke.toNode(\"DotInput\"))\n    else:\n        nuke.toNode(\"ShuffleP\").setInput(0,nuke.toNode(\"DotInput\"))\n    n\[\"invert_depth\"].setVisible(kv==\"depth\")\nelif kn == \"pick\":\n    c = nuke.toNode(\"Card3D\")\n    c.knob(\"translate\").setValue(n\[\"pick\"].value())\nelif kn == \"proj_mode\":\n    kv = k.getValue()\n    for i in \[\"ref_frame\",\"ref_to_current\"]:\n        n\[i].setVisible(kv != 0)\nelif kn == \"preview_mode\":\n    kv = k.getValue()\n    for i in \[\"grid_resolution\",\"grid_size\"]:\n        n\[i].setVisible(kv != 0)\nelif kn == \"face_cam\":\n    kv = k.getValue()\n    for i in \[\"face_frame\",\"face_to_current\"]:\n        n\[i].setVisible(kv != 0)\nelif kn == \"deep_holdout\":\n    kv = k.value()\n    if kv:\n        print \"deep holdout...\"\nelif kn == \"out_mode\":\n    kv = k.getValue()\n    if kv in \[1,2]:\n        nuke.toNode(\"MergeImg\")\[\"operation\"].setValue(\"plus\" if kv==2 else \"over\")\n    #Switch output\n    opt = nuke.toNode(\"Output1\")\n    if kv == 3:\n        opt.setInput(0,nuke.toNode(\"DotDeepOut\"))\n    elif kv == 4:\n        opt.setInput(0,nuke.toNode(\"DotGeoOut\"))\n    else:\n        opt.setInput(0,nuke.toNode(\"DotImgOut\"))\n\n# Global checks here\nif kn not in \[\"xpos\",\"ypos\",\"selected\"]:\n    if n.input(4):\n        nuke.toNode(\"DotDeep\").setInput(0,nuke.toNode(\"DotInput\"))\n    #Expose deep options\n    deep_opt = True if (n\[\"in_vectors\"].value() == \"deep\" or n.input(4)) else False\n    nuke.toNode(\"DotDeep\").setInput(0,nuke.toNode(\"DotInput\"))\n    dh = n\[\"deep_holdout\"]\n    dh.setEnabled(deep_opt)\n    for i in \[\"deep_thickness\",\"deep_opacity\"]:\n        n\[i].setVisible(deep_opt and dh.value())"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nkn = k.name()\nif kn in \[\"in_vectors\",\"inputChange\"]:\n    kv = n\[\"in_vectors\"].value()\n    for i in nuke.allNodes(\"Input\"):\n        if i\[\"label\"].value() == \"dyn\":\n            inp = i\n    options = \{\"position\":\"pos\",\"depth\":\"depth\",\"deep\":\"deep\",\"geometry\":\"geo\"\}\n    inp\[\"name\"].setValue(\"Input\"+options\[kv])\n    if kv in \[\"position\",\"geometry\"]:\n        n\[\"p_channels\"].setValue(\"P\")\n    else:\n        n\[\"p_channels\"].setValue(\"depth\")\n    if kv==\"deep\":\n        nuke.toNode(\"ShuffleP\").setInput(0,nuke.toNode(\"DeepToImage\"))\n        nuke.toNode(\"DeepToImage\").setInput(0,nuke.toNode(\"DotDeep\"))\n        #nuke.toNode(\"DotDeep\").setInput(0,nuke.toNode(\"DotInput\"))\n    elif kv==\"geometry\":\n        nuke.toNode(\"ShuffleP\").setInput(0,nuke.toNode(\"SRGeo\"))\n        nuke.toNode(\"ApplyMat\").setInput(0,nuke.toNode(\"DotInput\"))\n    else:\n        nuke.toNode(\"ShuffleP\").setInput(0,nuke.toNode(\"DotInput\"))\n    n\[\"invert_depth\"].setVisible(kv==\"depth\")\nelif kn == \"pick\":\n    c = nuke.toNode(\"Card3D\")\n    c.knob(\"translate\").setValue(n\[\"pick\"].value())\nelif kn == \"proj_mode\":\n    kv = k.getValue()\n    for i in \[\"ref_frame\",\"ref_to_current\"]:\n        n\[i].setVisible(kv != 0)\nelif kn == \"preview_mode\":\n    kv = k.getValue()\n    for i in \[\"grid_resolution\",\"grid_size\"]:\n        n\[i].setVisible(kv != 0)\nelif kn == \"face_cam\":\n    kv = k.getValue()\n    for i in \[\"face_frame\",\"face_to_current\"]:\n        n\[i].setVisible(kv != 0)\nelif kn ==\"deep_holdout\":\n    kv = k.value()\n    if kv:\n        print (\"deep holdout...\")\nelif kn == \"out_mode\":\n    kv = k.getValue()\n    if kv in \[1,2]:\n        nuke.toNode(\"MergeImg\")\[\"operation\"].setValue(\"plus\" if kv==2 else \"over\")\n    #Switch output\n    opt = nuke.toNode(\"Output1\")\n    if kv == 3:\n        opt.setInput(0,nuke.toNode(\"DotDeepOut\"))\n    elif kv == 4:\n        opt.setInput(0,nuke.toNode(\"DotGeoOut\"))\n    else:\n        opt.setInput(0,nuke.toNode(\"DotImgOut\"))\n\n# Global checks here\nif kn not in \[\"xpos\",\"ypos\",\"selected\"]:\n    if n.input(4):\n        nuke.toNode(\"DotDeep\").setInput(0,nuke.toNode(\"DotInput\"))\n    #Expose deep options\n    deep_opt = True if (n\[\"in_vectors\"].value() == \"deep\" or n.input(4)) else False\n    nuke.toNode(\"DotDeep\").setInput(0,nuke.toNode(\"DotInput\"))\n    dh = n\[\"deep_holdout\"]\n    dh.setEnabled(deep_opt)\n    for i in \[\"deep_thickness\",\"deep_opacity\"]:\n        n\[i].setVisible(deep_opt and dh.value())"
  addUserKnob {20 aPCard}
  addUserKnob {4 in_vectors l input M {position depth deep geometry "" ""}}
  addUserKnob {41 p_channels l channels -STARTLINE T ShuffleP.in}
@@ -24,7 +24,7 @@ Group {
  grid_resolution 10
  addUserKnob {7 grid_size l size -STARTLINE R 0 2}
  grid_size 5
- addUserKnob {41 pivot T Card3D1.pivot}
+ addUserKnob {41 pivot +INVISIBLE T Card3D1.pivot}
  addUserKnob {41 translate_world l translate T AxisTweakPre.translate}
  addUserKnob {4 face_cam l "face camera" M {none "on frame" always ""}}
  addUserKnob {3 face_frame l "" -STARTLINE +HIDDEN}
@@ -64,7 +64,7 @@ Group {
   xpos 1099
   ypos 501
  }
-set N15ae28c0 [stack 0]
+set N3434f600 [stack 0]
  Axis2 {
   useMatrix true
   matrix {
@@ -109,16 +109,16 @@ set N15ae28c0 [stack 0]
  Dot {
   name DotInput
   label " Main"
-  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font "Bitstream Vera Sans Bold"
   note_font_size 41
   xpos -112
   ypos -67
  }
-set N10457610 [stack 0]
+set N34387fa0 [stack 0]
  Dot {
   name DotDeep
   label "\nDeep?"
-  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font "Bitstream Vera Sans Bold"
   note_font_size 41
   xpos -112
   ypos 309
@@ -138,7 +138,7 @@ set N10457610 [stack 0]
   ypos 1861
   disable {{"\[exists parent.input4]"}}
  }
-set N105f5850 [stack 0]
+set N33de49a0 [stack 0]
  Dot {
   name Dot20
   note_font_size 41
@@ -158,20 +158,20 @@ set N105f5850 [stack 0]
   xpos 1879
   ypos 186
  }
-set N10371d40 [stack 0]
+set N34091c40 [stack 0]
  Dot {
   name Dot14
   note_font_size 41
   xpos 1879
   ypos 310
  }
-set N15f28d10 [stack 0]
+set N2aed3110 [stack 0]
  Dot {
   name Dot28
   xpos 1879
   ypos 621
  }
-set N4675590 [stack 0]
+set N131564e0 [stack 0]
  Dot {
   name Dot10
   note_font_size 41
@@ -184,31 +184,31 @@ set N4675590 [stack 0]
   xpos 1157
   ypos 1168
  }
-set N1606cf50 [stack 0]
+set N13cf36c0 [stack 0]
  Dot {
   name Dot15
   note_font_size 41
   xpos 1157
   ypos 1247
  }
-set Nd873290 [stack 0]
+set N342e7a70 [stack 0]
  Dot {
   name Dot16
   note_font_size 41
   xpos 1157
   ypos 1317
  }
-set N16271840 [stack 0]
+set N34361ec0 [stack 0]
  Dot {
   name Dot2
   note_font_size 41
   xpos 1157
   ypos 1366
  }
-push $N16271840
-push $Nd873290
+push $N34361ec0
+push $N342e7a70
  FrameHold {
-  first_frame {{parent.ref_frame}}
+  firstFrame {{parent.ref_frame}}
   name FrameHoldProj
   xpos 964
   ypos 1237
@@ -231,21 +231,21 @@ push $Nd873290
   xpos 934
   ypos 868
  }
-set N1591b320 [stack 0]
+set N2aecc000 [stack 0]
  Dot {
   name Dot18
   note_font_size 41
   xpos 824
   ypos 868
  }
-set N10a5f110 [stack 0]
+set N342c8330 [stack 0]
  Project3D2 {
   inputs 2
   name Project3D1
   xpos 790
   ypos 1243
  }
-push $N4675590
+push $N131564e0
  Axis2 {
   name AxisCamBoss
   xpos 1463
@@ -256,7 +256,7 @@ push $N4675590
   xpos 1487
   ypos 824
  }
-push $N15ae28c0
+push $N3434f600
  Axis2 {
   useMatrix true
   matrix {
@@ -281,7 +281,7 @@ push $N15ae28c0
   xpos 1099
   ypos 724
  }
-set N161dfe30 [stack 0]
+set N3407b520 [stack 0]
  Axis2 {
   inputs 2
   name Axis7
@@ -289,14 +289,14 @@ set N161dfe30 [stack 0]
   xpos 1334
   ypos 800
  }
-set N15fdbb00 [stack 0]
+set N343067d0 [stack 0]
  Dot {
   name Dot9
   xpos 1358
   ypos 966
  }
-push $N15fdbb00
-push $N161dfe30
+push $N343067d0
+push $N3407b520
  Axis2 {
   useMatrix true
   matrix {
@@ -325,7 +325,7 @@ push $N161dfe30
   xpos 1191
   ypos 892
  }
-push $N161dfe30
+push $N3407b520
  Switch {
   inputs 3
   which {{parent.face_cam}}
@@ -340,8 +340,8 @@ push $N161dfe30
   xpos 1099
   ypos 1042
  }
-set N10653f30 [stack 0]
-push $N10a5f110
+set N344266b0 [stack 0]
+push $N342c8330
  Dot {
   name Dot1
   note_font_size 41
@@ -377,14 +377,14 @@ push $N10a5f110
   xpos 702
   ypos 1208
  }
-set N1632b6f0 [stack 0]
+set N34408aa0 [stack 0]
  ApplyMaterial {
   inputs 2
   name ApplyMaterial1
   xpos 668
   ypos 1243
  }
-set N15f1e930 [stack 0]
+set N127fe430 [stack 0]
  Input {
   inputs 0
   name Inputbg
@@ -418,7 +418,7 @@ set N15f1e930 [stack 0]
   ypos 182
   disable {{"!\[exists parent.input3] "}}
  }
-set N161f7fe0 [stack 0]
+set N2e4fd440 [stack 0]
  Remove {
   name RemoveAll2
   xpos 558
@@ -456,9 +456,9 @@ set N161f7fe0 [stack 0]
   xpos 702
   ypos 1449
  }
-push $N10653f30
-push $N1606cf50
-push $N1591b320
+push $N344266b0
+push $N13cf36c0
+push $N2aecc000
  Card3D {
   inputs 3
   translate {0 0 0}
@@ -481,7 +481,7 @@ push $N1591b320
   xpos 934
   ypos 1789
  }
-set N161f68d0 [stack 0]
+set N3449df60 [stack 0]
  DeepFromImage {
   premult true
   name DeepFromImage1
@@ -501,7 +501,7 @@ set N161f68d0 [stack 0]
   xpos 189
   ypos 1811
  }
-set N176a7b10 [stack 0]
+set N3441e1a0 [stack 0]
  Dot {
   name Dot21
   note_font_size 41
@@ -523,17 +523,17 @@ set N176a7b10 [stack 0]
   xpos 84
   ypos 2147
  }
-push $N15f28d10
+push $N2aed3110
  Dot {
   name Dot3
   label "\ncam"
-  note_font "Bitstream Vera Sans Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold Bold"
+  note_font "Bitstream Vera Sans Bold"
   note_font_size 12
   xpos -1228
   ypos 1319
   hide_input true
  }
-push $N10653f30
+push $N344266b0
  Wireframe {
   inputs 0
   operation "see through"
@@ -603,7 +603,7 @@ push $N10653f30
   xpos -1113
   ypos 1062
  }
-push $N161f7fe0
+push $N2e4fd440
  Remove {
   name RemoveAll1
   xpos -982
@@ -624,15 +624,15 @@ push $N161f7fe0
   xpos -1079
   ypos 2060
  }
-push $N105f5850
-push $N176a7b10
+push $N33de49a0
+push $N3441e1a0
  DeepHoldout2 {
   inputs 2
   name DeepHoldout1
   xpos 189
   ypos 1861
  }
-push $N161f68d0
+push $N3449df60
  Switch {
   inputs 2
   which {{"parent.deep_holdout && (\[exists parent.input4] || \[exists DotDeep.input0])"}}
@@ -646,7 +646,7 @@ push $N161f68d0
   xpos 934
   ypos 2028
  }
-push $N161f7fe0
+push $N2e4fd440
  Remove {
   name RemoveAll
   xpos -497
@@ -680,7 +680,7 @@ push $N161f7fe0
   xpos -497
   ypos 2351
  }
-push $N10371d40
+push $N34091c40
  FillMat {
   inputs 0
   color 1
@@ -688,14 +688,14 @@ push $N10371d40
   xpos 1390
   ypos 139
  }
-push $N10457610
+push $N34387fa0
  ApplyMaterial {
   inputs 2
   name ApplyMat
   xpos 1280
   ypos 139
  }
-push $N161f7fe0
+push $N2e4fd440
  Remove {
   name RemoveAll3
   xpos 1170
@@ -711,8 +711,8 @@ push $N161f7fe0
   xpos 1280
   ypos 182
  }
-push $N15f28d10
-push $N10457610
+push $N2aed3110
+push $N34387fa0
  Shuffle {
   in P
   in2 rgba
@@ -722,7 +722,7 @@ push $N10457610
   xpos 941
   ypos 242
  }
-set Ncfe8080 [stack 0]
+set N3463bed0 [stack 0]
  Shuffle {
   out depth
   name Shuffle1
@@ -749,7 +749,7 @@ set Ncfe8080 [stack 0]
   xpos 1127
   ypos 363
  }
-push $Ncfe8080
+push $N3463bed0
  Switch {
   inputs 2
   which 1
@@ -777,8 +777,8 @@ push $Ncfe8080
   addUserKnob {6 pick_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
   addUserKnob {6 pick_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
  }
-push $N15f1e930
-push $N1632b6f0
+push $N127fe430
+push $N34408aa0
  Dot {
   name Dot12
   note_font_size 41
@@ -800,7 +800,7 @@ push $N1632b6f0
   xpos 419
   ypos 2152
  }
-push $N10457610
+push $N34387fa0
  Switch {
   which 1
   name SwitchInRes
