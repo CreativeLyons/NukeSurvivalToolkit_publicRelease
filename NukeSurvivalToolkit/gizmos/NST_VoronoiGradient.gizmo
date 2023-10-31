@@ -1,6 +1,6 @@
 Group {
  name VoronoiGradient
- knobChanged "\n\nimport random\nfrom math import sqrt\n\n################\n##Script Start##\n################    \n        \nn = nuke.thisNode() #the node\nk = nuke.thisKnob() #the knob\nkn = k.name() #the knob name\n\nprint (\"Knob name: \"+kn)\n\nif kn == \"type\":\n    if n\['type'].getValue() == 0: #generate\n        n\['sample_radius'].setVisible(False)\n        n\['generate_format'].setVisible(True)\n        n\['threshold'].setVisible(False)\n        if n\['method'].getValue() == 1: #NNI\n            n\['speedup'].setVisible(True)\n        else:\n            n\['speedup'].setVisible(False)\n    elif n\['type'].getValue() == 1: #sample\n        n\['generate_format'].setVisible(False)\n        n\['sample_radius'].setVisible(True)\n        n\['threshold'].setVisible(False)\n        if n\['method'].getValue() == 1: #NNI\n            n\['speedup'].setVisible(True)\n        else:\n            n\['speedup'].setVisible(False)\n    else: #fill\n        n\['generate_format'].setVisible(False)\n        n\['sample_radius'].setVisible(False)\n        n\['threshold'].setVisible(True)\n        n\['speedup'].setVisible(True)\n        \nif kn == \"method\":\n    if n\['method'].getValue() == 0: #voronoi\n        if n\['type'].getValue() == 2: #fill\n            n\['speedup'].setVisible(True)\n        else:\n            n\['speedup'].setVisible(False)\n        n\['aa'].setVisible(True)\n        n\['smoothness'].setVisible(False)\n    else: #NNI\n        n\['aa'].setVisible(False)\n        n\['speedup'].setVisible(True)\n        n\['smoothness'].setVisible(True)\n\n#############\n##Add Point##\n#############\n\nif kn == \"add_point\":\n    count = 0\n    found = False\n    i = 1\n\n    #Find the earliest available knob\n    while found == False:\n        try:\n            n\[\"pos_\"+str(i)]\n        except NameError:\n            found = True\n            count = i\n        else:\n            i += 1\n\n    divider = nuke.Text_Knob('divider_'+str(count), ' ')\n    position = nuke.XY_Knob('pos_'+str(count), 'Position '+str(count))\n    remove = nuke.PyScript_Knob('remove_'+str(count), 'Remove this Point', '')\n    color = nuke.AColor_Knob('color_'+str(count), 'Color '+str(count))\n\n    remove.setFlag(0x00002000) #no new line\n\n    n.addKnob(divider)\n    n.addKnob(position)\n    n.addKnob(remove)\n    n.addKnob(color)\n    \n    #Set a random color at point creation\n    randomColor = \[random.uniform(0,1), random.uniform(0,1), random.uniform(0,1), 0]\n    color.setValue(randomColor)\n    \n################\n##Remove Point##\n################\n\nif kn\[0:7] == \"remove_\":\n    id = str(kn\[7:])\n    n.removeKnob(knobs\['divider_'+id])\n    n.removeKnob(knobs\['pos_'+id])\n    n.removeKnob(knobs\['remove_'+id])\n    n.removeKnob(knobs\['color_'+id])\n    \n####################\n##Update Pointlist##\n####################\n\nknobs = n.knobs() #knoblist\n\nif kn\[0:7] == \"remove_\" or kn == \"add_point\":\n    points_orig = \[]\n    #iterate through all knobs. If a position knob is found, append to pointlist\n    for knob in knobs:\n        if knob\[0:4] == \"pos_\":\n            id = int(knob\[4:])\n            points_orig.append(id)\n    \n    points_orig.sort()\n    \n    n\['count'].setValue('<b>'+str(len(points_orig))+'</b>')\n    points = ','.join(str(i) for i in points_orig)\n    n\['points'].setValue(points)\n"
+ knobChanged "\n\nimport random\nfrom math import sqrt\n\n################\n##Script Start##\n################    \n        \nn = nuke.thisNode() #the node\nk = nuke.thisKnob() #the knob\nkn = k.name() #the knob name\n\n#print (\"Knob name: \"+kn)\n\nif kn == \"type\":\n    if n\['type'].getValue() == 0: #generate\n        n\['sample_radius'].setVisible(False)\n        n\['generate_format'].setVisible(True)\n        n\['threshold'].setVisible(False)\n        if n\['method'].getValue() == 1: #NNI\n            n\['speedup'].setVisible(True)\n        else:\n            n\['speedup'].setVisible(False)\n    elif n\['type'].getValue() == 1: #sample\n        n\['generate_format'].setVisible(False)\n        n\['sample_radius'].setVisible(True)\n        n\['threshold'].setVisible(False)\n        if n\['method'].getValue() == 1: #NNI\n            n\['speedup'].setVisible(True)\n        else:\n            n\['speedup'].setVisible(False)\n    else: #fill\n        n\['generate_format'].setVisible(False)\n        n\['sample_radius'].setVisible(False)\n        n\['threshold'].setVisible(True)\n        n\['speedup'].setVisible(True)\n        \nif kn == \"method\":\n    if n\['method'].getValue() == 0: #voronoi\n        if n\['type'].getValue() == 2: #fill\n            n\['speedup'].setVisible(True)\n        else:\n            n\['speedup'].setVisible(False)\n        n\['aa'].setVisible(True)\n        n\['smoothness'].setVisible(False)\n    else: #NNI\n        n\['aa'].setVisible(False)\n        n\['speedup'].setVisible(True)\n        n\['smoothness'].setVisible(True)\n\n#############\n##Add Point##\n#############\n\nif kn == \"add_point\":\n    count = 0\n    found = False\n    i = 1\n\n    #Find the earliest available knob\n    while found == False:\n        try:\n            n\[\"pos_\"+str(i)]\n        except NameError:\n            found = True\n            count = i\n        else:\n            i += 1\n\n    divider = nuke.Text_Knob('divider_'+str(count), ' ')\n    position = nuke.XY_Knob('pos_'+str(count), 'Position '+str(count))\n    remove = nuke.PyScript_Knob('remove_'+str(count), 'Remove this Point', '')\n    color = nuke.AColor_Knob('color_'+str(count), 'Color '+str(count))\n\n    remove.setFlag(0x00002000) #no new line\n\n    n.addKnob(divider)\n    n.addKnob(position)\n    n.addKnob(remove)\n    n.addKnob(color)\n    \n    #Set a random color at point creation\n    randomColor = \[random.uniform(0,1), random.uniform(0,1), random.uniform(0,1), 0]\n    color.setValue(randomColor)\n    \n################\n##Remove Point##\n################\n\nif kn\[0:7] == \"remove_\":\n    id = str(kn\[7:])\n    n.removeKnob(knobs\['divider_'+id])\n    n.removeKnob(knobs\['pos_'+id])\n    n.removeKnob(knobs\['remove_'+id])\n    n.removeKnob(knobs\['color_'+id])\n    \n####################\n##Update Pointlist##\n####################\n\nknobs = n.knobs() #knoblist\n\nif kn\[0:7] == \"remove_\" or kn == \"add_point\":\n    points_orig = \[]\n    #iterate through all knobs. If a position knob is found, append to pointlist\n    for knob in knobs:\n        if knob\[0:4] == \"pos_\":\n            id = int(knob\[4:])\n            points_orig.append(id)\n    \n    points_orig.sort()\n    \n    n\['count'].setValue('<b>'+str(len(points_orig))+'</b>')\n    points = ','.join(str(i) for i in points_orig)\n    n\['points'].setValue(points)\n"
  tile_color 0xffb300ff
  label "\[llength \[split \[value this.points] ,]] Points"
  selected true
@@ -11,12 +11,12 @@ Group {
  addUserKnob {26 divider_general l "<b><font color=#ffd228>General</font><b>"}
  addUserKnob {4 type l Type t "Generate: using select point colors\nSample: using select input colors\nFill: using all input colors" M {Generate Sample Fill}}
  addUserKnob {17 generate_format l Format}
- generate_format "1920 1080 0 0 1920 1080 1 HD"
+ generate_format "1920 1080 0 0 1920 1080 1 HD_1080"
  addUserKnob {3 sample_radius l "Sample Radius" t "When Type is set to \"Sample\".\nBlurs the input image by this amount and samples the pixel at given position." +HIDDEN}
  sample_radius 3
- addUserKnob {7 threshold l "Alpha Threshold" t "Alpha needs to be bigger than this to be considered a feature point" +HIDDEN +SLIDER +LOG_SLIDER}
+ addUserKnob {7 threshold l "Alpha Threshold" t "Alpha needs to be bigger than this to be considered a feature point" +HIDDEN}
  threshold 0.05
- addUserKnob {14 overscan l "Overscan" t "This will extrapolate the gradient beyond the image bounds" R 0 100}
+ addUserKnob {14 overscan l Overscan t "This will extrapolate the gradient beyond the image bounds" R 0 100}
  addUserKnob {26 spacer_01 l "" +STARTLINE T " "}
  addUserKnob {26 divider_method l "<b><font color=#ffd228>Method</font><b>"}
  addUserKnob {4 method l Output t "Voronoi Diagram: \nEvery pixel becomes the color of the feature point that is the closest\n\nNNI: \nSmooth and natural color interpolation between feature points" M {"Voronoi Diagram" "Natural Neighbor Interpolation" "" ""}}
@@ -86,13 +86,13 @@ Group {
   xpos 25
   ypos -393
  }
- set C2941ec80 [stack 0]
+ set Cf546860 [stack 0]
  Dot {
   name Dot4
   xpos 59
   ypos -322
  }
-set N2942c1a0 [stack 0]
+set Nc445da0 [stack 0]
  Dot {
   name Dot8
   xpos 345
@@ -103,13 +103,13 @@ set N2942c1a0 [stack 0]
   xpos 345
   ypos 584
  }
-set N29420b70 [stack 0]
+set Nc3a5700 [stack 0]
  Dot {
   name Dot12
   xpos 345
   ypos 1654
  }
-push $N2942c1a0
+push $Nc445da0
  Reformat {
   type scale
   scale {{1/speedup}}
@@ -118,7 +118,7 @@ push $N2942c1a0
   xpos 150
   ypos -243
  }
- set C29429860 [stack 0]
+ set Cb6c53f0 [stack 0]
  Reformat {
   type scale
   scale 0.5
@@ -134,7 +134,7 @@ push $N2942c1a0
   xpos 184
   ypos -94
  }
-push $N2942c1a0
+push $Nc445da0
  Blur {
   size {{"\[value this.parent.sample_radius]-1"}}
   name Blur_SampleRadius
@@ -155,7 +155,7 @@ push $N2942c1a0
   xpos -111
   ypos -492
  }
-clone $C2941ec80 {
+clone $Cf546860 {
   xpos -111
   ypos -393
   selected false
@@ -174,7 +174,7 @@ clone $C2941ec80 {
   xpos 25
   ypos -22
  }
- set C28ff84a0 [stack 0]
+ set Cb6bbff0 [stack 0]
  Reformat {
   type scale
   scale {{aa}}
@@ -184,13 +184,13 @@ clone $C2941ec80 {
   ypos 44
   disable {{method==0?0:1}}
  }
-set N294253a0 [stack 0]
+set Nb58c620 [stack 0]
  Dot {
   name Dot30
   xpos 163
   ypos 106
  }
-set N29426f20 [stack 0]
+set Nefa7dd0 [stack 0]
  Expression {
   expr3 a<0.9999?1:0
   name Expression_MakeBinary1
@@ -202,7 +202,7 @@ set N29426f20 [stack 0]
   xpos 112
   ypos 445
  }
-push $N29426f20
+push $Nefa7dd0
  Expression {
   temp_name0 threshold
   temp_expr0 "\[value this.parent.threshold]"
@@ -214,14 +214,14 @@ push $N29426f20
   xpos 186
   ypos 158
  }
-set N29429bd0 [stack 0]
+set Nb1600e0 [stack 0]
  Dilate {
   size -1
   name Dilate_GetEdge
   xpos 385
   ypos 154
  }
-push $N29429bd0
+push $Nb1600e0
  Merge2 {
   inputs 2
   operation stencil
@@ -229,7 +229,7 @@ push $N29429bd0
   xpos 385
   ypos 223
  }
-push $N29429bd0
+push $Nb1600e0
  BlinkScript {
   inputs 2
   ProgramGroup 1
@@ -237,12 +237,13 @@ push $N29429bd0
   kernelSource "float distance(int2 q, float2 p)\{\n  return sqrt(pow(q.x - p.x, 2) + pow(q.y - p.y, 2));\n\}\n\nkernel NNIKernel : public ImageComputationKernel<ePixelWise>\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src;\n  Image<eRead, eAccessRandom, eEdgeClamped> points;\n  Image<eWrite> dst;\n\n  param:\n    float smoothness;\n\n  void process(int2 pos)\{\n    int x,y,dx,dy;\n    float4 rgba = 0;\n    float dist = 99999;\n    if(src(pos.x, pos.y, 3) == 0)\{\n      for(int i = src.bounds.x1; i < src.bounds.x2; i+=1)\{\n        for(int j = src.bounds.y1; j < src.bounds.y2; j+=1)\{\n          if(points(i,j,3) != 0)\{\n            if(distance(pos, float2(i,j)) <= dist)\{\n              dist = distance(pos, float2(i,j));\n              rgba.x = src(i,j,0);\n              rgba.y = src(i,j,1);\n              rgba.z = src(i,j,2);\n              rgba.w = dist*smoothness;\n            \}\n          \}\n        \}\n      \}\n    \}\n    else\{\n      rgba = src(pos.x, pos.y);\n    \}\n    dst() = rgba;\n  \}\n\};"
   rebuild ""
   NNIKernel_smoothness {{smoothness}}
+  rebuild_finalise ""
   name BlinkScript_Filler
   xpos 186
   ypos 303
   disable {{"type == 2 ? 0 : 1"}}
  }
-set N2942a2b0 [stack 0]
+set Nf34bf90 [stack 0]
  ShuffleCopy {
   inputs 2
   alpha alpha2
@@ -267,8 +268,10 @@ set N2942a2b0 [stack 0]
   name Crop_Points
   xpos -394
   ypos -86
+  addUserKnob {20 User}
+  addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
  }
-set N2942b750 [stack 0]
+set Na63fed0 [stack 0]
  Expression {
   expr0 0
   expr1 0
@@ -283,7 +286,7 @@ set N2942b750 [stack 0]
   xpos -214
   ypos 101
  }
-push $N2942b750
+push $Na63fed0
  Expression {
   expr0 "\[\nset points \[split \[value this.parent.points] ,]\nset string \"\"\nset y 0\nforeach pos \$points \{\n  append string \"y==\" \$y \"?\" \[value this.parent.pos_\$pos.x] \":\"\n  incr y\n\}\nappend string \"0\"\nreturn \$string\n]"
   expr1 "\[\nset points \[split \[value this.parent.points] ,]\nset string \"\"\nset y 0\nforeach pos \$points \{\n  append string \"y==\" \$y \"?\" \[value this.parent.pos_\$pos.y] \":\"\n  incr y\n\}\nappend string \"0\"\nreturn \$string\n]"
@@ -312,7 +315,7 @@ push $N2942b750
   xpos -224
   ypos 231
  }
-push $N294253a0
+push $Nb58c620
  Dot {
   name Dot7
   xpos -80
@@ -327,12 +330,13 @@ push $N294253a0
   VoronoiKernel_smoothness {{smoothness}}
   VoronoiKernel_sample {{type==1?1:0}}
   VoronoiKernel_scale {{"method == 0 ? aa : 1"}}
+  rebuild_finalise ""
   name BlinkScript_VoronoiDiagram
   xpos -114
   ypos 307
   disable {{"type == 2 ? 1 : 0"}}
  }
-set N29427290 [stack 0]
+set Nf360f00 [stack 0]
  Multiply {
   channels alpha
   value {{1/speedup}}
@@ -347,12 +351,12 @@ set N29427290 [stack 0]
   xpos -114
   ypos 449
  }
-clone $C29429860 {
+clone $Cb6c53f0 {
   xpos -114
   ypos 519
   selected false
  }
-set N29424950 [stack 0]
+set Nf5342b0 [stack 0]
  Dot {
   name Dot1
   xpos 72
@@ -364,20 +368,20 @@ set N29424950 [stack 0]
   xpos 72
   ypos 646
  }
-push $N29424950
+push $Nf5342b0
  Dot {
   name Dot3
   label Generate
   xpos -80
   ypos 650
  }
-clone $C28ff84a0 {
+clone $Cb6bbff0 {
   inputs 3
   xpos 38
   ypos 758
   selected false
  }
-set N28ffa1a0 [stack 0]
+set Nb193000 [stack 0]
  Shuffle {
   in mask
   red black
@@ -388,7 +392,7 @@ set N28ffa1a0 [stack 0]
   xpos 183
   ypos 830
  }
-push $N28ffa1a0
+push $Nb193000
  Colorspace {
   name Colorspace_Forth
   knobChanged "id = nuke.thisNode().knob(\"colorspace_out\").getValue()\nnuke.toNode(\"Colorspace_Back\").knob(\"colorspace_in\").setValue(int(id))"
@@ -407,6 +411,7 @@ push $N28ffa1a0
   KernelDescription "1 \"NNIKernel\" iterate pixelWise 6686a101b1a20245c97ca97df6de6aa9de029344db904f11b0103cb70408d85c 3 \"src\" Read Random \"mask\" Read Random \"dst\" Write Point 0"
   kernelSource "float distance(int2 q, float2 p)\{\n  return sqrt(pow(q.x - p.x, 2) + pow(q.y - p.y, 2));\n\}\n\nkernel NNIKernel : public ImageComputationKernel<ePixelWise>\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src;\n  Image<eRead, eAccessRandom, eEdgeClamped> mask;\n  Image<eWrite> dst;\n\n  void process(int2 pos)\{\n    int x,y,dx,dy;\n    float4 rgba = 0;\n    int c = 0;\n    bool found = true;\n    float dist;\n    if(mask(pos.x, pos.y, 3) > 0.9999)\{\n      for(int i = src.bounds.x1; i < src.bounds.x2; i+=1)\{\n        for(int j = src.bounds.y1; j < src.bounds.y2; j+=1)\{\n          if(distance(pos, float2(i,j)) <= src(i, j, 3))\{\n            rgba += src(i, j);\n            c += 1;\n          \}\n        \}\n      \}\n      dst() = rgba/c;\n    \}\n    else\{\n      dst() = src(pos.x, pos.y);\n    \}\n  \}\n\};"
   rebuild ""
+  rebuild_finalise ""
   name BlinkScript_NaturalNeighborInterpolation
   xpos 38
   ypos 1074
@@ -425,7 +430,7 @@ push $N28ffa1a0
   xpos 38
   ypos 1375
  }
-set N29420120 [stack 0]
+set Nf52bd60 [stack 0]
  Reformat {
   type "to box"
   box_width {{this.parent.input.width}}
@@ -433,14 +438,14 @@ set N29420120 [stack 0]
   box_fixed true
   box_pixel_aspect {{this.parent.input.pixel_aspect}}
   resize distort
-  filter Notch
+  filter notch
   pbb true
   name Reformat_OriginalSize
   xpos 115
   ypos 1481
  }
- set C29427600 [stack 0]
-set N29427600 [stack 0]
+ set Cf5c5e70 [stack 0]
+set Nf5c5e70 [stack 0]
  Dot {
   name Dot28
   xpos 220
@@ -452,7 +457,7 @@ set N29427600 [stack 0]
   xpos 186
   ypos 1651
  }
- set C294245e0 [stack 0]
+ set Cb180650 [stack 0]
  Dot {
   name Dot6
   label Fill
@@ -460,7 +465,7 @@ set N29427600 [stack 0]
   xpos 220
   ypos 1725
  }
-push $N29427600
+push $Nf5c5e70
  Dot {
   name Dot14
   xpos 72
@@ -472,7 +477,7 @@ push $N29427600
   xpos 72
   ypos 1726
  }
-push $N29420120
+push $Nf52bd60
  Reformat {
   type "to box"
   box_width {{Constant_Base.width}}
@@ -480,13 +485,13 @@ push $N29420120
   box_fixed true
   scale {{speedup}}
   resize distort
-  filter Notch
+  filter notch
   pbb true
   name Reformat_ConstantSize
   xpos -41
   ypos 1481
  }
- set C29428e10 [stack 0]
+ set Cf63e3a0 [stack 0]
  Dot {
   name Dot15
   xpos -80
@@ -498,14 +503,14 @@ push $N29420120
   xpos -80
   ypos 1730
  }
-clone $C28ff84a0 {
+clone $Cb6bbff0 {
   inputs 3
   xpos 38
   ypos 1884
   selected false
  }
-push $N29420b70
-push $N2942a2b0
+push $Nc3a5700
+push $Nf34bf90
  Dot {
   name Dot26
   xpos 290
@@ -516,12 +521,12 @@ push $N2942a2b0
   xpos 704
   ypos 356
  }
-clone $C29427600 {
+clone $Cf5c5e70 {
   xpos 670
   ypos 522
   selected false
  }
-clone $C294245e0 {
+clone $Cb180650 {
   inputs 2
   xpos 670
   ypos 581
@@ -534,7 +539,7 @@ clone $C294245e0 {
   xpos 704
   ypos 640
  }
-push $N29427290
+push $Nf360f00
  Dot {
   name Dot25
   xpos 43
@@ -545,13 +550,13 @@ push $N29427290
   xpos 429
   ypos 392
  }
-set N29425df0 [stack 0]
+set Nf67b260 [stack 0]
  Dot {
   name Dot5
   xpos 566
   ypos 392
  }
-clone $C29427600 {
+clone $Cf5c5e70 {
   xpos 532
   ypos 521
   selected false
@@ -562,8 +567,8 @@ clone $C29427600 {
   xpos 566
   ypos 639
  }
-push $N29425df0
-clone $C29428e10 {
+push $Nf67b260
+clone $Cf63e3a0 {
   xpos 395
   ypos 519
   selected false
@@ -574,7 +579,7 @@ clone $C29428e10 {
   xpos 429
   ypos 645
  }
-clone $C28ff84a0 {
+clone $Cb6bbff0 {
   inputs 3
   xpos 532
   ypos 755
