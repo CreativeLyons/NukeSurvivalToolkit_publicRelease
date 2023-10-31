@@ -1,5 +1,3 @@
-set cut_paste_input [stack 0]
-push $cut_paste_input
 Group {
 name SliceTool
 selected true
