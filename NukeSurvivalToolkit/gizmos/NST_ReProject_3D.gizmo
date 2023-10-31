@@ -1,6 +1,5 @@
 Group {
  name Reproject_3D
- inputs 4
  help "This gizmo does camera projection using the STMap node to remap all the layers in the input image.  It uses a 3D render of point positions in world space (as output by Nuke's ScanlineRender node) and a 3D camera to create UV texture coordinates that are then used to warp an input image such as a matte painting.\n\nNOTE: The projection works best with unmatted input images or at least unpremulted matting with some coverage, then all masking occurs within the gizmo.\n\nIt can mask the projected image in the following ways:\n- Input alpha from the 3D render.\n- Projecting on surfaces facing camera, using normal (N) in world space. This means all surfaces facing the projecting camera will receive the projection regardless of whether they are blocked by other geometry. This is like Nuke's existing camera projection masking."
  addUserKnob {20 reproject3d l ReProject3D}
  addUserKnob {41 pworld_channel l "Surface Pworld" t "Choose the input Position Pass layer from the \"Pworld\" input.  Note that it needs to be rendered in world space." T ShuffleP.in}
@@ -52,7 +51,7 @@ Group {
   xpos 17
   ypos 95
  }
-set Ne99c4b90 [stack 0]
+set N3652e6b0 [stack 0]
  Dot {
   name Dot2
   tile_color 0xcccccc00
@@ -65,7 +64,7 @@ set Ne99c4b90 [stack 0]
   xpos 127
   ypos 206
  }
-push $Ne99c4b90
+push $N3652e6b0
  Shuffle {
   alpha white
   name ShuffleP
@@ -89,7 +88,7 @@ push $Ne99c4b90
   xpos 17
   ypos 262
  }
-set N2fde20a0 [stack 0]
+set N3655a770 [stack 0]
  Input {
   inputs 0
   name Nworld
@@ -164,14 +163,14 @@ set N2fde20a0 [stack 0]
   xpos -235
   ypos 917
  }
-push $N2fde20a0
+push $N3655a770
  Dot {
   name Dot5
   tile_color 0x7aa9ff00
   xpos 17
   ypos 811
  }
-push $N2fde20a0
+push $N3655a770
  Dot {
   name Dot16
   tile_color 0x7aa9ff00
@@ -225,7 +224,7 @@ push $N2fde20a0
   xpos 427
   ypos 702
  }
-set Ne0ca2b70 [stack 0]
+set N36600e30 [stack 0]
  Expression {
   channel0 rgba
   expr0 b>0
@@ -234,7 +233,7 @@ set Ne0ca2b70 [stack 0]
   xpos 393
   ypos 749
  }
-push $Ne0ca2b70
+push $N36600e30
  Expression {
   temp_name0 h_tan
   temp_expr0 "(h_apert /2) / focal"
