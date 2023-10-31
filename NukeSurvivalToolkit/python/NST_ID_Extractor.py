@@ -54,7 +54,7 @@ def extractRed():
 	        s.autoplace()
 	        s.setInput(0,n)##################
 	        matte = 1
-	        s['tile_color'].setValue(2466250752L)
+	        s['tile_color'].setValue(2466250752)
 	        s['red'].setValue(matte)
 	        s['green'].setValue(matte)
 	        s['blue'].setValue(matte)
@@ -102,7 +102,7 @@ def extractGreen():
 	        s.autoplace()
 	        s.setInput(0,n)##################
 	        matte = 2
-	        s['tile_color'].setValue(1063467008L)
+	        s['tile_color'].setValue(1063467008)
 	        s['red'].setValue(matte)
 	        s['green'].setValue(matte)
 	        s['blue'].setValue(matte)
@@ -150,7 +150,7 @@ def extractBlue():
 	        s.autoplace()
 	        s.setInput(0,n)##################
 	        matte = 3
-	        s['tile_color'].setValue(1027575296L)
+	        s['tile_color'].setValue(1027575296)
 	        s['red'].setValue(matte)
 	        s['green'].setValue(matte)
 	        s['blue'].setValue(matte)
