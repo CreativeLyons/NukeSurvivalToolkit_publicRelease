@@ -37,7 +37,7 @@ Group {
  addUserKnob {22 outParticles l "Output As Particles" t "Click this to output Particles instead of a 2D render.\nIt can then be plugged into a 3D scene." T "n = nuke.thisNode()\n\nn.begin()\n\nSwitch = nuke.toNode('DotSwitch')\nP= nuke.toNode('ParticlesDot')\nR= nuke.toNode('RenderDot')\n\nif n\['ROrP'].value() ==0:\n    Switch.setInput(0,P)\n    n\['ROrP'].setValue(1)\n    n\['outParticles'].setLabel(\"Output As 2D Render\")\nelse:\n    Switch.setInput(0,R)\n    n\['ROrP'].setValue(0)\n    n\['outParticles'].setLabel(\"Output As Particles\")\n\nn.end()\n" +STARTLINE}
  addUserKnob {20 Presets}
  addUserKnob {4 AnimPreset l "Animation Presets" t "None: This wont do anything. Serves as safety to not enable a preset accidentally\nSingle Hit Heavy: Heavy hit with a double pop.\nSingle Hit Light : Light pop of sparks.\nWelding : Expression that will mimic a natural welding feeling.\nWavy : Constant sim with some strong variation in birth rate.\nConstant : Softer variation than the Wavy preset.\nLoopy : Loops the same pop of Sparks." M {None "Single Hit Heavy" "Single Hit Light" Welding Wavy Constant Loopy "" "" "" "" ""}}
- addUserKnob {22 Apply l "Apply Preset" t "    " T "def checkPreset():\n    preset = int(nuke.thisNode()\['AnimPreset'].getValue())\n    print preset\n    if preset ==0:\n        return False\n    else:\n        return preset\n\ndef checkFrame():\n    InitFrame = nuke.getInput(\"Enter Initial Frame\", '1001')\n    if InitFrame:\n        try:\n            InitFrame = int(InitFrame)\n            return InitFrame\n        except ValueError:\n            nuke.message(\"Not a valid frame number\")\n            return False\n\n\nif checkPreset() == False:\n    nuke.ask(\"No preset selected\")\nelse:\n    n=nuke.thisNode()\['EmissionRate']\n    s=int(nuke.thisNode()\['AnimPreset'].getValue())\n    cf=checkFrame()\n    if cf!=False and cf!=None:\n        if s == 1:        \n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setAnimated()\n            sCurve = '\{curve K x%v1 0 S 400 x%v2 0 12 x%v3 175 x%v4 20 0\}'\n            sCurve=sCurve.replace(\"%v1\",str(cf))\n            sCurve=sCurve.replace(\"%v2\",str(cf+3))\n            sCurve=sCurve.replace(\"%v3\",str(cf+6))\n            sCurve=sCurve.replace(\"%v4\",str(cf+12))\n            n.fromScript(sCurve)\n            nuke.message(\"Applied Single Hit Heavy Preset\")\n        elif s == 2:\n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setAnimated()\n            sCurve = '\{curve K x%v1 0 S 140 x%v2 0\}'\n            sCurve=sCurve.replace(\"%v1\",str(cf))\n            sCurve=sCurve.replace(\"%v2\",str(cf+3))\n            n.fromScript(sCurve)\n            nuke.message(\"Applied Single Hit Light Preset\")\n        elif s == 3:\n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setExpression(\"max(0,(random(frame+seed)*120*((sin(frame+seed)+1)*0.5)-12))*3\")\n            nuke.message(\"Applied Welding Preset\")\n        elif s == 4:\n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setExpression(\"random(frame+seed)*120*((sin(frame+seed)+1)*0.5)\")\n            nuke.message(\"Applied Wavy Preset\")\n        elif s == 5:\n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setExpression(\"random(frame/5+seed)*100+60\")\n            nuke.message(\"Applied Constant Preset\")\n        else:\n            print \"Initial frame is x\" + str(cf)\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setAnimated()\n            sCurve = '\{curve(((frame-%v1)%(%v6-%v1+1))+%v1) K x%v1 0 S 400 x%v2 0 x%v3 12 175 x%v4 20 x%v5 0 x%v6 0\}'\n            sCurve=sCurve.replace(\"%v1\",str(cf))\n            sCurve=sCurve.replace(\"%v2\",str(cf+3))\n            sCurve=sCurve.replace(\"%v3\",str(cf+4))\n            sCurve=sCurve.replace(\"%v4\",str(cf+7))\n            sCurve=sCurve.replace(\"%v5\",str(cf+11))\n            sCurve=sCurve.replace(\"%v6\",str(cf+14))\n            n.fromScript(sCurve)\n            nuke.message(\"Applied Loopy Preset\")\n\n" +STARTLINE}
+ addUserKnob {22 Apply l "Apply Preset" t "    " T "def checkPreset():\n    preset = int(nuke.thisNode()\['AnimPreset'].getValue())\n    print(preset)\n    if preset ==0:\n        return False\n    else:\n        return preset\n\ndef checkFrame():\n    InitFrame = nuke.getInput(\"Enter Initial Frame\", '1001')\n    if InitFrame:\n        try:\n            InitFrame = int(InitFrame)\n            return InitFrame\n        except ValueError:\n            nuke.message(\"Not a valid frame number\")\n            return False\n\n\nif checkPreset() == False:\n    nuke.ask(\"No preset selected\")\nelse:\n    n=nuke.thisNode()\['EmissionRate']\n    s=int(nuke.thisNode()\['AnimPreset'].getValue())\n    cf=checkFrame()\n    if cf!=False and cf!=None:\n        if s == 1:        \n            print(\"Initial frame is x\" + str(cf))\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setAnimated()\n            sCurve = '\{curve K x%v1 0 S 400 x%v2 0 12 x%v3 175 x%v4 20 0\}'\n            sCurve=sCurve.replace(\"%v1\",str(cf))\n            sCurve=sCurve.replace(\"%v2\",str(cf+3))\n            sCurve=sCurve.replace(\"%v3\",str(cf+6))\n            sCurve=sCurve.replace(\"%v4\",str(cf+12))\n            n.fromScript(sCurve)\n            nuke.message(\"Applied Single Hit Heavy Preset\")\n        elif s == 2:\n            print(\"Initial frame is x\" + str(cf))\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setAnimated()\n            sCurve = '\{curve K x%v1 0 S 140 x%v2 0\}'\n            sCurve=sCurve.replace(\"%v1\",str(cf))\n            sCurve=sCurve.replace(\"%v2\",str(cf+3))\n            n.fromScript(sCurve)\n            nuke.message(\"Applied Single Hit Light Preset\")\n        elif s == 3:\n            print(\"Initial frame is x\" + str(cf))\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setExpression(\"max(0,(random(frame+seed)*120*((sin(frame+seed)+1)*0.5)-12))*3\")\n            nuke.message(\"Applied Welding Preset\")\n        elif s == 4:\n            print(\"Initial frame is x\" + str(cf))\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setExpression(\"random(frame+seed)*120*((sin(frame+seed)+1)*0.5)\")\n            nuke.message(\"Applied Wavy Preset\")\n        elif s == 5:\n            print(\"Initial frame is x\" + str(cf))\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setExpression(\"random(frame/5+seed)*100+60\")\n            nuke.message(\"Applied Constant Preset\")\n        else:\n            print(\"Initial frame is x\" + str(cf))\n            nuke.thisNode()\['start_frame'].setValue(cf)\n            n.clearAnimated()\n            n.setAnimated()\n            sCurve = '\{curve(((frame-%v1)%(%v6-%v1+1))+%v1) K x%v1 0 S 400 x%v2 0 x%v3 12 175 x%v4 20 x%v5 0 x%v6 0\}'\n            sCurve=sCurve.replace(\"%v1\",str(cf))\n            sCurve=sCurve.replace(\"%v2\",str(cf+3))\n            sCurve=sCurve.replace(\"%v3\",str(cf+4))\n            sCurve=sCurve.replace(\"%v4\",str(cf+7))\n            sCurve=sCurve.replace(\"%v5\",str(cf+11))\n            sCurve=sCurve.replace(\"%v6\",str(cf+14))\n            n.fromScript(sCurve)\n            nuke.message(\"Applied Loopy Preset\")\n\n" +STARTLINE}
  addUserKnob {20 Advanced l "Advanced Settings"}
  addUserKnob {7 TVelocity l "Transfer Velocity"}
  TVelocity 0.5
@@ -96,7 +96,7 @@ Group {
   xpos -1227
   ypos 548
  }
-set N5c811000 [stack 0]
+set N10a85330 [stack 0]
  ColorWheel {
   inputs 0
   format "256 256 0 0 256 256 1 square_256"
@@ -154,13 +154,13 @@ set N5c811000 [stack 0]
   xpos -676
   ypos -548
  }
-set N5950d400 [stack 0]
+set N10a0e6f0 [stack 0]
  Sphere {
   name Sphere1
   xpos -770
   ypos -456
  }
-push $N5950d400
+push $N10a0e6f0
  Sphere {
   translate {{parent.input1.translate} {parent.input1.translate} {parent.input1.translate}}
   rotate {{parent.input1.rotate} {parent.input1.rotate} {parent.input1.rotate}}
@@ -253,13 +253,13 @@ push 0
   xpos -676
   ypos 265
  }
-set N79949400 [stack 0]
+set Na063a70 [stack 0]
  Dot {
   name Dot6
   xpos -642
   ypos 516
  }
-set N59540000 [stack 0]
+set Na06c0d0 [stack 0]
  Constant {
   inputs 0
   name Constant1
@@ -280,7 +280,7 @@ set N59540000 [stack 0]
   xpos -127
   ypos 551
  }
-set N79871800 [stack 0]
+set Na08a170 [stack 0]
  ScanlineRender {
   inputs 3
   conservative_shader_sampling false
@@ -305,14 +305,14 @@ set N79871800 [stack 0]
   xpos -448
   ypos 708
  }
-push $N5c811000
+push $N10a85330
  Dot {
   name Dot48
   xpos -1192
   ypos 640
  }
-push $N59540000
-push $N79871800
+push $Na06c0d0
+push $Na08a170
  Dot {
   name Dot5
   xpos -126
@@ -377,7 +377,7 @@ push $N79871800
   xpos -324
   ypos -479
  }
-push $N79949400
+push $Na063a70
  Dot {
   name Dot2
   xpos -924
