@@ -401,16 +401,16 @@ def KeyframeReducer(knob):
         delta = math.sqrt(xd*xd+yd*yd)
         if delta < threshold:
             if reduce:
-                print "Reduce this",frame
+                print ("Reduce this",frame)
                 if myKnob.isAnimated():
                     myKnob.removeKeyAt(frame)
             else:
-                print help(myKnob.setValueAt)
+                print (help(myKnob.setValueAt))
                 #myKnob.removeKeyAt(frame)
                 #myKnob.setValueAt(myKnob.getValueAt(frame)[0],frame,0)
                 #myKnob.setValueAt(myKnob.getValueAt(frame)[1],frame,1)
                 reduce = True
-            print frame, delta
+            print (frame, delta)
         else:
             reduce = False
 
@@ -546,8 +546,8 @@ def Solve2DTransform(_node):
       if frame == preProcessList[frameindex][0]:
         tempX = preProcessList[frameindex][1]
         tempY = preProcessList[frameindex][2]
-        print "Reached keyframe",preProcessList[frameindex][0],preProcessList[frameindex][1],preProcessList[frameindex][2]
-        print "Dif:", tempX-(temp_pos[0]-center_pos[0]),tempY-(temp_pos[1]-center_pos[1])
+        print ("Reached keyframe",preProcessList[frameindex][0],preProcessList[frameindex][1],preProcessList[frameindex][2])
+        print ("Dif:", tempX-(temp_pos[0]-center_pos[0]),tempY-(temp_pos[1]-center_pos[1]))
         frameindex -= 1
 
   #-------------------------
@@ -655,7 +655,7 @@ def SolveCurves(_node,_isSplineWarp=False):
 
   for item in RefPointListInt:
     temp_pos = [item[0],item[1]]
-    print "tempbos:",temp_pos
+    print ("tempbos:",temp_pos)
     centerPoint = item[2]
     #--------------------------
     #Resolve backwards [<-----]
@@ -702,12 +702,12 @@ def Solve2DTracker(_node):
   for x in range(0,n_tracks):
     track_a = [float(_node.knob("tracks").getValue(numColumns*x + colTrackX)),float(_node.knob("tracks").getValue(numColumns*x + colTrackY))]
     RefPointList.append(track_a)
-  print "the ref point list:",RefPointList
+  print ("the ref point list:",RefPointList)
 
   #Grap data from the camera tracker and convert it into a format we can use.
   PointData = GrabListData()
 
-  print "--Initializing Main Loop--"
+  print ("--Initializing Main Loop--")
   trackIdx = 0
   for item in RefPointList:
     temp_pos = item
@@ -757,12 +757,12 @@ def ResolveSelectedNodes():
     if itemclass == "CornerPin2D":
       sucess = True
       SolveCornerpin(item)
-      print "Cornerpin"
+      print ("Cornerpin")
 
     elif itemclass == "Transform" or itemclass == "TransformMasked":
       sucess = True
       Solve2DTransform(item)
-      print "Transform"
+      print ("Transform")
 
     elif itemclass == "Roto" or itemclass == "RotoPaint":
       sucess = True
@@ -770,20 +770,20 @@ def ResolveSelectedNodes():
         Solve2DTransform(item)
       else:
         SolveCurves(item)
-      print "roto or paint"
+      print ("roto or paint")
 
     elif itemclass == "SplineWarp3":
       sucess = True
       SolveCurves(item,True)
-      print "SplineWarp3"
+      print ("SplineWarp3")
 
     elif itemclass == "Tracker4":
       sucess = True
       Solve2DTracker(item)
-      print "Tracker"
+      print ("Tracker")
 
     else:
-      print "selected node not supported:",itemclass
+      print ("selected node not supported:",itemclass)
   if not sucess:
     nuke.message("Please select a assistable node in the nodegraph.")
 
@@ -837,7 +837,7 @@ def StickIT():
 
     #print finalAnimation
     end = time.clock()
-    print "%.2gs" % (end-start)
+    print ("%.2gs" % (end-start))
     CreateWarpPinPair(NodePin,finalAnimation,frameForRef)
     del(taskB)
 
