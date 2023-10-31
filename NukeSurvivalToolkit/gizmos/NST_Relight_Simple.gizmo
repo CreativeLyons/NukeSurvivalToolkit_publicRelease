@@ -1,6 +1,5 @@
 Group {
  name Relight_Simple
- inputs 2
  help "Simpliflied relight node.\nOnly requires a normal map to get started.\n\nThis node will not reproduce accurate lighting, as it does not take into account the actual 3D world space, but instead considers the image in its own local space."
  addUserKnob {20 relight_simple l Relight_Simple}
  addUserKnob {12 light l "Light XY" t "Controls the light position in X and Y axis"}
