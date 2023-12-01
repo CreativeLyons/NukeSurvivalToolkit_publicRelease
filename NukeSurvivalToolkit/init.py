@@ -2,5 +2,8 @@
 @author: Tony Lyons (creativelyons@gmail.com)
 # init.py
 '''
-# import os
-# import nuke
+nuke.pluginAddPath('./gizmos')
+nuke.pluginAddPath('./python')
+nuke.pluginAddPath('./icons')
+nuke.pluginAddPath('./images')
+nuke.pluginAddPath('./nk_files')
