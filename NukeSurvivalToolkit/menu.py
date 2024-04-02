@@ -536,6 +536,7 @@ ThreeDMenu.addCommand('DistanceBetween_CS NKPD', "nuke.createNode('{}DistanceBet
 ThreeDMenu.addCommand('Lightning3D EL', "nuke.createNode('{}Lightning3D')".format(prefixNST), icon="nukepedia_icon.png")
 ThreeDMenu.addCommand('Noise3DTexture NKPD', "nuke.createNode('{}Noise3DTexture')".format(prefixNST), icon="noise3dicon.png")
 ThreeDMenu.addCommand('GodRaysProjector CF', "nuke.createNode('{}GodRaysProjector')".format(prefixNST), icon="VolumeRays.png")
+ThreeDMenu.addCommand('MirrorDimension TL', "nuke.createNode('{}MirrorDimension')".format(prefixNST), icon="Mirror.png")
 
 ############################################################################################################
 ############################################################################################################
