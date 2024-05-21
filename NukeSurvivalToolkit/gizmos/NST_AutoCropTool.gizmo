@@ -9,7 +9,7 @@ Group {
  addUserKnob {26 ""}
  addUserKnob {26 preReformat l "@b; Pre-Reformat Scale" T " "}
  addUserKnob {41 scale l "" -STARTLINE T Reformat1.scale}
- addUserKnob {22 go l Go! T "n = nuke.thisNode()\n#Define this node\n\nct1 = nuke.toNode(\"CurveTool\")\n# Define curveTool nodes\n\nfirst_frame = int(nuke.Root()\['first_frame'].getValue())\nlast_frame = int(nuke.Root()\['last_frame'].getValue())\n# Grab first and last frame from root\n\np = nuke.Panel(\"Execute on FrameRange\")\np.addSingleLineInput('First Frame', first_frame)\np.addSingleLineInput('Last Frame', last_frame)\np.addSingleLineInput('Increment', 1)\nif p.show():\n    \n    # Create user input panel\n    \n    ff = int(p.value(\"First Frame\"))\n    lf = int(p.value(\"Last Frame\"))\n    i = int(p.value(\"Increment\"))\n    # Define first, last, increment from user input panel\n    \n    with n:\n        \n        ct1\[\"autocropdata\"].clearAnimated()\n        # Clear any intensitydata from all CurveTool nodes\n    \n        def executeCT(first,last,inc):\n            runMe = True\n            while runMe == True:\n                nuke.execute(ct1,first,last,inc)\n                stop_event.set()\n                runMe = False\n                print('CurveTools done')\n                break\n            # Define CurveTool execution function\n    \n    \n        global stop_event \n        stop_event = threading.Event()\n        threading.Thread(target=executeCT, kwargs=dict(first=ff,last=lf,inc=i) ).start() \n        while not stop_event.is_set():\n            time.sleep(0.1)\n        # run CurveTools with threading" +STARTLINE}
+ addUserKnob {22 go l Go! T "import time\nn = nuke.thisNode()\n#Define this node\n\nct1 = nuke.toNode(\"CurveTool\")\n# Define curveTool nodes\n\nfirst_frame = int(nuke.Root()\['first_frame'].getValue())\nlast_frame = int(nuke.Root()\['last_frame'].getValue())\n# Grab first and last frame from root\n\np = nuke.Panel(\"Execute on FrameRange\")\np.addSingleLineInput('First Frame', first_frame)\np.addSingleLineInput('Last Frame', last_frame)\np.addSingleLineInput('Increment', 1)\nif p.show():\n    \n    # Create user input panel\n    \n    ff = int(p.value(\"First Frame\"))\n    lf = int(p.value(\"Last Frame\"))\n    i = int(p.value(\"Increment\"))\n    # Define first, last, increment from user input panel\n    \n    with n:\n        \n        ct1\[\"autocropdata\"].clearAnimated()\n        # Clear any intensitydata from all CurveTool nodes\n    \n        def executeCT(first,last,inc):\n            runMe = True\n            while runMe == True:\n                nuke.execute(ct1,first,last,inc)\n                stop_event.set()\n                runMe = False\n                print('CurveTools done')\n                break\n            # Define CurveTool execution function\n    \n    \n        global stop_event \n        stop_event = threading.Event()\n        threading.Thread(target=executeCT, kwargs=dict(first=ff,last=lf,inc=i) ).start() \n        while not stop_event.is_set():\n            time.sleep(0.1)\n        # run CurveTools with threading" +STARTLINE}
  addUserKnob {26 adjustbbox l "@b;Adjust Final BBox"}
  addUserKnob {6 blackOutside l BlackOutside +STARTLINE}
  addUserKnob {7 addPix l "Add Pixels" R 0 100}
@@ -35,7 +35,7 @@ Group {
   xpos -455
   ypos 404
  }
-set Naa32710 [stack 0]
+set N1f815980 [stack 0]
  Reformat {
   type scale
   scale 0.05
@@ -44,7 +44,7 @@ set Naa32710 [stack 0]
   xpos -629
   ypos 400
  }
-set Naa381b0 [stack 0]
+set N1f864460 [stack 0]
  CurveTool {
   operation "Auto Crop"
   channels alpha
@@ -120,7 +120,7 @@ set Naa381b0 [stack 0]
   xpos -629
   ypos 612
  }
-push $Naa32710
+push $N1f815980
  CopyBBox {
   inputs 2
   name CopyBBox13
@@ -138,7 +138,7 @@ push $Naa32710
   xpos -489
   ypos 712
  }
-push $Naa381b0
+push $N1f864460
  Group {
   name bboxSize1
   tile_color 0xa57aaaff
@@ -180,7 +180,7 @@ push $Naa381b0
    ypos 583
   }
  end_group
-push $Naa381b0
+push $N1f864460
  Group {
   name bboxSize2
   tile_color 0xa57aaaff
