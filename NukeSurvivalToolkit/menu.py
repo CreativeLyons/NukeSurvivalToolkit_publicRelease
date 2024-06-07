@@ -349,6 +349,10 @@ apChromaMenu.addCommand('apChromaPremult AP', 'nuke.createNode("{}apChromaPremul
 filterMenu.addSeparator()
 
 filterMenu.addCommand('Chromatik SPIN', "nuke.createNode('{}Chromatik')".format(prefixNST), icon='spin_tools.png')
+filterMenu.addCommand("ChromaSmear LJ", "nuke.createNode('{}ChromaSmear')".format(prefixNST), icon="ColorLookup.png")
+
+filterMenu.addSeparator()
+
 filterMenu.addCommand('CatsEyeDefocus NKPD', "nuke.createNode('{}CatsEyeDefocus')".format(prefixNST), icon="nukepedia_icon.png")
 filterMenu.addCommand('DefocusSwirlyBokeh NKPD', "nuke.createNode('{}DefocusSwirlyBokeh')".format(prefixNST), icon="nukepedia_icon.png")
 filterMenu.addCommand('deHaze NKPD', "nuke.createNode('{}deHaze')".format(prefixNST), icon="nukepedia_icon.png")
