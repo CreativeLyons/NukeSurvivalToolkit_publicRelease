@@ -1,318 +1,326 @@
 Group {
-name ChromaSmear
-tile_color 0xd26524ff
-note_font "Bitstream Vera Sans Bold"
-note_font_color 0xffffffff
-selected true
-addUserKnob {20 ChromaSmear}
-addUserKnob {26 note l "" +STARTLINE T "<b>Area input</b> = pre-mask (mult vectors)"}
-addUserKnob {26 note3 l "      " -STARTLINE T "<b>Vector input</b> = custom vectors"}
-addUserKnob {26 note2 l "" +STARTLINE T "<b>Mask input </b>= post-mask (keymix)"}
-addUserKnob {26 "" +STARTLINE}
-addUserKnob {7 abberation R -5 5}
-abberation 3
-addUserKnob {26 ""}
-addUserKnob {41 translate T Transform1.translate}
-addUserKnob {41 rotate T Transform1.rotate}
-addUserKnob {41 scale T Transform1.scale}
-addUserKnob {41 center T Transform1.center}
-addUserKnob {41 opacity l fade T Radial1.opacity}
-addUserKnob {26 ""}
-addUserKnob {7 overallAmount l "Overall Amount" R -2 3}
-overallAmount 1
-addUserKnob {7 Mask_softness l "Radial Mask"}
-addUserKnob {26 ""}
-addUserKnob {26 "" l mask T ""}
-addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge5.maskChannelInput}
-addUserKnob {41 inject -STARTLINE T Merge5.inject}
-addUserKnob {41 invert_mask l invert -STARTLINE T Merge5.invert_mask}
-addUserKnob {41 fringe -STARTLINE T Merge5.fringe}
-addUserKnob {41 mix T Merge5.mix}
-addUserKnob {26 ""}
-addUserKnob {26 credit l "" +STARTLINE T "Luc Julien 2010 | edited by Tony Lyons 2024"}
-}
-Input {
- inputs 0
- name InputMask
+ name ChromaSmear
+ tile_color 0xd26524ff
+ note_font "Bitstream Vera Sans Bold"
+ note_font_color 0xffffffff
  selected true
- xpos -31
- ypos 687
- number 1
+ addUserKnob {20 ChromaSmear}
+ addUserKnob {26 note l "" +STARTLINE T "<b>Area input</b> = pre-mask (mult vectors)"}
+ addUserKnob {26 note3 l "      " -STARTLINE T "<b>Vector input</b> = custom vectors"}
+ addUserKnob {26 note2 l "" +STARTLINE T "<b>Mask input </b>= post-mask (keymix)"}
+ addUserKnob {26 ""}
+ addUserKnob {7 abberation R -5 5}
+ abberation 3
+ addUserKnob {7 saturation}
+ saturation 1
+ addUserKnob {7 offset R -1 1}
+ offset 0.5
+ addUserKnob {26 ""}
+ addUserKnob {41 translate T Transform1.translate}
+ addUserKnob {41 rotate T Transform1.rotate}
+ addUserKnob {41 scale T Transform1.scale}
+ addUserKnob {41 center T Transform1.center}
+ addUserKnob {41 opacity l fade T Radial1.opacity}
+ addUserKnob {26 ""}
+ addUserKnob {7 overallAmount l "Overall Amount" R -2 3}
+ overallAmount 1
+ addUserKnob {7 Mask_softness l "Radial Mask"}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge5.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge5.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge5.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge5.fringe}
+ addUserKnob {41 mix T Merge5.mix}
+ addUserKnob {26 ""}
+ addUserKnob {26 credit l "" +STARTLINE T "Luc Julien 2010 | edited by Tony Lyons 2024"}
 }
-Input {
- inputs 0
- name InputArea
- xpos 311
- ypos 20
- number 2
-}
-AddChannels {
- channels rgba
- color 1
- name AddChannels1
- xpos 311
- ypos 58
-}
-Invert {
- name Invert2
- xpos 311
- ypos 97
-}
-Input {
- inputs 0
- name Inputvectors
- label "\[value number]"
- xpos 178
- ypos 5
- number 3
-}
-Radial {
- inputs 0
- cliptype none
- invert true
- opacity 0.25
- area {{curve i} {curve i} {input.width i} {input.height i}}
- softness {{parent.Mask_softness*-1+1+.5 i x1 0.585}}
- plinear true
- name Radial1
- xpos 145
- ypos -108
-}
-Input {
- inputs 0
- name Inputimg
- xpos -210
- ypos -402
-}
-Dot {
- name Dot1
- note_font_size 41
- xpos -176
- ypos -312
-}
-set N3436d790 [stack 0]
-Remove {
- name Remove1
- xpos 31
- ypos -322
-}
-AdjBBox {
- numpixels {{width/4} {width/4}}
- name AdjBBox1
- xpos 31
- ypos -237
-}
-Expression {
- expr0 x
- expr1 y
- name Expression1
- xpos 31
- ypos -213
-}
-set N34384300 [stack 0]
-Dot {
- name Dot2
- xpos -79
- ypos -210
-}
-Transform {
- scale 1.1
- center {{input.width/2} {input.height/2}}
- black_outside false
- name Transform1
- xpos -113
- ypos -189
-}
-push $N34384300
-Merge2 {
- inputs 2
- operation minus
- name Merge1
- xpos 31
- ypos -189
-}
-Invert {
- channels rgba
- name Invert1
- xpos 31
- ypos -165
-}
-Merge2 {
- inputs 2
- operation multiply
- name Merge2
- xpos 31
- ypos -54
-}
-Switch {
- inputs 2
- which {{"\[exists parent.input3]"}}
- name Switch1
- xpos 31
- ypos 17
-}
-Multiply {
- inputs 1+1
- value 0
- name Multiply1
- label "\[value value]"
- xpos 31
- ypos 91
-}
-Multiply {
- value {{parent.overallAmount}}
- name Multiply2
- label "\[value value]"
- xpos 31
- ypos 192
-}
-Dot {
- name Dot5
- note_font_size 41
- xpos 65
- ypos 312
-}
-push $N3436d790
-Copy {
- inputs 2
- from0 rgba.red
- to0 forward.u
- from1 rgba.green
- to1 forward.v
- name Copy1
- xpos -210
- ypos 296
-}
-set N343fa3c0 [stack 0]
-Shuffle {
- red black
- green black
- name Shuffle3
- xpos -119
- ypos 374
-}
-VectorBlur {
- channels {-rgba.red -rgba.green rgba.blue rgba.alpha}
- uv forward
- scale -1
- offset {{-.5*abberation*.8}}
- name VectorBlur3
- xpos -119
- ypos 412
-}
-Expression {
- expr3 a*0.114
- name Expression4
- xpos -119
- ypos 467
-}
-push $N343fa3c0
-Shuffle {
- red black
- blue black
- name Shuffle2
- xpos -210
- ypos 375
-}
-VectorBlur {
- channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
- uv forward
- scale -1
- offset {{-.5*abberation*.6}}
- name VectorBlur2
- xpos -210
- ypos 413
-}
-Expression {
- expr3 a*0.587
- name Expression3
- xpos -210
- ypos 468
-}
-push $N343fa3c0
-Shuffle {
- green black
- blue black
- name Shuffle1
- xpos -297
- ypos 375
-}
-VectorBlur {
- channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
- uv forward
- scale -1
- offset {{-.5*abberation*.4}}
- name VectorBlur1
- xpos -297
- ypos 413
-}
-set N34478800 [stack 0]
-Expression {
- expr3 a*0.299
- name Expression2
- xpos -297
- ypos 468
-}
-Merge2 {
- inputs 2
- operation plus
- name Merge3
- xpos -248
- ypos 509
-}
-Merge2 {
- inputs 2
- operation plus
- name Merge4
- xpos -182
- ypos 553
-}
-Crop {
- box {{curve i} {curve i} {input.width i} {input.height i}}
- name Crop1
- xpos -182
- ypos 579
-}
-push $N3436d790
-Dot {
- name Dot3
- note_font_size 41
- xpos -424
- ypos -312
-}
-Dot {
- name Dot4
- note_font_size 41
- selected true
- xpos -424
- ypos 697
-}
-Merge2 {
- inputs 2+1
- operation copy
- name Merge5
- label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
- selected true
- xpos -182
- ypos 693
- addUserKnob {20 TRX}
- addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
-}
-Output {
- name Output1
- selected true
- xpos -182
- ypos 798
-}
-push $N34478800
-Viewer {
- frame_range 1017-1226
- viewerProcess "Show (graded) (default)"
- near 0.9
- far 10000
- monitorOutNDISenderName "Nuke - 204_032__3000__main__u067 - Viewer1"
- name Viewer1
- xpos 31
- ypos -139
-}
+ Input {
+  inputs 0
+  name InputMask
+  xpos -31
+  ypos 687
+  number 1
+ }
+ Input {
+  inputs 0
+  name InputArea
+  xpos 311
+  ypos 20
+  number 2
+ }
+ AddChannels {
+  channels rgba
+  color 1
+  name AddChannels1
+  xpos 311
+  ypos 58
+ }
+ Invert {
+  name Invert2
+  xpos 311
+  ypos 97
+ }
+ Input {
+  inputs 0
+  name Inputvectors
+  label "\[value number]"
+  xpos 178
+  ypos 5
+  number 3
+ }
+ Radial {
+  inputs 0
+  cliptype none
+  invert true
+  opacity 0.25
+  area {{curve i} {curve i} {input.width i} {input.height i}}
+  softness {{parent.Mask_softness*-1+1+.5 i x1 0.585}}
+  plinear true
+  name Radial1
+  xpos 145
+  ypos -108
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos -210
+  ypos -402
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos -176
+  ypos -312
+ }
+set Ned84310 [stack 0]
+ Remove {
+  name Remove1
+  xpos 31
+  ypos -322
+ }
+ AdjBBox {
+  numpixels {{width/4} {width/4}}
+  name AdjBBox1
+  xpos 31
+  ypos -237
+ }
+ Expression {
+  expr0 x
+  expr1 y
+  name Expression1
+  xpos 31
+  ypos -213
+ }
+set N2dfc6ef0 [stack 0]
+ Dot {
+  name Dot2
+  xpos -79
+  ypos -210
+ }
+ Transform {
+  scale 1.1
+  center {{input.width/2} {input.height/2}}
+  black_outside false
+  name Transform1
+  xpos -113
+  ypos -189
+ }
+push $N2dfc6ef0
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge1
+  xpos 31
+  ypos -189
+ }
+ Invert {
+  channels rgba
+  name Invert1
+  xpos 31
+  ypos -165
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge2
+  xpos 31
+  ypos -54
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input3]"}}
+  name Switch1
+  xpos 31
+  ypos 17
+ }
+ Multiply {
+  inputs 1+1
+  value 0
+  name Multiply1
+  label "\[value value]"
+  xpos 31
+  ypos 91
+ }
+ Multiply {
+  value {{parent.overallAmount}}
+  name Multiply2
+  label "\[value value]"
+  xpos 31
+  ypos 192
+ }
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 65
+  ypos 312
+ }
+push $Ned84310
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 forward.u
+  from1 rgba.green
+  to1 forward.v
+  name Copy1
+  xpos -210
+  ypos 296
+ }
+set N4843ba20 [stack 0]
+ Shuffle {
+  red black
+  green black
+  name Shuffle3
+  xpos -119
+  ypos 374
+ }
+ VectorBlur {
+  channels {-rgba.red -rgba.green rgba.blue rgba.alpha}
+  uv forward
+  scale -1
+  offset {{(-.5*abberation*.8)+parent.offset}}
+  name VectorBlur3
+  xpos -119
+  ypos 412
+ }
+ Expression {
+  expr3 a*0.114
+  name Expression4
+  xpos -119
+  ypos 466
+ }
+push $N4843ba20
+ Shuffle {
+  red black
+  blue black
+  name Shuffle2
+  xpos -210
+  ypos 375
+ }
+ VectorBlur {
+  channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
+  uv forward
+  scale -1
+  offset {{(-.5*abberation*.6)+parent.offset}}
+  name VectorBlur2
+  xpos -210
+  ypos 413
+ }
+ Expression {
+  expr3 a*0.587
+  name Expression3
+  xpos -210
+  ypos 468
+ }
+push $N4843ba20
+ Shuffle {
+  green black
+  blue black
+  name Shuffle1
+  xpos -297
+  ypos 375
+ }
+ VectorBlur {
+  channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  uv forward
+  scale -1
+  offset {{(-.5*abberation*.4)+parent.offset}}
+  name VectorBlur1
+  xpos -297
+  ypos 413
+ }
+ Expression {
+  expr3 a*0.299
+  name Expression2
+  xpos -297
+  ypos 467
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge3
+  xpos -248
+  ypos 509
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge4
+  xpos -182
+  ypos 553
+ }
+push $N4843ba20
+ VectorBlur {
+  uv forward
+  scale -1.6
+  name VectorBlur4
+  xpos 8
+  ypos 409
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  mix {{parent.saturation}}
+  name Merge6
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  selected true
+  xpos -182
+  ypos 596
+  addUserKnob {20 TRX}
+  addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+ }
+ Crop {
+  box {{curve i} {curve i} {input.width i} {input.height i}}
+  name Crop1
+  xpos -182
+  ypos 646
+ }
+push $Ned84310
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos -424
+  ypos -312
+ }
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos -424
+  ypos 697
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  name Merge5
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -182
+  ypos 693
+  addUserKnob {20 TRX}
+  addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+ }
+ Output {
+  name Output1
+  xpos -182
+  ypos 798
+ }
 end_group
