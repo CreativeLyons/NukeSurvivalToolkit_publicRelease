@@ -1,0 +1,288 @@
+Group {
+ name apEdgeCrush
+ help "apEdgeCrush by Adrian Pueyo"
+ knobChanged "n=nuke.thisNode()\nk=nuke.thisKnob()\nkn = k.name()\nif kn == \"use_input_channels\":\n    n.knobs()\[\"pattern_channel\"].setEnabled(not bool(k.getValue()))\nelif kn == \"inputChange\":\n    n.knobs()\[\"use_input_channels\"].setEnabled(n.input(1) is not None)\n    n.knobs()\[\"pattern_channel\"].setEnabled(\n            n.input(1) is not None\n            and not bool(n\[\"use_input_channels\"].getValue())\n    )\n"
+ tile_color 0x848484ff
+ selected true
+ addUserKnob {20 apEdgeCrush}
+ addUserKnob {26 "" l "Local GPU:" T ""}
+ addUserKnob {41 gpuName l "" -STARTLINE T apEdgeCrushKernel1.gpuName}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T apEdgeCrushKernel1.useGPUIfAvailable}
+ addUserKnob {41 vectorize l "Vectorize on CPU" -STARTLINE T apEdgeCrushKernel1.vectorize}
+ addUserKnob {26 space_1 l "" +STARTLINE T " "}
+ addUserKnob {26 text l "<b>Edge Crush"}
+ addUserKnob {14 amount R 0 100}
+ amount 30
+ addUserKnob {4 direction t "<li><b>forward:</b> image is displaced horizontally and vertically using the pattern as a mask.\n<b>backward:</b> same happens but using an inverse direction on the vectors.\n<b>both:</b> the process happens twice. First forward and then backward." M {forward backward both "" "" "" "" "" ""}}
+ direction both
+ addUserKnob {6 reverse_order l "reverse order" t "Enable to distort vertically and then horizontally. Nice to use for aesthetic reasons (to see which result you prefer)." -STARTLINE}
+ addUserKnob {7 grow_bbox l "grow bbox" t "Increase this to manually compensate for bits that fall outside the edges." R 0 200}
+ addUserKnob {6 limit_overscan l "limit overscan" t "Enable to clip the bounding box from growing into the overscan more than a certain amount of pixels." +STARTLINE}
+ limit_overscan true
+ addUserKnob {7 overscan_limit l "" t "If limit overscan is enabled, this is the max. amount of pixels that that the bounding box can grow into the overscan before getting clipped." -STARTLINE R 0 200}
+ overscan_limit 100
+ addUserKnob {26 text_2 l " " T " "}
+ addUserKnob {26 text_1 l <b>Pattern}
+ addUserKnob {41 pattern_channel l channel +DISABLED T CopyMatte.from0}
+ addUserKnob {6 use_input_channels l "use input channels" t "Use each channel as a distortion pattern to the corresponding image channel, instead of using only the alpha." -STARTLINE +DISABLED}
+ addUserKnob {41 blur T Blur1.size}
+ addUserKnob {41 preview_pattern l preview T preview_noise}
+ addUserKnob {26 space_2 l "" +STARTLINE T " "}
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelMask l "" -STARTLINE T Merge1.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 mix T Merge1.mix}
+ addUserKnob {26 version_author l " " T "<span style=\"color:#666\"><br/><b>apEdgeCrush v0.5</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2017-2023</span>"}
+ addUserKnob {20 Noise}
+ addUserKnob {26 noise_info l " " T "<i>(Use this tab if you don't input a pattern)\n "}
+ addUserKnob {6 preview_noise l preview +STARTLINE}
+ addUserKnob {41 type T Noise1.type}
+ addUserKnob {41 size l x/ysize T Noise1.size}
+ addUserKnob {41 zoffset l z T Noise1.zoffset}
+ addUserKnob {41 octaves T Noise1.octaves}
+ addUserKnob {41 nyquist l "clip at Nyquist limit" -STARTLINE T Noise1.nyquist}
+ addUserKnob {41 lacunarity T Noise1.lacunarity}
+ addUserKnob {41 gain T Noise1.gain}
+ addUserKnob {41 gamma T Noise1.gamma}
+ addUserKnob {26 space l "" +STARTLINE T " "}
+ addUserKnob {26 noise_transform_txt l <b>Transform}
+ addUserKnob {41 translate T Noise1.translate}
+ addUserKnob {41 rotate T Noise1.rotate}
+ addUserKnob {41 scale T Noise1.scale}
+}
+ Input {
+  inputs 0
+  name Inputimg
+  xpos -432
+  ypos -378
+ }
+set N109f20b0 [stack 0]
+push $N109f20b0
+ Merge2 {
+  inputs 2
+  operation copy
+  name Merge2
+  label "Copy ch to rgba"
+  xpos -314
+  ypos -382
+ }
+ AdjBBox {
+  numpixels {{abs(parent.amount)+2} {abs(parent.amount)+2}}
+  name AdjBBox1
+  xpos -314
+  ypos -350
+ }
+ AdjBBox {
+  numpixels {{parent.grow_bbox}}
+  name AdjBBox2
+  xpos -314
+  ypos -326
+ }
+set N1aa1e7b0 [stack 0]
+ Noise {
+  cliptype bbox
+  replace true
+  size 30
+  center {960 540}
+  name Noise1
+  xpos -235
+  ypos -278
+ }
+push $N1aa1e7b0
+ Input {
+  inputs 0
+  name Inputpattern
+  xpos -79
+  ypos -392
+  number 1
+ }
+set Ncf71f7b0 [stack 0]
+push $Ncf71f7b0
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  channels rgba
+  bbox B
+  name CopyMatte
+  xpos -79
+  ypos -368
+  disable {{!parent.use_input_channels}}
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -79
+  ypos -326
+ }
+ Shuffle {
+  red alpha
+  green alpha
+  blue alpha
+  name ShuffleAlphaOnly
+  xpos -79
+  ypos -302
+  disable {{parent.use_input_channels}}
+ }
+ Switch {
+  inputs 2
+  which {{"!\[exists parent.input1]"}}
+  name SwitchPattern
+  xpos -79
+  ypos -278
+ }
+ Blur {
+  channels rgba
+  name Blur1
+  xpos -79
+  ypos -254
+  disable {{size==0}}
+ }
+set N108d21d0 [stack 0]
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos -45
+  ypos 33
+ }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos -542
+  ypos -26
+  number 2
+ }
+push $N108d21d0
+ Grade {
+  channels rgba
+  white 2
+  add -0.5
+  black_clamp false
+  name Grade3
+  xpos -165
+  ypos -198
+ }
+ Multiply {
+  channels rgba
+  value -1
+  name MultiplyInvert
+  xpos -165
+  ypos -174
+  disable {{parent.amount.w>=0}}
+ }
+ Clamp {
+  channels rgba
+  minimum -1
+  name Clamp3
+  xpos -165
+  ypos -150
+ }
+set N1080aee0 [stack 0]
+push $N1080aee0
+push $N1080aee0
+push $N1080aee0
+push $N1aa1e7b0
+ BlinkScript {
+  inputs 2
+  recompileCount 66
+  ProgramGroup 1
+  KernelDescription "2 \"apEdgeCrushKernel\" iterate pixelWise 859a1c49670895fa1438357276cb89b54996b1574609837fb9d90ccdf486a446 3 \"src\" Read Ranged1D \"mask\" Read Point \"dst\" Write Point 3 \"amount\" Float 1 AAAAAA== \"axis\" Int 1 AAAAAA== \"inverse\" Int 1 AAAAAA== 3 \"amount\" 1 1 \"axis\" 1 1 \"inverse\" 1 1 3 \"srcrangedAxisMask\" Int 1 1 AAAAAA== \"srcrangeMin\" Int 1 1 AAAAAA== \"srcrangeMax\" Int 1 1 AAAAAA=="
+  kernelSource "inline float lerp (float p1, float p2, float f)\{\n  return p1*f + p2*(1.0f-f);\n\}\n\n\nkernel apEdgeCrushKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRanged1D, eEdgeClamped> src;\n  Image<eRead, eAccessPoint, eEdgeClamped> mask;\n  Image<eWrite> dst;\n\n  param:\n    float amount;\n    int axis;\n    int inverse;\n\n  void init() \{\n    src.setRange(-int(ceil(amount)), int(ceil(amount)));\n    src.setAxis(axis?eY:eX);\n  \}\n  void process() \{\n    float4 pixelPos = mask() * amount;\n    pixelPos = inverse?-pixelPos:pixelPos;\n    float4 result;\n    for(int i=0;i<4;i++)\{\n      result\[i] = lerp(src(-int(floor(pixelPos\[i])),i),src(-int(ceil(pixelPos\[i])),i),pixelPos\[i]<0.0f?fabs(fmod(pixelPos\[i], 1.0f)):1.0f-fmod(pixelPos\[i], 1.0f));\n    \}\n    dst() = result;\n  \}\n\};\n"
+  rebuild ""
+  apEdgeCrushKernel_amount {{apEdgeCrushKernel_axis?abs(parent.amount.h):abs(parent.amount.w)}}
+  apEdgeCrushKernel_axis {{parent.reverse_order}}
+  rebuild_finalise ""
+  name apEdgeCrushKernel1
+  xpos -314
+  ypos -154
+  disable {{"(parent.amount.w==0 && parent.amount.h==0) || parent.direction==1"}}
+ }
+ BlinkScript {
+  inputs 2
+  recompileCount 66
+  ProgramGroup 1
+  KernelDescription "2 \"apEdgeCrushKernel\" iterate pixelWise 859a1c49670895fa1438357276cb89b54996b1574609837fb9d90ccdf486a446 3 \"src\" Read Ranged1D \"mask\" Read Point \"dst\" Write Point 3 \"amount\" Float 1 AAAAAA== \"axis\" Int 1 AAAAAA== \"inverse\" Int 1 AAAAAA== 3 \"amount\" 1 1 \"axis\" 1 1 \"inverse\" 1 1 3 \"srcrangedAxisMask\" Int 1 1 AAAAAA== \"srcrangeMin\" Int 1 1 AAAAAA== \"srcrangeMax\" Int 1 1 AAAAAA=="
+  kernelSource "inline float lerp (float p1, float p2, float f)\{\n  return p1*f + p2*(1.0f-f);\n\}\n\n\nkernel apEdgeCrushKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRanged1D, eEdgeClamped> src;\n  Image<eRead, eAccessPoint, eEdgeClamped> mask;\n  Image<eWrite> dst;\n\n  param:\n    float amount;\n    int axis;\n    int inverse;\n\n  void init() \{\n    src.setRange(-int(ceil(amount)), int(ceil(amount)));\n    src.setAxis(axis?eY:eX);\n  \}\n  void process() \{\n    float4 pixelPos = mask() * amount;\n    pixelPos = inverse?-pixelPos:pixelPos;\n    float4 result;\n    for(int i=0;i<4;i++)\{\n      result\[i] = lerp(src(-int(floor(pixelPos\[i])),i),src(-int(ceil(pixelPos\[i])),i),pixelPos\[i]<0.0f?fabs(fmod(pixelPos\[i], 1.0f)):1.0f-fmod(pixelPos\[i], 1.0f));\n    \}\n    dst() = result;\n  \}\n\};\n"
+  useGPUIfAvailable {{parent.apEdgeCrushKernel1.useGPUIfAvailable}}
+  vectorize {{parent.apEdgeCrushKernel1.vectorize}}
+  rebuild ""
+  apEdgeCrushKernel_amount {{apEdgeCrushKernel_axis?abs(parent.amount.h):abs(parent.amount.w)}}
+  apEdgeCrushKernel_axis {{!parent.reverse_order}}
+  rebuild_finalise ""
+  name apEdgeCrushKernel2
+  xpos -314
+  ypos -122
+  disable {{"(parent.amount.w==0 && parent.amount.h==0) || parent.direction==1"}}
+ }
+ BlinkScript {
+  inputs 2
+  recompileCount 66
+  ProgramGroup 1
+  KernelDescription "2 \"apEdgeCrushKernel\" iterate pixelWise 859a1c49670895fa1438357276cb89b54996b1574609837fb9d90ccdf486a446 3 \"src\" Read Ranged1D \"mask\" Read Point \"dst\" Write Point 3 \"amount\" Float 1 AAAAAA== \"axis\" Int 1 AAAAAA== \"inverse\" Int 1 AAAAAA== 3 \"amount\" 1 1 \"axis\" 1 1 \"inverse\" 1 1 3 \"srcrangedAxisMask\" Int 1 1 AAAAAA== \"srcrangeMin\" Int 1 1 AAAAAA== \"srcrangeMax\" Int 1 1 AAAAAA=="
+  kernelSource "inline float lerp (float p1, float p2, float f)\{\n  return p1*f + p2*(1.0f-f);\n\}\n\n\nkernel apEdgeCrushKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRanged1D, eEdgeClamped> src;\n  Image<eRead, eAccessPoint, eEdgeClamped> mask;\n  Image<eWrite> dst;\n\n  param:\n    float amount;\n    int axis;\n    int inverse;\n\n  void init() \{\n    src.setRange(-int(ceil(amount)), int(ceil(amount)));\n    src.setAxis(axis?eY:eX);\n  \}\n  void process() \{\n    float4 pixelPos = mask() * amount;\n    pixelPos = inverse?-pixelPos:pixelPos;\n    float4 result;\n    for(int i=0;i<4;i++)\{\n      result\[i] = lerp(src(-int(floor(pixelPos\[i])),i),src(-int(ceil(pixelPos\[i])),i),pixelPos\[i]<0.0f?fabs(fmod(pixelPos\[i], 1.0f)):1.0f-fmod(pixelPos\[i], 1.0f));\n    \}\n    dst() = result;\n  \}\n\};\n"
+  useGPUIfAvailable {{parent.apEdgeCrushKernel1.useGPUIfAvailable}}
+  vectorize {{parent.apEdgeCrushKernel1.vectorize}}
+  rebuild ""
+  apEdgeCrushKernel_amount {{apEdgeCrushKernel_axis?abs(parent.amount.h):abs(parent.amount.w)}}
+  apEdgeCrushKernel_axis {{parent.reverse_order}}
+  apEdgeCrushKernel_inverse 1
+  rebuild_finalise ""
+  name apEdgeCrushKernel3
+  xpos -314
+  ypos -90
+  disable {{"(parent.amount.w==0 && parent.amount.h==0) || parent.direction==0"}}
+ }
+ BlinkScript {
+  inputs 2
+  recompileCount 66
+  ProgramGroup 1
+  KernelDescription "2 \"apEdgeCrushKernel\" iterate pixelWise 859a1c49670895fa1438357276cb89b54996b1574609837fb9d90ccdf486a446 3 \"src\" Read Ranged1D \"mask\" Read Point \"dst\" Write Point 3 \"amount\" Float 1 AAAAAA== \"axis\" Int 1 AAAAAA== \"inverse\" Int 1 AAAAAA== 3 \"amount\" 1 1 \"axis\" 1 1 \"inverse\" 1 1 3 \"srcrangedAxisMask\" Int 1 1 AAAAAA== \"srcrangeMin\" Int 1 1 AAAAAA== \"srcrangeMax\" Int 1 1 AAAAAA=="
+  kernelSource "inline float lerp (float p1, float p2, float f)\{\n  return p1*f + p2*(1.0f-f);\n\}\n\n\nkernel apEdgeCrushKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRanged1D, eEdgeClamped> src;\n  Image<eRead, eAccessPoint, eEdgeClamped> mask;\n  Image<eWrite> dst;\n\n  param:\n    float amount;\n    int axis;\n    int inverse;\n\n  void init() \{\n    src.setRange(-int(ceil(amount)), int(ceil(amount)));\n    src.setAxis(axis?eY:eX);\n  \}\n  void process() \{\n    float4 pixelPos = mask() * amount;\n    pixelPos = inverse?-pixelPos:pixelPos;\n    float4 result;\n    for(int i=0;i<4;i++)\{\n      result\[i] = lerp(src(-int(floor(pixelPos\[i])),i),src(-int(ceil(pixelPos\[i])),i),pixelPos\[i]<0.0f?fabs(fmod(pixelPos\[i], 1.0f)):1.0f-fmod(pixelPos\[i], 1.0f));\n    \}\n    dst() = result;\n  \}\n\};\n"
+  useGPUIfAvailable {{parent.apEdgeCrushKernel1.useGPUIfAvailable}}
+  vectorize {{parent.apEdgeCrushKernel1.vectorize}}
+  rebuild ""
+  apEdgeCrushKernel_amount {{apEdgeCrushKernel_axis?abs(parent.amount.h):abs(parent.amount.w)}}
+  apEdgeCrushKernel_axis {{!parent.reverse_order}}
+  apEdgeCrushKernel_inverse 1
+  rebuild_finalise ""
+  name apEdgeCrushKernel4
+  xpos -314
+  ypos -58
+  disable {{"(parent.amount.w==0 && parent.amount.h==0) || parent.direction==0"}}
+ }
+ Crop {
+  box {{-parent.overscan_limit} {-parent.overscan_limit} {input.width+parent.overscan_limit} {input.height+parent.overscan_limit}}
+  intersect true
+  crop false
+  name CropOverscan
+  xpos -314
+  ypos -26
+  disable {{!parent.limit_overscan}}
+ }
+push $N109f20b0
+ Merge2 {
+  inputs 2+1
+  operation copy
+  Bchannels {{{parent.Merge2.Achannels}}}
+  output {{{parent.Merge2.Achannels}}}
+  name Merge1
+  label "Copy rgba to ch"
+  xpos -432
+  ypos -30
+ }
+ Switch {
+  inputs 2
+  which {{parent.preview_noise}}
+  name SwitchPreviewNoise
+  xpos -432
+  ypos 30
+ }
+ Output {
+  name Output1
+  xpos -432
+  ypos 75
+ }
+end_group
