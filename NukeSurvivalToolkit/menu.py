@@ -287,6 +287,7 @@ filterMenu.addSeparator()
 
 EdgesMenu = filterMenu.addMenu("Edges", icon="FilterErode.png")
 EdgesMenu.addCommand('apEdgePush AP', 'nuke.createNode("{}apEdgePush")'.format(prefixNST), icon='apEdgePush.png')
+EdgesMenu.addCommand('apEdgeCrush AP', 'nuke.createNode("{}apEdgeCrush")'.format(prefixNST), icon='Dither.png')
 EdgesMenu.addCommand('EdgeDetectAlias TL', "nuke.createNode('{}EdgeDetectAlias')".format(prefixNST), icon="FilterErod.png")
 EdgesMenu.addCommand('AntiAliasingFilter AG', "nuke.createNode('{}AntiAliasingFilter')".format(prefixNST), icon="nukepedia_icon.png")
 EdgesMenu.addCommand('ErodeSmooth TL', "nuke.createNode('{}ErodeSmooth')".format(prefixNST), icon="FilterErode.png")
