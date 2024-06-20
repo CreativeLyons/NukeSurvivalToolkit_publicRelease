@@ -42,6 +42,7 @@ Group {
  }
  Reformat {
   type scale
+  resize none
   pbb true
   name Reformat1
   xpos 620
@@ -55,7 +56,7 @@ Group {
   pbb true
   name Reformat2
   xpos 620
-  ypos -37
+  ypos -45
  }
  Shuffle {
   alpha white
