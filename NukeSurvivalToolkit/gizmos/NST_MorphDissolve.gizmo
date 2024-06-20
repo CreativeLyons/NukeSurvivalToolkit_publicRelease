@@ -14,6 +14,7 @@ Group {
  vectorDetail 0.75
  addUserKnob {7 strength l Strength t "Match Strength : Stonger values will match larger differences between the two plates." R 0 1.5}
  strength 1.5
+ addUserKnob {41 scale l "STmap Overscan" T UV_Map.scale}
  addUserKnob {26 ""}
  addUserKnob {26 copyright l "" +STARTLINE T "v1.0 - by Erwan Leroy - 2017"}
 }
@@ -41,14 +42,14 @@ Group {
   xpos 1389
   ypos -72
  }
-set N26d71d00 [stack 0]
+set Nffa41ee0 [stack 0]
  Dot {
   name Dot8
   tile_color 0xcccccc00
   xpos 1389
   ypos 1115
  }
-push $N26d71d00
+push $Nffa41ee0
  Dot {
   name Dot13
   tile_color 0xcccccc00
@@ -89,7 +90,7 @@ push $N26d71d00
   xpos 10
   ypos -75
  }
-set Ncdbcb900 [stack 0]
+set N3db7b800 [stack 0]
  Dot {
   name Dot14
   tile_color 0xcccccc00
@@ -132,7 +133,7 @@ set Ncdbcb900 [stack 0]
   xpos 684
   ypos 124
  }
-set Ncdbc9600 [stack 0]
+set Nf88d8d0 [stack 0]
  Dot {
   name Dot2
   tile_color 0xcccccc00
@@ -143,11 +144,9 @@ set Ncdbc9600 [stack 0]
   retimedChannels all
   timing2 Frame
   timingFrame2 {{(frame-1001)*2+1001+parent.morph}}
-  showLegacyMode false
   motionEstimation Regularized
   vectorDetailReg {{parent.vectorDetail}}
   strengthReg {{parent.strength}}
-  legacyModeNuke9 false
   name Kronos1
   xpos 951
   ypos 273
@@ -158,7 +157,7 @@ set Ncdbc9600 [stack 0]
   xpos 985
   ypos 903
  }
-push $Ncdbc9600
+push $Nf88d8d0
  Dot {
   name Dot10
   tile_color 0xcccccc00
@@ -179,7 +178,7 @@ push $Ncdbc9600
   xpos 415
   ypos 350
  }
-set Ncdba2400 [stack 0]
+set Na0df1320 [stack 0]
  Shuffle {
   in backward
   blue black
@@ -197,7 +196,7 @@ set Ncdba2400 [stack 0]
   xpos 217
   ypos 484
  }
-push $Ncdba2400
+push $Na0df1320
  Shuffle {
   in forward
   blue black
@@ -215,7 +214,7 @@ push $Ncdba2400
   xpos 560
   ypos 414
  }
-push $Ncdba2400
+push $Na0df1320
  Copy {
   inputs 2
   from0 forward.u
@@ -236,7 +235,7 @@ push $Ncdba2400
   bbox B
   name Copy2
   xpos 381
-  ypos 478
+  ypos 484
  }
  Group {
   name UV_Map
@@ -244,6 +243,7 @@ push $Ncdba2400
   tile_color 0x578100ff
   note_font "Bitstream Vera Sans"
   note_font_color 0xffffffff
+  selected true
   xpos 381
   ypos 549
   disable {{!result}}
@@ -284,8 +284,10 @@ push $Ncdba2400
   }
   Reformat {
    type scale
+   resize none
    pbb true
    name Reformat1
+   selected true
    xpos 620
    ypos -71
   }
@@ -327,7 +329,7 @@ push $Ncdba2400
   xpos 415
   ypos 601
  }
-set Ncdb3e400 [stack 0]
+set N704f3310 [stack 0]
  Retime {
   input.first 1000
   input.first_lock true
@@ -351,8 +353,8 @@ set Ncdb3e400 [stack 0]
   xpos 459
   ypos 741
  }
-set Ncdb3d600 [stack 0]
-push $Ncdb3e400
+set N4c486100 [stack 0]
+push $N704f3310
  Retime {
   input.first 1001
   input.first_lock true
@@ -376,9 +378,9 @@ push $Ncdb3e400
   xpos 308
   ypos 738
  }
-set Ncdb3c800 [stack 0]
-push $Ncdb3d600
-push $Ncdb3c800
+set N40def0f0 [stack 0]
+push $N4c486100
+push $N40def0f0
  Dissolve {
   inputs 2
   which {{parent.morph}}
@@ -407,8 +409,8 @@ push $Ncdb3c800
   xpos 627
   ypos 899
  }
-set Ncdb12b00 [stack 0]
-push $Ncdbcb900
+set N40770720 [stack 0]
+push $N3db7b800
  Dot {
   name Dot7
   tile_color 0xcccccc00
@@ -422,10 +424,10 @@ push $Ncdbcb900
   xpos 547
   ypos 1111
  }
-set Ncdb11600 [stack 0]
-push $Ncdb12b00
-push $Ncdb12b00
-push $Ncdb11600
+set N4077d620 [stack 0]
+push $N40770720
+push $N40770720
+push $N4077d620
  Switch {
   inputs 3
   which {{"result + direction"}}
