@@ -93,7 +93,7 @@ Group {
   xpos -176
   ypos -312
  }
-set Ned84310 [stack 0]
+set Na3bf1b40 [stack 0]
  Remove {
   name Remove1
   xpos 31
@@ -112,7 +112,7 @@ set Ned84310 [stack 0]
   xpos 31
   ypos -213
  }
-set N2dfc6ef0 [stack 0]
+set N12dedf00 [stack 0]
  Dot {
   name Dot2
   xpos -79
@@ -126,7 +126,7 @@ set N2dfc6ef0 [stack 0]
   xpos -113
   ypos -189
  }
-push $N2dfc6ef0
+push $N12dedf00
  Merge2 {
   inputs 2
   operation minus
@@ -175,7 +175,7 @@ push $N2dfc6ef0
   xpos 65
   ypos 312
  }
-push $Ned84310
+push $Na3bf1b40
  Copy {
   inputs 2
   from0 rgba.red
@@ -186,7 +186,7 @@ push $Ned84310
   xpos -210
   ypos 296
  }
-set N4843ba20 [stack 0]
+set Na38f1b30 [stack 0]
  Shuffle {
   red black
   green black
@@ -209,7 +209,7 @@ set N4843ba20 [stack 0]
   xpos -119
   ypos 466
  }
-push $N4843ba20
+push $Na38f1b30
  Shuffle {
   red black
   blue black
@@ -232,7 +232,7 @@ push $N4843ba20
   xpos -210
   ypos 468
  }
-push $N4843ba20
+push $Na38f1b30
  Shuffle {
   green black
   blue black
@@ -269,7 +269,7 @@ push $N4843ba20
   xpos -182
   ypos 553
  }
-push $N4843ba20
+push $Na38f1b30
  VectorBlur {
   uv forward
   scale -1.6
@@ -295,7 +295,7 @@ push $N4843ba20
   xpos -182
   ypos 646
  }
-push $Ned84310
+push $Na3bf1b40
  Dot {
   name Dot3
   note_font_size 41
