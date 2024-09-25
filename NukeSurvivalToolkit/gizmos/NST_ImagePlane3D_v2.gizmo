@@ -5,6 +5,7 @@ Group {
  label "dist: \[value distance]"
  note_font "DejaVu Sans"
  note_font_color 0xffffffff
+ selected true
  addUserKnob {20 imagePlane3D l ImagePlane3D}
  addUserKnob {26 instructions l Instructions: T "1.) Choose preview (Result) method.\n2.) Set Ref Frame and Distance\n3.) Bake FrameRange\n4.) Export CornerPin\n\nUse this like cardToTrack, for exports\nNot recommended to be plugged into stream"}
  addUserKnob {26 text_1 l " " T " "}
@@ -128,30 +129,32 @@ Group {
   ypos -300
   number 1
  }
-set N35c0ea30 [stack 0]
+set Ndb8948a0 [stack 0]
  Camera {
-  projection_mode {{"\[value the_cam]projection_mode"}}
-  focal {{"\[value \[value the_cam]focal]"}}
-  haperture {{"\[value \[value the_cam]haperture]"}}
-  vaperture {{"\[value \[value the_cam]vaperture]"}}
-  near {{"\[value \[value the_cam]near]"}}
-  far {{"\[value \[value the_cam]far]"}}
-  win_translate {{"\[lindex \[value \[value the_cam]win_translate] 0]"} {"\[lindex \[value \[value the_cam]win_translate] 1]"}}
-  win_scale {{"\[lindex \[value \[value the_cam]win_scale] 0]"} {"\[lindex \[value \[value the_cam]win_scale] 1]"}}
-  winroll {{"\[value \[value the_cam]winroll]"}}
-  focal_point {{"\[value \[value the_cam]focal_point]"}}
-  fstop {{"\[value \[value the_cam]fstop]"}}
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {10000}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
   name DummyCam
-  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if not Camera connected.\n\nCan also be used inside of groups and gizmos, as many levels deep as you want :D\n\nAll using live and super fast TCL.\n\nadrianpueyo.com, 2019"
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nUpdated v1.3: Now accepts Nuke13's Camera3\n\nadrianpueyo.com, 2019-2021"
   onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
-  xpos 969
-  ypos -1133
+  xpos 972
+  ypos -1126
   addUserKnob {20 DummyCam l Defaults}
   addUserKnob {43 the_cam +INVISIBLE}
-  the_cam "\[\nset the_knob \"focal\"\nset knob_index 0\nset starting_point \"this.input0\"\nset default \"this\"\nset default \[append default \".d_\"]\n\n# If cam has no inputs, return the default...\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{\[class \$x]==\"Input\"\} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{\[exists \$inp]\} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  the_cam "\[\n#DummyCam v1.3 - Updated 5 May 2021.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera3\" && \[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera3\"||\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame +INVISIBLE}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
   addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
-  addUserKnob {7 d_focal l focal R 0 100}
-  d_focal 60
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 50
   addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
   d_haperture 24.576
   addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
@@ -160,15 +163,15 @@ set N35c0ea30 [stack 0]
   d_near 0.1
   addUserKnob {7 d_far l far R 0 10000}
   d_far 10000
-  addUserKnob {12 d_win_translate l "window translate"}
-  addUserKnob {12 d_win_scale l "window scale"}
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
   d_win_scale {1 1}
   addUserKnob {7 d_winroll l "window roll" R 0 45}
   addUserKnob {7 d_focal_point l "focal distance" R 0 10}
   d_focal_point 2
   addUserKnob {7 d_fstop l fstop R 0 30}
   d_fstop 16
-  addUserKnob {26 text l " " T "<span style=\"color:#666\"><br/><b>DummyCam v1.0</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019</span>"}
+  addUserKnob {26 version l " " t "Updated 5 May 2021" T "<span style=\"color:#666\"><br/><b>DummyCam v1.3</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2021</span>"}
  }
  Dot {
   name Dot27
@@ -176,7 +179,7 @@ set N35c0ea30 [stack 0]
   xpos 993
   ypos -974
  }
-set N35f0ba90 [stack 0]
+set Ndbedd50 [stack 0]
  Dot {
   name Dot23
   label cam
@@ -198,7 +201,7 @@ set N35f0ba90 [stack 0]
   xpos 1293
   ypos -539
  }
-set N35eb60d0 [stack 0]
+set N2436b100 [stack 0]
  Axis2 {
   scaling {1 {DummyCam.vaperture/parent.DummyCam.haperture} 1}
   name AspectRatioScaleY
@@ -212,7 +215,7 @@ set N35eb60d0 [stack 0]
   xpos 2155
   ypos -419
  }
-set N35f12950 [stack 0]
+set N256636e0 [stack 0]
  Card2 {
   inputs 0
   image_aspect false
@@ -251,7 +254,7 @@ set N35f12950 [stack 0]
   xpos 476
   ypos -62
  }
-set N35c31250 [stack 0]
+set Nebe4d210 [stack 0]
  Dot {
   name Dot16
   note_font_size 41
@@ -284,7 +287,7 @@ set N35c31250 [stack 0]
   xpos 883
   ypos 333
  }
-set N35fc2330 [stack 0]
+set Nd6e98960 [stack 0]
  Dot {
   name Dot7
   label img
@@ -292,14 +295,14 @@ set N35fc2330 [stack 0]
   xpos 1686
   ypos 333
  }
-set N35fc72b0 [stack 0]
+set Nc81917a0 [stack 0]
  Dot {
   name Dot14
   note_font_size 41
   xpos 1967
   ypos 334
  }
-set N35fcc210 [stack 0]
+set Ne1c9aa80 [stack 0]
  Dot {
   name Dot6
   label img
@@ -313,7 +316,7 @@ set N35fcc210 [stack 0]
   xpos 2428
   ypos 482
  }
-set N35fd60a0 [stack 0]
+set N7c6fb240 [stack 0]
  CornerPin2D {
   to1 {0 0}
   to2 {1920 0}
@@ -333,7 +336,7 @@ set N35fd60a0 [stack 0]
   addUserKnob {20 User}
   addUserKnob {22 "set reference frame" -STARTLINE T "import addOnCreateUU; addOnCreateUU.cornerPinZero()"}
  }
-push $N35fd60a0
+push $N7c6fb240
  CornerPin2D {
   to1 {{from1(refFrame)} {from1(refFrame)}}
   to2 {{from2(refFrame)} {from2(refFrame)}}
@@ -366,14 +369,14 @@ push $N35fd60a0
   xpos 2428
   ypos 1281
  }
-push $N35fcc210
+push $Ne1c9aa80
  Dot {
   name Dot26
   note_font_size 41
   xpos 1967
   ypos 498
  }
-set N3600d160 [stack 0]
+set N8c6f4770 [stack 0]
  CornerPin2D {
   to1 {{parent.Reconcile3DBL.output} {parent.Reconcile3DBL.output}}
   to2 {{parent.Reconcile3DBR.output} {parent.Reconcile3DBR.output}}
@@ -393,7 +396,7 @@ set N3600d160 [stack 0]
   addUserKnob {20 User}
   addUserKnob {22 "set reference frame" -STARTLINE T "import addOnCreateUU; addOnCreateUU.cornerPinZero()"}
  }
-push $N3600d160
+push $N8c6f4770
  CornerPin2D {
   to1 {{parent.Reconcile3DBL.output(refFrame)} {parent.Reconcile3DBL.output(refFrame)}}
   to2 {{parent.Reconcile3DBR.output(refFrame)} {parent.Reconcile3DBR.output(refFrame)}}
@@ -426,15 +429,15 @@ push $N3600d160
   xpos 1967
   ypos 785
  }
-push $N35eb60d0
+push $N2436b100
  Dot {
   name Dot19
   note_font_size 41
   xpos 1317
   ypos -361
  }
-set N36071f10 [stack 0]
-push $N36071f10
+set Ne8192410 [stack 0]
+push $Ne8192410
  FrameHold {
   firstFrame {{parent.refFrame}}
   name FrameHold4
@@ -449,42 +452,42 @@ push $N36071f10
   xpos 1283
   ypos -224
  }
-push $N35c0ea30
+push $Ndb8948a0
  Dot {
   name Dot18
   note_font_size 41
   xpos -564
   ypos -54
  }
-set N36088960 [stack 0]
+set N3330d7b0 [stack 0]
  Dot {
   name Dot4
   note_font_size 41
   xpos -564
   ypos 271
  }
-set N3608d8e0 [stack 0]
+set N2fd660 [stack 0]
  FrameHold {
   firstFrame {{parent.refFrame}}
   name FrameHold2
   xpos -454
   ypos 264
  }
-set N36092810 [stack 0]
+set Ne8392930 [stack 0]
  Dot {
   name Dot13
   note_font_size 41
   xpos -420
   ypos 536
  }
-push $N3608d8e0
+push $N2fd660
  Dot {
   name Dot11
   note_font_size 41
   xpos -564
   ypos 442
  }
-set N360a0ec0 [stack 0]
+set Ncecf0100 [stack 0]
  Switch {
   inputs 2
   which {{!output}}
@@ -499,8 +502,8 @@ set N360a0ec0 [stack 0]
   xpos -564
   ypos 629
  }
-set N360ae190 [stack 0]
-push $N35fc2330
+set N94c949b0 [stack 0]
+push $Nd6e98960
  Card3D {
   inputs 3
   translate {0 0 0}
@@ -517,21 +520,21 @@ push $N35fc2330
   xpos 1317
   ypos 725
  }
-push $N360ae190
+push $N94c949b0
  Dot {
   name Dot5
   note_font_size 41
   xpos -564
   ypos 736
  }
-push $N36092810
+push $Ne8392930
  Dot {
   name Dot24
   note_font_size 41
   xpos -282
   ypos 271
  }
-push $N360a0ec0
+push $Ncecf0100
  Switch {
   inputs 2
   which {{output}}
@@ -540,7 +543,7 @@ push $N360a0ec0
   xpos -316
   ypos 435
  }
-push $N35fc2330
+push $Nd6e98960
  Dot {
   name Dot29
   label img
@@ -561,7 +564,7 @@ push $N35fc2330
   xpos 626
   ypos 520
  }
-push $N35c31250
+push $Nebe4d210
  ApplyMaterial {
   inputs 2
   name ApplyMaterial1
@@ -617,7 +620,7 @@ push $N35c31250
   xpos 442
   ypos 1423
  }
-push $N35f12950
+push $N256636e0
  FrameHold {
   firstFrame {{parent.refFrame}}
   name FrameHold3
@@ -630,15 +633,15 @@ push $N35f12950
   xpos 2155
   ypos -250
  }
-set N36150cf0 [stack 0]
+set N29568c60 [stack 0]
  Axis2 {
   translate {0.5 0.5 0}
   name TopRight
   xpos 2043
   ypos -178
  }
-set N36155c70 [stack 0]
-push $N35f0ba90
+set Ne8b853d0 [stack 0]
+push $Ndbedd50
  Dot {
   name Dot20
   label cam
@@ -653,8 +656,8 @@ push $N35f0ba90
   xpos 1837
   ypos 11
  }
-set N3616ebc0 [stack 0]
-push $N35fc72b0
+set N2038c3c0 [stack 0]
+push $Nc81917a0
  Reconcile3D {
   inputs 3
   calc_output true
@@ -664,16 +667,16 @@ push $N35fc72b0
   xpos 2033
   ypos 103
  }
-push $N36150cf0
+push $N29568c60
  Axis2 {
   translate {-0.5 -0.5 0}
   name BottomLeft
   xpos 2219
   ypos -178
  }
-set N36183780 [stack 0]
-push $N3616ebc0
-push $N35fc72b0
+set Nd93484a0 [stack 0]
+push $N2038c3c0
+push $Nc81917a0
  Reconcile3D {
   inputs 3
   calc_output true
@@ -683,16 +686,16 @@ push $N35fc72b0
   xpos 2209
   ypos 99
  }
-push $N36150cf0
+push $N29568c60
  Axis2 {
   translate {0.5 -0.5 0}
   name BottomRight
   xpos 2358
   ypos -184
  }
-set N361a6aa0 [stack 0]
-push $N3616ebc0
-push $N35fc72b0
+set Nd7d973f0 [stack 0]
+push $N2038c3c0
+push $Nc81917a0
  Reconcile3D {
   inputs 3
   calc_output true
@@ -702,16 +705,16 @@ push $N35fc72b0
   xpos 2348
   ypos 101
  }
-push $N36150cf0
+push $N29568c60
  Axis2 {
   translate {-0.5 0.5 0}
   name TopLeft
   xpos 1883
   ypos -180
  }
-set N361c9db0 [stack 0]
-push $N3616ebc0
-push $N35fc72b0
+set Nda020630 [stack 0]
+push $N2038c3c0
+push $Nc81917a0
  Reconcile3D {
   inputs 3
   calc_output true
@@ -721,11 +724,11 @@ push $N35fc72b0
   xpos 1873
   ypos 99
  }
-push $N35c31250
-push $N361a6aa0
-push $N36183780
-push $N36155c70
-push $N361c9db0
+push $Nebe4d210
+push $Nd7d973f0
+push $Nd93484a0
+push $Ne8b853d0
+push $Nda020630
  Scene {
   inputs 5
   name SceneTest
@@ -747,7 +750,7 @@ push $N361c9db0
   addUserKnob {6 isOn +STARTLINE}
   isOn {{"\[exists input2]"}}
  }
-push $N36088960
+push $N3330d7b0
  Group {
   inputs 2
   name AxisDistance
