@@ -654,7 +654,7 @@ cgMenu.addCommand('Relight_bb NKPD', "nuke.createNode('{}Relight_bb')".format(pr
 cgMenu.addCommand('EnvReflect_bb NKPD', "nuke.createNode('{}EnvReflect_BB')".format(prefixNST), icon="Sphere.png")
 cgMenu.addCommand('N_Reflection NKPD', "nuke.createNode('{}N_Reflection')".format(prefixNST), icon="Sphere.png")
 cgMenu.addCommand('aeRefracTHOR AE', "nuke.createNode('{}aeRefracTHOR')".format(prefixNST), icon="aeRefracTHOR_icon.png")
-
+cgMenu.addCommand('Emission NW', "nuke.createNode('{}Emission')".format(prefixNST), icon="Light.png")
 cgMenu.addCommand('SimpleSSS MHD', "nuke.createNode('{}SimpleSSS')".format(prefixNST), icon="Toolbar3D.png")
 
 cgMenu.addSeparator()
