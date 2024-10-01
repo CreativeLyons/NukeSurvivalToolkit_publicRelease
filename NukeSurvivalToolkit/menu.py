@@ -172,7 +172,7 @@ except:
 
 drawMenu.addSeparator()
 
-drawMenu.addCommand('VoronoiGradient NKPD', "nuke.createNode('{}VoronoiGradient')".format(prefixNST), icon="GradMagic.png")
+drawMenu.addCommand('VoronoiGradient NW', "nuke.createNode('{}VoronoiGradient')".format(prefixNST), icon="GradMagic.png")
 drawMenu.addCommand('CellNoise NKPD', "nuke.createNode('{}CellNoise')".format(prefixNST), icon="Noise.png")
 drawMenu.addCommand('LineTool NKPD', "nuke.createNode('{}LineTool')".format(prefixNST), icon="nukepedia_icon.png")
 drawMenu.addCommand('PlotScanline NKPD', "nuke.createNode('{}PlotScanline')".format(prefixNST), icon="nukepedia_icon.png")
