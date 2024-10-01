@@ -1,9 +1,12 @@
-set cut_paste_input [stack 0]
-push $cut_paste_input
 Group {
 name Glass
+tile_color 0xcc804eff
+note_font "Bitstream Vera Sans Bold"
+note_font_color 0xffffffff
 selected true
 addUserKnob {20 "" l Glass}
+addUserKnob {41 channles l channels T Merge2.also_merge}
+addUserKnob {26 "" +STARTLINE}
 addUserKnob {7 displace l Displace R 0 20}
 displace 5
 addUserKnob {7 abberation l Abberation}
@@ -12,25 +15,39 @@ addUserKnob {6 useDef l "Apply Defocus" -STARTLINE}
 addUserKnob {41 size T ZBlur1.size}
 addUserKnob {41 max_size l maximum T ZBlur1.max_size}
 addUserKnob {41 shape l "filter shape" T ZBlur1.shape}
+addUserKnob {26 "" +STARTLINE}
+addUserKnob {26 "" l mask T ""}
+addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge2.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T Merge2.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T Merge2.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Merge2.fringe}
+addUserKnob {41 mix T Merge2.mix}
+}
+Input {
+inputs 0
+name Inputmask
+xpos 82
+ypos 953
+number 2
 }
 Input {
 inputs 0
 name img
-selected true
 xpos -289
-ypos 79
+ypos -1
 }
-set Nfad09e90 [stack 0]
+set N122bf7f0 [stack 0]
 Dot {
 name Dot1
 xpos -255
-ypos 634
+ypos 871
 }
+set N122c5dd0 [stack 0]
 Input {
 inputs 0
 name control
 xpos -64
-ypos -461
+ypos -564
 number 1
 }
 AddChannels {
@@ -39,8 +56,8 @@ name AddChannels2
 xpos -64
 ypos -400
 }
-set N2ac99680 [stack 0]
-push $N2ac99680
+set Ncf85b870 [stack 0]
+push $Ncf85b870
 Copy {
 inputs 2
 from0 rgba.alpha
@@ -50,21 +67,21 @@ xpos -64
 ypos -354
 disable {{error}}
 }
-set Nfd682380 [stack 0]
+set Ncf3e2a20 [stack 0]
 Dot {
 name Dot2
 xpos 94
 ypos -343
 }
-set Nea5cbc80 [stack 0]
+set N9387b4e0 [stack 0]
 Transform {
 translate {0 -1}
 center {320 240}
 name down
 xpos 60
-ypos -140
+ypos -141
 }
-push $Nfd682380
+push $Ncf3e2a20
 Dot {
 name Dot3
 xpos -122
@@ -82,7 +99,7 @@ name up
 xpos -241
 ypos -180
 }
-push $Nea5cbc80
+push $N9387b4e0
 Dot {
 name Dot5
 xpos 176
@@ -95,7 +112,7 @@ name right
 xpos 142
 ypos -221
 }
-push $Nfd682380
+push $Ncf3e2a20
 Shuffle {
 in alpha
 green black
@@ -110,7 +127,7 @@ translate {-1 0}
 center {320 240}
 name left
 xpos -64
-ypos -285
+ypos -273
 }
 Copy {
 inputs 2
@@ -155,7 +172,7 @@ name Expression1
 xpos -64
 ypos -3
 }
-set N236d2500 [stack 0]
+set N54da1870 [stack 0]
 Dot {
 name Dot6
 xpos 89
@@ -166,8 +183,8 @@ name Dot7
 xpos 89
 ypos 193
 }
-push $N236d2500
-push $Nfad09e90
+push $N54da1870
+push $N122bf7f0
 Copy {
 inputs 2
 from0 -rgba.alpha
@@ -187,72 +204,175 @@ xpos -64
 ypos 175
 }
 ZBlur {
-channels rgba
 math -linear
 shape 1
 name ZBlur1
 xpos -64
-ypos 229
+ypos 225
 disable {{!parent.useDef}}
 }
-set Nfe2a5400 [stack 0]
+set Ncbc44560 [stack 0]
 IDistort {
-channels rgba
 uv forward
-uv_scale {{parent.displace i}}
+uv_scale {{parent.displace}}
 name IDistort4
 xpos 98
-ypos 491
+ypos 788
 }
-push $Nfe2a5400
+push $Ncbc44560
 IDistort {
-channels {-rgba.red -rgba.green rgba.blue rgba.alpha}
 uv forward
 uv_scale {{parent.displace/(1+parent.abberation/10)}}
 name IDistort3
-xpos 66
-ypos 314
+xpos 65
+ypos 313
 }
-push $Nfe2a5400
+Multiply {
+value {0 0 1 1}
+name Multiply2
+label "\[value value]"
+xpos 65
+ypos 366
+}
+set Nbc97d60 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle2
+autolabel ''
+tile_color 0xffffffff
+note_font_size 22
+note_font_color 0xffffffff
+xpos 386
+ypos 373
+}
+push 0
+push $Ncbc44560
 IDistort {
-channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+uv forward
+uv_scale {{parent.displace}}
+name IDistort2
+xpos -64
+ypos 312
+}
+Multiply {
+value {0 1 0 1}
+name Multiply3
+label "\[value value]"
+xpos -64
+ypos 362
+}
+set N7ed065a0 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle3
+autolabel ''
+tile_color 0xffffffff
+note_font_size 22
+note_font_color 0xffffffff
+xpos 291
+ypos 416
+}
+push $Ncbc44560
+IDistort {
 uv forward
 uv_scale {{parent.displace/(1-parent.abberation/10)}}
 name IDistort1
 xpos -188
-ypos 309
+ypos 308
 }
-push $Nfe2a5400
-IDistort {
-channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
-uv forward
-uv_scale {{parent.displace i}}
-name IDistort2
+Multiply {
+value {1 0 0 1}
+name Multiply1
+label "\[value value]"
+xpos -188
+ypos 365
+}
+set N201e1910 [stack 0]
+Shuffle {
+red alpha
+green alpha
+blue alpha
+name Shuffle4
+autolabel ''
+tile_color 0xffffffff
+note_font_size 22
+note_font_color 0xffffffff
+xpos 228
+ypos 453
+}
+Blend {
+inputs 3+1
+weight0 0.2126
+weight1 0.7152
+weight2 0.0722
+name Blend1
+xpos 291
+ypos 508
+}
+Multiply {
+value {0 0 0 1}
+name Multiply4
+label "\[value value]"
+xpos 291
+ypos 592
+}
+push $Nbc97d60
+Multiply {
+value {1 1 1 0}
+name Multiply7
+label "\[value value]"
+xpos 65
+ypos 448
+}
+push 0
+push $N201e1910
+Multiply {
+value {1 1 1 0}
+name Multiply5
+label "\[value value]"
+xpos -188
+ypos 445
+}
+push $N7ed065a0
+Multiply {
+value {1 1 1 0}
+name Multiply6
+label "\[value value]"
 xpos -64
-ypos 311
+ypos 444
 }
-Copy {
+Merge2 {
+inputs 3+1
+operation plus
+also_merge all
+name Merge1
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos -64
+ypos 554
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+}
+Merge2 {
 inputs 2
-from0 rgba.red
-to0 rgba.red
-name Copy9
+operation plus
+also_merge all
+name Merge3
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
 xpos -64
-ypos 372
-}
-Copy {
-inputs 2
-from0 rgba.blue
-to0 rgba.blue
-name Copy10
-xpos -64
-ypos 412
+ypos 604
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
 }
 Switch {
 inputs 2
 which {{parent.abberation==0}}
 name Switch1
 xpos -64
-ypos 491
+ypos 794
 addUserKnob {20 "" l Weta}
 addUserKnob {32 knob l "update input order" t "changes the input order according to the input nodes' horizontal order (left most node becomes input 0)" -STARTLINE T " reconnectInputs"}
 }
@@ -263,11 +383,29 @@ to0 -rgba.alpha
 channels depth
 name Copy5
 xpos -64
-ypos 616
+ypos 855
+}
+push $N122c5dd0
+Dot {
+name Dot8
+note_font_size 41
+xpos -255
+ypos 963
+}
+Merge2 {
+inputs 2+1
+operation copy
+also_merge all
+name Merge2
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos -64
+ypos 959
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
 }
 Output {
 name Output1
-xpos -59
-ypos 747
+xpos -64
+ypos 1096
 }
 end_group

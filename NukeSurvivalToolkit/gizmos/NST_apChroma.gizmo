@@ -95,13 +95,13 @@ Group {
   xpos -464
   ypos 651
  }
-set Nc322d600 [stack 0]
+set Nd69fcd80 [stack 0]
  Dot {
   name Dot21
   xpos -464
   ypos 689
  }
-set Nc322cf00 [stack 0]
+set Nd69fd230 [stack 0]
  Dot {
   name Dot24
   note_font_size 41
@@ -126,13 +126,13 @@ set Nc322cf00 [stack 0]
   xpos -388
   ypos -502
  }
-set Nc3203200 [stack 0]
+set N157998b0 [stack 0]
  Dot {
   name Dot1
   xpos -47
   ypos -498
  }
-set Nc3202b00 [stack 0]
+set N2789dd90 [stack 0]
  Expression {
   expr0 (x+0.5)/width
   expr1 (y+0.5)/height
@@ -168,7 +168,7 @@ set Nc3202b00 [stack 0]
   xpos 313
   ypos -275
  }
-set Nc3200800 [stack 0]
+set Nef3c8fa0 [stack 0]
  Dot {
   name Dot11
   note_font_size 41
@@ -195,14 +195,14 @@ set Nc3200800 [stack 0]
   xpos 447
   ypos -183
  }
-set Nc31e2b00 [stack 0]
+set N1c3c5170 [stack 0]
  Dot {
   name Dot15
   note_font_size 41
   xpos 690
   ypos -183
  }
-set Nc31e2400 [stack 0]
+set Nc66aed0 [stack 0]
  Multiply {
   channels {rgba.red rgba.green -rgba.blue none}
   value {{1-parent.ab} {1-parent.ab} 1 1}
@@ -215,7 +215,7 @@ set Nc31e2400 [stack 0]
   xpos 690
   ypos -38
  }
-push $Nc3200800
+push $Nef3c8fa0
  Dot {
   name Dot27
   note_font_size 41
@@ -228,7 +228,7 @@ push $Nc3200800
   xpos 214
   ypos -233
  }
-push $Nc3200800
+push $Nef3c8fa0
  Merge2 {
   inputs 2
   operation copy
@@ -242,7 +242,7 @@ push $Nc3200800
   xpos 313
   ypos -164
  }
-set Nc31c3200 [stack 0]
+set N2d176a60 [stack 0]
  Dot {
   name Dot14
   note_font_size 41
@@ -274,8 +274,8 @@ set Nc31c3200 [stack 0]
   label control
   xpos 566
  }
-set Nc31c0f00 [stack 0]
-push $Nc31e2400
+set Nc67a5a0 [stack 0]
+push $Nc66aed0
  Dot {
   name Dot18
   note_font_size 41
@@ -293,7 +293,7 @@ push $Nc31e2400
   xpos 831
   ypos 77
  }
-push $Nc31c0f00
+push $Nc67a5a0
  Merge2 {
   inputs 2
   operation difference
@@ -313,16 +313,16 @@ push $Nc31c0f00
   xpos 600
   ypos 440
  }
-set Nc338a400 [stack 0]
-push $Nc338a400
-push $Nc3202b00
+set Nc608e20 [stack 0]
+push $Nc608e20
+push $N2789dd90
  Dot {
   name Dot2
   note_font_size 41
   xpos -47
   ypos -453
  }
-set Nc3389d00 [stack 0]
+set Nc6022a0 [stack 0]
  Dot {
   name Dot17
   note_font_size 41
@@ -335,7 +335,7 @@ set Nc3389d00 [stack 0]
   xpos 31
   ypos -364
  }
-push $Nc3389d00
+push $Nc6022a0
 add_layer {apChroma apChroma.red apChroma.green apChroma.blue apChroma.alpha}
  Shuffle {
   alpha white
@@ -388,7 +388,7 @@ add_layer {apChromaWeight apChromaWeight.red apChromaWeight.green apChromaWeight
   xpos -47
   ypos -141
  }
-set Nc3360f00 [stack 0]
+set N278a1c10 [stack 0]
  Dot {
   name Dot7
   note_font_size 41
@@ -401,7 +401,7 @@ set Nc3360f00 [stack 0]
   xpos -139
   ypos 90
  }
-push $Nc31c3200
+push $N2d176a60
  Multiply {
   channels {rgba.red rgba.green -rgba.blue none}
   value {{"(TB.frf-.5)*parent.ab + 0.5*(1-parent.compensate)"} {"(TB.frf-.5)*parent.ab + 0.5*(1-parent.compensate)"} 0 0}
@@ -415,7 +415,7 @@ push $Nc31c3200
   xpos 313
   ypos -108
  }
-push $Nc31e2b00
+push $N1c3c5170
  Multiply {
   channels {rgba.red rgba.green -rgba.blue none}
   value {{"(1- ((TB.frf-.5)*parent.ab + 0.5*(1-parent.compensate)) )" i} {"(1- ((TB.frf-.5)*parent.ab + 0.5*(1-parent.compensate)) )" i} 1 1}
@@ -438,7 +438,7 @@ push $Nc31e2b00
   xpos 447
   ypos 43
  }
-push $Nc3360f00
+push $N278a1c10
  Remove {
   channels apChromaWeight
   name Remove3
@@ -463,6 +463,7 @@ push $Nc3360f00
   name Blur1
   xpos -81
   ypos -40
+  disable true
   addUserKnob {20 User}
   addUserKnob {26 info l "" +STARTLINE T "needed to break concatenation and make sure mblur works with the stmaps"}
  }
@@ -494,8 +495,8 @@ push $Nc3360f00
   addUserKnob {7 frf}
   frf {{(frame%1)*(parent.samples+1)/parent.samples}}
  }
-set Nc3322400 [stack 0]
-push $Nc3322400
+set N469fb90 [stack 0]
+push $N469fb90
  Shuffle {
   in apChromaWeight
   name Shuffle2
@@ -503,7 +504,7 @@ push $Nc3322400
   xpos 89
   ypos 118
  }
-set Nc3321d00 [stack 0]
+set Nc1012d0 [stack 0]
  Merge2 {
   inputs 2
   operation divide
@@ -516,8 +517,8 @@ set Nc3321d00 [stack 0]
   xpos 89
   ypos 261
  }
-push $Nc3322400
-push $Nc3321d00
+push $N469fb90
+push $Nc1012d0
  Merge2 {
   inputs 2
   operation divide
@@ -541,7 +542,7 @@ push $Nc3321d00
   xpos -47
   ypos 323
  }
-set Nc3320100 [stack 0]
+set N2cc299e0 [stack 0]
  Shuffle {
   in apChroma
   name Shuffle1
@@ -555,7 +556,7 @@ set Nc3320100 [stack 0]
   xpos 43
   ypos 359
  }
-push $Nc3320100
+push $N2cc299e0
  Copy {
   inputs 2
   from0 rgba.red
@@ -590,46 +591,46 @@ push $Nc3320100
   xpos -47
   ypos 651
  }
-set Nc32ed600 [stack 0]
+set Nf4c48100 [stack 0]
  Dot {
   name Dot20
   xpos -47
   ypos 689
  }
-set Nc32ecf00 [stack 0]
+set N2cc908e0 [stack 0]
  Dot {
   name Dot28
   note_font_size 41
   xpos -47
   ypos 742
  }
-set Nc32ec800 [stack 0]
+set N2cc95a80 [stack 0]
  Dot {
   name Dot23
   note_font_size 41
   xpos -47
   ypos 799
  }
-push $Nc32ec800
-push $Nc322cf00
-push $Nc32ecf00
-push $Nc322d600
-push $Nc32ed600
-push $Nc3203200
+push $N2cc95a80
+push $Nd69fd230
+push $N2cc908e0
+push $Nd69fcd80
+push $Nf4c48100
+push $N157998b0
  Dot {
   name Dot30
   note_font_size 41
   xpos -354
   ypos 428
  }
-set Nc32c7900 [stack 0]
+set Nf0d9f20 [stack 0]
  AddChannels {
   channels rgba
   name AddChannels2
   xpos -279
   ypos 424
  }
-push $Nc32c7900
+push $Nf0d9f20
  Copy {
   inputs 2
   from0 rgba.alpha

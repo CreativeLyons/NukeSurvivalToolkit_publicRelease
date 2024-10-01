@@ -1,0 +1,1064 @@
+Group {
+ name Emission
+ knobChanged "def add_input(group, prefix):\n    with group:\n        fullname = group.fullName() + '.' + prefix\n        if not nuke.exists(fullname):\n            input = nuke.nodes.Input()\n            input.setName(prefix)\n            noop_input = nuke.toNode(prefix+'_input')\n            noop_input.setInput(0, input)\n            xpos = noop_input.xpos()\n            ypos = noop_input.ypos()\n            input.setXYpos(xpos, ypos-50)\n\ndef remove_input(group, prefix):\n    fullname = group.fullName() + '.' + prefix\n    if nuke.exists(fullname):\n        nuke.delete(nuke.toNode(fullname))\n\n\ngroup = nuke.thisNode() #the node\nk = nuke.thisKnob() #the knob\nkn = k.name() #the knob name\n\nif kn == 'inputChange':\n    if group.input(2):\n        group.knob('maskChannelMask').setValue('rgba.alpha')\n    else:\n        group.knob('maskChannelMask').setValue('none')\n    \nelif kn in \['env_method','light_method', 'showPanel']:\n    env_method = group\['env_method'].getValue()\n    light_method = group\['light_method'].getValue()\n    \n    #env method\n    if env_method == 0: #P\n        for knob in \['env_P_label', 'env_P', 'env_P_unpremult']:\n            group\[knob].setEnabled(True)\n        for knob in \['env_Z_label', 'env_Z', 'env_Z_invert', 'env_Z_unpremult']:\n            group\[knob].setEnabled(False)\n            \n        \n    elif env_method == 1: #Z and cam\n        for knob in \['env_P_label', 'env_P', 'env_P_unpremult']:\n            group\[knob].setEnabled(False)\n        for knob in \['env_Z_label', 'env_Z', 'env_Z_invert', 'env_Z_unpremult']:\n            group\[knob].setEnabled(True)\n    \n    \n    #light method\n    if light_method == 0: #P and Z\n        for knob in \['light_P_label', 'light_P', 'light_P_unpremult', 'light_Z_label', 'light_Z', 'light_Z_invert', 'light_Z_unpremult', 'light_color_label', 'light_color', 'light_color_premult']:\n            group\[knob].setEnabled(True)\n            \n    elif light_method == 1: #P and cam\n        for knob in \['light_P_label', 'light_P', 'light_P_unpremult', 'light_color_label', 'light_color', 'light_color_premult']:\n            group\[knob].setEnabled(True)\n        for knob in \['light_Z_label', 'light_Z', 'light_Z_invert', 'light_Z_unpremult']:\n            group\[knob].setEnabled(False)\n    \n    elif light_method == 2: #Z and cam\n        for knob in \['light_P_label', 'light_P', 'light_P_unpremult']:\n            group\[knob].setEnabled(False)\n        for knob in \['light_Z_label', 'light_Z', 'light_Z_invert', 'light_Z_unpremult', 'light_color_label', 'light_color', 'light_color_premult']:\n            group\[knob].setEnabled(True)\n            \n    if env_method == 1 or light_method == 1 or light_method == 2:\n        add_input(group, 'cam')\n    else:\n        remove_input(group, 'cam')     \n    \n\n\n"
+ tile_color 0xc0ffff
+ label v1.2
+ selected true
+ addUserKnob {20 User l Emission}
+ addUserKnob {26 description l "" +STARTLINE T "<b><font color=\"#00AAFF\">Emission</font> v1.2</b><br>\n<font color=\"#888\" size=\"2\">by Nikolai Wüstemann</font><br><br>\n\nRelight the environment input with the light source input. <br>\nBoth inputs should be CG render elements.\n<br>\n"}
+ addUserKnob {26 div1 l "<b><font color=\"#00AAFF\">Environment</font></b>"}
+ addUserKnob {26 env_method_label l "I have" T <i>}
+ addUserKnob {4 env_method l "" -STARTLINE M {PWorld "ZDepth and Camera" "" "" ""}}
+ addUserKnob {26 env_P_label l PWorld T <i>}
+ addUserKnob {41 env_P l "" -STARTLINE T Shuffle_env_P.in}
+ addUserKnob {6 env_P_unpremult l unpremult -STARTLINE}
+ addUserKnob {26 env_Z_label l ZDepth +DISABLED T <i>}
+ addUserKnob {41 env_Z l "" -STARTLINE T DepthToPosition_env.depth}
+ addUserKnob {6 env_Z_invert l 1/z t "The ZDepth must be converted to the distance from camera at some point. Check this, if your input comes from the Nuke ScanlineRenderer." -STARTLINE +DISABLED}
+ env_Z_invert true
+ addUserKnob {6 env_Z_unpremult l unpremult t "The ZDepth needs to be unpremultiplied at some point, if it comes premultiplied from the renderer." -STARTLINE +DISABLED}
+ addUserKnob {26 spacer_01 l "" +STARTLINE T " "}
+ addUserKnob {26 env_N_label l Normals T <i>}
+ addUserKnob {41 env_N l "" -STARTLINE T Shuffle_env_N.in}
+ addUserKnob {6 env_N_unpremult l unpremult -STARTLINE}
+ addUserKnob {6 env_bg l "replace background with black" +STARTLINE}
+ env_bg true
+ addUserKnob {26 spacer l " " T ""}
+ addUserKnob {26 div2 l "<b><font color=\"#00AAFF\">Light Source</font></b>"}
+ addUserKnob {26 lightSource_method_label l "I have" T <i>}
+ addUserKnob {4 light_method l "" -STARTLINE M {"PWorld and ZDepth" "PWorld and Camera" "ZDepth and Camera"}}
+ addUserKnob {26 light_P_label l PWorld T <i>}
+ addUserKnob {41 light_P l "" -STARTLINE T Shuffle_light_P.in}
+ addUserKnob {6 light_P_unpremult l unpremult t "The PWorld needs to be unpremultiplied at some point, if it comes premultiplied from the renderer." -STARTLINE}
+ addUserKnob {26 light_Z_label l ZDepth T <i>}
+ addUserKnob {41 light_Z l "" -STARTLINE T DepthToPosition_light.depth}
+ addUserKnob {6 light_Z_invert l 1/z -STARTLINE}
+ light_Z_invert true
+ addUserKnob {6 light_Z_unpremult l unpremult -STARTLINE}
+ addUserKnob {26 spacer_02 l "" +STARTLINE T " "}
+ addUserKnob {26 light_color_label l Color T <i>}
+ addUserKnob {41 light_color l "" -STARTLINE T Shuffle_light_Color.in}
+ addUserKnob {6 light_color_premult l "premult   " t "The light source color must be premultiplied with its alpha at some point. As objects are moving away from the camera, they occupy less and less screen space and their appearance might be merely defined by anti-aliased and/or semi-transparent pixels. We need to preserve these values, because they give us crucial information about the light source intensity and can then be correctly interpreted in combination with the PWorld pass and the camera position." -STARTLINE}
+ addUserKnob {26 divider_01 l " "}
+ addUserKnob {3 maxSamples l "Max. Samples" t "More samples = longer rendering time"}
+ maxSamples 1000
+ addUserKnob {6 useMaxSamples l use? -STARTLINE}
+ useMaxSamples true
+ addUserKnob {7 intensity l Intensity R 0 10}
+ intensity 1
+ addUserKnob {4 falloff l Falloff M {Linear Quadratic Cubic}}
+ falloff Quadratic
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelMask l "" -STARTLINE T Merge_MaskMix.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T Merge_MaskMix.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge_MaskMix.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge_MaskMix.fringe}
+ addUserKnob {41 mix T Merge_MaskMix.mix}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos -1337
+  ypos -429
+  number 2
+ }
+ Dot {
+  name Dot32
+  xpos -1303
+  ypos 1975
+ }
+ Input {
+  inputs 0
+  name environment
+  xpos -1086
+  ypos -428
+ }
+ Dot {
+  name Dot24
+  xpos -1052
+  ypos 202
+ }
+set N551e400 [stack 0]
+ Dot {
+  name Dot13
+  xpos -1052
+  ypos 662
+ }
+set N551e800 [stack 0]
+ Dot {
+  name Dot1
+  xpos -1052
+  ypos 1557
+ }
+set N551ec00 [stack 0]
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 black -1 -1 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3"
+  name Shuffle_BlackBG
+  xpos -1086
+  ypos 1801
+  disable {{!parent.env_bg}}
+ }
+set N551f000 [stack 0]
+push $N551ec00
+ NoOp {
+  inputs 0
+  name cam_input
+  xpos -203
+  ypos -313
+ }
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {{"\[expression \[value the_cam]far(\[value the_frame])]"}}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyCam
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nUpdated v1.3: Now accepts Nuke13's Camera3\n\nadrianpueyo.com, 2019-2021"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  label v1.3
+  xpos -193
+  ypos -138
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam +INVISIBLE}
+  the_cam "\[\n#DummyCam v1.3 - Updated 5 May 2021.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera3\" && \[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera3\"||\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame +INVISIBLE}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 50
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 24.576
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 0.1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 10000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 May 2021" T "<span style=\"color:#666\"><br/><b>DummyCam v1.3</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2021</span>"}
+ }
+ Dot {
+  name Dot12
+  xpos -169
+  ypos 355
+ }
+set N551fc00 [stack 0]
+ Input {
+  inputs 0
+  name light_source
+  xpos 882
+  ypos -447
+  number 1
+ }
+ Dot {
+  name Dot5
+  xpos 916
+  ypos -334
+ }
+set N27a94400 [stack 0]
+ Shuffle {
+  in rgb
+  in2 alpha
+  alpha red2
+  name Shuffle_light_Color
+  label "\[value in]"
+  xpos 1021
+  ypos -343
+ }
+ set C27a94800 [stack 0]
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  channel3 alpha
+  expr3 "r>0||g>0||b>0 ? 1 : 0"
+  name Expression1
+  xpos 1021
+  ypos -239
+ }
+push $N27a94400
+add_layer {PixelGatherMetadata PixelGatherMetadata.red PixelGatherMetadata.green PixelGatherMetadata.blue PixelGatherMetadata.alpha}
+add_layer {PixelGatherMask PixelGatherMask.alpha}
+ Group {
+  inputs 2
+  name PixelGather
+  xpos 882
+  ypos -245
+  addUserKnob {20 User l PixelGather}
+  addUserKnob {26 description l "" +STARTLINE T "<b>PixelGather v1.1</b> by Nikolai Wüstemann<br><br>\n\nUtility to collect all input pixels next to each other.<br>\nUse the mask input to specify the pixels that should be gathered.<br> \n(Any pixel with alpha value > 0 in the mask input will be fully considered.)<br>"}
+  addUserKnob {41 channels T STMap_PixelGather.channels}
+  addUserKnob {3 maxPoints l "max points" t "Specify the maximum amount of points you want to have left. If this number is lower than the total amount of points, the input willl be downscaled accordingly. \nNote, that the specified number will not precisely match the final amount of points, because we don't know the exact number of the points that we are left with after the downsampling stage. There might even be scenarios, where downsampling introduces MORE points than before because of the cubic filtering in the scaling process."}
+  maxPoints {{parent.maxSamples}}
+  addUserKnob {6 useMaxPoints l use? -STARTLINE}
+  useMaxPoints {{parent.useMaxSamples}}
+  addUserKnob {4 outputFormat l arrangement t "Change the arrangement of the output.\n\nunchanged:\nDo not gather the pixels, but return original image (downscaled if applicable)\n\nin bbox:\nThe gathered pixels will be arranged in the bounding box, starting at the lower left.\n\nsquare:\nThe gathered pixels will be arranged in a way so that they approximate a square." M {unchanged "in bbox" square "" "" "" "" "" "" "" "" "" ""}}
+  outputFormat "in bbox"
+  addUserKnob {6 cropBBox l "crop to bbox" t "Side note: Unfortunately there is no (stable) way to crop the output to the actual CONTENT instead of just the bounding box, which would simplify a lot of things." -STARTLINE}
+  addUserKnob {41 gatherMetadata l "output metadata" T ShuffleCopy3.out2}
+  addUserKnob {6 writeMetadata l "write metadata layer" -STARTLINE}
+  writeMetadata true
+  addUserKnob {41 gatherMask l "output mask" T ShuffleCopy4.out2}
+  addUserKnob {6 writeMask l "write mask layer" -STARTLINE}
+  writeMask true
+  addUserKnob {20 info l Info}
+  addUserKnob {26 metadataInfo l "" +STARTLINE T "<br>\nThe <b><font color=\"#d00\">R</font><font color=\"#0c0\">G</font><font color=\"#06f\">B</font>A</b> channels of the PixelGatherMetadata-Layer contain the following information:<br>\nthe iteration space in x or <font color=\"#d00\"><b>width of content</b></font>,<br> \nand the iteration space in y or <font color=\"#0c0\"><b>height of content</b></font>,<br> \nhow many pixels were <font color=\"#06f\"><b>found in total</b></font>,<br> \nand how many pixels <b>were gathered</b>.<br>\n<br>\nThe <b>Alpha</b> channel of the PixelGatherMask-Layer contains the information<br>\nhow the downscaling (if max samples was used) affected the binary nature of the samples.<br>\nUse this channel, to unpremult any layer that came in unpremulted before and needs to stay that way."}
+ }
+  Input {
+   inputs 0
+   name mask
+   xpos 353
+   ypos -182
+   number 1
+  }
+  Dot {
+   name Dot11
+   xpos 387
+   ypos -45
+  }
+set N27a95400 [stack 0]
+  Dot {
+   name Dot7
+   xpos 387
+   ypos 132
+  }
+push $N27a95400
+  Input {
+   inputs 0
+   name src
+   xpos 0
+   ypos -181
+  }
+  Crop {
+   box {{bbox.x} {bbox.y} {"max(bbox.x+3, bbox.r)"} {bbox.t}}
+   crop false
+   name Crop3
+   xpos 0
+   ypos -108
+  }
+  Copy {
+   inputs 2
+   from0 rgba.alpha
+   to0 PixelGatherMask.alpha
+   name Copy1
+   xpos 0
+   ypos -54
+  }
+  Dot {
+   name Dot5
+   xpos 34
+   ypos 21
+  }
+set N2030c800 [stack 0]
+  Remove {
+   name Remove1
+   xpos 156
+   ypos 12
+  }
+  Shuffle {
+   red black
+   green black
+   blue black
+   alpha white
+   name Shuffle2
+   label "\[value in]"
+   xpos 156
+   ypos 69
+  }
+  Merge2 {
+   inputs 2
+   operation copy
+   name Merge1
+   xpos 156
+   ypos 129
+   addUserKnob {20 TRX}
+   addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "import convertMergeToMergeAll;convertMergeToMergeAll.convertMergeToMergeAll()"}
+  }
+  Dot {
+   name Dot9
+   xpos 190
+   ypos 187
+  }
+set N2030d800 [stack 0]
+push $N2030c800
+  BlinkScript {
+   inputs 2
+   recompileCount 165
+   ProgramGroup 1
+   KernelDescription "2 \"CountKernel\" iterate pixelWise 7518f6cec91f8fe0a69225e2a35dcf97a15425f0bb8b87dc77592bc1138a794f 3 \"src\" Read Random \"mask\" Read Random \"dst\" Write Random 2 \"maxPoints\" Int 1 AAAAAA== \"useMaxPoints\" Int 1 AAAAAA== 2 \"maxPoints\" 1 1 \"useMaxPoints\" 1 1 2 \"srcconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA== \"maskconstEdgeColor\" Float 4 1 AAAAAAAAAAAAAAAAAAAAAA=="
+   kernelSource "kernel CountKernel : public ImageComputationKernel<ePixelWise>\{\n  Image<eRead, eAccessRandom, eEdgeConstant> src;\n  Image<eRead, eAccessRandom, eEdgeConstant> mask;\n  Image<eWrite, eAccessRandom> dst;\n\n  param:\n    int maxPoints;\n    int useMaxPoints;\n\n  void process(int2 pos)\{\n    if(pos.x == src.bounds.x1 && pos.y == src.bounds.y1)\{\n      int totalPoints = 0;\n      \n      for(int j = mask.bounds.y1; j < mask.bounds.y2; j++)\{\n        for(int i = mask.bounds.x1; i < mask.bounds.x2; i++)\{\n          if(mask(i,j,3) > 0)\{\n            //Count total amount of samples\n            totalPoints++;\n          \}\n        \}\n      \}\n      \n      int actualPoints = totalPoints;\n      if(useMaxPoints == 1)\{\n        actualPoints = min(totalPoints, maxPoints);\n      \}\n\n      float ratio = sqrt((float) actualPoints / totalPoints);\n\n      float s = 0.0f;\n      float t = 0.0f;\n      int x = 0;\n      int y = 0;\n\n      for(int j = 0; j < src.bounds.height(); j++)\{\n        for(int i = 0; i < src.bounds.width(); i++)\{\n          s = i / ratio + src.bounds.x1 + 0.5;\n          t = j / ratio + src.bounds.y1 + 0.5;\n\n          x = src.bounds.x1 + i;\n          y = src.bounds.y1 + j;\n\n          //Write STMap\n          dst(x, y) = float4(s, t, 0, 0);\n        \}\n      \}\n\n      dst(pos.x, pos.y, 2) = ceil(src.bounds.width() * ratio);\n      dst(pos.x, pos.y, 3) = ceil(src.bounds.height() * ratio);\n      dst(pos.x+1, pos.y, 2) = totalPoints;\n      dst(pos.x+1, pos.y, 3) = actualPoints;\n    \}\n  \}\n\};"
+   rebuild ""
+   CountKernel_maxPoints {{parent.maxPoints}}
+   CountKernel_useMaxPoints {{parent.useMaxPoints}}
+   rebuild_finalise ""
+   name BlinkScript_PixelCount
+   xpos 0
+   ypos 178
+   disable {{"type == 2 ? 0 : 1"}}
+  }
+set N2030dc00 [stack 0]
+  Dot {
+   name Dot18
+   xpos -290
+   ypos 187
+  }
+set N19090000 [stack 0]
+  Dot {
+   name Dot19
+   xpos -290
+   ypos 431
+  }
+push $N19090000
+  Dot {
+   name Dot20
+   xpos -459
+   ypos 187
+  }
+set N19090800 [stack 0]
+  Crop {
+   box {{bbox.x+1} {bbox.y} {bbox.x+2} {bbox.y+1}}
+   crop false
+   name Crop5
+   xpos -427
+   ypos 272
+  }
+push $N19090800
+  Crop {
+   box {{bbox.x} {bbox.y} {bbox.x+1} {bbox.y+1}}
+   crop false
+   name Crop6
+   xpos -544
+   ypos 274
+  }
+  ShuffleCopy {
+   inputs 2
+   red blue2
+   green alpha2
+   blue blue
+   name ShuffleCopy5
+   xpos -490
+   ypos 352
+  }
+  CopyBBox {
+   inputs 2
+   name CopyBBox2
+   xpos -490
+   ypos 428
+  }
+  Dot {
+   name Dot21
+   xpos -456
+   ypos 819
+  }
+push $N2030dc00
+  Expression {
+   expr0 r/width
+   expr1 g/height
+   expr2 b
+   name Expression_Normalize
+   xpos 0
+   ypos 256
+  }
+set Nc796000 [stack 0]
+push $N2030c800
+  Dot {
+   name Dot10
+   xpos -168
+   ypos 21
+  }
+  STMap {
+   inputs 2
+   uv rgb
+   name STMap_SuperSample
+   xpos -202
+   ypos 343
+  }
+  set Cc796800 [stack 0]
+  Dot {
+   name Dot16
+   xpos -168
+   ypos 600
+  }
+set Nc796c00 [stack 0]
+  Dot {
+   name Dot15
+   xpos -312
+   ypos 600
+  }
+  ShuffleCopy {
+   inputs 2
+   alpha alpha2
+   black red
+   white green
+   red2 blue
+   green2 alpha
+   out2 PixelGatherMetadata
+   name ShuffleCopy6
+   xpos -346
+   ypos 816
+   disable {{!parent.writeMetadata}}
+  }
+  Dot {
+   name Dot17
+   xpos -312
+   ypos 961
+  }
+push $Nc796000
+push $N2030d800
+clone $Cc796800 {
+   inputs 2
+   xpos 156
+   ypos 343
+   selected false
+  }
+  Dot {
+   name Dot3
+   xpos 190
+   ypos 404
+  }
+push $Nc796000
+  ShuffleCopy {
+   inputs 2
+   red blue2
+   green alpha2
+   blue black
+   name ShuffleCopy1
+   xpos 0
+   ypos 401
+  }
+  BlinkScript {
+   recompileCount 138
+   ProgramGroup 1
+   KernelDescription "2 \"GatherKernel\" iterate pixelWise 2f170194aaef057db556e8c9979f665898ec64fb6d93b0ffc18531dfcc44db25 2 \"src\" Read Random \"dst\" Write Random 3 \"maxPoints\" Int 1 AAAAAA== \"useMaxPoints\" Int 1 AAAAAA== \"outputFormat\" Int 1 AAAAAA== 3 \"maxPoints\" 1 1 \"useMaxPoints\" 1 1 \"outputFormat\" 1 1 0"
+   kernelSource "kernel GatherKernel : public ImageComputationKernel<ePixelWise>\{\n  Image<eRead, eAccessRandom, eEdgeClamped> src;\n  Image<eWrite, eAccessRandom> dst;\n\n  param:\n    int maxPoints;\n    int useMaxPoints;\n    int outputFormat;\n\n  void process(int2 pos)\{\n    if(pos.x == src.bounds.x1 && pos.y == src.bounds.y1)\{\n      int2 searchStart = int2(src.bounds.x1, src.bounds.y1);\n      int2 searchEnd = int2(src.bounds.x1 + (int)src(src.bounds.x1, src.bounds.y1, 0), src.bounds.y1 + (int)src(src.bounds.x1, src.bounds.y1, 1));\n      int2 plotStart = int2(src.bounds.x1, src.bounds.y1);\n      int2 plotEnd = int2(src.bounds.x2, src.bounds.y2);\n\n      if(outputFormat == 2)\{\n        int squareLength = (int)ceil(sqrt(src(src.bounds.x1 + 1, src.bounds.y1, 1)));\n        plotEnd = int2(src.bounds.x1 + squareLength, src.bounds.y1 + squareLength);\n      \}\n\n      int actualPoints = 0;\n      int s = 0;\n      int t = 0;\n      int x = plotStart.x;\n      int y = plotStart.y;\n\n      for(int j = searchStart.y; j < searchEnd.y; j++)\{\n        for(int i = searchStart.x; i < searchEnd.x; i++)\{\n          if(src(i,j,3) > 0)\{\n            actualPoints++;\n\n            if(x > plotEnd.x)\{\n              x = plotStart.x;\n              y++;\n            \}\n            \n            s = i + 0.5;\n            t = j + 0.5;\n            \n            dst(x, y) = float4(s, t, 0, 0);\n            x++;\n          \}\n        \}\n      \}\n\n      dst(pos.x, pos.y, 2) = plotEnd.x - plotStart.x;\n      dst(pos.x, pos.y, 3) = y - plotStart.y + 1;\n      dst(pos.x+1, pos.y, 2) = src(src.bounds.x1+1, src.bounds.y1, 0);\n      dst(pos.x+1, pos.y, 3) = actualPoints;\n    \}\n  \}\n\};"
+   rebuild ""
+   GatherKernel_maxPoints {{parent.maxPoints}}
+   GatherKernel_useMaxPoints {{parent.useMaxPoints}}
+   GatherKernel_outputFormat {{parent.outputFormat}}
+   rebuild_finalise ""
+   name BlinkScript_PixelGather
+   xpos 0
+   ypos 480
+   disable {{"type == 2 ? 0 : 1"}}
+  }
+set N17ca800 [stack 0]
+  Dot {
+   name Dot6
+   xpos 190
+   ypos 489
+  }
+set N17cac00 [stack 0]
+  Dot {
+   name Dot8
+   xpos 190
+   ypos 733
+  }
+push $N17cac00
+  Dot {
+   name Dot4
+   xpos 356
+   ypos 489
+  }
+set N17cb400 [stack 0]
+  Crop {
+   box {{bbox.x+1} {bbox.y} {bbox.x+2} {bbox.y+1}}
+   crop false
+   name Crop4
+   xpos 388
+   ypos 574
+  }
+push $N17cb400
+  Crop {
+   box {{bbox.x} {bbox.y} {bbox.x+1} {bbox.y+1}}
+   crop false
+   name Crop1
+   xpos 271
+   ypos 576
+  }
+  ShuffleCopy {
+   inputs 2
+   red blue2
+   green alpha2
+   blue blue
+   name ShuffleCopy2
+   xpos 325
+   ypos 654
+  }
+  CopyBBox {
+   inputs 2
+   name CopyBBox1
+   xpos 325
+   ypos 730
+  }
+  Dot {
+   name Dot2
+   xpos 359
+   ypos 818
+  }
+push $N17ca800
+  Expression {
+   expr0 r/width
+   expr1 g/height
+   name Expression3
+   xpos 0
+   ypos 619
+   disable {{"parent.output == 1 ? 0 : 1"}}
+  }
+  Dot {
+   name Dot1
+   xpos 34
+   ypos 728
+  }
+push $Nc796c00
+  STMap {
+   inputs 2
+   uv rgb
+   filter impulse
+   name STMap_PixelGather
+   xpos -202
+   ypos 719
+  }
+  ShuffleCopy {
+   inputs 2
+   alpha alpha2
+   black red
+   white green
+   red2 blue
+   green2 alpha
+   out2 PixelGatherMetadata
+   name ShuffleCopy3
+   xpos -202
+   ypos 815
+   disable {{!parent.writeMetadata}}
+  }
+  Switch {
+   inputs 2
+   which {{outputFormat==0?1:0}}
+   name Switch1
+   xpos -202
+   ypos 958
+  }
+  Dot {
+   name Dot13
+   xpos -168
+   ypos 1133
+  }
+set N17094000 [stack 0]
+  Dot {
+   name Dot14
+   xpos -45
+   ypos 1133
+  }
+  Dot {
+   name Dot12
+   xpos -45
+   ypos 1251
+  }
+push $N17094000
+  Remove {
+   channels PixelGatherMask
+   name Remove2
+   xpos -202
+   ypos 1178
+  }
+  ShuffleCopy {
+   inputs 2
+   in PixelGatherMask
+   alpha alpha2
+   black red
+   white green
+   red2 blue
+   green2 alpha
+   out2 PixelGatherMask
+   name ShuffleCopy4
+   xpos -202
+   ypos 1248
+   disable {{!parent.writeMaskLayer}}
+  }
+  Crop {
+   box {{bbox.x} {bbox.y} {bbox.r} {bbox.t}}
+   reformat true
+   crop false
+   name Crop2
+   xpos -202
+   ypos 1361
+   disable {{!parent.cropBBox}}
+  }
+  Output {
+   name Output1
+   xpos -202
+   ypos 1414
+  }
+ end_group
+ Dot {
+  name Dot3
+  xpos 916
+  ypos -80
+ }
+set N17095c00 [stack 0]
+ Dot {
+  name Dot16
+  xpos 526
+  ypos -80
+ }
+set Nf1e1a000 [stack 0]
+ Shuffle {
+  in PixelGatherMask
+  in2 alpha
+  name Shuffle_light_Color3
+  label "\[value in]"
+  xpos 492
+  ypos -20
+ }
+ Dot {
+  name Dot19
+  xpos 526
+  ypos 176
+ }
+set Nf1e1a800 [stack 0]
+push $N17095c00
+ Dot {
+  name Dot6
+  xpos 916
+  ypos 112
+ }
+set Nf1e1ac00 [stack 0]
+ Unpremult {
+  channels all
+  name Unpremult_light_Z
+  xpos 756
+  ypos 103
+  disable {{!light_Z_unpremult}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos 756
+  ypos 167
+ }
+ Unpremult {
+  channels all
+  name Unpremult2
+  xpos 756
+  ypos 225
+  disable {{light_Z_unpremult}}
+ }
+ Dot {
+  name Dot23
+  xpos 790
+  ypos 285
+ }
+set Nf1e1bc00 [stack 0]
+ Dot {
+  name Dot22
+  xpos 31
+  ypos 285
+ }
+ DepthToPosition {
+  inputs 2
+  invert {{parent.light_Z_invert}}
+  name DepthToPosition_light
+  xpos -3
+  ypos 352
+ }
+ Dot {
+  name Dot28
+  xpos 31
+  ypos 510
+ }
+push $Nf1e1a800
+push $Nf1e1a000
+ Dot {
+  name Dot18
+  xpos 199
+  ypos -80
+ }
+ Shuffle {
+  in P
+  in2 alpha
+  alpha red2
+  name Shuffle_light_P
+  label "\[value in]"
+  xpos 165
+  ypos -28
+ }
+ Unpremult {
+  name Unpremult_light_P
+  xpos 165
+  ypos 107
+  disable {{!light_P_unpremult}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos 165
+  ypos 167
+ }
+ Unpremult {
+  name Unpremult1
+  xpos 165
+  ypos 228
+  disable {{light_P_unpremult}}
+ }
+ Dot {
+  name Dot9
+  xpos 199
+  ypos 361
+ }
+set N1f6ae000 [stack 0]
+ Switch {
+  inputs 2
+  which {{"light_method==0 || light_method==1 ? 0 : 1"}}
+  name Switch_light_P_method
+  label "\[value this.which]"
+  xpos 165
+  ypos 501
+ }
+ Dot {
+  name Dot2
+  xpos 199
+  ypos 1186
+ }
+push $N17095c00
+ Dot {
+  name Dot17
+  xpos 1290
+  ypos -80
+ }
+ Shuffle {
+  in PixelGatherMetadata
+  in2 alpha
+  name Shuffle_light_Color2
+  label "\[value in]"
+  xpos 1256
+  ypos -4
+ }
+ Dot {
+  name Dot30
+  xpos 1290
+  ypos 1196
+ }
+push $Nf1e1a800
+ Dot {
+  name Dot20
+  xpos 526
+  ypos 1014
+ }
+push $Nf1e1ac00
+ Dot {
+  name Dot14
+  xpos 1029
+  ypos 112
+ }
+ Dot {
+  name Dot10
+  xpos 1029
+  ypos 862
+ }
+set N1ac96000 [stack 0]
+ Dot {
+  name Dot11
+  xpos 1029
+  ypos 918
+ }
+push $N1ac96000
+push $N1f6ae000
+ Dot {
+  name Dot29
+  xpos 391
+  ypos 361
+ }
+ ColorMatrix {
+  matrix {
+      {{parent.DummyCam.world_matrix.0} {parent.DummyCam.world_matrix.1} {parent.DummyCam.world_matrix.2}}
+      {{parent.DummyCam.world_matrix.4} {parent.DummyCam.world_matrix.5} {parent.DummyCam.world_matrix.6}}
+      {{parent.DummyCam.world_matrix.8} {parent.DummyCam.world_matrix.9} {parent.DummyCam.world_matrix.10}}
+    }
+  invert true
+  name ColorMatrix1
+  xpos 357
+  ypos 507
+ }
+ Add {
+  value {{-parent.DummyCam.world_matrix.3} {-parent.DummyCam.world_matrix.7} {-parent.DummyCam.world_matrix.11} 0}
+  name Add2
+  xpos 357
+  ypos 557
+ }
+ Expression {
+  expr0 -b
+  expr1 -b
+  expr2 -b
+  name Expression5
+  xpos 357
+  ypos 620
+ }
+push $Nf1e1bc00
+ Expression {
+  expr0 "\[value DepthToPosition_light.depth]"
+  expr1 "\[value DepthToPosition_light.depth]"
+  expr2 "\[value DepthToPosition_light.depth]"
+  name Expression_light_Z_get
+  label "\[value DepthToPosition_light.depth]"
+  xpos 756
+  ypos 438
+ }
+ Expression {
+  expr0 r>0?1/r:1
+  expr1 g>0?1/g:1
+  expr2 b>0?1/b:1
+  name Expression_light_Z_invert
+  xpos 756
+  ypos 514
+  disable {{!parent.light_Z_invert}}
+ }
+ Switch {
+  inputs 2
+  which {{"light_method==0 || light_method==2 ? 0 : 1"}}
+  name Switch_light_Z_method
+  label "\[value this.which]"
+  xpos 756
+  ypos 614
+ }
+ Dot {
+  name Dot15
+  xpos 790
+  ypos 720
+ }
+push $Nf1e1ac00
+clone $C27a94800 {
+  xpos 882
+  ypos 370
+  selected false
+ }
+ Premult {
+  name Premult2
+  xpos 882
+  ypos 448
+  disable {{!parent.light_color_premult}}
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge1
+  xpos 882
+  ypos 717
+ }
+ MergeExpression {
+  inputs 2
+  expr0 "x==bbox.x && y==bbox.y ? A.b : B.r"
+  expr1 "x==bbox.x && y==bbox.y ? A.b : B.g"
+  expr2 "x==bbox.x && y==bbox.y ? A.b : B.b"
+  channel3 alpha
+  expr3 "x==bbox.x && y==bbox.y ? A.b : B.a"
+  name MergeExpression2
+  xpos 882
+  ypos 859
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos 882
+  ypos 915
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy5
+  xpos 882
+  ypos 1005
+ }
+ Dot {
+  name Dot4
+  xpos 916
+  ypos 1169
+ }
+push $N551e400
+ Dot {
+  name Dot21
+  xpos -781
+  ypos 202
+ }
+set N20d62400 [stack 0]
+ Dot {
+  name Dot26
+  xpos -603
+  ypos 202
+ }
+set N20d62800 [stack 0]
+ Dot {
+  name Dot25
+  xpos -425
+  ypos 202
+ }
+ Shuffle {
+  in N
+  in2 alpha
+  alpha red2
+  name Shuffle_env_N
+  label "\[value in]"
+  xpos -459
+  ypos 364
+ }
+ Unpremult {
+  name Unpremult_env_N
+  xpos -459
+  ypos 450
+  disable {{!env_N_unpremult}}
+ }
+ Dot {
+  name Dot8
+  xpos -425
+  ypos 1200
+ }
+push $N551e800
+push $N551fc00
+ Dot {
+  name Dot27
+  xpos -169
+  ypos 557
+ }
+push $N20d62800
+ Unpremult {
+  channels all
+  name Unpremult_env_Z
+  xpos -637
+  ypos 429
+  disable {{!env_Z_unpremult}}
+ }
+ DepthToPosition {
+  inputs 2
+  invert {{parent.env_Z_invert}}
+  name DepthToPosition_env
+  xpos -637
+  ypos 554
+ }
+push $N20d62400
+ Shuffle {
+  in P
+  in2 alpha
+  alpha red2
+  name Shuffle_env_P
+  label "\[value in]"
+  xpos -815
+  ypos 365
+ }
+ Unpremult {
+  name Unpremult_env_P
+  xpos -815
+  ypos 438
+  disable {{!env_P_unpremult}}
+ }
+ Switch {
+  inputs 2
+  which {{"env_method==0 || env_method==1 ? 0 : 1"}}
+  name Switch_env_P_method
+  label "\[value this.which]"
+  xpos -815
+  ypos 548
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy4
+  xpos -815
+  ypos 653
+ }
+ Dot {
+  name Dot7
+  xpos -781
+  ypos 1194
+ }
+ BlinkScript {
+  inputs 5
+  recompileCount 116
+  ProgramGroup 1
+  KernelDescription "2 \"EmissionKernel\" iterate pixelWise 5445ff44e6e21eb225990cf422d24f8e0ad674ae14f3be1c3d4fcacd6a881349 6 \"envP\" Read Point \"envN\" Read Point \"lightColor\" Read Random \"lightMetadata\" Read Point \"lightP\" Read Random \"dst\" Write Point 3 \"falloff\" Int 1 AAAAAA== \"formatWidth\" Int 1 AAAAAA== \"formatHeight\" Int 1 AAAAAA== 3 \"falloff\" 1 1 \"formatWidth\" 1 1 \"formatHeight\" 1 1 0"
+  kernelSource "kernel EmissionKernel : public ImageComputationKernel<ePixelWise>\{\n  Image<eRead, eAccessPoint, eEdgeClamped> envP;\n  Image<eRead, eAccessPoint, eEdgeClamped> envN;\n  Image<eRead, eAccessRandom, eEdgeClamped> lightColor;\n  Image<eRead, eAccessPoint, eEdgeClamped> lightMetadata;\n  Image<eRead, eAccessRandom, eEdgeClamped> lightP;\n  Image<eWrite> dst;\n  \n  param:\n    int falloff;\n    int formatWidth;\n    int formatHeight;\n\n  void process()\{\n    float4 rgb = 0.0f;\n\n    //If env has an alpha\n    if(envP(3) > 0)\{\n      //Loop through all pixels in the light source. Each pixel will act as point light\n      for(int j = lightColor.bounds.y1; j <= lightColor.bounds.y1 + lightMetadata(1); j++)\{\n        for(int i = lightColor.bounds.x1; i <= lightColor.bounds.x1 + lightMetadata(0); i++)\{\n          //Only calculate, if we meet a valid sample.\n          //This should mainly be taken care of by the PixelGather group,\n          //but still saves a bit of time if we do it here again\n          if(lightColor(i,j,3) > 0)\{\n            float3 lightVector = float3(lightP(i,j,0) - envP(0), lightP(i,j,1) - envP(1), lightP(i,j,2) - envP(2));\n            float lightInfluence = clamp(dot(normalize(lightVector), float3(envN(0), envN(1), envN(2))), 0.0, 1.0);\n            float distance = length(lightVector);\n            float4 sourceIntensity = lightColor(i, j);\n            float falloffIntensity = 1.0;\n\n            //Linear falloff\n            if(falloff == 0)\{\n              falloffIntensity = 1 / distance;\n            \}\n            //Quadratic falloff\n            else if(falloff == 1)\{\n              falloffIntensity = 1 / pow(distance, 2);\n            \}\n            //Cubic falloff\n            else if(falloff == 2)\{\n              falloffIntensity = 1 / pow(distance, 3);\n            \}\n\n            //Calculate output intensity\n            rgb += sourceIntensity * falloffIntensity * lightInfluence;\n          \}\n        \}\n      \}\n    \}\n\n    //Prepare output\n    float4 rgba = float4(rgb.x, rgb.y, rgb.z, 0);\n\n    //Contering the downscaling for max samples\n    rgba *= lightMetadata(2) / lightMetadata(3);\n\n    //Countering the format\n    rgba /= formatWidth * formatHeight;\n\n    dst() = rgba;\n  \}\n\};"
+  rebuild ""
+  EmissionKernel_falloff {{parent.falloff}}
+  EmissionKernel_formatWidth {{width}}
+  EmissionKernel_formatHeight {{height}}
+  rebuild_finalise ""
+  name BlinkScript_Emission
+  xpos 165
+  ypos 1396
+  disable {{"type == 2 ? 0 : 1"}}
+ }
+ Multiply {
+  channels rgba
+  value {{parent.intensity}}
+  name Multiply1
+  xpos 165
+  ypos 1473
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy3
+  xpos 165
+  ypos 1548
+ }
+ Premult {
+  name Premult1
+  xpos 165
+  ypos 1623
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output {rgba.red rgba.green rgba.blue -rgba.alpha}
+  maskChannelInput rgba.alpha
+  name Merge2
+  xpos 165
+  ypos 1795
+ }
+ Dot {
+  name Dot33
+  xpos 199
+  ypos 1975
+ }
+push $N551f000
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  Achannels none
+  Bchannels none
+  output none
+  also_merge rgb
+  maskChannelMask none
+  maskChannelInput -rgba.alpha
+  name Merge_MaskMix
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -1086
+  ypos 1966
+ }
+ Output {
+  name Output1
+  xpos -1086
+  ypos 2060
+ }
+end_group

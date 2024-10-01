@@ -1,0 +1,441 @@
+Group {
+ name ChromaSmear
+ tile_color 0xd26524ff
+ note_font "Bitstream Vera Sans Bold"
+ note_font_color 0xffffffff
+ selected true
+ addUserKnob {20 ChromaSmear}
+ addUserKnob {26 note l "" +STARTLINE T "<b>Area input</b> = pre-mask (mult vectors)"}
+ addUserKnob {26 note3 l "      " -STARTLINE T "<b>Vector input</b> = custom vectors"}
+ addUserKnob {26 note2 l "" +STARTLINE T "<b>Mask input </b>= post-mask (keymix)"}
+ addUserKnob {26 ""}
+ addUserKnob {7 abberation R -5 5}
+ abberation 3
+ addUserKnob {7 saturation}
+ saturation 1
+ addUserKnob {7 offset R -1 1}
+ offset 0.5
+ addUserKnob {26 ""}
+ addUserKnob {41 translate T Transform1.translate}
+ addUserKnob {41 rotate T Transform1.rotate}
+ addUserKnob {41 scale T Transform1.scale}
+ addUserKnob {41 center T Transform1.center}
+ addUserKnob {41 opacity l fade T Radial1.opacity}
+ addUserKnob {26 ""}
+ addUserKnob {7 overallAmount l "Overall Amount" R -2 3}
+ overallAmount 1
+ addUserKnob {7 Mask_softness l "Radial Mask"}
+ addUserKnob {6 exportAPchroma l "Export apChroma layer" +STARTLINE}
+ exportAPchroma true
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge5.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge5.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge5.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge5.fringe}
+ addUserKnob {41 mix T Merge5.mix}
+ addUserKnob {26 ""}
+ addUserKnob {26 credit l "" +STARTLINE T "Luc Julien 2010 | edited by Tony Lyons 2024"}
+}
+ Input {
+  inputs 0
+  name InputMask
+  xpos -31
+  ypos 1074
+  number 1
+ }
+ Input {
+  inputs 0
+  name InputArea
+  xpos 311
+  ypos 20
+  number 2
+ }
+ AddChannels {
+  channels rgba
+  color 1
+  name AddChannels1
+  xpos 311
+  ypos 58
+ }
+ Invert {
+  name Invert2
+  xpos 311
+  ypos 97
+ }
+ Input {
+  inputs 0
+  name Inputvectors
+  label "\[value number]"
+  xpos 178
+  ypos 5
+  number 3
+ }
+ Radial {
+  inputs 0
+  cliptype none
+  invert true
+  opacity 0.25
+  area {{curve i} {curve i} {input.width i} {input.height i}}
+  softness {{parent.Mask_softness*-1+1+.5 i x1 0.585}}
+  plinear true
+  name Radial1
+  xpos 145
+  ypos -108
+ }
+ Input {
+  inputs 0
+  name Inputimg
+  xpos -210
+  ypos -402
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos -176
+  ypos -312
+ }
+set Na1187ca0 [stack 0]
+ Remove {
+  name Remove1
+  xpos 31
+  ypos -322
+ }
+ AdjBBox {
+  numpixels {{width/4} {width/4}}
+  name AdjBBox1
+  xpos 31
+  ypos -237
+ }
+ Expression {
+  expr0 x
+  expr1 y
+  name Expression1
+  xpos 31
+  ypos -213
+ }
+set N4fafe3c0 [stack 0]
+ Dot {
+  name Dot2
+  xpos -79
+  ypos -210
+ }
+ Transform {
+  scale 1.1
+  center {{input.width/2} {input.height/2}}
+  black_outside false
+  name Transform1
+  xpos -113
+  ypos -189
+ }
+push $N4fafe3c0
+ Merge2 {
+  inputs 2
+  operation minus
+  name Merge1
+  xpos 31
+  ypos -189
+ }
+ Invert {
+  channels rgba
+  name Invert1
+  xpos 31
+  ypos -165
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge2
+  xpos 31
+  ypos -54
+ }
+ Switch {
+  inputs 2
+  which {{"\[exists parent.input3]"}}
+  name Switch1
+  xpos 31
+  ypos 17
+ }
+ Multiply {
+  inputs 1+1
+  value 0
+  name Multiply1
+  label "\[value value]"
+  xpos 31
+  ypos 91
+ }
+ Multiply {
+  value {{parent.overallAmount}}
+  name Multiply2
+  label "\[value value]"
+  xpos 31
+  ypos 192
+ }
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 65
+  ypos 312
+ }
+push $Na1187ca0
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 forward.u
+  from1 rgba.green
+  to1 forward.v
+  name Copy1
+  xpos -210
+  ypos 296
+ }
+set Na5bae2b0 [stack 0]
+ Shuffle {
+  red black
+  green black
+  name Shuffle3
+  xpos -119
+  ypos 374
+ }
+ VectorBlur {
+  channels {-rgba.red -rgba.green rgba.blue rgba.alpha}
+  uv forward
+  scale -1
+  offset {{(-.5*abberation*.8)+parent.offset}}
+  name VectorBlur3
+  xpos -119
+  ypos 412
+ }
+set Nc5322e40 [stack 0]
+push $Na5bae2b0
+ Shuffle {
+  red black
+  blue black
+  name Shuffle2
+  xpos -210
+  ypos 375
+ }
+ VectorBlur {
+  channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
+  uv forward
+  scale -1
+  offset {{(-.5*abberation*.6)+parent.offset}}
+  name VectorBlur2
+  xpos -210
+  ypos 413
+ }
+set Na7ef3620 [stack 0]
+push $Na5bae2b0
+ Shuffle {
+  green black
+  blue black
+  name Shuffle1
+  xpos -297
+  ypos 375
+ }
+ VectorBlur {
+  channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+  uv forward
+  scale -1
+  offset {{(-.5*abberation*.4)+parent.offset}}
+  name VectorBlur1
+  xpos -297
+  ypos 413
+ }
+set Nab834f80 [stack 0]
+push $Nc5322e40
+ Expression {
+  expr3 a*0.114
+  name Expression4
+  xpos -119
+  ypos 466
+ }
+push $Na7ef3620
+ Expression {
+  expr3 a*0.587
+  name Expression3
+  xpos -210
+  ypos 468
+ }
+push $Nab834f80
+ Expression {
+  expr3 a*0.299
+  name Expression2
+  xpos -297
+  ypos 467
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge3
+  xpos -248
+  ypos 509
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge4
+  xpos -182
+  ypos 553
+ }
+add_layer {apChroma apChroma.red apChroma.green apChroma.blue apChroma.alpha}
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 apChroma.red
+  name Copy2
+  xpos -182
+  ypos 603
+  disable {{!parent.exportAPchroma}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 apChroma.green
+  name Copy3
+  xpos -182
+  ypos 656
+  disable {{!parent.exportAPchroma}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 apChroma.blue
+  name Copy4
+  xpos -182
+  ypos 710
+  disable {{!parent.exportAPchroma}}
+ }
+push $Na5bae2b0
+ VectorBlur {
+  uv forward
+  scale -1.6
+  name VectorBlur4
+  xpos 7
+  ypos 409
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels2
+  xpos 7
+  ypos 447
+ }
+set N19447460 [stack 0]
+push $N19447460
+push $N19447460
+push $N19447460
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 apChroma.red
+  name Copy7
+  xpos 77
+  ypos 499
+  disable {{!parent.exportAPchroma}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 apChroma.green
+  name Copy8
+  xpos 77
+  ypos 553
+  disable {{!parent.exportAPchroma}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 apChroma.blue
+  name Copy9
+  xpos 77
+  ypos 606
+  disable {{!parent.exportAPchroma}}
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  output rgb
+  also_merge apChroma
+  mix {{parent.saturation}}
+  name Merge6
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -182
+  ypos 773
+  addUserKnob {20 TRX}
+  addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+ }
+ Dot {
+  name Dot29
+  note_font_size 41
+  xpos -148
+  ypos 857
+ }
+set N5fefb260 [stack 0]
+ Shuffle {
+  in apChroma
+  name Shuffle4
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat → \[value out2]] \}]"
+  xpos -58
+  ypos 841
+ }
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos -58
+  ypos 893
+ }
+set Neaffeda0 [stack 0]
+push $Neaffeda0
+push $N5fefb260
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.alpha
+  name Copy5
+  xpos -182
+  ypos 887
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 apChroma.alpha
+  name Copy6
+  xpos -182
+  ypos 925
+  disable {{!parent.exportAPchroma}}
+ }
+ Crop {
+  box {{curve i} {curve i} {input.width i} {input.height i}}
+  name Crop1
+  xpos -182
+  ypos 1016
+ }
+push $Na1187ca0
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos -424
+  ypos -312
+ }
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos -424
+  ypos 1084
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  also_merge apChroma
+  name Merge5
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos -182
+  ypos 1080
+  addUserKnob {20 TRX}
+  addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+ }
+ Output {
+  name Output1
+  xpos -182
+  ypos 1185
+ }
+end_group

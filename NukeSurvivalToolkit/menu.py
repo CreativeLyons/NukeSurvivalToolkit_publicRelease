@@ -172,7 +172,7 @@ except:
 
 drawMenu.addSeparator()
 
-drawMenu.addCommand('VoronoiGradient NKPD', "nuke.createNode('{}VoronoiGradient')".format(prefixNST), icon="GradMagic.png")
+drawMenu.addCommand('VoronoiGradient NW', "nuke.createNode('{}VoronoiGradient')".format(prefixNST), icon="GradMagic.png")
 drawMenu.addCommand('CellNoise NKPD', "nuke.createNode('{}CellNoise')".format(prefixNST), icon="Noise.png")
 drawMenu.addCommand('LineTool NKPD', "nuke.createNode('{}LineTool')".format(prefixNST), icon="nukepedia_icon.png")
 drawMenu.addCommand('PlotScanline NKPD', "nuke.createNode('{}PlotScanline')".format(prefixNST), icon="nukepedia_icon.png")
@@ -287,6 +287,7 @@ filterMenu.addSeparator()
 
 EdgesMenu = filterMenu.addMenu("Edges", icon="FilterErode.png")
 EdgesMenu.addCommand('apEdgePush AP', 'nuke.createNode("{}apEdgePush")'.format(prefixNST), icon='apEdgePush.png')
+EdgesMenu.addCommand('apEdgeCrush AP', 'nuke.createNode("{}apEdgeCrush")'.format(prefixNST), icon='Dither.png')
 EdgesMenu.addCommand('EdgeDetectAlias TL', "nuke.createNode('{}EdgeDetectAlias')".format(prefixNST), icon="FilterErod.png")
 EdgesMenu.addCommand('AntiAliasingFilter AG', "nuke.createNode('{}AntiAliasingFilter')".format(prefixNST), icon="nukepedia_icon.png")
 EdgesMenu.addCommand('ErodeSmooth TL', "nuke.createNode('{}ErodeSmooth')".format(prefixNST), icon="FilterErode.png")
@@ -349,6 +350,10 @@ apChromaMenu.addCommand('apChromaPremult AP', 'nuke.createNode("{}apChromaPremul
 filterMenu.addSeparator()
 
 filterMenu.addCommand('Chromatik SPIN', "nuke.createNode('{}Chromatik')".format(prefixNST), icon='spin_tools.png')
+filterMenu.addCommand("ChromaSmear LJ", "nuke.createNode('{}ChromaSmear')".format(prefixNST), icon="ColorLookup.png")
+
+filterMenu.addSeparator()
+
 filterMenu.addCommand('CatsEyeDefocus NKPD', "nuke.createNode('{}CatsEyeDefocus')".format(prefixNST), icon="nukepedia_icon.png")
 filterMenu.addCommand('DefocusSwirlyBokeh NKPD', "nuke.createNode('{}DefocusSwirlyBokeh')".format(prefixNST), icon="nukepedia_icon.png")
 filterMenu.addCommand('deHaze NKPD', "nuke.createNode('{}deHaze')".format(prefixNST), icon="nukepedia_icon.png")
@@ -500,7 +505,7 @@ transformMenu.addSeparator()
 
 transformMenu.addCommand('IIDistort EL', "nuke.createNode('{}IIDistort')".format(prefixNST), icon="nukepedia_icon.png")
 transformMenu.addCommand('bm_CameraShake BM', "nuke.createNode('{}bm_CameraShake')".format(prefixNST), icon="bm_CameraShake_icon.png")
-transformMenu.addCommand('ITransform FR', "nuke.createNode('{}ITransformU')".format(prefixNST), icon="STMap.png")
+transformMenu.addCommand('ITransform AE', "nuke.createNode('{}iTransform_ae')".format(prefixNST), icon="STMap.png")
 transformMenu.addCommand('MorphDissolve SPIN', "nuke.createNode('{}MorphDissolve')".format(prefixNST), icon="spin_tools.png")
 transformMenu.addCommand('RotoCentroid NKPD', "nuke.createNode('{}RotoCentroid')".format(prefixNST), icon="nukepedia_icon.png")
 transformMenu.addCommand('STmapInverse NKPD', "nuke.createNode('{}STmapInverse')".format(prefixNST), icon="nukepedia_icon.png")
@@ -630,7 +635,6 @@ PosToolkit.addCommand('PosMatte MJT', 'nuke.createNode("{}PosMatte_MJ")'.format(
 PosToolkit.addCommand('PosPattern MJT', 'nuke.createNode("{}PosPattern_MJ")'.format(prefixNST), icon='PosPattern_MJ.png')
 PosToolkit.addCommand('PosProjection MJT', 'nuke.createNode("{}PosProjection_MJ")'.format(prefixNST), icon='PosProjection_MJ.png')
 
-
 cgMenu.addSeparator()
 
 cgMenu.addCommand('Noise_3D SPIN', 'nuke.createNode("{}Noise3D_spin")'.format(prefixNST), icon='spin_tools.png')
@@ -649,7 +653,8 @@ cgMenu.addCommand('NormalsRotate NKPD', "nuke.createNode('{}NormalsRotate')".for
 cgMenu.addCommand('Relight_bb NKPD', "nuke.createNode('{}Relight_bb')".format(prefixNST), icon="SpotLight.png")
 cgMenu.addCommand('EnvReflect_bb NKPD', "nuke.createNode('{}EnvReflect_BB')".format(prefixNST), icon="Sphere.png")
 cgMenu.addCommand('N_Reflection NKPD', "nuke.createNode('{}N_Reflection')".format(prefixNST), icon="Sphere.png")
-
+cgMenu.addCommand('aeRefracTHOR AE', "nuke.createNode('{}aeRefracTHOR')".format(prefixNST), icon="aeRefracTHOR_icon.png")
+cgMenu.addCommand('Emission NW', "nuke.createNode('{}Emission')".format(prefixNST), icon="Light.png")
 cgMenu.addCommand('SimpleSSS MHD', "nuke.createNode('{}SimpleSSS')".format(prefixNST), icon="Toolbar3D.png")
 
 cgMenu.addSeparator()

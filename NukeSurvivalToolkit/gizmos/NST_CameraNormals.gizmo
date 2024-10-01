@@ -1,5 +1,3 @@
-set cut_paste_input [stack 0]
-push $cut_paste_input
 add_layer {N N.red N.green N.blue N.alpha}
 add_layer {P P.red P.green P.blue P.alpha}
 Group {
@@ -27,56 +25,6 @@ Group {
 }
  Input {
   inputs 0
-  name cam
-  xpos 421
-  ypos -32
-  number 1
- }
- Camera {
-  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
-  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
-  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
-  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
-  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
-  far {{"\[expression \[value the_cam]far(\[value the_frame])]"}}
-  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
-  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
-  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
-  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
-  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
-  name DummyCam
-  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nadrianpueyo.com, 2019-2020"
-  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
-  xpos 431
-  ypos 22
-  addUserKnob {20 DummyCam l Defaults}
-  addUserKnob {43 the_cam +INVISIBLE}
-  the_cam "\[\n#DummyCam v1.1. Updated 5 April 2020.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
-  addUserKnob {43 the_frame +INVISIBLE}
-  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
-  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
-  addUserKnob {7 d_focal l "focal length" R 0 100}
-  d_focal 50
-  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
-  d_haperture 24.576
-  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
-  d_vaperture 18.672
-  addUserKnob {7 d_near l near R 0 10}
-  d_near 0.1
-  addUserKnob {7 d_far l far R 0 10000}
-  d_far 10000
-  addUserKnob {30 d_win_translate l "window translate"}
-  addUserKnob {30 d_win_scale l "window scale"}
-  d_win_scale {1 1}
-  addUserKnob {7 d_winroll l "window roll" R 0 45}
-  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
-  d_focal_point 2
-  addUserKnob {7 d_fstop l fstop R 0 30}
-  d_fstop 16
-  addUserKnob {26 version l " " t "Updated 5 April 2020" T "<span style=\"color:#666\"><br/><b>DummyCam v1.1</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2020</span>"}
- }
- Input {
-  inputs 0
   name Input
   xpos 239
   ypos -24
@@ -86,13 +34,13 @@ Group {
   xpos 273
   ypos 146
  }
-set N6850e630 [stack 0]
+set N114f6ff0 [stack 0]
  Dot {
   name Dot2
   xpos -128
   ypos 146
  }
-set N6854eb60 [stack 0]
+set N11522990 [stack 0]
  Dot {
   name Dot3
   xpos -638
@@ -121,11 +69,10 @@ set N6854eb60 [stack 0]
   xpos -672
   ypos 381
  }
-push $N6854eb60
+push $N11522990
  Shuffle {
   in N
   name Shuffle_N
-  selected true
   xpos -162
   ypos 233
  }
@@ -134,7 +81,7 @@ push $N6854eb60
   xpos -128
   ypos 375
  }
-set N685ea4d0 [stack 0]
+set N11443fe0 [stack 0]
  MergeExpression {
   inputs 2
   channel0 rgb
@@ -148,7 +95,7 @@ set N685ea4d0 [stack 0]
   xpos -388
   ypos 1016
  }
-push $N685ea4d0
+push $N11443fe0
  ColorMatrix {
   matrix {
       {{DummyCam.world_matrix.0} {DummyCam.world_matrix.1} {DummyCam.world_matrix.2}}
@@ -165,7 +112,7 @@ push $N685ea4d0
   xpos -128
   ypos 915
  }
-set N6910d360 [stack 0]
+set N113c1420 [stack 0]
  Dot {
   name Dot11
   xpos -260
@@ -184,7 +131,7 @@ set N6910d360 [stack 0]
   xpos -260
   ypos 1134
  }
-push $N6910d360
+push $N113c1420
  Switch {
   inputs 2
   which {{fix}}
@@ -205,8 +152,8 @@ push $N6910d360
   xpos -128
   ypos 1525
  }
-set N69134780 [stack 0]
-push $N6850e630
+set N1144c690 [stack 0]
+push $N114f6ff0
  ShuffleCopy {
   inputs 2
   alpha alpha2
@@ -224,8 +171,8 @@ push $N6850e630
   xpos 273
   ypos 1921
  }
-set N69145c30 [stack 0]
-push $N69134780
+set N114455d0 [stack 0]
+push $N1144c690
  Shuffle {
   red blue
   green blue
@@ -266,7 +213,7 @@ push $N69134780
   xpos -128
   ypos 2079
  }
-push $N69145c30
+push $N114455d0
  Switch {
   inputs 2
   which {{output_mask}}
@@ -279,5 +226,55 @@ push $N69145c30
   name Output1
   xpos 239
   ypos 2192
+ }
+ Input {
+  inputs 0
+  name cam
+  xpos 421
+  ypos -32
+  number 1
+ }
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {10000}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyCam
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nUpdated v1.3: Now accepts Nuke13's Camera3\n\nadrianpueyo.com, 2019-2021"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  xpos 431
+  ypos 36
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam +INVISIBLE}
+  the_cam "\[\n#DummyCam v1.3 - Updated 5 May 2021.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera3\" && \[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera3\"||\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame +INVISIBLE}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 50
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 24.576
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 0.1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 10000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 May 2021" T "<span style=\"color:#666\"><br/><b>DummyCam v1.3</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2021</span>"}
  }
 end_group

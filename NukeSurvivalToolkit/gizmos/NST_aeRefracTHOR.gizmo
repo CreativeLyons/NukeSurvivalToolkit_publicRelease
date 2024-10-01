@@ -1,0 +1,1340 @@
+Group {
+ name aeRefracTHOR
+ tile_color 0xa0500ff
+ note_font "Verdana Bold"
+ selected true
+ addUserKnob {20 aeRefracTHOR}
+ addUserKnob {26 text_6_1 l "<b><font color=#ffffff>Refraction</font><b>"}
+ addUserKnob {7 frontbackmix l "frontBack mix" t "This will control how much geo from the back and from the front will affect to the refraction.\n\nIf set to 1 only refract the light from the back of the geo.\nIf set to 0.5 both back and front light will have an effect.\nIf set to 1 only refract the light from the back of the geo."}
+ frontbackmix 0.5
+ addUserKnob {7 refraction l distortion t "Control the amount of refraction distortion, you can set negative values too.\n\nLarge distortions may require a larger image to avoid cropping." R 0 500}
+ refraction 250
+ addUserKnob {7 edge l "soft edges" t "Round and soft the distortion in the edges, simulates rounder surfaces." R 0 10}
+ edge 5
+ addUserKnob {26 ""}
+ addUserKnob {7 renderquality l "rende rquality" t "Increse the render quality of the scanline render and ray render to avoid edges issues.\nHigher quality increases waiting times." R 1 3}
+ renderquality 1
+ addUserKnob {3 shutterSamples l "shutter samples" t "Increase the shutter samples to get more quality motion blur."}
+ shutterSamples 1
+ addUserKnob {26 text l "" -STARTLINE T "   "}
+ addUserKnob {6 rebuilt l "rebuilt normals" t "This option allows rebuilt the normals of the geo, sometimes the geometry normals don't work properly" -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 text_6_1_1_1 l "<b><font color=#ffffff>Reflection</font><b>"}
+ addUserKnob {6 tint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {4 method l "ref method" t "Ray Render creates a more realistic reflection but sometimes creates black areas without reflection, the distortion method does not create those areas" M {"ray render" distortion "" "" "" "" ""}}
+ method distortion
+ addUserKnob {7 reflection t "Control the amount of reflection of the input map.\nIf there is no input map, it reflects a false map from the input image."}
+ reflection 0.5
+ addUserKnob {7 rotate l "rotate map" t "This control allows rotate the input map." R -180 180}
+ addUserKnob {26 ""}
+ addUserKnob {7 fresnel t "This control allows to determine the Fresnel effect threshold."}
+ fresnel 0.25
+ addUserKnob {7 power l amount t "Control the strength of the fresnel effect"}
+ power 0.25
+ addUserKnob {26 ""}
+ addUserKnob {26 text_6_1_1_1_1 l "<b><font color=#ffffff>Absorption</font><b>"}
+ addUserKnob {7 thickness t "This control allows you to edit the tickness of the glass to simulate a more complex refraction."}
+ thickness 0.25
+ addUserKnob {7 light l absorption t "This control allows you to simulate an internal light absortion of the geo."}
+ light 0.25
+ addUserKnob {7 amount_tint l tint}
+ amount_tint 0.5
+ addUserKnob {18 tint l color t "This control allows you to tint the glass."}
+ tint {0.4 0.9 0.8}
+ addUserKnob {6 tint_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 text_6 l "" -STARTLINE T "   "}
+ addUserKnob {6 tintabsolute l "tint absolute" t "This option allows the refraction to be completely tinted, without respecting the original colours." -STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 text_6_1_1 l "<b><font color=#ffffff>Aberration</font><b>"}
+ addUserKnob {7 ab l aberration t "This control allows you to add chroma aberration. this option is disable with value 0, you can increase the value all of you want." R 0 2}
+ addUserKnob {7 smooth t "This option allows the chroma aberration to be smoothed out if there are not enough samples."}
+ addUserKnob {3 samples t "Increase the amount of samples to get more quality."}
+ samples 10
+ addUserKnob {26 ""}
+ addUserKnob {30 translate t "This control allows you to create the chroma aberration in the deserve way."}
+ addUserKnob {26 text_5 l "" -STARTLINE T "   "}
+ addUserKnob {6 invert_spectrum t "This control allows you to invert the chroma spectum." -STARTLINE}
+ addUserKnob {7 scale t "This control allows you to create other chroma aberration effects." R 0.1 2}
+ scale 1
+ addUserKnob {12 center t "This control allows you to center the transform before."}
+ center {960 540}
+ addUserKnob {22 autocenter l center t "This option allows you to auto center the transform." -STARTLINE T "n = nuke.thisNode()\ntry:\n    ni = n.input(0)\n    n\[\"center\"].setValue(\[ni.width()/2,ni.height()/2])\nexcept:\n    pass"}
+ addUserKnob {26 ""}
+ addUserKnob {26 about_1 l "" +STARTLINE T "<span style=\"color:#666\"><br/><b>aeRefracTHOR v1.0</b> - <a  style=\"color:#666;text-decoration: none;\">Aitor Echeveste</a>  © 2021</span>"}
+ addUserKnob {20 About}
+ addUserKnob {26 text_1 l "" +STARTLINE T "   "}
+ addUserKnob {26 text_2 l "" +STARTLINE T "   "}
+ addUserKnob {26 text_4 l "" +STARTLINE T "<font color=#ffffff><font size=\"7\">aeRefracTHOR</font><font size=\"2\"> v1.0</font>\n"}
+ addUserKnob {26 about_1_1 l "" +STARTLINE T "by Aitor Echeveste Izquierdo © 2021"}
+ addUserKnob {26 text_1_1 l "" +STARTLINE T "   "}
+ addUserKnob {26 ""}
+ addUserKnob {26 text_3 l "" +STARTLINE T "   "}
+ addUserKnob {26 website l "" +STARTLINE T "<b><a href=\"http://www.aitorecheveste.com\"><span style=\"color:#C8C8C8;\">www.aitorecheveste.com</span></a><b>"}
+}
+ Transform {
+  inputs 0
+  translate {{parent.translate} {parent.translate}}
+  scale {{parent.scale}}
+  center {{parent.center} {parent.center}}
+  motionblur {{parent.smooth}}
+  shutter {{1/parent.samples}}
+  shutteroffset centred
+  name Transform17
+  label control
+  xpos -1520
+  ypos 762
+  hide_input true
+ }
+ ColorLookup {
+  inputs 0
+  use_precomputed false
+  lut {master {}
+    red {curve C 0 s0 x0.3128865659 1 s-0 v0.7904256582 x0.7806204557 -0.0007482314769 s0 u1.743535638 v1.742119074 x0.9418143034 0.06970721483 s-0.05000000075 x1 0 s0}
+    green {curve C x0.1143286526 0 s0.01999999955 v1.837088585 x0.530087471 1 s-0.05000000075 u1.36422956 v1.120811939 x0.9743717909 0 s-0 u2.045060158}
+    blue {curve C x0.6321670413 0 s0 x0.8160832524 0.99800843 s0 x1 0 s0}
+    alpha {}}
+  name CLP
+  label "Natural Spectrum"
+  xpos -1522
+  ypos 644
+  hide_input true
+ }
+ Input {
+  inputs 0
+  name cam
+  xpos -492
+  ypos 27
+  number 2
+ }
+ Dot {
+  name Dot16
+  xpos -458
+  ypos 231
+ }
+set N15214310 [stack 0]
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]"}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {10000}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyCam2
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nUpdated v1.3: Now accepts Nuke13's Camera3\n\nadrianpueyo.com, 2019-2021"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  label "By Adrian Pueyo"
+  xpos -600
+  ypos 207
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam +INVISIBLE}
+  the_cam "\[\n#DummyCam v1.3 - Updated 5 May 2021.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera3\" && \[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera3\"||\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame +INVISIBLE}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 50
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 24.576
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 0.1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 10000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 May 2021" T "<span style=\"color:#666\"><br/><b>DummyCam v1.3</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2021</span>"}
+ }
+ Axis2 {
+  name Axis1
+  xpos -600
+  ypos 293
+ }
+ Camera2 {
+  inputs 0
+  translate {-0.01637784764 0.09661245346 0.9382824898}
+  useMatrix true
+  matrix {
+      {{parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix}}
+      {{parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix}}
+      {{parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix}}
+      {{parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix} {parent.DummyCam2.world_matrix}}
+    }
+  focal {{parent.DummyCam2.focal}}
+  haperture {{parent.DummyCam2.haperture}}
+  vaperture {{parent.DummyCam2.vaperture}}
+  near {{parent.DummyCam2.far}}
+  far 0.1
+  win_translate {{parent.DummyCam2.win_translate} {parent.DummyCam2.win_translate}}
+  win_scale {{parent.DummyCam2.win_scale} {parent.DummyCam2.win_scale}}
+  winroll {{parent.DummyCam2.winroll}}
+  focal_point {{parent.DummyCam2.focal_point}}
+  fstop {{parent.DummyCam2.fstop}}
+  name Camera12
+  xpos -1063
+  ypos 523
+ }
+ BasicMaterial {
+  inputs 0
+  specular 0
+  name BasicMaterial3
+  xpos -953
+  ypos 439
+ }
+ Input {
+  inputs 0
+  name geo
+  xpos -818
+  ypos 27
+  number 1
+ }
+ Dot {
+  name Dot28
+  xpos -784
+  ypos 203
+ }
+set N12b6a990 [stack 0]
+ Dot {
+  name Dot14
+  xpos -784
+  ypos 466
+ }
+set N148777b0 [stack 0]
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial2
+  xpos -953
+  ypos 463
+ }
+ Normals {
+  action build
+  name Normals2
+  xpos -953
+  ypos 504
+  disable {{!rebuilt}}
+ }
+ Reformat {
+  inputs 0
+  type scale
+  scale {{renderquality<1?1:parent.renderquality}}
+  name Reformat3
+  xpos -827
+  ypos 544
+  hide_input true
+ }
+set N13a17100 [stack 0]
+add_layer {P P.red P.green P.blue P.alpha P.X P.Y P.Z}
+add_layer {N N.red N.green N.blue N.alpha N.X N.Y N.Z}
+ ScanlineRender {
+  inputs 3
+  antialiasing high
+  zblend_mode smooth
+  samples {{parent.shutterSamples}}
+  shutteroffset centred
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel P
+  N_channel N
+  name ScanlineRender7
+  xpos -953
+  ypos 544
+ }
+ Reformat {
+  type scale
+  scale {{renderquality<1?1:1/parent.renderquality}}
+  name Reformat4
+  xpos -953
+  ypos 590
+ }
+set N113b94b0 [stack 0]
+ Dot {
+  name Dot15
+  xpos -1347
+  ypos 593
+ }
+ Dot {
+  name Dot6
+  xpos -1347
+  ypos 2332
+ }
+set N13dc4380 [stack 0]
+ Dot {
+  name Dot21
+  xpos -1347
+  ypos 2415
+ }
+push $N13dc4380
+push $N15214310
+ Dot {
+  name Dot17
+  xpos -458
+  ypos 547
+ }
+ BasicMaterial {
+  inputs 0
+  specular 0
+  name BasicMaterial4
+  xpos -623
+  ypos 439
+ }
+push $N148777b0
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial4
+  xpos -623
+  ypos 463
+ }
+ Normals {
+  action build
+  name Normals3
+  xpos -623
+  ypos 502
+  disable {{!rebuilt}}
+ }
+push $N13a17100
+ ScanlineRender {
+  inputs 3
+  antialiasing high
+  zblend_mode smooth
+  samples {{parent.shutterSamples}}
+  shutteroffset centred
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel P
+  N_channel N
+  name ScanlineRender8
+  xpos -623
+  ypos 544
+ }
+ Reformat {
+  type scale
+  scale {{renderquality<1?1:1/parent.renderquality}}
+  name Reformat5
+  xpos -623
+  ypos 568
+ }
+set N151fc8b0 [stack 0]
+ Dot {
+  name Dot7
+  xpos -198
+  ypos 571
+ }
+set N15217b40 [stack 0]
+ Dot {
+  name Dot36
+  xpos 277
+  ypos 571
+ }
+set N150b6130 [stack 0]
+ Shuffle {
+  in P
+  out rgb
+  name P
+  xpos 243
+  ypos 642
+ }
+ Grade {
+  add {{parent.Axis1.world_matrix.3} {parent.Axis1.world_matrix.7} {parent.Axis1.world_matrix.11} {curve}}
+  reverse true
+  black_clamp false
+  name Grade2
+  xpos 243
+  ypos 1156
+ }
+ Dot {
+  name Dot23
+  xpos 277
+  ypos 1218
+ }
+set N150f2290 [stack 0]
+ Dot {
+  name Dot25
+  xpos 277
+  ypos 1266
+ }
+set N15110780 [stack 0]
+push $N150f2290
+push $N151fc8b0
+ Shuffle {
+  in N
+  out rgb
+  name NF
+  xpos -623
+  ypos 625
+ }
+ Dot {
+  name Dot18
+  xpos -589
+  ypos 770
+ }
+set N115b5e70 [stack 0]
+ MergeExpression {
+  inputs 2
+  temp_name0 cosA
+  temp_expr0 (Ar*Br+Ag*Bg+Ab*Bb)/(sqrt(Ar*Ar+Ag*Ag+Ab*Ab)*sqrt(Br*Br+Bg*Bg+Bb*Bb))
+  channel0 rgba
+  expr0 (1+cosA)
+  name fresnel
+  xpos -627
+  ypos 1215
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy11
+  xpos -627
+  ypos 1257
+ }
+set N125ce050 [stack 0]
+ Grade {
+  white {{fresnel==0?0:power}}
+  gamma {{lerp(0.01,0.25,fresnel)}}
+  black_clamp false
+  name Grade6
+  xpos -627
+  ypos 1354
+ }
+ Expression {
+  expr0 isnan(r)?0:r
+  expr1 isnan(g)?0:g
+  expr2 isnan(b)?0:b
+  expr3 isnan(a)?0:a
+  name NanToBlack
+  xpos -627
+  ypos 1378
+ }
+ Premult {
+  name Premult3
+  xpos -627
+  ypos 1402
+ }
+ Dot {
+  name Dot24
+  xpos -593
+  ypos 1916
+ }
+push $N15110780
+ Grade {
+  channels all
+  white {{lerp(0,0.4,reflection)}}
+  name Grade1
+  xpos 239
+  ypos 1665
+ }
+ Dot {
+  name Dot26
+  xpos 273
+  ypos 1748
+ }
+push $N150b6130
+ Dot {
+  name Dot37
+  xpos 1170
+  ypos 571
+ }
+ Shuffle {
+  in N
+  name Shuffle1
+  xpos 1136
+  ypos 1281
+ }
+ Expression {
+  temp_name0 h
+  temp_expr0 -0.001
+  expr0 r+h
+  expr1 g+h
+  expr2 b+h
+  name Expression1
+  xpos 1136
+  ypos 1305
+ }
+ Expression {
+  temp_name0 f1
+  temp_expr0 atan2(b,r)
+  temp_name1 f2
+  temp_expr1 asin(g)
+  expr0 "b > 0 ? f1 : (2*pi) + f1"
+  expr1 f2
+  expr2 0
+  name normal_to_radian1
+  xpos 1136
+  ypos 1329
+ }
+ Expression {
+  expr0 r/(2*pi)
+  expr1 (g+(pi/2))/pi
+  expr2 0
+  name radian_to_UV1
+  xpos 1136
+  ypos 1353
+ }
+ Input {
+  inputs 0
+  name map
+  xpos 801
+  ypos 1125
+  number 3
+ }
+ Input {
+  inputs 0
+  name img
+  xpos -1613
+  ypos 25
+ }
+ Dot {
+  name Dot34
+  xpos -1579
+  ypos 159
+ }
+set N13e5a020 [stack 0]
+ Dot {
+  name Dot35
+  xpos 938
+  ypos 159
+ }
+ Blur {
+  size 10
+  name Blur5
+  xpos 911
+  ypos 1176
+ }
+ Reformat {
+  format "2048 1024 0 0 2048 1024 1 2K_LatLong"
+  scale {1 1}
+  resize distort
+  name Reformat6
+  xpos 911
+  ypos 1212
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch4
+  xpos 801
+  ypos 1218
+  disable {{"!\[exists input3]"}}
+ }
+set N15151ac0 [stack 0]
+ Tile {
+  columns 5
+  name Tile1
+  xpos 1353
+  ypos 1218
+ }
+ Transform {
+  translate {{"((normalize*(center.x*2)) - center.x) % (center.x*2)"} {curve}}
+  scale {-3 1}
+  center {{input.width/2} {input.height/2}}
+  name Transform1
+  xpos 1353
+  ypos 1242
+  addUserKnob {20 User}
+  addUserKnob {7 iRotation R -180 180}
+  iRotation {{parent.rotate}}
+  addUserKnob {7 normalize l Normalize}
+  normalize {{"(iRotation +180)/360"}}
+  addUserKnob {41 center_1 l center T Transform1.center}
+  addUserKnob {41 translate_1 l translate T Transform1.translate}
+ }
+ Grade {
+  white 3
+  name Grade4
+  xpos 1353
+  ypos 1266
+ }
+ STMap {
+  inputs 2
+  uv rgb
+  name STMap1
+  xpos 1353
+  ypos 1347
+ }
+ Dot {
+  name Dot38
+  xpos 1387
+  ypos 1475
+ }
+push $N15214310
+ Dot {
+  name Dot2
+  xpos 495
+  ypos 231
+ }
+ Dot {
+  name Dot33
+  xpos 495
+  ypos 1378
+ }
+push $N15151ac0
+ Sphere {
+  rotate {0 {parent.rotate} 0}
+  uniform_scale 10000
+  name Sphere2
+  xpos 801
+  ypos 1274
+ }
+ Reflection {
+  inputs 0
+  reflection_color {3 3 3}
+  reflection_color_panelDropped true
+  name Reflection1
+  xpos 606
+  ypos 1189
+  hide_input true
+ }
+push $N12b6a990
+ Dot {
+  name Dot1
+  xpos 742
+  ypos 203
+ }
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterial5
+  xpos 708
+  ypos 1189
+ }
+ Normals {
+  action build
+  name Normals1
+  xpos 708
+  ypos 1229
+  disable {{!rebuilt}}
+ }
+ Scene {
+  inputs 2
+  name Scene1
+  xpos 718
+  ypos 1253
+ }
+ Reformat {
+  inputs 0
+  type scale
+  scale {{renderquality<1?1:parent.renderquality}}
+  name Reformat1
+  xpos 811
+  ypos 1375
+  hide_input true
+ }
+add_layer {reflecton reflecton.red reflecton.green reflecton.blue reflecton.alpha}
+ RayRender {
+  inputs 3
+  triangle_intersection_epsilon 1e-07
+  samples {{parent.renderquality}}
+  shutteroffset centred
+  output_shader_vectors true
+  remove_from_beauty false
+  AOV_Reflection reflecton
+  name RayRender2
+  xpos 708
+  ypos 1375
+ }
+ Reformat {
+  type scale
+  scale {{renderquality<1?1:1/parent.renderquality}}
+  name Reformat2
+  xpos 708
+  ypos 1399
+ }
+ Switch {
+  inputs 2
+  which {{method}}
+  name Switch3
+  xpos 708
+  ypos 1472
+ }
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace1
+  xpos 708
+  ypos 1565
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.tint} {parent.tint} {parent.tint} {parent.tint}}
+  color_panelDropped true
+  name Constant1
+  xpos 799
+  ypos 1542
+  postage_stamp false
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color 1
+  name Constant8
+  xpos 903
+  ypos 1579
+  postage_stamp false
+ }
+ Dissolve {
+  inputs 2
+  which {{amount_tint}}
+  name Dissolve1
+  xpos 799
+  ypos 1566
+ }
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace3
+  xpos 799
+  ypos 1602
+ }
+ Copy {
+  inputs 2
+  from0 rgba.blue
+  to0 rgba.blue
+  name Copy1
+  xpos 708
+  ypos 1596
+ }
+ Colorspace {
+  colorspace_in HSV
+  name Colorspace2
+  xpos 708
+  ypos 1640
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy10
+  xpos 708
+  ypos 1739
+ }
+ Premult {
+  name Premult4
+  xpos 708
+  ypos 1775
+ }
+ Dot {
+  name Dot13
+  xpos 742
+  ypos 1880
+ }
+push $N113b94b0
+ Dot {
+  name Dot10
+  xpos -843
+  ypos 593
+ }
+ Dot {
+  name Dot9
+  xpos -843
+  ypos 695
+ }
+ Shuffle {
+  in depth
+  name DB
+  xpos -333
+  ypos 692
+ }
+push $N15217b40
+ Shuffle {
+  in depth
+  name DF
+  xpos -232
+  ypos 657
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge3
+  xpos -232
+  ypos 692
+ }
+ Grade {
+  gamma {{lerp(0.01,5,light)}}
+  name Grade3
+  xpos -232
+  ypos 822
+ }
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace4
+  xpos -232
+  ypos 960
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.tint} {parent.tint} {parent.tint} {parent.tint}}
+  color_panelDropped true
+  name Constant2
+  xpos -122
+  ypos 937
+  postage_stamp false
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color 1
+  name Constant9
+  xpos -22
+  ypos 967
+  postage_stamp false
+ }
+ Dissolve {
+  inputs 2
+  which {{amount_tint}}
+  name Dissolve4
+  xpos -122
+  ypos 961
+ }
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace5
+  xpos -122
+  ypos 997
+ }
+ Copy {
+  inputs 2
+  from0 rgba.blue
+  to0 rgba.blue
+  name Copy2
+  xpos -232
+  ypos 991
+ }
+ Colorspace {
+  colorspace_in HSV
+  name Colorspace6
+  xpos -232
+  ypos 1035
+ }
+ Shuffle {
+  alpha blue
+  name DB1
+  xpos -232
+  ypos 1059
+ }
+ Dot {
+  name Dot29
+  xpos -198
+  ypos 1808
+ }
+set N14bc68e0 [stack 0]
+ Dot {
+  name Dot8
+  xpos -198
+  ypos 1844
+ }
+push $N14bc68e0
+push $N125ce050
+ Dot {
+  name Dot5
+  xpos -869
+  ypos 1266
+ }
+ ColorCorrect {
+  contrast 1.25
+  gamma 0.2
+  gain {{lerp(0,5,thickness)}}
+  name ColorCorrect1
+  xpos -903
+  ypos 1558
+ }
+ Shuffle {
+  alpha red
+  name thickness
+  xpos -903
+  ypos 1582
+ }
+ Invert {
+  name Invert1
+  xpos -903
+  ypos 1606
+ }
+set N14c031c0 [stack 0]
+ ColorCorrect {
+  gamma 0.2
+  name ColorCorrect2
+  xpos -903
+  ypos 1642
+ }
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace7
+  xpos -903
+  ypos 1679
+ }
+push $N14c031c0
+ Constant {
+  inputs 0
+  channels rgb
+  color 1
+  name Constant4
+  xpos -679
+  ypos 1612
+  postage_stamp false
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.tint} {parent.tint} {parent.tint} {parent.tint}}
+  color_panelDropped true
+  name Constant3
+  xpos -775
+  ypos 1546
+  postage_stamp false
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color 1
+  name Constant7
+  xpos -678
+  ypos 1576
+  postage_stamp false
+ }
+ Dissolve {
+  inputs 2
+  which {{amount_tint}}
+  name Dissolve3
+  xpos -775
+  ypos 1570
+ }
+ Keymix {
+  inputs 3
+  mix {{lerp(1,0,thickness)}}
+  name Keymix1
+  xpos -775
+  ypos 1606
+ }
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace8
+  xpos -775
+  ypos 1709
+ }
+ Copy {
+  inputs 2
+  from0 rgba.blue
+  to0 rgba.blue
+  name Copy5
+  xpos -903
+  ypos 1703
+ }
+ Colorspace {
+  colorspace_in HSV
+  name Colorspace9
+  xpos -903
+  ypos 1739
+ }
+ Clamp {
+  name Clamp1
+  xpos -903
+  ypos 1763
+ }
+push $N113b94b0
+ Dot {
+  name Dot3
+  xpos -919
+  ypos 638
+ }
+set N14cc6c40 [stack 0]
+ Dot {
+  name Dot4
+  xpos -1021
+  ypos 638
+ }
+ Clamp {
+  name Clamp2
+  xpos -1055
+  ypos 702
+ }
+set N14cd0d30 [stack 0]
+ Erode {
+  channels alpha
+  size 10
+  name ErodeIn
+  xpos -1055
+  ypos 762
+ }
+push $N14cd0d30
+ Erode {
+  channels alpha
+  size -10
+  name ErodeOut
+  xpos -1165
+  ypos 702
+ }
+ Merge2 {
+  inputs 2
+  operation stencil
+  name Merge2
+  xpos -1165
+  ypos 768
+ }
+ Blur {
+  channels alpha
+  size 10
+  name Blur2
+  xpos -1165
+  ypos 814
+ }
+push $N115b5e70
+ Multiply {
+  channels rgb
+  value {{min(1,1+parent.frontbackmix)}}
+  name Multiply1
+  xpos -824
+  ypos 767
+ }
+push $N14cc6c40
+ Shuffle {
+  in N
+  out rgb
+  name NB
+  xpos -953
+  ypos 693
+ }
+ Multiply {
+  channels rgb
+  value {{min(1,1-parent.frontbackmix)}}
+  name Multiply3
+  xpos -953
+  ypos 717
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels rgb
+  name Merge6
+  xpos -953
+  ypos 767
+ }
+ Blur {
+  inputs 1+1
+  channels rgb
+  size {{parent.edge}}
+  name Blur1
+  xpos -953
+  ypos 820
+ }
+ Dot {
+  name Dot19
+  xpos -919
+  ypos 1374
+ }
+push $N13e5a020
+ Dot {
+  name Dot22
+  xpos -1579
+  ypos 408
+ }
+set N14d68500 [stack 0]
+ Dot {
+  name Dot32
+  xpos -1751
+  ypos 408
+ }
+ Dot {
+  name Dot30
+  xpos -1751
+  ypos 1187
+ }
+push $N14d68500
+ Remove {
+  channels alpha
+  name Remove1
+  xpos -1613
+  ypos 537
+ }
+ NoTimeBlur {
+  rounding none
+  name NoTB
+  xpos -1613
+  ypos 573
+ }
+add_layer {apChromaWeight apChromaWeight.red apChromaWeight.green apChromaWeight.blue apChromaWeight.alpha}
+ AddChannels {
+  channels apChromaWeight
+  color 1
+  name AddChannels1
+  xpos -1613
+  ypos 597
+ }
+ Multiply {
+  value {{!parent.invert_spectrum?CLP.lut.red(TB.frf):CLP.lut.red(1-TB.frf)} {!parent.invert_spectrum?CLP.lut.green(TB.frf):CLP.lut.green(1-TB.frf)} {!parent.invert_spectrum?CLP.lut.blue(TB.frf):CLP.lut.blue(1-TB.frf)} {!parent.invert_spectrum?CLP.lut.red(TB.frf):CLP.lut.red(1-TB.frf)}}
+  name Multiply2
+  xpos -1613
+  ypos 643
+  addUserKnob {20 User}
+  addUserKnob {19 fullcolor}
+  fullcolor {{!parent.invert_spectrum?CLP.lut.red(TB.frf):CLP.lut.red(1-TB.frf)} {!parent.invert_spectrum?CLP.lut.green(TB.frf):CLP.lut.green(1-TB.frf)} {!parent.invert_spectrum?CLP.lut.blue(TB.frf):CLP.lut.blue(1-TB.frf)} {!parent.invert_spectrum?CLP.lut.red(TB.frf):CLP.lut.red(1-TB.frf)}}
+  addUserKnob {6 fullcolor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 fullcolor_panelDropped_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 fullcolor_panelDropped_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 fullcolor_panelDropped_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 fullcolor_panelDropped_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 fullcolor_panelDropped_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 fullcolor_panelDropped_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+  addUserKnob {6 fullcolor_panelDropped_1_1_1_1_1_1_1 l "panel dropped state" -STARTLINE +HIDDEN}
+ }
+ Dot {
+  name Dot20
+  note_font_size 41
+  xpos -1579
+  ypos 696
+ }
+set N14d93bf0 [stack 0]
+ Dot {
+  name Dot11
+  note_font_size 41
+  xpos -1671
+  ypos 696
+ }
+ Dot {
+  name Dot27
+  note_font_size 41
+  xpos -1671
+  ypos 927
+ }
+push $N14d93bf0
+ Remove {
+  channels apChromaWeight
+  name Remove3
+  xpos -1613
+  ypos 733
+ }
+ Transform {
+  translate {{parent.Transform17.translate*((TB.frf-0.5)*parent.ab)} {parent.Transform17.translate*((TB.frf-0.5)*parent.ab)}}
+  rotate {{parent.Transform17.rotate*((TB.frf-0.5)*parent.ab)}}
+  scale {{"parent.Transform17.scale*((TB.frf-0.5)*parent.ab) + 1 - ((TB.frf-0.5)*parent.ab) "} {"parent.Transform17.scale*((TB.frf-0.5)*parent.ab) + 1 - ((TB.frf-0.5)*parent.ab) "}}
+  center {600 600}
+  black_outside false
+  motionblur {{parent.smooth}}
+  shutter {{1/parent.samples}}
+  shutteroffset centred
+  name TransformI
+  xpos -1613
+  ypos 769
+ }
+ Blur {
+  channels rgba
+  name Blur3
+  xpos -1613
+  ypos 797
+  addUserKnob {20 User}
+  addUserKnob {26 info l "" +STARTLINE T "needed to break concatenation and make sure mblur works with the stmaps"}
+ }
+ Copy {
+  inputs 2
+  channels apChromaWeight
+  name Copy4
+  xpos -1613
+  ypos 911
+ }
+ TimeBlur {
+  divisions {{parent.samples}}
+  shutter 1
+  shutteroffset start
+  shuttercustomoffset 0
+  name TB
+  xpos -1613
+  ypos 993
+  addUserKnob {20 User}
+  addUserKnob {7 frf}
+  frf {{(frame%1)*(parent.samples+1)/parent.samples}}
+ }
+set N152ab280 [stack 0]
+push $N152ab280
+ Shuffle {
+  in apChromaWeight
+  name Shuffle2
+  label "\[value in]"
+  xpos -1512
+  ypos 987
+ }
+ Dot {
+  name Dot31
+  xpos -1478
+  ypos 1035
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  bbox A
+  metainput A
+  rangeinput A
+  name Merge5
+  xpos -1613
+  ypos 1032
+ }
+ Switch {
+  inputs 2
+  which {{ab==0?1:0}}
+  name Switch2
+  xpos -1613
+  ypos 1184
+ }
+add_layer {REFRACTION REFRACTION.red REFRACTION.green REFRACTION.blue REFRACTION.alpha}
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  out REFRACTION
+  name ShuffleCopy4
+  xpos -1613
+  ypos 1371
+ }
+ IDistort {
+  channels rgb
+  uv REFRACTION
+  uv_scale {{parent.refraction}}
+  name IDistort10
+  xpos -1613
+  ypos 1395
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  mix 0.97
+  name Merge1
+  label thickness
+  xpos -1613
+  ypos 1763
+  disable {{thickness==0?1:0}}
+ }
+ Blur {
+  inputs 1+1
+  size {{lerp(0,25,light)}}
+  name Blur4
+  xpos -1613
+  ypos 1799
+ }
+ Merge2 {
+  inputs 2
+  operation screen
+  Achannels rgb
+  name Merge4
+  label absortion
+  xpos -1613
+  ypos 1835
+  disable {{light==0?1:0}}
+ }
+ Merge2 {
+  inputs 2
+  Achannels rgb
+  name Merge11
+  label reflection
+  xpos -1613
+  ypos 1871
+  disable {{reflection==0?1:0 x1 1}}
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  Achannels rgb
+  name Merge10
+  label fresnel
+  xpos -1613
+  ypos 1907
+  disable {{fresnel==0?1:0 x1 1}}
+ }
+ Dot {
+  name Dot12
+  xpos -1579
+  ypos 2091
+ }
+set N15356dc0 [stack 0]
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace10
+  xpos -1739
+  ypos 2088
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color {{parent.tint} {parent.tint} {parent.tint} {parent.tint}}
+  color_panelDropped true
+  name Constant5
+  xpos -1849
+  ypos 2067
+  postage_stamp false
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  color 1
+  name Constant6
+  xpos -1938
+  ypos 2097
+  postage_stamp false
+ }
+ Dissolve {
+  inputs 2
+  which {{amount_tint}}
+  name Dissolve2
+  xpos -1849
+  ypos 2091
+ }
+ Colorspace {
+  colorspace_out HSV
+  name Colorspace11
+  xpos -1849
+  ypos 2127
+ }
+ Copy {
+  inputs 2
+  from0 rgba.blue
+  to0 rgba.blue
+  name Copy6
+  xpos -1739
+  ypos 2121
+ }
+ Colorspace {
+  colorspace_in HSV
+  name Colorspace12
+  xpos -1739
+  ypos 2165
+ }
+push $N15356dc0
+ Switch {
+  inputs 2
+  which {{tintabsolute}}
+  name Switch1
+  xpos -1613
+  ypos 2165
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy3
+  xpos -1613
+  ypos 2323
+ }
+ Premult {
+  name Premult1
+  xpos -1613
+  ypos 2359
+ }
+ CopyBBox {
+  inputs 2
+  name CopyBBox1
+  xpos -1613
+  ypos 2412
+ }
+ Output {
+  name Output1
+  xpos -1613
+  ypos 2710
+ }
+end_group
