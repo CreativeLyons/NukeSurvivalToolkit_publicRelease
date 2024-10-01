@@ -1,0 +1,1529 @@
+add_layer {LG01 LG01.red LG01.green LG01.blue LG01.alpha}
+add_layer {LG02 LG02.red LG02.green LG02.blue LG02.alpha}
+add_layer {LG03 LG03.red LG03.green LG03.blue LG03.alpha}
+add_layer {LG04 LG04.red LG04.green LG04.blue LG04.alpha}
+add_layer {LG05 LG05.red LG05.green LG05.blue LG05.alpha}
+add_layer {LG06 LG06.red LG06.green LG06.blue LG06.alpha}
+add_layer {LG07 LG07.red LG07.green LG07.blue LG07.alpha}
+Group {
+ name LightSwitch
+ tile_color 0x34c00ff
+ note_font Verdana
+ selected true
+ xpos 3065
+ ypos 766
+ addUserKnob {20 LightSwitch}
+ addUserKnob {4 chooseMethod l Method M {Subtractive Additive}}
+ chooseMethod Additive
+ addUserKnob {22 createLightSwitchPuppet l "<i>Create New Light Switch Puppet from Values" -STARTLINE T "thisNode = nuke.thisNode()\n\nwith nuke.Root():\n    try: \n        # Create a new LightSwitch node\n        newLightSwitch = nuke.nodePaste( '\{\}/nk_files/\{\}LightSwitchPuppet.nk'.format(NST_FolderPath, prefixNST) )\n        \n        for i in nuke.selectedNodes():\n            i.setInput(0, None)\n            i.setYpos(i.ypos() + 100 )\n            i.setSelected(False)\n        \n        # Deselect all nodes\n        nuke.selectAll()\n        nuke.invertSelection()\n        \n        # Select Original LightSwitch\n        thisNode.setSelected(True)\n        \n        newLightSwitch.knob(\"copyValuesFromLS\").execute()\n        \n        # Deselect all nodes\n        nuke.selectAll()\n        nuke.invertSelection()\n        newLightSwitch.setSelected(True)\n        \n    except:\n        nuke.message(\"No LightSwitchPuppet installation found. Cannot Create new LightSwitch.\")"}
+ addUserKnob {22 copyValuesFromLS l "<i>Copy Values from Selected LightSwitch" T "thisNode = nuke.thisNode()\n\nwith nuke.Root():\n    selectedNode = nuke.selectedNode()\n\nif selectedNode and selectedNode != thisNode and \"LightSwitch\" in selectedNode.name():\n    for knob in thisNode.knobs():\n        if knob in selectedNode.knobs() and knob not in \[\"xpos\",\"ypos\",\"name\",\"knobChanged\", \"label\", \"note_font_size\", \"note_font_color\"]:\n            thisNode\[knob].fromScript(selectedNode\[knob].toScript())\n            \nelse:\n    nuke.message(\"Please select another LightSwitch node to copy values from\")" +STARTLINE}
+ addUserKnob {22 reset l "<b><font color=DarkOrange>Reset" -STARTLINE T "node = nuke.thisNode()\nexposures = \[]\nmultiplies = \[]\nmutes = \[]\nsolos = \[]\nbypasses = \[]\n\nfor knob in node.knobs():\n    if \"panelDropped\" not in knob:\n        if \"exp\" in knob:\n            exposures.append(knob)\n        elif \"mult\" in knob:\n            multiplies.append(knob)\n        elif \"mute\" in knob:\n            mutes.append(knob)\n        elif \"solo\" in knob:\n            mutes.append(knob)\n        elif \"bypass\" in knob:\n            mutes.append(knob)\n        \nexposures.sort()\nmultiplies.sort()\nmutes.sort()\nsolos.sort()\nbypasses.sort()\n\nfor exp in exposures:\n    node.knob(exp).setValue(0)\n\nfor mult in multiplies:\n    node.knob(mult).setValue(1, 0)\n    node.knob(mult).setValue(1, 1)\n    node.knob(mult).setValue(1, 2)\n\n\nfor mute in mutes:\n    node.knob(mute).setValue(0)\n    \nfor solo in solos:\n    node.knob(solo).setValue(0)\n\nfor bypass in bypasses:\n    node.knob(bypass).setValue(0)\n    \nnode.knob(\"mix\").setValue(1)"}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG01 l "<font color=IndianRed>LightGroup 01" T " "}
+ addUserKnob {6 mute1 l Mute -STARTLINE}
+ addUserKnob {6 solo1 l Solo -STARTLINE}
+ addUserKnob {6 bypass1 l Bypass -STARTLINE}
+ addUserKnob {41 shuffleLG01 l "" -STARTLINE T Shuffle1.in}
+ addUserKnob {7 exp1 l Exposure R -5 5}
+ addUserKnob {18 mult1 l Multiply}
+ mult1 {1 1 1}
+ addUserKnob {6 mult1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG02 l "<font color = LightPink>LightGroup 02" T " "}
+ addUserKnob {6 mute2 l Mute -STARTLINE}
+ addUserKnob {6 solo2 l Solo -STARTLINE}
+ addUserKnob {6 bypass2 l Bypass -STARTLINE}
+ addUserKnob {41 shuffleLG02 l "" -STARTLINE T Shuffle2.in}
+ addUserKnob {7 exp2 l Exposure R -5 5}
+ addUserKnob {18 mult2 l Multiply}
+ mult2 {1 1 1}
+ addUserKnob {6 mult2_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {6 color_rgb_1_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG03 l "<font color=LightSalmon>LightGroup 03" T " "}
+ addUserKnob {6 mute3 l Mute -STARTLINE}
+ addUserKnob {6 solo3 l Solo -STARTLINE}
+ addUserKnob {6 bypass3 l Bypass -STARTLINE}
+ addUserKnob {41 shuffleLG03 l "" -STARTLINE T Shuffle3.in}
+ addUserKnob {7 exp3 l Exposure R -5 5}
+ addUserKnob {18 mult3 l Multiply}
+ mult3 {1 1 1}
+ addUserKnob {6 mult3_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG04 l "<font color=Khaki>LightGroup 04" T " "}
+ addUserKnob {6 mute4 l Mute -STARTLINE}
+ addUserKnob {6 solo4 l Solo -STARTLINE}
+ addUserKnob {6 bypass4 l Bypass -STARTLINE}
+ addUserKnob {41 shuffleLG04 l "" -STARTLINE T Shuffle4.in}
+ addUserKnob {7 exp4 l Exposure R -5 5}
+ addUserKnob {18 mult4 l Multiply}
+ mult4 {1 1 1}
+ addUserKnob {6 mult4_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG05 l "<font color=DarkKhaki>LightGroup 05" T " "}
+ addUserKnob {6 mute5 l Mute -STARTLINE}
+ addUserKnob {6 solo5 l Solo -STARTLINE}
+ addUserKnob {6 bypass5 l Bypass -STARTLINE}
+ addUserKnob {41 shuffleLG05 l "" -STARTLINE T Shuffle5.in}
+ addUserKnob {7 exp5 l Exposure R -5 5}
+ addUserKnob {18 mult5 l Multiply}
+ mult5 {1 1 1}
+ addUserKnob {6 mult5_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG06 l "<font color=MediumSeaGreen>LightGroup 06" T " "}
+ addUserKnob {6 mute6 l Mute -STARTLINE}
+ addUserKnob {6 solo6 l Solo -STARTLINE}
+ addUserKnob {6 bypass6 l Bypass -STARTLINE}
+ addUserKnob {41 shuffleLG06 l "" -STARTLINE T Shuffle6.in}
+ addUserKnob {7 exp6 l Exposure R -5 5}
+ addUserKnob {18 mult6 l Multiply}
+ mult6 {1 1 1}
+ addUserKnob {6 mult6_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG07 l "<font color=MediumAquamarine>LightGroup 07" T " "}
+ addUserKnob {6 mute7 l Mute -STARTLINE}
+ addUserKnob {6 solo7 l Solo -STARTLINE}
+ addUserKnob {6 bypass7 l Bypass -STARTLINE}
+ addUserKnob {41 shuffleLG07 l "" -STARTLINE T Shuffle7.in}
+ addUserKnob {7 exp7 l Exposure R -5 5}
+ addUserKnob {18 mult7 l Multiply}
+ mult7 {1 1 1}
+ addUserKnob {6 mult7_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG08 l "<font color=CadetBlue>LightGroup 08" T " "}
+ addUserKnob {6 mute8 l Mute -STARTLINE}
+ addUserKnob {6 solo8 l Solo -STARTLINE}
+ addUserKnob {6 bypass8 l Bypass -STARTLINE}
+ addUserKnob {41 shuffleLG08 l "" -STARTLINE T Shuffle8.in}
+ addUserKnob {7 exp8 l Exposure R -5 5}
+ addUserKnob {18 mult8 l Multiply}
+ mult8 {1 1 1}
+ addUserKnob {6 mult8_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG09 l "<font color=SkyBlue>LightGroup 09" T " "}
+ addUserKnob {6 mute9 l Mute -STARTLINE}
+ addUserKnob {6 solo9 l Solo -STARTLINE}
+ addUserKnob {6 bypass9 l Bypass -STARTLINE}
+ addUserKnob {41 shuffleLG09 l "" -STARTLINE T Shuffle9.in}
+ addUserKnob {7 exp9 l Exposure R -5 5}
+ addUserKnob {18 mult9 l Multiply}
+ mult9 {1 1 1}
+ addUserKnob {6 mult9_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 _1 l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge19.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge19.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge19.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge19.fringe}
+ addUserKnob {41 mix T Merge19.mix}
+}
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 166
+  ypos 5483
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+ }
+ Dot {
+  name Dot1
+  note_font_size 41
+  xpos 34
+  ypos 207
+ }
+set N5eb6d800 [stack 0]
+ Dot {
+  name Dot2
+  note_font_size 41
+  xpos -652
+  ypos 207
+ }
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos -652
+  ypos 332
+ }
+set N5eb6d000 [stack 0]
+ Dot {
+  name Dot8
+  note_font_size 41
+  xpos -652
+  ypos 843
+ }
+set N5eb6cc00 [stack 0]
+ Dot {
+  name Dot13
+  note_font_size 41
+  xpos -652
+  ypos 1370
+ }
+set N5eb6c800 [stack 0]
+ Dot {
+  name Dot18
+  note_font_size 41
+  xpos -652
+  ypos 1920
+ }
+set N5eb6c400 [stack 0]
+ Dot {
+  name Dot23
+  note_font_size 41
+  xpos -652
+  ypos 2475
+ }
+set N5eb13c00 [stack 0]
+ Dot {
+  name Dot28
+  note_font_size 41
+  xpos -652
+  ypos 3013
+ }
+set N5eb13800 [stack 0]
+ Dot {
+  name Dot33
+  note_font_size 41
+  xpos -652
+  ypos 3583
+ }
+set N5eb13400 [stack 0]
+ Dot {
+  name Dot38
+  note_font_size 41
+  xpos -652
+  ypos 4136
+ }
+set N5eb13000 [stack 0]
+ Dot {
+  name Dot43
+  note_font_size 41
+  xpos -652
+  ypos 4716
+ }
+set N5eb12c00 [stack 0]
+ Shuffle {
+  in none
+  name Shuffle9
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+  note_font_size 15
+  note_font_color 0xffffffff
+  xpos -334
+  ypos 4705
+ }
+set N5eb12800 [stack 0]
+ Remove {
+  operation keep
+  channels rgba
+  name Remove9
+  xpos -334
+  ypos 4745
+ }
+set N5eb12400 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.exp9}}
+  green {{parent.exp9}}
+  blue {{parent.exp9}}
+  name ExposureLG09_
+  label "\[value red]"
+  xpos -502
+  ypos 4779
+ }
+ Multiply {
+  channels rgb
+  value {{parent.mult9} {parent.mult9} {parent.mult9} {parent.mult9}}
+  name MultiplyColor09_
+  label "\[value value]"
+  xpos -502
+  ypos 4834
+ }
+push $N5eb12400
+ Switch {
+  inputs 2
+  which {{!bypass9}}
+  name SwitchBypass09_
+  xpos -334
+  ypos 4838
+ }
+ Multiply {
+  value 0
+  name MultiplyMute09_
+  label "\[value value]"
+  xpos -334
+  ypos 4886
+  disable {{!parent.mute9}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo09_
+  label "\[value value]"
+  xpos -334
+  ypos 4928
+  disable {{"solo1 + \nsolo2 + \nsolo3 + \nsolo4 + \nsolo5 + \nsolo6 + \nsolo7 + \nsolo8 + \nsolo9 \n\n== 0 ? 1 : solo9"}}
+ }
+ Dot {
+  name Dot44
+  note_font_size 41
+  xpos -300
+  ypos 4996
+ }
+set N5eb11000 [stack 0]
+ Dot {
+  name Dot47
+  note_font_size 41
+  xpos -300
+  ypos 5039
+ }
+set N5eb10c00 [stack 0]
+ Dot {
+  name Dot20
+  note_font_size 41
+  xpos -300
+  ypos 5086
+ }
+set N5eb10800 [stack 0]
+ Dot {
+  name Dot48
+  note_font_size 41
+  xpos -300
+  ypos 5132
+ }
+push $N5eb10800
+push $N5eb13000
+ Shuffle {
+  in none
+  name Shuffle8
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+  note_font_size 15
+  note_font_color 0xffffffff
+  xpos -338
+  ypos 4125
+ }
+set N5e533c00 [stack 0]
+ Remove {
+  operation keep
+  channels rgba
+  name Remove8
+  xpos -338
+  ypos 4165
+ }
+set N5e533800 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.exp8}}
+  green {{parent.exp8}}
+  blue {{parent.exp8}}
+  name ExposureLG08_
+  label "\[value red]"
+  xpos -469
+  ypos 4199
+ }
+ Multiply {
+  channels rgb
+  value {{parent.mult8} {parent.mult8} {parent.mult8} {parent.mult8}}
+  name MultiplyColor08_
+  label "\[value value]"
+  xpos -469
+  ypos 4254
+ }
+push $N5e533800
+ Switch {
+  inputs 2
+  which {{!bypass8}}
+  name SwitchBypass08_
+  xpos -338
+  ypos 4258
+ }
+ Multiply {
+  value 0
+  name MultiplyMute08_
+  label "\[value value]"
+  xpos -338
+  ypos 4286
+  disable {{!parent.mute8}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo08_
+  label "\[value value]"
+  xpos -338
+  ypos 4328
+  disable {{"solo1 + \nsolo2 + \nsolo3 + \nsolo4 + \nsolo5 + \nsolo6 + \nsolo7 + \nsolo8 + \nsolo9 \n\n== 0 ? 1 : solo8"}}
+ }
+ Dot {
+  name Dot39
+  note_font_size 41
+  xpos -304
+  ypos 4396
+ }
+set N5e532400 [stack 0]
+ Dot {
+  name Dot45
+  note_font_size 41
+  xpos -304
+  ypos 4441
+ }
+set N5e532000 [stack 0]
+ Dot {
+  name Dot17
+  note_font_size 41
+  xpos -304
+  ypos 4494
+ }
+set N5e531c00 [stack 0]
+ Dot {
+  name Dot46
+  note_font_size 41
+  xpos -304
+  ypos 4542
+ }
+push $N5e531c00
+push $N5eb13400
+ Shuffle {
+  in LG07
+  name Shuffle7
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+  note_font_size 15
+  note_font_color 0xffffffff
+  xpos -340
+  ypos 3572
+ }
+set N5e531400 [stack 0]
+ Remove {
+  operation keep
+  channels rgba
+  name Remove7
+  xpos -340
+  ypos 3612
+ }
+set N5e531000 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.exp7}}
+  green {{parent.exp7}}
+  blue {{parent.exp7}}
+  name ExposureLG07_
+  label "\[value red]"
+  xpos -475
+  ypos 3646
+ }
+ Multiply {
+  channels rgb
+  value {{parent.mult7} {parent.mult7} {parent.mult7} {parent.mult7}}
+  name MultiplyColor07_
+  label "\[value value]"
+  xpos -475
+  ypos 3701
+ }
+push $N5e531000
+ Switch {
+  inputs 2
+  which {{!bypass7}}
+  name SwitchBypass07_
+  xpos -340
+  ypos 3705
+ }
+ Multiply {
+  value 0
+  name MultiplyMute07_
+  label "\[value value]"
+  xpos -340
+  ypos 3733
+  disable {{!parent.mute7}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo07_
+  label "\[value value]"
+  xpos -340
+  ypos 3775
+  disable {{"solo1 + \nsolo2 + \nsolo3 + \nsolo4 + \nsolo5 + \nsolo6 + \nsolo7 + \nsolo8 + \nsolo9 \n\n== 0 ? 1 : solo7"}}
+ }
+ Dot {
+  name Dot34
+  note_font_size 41
+  xpos -306
+  ypos 3843
+ }
+set N5e4c7800 [stack 0]
+ Dot {
+  name Dot41
+  note_font_size 41
+  xpos -305
+  ypos 3888
+ }
+set N5e4c7400 [stack 0]
+ Dot {
+  name Dot16
+  note_font_size 41
+  xpos -306
+  ypos 3938
+ }
+set N5e4c7000 [stack 0]
+ Dot {
+  name Dot42
+  note_font_size 41
+  xpos -306
+  ypos 3982
+ }
+push $N5e4c7000
+push $N5eb13800
+ Shuffle {
+  in LG06
+  name Shuffle6
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+  note_font_size 15
+  note_font_color 0xffffffff
+  xpos -340
+  ypos 3002
+ }
+set N5e4c6800 [stack 0]
+ Remove {
+  operation keep
+  channels rgba
+  name Remove6
+  xpos -340
+  ypos 3042
+ }
+set N5e4c6400 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.exp6}}
+  green {{parent.exp6}}
+  blue {{parent.exp6}}
+  name ExposureLG06_
+  label "\[value red]"
+  xpos -502
+  ypos 3076
+ }
+ Multiply {
+  channels rgb
+  value {{parent.mult6} {parent.mult6} {parent.mult6} {parent.mult6}}
+  name MultiplyColor06_
+  label "\[value value]"
+  xpos -502
+  ypos 3131
+ }
+push $N5e4c6400
+ Switch {
+  inputs 2
+  which {{!bypass6}}
+  name SwitchBypass06_
+  xpos -340
+  ypos 3135
+ }
+ Multiply {
+  value 0
+  name MultiplyMute06_
+  label "\[value value]"
+  xpos -340
+  ypos 3202
+  disable {{!parent.mute6}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo06_
+  label "\[value value]"
+  xpos -340
+  ypos 3244
+  disable {{"solo1 + \nsolo2 + \nsolo3 + \nsolo4 + \nsolo5 + \nsolo6 + \nsolo7 + \nsolo8 + \nsolo9 \n\n== 0 ? 1 : solo6"}}
+ }
+ Dot {
+  name Dot29
+  note_font_size 41
+  xpos -306
+  ypos 3312
+ }
+set N5e4c5000 [stack 0]
+ Dot {
+  name Dot37
+  note_font_size 41
+  xpos -306
+  ypos 3361
+ }
+set N5e4c4c00 [stack 0]
+ Dot {
+  name Dot15
+  note_font_size 41
+  xpos -306
+  ypos 3407
+ }
+set N5e4c4800 [stack 0]
+ Dot {
+  name Dot40
+  note_font_size 41
+  xpos -306
+  ypos 3452
+ }
+push $N5e4c4800
+push $N5eb13c00
+ Shuffle {
+  in LG05
+  name Shuffle5
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+  note_font_size 15
+  note_font_color 0xffffffff
+  xpos -344
+  ypos 2464
+ }
+set N5e483c00 [stack 0]
+ Remove {
+  operation keep
+  channels rgba
+  name Remove5
+  xpos -344
+  ypos 2504
+ }
+set N5e483800 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.exp5}}
+  green {{parent.exp5}}
+  blue {{parent.exp5}}
+  name ExposureLG05_
+  label "\[value red]"
+  xpos -502
+  ypos 2538
+ }
+ Multiply {
+  channels rgb
+  value {{parent.mult5} {parent.mult5} {parent.mult5} {parent.mult5}}
+  name MultiplyColor05_
+  label "\[value value]"
+  xpos -502
+  ypos 2583
+ }
+push $N5e483800
+ Switch {
+  inputs 2
+  which {{!bypass5}}
+  name SwitchBypass05_
+  xpos -344
+  ypos 2587
+ }
+ Multiply {
+  value 0
+  name MultiplyMute05_
+  label "\[value value]"
+  xpos -344
+  ypos 2625
+  disable {{!parent.mute5}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo05_
+  label "\[value value]"
+  xpos -344
+  ypos 2667
+  disable {{"solo1 + \nsolo2 + \nsolo3 + \nsolo4 + \nsolo5 + \nsolo6 + \nsolo7 + \nsolo8 + \nsolo9 \n\n== 0 ? 1 : solo5"}}
+ }
+ Dot {
+  name Dot24
+  note_font_size 41
+  xpos -310
+  ypos 2735
+ }
+set N5e482400 [stack 0]
+ Dot {
+  name Dot35
+  note_font_size 41
+  xpos -310
+  ypos 2775
+ }
+set N5e482000 [stack 0]
+ Dot {
+  name Dot12
+  note_font_size 41
+  xpos -310
+  ypos 2820
+ }
+set N5e481c00 [stack 0]
+ Dot {
+  name Dot36
+  note_font_size 41
+  xpos -310
+  ypos 2868
+ }
+push $N5e481c00
+push $N5eb6c400
+ Shuffle {
+  in LG04
+  name Shuffle4
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+  note_font_size 15
+  note_font_color 0xffffffff
+  xpos -355
+  ypos 1909
+ }
+set N5e481400 [stack 0]
+ Remove {
+  operation keep
+  channels rgba
+  name Remove4
+  xpos -355
+  ypos 1949
+ }
+set N5e481000 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.exp4}}
+  green {{parent.exp4}}
+  blue {{parent.exp4}}
+  name ExposureLG04_
+  label "\[value red]"
+  xpos -502
+  ypos 1983
+ }
+ Multiply {
+  channels rgb
+  value {{parent.mult4} {parent.mult4} {parent.mult4} {parent.mult4}}
+  name MultiplyColor04_
+  label "\[value value]"
+  xpos -502
+  ypos 2028
+ }
+push $N5e481000
+ Switch {
+  inputs 2
+  which {{!bypass4}}
+  name SwitchBypass04_
+  xpos -355
+  ypos 2032
+ }
+ Multiply {
+  value 0
+  name MultiplyMute04_
+  label "\[value value]"
+  xpos -355
+  ypos 2070
+  disable {{!parent.mute4}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo04_
+  label "\[value value]"
+  xpos -355
+  ypos 2112
+  disable {{"solo1 + \nsolo2 + \nsolo3 + \nsolo4 + \nsolo5 + \nsolo6 + \nsolo7 + \nsolo8 + \nsolo9 \n\n== 0 ? 1 : solo4"}}
+ }
+ Dot {
+  name Dot19
+  note_font_size 41
+  xpos -321
+  ypos 2180
+ }
+set N5e423800 [stack 0]
+ Dot {
+  name Dot31
+  note_font_size 41
+  xpos -321
+  ypos 2223
+ }
+set N5e423400 [stack 0]
+ Dot {
+  name Dot11
+  note_font_size 41
+  xpos -321
+  ypos 2267
+ }
+set N5e423000 [stack 0]
+ Dot {
+  name Dot32
+  note_font_size 41
+  xpos -321
+  ypos 2318
+ }
+push $N5e423000
+push $N5eb6c800
+ Shuffle {
+  in LG03
+  name Shuffle3
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+  note_font_size 15
+  note_font_color 0xffffffff
+  xpos -363
+  ypos 1359
+ }
+set N5e422800 [stack 0]
+ Remove {
+  operation keep
+  channels rgba
+  name Remove3
+  xpos -363
+  ypos 1399
+ }
+set N5e422400 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.exp3}}
+  green {{parent.exp3}}
+  blue {{parent.exp3}}
+  name ExposureLG03_
+  label "\[value red]"
+  xpos -502
+  ypos 1433
+ }
+ Multiply {
+  channels rgb
+  value {{parent.mult3} {parent.mult3} {parent.mult3} {parent.mult3}}
+  name MultiplyColor03_
+  label "\[value value]"
+  xpos -502
+  ypos 1478
+ }
+push $N5e422400
+ Switch {
+  inputs 2
+  which {{!bypass3}}
+  name SwitchBypass03_
+  xpos -363
+  ypos 1482
+ }
+ Multiply {
+  value 0
+  name MultiplyMute03_
+  label "\[value value]"
+  xpos -363
+  ypos 1520
+  disable {{!parent.mute3}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo03_
+  label "\[value value]"
+  xpos -363
+  ypos 1562
+  disable {{"solo1 + \nsolo2 + \nsolo3 + \nsolo4 + \nsolo5 + \nsolo6 + \nsolo7 + \nsolo8 + \nsolo9 \n\n== 0 ? 1 : solo3"}}
+ }
+ Dot {
+  name Dot14
+  note_font_size 41
+  xpos -329
+  ypos 1630
+ }
+set N5e421000 [stack 0]
+ Dot {
+  name Dot27
+  note_font_size 41
+  xpos -329
+  ypos 1673
+ }
+set N5e420c00 [stack 0]
+ Dot {
+  name Dot10
+  note_font_size 41
+  xpos -329
+  ypos 1708
+ }
+set N5e420800 [stack 0]
+ Dot {
+  name Dot30
+  note_font_size 41
+  xpos -329
+  ypos 1750
+ }
+push $N5e420800
+push $N5eb6cc00
+ Shuffle {
+  in LG02
+  name Shuffle2
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+  note_font_size 15
+  note_font_color 0xffffffff
+  xpos -385
+  ypos 832
+ }
+set N5e3cbc00 [stack 0]
+ Remove {
+  operation keep
+  channels rgba
+  name Remove2
+  xpos -385
+  ypos 872
+ }
+set N5e3cb800 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.exp2}}
+  green {{parent.exp2}}
+  blue {{parent.exp2}}
+  name ExposureLG02_
+  label "\[value red]"
+  xpos -502
+  ypos 906
+ }
+ Multiply {
+  channels rgb
+  value {{parent.mult2} {parent.mult2} {parent.mult2} {parent.mult2}}
+  name MultiplyColor02_
+  label "\[value value]"
+  xpos -502
+  ypos 951
+ }
+push $N5e3cb800
+ Switch {
+  inputs 2
+  which {{!bypass2}}
+  name SwitchBypass02_
+  xpos -385
+  ypos 955
+ }
+ Multiply {
+  value 0
+  name MultiplyMute02_
+  label "\[value value]"
+  xpos -385
+  ypos 993
+  disable {{!parent.mute2}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo02_
+  label "\[value value]"
+  xpos -385
+  ypos 1035
+  disable {{"solo1 + \nsolo2 + \nsolo3 + \nsolo4 + \nsolo5 + \nsolo6 + \nsolo7 + \nsolo8 + \nsolo9 \n\n== 0 ? 1 : solo2"}}
+ }
+ Dot {
+  name Dot9
+  note_font_size 41
+  xpos -351
+  ypos 1103
+ }
+set N5e3ca400 [stack 0]
+ Dot {
+  name Dot25
+  note_font_size 41
+  xpos -352
+  ypos 1134
+ }
+set N5e3ca000 [stack 0]
+ Dot {
+  name Dot7
+  note_font_size 41
+  xpos -351
+  ypos 1169
+ }
+set N5e3c9c00 [stack 0]
+ Dot {
+  name Dot26
+  note_font_size 41
+  xpos -351
+  ypos 1214
+ }
+push $N5e3c9c00
+push $N5eb6d000
+ Shuffle {
+  in LG01
+  name Shuffle1
+  label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+  note_font_size 15
+  note_font_color 0xffffffff
+  xpos -370
+  ypos 321
+ }
+set N5e3c9400 [stack 0]
+ Remove {
+  operation keep
+  channels rgba
+  name Remove1
+  xpos -370
+  ypos 361
+ }
+set N5e3c9000 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.exp1}}
+  green {{parent.exp1}}
+  blue {{parent.exp1}}
+  name ExposureLG01_
+  label "\[value red]"
+  xpos -502
+  ypos 395
+ }
+ Multiply {
+  channels rgb
+  value {{parent.mult1} {parent.mult1} {parent.mult1} {parent.mult1}}
+  name MultiplyColor01_
+  label "\[value value]"
+  xpos -502
+  ypos 440
+ }
+push $N5e3c9000
+ Switch {
+  inputs 2
+  which {{!bypass1}}
+  name SwitchBypass01_
+  xpos -370
+  ypos 444
+ }
+ Multiply {
+  value 0
+  name MultiplyMute01_
+  label "\[value value]"
+  xpos -370
+  ypos 510
+  disable {{!parent.mute1}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo01_1
+  label "\[value value]"
+  xpos -370
+  ypos 566
+  disable {{"solo1 + \nsolo2 + \nsolo3 + \nsolo4 + \nsolo5 + \nsolo6 + \nsolo7 + \nsolo8 + \nsolo9 \n\n== 0 ? 1 : solo1"}}
+ }
+ Dot {
+  name Dot4
+  note_font_size 41
+  xpos -336
+  ypos 629
+ }
+set N5e36b800 [stack 0]
+ Dot {
+  name Dot21
+  note_font_size 41
+  xpos -336
+  ypos 678
+ }
+set N5e36b400 [stack 0]
+ Dot {
+  name Dot6
+  note_font_size 41
+  xpos -336
+  ypos 723
+ }
+set N5e36b000 [stack 0]
+ Dot {
+  name Dot22
+  note_font_size 41
+  xpos -336
+  ypos 767
+ }
+push $N5e36b000
+push $N5eb6d800
+ Dot {
+  name Dot5
+  note_font_size 41
+  xpos 242
+  ypos 207
+ }
+ Multiply {
+  channels rgb
+  value 0
+  name Multiply1
+  label "\[value value]"
+  xpos 208
+  ypos 328
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge20
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 208
+  ypos 720
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle1.in}}}
+  name ShuffleCopy2
+  xpos 208
+  ypos 764
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge21
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 208
+  ypos 1166
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle2.in}}}
+  name ShuffleCopy4
+  xpos 208
+  ypos 1211
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge22
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 208
+  ypos 1705
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle3.in}}}
+  name ShuffleCopy5
+  xpos 208
+  ypos 1747
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge23
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 208
+  ypos 2264
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle4.in}}}
+  name ShuffleCopy8
+  xpos 208
+  ypos 2315
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge24
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 208
+  ypos 2817
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle5.in}}}
+  name ShuffleCopy7
+  xpos 208
+  ypos 2865
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge25
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 208
+  ypos 3404
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle6.in}}}
+  name ShuffleCopy11
+  xpos 208
+  ypos 3449
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge26
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 208
+  ypos 3935
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle7.in}}}
+  name ShuffleCopy14
+  xpos 208
+  ypos 3979
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge27
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 208
+  ypos 4491
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle8.in}}}
+  name ShuffleCopy13
+  xpos 208
+  ypos 4539
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge28
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 208
+  ypos 5083
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle9.in}}}
+  name ShuffleCopy17
+  xpos 208
+  ypos 5129
+ }
+set N5ec91800 [stack 0]
+push $N5ec91800
+push $N5eb10c00
+push $N5eb11000
+push $N5eb12800
+push $N5e532000
+push $N5e532400
+push $N5e533c00
+push $N5e4c7400
+push $N5e4c7800
+push $N5e531400
+push $N5e4c4c00
+push $N5e4c5000
+push $N5e4c6800
+push $N5e482000
+push $N5e482400
+push $N5e483c00
+push $N5e423400
+push $N5e423800
+push $N5e481400
+push $N5e420c00
+push $N5e421000
+push $N5e422800
+push $N5e3ca000
+push $N5e3ca400
+push $N5e3cbc00
+push $N5e36b400
+push $N5e36b800
+push $N5e3c9400
+push $N5eb6d800
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge1
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 329
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge2
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 626
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle1.in}}}
+  name ShuffleCopy1
+  xpos 0
+  ypos 675
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge3
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 840
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge4
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 1100
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle2.in}}}
+  name ShuffleCopy3
+  xpos 0
+  ypos 1131
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge5
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 1367
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge6
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 1627
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle3.in}}}
+  name ShuffleCopy6
+  xpos 0
+  ypos 1670
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge7
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 1917
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge8
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 2177
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle4.in}}}
+  name ShuffleCopy9
+  xpos 0
+  ypos 2220
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge9
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 2472
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge10
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 2732
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle5.in}}}
+  name ShuffleCopy10
+  xpos 0
+  ypos 2772
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge11
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 3010
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge12
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 3309
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle6.in}}}
+  name ShuffleCopy12
+  xpos 0
+  ypos 3358
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge13
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 3580
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge14
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 3840
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle7.in}}}
+  name ShuffleCopy15
+  xpos 0
+  ypos 3885
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge15
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 4133
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge16
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 4393
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle8.in}}}
+  name ShuffleCopy16
+  xpos 0
+  ypos 4438
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  output rgb
+  name Merge17
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 4713
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  output rgb
+  name Merge18
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 4993
+ }
+ ShuffleCopy {
+  inputs 2
+  red red
+  green green
+  blue blue
+  alpha alpha2
+  out {{{parent.Shuffle9.in}}}
+  name ShuffleCopy18
+  xpos 0
+  ypos 5036
+ }
+ Switch {
+  inputs 2
+  which {{"solo1 + \nsolo2 + \nsolo3 + \nsolo4 + \nsolo5 + \nsolo6 + \nsolo7 + \nsolo8 + \nsolo9 \n\n== 0 ? 0 : 1"}}
+  name Switch1
+  xpos 0
+  ypos 5212
+ }
+ Switch {
+  inputs 2
+  which {{chooseMethod}}
+  name Switch2
+  xpos 0
+  ypos 5289
+ }
+push $N5eb12c00
+ Dot {
+  name Dot49
+  xpos -652
+  ypos 5485
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  also_merge all
+  name Merge19
+  label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+  xpos 0
+  ypos 5482
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 5791
+ }
+end_group

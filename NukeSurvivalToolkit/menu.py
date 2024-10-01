@@ -660,6 +660,12 @@ cgMenu.addCommand('P_Project NKPD', "nuke.createNode('{}F_P_Project')".format(pr
 cgMenu.addCommand('Glue_P LS', "nuke.createNode('{}GlueP')".format(prefixNST), icon="PosProjection_MJ.png")
 cgMenu.addCommand('P_Noise_Advanced NKPD', "nuke.createNode('{}P_Noise_Advanced')".format(prefixNST), icon="Noise.png")
 
+cgMenu.addSeparator()
+
+cgMenu.addCommand('LightSwitch TL', "nuke.createNode('{}LightSwitch')".format(prefixNST), icon="Switch.png")
+cgMenu.addCommand('LightSwitchPuppet TL', "nuke.nodePaste('{}/nk_files/{}LightSwitchPuppet.nk')".format(NST_FolderPath, prefixNST), icon="Switch.png")
+
+
 ############################################################################################################
 ############################################################################################################
 

@@ -1,0 +1,916 @@
+Group {
+ name GradeLG01_
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"mute2\":\n    if k.getValue() == 1:\n        n\[\"tile_color\"].setValue(4278190335)\n    elif k.getValue() == 0:\n        n\[\"tile_color\"].setValue(55312639)"
+ tile_color 0x34c00ff
+ note_font_color 0xffffffff
+ selected true
+ xpos 828
+ ypos 455
+ addUserKnob {20 GradeLG01}
+ addUserKnob {6 mute1 l Mute +STARTLINE}
+ mute1 true
+ addUserKnob {41 solo1 l Solo -STARTLINE T LightSwitchPuppet.solo1}
+ addUserKnob {41 bypass1 l Bypass -STARTLINE T LightSwitchPuppet.bypass1}
+ addUserKnob {41 exp1 l Exposure T LightSwitchPuppet.exp1}
+ addUserKnob {41 mult1 l Multiply T LightSwitchPuppet.mult1}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+  ypos -20
+ }
+set N5e096400 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.parent.LightSwitchPuppet.exp1}}
+  green {{parent.parent.LightSwitchPuppet.exp1}}
+  blue {{parent.parent.LightSwitchPuppet.exp1}}
+  name Exposure
+  label "\[value red]"
+  xpos -149
+  ypos 33
+ }
+ Multiply {
+  channels rgb
+  value {{parent.parent.LightSwitchPuppet.mult1} {parent.parent.LightSwitchPuppet.mult1} {parent.parent.LightSwitchPuppet.mult1} {parent.parent.LightSwitchPuppet.mult1}}
+  name MultiplyColor
+  label "\[value value]"
+  xpos -149
+  ypos 83
+ }
+push $N5e096400
+ Switch {
+  inputs 2
+  which {{!parent.parent.LightSwitchPuppet.bypass1}}
+  name SwitchBypass
+  xpos -149
+  ypos 195
+ }
+ Multiply {
+  value 0
+  name MultiplyMute
+  label "\[value value]"
+  xpos -149
+  ypos 256
+  disable {{!parent.mute1}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo
+  label "\[value value]"
+  xpos -149
+  ypos 317
+  disable {{"LightSwitchPuppet.solo1 + \nLightSwitchPuppet.solo2 + \nLightSwitchPuppet.solo3 + \nLightSwitchPuppet.solo4 + \nLightSwitchPuppet.solo5 + \nLightSwitchPuppet.solo6 + \nLightSwitchPuppet.solo7 + \nLightSwitchPuppet.solo8 + \nLightSwitchPuppet.solo9 \n\n== 0 ? 1 : LightSwitchPuppet.solo1"}}
+ }
+push $N5e096400
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{parent.parent.LightSwitchPuppet.mix}}
+  name DissolveMix
+  selected true
+  xpos -149
+  ypos 392
+ }
+push $N5e096400
+ Switch {
+  inputs 2
+  which {{"LightSwitchPuppet.disable == 1 ? 0 : 1"}}
+  name SwitchDisable
+  xpos 0
+  ypos 392
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 537
+ }
+end_group
+push $cut_paste_input
+Group {
+ name GradeLG02_
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"mute2\":\n    if k.getValue() == 1:\n        n\[\"tile_color\"].setValue(4278190335)\n    elif k.getValue() == 0:\n        n\[\"tile_color\"].setValue(55312639)"
+ tile_color 0x34c00ff
+ label "\[expr \{\[value mute2] ? \"Mute\" : \[]\}]"
+ note_font_color 0xffffffff
+ selected true
+ xpos 983
+ ypos 457
+ addUserKnob {20 GradeLG02}
+ addUserKnob {6 mute2 l Mute +STARTLINE}
+ addUserKnob {41 solo2 l Solo -STARTLINE T LightSwitchPuppet.solo2}
+ addUserKnob {41 bypass2 l Bypass -STARTLINE T LightSwitchPuppet.bypass2}
+ addUserKnob {41 exp2 l Exposure T LightSwitchPuppet.exp2}
+ addUserKnob {41 mult2 l Multiply T LightSwitchPuppet.mult2}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+ }
+set N5e023800 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.parent.LightSwitchPuppet.exp2}}
+  green {{parent.parent.LightSwitchPuppet.exp2}}
+  blue {{parent.parent.LightSwitchPuppet.exp2}}
+  name Exposure
+  label "\[value red]"
+  xpos -163
+  ypos 53
+ }
+ Multiply {
+  channels rgb
+  value {{parent.parent.LightSwitchPuppet.mult2} {parent.parent.LightSwitchPuppet.mult2} {parent.parent.LightSwitchPuppet.mult2} {parent.parent.LightSwitchPuppet.mult2}}
+  name MultiplyColor
+  label "\[value value]"
+  xpos -163
+  ypos 85
+ }
+push $N5e023800
+ Switch {
+  inputs 2
+  which {{!parent.parent.LightSwitchPuppet.bypass2}}
+  name SwitchBypass1
+  xpos -163
+  ypos 144
+ }
+ Multiply {
+  value 0
+  name MultiplyMute
+  label "\[value value]"
+  xpos -163
+  ypos 184
+  disable {{!parent.mute2}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo
+  label "\[value value]"
+  xpos -163
+  ypos 226
+  disable {{"LightSwitchPuppet.solo1 + \nLightSwitchPuppet.solo2 + \nLightSwitchPuppet.solo3 + \nLightSwitchPuppet.solo4 + \nLightSwitchPuppet.solo5 + \nLightSwitchPuppet.solo6 + \nLightSwitchPuppet.solo7 + \nLightSwitchPuppet.solo8 + \nLightSwitchPuppet.solo9 \n\n== 0 ? 1 : LightSwitchPuppet.solo2"}}
+ }
+push $N5e023800
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{parent.parent.LightSwitchPuppet.mix}}
+  name DissolveMix
+  xpos -163
+  ypos 311
+ }
+push $N5e023800
+ Switch {
+  inputs 2
+  which {{"LightSwitchPuppet.disable == 1 ? 0 : 1"}}
+  name SwitchDisable
+  xpos 0
+  ypos 311
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 370
+ }
+end_group
+push $cut_paste_input
+Group {
+ name GradeLG03_
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"mute3\":\n    if k.getValue() == 1:\n        n\[\"tile_color\"].setValue(4278190335)\n    elif k.getValue() == 0:\n        n\[\"tile_color\"].setValue(55312639)"
+ tile_color 0x34c00ff
+ label "\[expr \{\[value mute3] ? \"Mute\" : \[]\}]"
+ selected true
+ xpos 1153
+ ypos 458
+ addUserKnob {20 GradeLG03}
+ addUserKnob {6 mute3 l Mute +STARTLINE}
+ addUserKnob {41 solo3 l Solo -STARTLINE T LightSwitchPuppet.solo3}
+ addUserKnob {41 bypass3 l Bypass -STARTLINE T LightSwitchPuppet.bypass3}
+ addUserKnob {41 exp3 l Exposure T LightSwitchPuppet.exp3}
+ addUserKnob {41 mult3 l Multiply T LightSwitchPuppet.mult3}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+ }
+set N5e021000 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.parent.LightSwitchPuppet.exp3}}
+  green {{parent.parent.LightSwitchPuppet.exp3}}
+  blue {{parent.parent.LightSwitchPuppet.exp3}}
+  name Exposure1
+  label "\[value red]"
+  xpos -150
+  ypos 95
+ }
+ Multiply {
+  channels rgb
+  value {{parent.parent.LightSwitchPuppet.mult3} {parent.parent.LightSwitchPuppet.mult3} {parent.parent.LightSwitchPuppet.mult3} {parent.parent.LightSwitchPuppet.mult3}}
+  name MultiplyColor
+  label "\[value value]"
+  xpos -150
+  ypos 127
+ }
+push $N5e021000
+ Switch {
+  inputs 2
+  which {{!parent.parent.LightSwitchPuppet.bypass3}}
+  name SwitchBypass
+  xpos -150
+  ypos 183
+ }
+ Multiply {
+  value 0
+  name MultiplyMute
+  label "\[value value]"
+  xpos -150
+  ypos 223
+  disable {{!parent.mute3}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo
+  label "\[value value]"
+  xpos -150
+  ypos 265
+  disable {{"LightSwitchPuppet.solo1 + \nLightSwitchPuppet.solo2 + \nLightSwitchPuppet.solo3 + \nLightSwitchPuppet.solo4 + \nLightSwitchPuppet.solo5 + \nLightSwitchPuppet.solo6 + \nLightSwitchPuppet.solo7 + \nLightSwitchPuppet.solo8 + \nLightSwitchPuppet.solo9 \n\n== 0 ? 1 : LightSwitchPuppet.solo3"}}
+ }
+push $N5e021000
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{parent.parent.LightSwitchPuppet.mix}}
+  name DissolveMix
+  selected true
+  xpos -150
+  ypos 331
+ }
+push $N5e021000
+ Switch {
+  inputs 2
+  which {{"LightSwitchPuppet.disable == 1 ? 0 : 1"}}
+  name SwitchDisable
+  xpos 0
+  ypos 331
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 438
+ }
+end_group
+push $cut_paste_input
+Group {
+ name GradeLG04_
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"mute4\":\n    if k.getValue() == 1:\n        n\[\"tile_color\"].setValue(4278190335)\n    elif k.getValue() == 0:\n        n\[\"tile_color\"].setValue(55312639)"
+ tile_color 0x34c00ff
+ label "\[expr \{\[value mute4] ? \"Mute\" : \[]\}]"
+ note_font_color 0xffffffff
+ selected true
+ xpos 1299
+ ypos 457
+ addUserKnob {20 GradeLG04}
+ addUserKnob {6 mute4 l Mute +STARTLINE}
+ addUserKnob {41 solo4 l Solo -STARTLINE T LightSwitchPuppet.solo4}
+ addUserKnob {41 bypass4 l Bypass -STARTLINE T LightSwitchPuppet.bypass4}
+ addUserKnob {41 exp4 l Exposure T LightSwitchPuppet.exp4}
+ addUserKnob {41 mult4 l Multiply T LightSwitchPuppet.mult4}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+ }
+set N5dfaa400 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.parent.LightSwitchPuppet.exp4}}
+  green {{parent.parent.LightSwitchPuppet.exp4}}
+  blue {{parent.parent.LightSwitchPuppet.exp4}}
+  name Exposure
+  label "\[value red]"
+  xpos -186
+  ypos 77
+ }
+ Multiply {
+  channels rgb
+  value {{parent.parent.LightSwitchPuppet.mult4} {parent.parent.LightSwitchPuppet.mult4} {parent.parent.LightSwitchPuppet.mult4} {parent.parent.LightSwitchPuppet.mult4}}
+  name MultiplyColor
+  label "\[value value]"
+  xpos -186
+  ypos 109
+ }
+push $N5dfaa400
+ Switch {
+  inputs 2
+  which {{!parent.parent.LightSwitchPuppet.bypass4}}
+  name SwitchBypass
+  xpos -186
+  ypos 159
+ }
+ Multiply {
+  value 0
+  name MultiplyMute
+  label "\[value value]"
+  xpos -186
+  ypos 209
+  disable {{!parent.mute4}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo
+  label "\[value value]"
+  xpos -186
+  ypos 251
+  disable {{"LightSwitchPuppet.solo1 + \nLightSwitchPuppet.solo2 + \nLightSwitchPuppet.solo3 + \nLightSwitchPuppet.solo4 + \nLightSwitchPuppet.solo5 + \nLightSwitchPuppet.solo6 + \nLightSwitchPuppet.solo7 + \nLightSwitchPuppet.solo8 + \nLightSwitchPuppet.solo9 \n\n== 0 ? 1 : LightSwitchPuppet.solo4"}}
+ }
+push $N5dfaa400
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{parent.parent.LightSwitchPuppet.mix}}
+  name DissolveMix
+  xpos -186
+  ypos 354
+ }
+push $N5dfaa400
+ Switch {
+  inputs 2
+  which {{"LightSwitchPuppet.disable == 1 ? 0 : 1"}}
+  name SwitchDisable
+  xpos 0
+  ypos 354
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 422
+ }
+end_group
+push $cut_paste_input
+Group {
+ name GradeLG05_
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"mute5\":\n    if k.getValue() == 1:\n        n\[\"tile_color\"].setValue(4278190335)\n    elif k.getValue() == 0:\n        n\[\"tile_color\"].setValue(55312639)"
+ tile_color 0x34c00ff
+ label "\[expr \{\[value mute5] ? \"Mute\" : \[]\}]"
+ note_font_color 0xffffffff
+ selected true
+ xpos 1442
+ ypos 457
+ addUserKnob {20 GradeLG05}
+ addUserKnob {6 mute5 l Mute +STARTLINE}
+ addUserKnob {41 solo5 l Solo -STARTLINE T LightSwitchPuppet.solo5}
+ addUserKnob {41 bypass5 l Bypass -STARTLINE T LightSwitchPuppet.bypass5}
+ addUserKnob {41 exp5 l Exposure T LightSwitchPuppet.exp5}
+ addUserKnob {41 mult5 l Multiply T LightSwitchPuppet.mult5}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+ }
+set N5e33b800 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.parent.LightSwitchPuppet.exp5}}
+  green {{parent.parent.LightSwitchPuppet.exp5}}
+  blue {{parent.parent.LightSwitchPuppet.exp5}}
+  name Exposure
+  label "\[value red]"
+  xpos -139
+  ypos 84
+ }
+ Multiply {
+  channels rgb
+  value {{parent.parent.LightSwitchPuppet.mult5} {parent.parent.LightSwitchPuppet.mult5} {parent.parent.LightSwitchPuppet.mult5} {parent.parent.LightSwitchPuppet.mult5}}
+  name MultiplyColor
+  label "\[value value]"
+  xpos -139
+  ypos 116
+ }
+push $N5e33b800
+ Switch {
+  inputs 2
+  which {{!parent.parent.LightSwitchPuppet.bypass5}}
+  name SwitchBypass
+  xpos -139
+  ypos 164
+ }
+ Multiply {
+  value 0
+  name MultiplyMute
+  label "\[value value]"
+  xpos -139
+  ypos 208
+  disable {{!parent.mute5}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo
+  label "\[value value]"
+  xpos -139
+  ypos 250
+  disable {{"LightSwitchPuppet.solo1 + \nLightSwitchPuppet.solo2 + \nLightSwitchPuppet.solo3 + \nLightSwitchPuppet.solo4 + \nLightSwitchPuppet.solo5 + \nLightSwitchPuppet.solo6 + \nLightSwitchPuppet.solo7 + \nLightSwitchPuppet.solo8 + \nLightSwitchPuppet.solo9 \n\n== 0 ? 1 : LightSwitchPuppet.solo5"}}
+ }
+push $N5e33b800
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{parent.parent.LightSwitchPuppet.mix}}
+  name DissolveMix
+  xpos -139
+  ypos 318
+ }
+push $N5e33b800
+ Switch {
+  inputs 2
+  which {{"LightSwitchPuppet.disable == 1 ? 0 : 1"}}
+  name SwitchDisable
+  xpos 0
+  ypos 318
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 367
+ }
+end_group
+push $cut_paste_input
+Group {
+ name GradeLG06_
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"mute6\":\n    if k.getValue() == 1:\n        n\[\"tile_color\"].setValue(4278190335)\n    elif k.getValue() == 0:\n        n\[\"tile_color\"].setValue(55312639)"
+ tile_color 0x34c00ff
+ label "\[expr \{\[value mute6] ? \"Mute\" : \[]\}]"
+ note_font_color 0xffffffff
+ selected true
+ xpos 1582
+ ypos 457
+ addUserKnob {20 GradeLG06}
+ addUserKnob {6 mute6 l Mute +STARTLINE}
+ addUserKnob {41 solo6 l Solo -STARTLINE T LightSwitchPuppet.solo6}
+ addUserKnob {41 bypass6 l Bypass -STARTLINE T LightSwitchPuppet.bypass6}
+ addUserKnob {41 exp6 l Exposure T LightSwitchPuppet.exp6}
+ addUserKnob {41 mult6 l Multiply T LightSwitchPuppet.mult6}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+ }
+set N5e339000 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.parent.LightSwitchPuppet.exp6}}
+  green {{parent.parent.LightSwitchPuppet.exp6}}
+  blue {{parent.parent.LightSwitchPuppet.exp6}}
+  name Exposure1
+  label "\[value red]"
+  xpos -130
+  ypos 80
+ }
+ Multiply {
+  value {{parent.parent.LightSwitchPuppet.mult6} {parent.parent.LightSwitchPuppet.mult6} {parent.parent.LightSwitchPuppet.mult6} {parent.parent.LightSwitchPuppet.mult6}}
+  name MultiplyColor
+  label "\[value value]"
+  xpos -130
+  ypos 112
+ }
+push $N5e339000
+ Switch {
+  inputs 2
+  which {{!parent.parent.LightSwitchPuppet.bypass6}}
+  name SwitchBypass
+  xpos -130
+  ypos 177
+ }
+ Multiply {
+  value 0
+  name MultiplyMute
+  label "\[value value]"
+  xpos -130
+  ypos 225
+  disable {{!parent.mute6}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo
+  label "\[value value]"
+  xpos -130
+  ypos 267
+  disable {{"LightSwitchPuppet.solo1 + \nLightSwitchPuppet.solo2 + \nLightSwitchPuppet.solo3 + \nLightSwitchPuppet.solo4 + \nLightSwitchPuppet.solo5 + \nLightSwitchPuppet.solo6 + \nLightSwitchPuppet.solo7 + \nLightSwitchPuppet.solo8 + \nLightSwitchPuppet.solo9 \n\n== 0 ? 1 : LightSwitchPuppet.solo6"}}
+ }
+push $N5e339000
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{parent.parent.LightSwitchPuppet.mix}}
+  name DissolveMix
+  selected true
+  xpos -130
+  ypos 325
+ }
+push $N5e339000
+ Switch {
+  inputs 2
+  which {{"LightSwitchPuppet.disable == 1 ? 0 : 1"}}
+  name SwitchDisable
+  xpos 0
+  ypos 325
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 419
+ }
+end_group
+push $cut_paste_input
+Group {
+ name GradeLG07_
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"mute7\":\n    if k.getValue() == 1:\n        n\[\"tile_color\"].setValue(4278190335)\n    elif k.getValue() == 0:\n        n\[\"tile_color\"].setValue(55312639)"
+ tile_color 0x34c00ff
+ label "\[expr \{\[value mute7] ? \"Mute\" : \[]\}]"
+ note_font_color 0xffffffff
+ selected true
+ xpos 1755
+ ypos 457
+ addUserKnob {20 GradeLG07}
+ addUserKnob {6 mute7 l Mute +STARTLINE}
+ addUserKnob {41 solo7 l Solo -STARTLINE T LightSwitchPuppet.solo7}
+ addUserKnob {41 bypass7 l Bypass -STARTLINE T LightSwitchPuppet.bypass7}
+ addUserKnob {41 exp7 l Exposure T LightSwitchPuppet.exp7}
+ addUserKnob {41 mult7 l Multiply T LightSwitchPuppet.mult7}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+ }
+set N5e2be400 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.parent.LightSwitchPuppet.exp7}}
+  green {{parent.parent.LightSwitchPuppet.exp7}}
+  blue {{parent.parent.LightSwitchPuppet.exp7}}
+  name Exposure
+  label "\[value red]"
+  xpos -151
+  ypos 88
+ }
+ Multiply {
+  channels rgb
+  value {{parent.parent.LightSwitchPuppet.mult7} {parent.parent.LightSwitchPuppet.mult7} {parent.parent.LightSwitchPuppet.mult7} {parent.parent.LightSwitchPuppet.mult7}}
+  name Multiply1
+  label "\[value value]"
+  xpos -151
+  ypos 120
+ }
+push $N5e2be400
+ Switch {
+  inputs 2
+  which {{!parent.parent.LightSwitchPuppet.bypass7}}
+  name SwitchBypass
+  xpos -151
+  ypos 182
+ }
+ Multiply {
+  value 0
+  name MultiplyMute
+  label "\[value value]"
+  xpos -151
+  ypos 219
+  disable {{!parent.mute7}}
+ }
+ Multiply {
+  value 0
+  name Multiply3
+  label "\[value value]"
+  xpos -151
+  ypos 261
+  disable {{"LightSwitchPuppet.solo1 + \nLightSwitchPuppet.solo2 + \nLightSwitchPuppet.solo3 + \nLightSwitchPuppet.solo4 + \nLightSwitchPuppet.solo5 + \nLightSwitchPuppet.solo6 + \nLightSwitchPuppet.solo7 + \nLightSwitchPuppet.solo8 + \nLightSwitchPuppet.solo9 \n\n== 0 ? 1 : LightSwitchPuppet.solo7"}}
+ }
+push $N5e2be400
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{parent.parent.LightSwitchPuppet.mix}}
+  name DissolveMix
+  xpos -151
+  ypos 327
+ }
+push $N5e2be400
+ Switch {
+  inputs 2
+  which {{"LightSwitchPuppet.disable == 1 ? 0 : 1"}}
+  name SwitchDisable
+  xpos 0
+  ypos 327
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 378
+ }
+end_group
+push $cut_paste_input
+Group {
+ name GradeLG08_
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"mute8\":\n    if k.getValue() == 1:\n        n\[\"tile_color\"].setValue(4278190335)\n    elif k.getValue() == 0:\n        n\[\"tile_color\"].setValue(55312639)"
+ tile_color 0x34c00ff
+ label "\[expr \{\[value mute8] ? \"Mute\" : \[]\}]"
+ note_font_color 0xffffffff
+ selected true
+ xpos 1944
+ ypos 457
+ addUserKnob {20 GradeLG08}
+ addUserKnob {6 mute8 l Mute +STARTLINE}
+ addUserKnob {41 solo8 l Solo -STARTLINE T LightSwitchPuppet.solo8}
+ addUserKnob {41 bypass8 l Bypass -STARTLINE T LightSwitchPuppet.bypass8}
+ addUserKnob {41 exp8 l Exposure T LightSwitchPuppet.exp8}
+ addUserKnob {41 mult8 l Multiply T LightSwitchPuppet.mult8}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+ }
+set N5ebe3400 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.parent.LightSwitchPuppet.exp8}}
+  green {{parent.parent.LightSwitchPuppet.exp8}}
+  blue {{parent.parent.LightSwitchPuppet.exp8}}
+  name Exposure
+  label "\[value red]"
+  xpos -147
+  ypos 52
+ }
+ Multiply {
+  channels rgb
+  value {{parent.parent.LightSwitchPuppet.mult8} {parent.parent.LightSwitchPuppet.mult8} {parent.parent.LightSwitchPuppet.mult8} {parent.parent.LightSwitchPuppet.mult8}}
+  name MultiplyColor
+  label "\[value value]"
+  xpos -147
+  ypos 84
+ }
+push $N5ebe3400
+ Switch {
+  inputs 2
+  which {{!parent.parent.LightSwitchPuppet.bypass8}}
+  name SwitchBypass
+  xpos -147
+  ypos 140
+ }
+ Multiply {
+  value 0
+  name MultiplyMute
+  label "\[value value]"
+  xpos -147
+  ypos 186
+  disable {{!parent.mute8}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo
+  label "\[value value]"
+  xpos -147
+  ypos 228
+  disable {{"LightSwitchPuppet.solo1 + \nLightSwitchPuppet.solo2 + \nLightSwitchPuppet.solo3 + \nLightSwitchPuppet.solo4 + \nLightSwitchPuppet.solo5 + \nLightSwitchPuppet.solo6 + \nLightSwitchPuppet.solo7 + \nLightSwitchPuppet.solo8 + \nLightSwitchPuppet.solo9 \n\n== 0 ? 1 : LightSwitchPuppet.solo8"}}
+ }
+push $N5ebe3400
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{parent.parent.LightSwitchPuppet.mix}}
+  name DissolveMix
+  selected true
+  xpos -147
+  ypos 309
+ }
+push $N5ebe3400
+ Switch {
+  inputs 2
+  which {{"LightSwitchPuppet.disable == 1 ? 0 : 1"}}
+  name SwitchDisable
+  xpos 0
+  ypos 309
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 360
+ }
+end_group
+push $cut_paste_input
+Group {
+ name GradeLG09_
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\n\nif k.name() == \"mute9\":\n    if k.getValue() == 1:\n        n\[\"tile_color\"].setValue(4278190335)\n    elif k.getValue() == 0:\n        n\[\"tile_color\"].setValue(55312639)"
+ tile_color 0x34c00ff
+ label "\[expr \{\[value mute9] ? \"Mute\" : \[]\}]"
+ note_font_color 0xffffffff
+ selected true
+ xpos 2090
+ ypos 457
+ addUserKnob {20 GradeLG09}
+ addUserKnob {6 mute9 l Mute +STARTLINE}
+ addUserKnob {41 solo9 l Solo -STARTLINE T LightSwitchPuppet.solo9}
+ addUserKnob {41 bypass9 l Bypass -STARTLINE T LightSwitchPuppet.bypass9}
+ addUserKnob {41 exp9 l Exposure T LightSwitchPuppet.exp9}
+ addUserKnob {41 mult9 l Multiply T LightSwitchPuppet.mult9}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+ }
+set N5ebe0800 [stack 0]
+ EXPTool {
+  mode Stops
+  red {{parent.parent.LightSwitchPuppet.exp9}}
+  green {{parent.parent.LightSwitchPuppet.exp9}}
+  blue {{parent.parent.LightSwitchPuppet.exp9}}
+  name Exposure
+  label "\[value red]"
+  xpos -139
+  ypos 73
+ }
+ Multiply {
+  channels rgb
+  value {{parent.parent.LightSwitchPuppet.mult9} {parent.parent.LightSwitchPuppet.mult9} {parent.parent.LightSwitchPuppet.mult9} {parent.parent.LightSwitchPuppet.mult9}}
+  name MultiplyColor
+  label "\[value value]"
+  xpos -139
+  ypos 105
+ }
+push $N5ebe0800
+ Switch {
+  inputs 2
+  which {{!parent.parent.LightSwitchPuppet.bypass9}}
+  name SwitchBypass
+  xpos -139
+  ypos 164
+ }
+ Multiply {
+  value 0
+  name MultiplyMute
+  label "\[value value]"
+  xpos -139
+  ypos 213
+  disable {{!parent.mute9}}
+ }
+ Multiply {
+  value 0
+  name MultiplySolo
+  label "\[value value]"
+  xpos -139
+  ypos 255
+  disable {{"LightSwitchPuppet.solo1 + \nLightSwitchPuppet.solo2 + \nLightSwitchPuppet.solo3 + \nLightSwitchPuppet.solo4 + \nLightSwitchPuppet.solo5 + \nLightSwitchPuppet.solo6 + \nLightSwitchPuppet.solo7 + \nLightSwitchPuppet.solo8 + \nLightSwitchPuppet.solo9 \n\n== 0 ? 1 : LightSwitchPuppet.solo9"}}
+ }
+push $N5ebe0800
+ Dissolve {
+  inputs 2
+  channels rgb
+  which {{parent.parent.LightSwitchPuppet.mix}}
+  name DissolveMix
+  xpos -139
+  ypos 353
+ }
+push $N5ebe0800
+ Switch {
+  inputs 2
+  which {{"LightSwitchPuppet.disable == 1 ? 0 : 1"}}
+  name SwitchDisable
+  xpos 0
+  ypos 353
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 420
+ }
+end_group
+push $cut_paste_input
+Group {
+ name LightSwitchPuppet
+ tile_color 0x34c00ff
+ note_font Verdana
+ selected true
+ xpos 2349
+ ypos 459
+ addUserKnob {20 LightSwitchPuppet}
+ addUserKnob {22 createNewLS l "<i>Create New LightSwitch from Values" T "thisNode = nuke.thisNode()\nwith nuke.Root():\n    try: \n        # Create a new LightSwitch node\n        lightSwitch = nuke.createNode(\"NST_LightSwitch\")\n        \n        # Get the x and y position of the current node\n        x = thisNode.xpos()\n        y = thisNode.ypos()\n        \n        # Disconnect all inputs of the new node\n        lightSwitch.setInput(0, None)\n        \n        # Move the new node 100 units to the right of the selected node\n        lightSwitch.setXpos(x + 150)\n        lightSwitch.setYpos(y + 50)\n        \n        # Deselect all nodes\n        nuke.selectAll()\n        nuke.invertSelection()\n        \n        # Select Original LightSwitch\n        thisNode.setSelected(True)\n        \n        lightSwitch.knob(\"copyValuesFromLS\").execute()\n        \n        # Deselect all nodes\n        nuke.selectAll()\n        nuke.invertSelection()\n        \n        lightSwitch.setSelected(True)\n        \n    except:\n        nuke.message(\"No LightSwitch node installation found. Cannot Create new LightSwitch.\")" +STARTLINE}
+ addUserKnob {22 copyValuesFromLS l "<i>Copy Values from Selected LightSwitch" T "thisNode = nuke.thisNode()\n\nwith nuke.Root():\n    selectedNode = nuke.selectedNode()\n\nif selectedNode and selectedNode != thisNode and \"LightSwitch\" in selectedNode.name():\n    for knob in thisNode.knobs():\n        if knob in selectedNode.knobs() and knob not in \[\"xpos\",\"ypos\",\"name\",\"knobChanged\", \"label\", \"note_font_size\", \"note_font_color\"]:\n            thisNode\[knob].fromScript(selectedNode\[knob].toScript())\n            \nelse:\n    nuke.message(\"Please select another LightSwitch node to copy values from\")" +STARTLINE}
+ addUserKnob {22 reset l "<b><font color=DarkOrange>Reset" -STARTLINE T "node = nuke.thisNode()\nexposures = \[]\nmultiplies = \[]\nmutes = \[]\nsolos = \[]\nbypasses = \[]\n\nfor knob in node.knobs():\n    if \"panelDropped\" not in knob:\n        if \"exp\" in knob:\n            exposures.append(knob)\n        elif \"mult\" in knob:\n            multiplies.append(knob)\n        elif \"mute\" in knob:\n            mutes.append(knob)\n        elif \"solo\" in knob:\n            mutes.append(knob)\n        elif \"bypass\" in knob:\n            mutes.append(knob)\n        \nexposures.sort()\nmultiplies.sort()\nmutes.sort()\nsolos.sort()\nbypasses.sort()\n\nfor exp in exposures:\n    node.knob(exp).setValue(0)\n\nfor mult in multiplies:\n    node.knob(mult).setValue(1, 0)\n    node.knob(mult).setValue(1, 1)\n    node.knob(mult).setValue(1, 2)\n\nfor mute in mutes:\n    node.knob(mute).setValue(0)\n    \nfor solo in solos:\n    node.knob(solo).setValue(0)\n\nfor bypass in bypasses:\n    node.knob(bypass).setValue(0)\n\nnode.knob(\"mix\").setValue(1)"}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG01 l "<font color=IndianRed>LightGroup 01" T " "}
+ addUserKnob {41 mute1 l Mute -STARTLINE T GradeLG01_.mute1}
+ addUserKnob {6 solo1 l Solo -STARTLINE}
+ addUserKnob {6 bypass1 l Bypass -STARTLINE}
+ addUserKnob {7 exp1 l Exposure R -5 5}
+ exp1 3.44
+ addUserKnob {18 mult1 l Multiply}
+ mult1 {1.3 1 1}
+ addUserKnob {6 mult1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG02 l "<font color = LightPink>LightGroup 02" T " "}
+ addUserKnob {41 mute2 l Mute -STARTLINE T GradeLG02_.mute2}
+ addUserKnob {6 solo2 l Solo -STARTLINE}
+ solo2 true
+ addUserKnob {6 bypass2 l Bypass -STARTLINE}
+ addUserKnob {7 exp2 l Exposure R -5 5}
+ exp2 -5
+ addUserKnob {18 mult2 l Multiply}
+ mult2 {1.1 0.8 1.3}
+ addUserKnob {6 mult2_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {6 color_rgb_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {6 color_rgb_1_panelDropped l "panel dropped state" +HIDDEN +STARTLINE}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG03 l "<font color=LightSalmon>LightGroup 03" T " "}
+ addUserKnob {41 mute3 l Mute -STARTLINE T GradeLG03_.mute3}
+ addUserKnob {6 solo3 l Solo -STARTLINE}
+ addUserKnob {6 bypass3 l Bypass -STARTLINE}
+ bypass3 true
+ addUserKnob {7 exp3 l Exposure R -5 5}
+ exp3 1.62
+ addUserKnob {18 mult3 l Multiply}
+ mult3 {1.2 1.2 1.1}
+ addUserKnob {6 mult3_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG04 l "<font color=Khaki>LightGroup 04" T " "}
+ addUserKnob {41 mute4 l Mute -STARTLINE T GradeLG04_.mute4}
+ addUserKnob {6 solo4 l Solo -STARTLINE}
+ solo4 true
+ addUserKnob {6 bypass4 l Bypass -STARTLINE}
+ addUserKnob {7 exp4 l Exposure R -5 5}
+ addUserKnob {18 mult4 l Multiply}
+ mult4 {1.2 1 1}
+ addUserKnob {6 mult4_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG05 l "<font color=DarkKhaki>LightGroup 05" T " "}
+ addUserKnob {41 mute5 l Mute -STARTLINE T GradeLG05_.mute5}
+ addUserKnob {6 solo5 l Solo -STARTLINE}
+ addUserKnob {6 bypass5 l Bypass -STARTLINE}
+ bypass5 true
+ addUserKnob {7 exp5 l Exposure R -5 5}
+ exp5 -4.32
+ addUserKnob {18 mult5 l Multiply}
+ mult5 {1.3 1.2 1}
+ addUserKnob {6 mult5_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG06 l "<font color=MediumSeaGreen>LightGroup 06" T " "}
+ addUserKnob {41 mute6 l Mute -STARTLINE T GradeLG06_.mute6}
+ addUserKnob {6 solo6 l Solo -STARTLINE}
+ addUserKnob {6 bypass6 l Bypass -STARTLINE}
+ bypass6 true
+ addUserKnob {7 exp6 l Exposure R -5 5}
+ addUserKnob {18 mult6 l Multiply}
+ mult6 {1 1.4 1.3}
+ addUserKnob {6 mult6_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG07 l "<font color=MediumAquamarine>LightGroup 07" T " "}
+ addUserKnob {41 mute7 l Mute -STARTLINE T GradeLG07_.mute7}
+ addUserKnob {6 solo7 l Solo -STARTLINE}
+ addUserKnob {6 bypass7 l Bypass -STARTLINE}
+ addUserKnob {7 exp7 l Exposure R -5 5}
+ addUserKnob {18 mult7 l Multiply}
+ mult7 {1.3 1 1.2}
+ addUserKnob {6 mult7_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG08 l "<font color=CadetBlue>LightGroup 08" T " "}
+ addUserKnob {41 mute8 l Mute -STARTLINE T GradeLG08_.mute8}
+ addUserKnob {6 solo8 l Solo -STARTLINE}
+ addUserKnob {6 bypass8 l Bypass -STARTLINE}
+ addUserKnob {7 exp8 l Exposure R -5 5}
+ exp8 -4.1
+ addUserKnob {18 mult8 l Multiply}
+ mult8 {1 1.3 1}
+ addUserKnob {6 mult8_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {26 LG09 l "<font color=SkyBlue>LightGroup 09" T " "}
+ addUserKnob {41 mute9 l Mute -STARTLINE T GradeLG09_.mute9}
+ addUserKnob {6 solo9 l Solo -STARTLINE}
+ solo9 true
+ addUserKnob {6 bypass9 l Bypass -STARTLINE}
+ addUserKnob {7 exp9 l Exposure R -5 5}
+ exp9 -1.28
+ addUserKnob {18 mult9 l Multiply}
+ mult9 {1 1.3 1.3}
+ addUserKnob {6 mult9_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {26 ""}
+ addUserKnob {7 mix}
+ mix 1
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 0
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 300
+ }
+end_group
