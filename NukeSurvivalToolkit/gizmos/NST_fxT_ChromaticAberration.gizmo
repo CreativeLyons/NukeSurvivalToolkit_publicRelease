@@ -1,0 +1,1426 @@
+Group {
+name fxT_ChromaticAberration
+help "Chromatic Aberration tool with a bunch of options for matching the plate's aberration.\nHappy channel-shifting!\n\nDeveloped by - Tor Andreassen - fxtor.net"
+tile_color 0xf9ff00ff
+note_font Verdana
+selected true
+addUserKnob {20 fxT_chromaticAberrationTAB l fxT_chromaticAberration}
+addUserKnob {41 channels T Merge4.also_merge}
+addUserKnob {26 text_1 l " " T " "}
+addUserKnob {4 mode l "aberration mode" t "Choose the chromatic aberration method.\nScale with Transforms or with Godrays.\n\nGodrays will give you a smearing effect between the channels, which can look more realistic." M {"godrays scale" "transforms scale" "" ""}}
+addUserKnob {26 ""}
+addUserKnob {7 redScale l "<font  color='#de0000'>Red scale</font>" t "Red channel scale size" R -0.5 1.5}
+redScale 1.06
+addUserKnob {7 greenScale l "<font  color='#7ebd64'>Green scale</font>" t "Green channel scale size" R -0.5 1.5}
+greenScale 1
+addUserKnob {7 blueScale l "<font color='#2279c3'>Blue scale</font>" t "Blue channel scale size" R -0.5 1.5}
+blueScale 0.955
+addUserKnob {26 ""}
+addUserKnob {14 redChBlur l "<font color='#de0000'>Red Cannel Blur</font>" t "Red channel blur size" R 0 100}
+addUserKnob {14 greenChBlur l "<font color='#7ebd64'>Green Cannel Blur</font>" t "Green channel blur size" R 0 100}
+addUserKnob {14 blueChBlur l "<font color='#2279c3'>Blue Channel Blur</font>" t "Blue channel blur size" R 0 100}
+addUserKnob {26 ""}
+addUserKnob {20 extraOffsetControlsGROUP l "EXTRA GLOBAL OFFSET CONTROLS" n 1}
+extraOffsetControlsGROUP 0
+addUserKnob {6 activateEGOC l "activate extra global controls" t "Enable to activate the extra global offset controls.\n\nThis will give you more offset controls, but can cause some unwanted filtering.\n\nIf you want to use these controls, but it's causing too much filtering, try to restore some details with the 'restore luminance' checkbox.\n\nThese controls are intended for special cases to make it esier to match the plate's aberration. Pick your battles; more contol can cause some extra filtering." +STARTLINE}
+addUserKnob {7 offsetRotation l Rotation t "Rotation offset control.\n\nThis is useful for shifting the direction of the offset." R -10 10}
+addUserKnob {7 offsetX l X-axis t "X-axis offset control" R -20 20}
+addUserKnob {7 offsetY l Y-axis t "Y-axis offset control" R -20 20}
+addUserKnob {7 offsetTop l Top t "Offset control for the top of the frame.\n\nThis will offset the channels more on the top of the frame than the bottom." R -0.05 0.05}
+addUserKnob {7 offsetBottom l Bottom t "Offset control for the bottom of the frame\n\nThis will offset the channels more on the bottom of the frame than the top" R -0.05 0.05}
+addUserKnob {26 ""}
+addUserKnob {20 endGroup_1 l endGroup n -1}
+addUserKnob {20 centerMaskGROUP l "CENTER MASK CONTROLS" n 1}
+centerMaskGROUP 0
+addUserKnob {6 centerMask l "use center mask" t "Enable to remove aberration in the center of the frame.\n\nThis \"mimics\" the real world lense where less aberration is applied to the center of the frame.\n\nYou can addjust the opacity, softness and size of the 'centerMask' with the sliders below.\nFor convience, turn on the 'displayMask' while addjusting the size." +STARTLINE}
+centerMask true
+addUserKnob {6 displayMask l "display mask" t "Enable to display the affect-area of the center mask" +STARTLINE}
+addUserKnob {4 switchMaskColor l "|   display color" t "Choose what color to display when 'displayMask' in enabled" -STARTLINE M {red green blue "" "" "" "" "" "" "" "" ""}}
+switchMaskColor blue
+addUserKnob {14 displayMaskScale l scale t "Addjust the scale of the centerMask. This lets you decide how much of the image is affected by the centerMask" R 0 100}
+displayMaskScale {0.5 1}
+addUserKnob {16 centerMaskOpacity l opacity t "Addjust the center mask opacity.\n\nThis allows for controlling the opacity of the aberration showing in the center of the frame when the 'centerMask' box is enabled"}
+centerMaskOpacity 1
+addUserKnob {41 centerMaskFalloff l falloff T maskFalloff.centerMaskFalloff}
+addUserKnob {26 ""}
+addUserKnob {20 endGroup_2 l endGroup n -1}
+addUserKnob {41 center T centerPoint.center}
+addUserKnob {22 unlockReset l reset/lock t "By default the centerpoint is locked to the center of the input format.\n\nClick this button to unlock the values. This will also set the centerpoint to the center of the input format." -STARTLINE T "def resetLock():\n    me = nuke.thisNode()\n    lockValue = me\['center'].enabled()\n    x = 'width()/2'\n    y = 'height()/2'\n    x2 = nuke.thisNode().width()/2\n    y2 = nuke.thisNode().height()/2\n\n    \n\n    if lockValue == True:\n        me\['center'].setEnabled(not lockValue)\n        me\['center'].clearAnimated()\n        me\['center'].setExpression(x,0)\n        me\['center'].setExpression(y,1)\n    elif lockValue == False:\n        me\['center'].clearAnimated()\n        me\['center'].setValue(\[x2,y2])\n        me\['center'].setEnabled(not lockValue)\n\nresetLock()"}
+addUserKnob {26 ""}
+addUserKnob {6 restoreLuminance l "restore luminance  |" t "Restore the original luminace.\n\nThis can help bring back sharpness if the channel offset operations has caused too much filtering." +STARTLINE}
+addUserKnob {7 luminancePercent l amount t "Blend between comp luminance and input luminance to decide how much of the original luminance you want to restore.\n\n0 = comp luma (no restoration)\n1 = input luma (full restoration)\n\nThis only takes effect if the checkbox is checked." -STARTLINE}
+luminancePercent 1
+addUserKnob {6 Rbypass l "&nbsp;<font color='#de0000'> Red</font><font color='#717171'>bypass</font>" t "Enable to bypass alteration to the red channel" +STARTLINE}
+addUserKnob {6 Gbypass l "&nbsp;<font color='#7ebd64'> Green</font><font color='#717171'>bypass</font>" t "Enable to bypass alteration to the green channel" -STARTLINE}
+addUserKnob {6 Bbypass l "&nbsp;<font color='#2279c3'> Blue</font><font color='#717171'>bypass</font>" t "Enable to bypass alteration to the blue channel" -STARTLINE}
+addUserKnob {26 ""}
+addUserKnob {26 apChromaAlpha l apChroma T " "}
+addUserKnob {6 calculate_multi_alpha l "calculate per-channel alpha" t "Also generates a channel layer called apChroma wich includes the transformed alphas for each of the rgba channels. This is necessary if you want to merge the result of this node onto a background. You'll need apChromaMerge or a similar gizmo in order to perform the special merge." -STARTLINE}
+calculate_multi_alpha true
+addUserKnob {6 process_alpha l "process single alpha from" t "If activated, the multi-channel alpha will get combined into a regular alpha that you can use for normal operations after this node." +STARTLINE}
+process_alpha true
+addUserKnob {41 mode_1 l "" -STARTLINE T Saturation1.mode}
+addUserKnob {6 preserveBBox +STARTLINE}
+addUserKnob {41 numpixels l "            add px" -STARTLINE T AdjBBox1.numpixels}
+addUserKnob {26 ""}
+addUserKnob {26 "" l mask T ""}
+addUserKnob {41 maskChannelMask l "" -STARTLINE T Merge11.maskChannelMask}
+addUserKnob {41 inject -STARTLINE T Merge11.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T Merge11.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Merge11.fringe}
+addUserKnob {41 mix T Merge11.mix}
+addUserKnob {26 text l " " T " "}
+addUserKnob {26 copyright l "" +STARTLINE T "<font color=gray>// fxT_chromaticAberration v3.1 © Tor Andreassen</font>"}
+}
+BackdropNode {
+inputs 0
+name backdrop02
+tile_color 0x3f4e69ff
+gl_color 0x5f7a8701
+label "RGB channel seperation"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -838
+ypos -1176
+bookmark false
+bdwidth 2869
+bdheight 107
+}
+BackdropNode {
+inputs 0
+name backdrop03
+tile_color 0x3f4e69ff
+gl_color 0x5f7a8701
+label "RGB channel offsets"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -839
+ypos -1037
+bookmark false
+bdwidth 2869
+bdheight 406
+}
+BackdropNode {
+inputs 0
+name backdrop04
+tile_color 0x3f4e69ff
+gl_color 0x5f7a8701
+label "induvidual channel blur"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -840
+ypos -595
+bookmark false
+bdwidth 2873
+bdheight 127
+}
+BackdropNode {
+inputs 0
+name backdrop05
+tile_color 0x3a3a3aff
+gl_color 0x44444401
+label "mask input"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos 2090
+ypos -1556
+bookmark false
+bdwidth 662
+bdheight 3664
+}
+BackdropNode {
+inputs 0
+name backdrop08
+tile_color 0x3f4e69ff
+gl_color 0x44444401
+label "mix between added chromatic aberration and original input"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -843
+ypos 701
+bookmark false
+bdwidth 2879
+bdheight 130
+}
+BackdropNode {
+inputs 0
+name backdrop1
+tile_color 0x3f4e69ff
+gl_color 0x5f7a8701
+label "center mask (less aberration in the center of the image)"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -838
+ypos -271
+bookmark false
+bdwidth 2872
+bdheight 490
+}
+BackdropNode {
+inputs 0
+name backdrop2
+tile_color 0x3f4e69ff
+gl_color 0x5f7a8701
+label "build RGB"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -842
+ypos 280
+bookmark false
+bdwidth 2877
+bdheight 151
+}
+BackdropNode {
+inputs 0
+name backdrop3
+tile_color 0x3f4e69ff
+gl_color 0x44444401
+label "display CenterMask"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -848
+ypos 1518
+bookmark false
+bdwidth 2881
+bdheight 431
+}
+BackdropNode {
+inputs 0
+name backdrop4
+tile_color 0x3f4e69ff
+gl_color 0x44444401
+label "restore luminence"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -844
+ypos 873
+bookmark false
+bdwidth 2884
+bdheight 447
+}
+BackdropNode {
+inputs 0
+name backdrop5
+tile_color 0x3f4e69ff
+gl_color 0x44444401
+label "keep input bbox"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -848
+ypos 2144
+bookmark false
+bdwidth 2883
+bdheight 111
+}
+BackdropNode {
+inputs 0
+name backdrop6
+tile_color 0x3f4e69ff
+gl_color 0x44444401
+label "keep input alpha channel"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -852
+ypos 458
+bookmark false
+bdwidth 2878
+bdheight 202
+}
+BackdropNode {
+inputs 0
+name backdrop7
+tile_color 0x3f4e69ff
+gl_color 0x5f7a8701
+label "bypass channels"
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -840
+ypos -430
+bookmark false
+bdwidth 2873
+bdheight 122
+}
+BackdropNode {
+inputs 0
+name backdrop8
+tile_color 0x3f4e69ff
+gl_color 0x44444401
+label mask
+note_font "Arial Black"
+note_font_size 20
+note_font_color 0xffffffff
+xpos -854
+ypos 1995
+bookmark false
+bdwidth 2881
+bdheight 132
+}
+NoOp {
+inputs 0
+name values
+xpos 432
+ypos -720
+hide_input true
+addUserKnob {20 values}
+addUserKnob {16 base}
+base 0.1
+addUserKnob {16 red}
+red {{-1*blue}}
+addUserKnob {16 green}
+green {{base}}
+addUserKnob {16 blue}
+blue {{base+(green*2)}}
+}
+StickyNote {
+inputs 0
+name StickyNote2
+tile_color 0x545454ff
+gl_color 0x545454ff
+label "checking if the mask input has an existing alpha channel.\nif alpha channel exists, mask will use the input alpha,\nif no alpha exists, a solid alpha will be used (same as not masking)"
+xpos 2402
+ypos -1220
+}
+Input {
+inputs 0
+name mask
+label "\[value number]"
+xpos 2578
+ypos -1410
+number 1
+}
+Dot {
+name Dot24
+xpos 2603
+ypos -1346
+}
+set N648119f0 [stack 0]
+NoOp {
+name autoAlphaCheck2
+xpos 2456
+ypos -1340
+addUserKnob {20 autoAlphaCheck}
+addUserKnob {6 a +STARTLINE}
+a {{"clamp(\[lsearch \[channels this] rgba.alpha]+1, 0, 1)\n"}}
+}
+StickyNote {
+inputs 0
+name StickyNote3
+tile_color 0x545454ff
+gl_color 0x545454ff
+label "<left>info: \n\nThe nodes activated by default (only scale) controls the channelOffset.\nThis is the basic setup, the other transforms stacked under the scale-nodes are by default disabled to avoid filtering issus when extra offset controls is not needed.\n\nIf the 'activate global controls' checkbox is activated, all the transforms will be active.\nThis will give you access to all the extra offset controls, but can also cause some extra unwanted filtering. \n\nIf filtering becomes an issue, but you still want to use the extra controls, try using  the restore luminance option to restore detail.\n\nPick you battle:  more contol == some loss in detail"
+xpos -825
+ypos -974
+}
+StickyNote {
+inputs 0
+name StickyNote1
+tile_color 0x545454ff
+gl_color 0x545454ff
+label "<left>info: \n\ncopy node is there to recreate the input alpha.\nif an alpha does not extist, a solid alpha will be copied in.\nthis is to not get errors when using the node on inputs with no alpha channel.\n\nTo restore the original blank alpha channel,\nthe remove node grabs the input alpha value and removes\nor keeps the alpha channel based on if an input alpha exists"
+xpos 1184
+ypos 498
+}
+Input {
+inputs 0
+name rgba
+label "\[value number]"
+xpos 778
+ypos -1500
+}
+set N64b61ac0 [stack 0]
+Dot {
+name Dot2
+xpos -998
+ypos -1499
+}
+Dot {
+name Dot23
+xpos -998
+ypos -195
+}
+set Nabdd0a80 [stack 0]
+Dot {
+name Dot13
+xpos -998
+ypos 60
+}
+Dot {
+name Dot36
+note_font_size 41
+xpos -998
+ypos 582
+}
+Dot {
+name Dot21
+xpos -998
+ypos 758
+}
+Dot {
+name Dot34
+xpos -998
+ypos 1099
+}
+set Nb0e0110 [stack 0]
+Dot {
+name Dot7
+xpos -998
+ypos 1405
+}
+Dot {
+name Dot22
+xpos -998
+ypos 1586
+}
+set N1416d9e0 [stack 0]
+Dot {
+name Dot35
+note_font_size 41
+xpos -998
+ypos 2058
+}
+Dot {
+name Dot18
+tile_color 0x272727ff
+xpos -998
+ypos 2211
+}
+AdjBBox {
+numpixels 0
+name AdjBBox1
+xpos 1477
+ypos 2207
+}
+push $Nabdd0a80
+Remove {
+name Remove1
+xpos -491
+ypos -193
+}
+Radial {
+area {0 0 {input.width()} {input.height()}}
+name Radial2
+xpos -491
+ypos -163
+}
+Expression {
+expr0 r
+expr1 g
+expr2 b
+expr3 a<centerMaskFalloff?smoothstep(0,centerMaskFalloff,a):1
+name maskFalloff
+xpos -491
+ypos -137
+addUserKnob {20 maskFalloff l "mask falloff"}
+addUserKnob {7 centerMaskFalloff l maskFalloff t "Adjust the alpha falloff of the 'centerMask'.\n\nThis will let you addjust how hard the transition is between the affected and not affected area when the centerMask is activated." R 0.2 0.75}
+centerMaskFalloff 0.5
+}
+Transform {
+scale {{parent.displayMaskScale.w} {parent.displayMaskScale.h}}
+center {{(input.width())/2} {(input.height())/2}}
+name Transform2
+label centerMaskScale
+xpos -491
+ypos -113
+}
+Multiply {
+channels rgba
+value {{parent.centerMaskOpacity}}
+name Multiply4
+xpos -491
+ypos -81
+}
+Clamp {
+name Clamp1
+xpos -491
+ypos -57
+}
+Dot {
+name Dot10
+xpos -457
+ypos 3
+}
+set N23a7ece0 [stack 0]
+Dot {
+name Dot15
+xpos -929
+ypos 3
+}
+Dot {
+name Dot14
+xpos -929
+ypos 1841
+}
+push $N1416d9e0
+Remove {
+name Remove4
+xpos -65
+ypos 1576
+}
+Shuffle {
+alpha white
+name Shuffle1
+tile_color 0xffffffff
+label solidAlpha
+xpos -65
+ypos 1636
+}
+set N8766b7c0 [stack 0]
+Add {
+value {0 0 1 1}
+name Add3
+tile_color 0xffff
+xpos 56
+ypos 1692
+}
+push $N8766b7c0
+Add {
+value {0 1 0 1}
+name Add2
+tile_color 0xff00ff
+xpos -65
+ypos 1693
+}
+push $N8766b7c0
+Add {
+value {1 0 0 1}
+name Add1
+tile_color 0xff0000ff
+xpos -197
+ypos 1695
+}
+Switch {
+inputs 3
+which {{parent.switchMaskColor}}
+name Switch2
+xpos -65
+ypos 1775
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy2
+xpos -65
+ypos 1831
+}
+Premult {
+name Premult1
+xpos -65
+ypos 1895
+}
+push $Nb0e0110
+Colorspace {
+colorspace_out YCbCr
+name Colorspace1
+label "Lin --> YCbCr"
+xpos 1104
+ypos 1098
+}
+push $N23a7ece0
+Dot {
+name Dot1
+note_font_size 41
+xpos -34
+ypos 3
+}
+set Nf8545180 [stack 0]
+push $N64b61ac0
+Dot {
+name Dot25
+xpos 806
+ypos -1393
+}
+set Nf8549fd0 [stack 0]
+add_layer {apChroma apChroma.red apChroma.green apChroma.blue apChroma.alpha}
+Shuffle2 {
+fromInput1 {{0} B}
+fromInput2 {{0} B}
+out2 apChroma
+mappings "8 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.blue 0 2 rgba.alpha 0 3 rgba.alpha 0 3 rgba.alpha 0 3 apChroma.red 1 0 rgba.alpha 0 3 apChroma.green 1 1 rgba.alpha 0 3 apChroma.blue 1 2 rgba.alpha 0 3 apChroma.alpha 1 3"
+name Shuffle4
+label "\[value in1] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat -> \[value out2]] \}]"
+note_font_size 22
+note_font_color 0xffffffff
+xpos 772
+ypos -1353
+}
+Dot {
+name Dot5
+xpos 806
+ypos -1272
+}
+set Nabf63b40 [stack 0]
+Dot {
+name Dot9
+xpos 97
+ypos -1272
+}
+Shuffle {
+green red
+blue red
+name redShuffle
+tile_color 0xff0000ff
+xpos 72
+ypos -1108
+}
+set N64eaa360 [stack 0]
+Dot {
+name Dot27
+xpos -92
+ypos -1114
+}
+Dot {
+name Dot28
+xpos -92
+ypos -356
+}
+set Nabbd19a0 [stack 0]
+push $Nabf63b40
+Dot {
+name Dot6
+xpos 1668
+ypos -1272
+}
+set Nabcdd1a0 [stack 0]
+Shuffle {
+alpha white
+name Shuffle3
+tile_color 0xffffffff
+label solidAlpha
+xpos 2457
+ypos -1273
+}
+push $N648119f0
+Switch {
+inputs 2
+which {{!parent.autoAlphaCheck2.a}}
+name Switch1
+tile_color 0x666666ff
+label AutoMaskCheck
+xpos 2578
+ypos -1273
+}
+Dot {
+name Dot40
+note_font_size 41
+xpos 2612
+ypos -169
+}
+set Nabdae2a0 [stack 0]
+Dot {
+name Dot41
+note_font_size 41
+xpos 1785
+ypos -169
+}
+set Nabdb3360 [stack 0]
+Dot {
+name Dot42
+note_font_size 41
+xpos 880
+ypos -169
+}
+set Nabf26700 [stack 0]
+push $Nabbd19a0
+push $N64eaa360
+TransformMasked {
+scale {{parent.redScale}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name redTransform1
+tile_color 0xff0000ff
+label "scale\n\[value filter]"
+xpos -27
+ypos -961
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetTop*(values.red)}}
+center {{parent.centerPoint.input.width()/2} 0}
+name redTransform23
+tile_color 0xff0000ff
+label "top offset: skewX\n\[value filter]"
+xpos -27
+ypos -886
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetBottom*(values.red)}}
+center {{parent.centerPoint.input.width()/2} {parent.centerPoint.input.height()}}
+name redTransform24
+tile_color 0xff0000ff
+label "bottom offset: skewY\n\[value filter]"
+xpos -27
+ypos -844
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+rotate {{parent.offsetRotation*(values.red/10)}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name redTransform25
+tile_color 0xff0000ff
+label "rotate\n\[value filter]"
+xpos -27
+ypos -802
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+translate {{parent.offsetX*values.red} {parent.offsetY*values.red}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name redTransform26
+tile_color 0xff0000ff
+label "x,y\n\[value filter]"
+xpos -27
+ypos -760
+disable {{!parent.activateEGOC}}
+}
+push $N64eaa360
+GodRays {
+scale {{parent.redScale}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+invert_mask true
+name GodRays1
+tile_color 0xff0000ff
+label scale
+xpos 72
+ypos -956
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetTop*(values.red)}}
+center {{parent.centerPoint.input.width()/2} 0}
+name redTransform13
+tile_color 0xff0000ff
+label "top offset: skewX\n\[value filter]"
+xpos 72
+ypos -888
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetBottom*(values.red)}}
+center {{parent.centerPoint.input.width()/2} {parent.centerPoint.input.height()}}
+name redTransform14
+tile_color 0xff0000ff
+label "bottom offset: skewY\n\[value filter]"
+xpos 72
+ypos -846
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+rotate {{parent.offsetRotation*(values.red/10)}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name redTransform15
+tile_color 0xff0000ff
+label "rotate\n\[value filter]"
+xpos 72
+ypos -804
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+translate {{parent.offsetX*values.red} {parent.offsetY*values.red}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name redTransform21
+tile_color 0xff0000ff
+label "x,y\n\[value filter]"
+xpos 74
+ypos -762
+disable {{!parent.activateEGOC}}
+}
+Switch {
+inputs 2
+which {{parent.mode}}
+name modeSwitch1
+tile_color 0x666666ff
+xpos 74
+ypos -680
+}
+Blur {
+size {{parent.redChBlur}}
+name BlurRedCh
+tile_color 0xff0000ff
+xpos 74
+ypos -513
+}
+Switch {
+inputs 2
+which {{parent.Rbypass}}
+name bypassRedSwitch
+tile_color 0x666666ff
+xpos 74
+ypos -350
+}
+push $Nabbd19a0
+Merge2 {
+inputs 2+1
+operation copy
+also_merge all
+maskChannelMask {{{parent.Merge11.maskChannelMask}}}
+inject {{parent.Merge11.inject}}
+invert_mask {{parent.Merge11.invert_mask}}
+fringe {{parent.Merge11.fringe}}
+mix {{parent.Merge11.mix}}
+name Merge14
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 74
+ypos -173
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+}
+Merge2 {
+inputs 2+1
+operation copy
+also_merge all
+name Merge15
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 74
+ypos 105
+disable {{!parent.centerMask}}
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+}
+Multiply {
+value {1 0 0 1}
+name Multiply3
+label "\[value value]"
+xpos 74
+ypos 374
+}
+Dot {
+name Dot39
+note_font_size 41
+xpos 1461
+ypos 390
+}
+push $Nf8545180
+Dot {
+name Dot3
+note_font_size 41
+xpos 593
+ypos 3
+}
+set N652c62f0 [stack 0]
+push $Nabf63b40
+Shuffle {
+red green
+blue green
+name greenShuffle
+tile_color 0xff00ff
+xpos 781
+ypos -1114
+}
+set N64aeb5e0 [stack 0]
+Dot {
+name Dot31
+xpos 601
+ypos -1116
+}
+Dot {
+name Dot29
+xpos 604
+ypos -364
+}
+set Nabf8a260 [stack 0]
+push $Nabf26700
+push $Nabf8a260
+push $N64aeb5e0
+TransformMasked {
+scale {{parent.greenScale}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name greenTransform1
+tile_color 0xff00ff
+label "scale\n\[value filter]"
+xpos 669
+ypos -970
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetTop*(values.green)}}
+center {{parent.centerPoint.input.width()/2} 0}
+name redTransform3
+tile_color 0xff00ff
+label "top offset: skewX\n\[value filter]"
+xpos 669
+ypos -899
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetBottom*(values.green)}}
+center {{parent.centerPoint.input.width()/2} {parent.centerPoint.input.height()}}
+name redTransform4
+tile_color 0xff00ff
+label "bottom offset: skewY\n\[value filter]"
+xpos 669
+ypos -857
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+rotate {{parent.offsetRotation*(values.green/10)}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name greenTransform7
+tile_color 0xff00ff
+label "rotate\n\[value filter]"
+xpos 669
+ypos -815
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+translate {{parent.offsetX*values.green} {parent.offsetY*values.green}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name greenTransform8
+tile_color 0xff00ff
+label "x, y\n\[value filter]"
+xpos 669
+ypos -773
+disable {{!parent.activateEGOC}}
+}
+push $N64aeb5e0
+GodRays {
+scale {{parent.greenScale}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+invert_mask true
+name GodRays2
+tile_color 0xff00ff
+label scale
+xpos 781
+ypos -970
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetTop*(values.green)}}
+center {{parent.centerPoint.input.width()/2} 0}
+name redTransform10
+tile_color 0xff00ff
+label "top offset: skewX\n\[value filter]"
+xpos 781
+ypos -902
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetBottom*(values.green)}}
+center {{parent.centerPoint.input.width()/2} {parent.centerPoint.input.height()}}
+name redTransform16
+tile_color 0xff00ff
+label "bottom offset: skewY\n\[value filter]"
+xpos 781
+ypos -860
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+rotate {{parent.offsetRotation*(values.green/10)}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name greenTransform9
+tile_color 0xff00ff
+label "rotate\n\[value filter]"
+xpos 781
+ypos -818
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+translate {{parent.offsetX*values.green} {parent.offsetY*values.green}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name greenTransform10
+tile_color 0xff00ff
+label "x, y\n\[value filter]"
+xpos 781
+ypos -776
+disable {{!parent.activateEGOC}}
+}
+Switch {
+inputs 2
+which {{parent.mode}}
+name modeSwitch3
+tile_color 0x666666ff
+xpos 782
+ypos -686
+}
+Blur {
+size {{parent.greenChBlur}}
+name BlurGeenCh
+tile_color 0xff00ff
+xpos 782
+ypos -518
+}
+Switch {
+inputs 2
+which {{parent.Gbypass}}
+name bypassGreenSwitch
+tile_color 0x666666ff
+xpos 785
+ypos -361
+}
+push $Nabf8a260
+Merge2 {
+inputs 2+1
+operation copy
+also_merge all
+maskChannelMask {{{parent.Merge11.maskChannelMask}}}
+inject {{parent.Merge11.inject}}
+invert_mask {{parent.Merge11.invert_mask}}
+fringe {{parent.Merge11.fringe}}
+mix {{parent.Merge11.mix}}
+name Merge12
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 785
+ypos -108
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+}
+Merge2 {
+inputs 2+1
+operation copy
+also_merge all
+name Merge13
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 785
+ypos 122
+disable {{!parent.centerMask}}
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+}
+Multiply {
+value {0 1 0 1}
+name Multiply5
+label "\[value value]"
+xpos 785
+ypos 314
+}
+push $N652c62f0
+Dot {
+name Dot12
+note_font_size 41
+xpos 1469
+ypos 3
+}
+push $Nabcdd1a0
+Shuffle {
+red blue
+green blue
+name blueShuffle
+tile_color 0xffff
+xpos 1640
+ypos -1126
+}
+set N57ef75b0 [stack 0]
+Dot {
+name Dot33
+xpos 1467
+ypos -1116
+}
+Dot {
+name Dot32
+xpos 1467
+ypos -373
+}
+set N7c842930 [stack 0]
+push $Nabdb3360
+push $N7c842930
+push $N57ef75b0
+TransformMasked {
+scale {{parent.blueScale}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name blueTransform1
+tile_color 0xffff
+label "scale\n\[value filter]"
+xpos 1532
+ypos -970
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetTop*(values.blue)}}
+center {{parent.centerPoint.input.width()/2} 0}
+name redTransform6
+tile_color 0xffff
+label "top offset: skewX\n\[value filter]"
+xpos 1532
+ypos -874
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetBottom*(values.blue)}}
+center {{parent.centerPoint.input.width()/2} {parent.centerPoint.input.height()}}
+name redTransform7
+tile_color 0xffff
+label "bottom offset: skewY\n\[value filter]"
+xpos 1532
+ypos -832
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+rotate {{parent.offsetRotation*(values.blue/10)}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name blueTransform7
+tile_color 0xffff
+label "rotate\n\[value filter]"
+xpos 1532
+ypos -790
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+translate {{parent.offsetX*values.blue} {parent.offsetY*values.blue}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name blueTransform8
+tile_color 0xffff
+label "x,y\n\[value filter]"
+xpos 1532
+ypos -748
+disable {{!parent.activateEGOC}}
+}
+push $N57ef75b0
+GodRays {
+scale {{parent.blueScale}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+invert_mask true
+name GodRays3
+tile_color 0xffff
+label scale
+xpos 1640
+ypos -970
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetTop*(values.blue)}}
+center {{parent.centerPoint.input.width()/2} 0}
+name redTransform8
+tile_color 0xffff
+label "top offset: skewX\n\[value filter]"
+xpos 1640
+ypos -876
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+skewX {{parent.offsetBottom*(values.blue)}}
+center {{parent.centerPoint.input.width()/2} {parent.centerPoint.input.height()}}
+name redTransform9
+tile_color 0xffff
+label "bottom offset: skewY\n\[value filter]"
+xpos 1640
+ypos -834
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+rotate {{parent.offsetRotation*(values.blue/10)}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name blueTransform9
+tile_color 0xffff
+label "rotate\n\[value filter]"
+xpos 1640
+ypos -792
+disable {{!parent.activateEGOC}}
+}
+TransformMasked {
+channels rgb
+translate {{parent.offsetX*values.blue} {parent.offsetY*values.blue}}
+center {{parent.centerPoint.center.x} {parent.centerPoint.center.y}}
+name blueTransform10
+tile_color 0xffff
+label "x,y\n\[value filter]"
+xpos 1640
+ypos -750
+disable {{!parent.activateEGOC}}
+}
+Switch {
+inputs 2
+which {{parent.mode}}
+name modeSwitch5
+tile_color 0x666666ff
+xpos 1641
+ypos -675
+}
+Blur {
+size {{parent.blueChBlur}}
+name BlurBlueCh
+tile_color 0xffff
+xpos 1641
+ypos -537
+}
+Switch {
+inputs 2
+which {{parent.Bbypass}}
+name bypassBlueSwitch
+tile_color 0x666666ff
+xpos 1641
+ypos -367
+}
+push $N7c842930
+Merge2 {
+inputs 2+1
+operation copy
+also_merge all
+name Merge11
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 1641
+ypos -95
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+}
+Merge2 {
+inputs 2+1
+operation copy
+also_merge rgba
+name Merge4
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 1641
+ypos 145
+disable {{!parent.centerMask}}
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+}
+Multiply {
+value {0 0 1 1}
+name Multiply6
+label "\[value value]"
+xpos 1641
+ypos 227
+}
+Merge2 {
+inputs 2
+operation plus
+also_merge all
+name Merge1
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 1641
+ypos 326
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+}
+Merge2 {
+inputs 2
+operation plus
+also_merge all
+name Merge3
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos 1641
+ypos 386
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+}
+set N6d1ac9d0 [stack 0]
+Shuffle {
+in apChroma
+name Shuffle6
+autolabel "nuke.thisNode()\['name'].value() + '\\n' + nuke.thisNode()\['in'].value() + (' -> ' + nuke.thisNode()\['out2'].value() if nuke.thisNode()\['out2'].value() != 'none' else '') + ('\\n' + nuke.thisNode()\['label'].value() if nuke.thisNode()\['label'].value() != '' else '')"
+note_font_size 22
+note_font_color 0xffffffff
+xpos 2156
+ypos 198
+}
+Saturation {
+saturation 0
+name Saturation1
+xpos 2156
+ypos 272
+}
+Shuffle {
+green red
+blue red
+alpha red
+name Shuffle8
+autolabel ''
+tile_color 0x93000000
+note_font_size 22
+note_font_color 0xffffffff
+xpos 2156
+ypos 298
+}
+push $N64b61ac0
+AddChannels {
+channels rgba
+name AddChannels1
+xpos 2144
+ypos -1506
+}
+Dot {
+name Dot11
+xpos 2338
+ypos -1502
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy1
+xpos 2304
+ypos 297
+disable {{!parent.process_alpha}}
+}
+Dot {
+name Dot26
+xpos 2338
+ypos 362
+}
+set Nc75990c0 [stack 0]
+Shuffle {
+alpha white
+name Shuffle5
+tile_color 0xffffffff
+label solidAlpha
+xpos 2164
+ypos 436
+}
+push $Nc75990c0
+Dot {
+name Dot8
+xpos 2338
+ypos 517
+}
+Switch {
+inputs 2
+which {{!autoAlphaCheck1.a}}
+name Switch3
+tile_color 0x666666ff
+label AutoMaskCheck
+xpos 2164
+ypos 519
+}
+push $N6d1ac9d0
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 rgba.alpha
+name Copy3
+xpos 1641
+ypos 519
+}
+Remove {
+channels alpha
+name Remove2
+xpos 1641
+ypos 577
+disable {{parent.autoAlphaCheck1.a}}
+}
+Remove {
+channels apChroma
+name Remove3
+xpos 1641
+ypos 763
+disable {{parent.calculate_multi_alpha}}
+}
+Dot {
+name Dot30
+xpos 1674
+ypos 1057
+}
+set Nc729daa0 [stack 0]
+Colorspace {
+colorspace_out YCbCr
+name Colorspace5
+label "Lin --> YCbCr"
+xpos 1459
+ypos 1047
+}
+set Nc7193100 [stack 0]
+Dissolve {
+inputs 2
+channels rgb
+which {{parent.luminancePercent}}
+name Dissolve2
+xpos 1285
+ypos 1100
+}
+push $Nc7193100
+Copy {
+inputs 2
+from0 rgba.red
+to0 rgba.red
+name Copy11
+xpos 1459
+ypos 1096
+}
+Colorspace {
+colorspace_in YCbCr
+name Colorspace6
+label "YCbCr --> Lin"
+xpos 1459
+ypos 1149
+}
+push $Nc729daa0
+Switch {
+inputs 2
+which {{parent.restoreLuminance}}
+name restore_luminance
+tile_color 0x666666ff
+xpos 1640
+ypos 1155
+}
+Merge2 {
+inputs 2
+name Merge2
+xpos 1641
+ypos 1898
+disable {{!(parent.displayMask)}}
+}
+CopyBBox {
+inputs 2
+name CopyBBox1
+xpos 1641
+ypos 2207
+disable {{!parent.preserveBBox}}
+}
+Output {
+name Output1
+xpos 1641
+ypos 2547
+}
+push $Nabdae2a0
+Dot {
+name Dot43
+note_font_size 41
+xpos 2612
+ypos 1567
+}
+Dot {
+name Dot4
+tile_color 0x272727ff
+label mask
+note_font "Arial Black"
+note_font_size 25
+xpos 2612
+ypos 2058
+}
+push $Nf8549fd0
+NoOp {
+name autoAlphaCheck1
+xpos 894
+ypos -1397
+addUserKnob {20 autoAlphaCheck}
+addUserKnob {6 a +STARTLINE}
+a {{"clamp(\[lsearch \[channels this] rgba.alpha]+1, 0, 1)"}}
+}
+push $Nf8549fd0
+NoOp {
+name centerPoint
+xpos 657
+ypos -1397
+addUserKnob {20 centerPoint}
+addUserKnob {12 center +DISABLED}
+center {{width()/2} {height()/2}}
+}
+end_group
