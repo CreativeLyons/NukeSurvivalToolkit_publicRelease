@@ -350,6 +350,7 @@ apChromaMenu.addCommand('apChromaPremult AP', 'nuke.createNode("{}apChromaPremul
 filterMenu.addSeparator()
 
 filterMenu.addCommand('Chromatik SPIN', "nuke.createNode('{}Chromatik')".format(prefixNST), icon='spin_tools.png')
+filterMenu.addCommand('ChromaticAberration fxT', "nuke.createNode('{}fxT_ChromaticAberration')".format(prefixNST), icon='ColorLookup.png')
 filterMenu.addCommand("ChromaSmear LJ", "nuke.createNode('{}ChromaSmear')".format(prefixNST), icon="ColorLookup.png")
 
 filterMenu.addSeparator()
