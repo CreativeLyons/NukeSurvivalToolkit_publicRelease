@@ -10,13 +10,6 @@ import sys
 import os
 import webbrowser
 
-# Add PluginPaths to tools and icons
-nuke.pluginAddPath('./gizmos')
-nuke.pluginAddPath('./python')
-nuke.pluginAddPath('./icons')
-nuke.pluginAddPath('./images')
-nuke.pluginAddPath('./nk_files')
-
 # Import some helpful functions for the NST
 import NST_helper
 
