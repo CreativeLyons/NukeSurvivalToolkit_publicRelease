@@ -324,6 +324,7 @@ filterMenu.addSeparator()
 
 filterMenu.addCommand('BeautifulSkin TL', "nuke.createNode('{}BeautifulSkin')".format(prefixNST), icon="Median.png")
 filterMenu.addCommand('BlacksExpon TL', "nuke.createNode('{}BlacksExpon')".format(prefixNST), icon="Toe.png")
+filterMenu.addCommand('aeShadows AE', "nuke.createNode('{}aeShadows')".format(prefixNST), icon="aeShadows_icon.png")
 filterMenu.addCommand('Halation TL', "nuke.createNode('{}Halation')".format(prefixNST), icon="EdgeBlur.png")
 filterMenu.addCommand('HighPass TL', "nuke.createNode('{}HighPass')".format(prefixNST), icon="Invert.png")
 filterMenu.addCommand('Diffusion TL', "nuke.createNode('{}Diffusion')".format(prefixNST), icon="Spark.png")
