@@ -1,679 +1,441 @@
-add_layer {apChroma apChroma.red apChroma.green apChroma.blue apChroma.alpha}
 Group {
- inputs 2
- name apChromaMerge
- tile_color 0x736efdff
- selected true
- addUserKnob {20 apChromaMerge}
- addUserKnob {41 operation T MergeR.operation}
- addUserKnob {41 sRGB l "Video colorspace" -STARTLINE T MergeR.sRGB}
- addUserKnob {41 screen_alpha l "alpha masking" -STARTLINE T MergeR.screen_alpha}
- addUserKnob {41 bbox l "set bbox to " T MergeR.bbox}
- addUserKnob {41 metainput l "metadata from" -STARTLINE T MergeR.metainput}
- addUserKnob {41 rangeinput l "range from" -STARTLINE T MergeR.rangeinput}
- addUserKnob {26 ""}
- addUserKnob {41 Achannels l "A channels" T MergeChroma.Achannels}
- addUserKnob {41 Bchannels l "B channels" T MergeChroma.Bchannels}
- addUserKnob {41 output T MergeChroma.output}
- addUserKnob {41 also_merge l "also merge" T MergeChroma.also_merge}
- addUserKnob {6 mergeAll l "Merge all channels the same as MergeAll node" +STARTLINE}
- addUserKnob {26 ""}
- addUserKnob {41 chroma l "<b><font color=#9292d2>multi-alpha" T MergeCopyChroma.output}
- addUserKnob {6 keep_multi_alpha l "keep multi-alpha" t "Keep the multi-alpha channels, so that you can do more chroma operations downstream." +STARTLINE}
- addUserKnob {6 process_alpha l "process single alpha from" t "If activated, the multi-channel alpha will get combined into a regular alpha that you can use for normal operations after this node." -STARTLINE}
- process_alpha true
- addUserKnob {41 mode l "" -STARTLINE T Saturation0.mode}
- addUserKnob {26 ""}
- addUserKnob {41 maskChannelMask l "mask " -STARTLINE T MergeChroma.maskChannelMask}
- addUserKnob {41 inject -STARTLINE T MergeChroma.inject}
- addUserKnob {41 invert_mask l invert -STARTLINE T MergeChroma.invert_mask}
- addUserKnob {41 fringe -STARTLINE T MergeChroma.fringe}
- addUserKnob {41 mix T MergeChroma.mix}
- addUserKnob {26 version_author l "" t "apChromaMerge v0.3\n2019" +STARTLINE T "<span style=\"color:#666\"><br/><b>apChromaMerge v0.3</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019</span>"}
+name ChromaSmear
+tile_color 0xd26524ff
+note_font "Bitstream Vera Sans Bold"
+note_font_color 0xffffffff
+selected true
+addUserKnob {20 ChromaSmear}
+addUserKnob {26 note l "" +STARTLINE T "<b>Area input</b> = pre-mask (mult vectors)"}
+addUserKnob {26 note3 l "      " -STARTLINE T "<b>Vector input</b> = custom vectors"}
+addUserKnob {26 note2 l "" +STARTLINE T "<b>Mask input </b>= post-mask (keymix)"}
+addUserKnob {26 ""}
+addUserKnob {7 abberation R -5 5}
+abberation 3
+addUserKnob {7 saturation}
+saturation 1
+addUserKnob {7 offset R -1 1}
+offset 0.5
+addUserKnob {26 ""}
+addUserKnob {41 translate T Transform1.translate}
+addUserKnob {41 rotate T Transform1.rotate}
+addUserKnob {41 scale T Transform1.scale}
+addUserKnob {41 center T Transform1.center}
+addUserKnob {41 opacity l fade T Radial1.opacity}
+addUserKnob {26 ""}
+addUserKnob {7 overallAmount l "Overall Amount" R -2 3}
+overallAmount 1
+addUserKnob {7 Mask_softness l "Radial Mask"}
+addUserKnob {6 exportAPchroma l "Export apChroma layer" +STARTLINE}
+exportAPchroma true
+addUserKnob {26 ""}
+addUserKnob {26 "" l mask T ""}
+addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge5.maskChannelInput}
+addUserKnob {41 inject -STARTLINE T Merge5.inject}
+addUserKnob {41 invert_mask l invert -STARTLINE T Merge5.invert_mask}
+addUserKnob {41 fringe -STARTLINE T Merge5.fringe}
+addUserKnob {41 mix T Merge5.mix}
+addUserKnob {26 ""}
+addUserKnob {26 credit l "" +STARTLINE T "Luc Julien 2010 | edited by Tony Lyons 2024"}
 }
- Merge2 {
-  inputs 0
-  operation copy
-  Achannels {{{parent.MergeCopyChroma.output}}}
-  Bchannels none
-  output {{{parent.MergeCopyChroma.output}}}
-  name MergeChosen
-  xpos -96
-  ypos -96
-  hide_input true
- }
- Input {
-  inputs 0
-  name Inputmask
-  xpos 1293
-  ypos 604
-  number 2
- }
-set N80e58740 [stack 0]
- Input {
-  inputs 0
-  name InputB
-  xpos 1158
-  ypos -338
- }
-set Nc5153c90 [stack 0]
- Input {
-  inputs 0
-  name InputA
-  xpos -401
-  ypos -302
-  number 1
- }
- Group {
-  inputs 2
-  name InjectAllChannels
-  tile_color 0x9e3c63ff
-  xpos -401
-  ypos -206
-  disable {{!parent.mergeAll}}
- }
-  Input {
-   inputs 0
-   name InputA
-   xpos 378
-   ypos 241
-   number 1
-  }
-  Multiply {
-   value 0
-   name Multiply1
-   label "\[value value]"
-   xpos 378
-   ypos 330
-  }
-  Input {
-   inputs 0
-   name InputB
-   xpos 520
-   ypos 241
-  }
-  Merge2 {
-   inputs 2
-   operation plus
-   also_merge all
-   name Merge1
-   xpos 520
-   ypos 342
-  }
-  Output {
-   name Output1
-   xpos 520
-   ypos 400
-  }
- end_group
- Dot {
-  name Dot18
-  note_font_size 41
-  xpos -367
-  ypos -143
- }
-set N6fb4e7e0 [stack 0]
- Dot {
-  name Dot6
-  note_font_size 41
-  xpos 70
-  ypos -143
- }
-set N39b58f60 [stack 0]
- Dot {
-  name Dot5
-  note_font_size 41
-  xpos 148
-  ypos -143
- }
- Dot {
-  name Dot8
-  note_font_size 41
-  xpos 148
-  ypos -61
- }
-push $N39b58f60
- Shuffle {
-  red alpha
-  green alpha
-  blue alpha
-  name ShuffleA
-  label alpha
-  xpos 36
-  ypos -113
- }
- Merge2 {
-  inputs 2
-  operation copy
-  Achannels {{{parent.MergeCopyChroma.output}}}
-  Bchannels none
-  name MergeGetChroma2
-  xpos 36
-  ypos -65
-  disable {{"\[\nif \{ \[lsearch -exact \[channels \[input this 1]] \[lindex \[channels MergeChosen] 0]] >= 0\} \{\n    return 0\n\} else \{\n    return 1\n\}\n]"}}
- }
- Dot {
-  name Dot2
-  note_font_size 41
-  xpos 70
-  ypos 7
- }
-set N12376bc0 [stack 0]
-push $N6fb4e7e0
- Dot {
-  name Dot12
-  note_font_size 41
-  xpos -367
-  ypos -42
- }
-set N10ad2290 [stack 0]
- Dot {
-  name Dot1
-  note_font_size 41
-  xpos -290
-  ypos -42
- }
-set N9776eaa0 [stack 0]
- Dot {
-  name Dot9
-  note_font_size 41
-  xpos -202
-  ypos -42
- }
-set N4424890 [stack 0]
- Dot {
-  name Dot7
-  note_font_size 41
-  xpos -117
-  ypos -42
- }
- Copy {
-  inputs 2
-  from0 rgba.red
-  to0 rgba.alpha
-  name Copy1
-  xpos -151
-  ypos -3
- }
- Multiply {
-  value {1 0 0 1}
-  name MultiplyKeepR2
-  label "\[value value]"
-  xpos -151
-  ypos 35
- }
- Dot {
-  name Dot16
-  note_font_size 41
-  xpos -117
-  ypos 155
- }
-push $Nc5153c90
- Dot {
-  name Dot32
-  note_font_size 41
-  xpos 1192
-  ypos -149
- }
-set N8e311d10 [stack 0]
- Dot {
-  name Dot19
-  note_font_size 41
-  xpos 945
-  ypos -149
- }
-set Naf759af0 [stack 0]
- Dot {
-  name Dot20
-  note_font_size 41
-  xpos 274
-  ypos -149
- }
-set N8f6efd30 [stack 0]
- Dot {
-  name Dot21
-  note_font_size 41
-  xpos 196
-  ypos -149
- }
- Dot {
-  name Dot22
-  note_font_size 41
-  xpos 196
-  ypos -60
- }
-push $N8f6efd30
- Shuffle {
-  red alpha
-  green alpha
-  blue alpha
-  name ShuffleA1
-  label alpha
-  xpos 240
-  ypos -119
- }
- Merge2 {
-  inputs 2
-  operation copy
-  Achannels {{{parent.MergeCopyChroma.output}}}
-  Bchannels none
-  name MergeGetChroma1
-  xpos 240
-  ypos -64
-  disable {{"\[\nif \{ \[lsearch -exact \[channels \[input this 1]] \[lindex \[channels MergeChosen] 0]] >= 0\} \{\n    return 0\n\} else \{\n    return 1\n\}\n]"}}
- }
- Dot {
-  name Dot23
-  note_font_size 41
-  xpos 274
-  ypos 1
- }
-set N34914360 [stack 0]
-push $Naf759af0
- Dot {
-  name Dot26
-  note_font_size 41
-  xpos 945
-  ypos -48
- }
-set Na2af72e0 [stack 0]
- Dot {
-  name Dot27
-  note_font_size 41
-  xpos 591
-  ypos -48
- }
-set N1ffc4140 [stack 0]
- Dot {
-  name Dot28
-  note_font_size 41
-  xpos 503
-  ypos -48
- }
-set N810d1a80 [stack 0]
- Dot {
-  name Dot29
-  note_font_size 41
-  xpos 418
-  ypos -48
- }
- Copy {
-  inputs 2
-  from0 rgba.red
-  to0 rgba.alpha
-  name Copy6
-  xpos 384
-  ypos -9
- }
- Multiply {
-  value {1 0 0 1}
-  name MultiplyKeepR1
-  label "\[value value]"
-  xpos 384
-  ypos 63
- }
- Merge2 {
-  inputs 2
-  Achannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
-  Bchannels {rgba.red -rgba.green -rgba.blue rgba.alpha}
-  output {rgba.red -rgba.green -rgba.blue rgba.alpha}
-  also_merge all
-  name MergeR
-  xpos 384
-  ypos 145
- }
- Dot {
-  name Dot31
-  xpos 418
-  ypos 512
- }
-set N1c247ed0 [stack 0]
-push $N12376bc0
-push $N4424890
- Copy {
-  inputs 2
-  from0 rgba.green
-  to0 rgba.alpha
-  name Copy2
-  xpos -236
-  ypos -3
- }
- Multiply {
-  value {0 1 0 1}
-  name MultiplyKeepG2
-  label "\[value value]"
-  xpos -236
-  ypos 35
- }
- Dot {
-  name Dot15
-  note_font_size 41
-  xpos -202
-  ypos 189
- }
-push $N34914360
-push $N810d1a80
- Copy {
-  inputs 2
-  from0 rgba.green
-  to0 rgba.alpha
-  name Copy5
-  xpos 469
-  ypos -9
- }
- Multiply {
-  value {0 1 0 1}
-  name MultiplyKeepG1
-  label "\[value value]"
-  xpos 469
-  ypos 63
- }
- Merge2 {
-  inputs 2
-  operation {{MergeR.operation}}
-  sRGB {{MergeR.sRGB}}
-  screen_alpha {{MergeR.screen_alpha}}
-  bbox {{MergeR.bbox}}
-  metainput {{MergeR.metainput}}
-  rangeinput {{MergeR.rangeinput}}
-  Achannels {-rgba.red rgba.green -rgba.blue rgba.alpha}
-  Bchannels {-rgba.red rgba.green -rgba.blue rgba.alpha}
-  output {-rgba.red rgba.green -rgba.blue rgba.alpha}
-  also_merge all
-  maskChannelMask none
-  inject {{MergeR.inject}}
-  invert_mask {{MergeR.invert_mask}}
-  fringe {{MergeR.fringe}}
-  mix {{MergeR.mix}}
-  name MergeG
-  xpos 469
-  ypos 179
- }
- Dot {
-  name Dot30
-  xpos 503
-  ypos 474
- }
-set N21bf9a0 [stack 0]
-push $N12376bc0
-push $N9776eaa0
- Copy {
-  inputs 2
-  from0 rgba.blue
-  to0 rgba.alpha
-  name Copy3
-  xpos -324
-  ypos -3
- }
- Multiply {
-  value {0 0 1 1}
-  name MultiplyKeepB2
-  label "\[value value]"
-  xpos -324
-  ypos 35
- }
- Dot {
-  name Dot14
-  note_font_size 41
-  xpos -290
-  ypos 237
- }
-push $N34914360
-push $N1ffc4140
- Copy {
-  inputs 2
-  from0 rgba.blue
-  to0 rgba.alpha
-  name Copy4
-  xpos 557
-  ypos -9
- }
- Multiply {
-  value {0 0 1 1}
-  name MultiplyKeepB1
-  label "\[value value]"
-  xpos 557
-  ypos 63
- }
- Merge2 {
-  inputs 2
-  operation {{MergeR.operation}}
-  sRGB {{MergeR.sRGB}}
-  screen_alpha {{MergeR.screen_alpha}}
-  bbox {{MergeR.bbox}}
-  metainput {{MergeR.metainput}}
-  rangeinput {{MergeR.rangeinput}}
-  Achannels {-rgba.red -rgba.green rgba.blue rgba.alpha}
-  Bchannels {-rgba.red -rgba.green rgba.blue rgba.alpha}
-  output {-rgba.red -rgba.green rgba.blue rgba.alpha}
-  also_merge all
-  maskChannelMask none
-  inject {{MergeR.inject}}
-  invert_mask {{MergeR.invert_mask}}
-  fringe {{MergeR.fringe}}
-  mix {{MergeR.mix}}
-  name MergeB
-  xpos 557
-  ypos 227
- }
- Dot {
-  name Dot17
-  note_font_size 41
-  xpos 591
-  ypos 436
- }
-set N914b9350 [stack 0]
-push $N10ad2290
- Dot {
-  name Dot13
-  note_font_size 41
-  xpos -367
-  ypos 281
- }
-push $Na2af72e0
- Merge2 {
-  inputs 2
-  operation {{MergeR.operation}}
-  sRGB {{MergeR.sRGB}}
-  screen_alpha {{MergeR.screen_alpha}}
-  bbox {{MergeR.bbox}}
-  metainput {{MergeR.metainput}}
-  rangeinput {{MergeR.rangeinput}}
-  Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
-  Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
-  output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
-  also_merge all
-  maskChannelMask none
-  inject {{MergeR.inject}}
-  invert_mask {{MergeR.invert_mask}}
-  fringe {{MergeR.fringe}}
-  mix {{MergeR.mix}}
-  name MergeA
-  xpos 911
-  ypos 271
- }
- Multiply {
-  value {0 0 0 1}
-  name MultiplyKeepA
-  label "\[value value]"
-  xpos 911
-  ypos 309
- }
- Dot {
-  name Dot33
-  note_font_size 41
-  xpos 945
-  ypos 381
- }
-set Na783d360 [stack 0]
- Dot {
-  name Dot34
-  note_font_size 41
-  xpos 816
-  ypos 381
- }
- Copy {
-  inputs 2
-  from0 rgba.alpha
-  to0 rgba.blue
-  name Copy10
-  xpos 782
-  ypos 426
- }
- Copy {
-  inputs 2
-  from0 rgba.alpha
-  to0 rgba.green
-  name Copy11
-  xpos 782
-  ypos 464
- }
- Copy {
-  inputs 2
-  from0 rgba.alpha
-  to0 rgba.red
-  name Copy12
-  xpos 782
-  ypos 502
- }
- Dot {
-  name Dot36
-  xpos 816
-  ypos 657
- }
-set N8f734ee0 [stack 0]
- Saturation {
-  channels rgba
-  saturation 0
-  name Saturation0
-  xpos 782
-  ypos 709
- }
-push $N80e58740
-push $N8f734ee0
-push $N80e58740
-push $Na783d360
- Dot {
-  name Dot3
-  note_font_size 41
-  xpos 1021
-  ypos 381
- }
- Dot {
-  name Dot4
-  note_font_size 41
-  xpos 1021
-  ypos 544
- }
-push $N1c247ed0
-push $N21bf9a0
-push $N914b9350
-push $Na783d360
- Merge2 {
-  inputs 2
-  operation plus
-  bbox A
-  metainput A
-  rangeinput A
-  also_merge all
-  name Merge1
-  xpos 911
-  ypos 432
- }
- Merge2 {
-  inputs 2
-  operation plus
-  bbox A
-  metainput A
-  rangeinput A
-  also_merge all
-  name Merge2
-  xpos 911
-  ypos 470
- }
- Merge2 {
-  inputs 2
-  operation plus
-  bbox A
-  metainput A
-  rangeinput A
-  also_merge all
-  name Merge3
-  xpos 911
-  ypos 508
- }
- Copy {
-  inputs 2
-  from0 rgba.alpha
-  to0 rgba.alpha
-  name CopyA
-  xpos 911
-  ypos 534
- }
- Dot {
-  name Dot37
-  xpos 945
-  ypos 608
- }
-push $N34914360
-push $N8e311d10
- Merge2 {
-  inputs 2
-  operation copy
-  Bchannels none
-  output {{{parent.MergeCopyChroma.output}}}
-  name MergeGetChroma3
-  xpos 1158
-  ypos -9
- }
- Merge2 {
-  inputs 2+1
-  operation copy
-  bbox {{MergeR.bbox}}
-  metainput {{MergeR.metainput}}
-  rangeinput {{MergeR.rangeinput}}
-  name MergeChroma
-  xpos 1158
-  ypos 604
- }
- Merge2 {
-  inputs 2+1
-  operation copy
-  Bchannels none
-  output apChroma
-  inject {{parent.MergeChroma.inject}}
-  invert_mask {{parent.MergeChroma.invert_mask}}
-  fringe {{parent.MergeChroma.fringe}}
-  mix {{parent.MergeChroma.mix}}
-  name MergeCopyChroma
-  xpos 1158
-  ypos 647
- }
- Copy {
-  inputs 2+1
-  from0 rgba.red
-  to0 rgba.alpha
-  maskChannelMask {{{parent.MergeChroma.maskChannelMask}}}
-  maskChannelInput {{{parent.MergeChroma.maskChannelInput}}}
-  inject {{parent.MergeChroma.inject}}
-  invert_mask {{parent.MergeChroma.invert_mask}}
-  fringe {{parent.MergeChroma.fringe}}
-  mix {{parent.MergeChroma.mix}}
-  name CopySingleAlpha
-  xpos 1158
-  ypos 703
-  disable {{!parent.process_alpha}}
- }
- Remove {
-  channels {{{parent.MergeCopyChroma.output}}}
-  name RemoveChroma
-  xpos 1158
-  ypos 741
-  disable {{parent.keep_multi_alpha}}
- }
- Output {
-  name Output1
-  xpos 1158
-  ypos 789
- }
+Input {
+inputs 0
+name InputMask
+xpos -31
+ypos 1074
+number 1
+}
+Input {
+inputs 0
+name InputArea
+xpos 311
+ypos 20
+number 2
+}
+AddChannels {
+channels rgba
+color 1
+name AddChannels1
+xpos 311
+ypos 58
+}
+Invert {
+name Invert2
+xpos 311
+ypos 97
+}
+Input {
+inputs 0
+name Inputvectors
+label "\[value number]"
+xpos 178
+ypos 5
+number 3
+}
+Radial {
+inputs 0
+cliptype none
+invert true
+opacity 0.25
+area {{curve i} {curve i} {input.width i} {input.height i}}
+softness {{parent.Mask_softness*-1+1+.5 i x1 0.585}}
+plinear true
+name Radial1
+xpos 145
+ypos -108
+}
+Input {
+inputs 0
+name Inputimg
+xpos -210
+ypos -402
+}
+Dot {
+name Dot1
+note_font_size 41
+xpos -176
+ypos -312
+}
+set N1a4f5220 [stack 0]
+Remove {
+name Remove1
+xpos 31
+ypos -322
+}
+AdjBBox {
+numpixels {{width/4} {width/4}}
+name AdjBBox1
+xpos 31
+ypos -237
+}
+Expression {
+expr0 x
+expr1 y
+name Expression1
+xpos 31
+ypos -213
+}
+set N61e77b00 [stack 0]
+Dot {
+name Dot2
+xpos -79
+ypos -210
+}
+Transform {
+scale 1.1
+center {{input.width/2} {input.height/2}}
+black_outside false
+name Transform1
+xpos -113
+ypos -189
+}
+push $N61e77b00
+Merge2 {
+inputs 2
+operation minus
+name Merge1
+xpos 31
+ypos -189
+}
+Invert {
+channels rgba
+name Invert1
+xpos 31
+ypos -165
+}
+Merge2 {
+inputs 2
+operation multiply
+name Merge2
+xpos 31
+ypos -54
+}
+Switch {
+inputs 2
+which {{"\[exists parent.input3]"}}
+name Switch1
+xpos 31
+ypos 17
+}
+Multiply {
+inputs 1+1
+value 0
+name Multiply1
+label "\[value value]"
+xpos 31
+ypos 91
+}
+Multiply {
+value {{parent.overallAmount}}
+name Multiply2
+label "\[value value]"
+xpos 31
+ypos 192
+}
+Dot {
+name Dot5
+note_font_size 41
+xpos 65
+ypos 312
+}
+push $N1a4f5220
+Copy {
+inputs 2
+from0 rgba.red
+to0 forward.u
+from1 rgba.green
+to1 forward.v
+name Copy1
+xpos -210
+ypos 296
+}
+set N1c2c5f10 [stack 0]
+Shuffle {
+red black
+green black
+name Shuffle3
+xpos -119
+ypos 374
+}
+VectorBlur {
+channels {-rgba.red -rgba.green rgba.blue rgba.alpha}
+uv forward
+scale -1
+offset {{(-.5*abberation*.8)+parent.offset}}
+name VectorBlur3
+xpos -119
+ypos 412
+}
+set N646404e0 [stack 0]
+push $N1c2c5f10
+Shuffle {
+red black
+blue black
+name Shuffle2
+xpos -210
+ypos 375
+}
+VectorBlur {
+channels {-rgba.red rgba.green -rgba.blue rgba.alpha}
+uv forward
+scale -1
+offset {{(-.5*abberation*.6)+parent.offset}}
+name VectorBlur2
+xpos -210
+ypos 413
+}
+set N1c2622c0 [stack 0]
+push $N1c2c5f10
+Shuffle {
+green black
+blue black
+name Shuffle1
+xpos -297
+ypos 375
+}
+VectorBlur {
+channels {rgba.red -rgba.green -rgba.blue rgba.alpha}
+uv forward
+scale -1
+offset {{(-.5*abberation*.4)+parent.offset}}
+name VectorBlur1
+xpos -297
+ypos 413
+}
+set N1ca3d980 [stack 0]
+push $N646404e0
+Expression {
+expr3 a*0.114
+name Expression4
+xpos -119
+ypos 466
+}
+push $N1c2622c0
+Expression {
+expr3 a*0.587
+name Expression3
+xpos -210
+ypos 468
+}
+push $N1ca3d980
+Expression {
+expr3 a*0.299
+name Expression2
+xpos -297
+ypos 467
+}
+Merge2 {
+inputs 2
+operation plus
+name Merge3
+xpos -248
+ypos 509
+}
+Merge2 {
+inputs 2
+operation plus
+name Merge4
+xpos -182
+ypos 553
+}
+add_layer {apChroma apChroma.red apChroma.green apChroma.blue apChroma.alpha}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 apChroma.red
+name Copy2
+xpos -182
+ypos 603
+disable {{!parent.exportAPchroma}}
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 apChroma.green
+name Copy3
+xpos -182
+ypos 656
+disable {{!parent.exportAPchroma}}
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 apChroma.blue
+name Copy4
+xpos -182
+ypos 710
+disable {{!parent.exportAPchroma}}
+}
+push $N1c2c5f10
+VectorBlur {
+uv forward
+scale -1.6
+name VectorBlur4
+xpos 7
+ypos 409
+}
+AddChannels {
+channels rgba
+name AddChannels2
+xpos 7
+ypos 447
+}
+set N66be8190 [stack 0]
+push $N66be8190
+push $N66be8190
+push $N66be8190
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 apChroma.red
+name Copy7
+xpos 77
+ypos 499
+disable {{!parent.exportAPchroma}}
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 apChroma.green
+name Copy8
+xpos 77
+ypos 553
+disable {{!parent.exportAPchroma}}
+}
+Copy {
+inputs 2
+from0 rgba.alpha
+to0 apChroma.blue
+name Copy9
+xpos 77
+ypos 606
+disable {{!parent.exportAPchroma}}
+}
+Merge2 {
+inputs 2
+operation copy
+output rgb
+also_merge apChroma
+mix {{parent.saturation}}
+name Merge6
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos -182
+ypos 773
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+}
+Dot {
+name Dot29
+note_font_size 41
+xpos -148
+ypos 857
+}
+set Nb70ea430 [stack 0]
+Shuffle {
+in apChroma
+name Shuffle4
+label "\[value in] \[ expr \{ \[value out2] == \"none\" ? \" \" : \[concat → \[value out2]] \}]"
+xpos -58
+ypos 841
+}
+Saturation {
+saturation 0
+name Saturation1
+xpos -58
+ypos 893
+}
+set N1c30b770 [stack 0]
+push $N1c30b770
+push $Nb70ea430
+Copy {
+inputs 2
+from0 rgba.red
+to0 rgba.alpha
+name Copy5
+xpos -182
+ypos 887
+}
+Copy {
+inputs 2
+from0 rgba.red
+to0 apChroma.alpha
+name Copy6
+xpos -182
+ypos 925
+disable {{!parent.exportAPchroma}}
+}
+Crop {
+box {{curve i} {curve i} {input.width i} {input.height i}}
+name Crop1
+xpos -182
+ypos 1016
+}
+push $N1a4f5220
+Dot {
+name Dot3
+note_font_size 41
+xpos -424
+ypos -312
+}
+Dot {
+name Dot4
+note_font_size 41
+xpos -424
+ypos 1084
+}
+Merge2 {
+inputs 2+1
+operation copy
+also_merge apChroma
+name Merge5
+label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+xpos -182
+ypos 1080
+addUserKnob {20 TRX}
+addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+}
+Output {
+name Output1
+xpos -182
+ypos 1185
+}
 end_group
