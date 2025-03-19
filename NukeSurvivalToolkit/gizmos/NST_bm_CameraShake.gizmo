@@ -1,131 +1,141 @@
+set cut_paste_input [stack 0]
+version 13.2 v8
+push $cut_paste_input
 Group {
  name bm_CameraShake
- help "Gives more control than Nuke's built-in CameraShake gizmo.\n\nCamera float, shake & sub-frame jitter settings are defined independently, then all 3 curves are added together into a final, new expression so your output curve has plenty of detail (especially in the motion blur) & only filters your image once."
+ onCreate "if nuke.GUI:\n    \n    # Hide the knob sliders.\n    nuke.thisNode().knob('motionblur_gui_samples').clearFlag(0x0000000000000002)\n    nuke.thisNode().knob('motionblur_gui_samples').setFlag(0x0000100000000000)\n    nuke.thisNode().knob('motionblur_render_samples').clearFlag(0x0000000000000002)\n    nuke.thisNode().knob('motionblur_render_samples').setFlag(0x0000100000000000)\n                \n    # Randomize the random seed if it's the first time the node is created.\n    if not nuke.thisNode().knob(\"random_seed_check\").value():\n        nuke.thisNode().knob(\"random_seed\").setValue(random.randint(1,99999))\n        nuke.thisNode().knob(\"random_seed_check\").setValue(True)\n        \n    # Hide gizmo's viewer handles.\n    knobs = ('jitter_translation', 'jitter_translation_output', 'jitter_rotation', 'jitter_rotation_output', 'shake_translation', 'shake_translation_output', 'shake_rotation', 'shake_rotation_output', 'float_translation', 'float_translation_output', 'float_rotation', 'float_rotation_output')\n    internal_knobs = ('combined_translation_curve', 'combined_rotation_curve')\n    \n    for knob in knobs:\n        if nuke.thisNode().knob(knob):\n            nuke.thisNode().knob(knob).setFlag(0x0000002000000000)\n            \n    # Hide user knobs' viewer handles for Transform node inside the gizmo.\n    with nuke.thisNode():\n        for knob in internal_knobs:\n            if nuke.toNode(\"Camera_Shake_Output\").knob(knob):\n                nuke.toNode(\"Camera_Shake_Output\").knob(knob).setFlag(0x0000002000000000)\n    "
+ knobChanged "if nuke.GUI:\n    \n    for knob_name in (\"jitter\", \"shake\", \"float\", \"shake_center\"):\n        current_value = nuke.thisNode().knob(f\"\{knob_name\}_chk\").value()\n        nuke.thisNode().knob(f\"\{knob_name\}_text\").setEnabled(current_value)\n        nuke.thisNode().knob(f\"\{knob_name\}_amount\").setEnabled(current_value)"
  tile_color 0x222222ff
- note_font Verdana
  selected true
- xpos -341
- ypos 123
- mapsize {0.15 0.15}
- addUserKnob {20 Options}
+ xpos 119
+ ypos -241
+ addUserKnob {20 options_tab l Options}
  addUserKnob {26 ""}
- addUserKnob {6 switchCheckerboard l Test t "Replaces input image with checkerboard so you can see your camera shake uncontaminated." +STARTLINE}
- addUserKnob {4 noiseType l "       Noise Type " t "Choose between 3 different noise functions to generate different types of camera shake." -STARTLINE M {fBm Turbulence Noise "" "" "" "" ""}}
+ addUserKnob {6 view_test_pattern l "View Test Pattern?" t "View a checkerboard test pattern instead of your shot." +STARTLINE}
+ view_test_pattern true
  addUserKnob {26 ""}
- addUserKnob {7 refFrame l "Reference Frame" t "Setting a reference frame is handy for scaling a curve's frequency around a specific point in time.\n\nNote: must be set prior to tweaking any parameters, as changing reference frame will offset your curve." R 1000 1100}
- refFrame 1001
- addUserKnob {22 setRef l "Set to current Frame" t "Set the Reference Frame to the current frame in the Viewer." T nuke.thisNode().knob('refFrame').setValue(nuke.frame()) +STARTLINE}
+ addUserKnob {26 setup_heading l "" +STARTLINE T "<b>CAMERA SHAKE SETUP</b>\n<br>"}
+ addUserKnob {3 reference_frame l "Reference Frame" t "Sets a time-based pivot-point from where to adjust the curve.\n\n<i>(This helps prevent the entire camera shake changing when you just want to slow down the frequency a little bit)</i>"}
+ reference_frame 1001
+ addUserKnob {22 set_ref_frame_btn l "Set to Current Frame" t "Set the Reference Frame to the current frame in the Viewer." -STARTLINE T nuke.thisNode().knob('reference_frame').setValue(nuke.frame())}
+ addUserKnob {3 random_seed l "Random Seed" t "Randomize the Camera Shake."}
+ random_seed 303
+ addUserKnob {22 random_seed_btn l "Randomize Seed" -STARTLINE T "import random\nnuke.thisNode().knob('random_seed').setValue(random.randint(1,99999))"}
+ addUserKnob {6 random_seed_check t "Hidden knob which checks itself when the node is created. This prevents the random seed from randomizing every time the nuck script is opened." -STARTLINE +INVISIBLE}
+ random_seed_check true
+ addUserKnob {26 spacer_02 l " " T " "}
+ addUserKnob {26 jitter_text l Jitter t "Use <b>Jitter</b> to introduce a high-frequency jitter to the overall camera shake.\n\nThis is helpful to add complexity, like you might see with wind buffeting, etc." T " "}
+ addUserKnob {6 jitter_chk l "" t "Use <b>Jitter</b> to introduce a high-frequency jitter to the overall camera shake.\n\nThis is helpful to add complexity, like you might see with wind buffeting, etc." -STARTLINE}
+ jitter_chk true
+ addUserKnob {7 jitter_amount l " " t "Global multiplier for the Jitter curve.\n\nUse <b>Jitter</b> to introduce a high-frequency jitter to the overall camera shake.\n\nThis is helpful to add complexity, like you might see with wind buffeting, etc." -STARTLINE}
+ jitter_amount 1
+ addUserKnob {26 shake_text l Shake t "Use <b>Shake</b> to control the overall look of your camera shake." T " "}
+ addUserKnob {6 shake_chk l "" t "Use <b>Shake</b> to control the overall look of your camera shake." -STARTLINE}
+ shake_chk true
+ addUserKnob {7 shake_amount l " " t "Global multiplier for the Shake curve.\n\nUse <b>Shake</b> to control the overall look of your camera shake." -STARTLINE}
+ shake_amount 1
+ addUserKnob {26 float_text l Float t "Use <b>Float</b> to introduce an overall handheld feel to your camera shake." T " "}
+ addUserKnob {6 float_chk l "" t "Use <b>Float</b> to introduce an overall handheld feel to your camera shake." -STARTLINE}
+ float_chk true
+ addUserKnob {7 float_amount l " " t "Global multiplier for the Float curve.\n\nUse <b>Float</b> to introduce an overall handheld feel to your camera shake." -STARTLINE}
+ float_amount 1
+ addUserKnob {26 shake_center_text l "Shake Center" t "When using rotation in your camera shake, also shaking the center-point can introduce a more-organic handheld feel.\n\nIt changes the pivot-point of the rotation on every frame." +DISABLED T " "}
+ addUserKnob {6 shake_center_chk l "" t "When using rotation in your camera shake, also shaking the center-point can introduce a more-organic handheld feel.\n\nIt changes the pivot-point of the rotation on every frame." -STARTLINE}
+ addUserKnob {7 shake_center_amount l " " t "Multiplier for how much to shake the centrepoint. 1 = the same amount as translate.\n<hr>\nWhen using rotation in your camera shake, also shaking the center-point can introduce a more-organic handheld feel.\n\nIt changes the pivot-point of the rotation on every frame." -STARTLINE +DISABLED R 0 2}
+ shake_center_amount 1
+ addUserKnob {26 spacer_01 l "" +STARTLINE T " "}
+ addUserKnob {4 edge_compensation l "Edge Compensation" t "Helps to manage pixels outside the bbox." M {None Mirror Repeat Spread}}
+ edge_compensation Mirror
+ addUserKnob {6 crop_bbox_chk l "Crop to Input bbox" t "Crops the bbox to the input-node's bbox." +STARTLINE}
+ crop_bbox_chk true
  addUserKnob {26 ""}
- addUserKnob {7 globalAmt l "Global Amount" t "Control the overall amount of camera shake in one go." R 0 5}
- globalAmt 1
- addUserKnob {26 ""}
- addUserKnob {20 fineControl l "    C O N T R O L S" n 1}
- addUserKnob {26 spacer01 l "" +STARTLINE T " "}
- addUserKnob {6 toggleJitter l Jitter t "Turn Camera Shake Jitter on/off." +STARTLINE}
- toggleJitter true
- addUserKnob {7 jitterAmt l "  " t "Adjust the contribution of the Jitter animation curve into the overall camera shake." -STARTLINE R 0 5}
- jitterAmt 1
- addUserKnob {6 toggleShake l Shake t "Turn Camera Shake Shake on/off." +STARTLINE}
- toggleShake true
- addUserKnob {7 shakeAmt l "" t "Adjust the contribution of the Shake animation curve into the overall camera shake." -STARTLINE R 0 5}
- shakeAmt 1
- addUserKnob {6 toggleFloat l Float t "Turn Camera Shake Float on/off." +STARTLINE}
- toggleFloat true
- addUserKnob {7 floatAmt l "  " t "Adjust the contribution of the Float animation curve into the overall camera shake." -STARTLINE R 0 5}
- floatAmt 1
- addUserKnob {20 endGroup n -1}
- addUserKnob {26 ""}
- addUserKnob {20 weightGroup l "    E D G E   C O M P E N S A T I O N    //    G L O B A L   T R A N S F O R M" n 1}
- weightGroup 0
- addUserKnob {26 unnames l "" +STARTLINE T " "}
- addUserKnob {4 edgePulldown l "Edge Type" t "For larger camera shakes, you will see edge encroachment issues.\n\nSpread will \"pixel smear\" the outer-most pixels to the edge of your format.\n\nMirror will flip/flop the input image around it's edges for more detail." M {None Spread Mirror "" "" ""}}
- addUserKnob {26 edgeSpacer l " "}
- addUserKnob {12 edgeTranslate l Translate t "Manually translate the image."}
- addUserKnob {7 edgeRotate l Rotate t "Manually rotate the image." R 0 360}
- addUserKnob {14 edgeScale l Scale t "Manually scale the image to prevent edge encroachment." R 0 100}
- edgeScale 1
- addUserKnob {20 endGroup_2 l endGroup n -1}
- addUserKnob {26 ""}
- addUserKnob {20 moblurGroup l "    M O T I O N   B L U R" n 1}
- moblurGroup 0
- addUserKnob {26 spacer_02 l "" +STARTLINE T " "}
- addUserKnob {6 toggleMoblur l "Motion Blur" t "Turn motion blur on/off." +STARTLINE}
- toggleMoblur true
+ addUserKnob {26 motionblur_heading l "" +STARTLINE T "<b>MOTION BLUR</b>\n<br>"}
+ addUserKnob {22 auto_motionblur_toggle_btn l "Automatically Calculate Motionblur <font color=grey>(beta)</font>" t "Pressing this button will switch from Manual mode (current) to Experimental mode." T "experimental_tooltip = \"\"\"<b>EXPERIMENTAL</b><br>\nAdjusts motion blur samples based on the speed of the curve.\n\nThis is calculated by getting the highest derivative value of X/Y translation curves, then multiplying it by 1 + the rotation curve's derivative.\n\nValues are clamped between minimum of 4, and maximum of 64.\n\"\"\"\n\n\nif nuke.thisKnob().label() == \"Automatically Calculate Motionblur <font color=grey>(beta)</font>\":\n    \n    nuke.thisKnob().setLabel(\"<font>Switch to Manual Motionblur</font>\")\n\n    nuke.thisNode().knob(\"motionblur_gui_samples\").setExpression(\"max(1, motionblur_render_samples/4)\")\n    nuke.thisNode().knob(\"motionblur_render_samples\").setExpression(\"max(1, clamp(abs(rint((max(global_translation_output.y.derivative, global_translation_output.y.derivative) / 2) * (global_rotation_output.derivative + 1))), 4, 64) * multiply_auto_motionblur_samples)\")\n    \n    nuke.thisKnob().setTooltip(\"Pressing this button will switch from Experimental mode (current) to Manual mode.\")\n    nuke.thisNode().knob(\"motionblur_gui_samples\").setTooltip(\"Calculated as 25% of the render samples.\")\n    nuke.thisNode().knob(\"motionblur_render_samples\").setTooltip(experimental_tooltip)\n    \n    nuke.thisNode().knob(\"multiply_auto_motionblur_samples\").setVisible(True)\n    \nelse:\n    \n    nuke.thisKnob().setLabel(\"Automatically Calculate Motionblur <font color=grey>(beta)</font>\")\n\n    nuke.thisNode().knob(\"motionblur_gui_samples\").clearAnimated()\n    nuke.thisNode().knob(\"motionblur_render_samples\").clearAnimated()\n    nuke.thisNode().knob(\"motionblur_gui_samples\").setValue(4)\n    nuke.thisNode().knob(\"motionblur_render_samples\").setValue(16)\n    \n    nuke.thisKnob().setTooltip(\"Pressing this button will switch from Manual mode (current) to Experimental mode.\")\n    nuke.thisNode().knob(\"motionblur_gui_samples\").setTooltip(\"How many samples to use when viewing in your active nuke session (GUI).\")\n    nuke.thisNode().knob(\"motionblur_render_samples\").setTooltip(\"How many samples to use when rendering on the farm.\")\n    \n    nuke.thisNode().knob(\"multiply_auto_motionblur_samples\").setVisible(False)" +STARTLINE}
  addUserKnob {26 spacer_03 l "" +STARTLINE T " "}
- addUserKnob {41 filter T jitterCTRL_fBm.filter}
- addUserKnob {26 spacer_misc l "" +STARTLINE T " "}
- addUserKnob {7 moblurSamples l INVISIBLE +INVISIBLE}
- moblurSamples 1
- addUserKnob {3 GUISamples l "GUI Samples" t "How many motion blur samples to display in the GUI. (keep this low for Nuke Script interactivity.)"}
- GUISamples 1
- addUserKnob {3 RenderSamples l "    Render Samples" t "How many motion blur samples to use in the render. (the higher the number, the better your result!)" -STARTLINE}
- RenderSamples 16
- addUserKnob {26 spacer_misc2 l "" +STARTLINE T " "}
- addUserKnob {41 shutter T jitterCTRL_fBm.shutter}
- addUserKnob {41 shutteroffset l "shutter offset" T jitterCTRL_fBm.shutteroffset}
- addUserKnob {41 shuttercustomoffset l "" -STARTLINE T jitterCTRL_fBm.shuttercustomoffset}
- addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {41 filter l Filter T Camera_Shake_Output.filter}
+ addUserKnob {41 clamp -STARTLINE +INVISIBLE T Camera_Shake_Output.clamp}
+ addUserKnob {41 black_outside l "black outside" -STARTLINE +INVISIBLE T Camera_Shake_Output.black_outside}
+ addUserKnob {7 motionblur_gui_samples l "GUI / Render samples" t "How many samples to use when viewing in your active nuke session (GUI)." R 0 4}
+ motionblur_gui_samples 4
+ addUserKnob {7 motionblur_render_samples l " " t "How many samples to use when rendering on the farm." -STARTLINE}
+ motionblur_render_samples 16
+ addUserKnob {7 multiply_auto_motionblur_samples l "Multiply Samples" t "Multiplies the GUI / Render samples. Use this if your motionblur is noisy." +HIDDEN R 1 3}
+ multiply_auto_motionblur_samples 1
+ addUserKnob {41 shutter l Shutter T Camera_Shake_Output.shutter}
  addUserKnob {26 ""}
- addUserKnob {26 overallOutput l "" -STARTLINE T "Load these values into the curve editor to view the overall animation curve.\n"}
- addUserKnob {12 outputOverallValue l " " t "The final animation curve of your camera shake."}
- outputOverallValue {{(toggleJitter==1?jitterCTRL_fBm.translate.x:0)+(toggleShake==1?shakeCTRL_fBm.translate.x:0)+(toggleFloat==1?floatCTRL_fBm.translate.x:0)} {(toggleJitter==1?jitterCTRL_fBm.translate.y:0)+(toggleShake==1?shakeCTRL_fBm.translate.y:0)+(toggleFloat==1?floatCTRL_fBm.translate.y:0) i}}
+ addUserKnob {26 output_heading l "" +STARTLINE T "<b>OUTPUT</b>\n<br>\n<br>\n<font color=grey>Load these values into the <b>Curve Editor</b> to view the output animation curve.</font><br>"}
+ addUserKnob {7 global_amount l "Global Amount Multiplier" t "Global multiplier for the camera shake curve."}
+ global_amount 1
+ addUserKnob {41 smooth_curve l "Smooth Curve" t "If you are getting crazy swirly motionblur, increase the <b>Smooth Curve</b> amount to reduce the subframe complexity of your overall camera shake.\n\nIncreasing this value past 1 also lowers the octaves of Jitter, Shake and Float's fBm noise curve." T Camera_Shake_Output.smooth_curve}
+ addUserKnob {41 global_translation_output l Translation t "The output Translation curve of Jitter, Shake and Float combined + any smoothing.\n<hr color=\"grey\">" T Camera_Shake_Output.translate}
+ addUserKnob {41 global_rotation_output l Rotation t "The output Rotation curve of Jitter, Shake and Float combined + any smoothing.\n<hr color=grey>" T Camera_Shake_Output.rotate}
  addUserKnob {26 ""}
- addUserKnob {26 info_1 l "" +STARTLINE T "<font color='#777'><b>bm_CameraShake v4.0</b></font><font color='#555'> created by </font><b><a href=\"https://github.com/BenMcEwan/nuke_public\" style=\"color:#777;\">Ben McEwan</a></b>.<br>\n<font color='#555'>Thanks to</font> <a href=\"https://github.com/mileslauridsen\" style=\"color:#777;\">Miles Lauridsen</a><font color='#555'> &</font> <a href=\"https://www.linkedin.com/in/lukas-fabian-6a8184147/\" style=\"color:#777;\">Lukas Fabian</a><font color='#555'> for their contributions.<br>\n<b>Last updated:</b> 29th November, 2020.</font>"}
- addUserKnob {20 jitterTab l Jitter}
+ addUserKnob {26 version_info l " " T "<font color='#777'><b>bm_CameraShake v5.0</b></font><font color='#555'> created by </font><b><a href=\"https://github.com/BenMcEwan/nuke_public\" style=\"color:#777;\">Ben McEwan</a></b>.<br>\n<font color='#555'><b>Last updated:</b> 20th February, 2025.</font>"}
+ addUserKnob {20 jitter_tab l Jitter}
  addUserKnob {26 ""}
- addUserKnob {14 jitterTranslate l Translate R 0 100}
- jitterTranslate {4 3}
- addUserKnob {7 jitterRotate l Rotate R 0 3}
+ addUserKnob {12 jitter_translation l "Translation (max)" t "The maximum amount of Translation the Jitter curve can have."}
+ jitter_translation {1.5 1.5}
+ addUserKnob {7 jitter_rotation l "Rotation (max)" t "The maximum amount of Rotation the Jitter curve can have." R 0 3}
+ jitter_rotation 0.05
  addUserKnob {26 ""}
- addUserKnob {3 jitterOctaves l Octaves}
- jitterOctaves 3
- addUserKnob {7 jitterSpeed l Frequency R 0 5}
- jitterSpeed 3
- addUserKnob {3 jitterSeed l Seed}
- jitterSeed 71526
- addUserKnob {22 jitterSeedRandomBtn l "  Random Seed  " -STARTLINE T "import random\nnuke.thisNode().knob('jitterSeed').setValue(random.randint(1,99999))"}
+ addUserKnob {3 jitter_octaves l Octaves t "Max subframes. Reduce this if you are getting crazy motionblur."}
+ jitter_octaves 3
+ addUserKnob {7 jitter_lacunarity l Lacunarity t "Adds frequency (detail) in subframes.\n\nLower values smooth the curve, whereas higher values add more noise." R 0 3}
+ jitter_lacunarity 3
+ addUserKnob {7 jitter_frequency l Frequency t "Controls the speed of the camera shake. Lower values are slower, Higher values are faster." R 0 3}
+ jitter_frequency 2
+ addUserKnob {7 jitter_gain l Gain t "Controls the bias of the curve towards exteme peaks (1) and smooth curves (0)."}
+ jitter_gain 0.5
  addUserKnob {26 ""}
- addUserKnob {26 drg l "" +STARTLINE T "Load these values into the curve editor to view the jitter animation curve.\n"}
- addUserKnob {12 outputJitterValue l " "}
- outputJitterValue {{(jitterCTRL_fBm.translate.x) i} {(jitterCTRL_fBm.translate.y) i}}
+ addUserKnob {26 jitter_output_text l "" +STARTLINE T "<font color=grey>Load these values into the <b>Curve Editor</b> to view the <b>Jitter</b> animation curve.</font><br>"}
+ addUserKnob {12 jitter_translation_output l "Jitter Translation Output"}
+ jitter_translation_output {{"fBm(((random_seed + (frame - reference_frame) * jitter_frequency) + reference_frame), 0.5, 0.5, (clamp(jitter_octaves - clamp((smooth_curve - 1), 0, 10), 0, 10)), jitter_lacunarity, jitter_gain) * jitter_translation.x * global_amount * jitter_amount"} {"fBm(((random_seed + 1000 + (frame - reference_frame) * jitter_frequency) + reference_frame), 0.5, 0.5, (clamp(jitter_octaves - clamp((smooth_curve - 1), 0, 10), 0, 10)), jitter_lacunarity, jitter_gain) * jitter_translation.y * global_amount * jitter_amount"}}
+ addUserKnob {7 jitter_rotation_output l "Jitter Rotation Output" R -10 10}
+ jitter_rotation_output {{"fBm(((random_seed + 2000 + (frame - reference_frame) * jitter_frequency) + reference_frame), 0.5, 0.5, (clamp(jitter_octaves - clamp((smooth_curve - 1), 0, 10), 0, 10)), jitter_lacunarity, jitter_gain) * jitter_rotation * global_amount * jitter_amount"}}
  addUserKnob {26 ""}
- addUserKnob {20 shakeTab l Shake}
+ addUserKnob {20 shake_tab l Shake}
  addUserKnob {26 ""}
- addUserKnob {14 shakeTranslate l Translate R 0 100}
- shakeTranslate {10 7}
- addUserKnob {7 shakeRotate l Rotate R 0 3}
- shakeRotate 0.2
+ addUserKnob {12 shake_translation l "Translation (max)" t "The maximum amount of Translation the Shake curve can have."}
+ shake_translation {30 30}
+ addUserKnob {7 shake_rotation l "Rotation (max)" t "The maximum amount of Rotation the Shake curve can have." R 0 3}
+ shake_rotation 0.5
  addUserKnob {26 ""}
- addUserKnob {3 shakeOctaves l Octaves}
- shakeOctaves 2
- addUserKnob {7 shakeSpeed l Frequency R 0 5}
- shakeSpeed 1.5
- addUserKnob {3 shakeSeed l Seed}
- shakeSeed 16572
- addUserKnob {22 shakeSeedRandomBtn l "  Random Seed  " -STARTLINE T "import random\nnuke.thisNode().knob('shakeSeed').setValue(random.randint(1,99999))"}
+ addUserKnob {3 shake_octaves l Octaves t "Max subframes. Reduce this if you are getting crazy motionblur."}
+ shake_octaves 3
+ addUserKnob {7 shake_lacunarity l Lacunarity t "Adds frequency (detail) in subframes.\n\nLower values smooth the curve, whereas higher values add more noise." R 0 3}
+ shake_lacunarity 3
+ addUserKnob {7 shake_frequency l Frequency t "Controls the speed of the camera shake. Lower values are slower, Higher values are faster." R 0 3}
+ shake_frequency 0.2
+ addUserKnob {7 shake_gain l Gain t "Controls the bias of the curve towards exteme peaks (1) and smooth curves (0)."}
+ shake_gain 0.7
  addUserKnob {26 ""}
- addUserKnob {26 ehhkmlkjhg l "" +STARTLINE T "Load these values into the curve editor to view the shake animation curve.\n"}
- addUserKnob {12 outputShakeValue l " "}
- outputShakeValue {{(shakeCTRL_fBm.translate.x) i} {(shakeCTRL_fBm.translate.y) i}}
+ addUserKnob {26 shake_output_text l "" +STARTLINE T "<font color=grey>Load these values into the <b>Curve Editor</b> to view the <b>Shake</b> animation curve.</font><br>"}
+ addUserKnob {12 shake_translation_output l "Shake Translation Output"}
+ shake_translation_output {{"fBm(((random_seed + (frame - reference_frame) * shake_frequency) + reference_frame), 0.5, 0.5, (clamp(shake_octaves - clamp((smooth_curve - 1), 0, 10), 0, 10)), shake_lacunarity, shake_gain) * shake_translation.x * global_amount * shake_amount"} {"fBm(((random_seed + 1000 + (frame - reference_frame) * shake_frequency) + reference_frame), 0.5, 0.5, (clamp(shake_octaves - clamp((smooth_curve - 1), 0, 10), 0, 10)), shake_lacunarity, shake_gain) * shake_translation.y * global_amount * shake_amount"}}
+ addUserKnob {7 shake_rotation_output l "Shake Rotation Output" R -10 10}
+ shake_rotation_output {{"fBm(((random_seed + 2000 + (frame - reference_frame) * shake_frequency) + reference_frame), 0.5, 0.5, (clamp(shake_octaves - clamp((smooth_curve - 1), 0, 10), 0, 10)), shake_lacunarity, shake_gain) * shake_rotation * global_amount * shake_amount"}}
  addUserKnob {26 ""}
- addUserKnob {20 floatTab l Float}
+ addUserKnob {20 float_tab l Float}
  addUserKnob {26 ""}
- addUserKnob {14 floatTranslate l Translate R 0 100}
- floatTranslate {40 32}
- addUserKnob {7 floatRotate l Rotate R 0 3}
- floatRotate 7
+ addUserKnob {12 float_translation l "Translation (max)" t "The maximum amount of Translation the Float curve can have."}
+ float_translation {50 50}
+ addUserKnob {7 float_rotation l "Rotation (max)" t "The maximum amount of Rotation the Float curve can have." R 0 3}
+ float_rotation 1
  addUserKnob {26 ""}
- addUserKnob {3 floatOctaves l Octaves}
- floatOctaves 1
- addUserKnob {7 floatSpeed l Frequency R 0 5}
- floatSpeed 0.06
- addUserKnob {3 floatSeed l Seed}
- floatSeed 72424
- addUserKnob {22 floatSeedRandomBtn l "  Random Seed  " -STARTLINE T "import random\nnuke.thisNode().knob('floatSeed').setValue(random.randint(1,99999))"}
+ addUserKnob {3 float_octaves l Octaves t "Max subframes. Reduce this if you are getting crazy motionblur."}
+ float_octaves 1
+ addUserKnob {7 float_lacunarity l Lacunarity t "Adds frequency (detail) in subframes.\n\nLower values smooth the curve, whereas higher values add more noise." R 0 3}
+ float_lacunarity 2
+ addUserKnob {7 float_frequency l Frequency t "Controls the speed of the camera shake. Lower values are slower, Higher values are faster." R 0 3}
+ float_frequency 0.02
+ addUserKnob {7 float_gain l Gain t "Controls the bias of the curve towards exteme peaks (1) and smooth curves (0)."}
+ float_gain 1
  addUserKnob {26 ""}
- addUserKnob {26 wd l "" +STARTLINE T "Load these values into the curve editor to view the float animation curve.\n"}
- addUserKnob {12 outputFloatValue l " "}
- outputFloatValue {{(floatCTRL_fBm.translate.x) i} {(floatCTRL_fBm.translate.y) i}}
+ addUserKnob {26 float_output_text l "" +STARTLINE T "<font color=grey>Load these values into the <b>Curve Editor</b> to view the <b>Float</b> animation curve.</font><br>"}
+ addUserKnob {12 float_translation_output l "Float Translation Output"}
+ float_translation_output {{"fBm(((random_seed + (frame - reference_frame) * float_frequency) + reference_frame), 0.5, 0.5, (clamp(float_octaves - clamp((smooth_curve - 1), 0, 10), 0, 10)), float_lacunarity, float_gain) * float_translation.x * global_amount * float_amount"} {"fBm(((random_seed + 1000 + (frame - reference_frame) * float_frequency) + reference_frame), 0.5, 0.5, (clamp(float_octaves - clamp((smooth_curve - 1), 0, 10), 0, 10)), float_lacunarity, float_gain) * float_translation.y * global_amount * float_amount"}}
+ addUserKnob {7 float_rotation_output l "Float Rotation Output" R -10 10}
+ float_rotation_output {{"fBm(((random_seed + 2000 + (frame - reference_frame) * float_frequency) + reference_frame), 0.5, 0.5, (clamp(float_octaves - clamp((smooth_curve - 1), 0, 10), 0, 10)), float_lacunarity, float_gain) * float_rotation * global_amount * float_amount"}}
  addUserKnob {26 ""}
 }
  CheckerBoard2 {
@@ -133,549 +143,114 @@ Group {
   linecolor 0
   linewidth 60
   name CheckerBoard1
-  xpos -144
-  ypos -391
+  xpos -157
+  ypos -33
  }
  Reformat {
   type "to box"
   box_width {{Input.width}}
   box_height {{Input.height}}
   box_fixed true
-  black_outside true
+  box_pixel_aspect {{Switch1.pixel_aspect}}
+  resize distort
   name Reformat1
-  xpos -144
-  ypos -319
- }
- Dot {
-  name Dot2
-  xpos -110
-  ypos -273
+  xpos -157
+  ypos 39
  }
  Input {
   inputs 0
   name Input
-  xpos 17
-  ypos -374
+  xpos -1
+  ypos -59
  }
  Switch {
   inputs 2
-  which {{switchCheckerboard i}}
+  which {{view_test_pattern}}
   name Switch1
-  xpos 17
-  ypos -277
+  xpos -1
+  ypos 39
  }
-set Nac853800 [stack 0]
- Dot {
-  name Dot11
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos 298
-  ypos -219
+ AdjBBox {
+  numpixels {{"abs(Camera_Shake_Output.translate.x - (Camera_Shake_Output.center.x - (format.w / 2))) + ( (format.w * abs(cos(Camera_Shake_Output.rotate*0.0174533)) + format.h * abs(sin(Camera_Shake_Output.rotate*0.0174533)) - format.w)/2 )"} {"abs(Camera_Shake_Output.translate.y - (Camera_Shake_Output.center.y - (format.h / 2))) + ( (format.w * abs(sin(Camera_Shake_Output.rotate*0.0174533)) + format.h * abs(cos(Camera_Shake_Output.rotate*0.0174533)) - format.h)/2 )\n"}}
+  name AdjBBox1
+  xpos -1
+  ypos 91
+  disable {{"!min(edge_compensation, 1)"}}
  }
- Dot {
-  name Dot12
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos 298
-  ypos 365
- }
-push $Nac853800
- Dot {
-  name Dot10
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -87
-  ypos -151
- }
-set Nac852c00 [stack 0]
- Mirror {
-  Horizontal true
-  name Mirror8
-  xpos -121
-  ypos -133
- }
- Transform {
-  translate {{-input.format.w} 0}
-  center {1075 860}
-  shutteroffset centred
-  name Transform8
-  xpos -121
-  ypos -107
- }
-push $Nac852c00
- Dot {
-  name Dot9
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -197
-  ypos -151
- }
-set Nac852000 [stack 0]
- Mirror {
-  Horizontal true
-  Vertical true
-  name Mirror7
-  xpos -228
-  ypos -131
- }
- Transform {
-  translate {{-input.format.w} {input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform7
-  xpos -228
-  ypos -105
- }
-push $Nac852000
- Dot {
-  name Dot8
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -315
-  ypos -151
- }
-set Nac851400 [stack 0]
- Dot {
-  name Dot7
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -425
-  ypos -151
- }
-set Nac851000 [stack 0]
- Dot {
-  name Dot6
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -535
-  ypos -151
- }
-set Nac850c00 [stack 0]
- Dot {
-  name Dot5
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -645
-  ypos -151
- }
-set Nac850800 [stack 0]
- Dot {
-  name Dot4
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -748
-  ypos -151
- }
-set Nac850400 [stack 0]
- Mirror {
-  Vertical true
-  name Mirror2
-  xpos -782
-  ypos -134
- }
- Transform {
-  translate {0 {-input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform2
-  xpos -782
-  ypos -108
- }
-push $Nac850800
- Mirror {
-  Horizontal true
-  Vertical true
-  name Mirror3
-  xpos -679
-  ypos -133
- }
- Transform {
-  translate {{input.format.w} {-input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform3
-  xpos -679
-  ypos -107
- }
-push $Nac850c00
- Mirror {
-  Horizontal true
-  name Mirror4
-  xpos -569
-  ypos -134
- }
- Transform {
-  translate {{input.format.w} 0}
-  center {1075 860}
-  shutteroffset centred
-  name Transform4
-  xpos -569
-  ypos -108
- }
-push $Nac851000
- Mirror {
-  Horizontal true
-  Vertical true
-  name Mirror5
-  xpos -459
-  ypos -133
- }
- Transform {
-  translate {{input.format.w} {input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform5
-  xpos -459
-  ypos -107
- }
-push 0
-push $Nac851400
- Mirror {
-  Vertical true
-  name Mirror6
-  xpos -349
-  ypos -133
- }
- Transform {
-  translate {0 {input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform6
-  xpos -349
-  ypos -107
- }
-push $Nac850400
- Dot {
-  name Dot3
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -851
-  ypos -151
- }
- Mirror {
-  Horizontal true
-  Vertical true
-  name Mirror1
-  xpos -885
-  ypos -133
- }
- Transform {
-  translate {{-input.format.w} {-input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform1
-  xpos -885
-  ypos -107
- }
- Merge2 {
-  inputs 8+1
-  name Merge1
-  xpos -459
-  ypos -49
- }
-push $Nac853800
- Merge2 {
-  inputs 2
-  name Merge2
-  xpos 17
-  ypos -49
-  disable {{edgePulldown==2?0:1}}
- }
- Dot {
-  name Dot1
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos 51
-  ypos 50
- }
-set Naa757c00 [stack 0]
- Transform {
-  translate {{noise((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),2.5,3.5)*jitterTranslate.w*globalAmt*jitterAmt} {noise(2.5,(base2-base2(refFrame))*(jitterSpeed/bfreq)+base2(refFrame),3.5)*jitterTranslate.h*globalAmt*jitterAmt}}
-  rotate {{noise((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),jitterOctaves,.5)*jitterRotate*globalAmt*jitterAmt}}
-  scale {1 1}
-  center {{toggleJitter==1?((noise(noise((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),2.5,3.5))*input.width)+input.width/2):(input.width/2)*globalAmt*jitterAmt} {toggleJitter==1?((noise(noise((base2-base2(refFrame))*(jitterSpeed/bfreq)+base2(refFrame),2.5,3.5))*input.height)+input.height/2):(input.height/2)*globalAmt*jitterAmt}}
-  filter {{jitterCTRL_fBm.filter}}
-  clamp {{jitterCTRL_fBm.clamp}}
-  black_outside {{jitterCTRL_fBm.black_outside}}
-  motionblur {{jitterCTRL_fBm.motionblur}}
-  shutter {{jitterCTRL_fBm.shutter}}
-  shutteroffset {{jitterCTRL_fBm.shutteroffset}}
-  shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
-  name jitterCTRL_noise
-  xpos 169
-  ypos 108
-  disable {{!toggleJitter}}
+set N1750b0d0 [stack 0]
+ Expression {
+  expr0 "r(max(0, min(width-1, x - translate_offset.x)), max(0, min(height-1, y - translate_offset.y)))"
+  expr1 "g(max(0, min(width-1, x - translate_offset.x)), max(0, min(height-1, y - translate_offset.y)))"
+  expr2 "b(max(0, min(width-1, x - translate_offset.x)), max(0, min(height-1, y - translate_offset.y)))"
+  channel3 alpha
+  expr3 "a(max(0, min(width-1, x - translate_offset.x)), max(0, min(height-1, y - translate_offset.y)))"
+  name Spread_Edges
+  xpos 325
+  ypos 148
   addUserKnob {20 User}
-  addUserKnob {7 base}
-  base {{parent.jitterCTRL_fBm.base}}
-  addUserKnob {7 base2}
-  base2 {{parent.jitterCTRL_fBm.base2}}
-  addUserKnob {7 bfreq l "base frequancy"}
-  bfreq {{parent.jitterCTRL_fBm.bfreq}}
+  addUserKnob {12 translate_offset}
  }
- Transform {
-  translate {{noise((base-base(refFrame))*(shakeSpeed/bfreq)+base(refFrame),2.5,3.5)*jitterTranslate.w*globalAmt*jitterAmt} {noise(2.5,(base2-base2(refFrame))*(shakeSpeed/bfreq)+base2(refFrame),3.5)*jitterTranslate.h*globalAmt*jitterAmt}}
-  rotate {{noise(((frame-refFrame)*shakeSpeed)+shakeSeed+refFrame,shakeOctaves,.5)*shakeRotate*globalAmt*shakeAmt}}
-  scale {1 1}
-  center {{toggleShake==1?((noise(noise((base-base(refFrame))*(shakeSpeed/bfreq)+base(refFrame),2.5,3.5))*input.width)+input.width/2):(input.width/2)*globalAmt*shakeAmt} {toggleShake==1?((noise(noise((base-base(refFrame))*(shakeSpeed/bfreq)+base(refFrame),2.5,3.5))*input.height)+input.height/2):(input.height/2)*globalAmt*shakeAmt}}
-  filter {{jitterCTRL_fBm.filter}}
-  clamp {{jitterCTRL_fBm.clamp}}
-  black_outside {{jitterCTRL_fBm.black_outside}}
-  motionblur {{jitterCTRL_fBm.motionblur}}
-  shutter {{jitterCTRL_fBm.shutter}}
-  shutteroffset {{jitterCTRL_fBm.shutteroffset}}
-  shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
-  name shakeCTRL_noise
-  xpos 169
-  ypos 134
-  disable {{!toggleShake}}
+push $N1750b0d0
+ Expression {
+  expr0 "r((x - translate_offset.x + width *100) % width, (y - translate_offset.y + height * 100) % height)"
+  expr1 "g((x - translate_offset.x + width * 100) % width, (y - translate_offset.y + height * 100) % height)"
+  expr2 "b((x - translate_offset.x + width * 100) % width, (y - translate_offset.y + height * 100) % height)"
+  channel3 alpha
+  expr3 "a((x - translate_offset.x + width * 100) % width, (y - translate_offset.y + height * 100) % height)"
+  name Repeat_Edges
+  xpos 192
+  ypos 148
   addUserKnob {20 User}
-  addUserKnob {7 base}
-  base {{parent.shakeCTRL_fBm.base}}
-  addUserKnob {7 base2}
-  base2 {{parent.shakeCTRL_fBm.base2}}
-  addUserKnob {7 bfreq l "base frequency"}
-  bfreq {{parent.shakeCTRL_fBm.bfreq}}
+  addUserKnob {12 translate_offset}
  }
- Transform {
-  translate {{noise((base-base(refFrame))*(floatSpeed/bfreq)+base(refFrame),2.5,3.5)*jitterTranslate.w*globalAmt*jitterAmt} {noise(2.5,(base2-base2(refFrame))*(floatSpeed/bfreq)+base2(refFrame),3.5)*jitterTranslate.h*globalAmt*jitterAmt}}
-  rotate {{noise((base-base(refFrame))*(floatSpeed/bfreq)+base(refFrame),floatOctaves,.5)*floatRotate*globalAmt*floatAmt}}
-  scale {1 1}
-  center {{toggleFloat==1?((noise(noise((base-base(refFrame))*(floatSpeed/bfreq)+base(refFrame),2.5,3.5))*input.width)+input.width/2):(input.width/2)*globalAmt*floatAmt} {toggleFloat==1?((noise(noise((base-base(refFrame))*(floatSpeed/bfreq)+base(refFrame),2.5,3.5))*input.height)+input.height/2):(input.height/2)*globalAmt*floatAmt}}
-  filter {{jitterCTRL_fBm.filter}}
-  clamp {{jitterCTRL_fBm.clamp}}
-  black_outside {{jitterCTRL_fBm.black_outside}}
-  motionblur {{jitterCTRL_fBm.motionblur}}
-  shutter {{jitterCTRL_fBm.shutter}}
-  shutteroffset {{jitterCTRL_fBm.shutteroffset}}
-  shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
-  name floatCTRL_noise
-  xpos 169
-  ypos 158
-  disable {{!toggleFloat}}
+push $N1750b0d0
+ Expression {
+  expr0 "r(width - abs(((x - translate_offset.x + width*100) % (2*width)) - width),\nheight - abs(((y - translate_offset.y + height*100) % (2*height)) - height))"
+  expr1 "g(width - abs(((x - translate_offset.x + width*100) % (2*width)) - width),\nheight - abs(((y - translate_offset.y + height*100) % (2*height)) - height))"
+  expr2 "b(width - abs(((x - translate_offset.x + width*100) % (2*width)) - width),\nheight - abs(((y - translate_offset.y + height*100) % (2*height)) - height))"
+  channel3 alpha
+  expr3 "a(width - abs(((x - translate_offset.x + width*100) % (2*width)) - width),\nheight - abs(((y - translate_offset.y + height*100) % (2*height)) - height))"
+  name Mirror_Edges
+  xpos 70
+  ypos 146
   addUserKnob {20 User}
-  addUserKnob {7 base}
-  base {{parent.floatCTRL_fBm.base}}
-  addUserKnob {7 base2}
-  base2 {{parent.floatCTRL_fBm.base2}}
-  addUserKnob {7 bfreq l "base frequency"}
-  bfreq {{parent.floatCTRL_fBm.bfreq}}
+  addUserKnob {12 translate_offset}
  }
- Transform {
-  translate {{edgeTranslate.x} {edgeTranslate.y}}
-  rotate {{edgeRotate}}
-  scale {{edgeScale} {edgeScale}}
-  center {{"width/2 - translate"} {"height/2 - translate"}}
-  filter {{jitterCTRL_fBm.filter}}
-  black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
-  shutter {{jitterCTRL_fBm.shutter}}
-  shutteroffset {{jitterCTRL_fBm.shutteroffset}}
-  shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
-  name edgeScale3
-  xpos 169
-  ypos 200
- }
-push $Naa757c00
- Transform {
-  translate {{turbulence((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),2.5,3.5,jitterOctaves,2,.5)*jitterTranslate.w*globalAmt*jitterAmt} {turbulence((base2-base2(refFrame))*(jitterSpeed/bfreq)+base2(refFrame),10.5,11.5,jitterOctaves,2,.5)*jitterTranslate.h*globalAmt*jitterAmt}}
-  rotate {{turbulence((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),20.5,21.5,jitterOctaves,2,.5)*jitterRotate*globalAmt*jitterAmt}}
-  scale {1 1}
-  center {{toggleJitter==1?((turbulence((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),2.5,3.5,jitterOctaves,2,.5)*input.width)+input.width/2):(input.width/2)*globalAmt*jitterAmt} {toggleJitter==1?((turbulence((base2-base2(refFrame))*(jitterSpeed/bfreq)+base2(refFrame),10.5,11.5,jitterOctaves,2,.5)*input.height)+input.height/2):(input.height/2)*globalAmt*jitterAmt}}
-  filter {{jitterCTRL_fBm.filter x1 0}}
-  clamp {{jitterCTRL_fBm.clamp}}
-  black_outside {{jitterCTRL_fBm.black_outside}}
-  motionblur {{jitterCTRL_fBm.motionblur}}
-  shutter {{jitterCTRL_fBm.shutter}}
-  shutteroffset {{jitterCTRL_fBm.shutteroffset}}
-  shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
-  name jitterCTRL_turbulence
-  xpos 17
-  ypos 109
-  disable {{!toggleJitter}}
-  addUserKnob {20 User}
-  addUserKnob {7 base}
-  base {{parent.jitterCTRL_fBm.base}}
-  addUserKnob {7 base2}
-  base2 {{parent.jitterCTRL_fBm.base2}}
-  addUserKnob {7 bfreq l "base frequency"}
-  bfreq {{parent.jitterCTRL_fBm.bfreq}}
- }
- Transform {
-  translate {{turbulence((base-base(refFrame))*(shakeSpeed/bfreq)+base(refFrame),2.5,3.5,shakeOctaves,2,.5)*shakeTranslate.w*globalAmt*shakeAmt} {turbulence((base2-base2(refFrame))*(shakeSpeed/bfreq)+base2(refFrame),10.5,11.5,shakeOctaves,2,.5)*shakeTranslate.h*globalAmt*shakeAmt}}
-  rotate {{turbulence((base-base(refFrame))*(shakeSpeed/bfreq)+base(refFrame),20.5,21.5,shakeOctaves,2,.5)*shakeRotate*globalAmt*shakeAmt x7 70}}
-  scale {1 1}
-  center {{toggleShake==1?((turbulence((base-base(refFrame))*(shakeSpeed/bfreq)+base(refFrame),2.5,3.5,shakeOctaves,2,.5)*input.width)+input.width/2):(input.width/2)*globalAmt*shakeAmt} {toggleShake==1?((turbulence((base2-base2(refFrame))*(shakeSpeed/bfreq)+base2(refFrame),10.5,11.5,shakeOctaves,2,.5)*input.height)+input.height/2):(input.height/2)*globalAmt*shakeAmt}}
-  filter {{jitterCTRL_fBm.filter x14 2}}
-  clamp {{jitterCTRL_fBm.clamp}}
-  black_outside {{jitterCTRL_fBm.black_outside}}
-  motionblur {{jitterCTRL_fBm.motionblur}}
-  shutter {{jitterCTRL_turbulence.shutter}}
-  shutteroffset {{jitterCTRL_fBm.shutteroffset}}
-  shuttercustomoffset {{jitterCTRL_turbulence.shuttercustomoffset}}
-  name shakeCTRL_turbulence
-  xpos 17
-  ypos 135
-  disable {{!toggleShake}}
-  addUserKnob {20 User}
-  addUserKnob {7 base}
-  base {{parent.shakeCTRL_fBm.base}}
-  addUserKnob {7 base2}
-  base2 {{parent.shakeCTRL_fBm.base2}}
-  addUserKnob {7 bfreq l "base frequency"}
-  bfreq {{parent.shakeCTRL_fBm.bfreq}}
- }
- Transform {
-  translate {{turbulence((base-base(refFrame))*(floatSpeed/bfreq)+base(refFrame),2.5,3.5,floatOctaves,2,.5)*floatTranslate.w*globalAmt*floatAmt} {turbulence((base2-base2(refFrame))*(floatSpeed/bfreq)+base2(refFrame),10.5,11.5,floatOctaves,2,.5)*floatTranslate.h*globalAmt*floatAmt}}
-  rotate {{turbulence((base-base(refFrame))*(floatSpeed/bfreq)+base(refFrame),20.5,21.5,floatOctaves,2,.5)*floatRotate*globalAmt*floatAmt}}
-  scale {1 1}
-  center {{toggleFloat==1?((turbulence((base-base(refFrame))*(floatSpeed/bfreq)+base(refFrame),2.5,3.5,floatOctaves,2,.5)*input.width)+input.width/2):(input.width/2)*globalAmt*floatAmt} {toggleFloat==1?((turbulence((base2-base2(refFrame))*(floatSpeed/bfreq)+base2(refFrame),10.5,11.5,floatOctaves,2,.5)*input.height)+input.height/2):(input.height/2)*globalAmt*floatAmt}}
-  filter {{jitterCTRL_fBm.filter x14 2}}
-  clamp {{jitterCTRL_fBm.clamp}}
-  black_outside {{jitterCTRL_fBm.black_outside}}
-  motionblur {{jitterCTRL_fBm.motionblur}}
-  shutter {{jitterCTRL_fBm.shutter}}
-  shutteroffset {{jitterCTRL_fBm.shutteroffset}}
-  shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
-  name floatCTRL_turbulence
-  xpos 17
-  ypos 159
-  disable {{!toggleFloat}}
-  addUserKnob {20 User}
-  addUserKnob {7 base}
-  base {{parent.floatCTRL_fBm.base}}
-  addUserKnob {7 base2}
-  base2 {{parent.floatCTRL_fBm.base2}}
-  addUserKnob {7 bfreq l "base frequency"}
-  bfreq {{parent.floatCTRL_fBm.bfreq}}
- }
- Transform {
-  translate {{edgeTranslate.x} {edgeTranslate.y}}
-  rotate {{edgeRotate}}
-  scale {{edgeScale} {edgeScale}}
-  center {{"width/2 - translate"} {"height/2 - translate"}}
-  filter {{jitterCTRL_fBm.filter}}
-  black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
-  shutter {{jitterCTRL_fBm.shutter}}
-  shutteroffset {{jitterCTRL_fBm.shutteroffset}}
-  shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
-  name edgeScale2
-  xpos 17
+push $N1750b0d0
+ Switch {
+  inputs 4
+  which {{edge_compensation}}
+  name Switch2
+  xpos -1
   ypos 204
  }
-push $Naa757c00
  Transform {
-  translate {{fBm((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),2.5,3.5,jitterOctaves,2,.5)*jitterTranslate.w*globalAmt*jitterAmt} {fBm((base2-base2(refFrame))*(jitterSpeed/bfreq)+base2(refFrame),10.5,11.5,jitterOctaves,2,.5)*jitterTranslate.h*globalAmt*jitterAmt}}
-  rotate {{fBm((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),20.5,21.5,jitterOctaves,2,.5)*jitterRotate*globalAmt*jitterAmt}}
-  scale {1 1}
-  center {{toggleJitter==1?((fBm((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),2.5,3.5,jitterOctaves,2,.5)*input.width)+input.width/2):(input.width/2)*globalAmt*jitterAmt} {toggleJitter==1?((fBm((base2-base2(refFrame))*(jitterSpeed/bfreq)+base2(refFrame),10.5,11.5,jitterOctaves,2,.5)*input.height)+input.height/2):(input.height/2)*globalAmt*jitterAmt}}
-  black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
+  translate {{"smooth_curve > 0 ? combined_translation_curve.x.integrate(frame - (smooth_curve / 2), frame + (smooth_curve / 2)) / smooth_curve : combined_translation_curve.x"} {"smooth_curve > 0 ? combined_translation_curve.y.integrate(frame - (smooth_curve / 2), frame + (smooth_curve / 2)) / smooth_curve : combined_translation_curve.y"}}
+  rotate {{"smooth_curve > 0 ? combined_rotation_curve.integrate(frame - (smooth_curve / 2), frame + (smooth_curve / 2)) / smooth_curve : combined_rotation_curve"}}
+  center {{"shake_center_chk ? (input.width/2) - (shake_center_amount * translate.x(frame+1000)) : (input.width/2)"} {"shake_center_chk ? (input.height/2) - (shake_center_amount * translate.x(frame+2000)) : (input.height/2)"}}
+  black_outside false
+  motionblur {{"\$gui ? motionblur_gui_samples : motionblur_render_samples"}}
   shutteroffset centred
-  name jitterCTRL_fBm
-  selected true
-  xpos -128
-  ypos 103
-  disable {{!toggleJitter}}
+  name Camera_Shake_Output
+  xpos 1
+  ypos 275
   addUserKnob {20 User}
-  addUserKnob {7 base}
-  base {{frame*bfreq+jitterSeed}}
-  addUserKnob {7 base2}
-  base2 {{frame*bfreq+jitterSeed+100}}
-  addUserKnob {7 bfreq l "base frequency"}
-  bfreq 3
+  addUserKnob {7 smooth_curve R 0 2}
+  addUserKnob {12 combined_translation_curve}
+  combined_translation_curve {{"(jitter_chk ? jitter_translation_output.x : 0) + (shake_chk ? shake_translation_output.x : 0) + (float_chk ? float_translation_output.x : 0)"} {"(jitter_chk ? jitter_translation_output.y : 0) + (shake_chk ? shake_translation_output.y : 0) + (float_chk ? float_translation_output.y : 0)"}}
+  addUserKnob {7 combined_rotation_curve}
+  combined_rotation_curve {{"(jitter_chk ? jitter_rotation_output : 0) + (shake_chk ? shake_rotation_output : 0) + (float_chk ? float_rotation_output : 0)"}}
  }
- Transform {
-  translate {{fBm((base-base(refFrame))*(shakeSpeed/bfreq)+base(refFrame),2.5,3.5,shakeOctaves,2,.5)*shakeTranslate.w*globalAmt*shakeAmt} {fBm((base2-base2(refFrame))*(shakeSpeed/bfreq)+base2(refFrame),10.5,11.5,shakeOctaves,2,.5)*shakeTranslate.h*globalAmt*shakeAmt}}
-  rotate {{fBm((base-base(refFrame))*(shakeSpeed/bfreq)+base(refFrame),20.5,21.5,shakeOctaves,2,.5)*shakeRotate*globalAmt*shakeAmt x7 70}}
-  scale {1 1}
-  center {{toggleShake==1?((fBm((base-base(refFrame))*(shakeSpeed/bfreq)+base(refFrame),2.5,3.5,shakeOctaves,2,.5)*input.width)+input.width/2):(input.width/2)*globalAmt*shakeAmt} {toggleShake==1?((fBm((base2-base2(refFrame))*(shakeSpeed/bfreq)+base2(refFrame),10.5,11.5,shakeOctaves,2,.5)*input.height)+input.height/2):(input.height/2)*globalAmt*shakeAmt}}
-  filter {{jitterCTRL_fBm.filter x14 2}}
-  clamp {{jitterCTRL_fBm.clamp}}
-  black_outside {{jitterCTRL_fBm.black_outside}}
-  motionblur {{jitterCTRL_fBm.motionblur}}
-  shutter {{jitterCTRL_fBm.shutter}}
-  shutteroffset {{jitterCTRL_fBm.shutteroffset}}
-  shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
-  name shakeCTRL_fBm
-  xpos -128
-  ypos 127
-  disable {{!toggleShake}}
-  addUserKnob {20 User}
-  addUserKnob {7 base}
-  base {{frame*bfreq+shakeSeed}}
-  addUserKnob {7 base2}
-  base2 {{frame*bfreq+shakeSeed+100}}
-  addUserKnob {7 bfreq l "base frequancy"}
-  bfreq 1.5
- }
- Transform {
-  translate {{fBm((base-base(refFrame))*(floatSpeed/bfreq)+base(refFrame),2.5,3.5,floatOctaves,2,.5)*floatTranslate.w*globalAmt*floatAmt} {fBm((base2-base2(refFrame))*(floatSpeed/bfreq)+base2(refFrame),10.5,11.5,floatOctaves,2,.5)*floatTranslate.h*globalAmt*floatAmt}}
-  rotate {{fBm((base-base(refFrame))*(floatSpeed/bfreq)+base(refFrame),20.5,21.5,floatOctaves,2,.5)*floatRotate*globalAmt*floatAmt}}
-  scale {1 1}
-  center {{toggleFloat==1?((fBm((base-base(refFrame))*(floatSpeed/bfreq)+base(refFrame),2.5,3.5,floatOctaves,2,.5)*input.width)+input.width/2):(input.width/2)*globalAmt*floatAmt} {toggleFloat==1?((fBm((base2-base2(refFrame))*(floatSpeed/bfreq)+base2(refFrame),10.5,11.5,floatOctaves,2,.5)*input.height)+input.height/2):(input.height/2)*globalAmt*floatAmt}}
-  filter {{jitterCTRL_fBm.filter x14 2}}
-  clamp {{jitterCTRL_fBm.clamp}}
-  black_outside {{jitterCTRL_fBm.black_outside}}
-  motionblur {{jitterCTRL_fBm.motionblur}}
-  shutter {{jitterCTRL_fBm.shutter}}
-  shutteroffset {{jitterCTRL_fBm.shutteroffset}}
-  shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
-  name floatCTRL_fBm
-  xpos -128
-  ypos 151
-  disable {{!toggleFloat}}
-  addUserKnob {20 User}
-  addUserKnob {7 base}
-  base {{frame*bfreq+floatSeed}}
-  addUserKnob {7 base2}
-  base2 {{frame*bfreq+floatSeed+100}}
-  addUserKnob {7 bfreq l "base frequency"}
-  bfreq 0.06
- }
- Transform {
-  translate {{edgeTranslate.x} {edgeTranslate.y}}
-  rotate {{edgeRotate}}
-  scale {{edgeScale} {edgeScale}}
-  center {{"width/2 - translate"} {"height/2 - translate"}}
-  filter {{jitterCTRL_fBm.filter}}
-  black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
-  shutter {{jitterCTRL_fBm.shutter}}
-  shutteroffset {{jitterCTRL_fBm.shutteroffset}}
-  shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
-  name edgeScale1
-  xpos -128
-  ypos 206
- }
- Switch {
-  inputs 3
-  which {{noiseType i}}
-  name Switch4
-  xpos 17
-  ypos 242
- }
- CopyBBox {
-  inputs 2
-  name CopyBBox1
-  xpos 17
-  ypos 362
+ Crop {
+  box {{Switch1.bbox.x} {Switch1.bbox.y} {Switch1.bbox.r} {Switch1.bbox.t}}
+  name Crop1
+  xpos 1
+  ypos 326
+  disable {{!crop_bbox_chk}}
  }
  Output {
   name Output1
-  xpos 17
-  ypos 460
+  xpos 1
+  ypos 388
  }
 end_group
