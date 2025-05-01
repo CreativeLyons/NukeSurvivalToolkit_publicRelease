@@ -167,7 +167,7 @@ try:
     import ColorGradientUi
     drawMenu.addCommand("GradientEditor MHD", "nuke.createNode('{}h_gradienteditor')".format(prefixNST), icon="h_gradienteditor.png")
 except Exception as e:
-    print(f"Could not load ColorGradientUi from HagbarthTools folder: {e}")
+    print(f"Could not load 'ColorGradientUi.py': {e}")
 
 drawMenu.addSeparator()
 
