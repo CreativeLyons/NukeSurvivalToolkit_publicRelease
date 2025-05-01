@@ -62,7 +62,7 @@ def setColorCurve(node, colorlist, parent, _object):
         "Linear": "L",
         "Smooth": "C",  # Cubic interpolation
         "Catmull-Rom": "R",
-        "Horizontal": "K",  # Constant interpolation for horizontal
+        "Horizontal": "s0",  # Step interpolation for horizontal
     }
     Interpolation = _object.interpolationMenu.currentText()
     interp = interpolation_map.get(Interpolation, "C")  # Default to Cubic
