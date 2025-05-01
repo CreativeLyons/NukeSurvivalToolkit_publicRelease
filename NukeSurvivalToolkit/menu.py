@@ -166,9 +166,8 @@ drawMenu.addCommand("Silk MHD", "nuke.createNode('{}h_silk')".format(prefixNST),
 try:
     import ColorGradientUi
     drawMenu.addCommand("GradientEditor MHD", "nuke.createNode('{}h_gradienteditor')".format(prefixNST), icon="h_gradienteditor.png")
-except:
-    print("Could not load ColorGradientUi from HagbarthTools folder")
-    pass
+except Exception as e:
+    print(f"Could not load ColorGradientUi from HagbarthTools folder: {e}")
 
 drawMenu.addSeparator()
 

@@ -1,45 +1,140 @@
 #(C) Copyright Mads Hagbarth Damsbo 2016 -- Not for redistribution.
-#Version 1.1
+# Version 1.1
+# Updated for Nuke 14.1 and above
+
 import sys, math, os
-import nuke,nukescripts
-try:
-    import PySide.QtGui as QtGui
-    import PySide.QtCore as QtCore
-    from PySide.QtGui import *
-    from PySide.QtCore import *
-except:
-    import h_Qt
-    from h_Qt import QtGui
-    from h_Qt import QtCore
-    from h_Qt.QtGui import *
-    from h_Qt.QtCore import *
+import nuke, nukescripts
 from nukescripts import panels
 import datetime
 import operator
+from functools import partial
+
+from PySide6 import QtGui, QtCore, QtWidgets
+from PySide6.QtWidgets import QWidget, QLabel, QSlider, QComboBox, QMenu, QToolButton, QGridLayout, QHBoxLayout, QWidgetAction, QPushButton
+from PySide6.QtGui import QColor, QPainter, QLinearGradient, QAction
+from PySide6.QtCore import Qt
 
 try:
     import ConfigParser
 except:
     import configparser as ConfigParser
+
 PresetsFile = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), 'python/GradientPresets.cfg')
 config = ConfigParser.RawConfigParser()
 config.read(PresetsFile)
 
-
 #nuke.toNode(inputNode.name()+".HueVsHue").knob("lut").editCurve("amount",myCurve.replace("amount","curve")[10:-1])
 
 
+def saveTemplate(_curves):
+    """
+    Save the current color gradient curves to a configuration file.
+    """
+    global PresetsFile
+    global config
+    p = SectionPanel()
+    if p.showModalDialog():
+        # Ensure the section exists or create it if it doesn't
+        if not config.has_section(p.category.value()):
+            config.add_section(p.category.value())
+        
+        config.read(PresetsFile)
+        config.set(p.category.value(), p.name.value(), _curves)
 
-#Projekt Variabler
+        try:
+            # Writing the configuration file in text mode
+            with open(PresetsFile, 'w') as configfile:
+                config.write(configfile)
+        except Exception as e:
+            print(f"Error writing to presets file: {e}")
 
 
-'''Constant
-Linear
-Smooth
-Catmull-Rom
-Horizontal
-'''
+def setColorCurve(node, colorlist, parent, _object):
+    """
+    Set the color curve for a given node based on the provided color list.
 
+    This function modifies the LUT (Look-Up Table) of a color lookup node by applying
+    a gradient curve based on the input color list. The gradient is constructed for
+    each channel (Red, Green, Blue, Alpha) and applied to the node.
+    """
+    interpolation_map = {
+        "Constant": "K",
+        "Linear": "L",
+        "Smooth": "C",  # Cubic interpolation
+        "Catmull-Rom": "R",
+        "Horizontal": "K",  # Constant interpolation for horizontal
+    }
+    Interpolation = _object.interpolationMenu.currentText()
+    interp = interpolation_map.get(Interpolation, "C")  # Default to Cubic
+    interpB = interp  # Boundary interpolation matches the main interpolation
+
+    # Helper function to construct curve strings
+    def build_curve_string(color_index):
+        curve = "curve "
+        for x, item in enumerate(colorlist):
+            if x == len(colorlist) - 1:  # Last point
+                curve += "%s x%s %s %s" % ("L", item[-1], item[color_index], interpB)
+            elif x == 0:  # First point
+                curve += "%s x%s %s" % (interpB, item[-1], item[color_index])
+            else:  # Middle points
+                curve += "%s x%s %s" % (interp, item[-1], item[color_index])
+        return curve
+
+    # Build curves for each channel
+    curveR = build_curve_string(0)  # Red channel
+    curveG = build_curve_string(1)  # Green channel
+    curveB = build_curve_string(2)  # Blue channel
+    curveA = build_curve_string(3)  # Alpha channel
+
+    # Apply the curves to the node
+    node['lut'].editCurve("red", curveR)
+    node['lut'].editCurve("green", curveG)
+    node['lut'].editCurve("blue", curveB)
+    node['lut'].editCurve("alpha", curveA)
+    node['chek'].execute()  # Force update the node
+
+
+def LoadCurveDataX(_curves):
+    """
+    Load the curve data from a string and return a list of color values.
+    """
+    # Split the input into lines and extract channel data
+    curves = _curves.splitlines()
+    channels = {
+        "red": curves[1][10:-1].split(" "),
+        "green": curves[2][12:-1].split(" "),
+        "blue": curves[3][11:-1].split(" "),
+        "alpha": curves[4][12:-1].split(" "),
+    }
+
+    colorlist = []
+    interpolation = ""
+    index = -1.0
+
+    # Iterate through the red channel (assuming uniform lengths for all channels)
+    for x, item in enumerate(channels["red"]):
+        if item[0:1].isdigit():  # Check if the item starts with a digit
+            if index == -1.0:  # Handle missing index for the first/last entry
+                index = 0 if x <= 2 else 1
+            colorlist.append([
+                float(channels["red"][x]),
+                float(channels["green"][x]),
+                float(channels["blue"][x]),
+                float(channels["alpha"][x]),
+                interpolation,
+                float(index),
+            ])
+            interpolation = ""
+            index = -1.0
+        else:  # Handle interpolation or index
+            if item[1:]:
+                index = item[1:]
+            elif item[0:1] == "k":
+                index = 0
+            else:
+                interpolation = item
+
+    return colorlist
 
 
 class SectionPanel(nukescripts.PythonPanel):
@@ -51,111 +146,6 @@ class SectionPanel(nukescripts.PythonPanel):
         self.addKnob(self.name)
 
 
-def saveTemplate(_curves):
-    global PresetsFile
-    global config
-    #print config.get('Section1', 'value')
-    p = SectionPanel()
-    if p.showModalDialog():
-        try:
-            config.add_section(p.category.value())
-        except:
-            pass
-        config.read(PresetsFile)
-        config.set(p.category.value(), p.name.value(),_curves)
-
-        # Writing our configuration file to 'example.cfg'
-        with open(PresetsFile, 'wb') as configfile:
-            config.write(configfile)
-        config.read(PresetsFile)
-
-
-
-#This function is used to set the curve of a color lookup node.
-#The input is a node and a (sorted) list of colors formated:
-#[[R,G,B,A,INDEX],[...]]
-#Index being the X offset
-def setColorCurve(node,colorlist,parent,_object):
-    #Interpolation = parent['Interpolation'].value()
-    Interpolation = _object.interpolationMenu.currentText()
-    parent['Interpolation'].setValue(_object.interpolationMenu.currentIndex ())
-
-    if Interpolation == "Constant":
-        interp = "K"
-        interpB = "K"
-    elif Interpolation == "Linear":
-        interp = "L"
-        interpB = "L"
-    elif Interpolation == "Smooth":
-        interp = "Z"
-        interpB = "Z"
-    elif Interpolation == "Catmull-Rom":
-        interp = "R"
-        interpB = "R"
-    elif Interpolation == "Horizontal":
-        interp = "H"
-        interpB = "s0"
-    else: #"Default // Cubic "
-        interp = "C"
-        interpB = "C"
-
-    curveR = 'curve '
-    curveG = 'curve '
-    curveB = 'curve '
-    curveA = 'curve '
-    for x,item in enumerate(colorlist):
-        if x == len(colorlist)-1:
-            curveR += "%s x%s %s %s" %("L",item[-1],item[0],interpB)
-            curveG += "%s x%s %s %s" %("L",item[-1],item[1],interpB)
-            curveB += "%s x%s %s %s" %("L",item[-1],item[2],interpB)
-            curveA += "%s x%s %s %s" %("L",item[-1],item[3],interpB)
-        elif x==0:
-            curveR += "%s x%s %s" %(interpB,item[-1],item[0])
-            curveG += "%s x%s %s" %(interpB,item[-1],item[1])
-            curveB += "%s x%s %s" %(interpB,item[-1],item[2])
-            curveA += "%s x%s %s" %(interpB,item[-1],item[3])
-        else:
-            curveR += "%s x%s %s" %(interp,item[-1],item[0])
-            curveG += "%s x%s %s" %(interp,item[-1],item[1])
-            curveB += "%s x%s %s" %(interp,item[-1],item[2])
-            curveA += "%s x%s %s" %(interp,item[-1],item[3])
-    node['lut'].editCurve("red",curveR)
-    node['lut'].editCurve("green",curveG)
-    node['lut'].editCurve("blue",curveB)
-    node['lut'].editCurve("alpha",curveA)
-    node['chek'].execute() #Force Update the node.
-
-
-def LoadCurveDataX(_curves):
-    #Warning, this was specifically designed to only work with uniform pairs. Will not work if there are no pairs!
-    curves = _curves.splitlines()
-    red_split = curves[1][10:-1].split(" ")
-    green_split = curves[2][12:-1].split(" ")
-    blue_split = curves[3][11:-1].split(" ")
-    alpha_split = curves[4][12:-1].split(" ")
-    Interpolation = ""
-    Index = -1.0
-    colorlist = []
-    for x,item in enumerate(red_split):
-        if item[0:1].isdigit():
-            if Index == -1.0: #First and lasty entry does sometimes not have a index.
-                if x <= 2:
-                    Index = 0
-                else:
-                    Index = 1
-            colorlist.append([float(red_split[x]),float(green_split[x]),float(blue_split[x]),float(alpha_split[x]),Interpolation,float(Index)])
-            Interpolation = ""
-            Index = -1.0
-        else:
-            if item[1:]:
-                Index = item[1:]
-            elif item[0:1] == "k":
-                Index = 0
-            else:
-                Interpolation = item
-    return colorlist
-
-
 class ColorValue:
     def __init__(self):
         self.position = 0 #Position is a value between 0 and 1
@@ -163,11 +153,12 @@ class ColorValue:
         self.distance = 1
         self.selected = False
 
-class GradientWidget(QtGui.QWidget):
+
+class GradientWidget(QWidget):
     def __init__(self, parent=None, mainDiameter=138, outerRingWidth=10,my_node="None"):
-        QtGui.QWidget.__init__(self, parent)
+        super(GradientWidget, self).__init__(parent)
         self._parent = parent
-        self.myTimer = QtCore.QTime() #Used to limit the trigger times of mousemove events
+        self.myTimer = QtCore.QElapsedTimer()  # Used to limit the trigger times of mousemove events
         self.colorLookupNode = my_node.node("ColorLookup1")
         self.thisNode = my_node
         self.colorList = [] #Used to store all the colors
@@ -200,7 +191,7 @@ class GradientWidget(QtGui.QWidget):
                 self._update()
                 break
 
-    def _update(self): #A function that is being called when changes have been made that needs to reflect in the UI
+    def _update(self):
         self.colorNodeUpdate()
         self.repaint()
 
@@ -218,7 +209,7 @@ class GradientWidget(QtGui.QWidget):
         self._parent.updateSlider(_item.color)
         self._update()
 
-    def testPointsSetup(self): #DEBRICATED!!
+    def testPointsSetup(self): #DEPRICATED!!
         self.colorList.append(ColorValue())
         self.colorList.append(ColorValue())
         self.colorList[1].position = 1
@@ -226,7 +217,6 @@ class GradientWidget(QtGui.QWidget):
 
 
     def getColorAtOffset(self,posx):
-
         #Get the points last and next point.
         sorted_x = sorted(self.colorList,key=operator.attrgetter('position'))
         current_index = len(sorted_x)
@@ -260,8 +250,6 @@ class GradientWidget(QtGui.QWidget):
         _alpha = _distT*itemA.color.getRgbF()[3] + (1-_distT)*itemB.color.getRgbF()[3]
         return QColor.fromRgbF(_green, _blue,_alpha,_red).rgba() #MUST BE A NUKE BUG THAT ITS GREEN BLUE ALPHA RED!!!
 
-
-
     def drawRectangles(self, painter):
         self.widget_offset = 10
         self.widget_width = self.width()-(self.widget_offset*2)
@@ -286,7 +274,6 @@ class GradientWidget(QtGui.QWidget):
             painter.drawRect((item.position*self.widget_width)-self.handle_width+self.widget_offset,self.widget_top+15+self.widget_height , self.handle_width*2, self.handle_width*2 ) #DRAW THE OUTER BLACK CIRCLE
 
         painter.setBrush(gradient)
-
         painter.drawRect(self.widget_offset, self.widget_top+10, self.widget_width-1, self.widget_height)
 
 
@@ -335,7 +322,6 @@ class GradientWidget(QtGui.QWidget):
             else:
                 return False
 
-
     def mousePressEvent(self, evt):
         self.myTimer.start()
         self.selectedHandle = self.getNearestHandle(max(0,min(1,(evt.x()-(self.widget_offset))/float(self.widget_width))),evt.y())
@@ -381,9 +367,7 @@ class GradientWidget(QtGui.QWidget):
         setColorCurve(self.colorLookupNode,colorList,self.thisNode,self._parent)
 
 
-
-#The labels used for the presets tab
-class GradientLabel(QtGui.QLabel):
+class GradientLabel(QLabel):
     masterSignal = QtCore.Signal(object)
     def __init__(self, _gradient="",name=""):
         super(GradientLabel, self).__init__()
@@ -425,11 +409,10 @@ class GradientLabel(QtGui.QLabel):
 
 
 
-
-#Basic toolbutton with a additional event filter.
-class MyToolButton(QtGui.QToolButton):
+class MyToolButton(QToolButton):
     def __init__(self, *args):
-        QtGui.QToolButton.__init__(self, *args)
+        super(MyToolButton, self).__init__(*args)
+
     def eventFilter(self, menu, event):
         if event.type() == QtCore.QEvent.MouseButtonRelease:
             if self.underMouse():
@@ -438,10 +421,10 @@ class MyToolButton(QtGui.QToolButton):
         return False
 
 
-class Example(QtGui.QWidget):
+class Example(QWidget):
     def __init__(self, parent=None,myNode="none"):
         global config
-        QtGui.QWidget.__init__(self, None)
+        super(Example, self).__init__(parent)
         self.setGeometry(900, 900, 800, 600)
         #self.setWindowTitle('ColorBars')
         self.baseNode = myNode
@@ -460,10 +443,9 @@ class Example(QtGui.QWidget):
 
         self.presetMenu = MyToolButton()
         self.presetMenu.setText("Gradient Presets  ")
-        self.menu = QtGui.QMenu('Presets')
+        self.menu = QMenu('Presets')  # Updated to use QMenu from QtWidgets
 
         self.UpdatePresetList()
-
         self.presetMenu.setMenu(self.menu)
 
         self.presetMenu.installEventFilter(self.presetMenu)
@@ -479,9 +461,9 @@ class Example(QtGui.QWidget):
         self.sat.setRange(0,255)
         self.lum.setRange(0,255)
 
-        layout = QtGui.QGridLayout()
-        sub_layout = QtGui.QHBoxLayout()
-        dropdown_layout = QtGui.QHBoxLayout()
+        layout = QGridLayout() 
+        sub_layout = QHBoxLayout()
+        dropdown_layout = QHBoxLayout()
         dropdown_layout.addWidget(self.presetMenu)
         dropdown_layout.addWidget(self.interpolationLabel)
         dropdown_layout.addWidget(self.interpolationMenu)
@@ -505,33 +487,64 @@ class Example(QtGui.QWidget):
         saveTemplate(self.baseNode.node("ColorLookup1")["lut"].toScript())
         self.UpdatePresetList()
 
+    def removePreset(self, section, preset_name):
+        # Remove the preset from the config
+        if config.has_section(section):
+            config.remove_option(section, preset_name)
+            # If the section is empty, remove the section
+            if not config.items(section):
+                config.remove_section(section)
+            # Write the updated config back to the file
+            with open(PresetsFile, 'w') as configfile:
+                config.write(configfile)
+        # Refresh the menu
+        self.UpdatePresetList()
+    
     def UpdatePresetList(self):
         for item in self.menu.actions():
             self.menu.removeAction(item)
+        
         #Read the presets. Look for all the sections
         config.read(PresetsFile)
         sections = config.sections()
         for section in sections:
             gradients = config.items(section)
-            submenu = QtGui.QMenu(section)
+            submenu = QMenu(section)
             submenu.setMinimumWidth(300)
             self.menu.addMenu(submenu)
             for gradient in gradients:
-                qle=GradientLabel(gradient[1],gradient[0])
-                qle.masterSignal.connect(self.gradientClicked)
-                wac=QtGui.QWidgetAction(submenu)
-                wac.setDefaultWidget(qle)
-                action=submenu.addAction(wac);
+                # Create a container widget for the gradient and the remove button
+                container = QWidget()
+                layout = QHBoxLayout(container)
+                layout.setContentsMargins(0, 0, 0, 0)  # Remove margins for compact alignment
 
-        addAction = QtGui.QAction('+ADD PRESET', self)
+                # Create the gradient label
+                qle = GradientLabel(gradient[1], gradient[0])
+                qle.masterSignal.connect(self.gradientClicked)
+                layout.addWidget(qle)
+
+                # Create the "Remove Preset" button
+                removeButton = QPushButton("Remove")
+                removeButton.setFixedSize(60, 25)  # Set a fixed size for the button
+                removeButton.clicked.connect(partial(self.removePreset, section, gradient[0]))
+                layout.addWidget(removeButton)
+
+                # Add the container widget to the submenu
+                wac = QWidgetAction(submenu)
+                wac.setDefaultWidget(container)
+                submenu.addAction(wac)
+
+        addAction = QAction('+ Add Preset', self)
         addAction.triggered.connect(self.addPreset)
         self.menu.addAction(addAction)
+        
+        # Close the dropdown menu
+        self.menu.close() #self.menu.update() #self.menu.repaint()
 
     def updateSlider(self,_color):
         self.hue.setValue(_color.hsvHueF()*255 )
         self.sat.setValue(_color.hsvSaturationF()*255)
         self.lum.setValue(_color.valueF()*255)
-
 
     def sliderUpdate(self):
         self.gradientUI.sliderUpdate(QColor.fromHsvF(self.hue.value()/255.0,self.sat.value()/255.0,self.lum.value()/255.0,1.0))
