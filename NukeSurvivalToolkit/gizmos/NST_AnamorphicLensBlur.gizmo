@@ -1,0 +1,9406 @@
+Group {
+ name anamorphicLensBlur
+ tile_color 0xcc804eff
+ note_font_color 0xffffffff
+ selected true
+ xpos 29544
+ ypos 4089
+ addUserKnob {20 User l anamorphicLensBlur}
+ addUserKnob {41 channels T Merge1.also_merge}
+ addUserKnob {26 ""}
+ addUserKnob {14 defocus_size l "defocus size" R 0 100}
+ defocus_size {25 0}
+ addUserKnob {14 blur_size l "blur size" R 0 100}
+ blur_size {3 2}
+ addUserKnob {26 ""}
+ addUserKnob {7 ramp_start l "ramp start position"}
+ ramp_start 0.3
+ addUserKnob {7 ramp_end l "ramp end position"}
+ ramp_end 1
+ addUserKnob {7 falloff R 0 4}
+ falloff 0.8
+ addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge1.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge1.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 mix T Merge1.mix}
+}
+ Input {
+  inputs 0
+  name mask
+  xpos 374
+  ypos 329
+  number 1
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 195
+  ypos -44
+ }
+set N899c51e0 [stack 0]
+add_layer {anamorphLensBlurMask anamorphLensBlurMask.red anamorphLensBlurMask.green anamorphLensBlurMask.blue anamorphLensBlurMask.alpha}
+ Expression {
+  channel3 anamorphLensBlurMask
+  expr3 abs(y-height/2)*2/height
+  name Expression2
+  xpos 60
+  ypos 62
+ }
+ Grade {
+  channels anamorphLensBlurMask
+  blackpoint {{ramp_start}}
+  whitepoint {{ramp_end}}
+  gamma {{falloff}}
+  white_clamp true
+  name Grade29
+  xpos 60
+  ypos 111
+ }
+set N35480730 [stack 0]
+ Shuffle {
+  in anamorphLensBlurMask
+  name Shuffle1
+  autolabel "nuke.thisNode()\['name'].value() + '\\n' + nuke.thisNode()\['in'].value() + (' -> ' + nuke.thisNode()\['out2'].value() if nuke.thisNode()\['out2'].value() != 'none' else '') + ('\\n' + nuke.thisNode()\['label'].value() if nuke.thisNode()\['label'].value() != '' else '')"
+  note_font_size 22
+  note_font_color 0xffffffff
+  xpos -113
+  ypos 100
+ }
+set N207e7700 [stack 0]
+push $N207e7700
+push $N35480730
+ Group {
+  inputs 2
+  name iBlurU
+  help "iBlur v1.0\n\nThis gizmo should work like the iBlur from Shake. I'm still missing a ramped blur in nuke, especially for technical stuff, where a zBlur is just not the right thing (and also too slow)."
+  tile_color 0xcc804eff
+  xpos 60
+  ypos 170
+  addUserKnob {20 Controls}
+  addUserKnob {41 channels t "Select the channels you want to iBlur." T Blur11.channels}
+  addUserKnob {26 divider2 l " " T " "}
+  addUserKnob {14 blur l "blur size" R 0 100}
+  blur {{parent.defocus_size} {parent.defocus_size}}
+  addUserKnob {4 blur_type l "blur type" t "The gizmo is indeed using Nuke's 'Blur' or 'Defocus'. You know the difference!" M {blur "defocus " "" "" ""}}
+  addUserKnob {4 quality t "This gizmo blurs the image in blended in slices. \nMore slices mean more accurate blur-ramp, and also more rendertime.  \n\nfast = 7 slices\naccurate = 13 slices" M {fast accurate "" ""}}
+  quality accurate
+  addUserKnob {26 spacer l "  " T "  "}
+  addUserKnob {26 divider l "" +STARTLINE}
+  addUserKnob {26 credit l "" +STARTLINE T "iBlur v2.0 | moritz eiche | 2011\nModified by Tony Lyons 2019"}
+ }
+  BackdropNode {
+   inputs 0
+   name BackdropNode1
+   tile_color 0x2e2e2eff
+   note_font_size 42
+   xpos 32
+   ypos -426
+   bdwidth 2731
+   bdheight 633
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode2
+   tile_color 0x262626ff
+   note_font_size 42
+   xpos 114
+   ypos -367
+   bdwidth 2572
+   bdheight 269
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode3
+   tile_color 0x262626ff
+   note_font_size 42
+   xpos 115
+   ypos -83
+   bdwidth 2573
+   bdheight 236
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode4
+   tile_color 0x2e2e2eff
+   note_font_size 42
+   xpos 33
+   ypos 320
+   bdwidth 2733
+   bdheight 625
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode5
+   tile_color 0x262626ff
+   note_font_size 42
+   xpos 108
+   ypos 373
+   bdwidth 2572
+   bdheight 269
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode6
+   tile_color 0x262626ff
+   note_font_size 42
+   xpos 109
+   ypos 652
+   bdwidth 2575
+   bdheight 237
+  }
+  Input {
+   inputs 0
+   name mask
+   label a
+   xpos -113
+   ypos -764
+   number 1
+  }
+  Dot {
+   name Dot6
+   xpos -79
+   ypos -312
+  }
+set N8be271e0 [stack 0]
+  Dot {
+   name Dot87
+   xpos -79
+   ypos -51
+  }
+set N49006390 [stack 0]
+  Dot {
+   name Dot57
+   xpos -79
+   ypos 430
+  }
+set Ne91f8e0 [stack 0]
+  Dot {
+   name Dot2
+   xpos 246
+   ypos 430
+  }
+set Ne9061f0 [stack 0]
+  Dot {
+   name Dot4
+   xpos 445
+   ypos 430
+  }
+set Ne91a370 [stack 0]
+  Dot {
+   name Dot32
+   xpos 651
+   ypos 430
+  }
+set N5f0008d0 [stack 0]
+  Dot {
+   name Dot33
+   xpos 850
+   ypos 430
+  }
+set N68f57740 [stack 0]
+  Dot {
+   name Dot34
+   xpos 1045
+   ypos 430
+  }
+set N3e0e6660 [stack 0]
+  Dot {
+   name Dot35
+   xpos 1233
+   ypos 429
+  }
+set N3e0c72d0 [stack 0]
+  Dot {
+   name Dot36
+   xpos 1438
+   ypos 429
+  }
+set N3fc0ae40 [stack 0]
+  Dot {
+   name Dot37
+   xpos 1634
+   ypos 429
+  }
+set N20b8aba0 [stack 0]
+  Dot {
+   name Dot38
+   xpos 1834
+   ypos 429
+  }
+set N2098a5d0 [stack 0]
+  Dot {
+   name Dot39
+   xpos 2036
+   ypos 429
+  }
+set N5ce521e0 [stack 0]
+  Dot {
+   name Dot40
+   xpos 2234
+   ypos 429
+  }
+set N5a46a960 [stack 0]
+  Dot {
+   name Dot41
+   xpos 2432
+   ypos 428
+  }
+set Ne90bae0 [stack 0]
+  Dot {
+   name Dot42
+   xpos 2624
+   ypos 428
+  }
+  Grade {
+   channels rgba
+   blackpoint 0.9
+   white_clamp true
+   name Grade12
+   xpos 2590
+   ypos 521
+  }
+  Input {
+   inputs 0
+   name image
+   label rgba
+   xpos -282
+   ypos -767
+  }
+  Dot {
+   name Dot1
+   xpos -248
+   ypos -272
+  }
+set Nc74c2250 [stack 0]
+  Dot {
+   name Dot25
+   xpos -248
+   ypos -155
+  }
+set Nc65cdfc0 [stack 0]
+  Dot {
+   name Dot86
+   xpos -248
+   ypos -11
+  }
+set Nc63ed610 [stack 0]
+  Dot {
+   name Dot88
+   xpos -248
+   ypos 106
+  }
+set Nb420fa60 [stack 0]
+  Dot {
+   name Dot58
+   xpos -248
+   ypos 470
+  }
+set N8a0cac10 [stack 0]
+  Dot {
+   name Dot43
+   xpos 152
+   ypos 470
+  }
+set N89df48a0 [stack 0]
+  Dot {
+   name Dot44
+   xpos 354
+   ypos 470
+  }
+set N8af83560 [stack 0]
+  Dot {
+   name Dot45
+   xpos 557
+   ypos 470
+  }
+set N8ad30980 [stack 0]
+  Dot {
+   name Dot46
+   xpos 756
+   ypos 470
+  }
+set N43577ca0 [stack 0]
+  Dot {
+   name Dot47
+   xpos 954
+   ypos 470
+  }
+set N435a1760 [stack 0]
+  Dot {
+   name Dot48
+   xpos 1142
+   ypos 469
+  }
+set N43327df0 [stack 0]
+  Dot {
+   name Dot49
+   xpos 1347
+   ypos 469
+  }
+set N435fef30 [stack 0]
+  Dot {
+   name Dot50
+   xpos 1543
+   ypos 469
+  }
+set N432cf0d0 [stack 0]
+  Dot {
+   name Dot51
+   xpos 1743
+   ypos 469
+  }
+set N20d6aaa0 [stack 0]
+  Dot {
+   name Dot52
+   xpos 1945
+   ypos 469
+  }
+set N1225b620 [stack 0]
+  Dot {
+   name Dot53
+   xpos 2143
+   ypos 469
+  }
+set N5f310840 [stack 0]
+  Dot {
+   name Dot54
+   xpos 2341
+   ypos 468
+  }
+set N5f3026e0 [stack 0]
+  Dot {
+   name Dot55
+   xpos 2533
+   ypos 468
+  }
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur} {blur}}
+   name Defocus13
+   xpos 2499
+   ypos 521
+  }
+push $Ne90bae0
+  Grade {
+   channels rgba
+   blackpoint 0.8
+   whitepoint 0.9
+   white_clamp true
+   name Grade15
+   xpos 2398
+   ypos 521
+  }
+push $N5f3026e0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*9} {blur/10*9}}
+   name Defocus12
+   xpos 2307
+   ypos 520
+  }
+push $N5a46a960
+  Grade {
+   channels rgba
+   blackpoint 0.7
+   whitepoint 0.8
+   white_clamp true
+   name Grade16
+   xpos 2200
+   ypos 521
+  }
+push $N5f310840
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*8} {blur/10*8}}
+   name Defocus11
+   xpos 2109
+   ypos 522
+  }
+push $N5ce521e0
+  Grade {
+   channels rgba
+   blackpoint 0.6
+   whitepoint 0.7
+   white_clamp true
+   name Grade17
+   xpos 2002
+   ypos 521
+  }
+push $N1225b620
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*7} {blur/10*7}}
+   name Defocus10
+   xpos 1911
+   ypos 521
+  }
+push $N2098a5d0
+  Grade {
+   channels rgba
+   blackpoint 0.5
+   whitepoint 0.6
+   white_clamp true
+   name Grade18
+   xpos 1800
+   ypos 521
+  }
+push $N20d6aaa0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*6} {blur/10*6}}
+   name Defocus9
+   xpos 1709
+   ypos 521
+  }
+push $N20b8aba0
+  Grade {
+   channels rgba
+   blackpoint 0.4
+   whitepoint 0.5
+   white_clamp true
+   name Grade19
+   xpos 1600
+   ypos 521
+  }
+push $N432cf0d0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*5} {blur/10*5}}
+   name Defocus8
+   xpos 1509
+   ypos 521
+  }
+push $N3fc0ae40
+  Grade {
+   channels rgba
+   blackpoint 0.3
+   whitepoint 0.4
+   white_clamp true
+   name Grade20
+   xpos 1404
+   ypos 521
+  }
+push $N435fef30
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*4} {blur/10*4}}
+   name Defocus7
+   xpos 1313
+   ypos 521
+  }
+push $N3e0c72d0
+  Grade {
+   channels rgba
+   blackpoint 0.2
+   whitepoint 0.3
+   white_clamp true
+   name Grade21
+   xpos 1199
+   ypos 521
+  }
+push $N43327df0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*3} {blur/10*3}}
+   name Defocus6
+   xpos 1108
+   ypos 522
+  }
+push $N3e0e6660
+  Grade {
+   channels rgba
+   blackpoint 0.1
+   whitepoint 0.2
+   white_clamp true
+   name Grade22
+   xpos 1011
+   ypos 521
+  }
+push $N435a1760
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*2} {blur/10*2}}
+   name Defocus5
+   xpos 920
+   ypos 524
+  }
+push $N68f57740
+  Grade {
+   channels rgba
+   blackpoint 0.075
+   whitepoint 0.1
+   white_clamp true
+   name Grade23
+   xpos 816
+   ypos 521
+  }
+push $N43577ca0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10} {blur/10}}
+   name Defocus4
+   xpos 722
+   ypos 522
+  }
+push $N5f0008d0
+  Grade {
+   channels rgba
+   blackpoint 0.05
+   whitepoint 0.075
+   white_clamp true
+   name Grade24
+   xpos 617
+   ypos 521
+  }
+push $N8ad30980
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10/4*3} {blur/10/4*3}}
+   name Defocus3
+   xpos 523
+   ypos 520
+  }
+push $Ne91a370
+  Grade {
+   channels rgba
+   blackpoint 0.025
+   whitepoint 0.05
+   white_clamp true
+   name Grade25
+   xpos 411
+   ypos 521
+  }
+push $N8af83560
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10/4*2} {blur/10/4*2}}
+   name Defocus2
+   xpos 320
+   ypos 519
+  }
+push $Ne9061f0
+  Grade {
+   channels rgba
+   whitepoint 0.025
+   white_clamp true
+   name Grade26
+   xpos 212
+   ypos 521
+  }
+push $N89df48a0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10/4} {blur/10/4}}
+   name Defocus1
+   xpos 118
+   ypos 518
+  }
+push $N8a0cac10
+  Dot {
+   name Dot56
+   xpos -248
+   ypos 587
+  }
+set N5f1f0940 [stack 0]
+  Group {
+   inputs 3
+   name KeymixBBox
+   tile_color 0x4b5ec6ff
+   xpos 118
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5c7c0ec0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5974fb10 [stack 0]
+push $N5c7c0ec0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N493ff190 [stack 0]
+push $N5974fb10
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N493ff190
+push $N5c7c0ec0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox1
+   tile_color 0x4b5ec6ff
+   xpos 320
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N8b5b01e0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N68f8ed60 [stack 0]
+push $N8b5b01e0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N5c850e20 [stack 0]
+push $N68f8ed60
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N5c850e20
+push $N8b5b01e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox2
+   tile_color 0x4b5ec6ff
+   xpos 523
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Ne50e8820 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nc6ee6d20 [stack 0]
+push $Ne50e8820
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N266e4e30 [stack 0]
+push $Nc6ee6d20
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N266e4e30
+push $Ne50e8820
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox3
+   tile_color 0x4b5ec6ff
+   xpos 722
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N34d56870 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N2e1cedc0 [stack 0]
+push $N34d56870
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N596bbac0 [stack 0]
+push $N2e1cedc0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N596bbac0
+push $N34d56870
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox4
+   tile_color 0x4b5ec6ff
+   xpos 920
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N36e59650 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N35f72020 [stack 0]
+push $N36e59650
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N3ce3c6e0 [stack 0]
+push $N35f72020
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N3ce3c6e0
+push $N36e59650
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox5
+   tile_color 0x4b5ec6ff
+   xpos 1108
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Ne5738460 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N8bc0c2d0 [stack 0]
+push $Ne5738460
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N8be28ca0 [stack 0]
+push $N8bc0c2d0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N8be28ca0
+push $Ne5738460
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox6
+   tile_color 0x4b5ec6ff
+   xpos 1313
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N122572f0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf049740 [stack 0]
+push $N122572f0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N1872b600 [stack 0]
+push $Nf049740
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N1872b600
+push $N122572f0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox7
+   tile_color 0x4b5ec6ff
+   xpos 1509
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nc6ca1860 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N12f1dfd0 [stack 0]
+push $Nc6ca1860
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N3bed03f0 [stack 0]
+push $N12f1dfd0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N3bed03f0
+push $Nc6ca1860
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox9
+   tile_color 0x4b5ec6ff
+   xpos 1709
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N1cf74320 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N16a539d0 [stack 0]
+push $N1cf74320
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N130e1cb0 [stack 0]
+push $N16a539d0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N130e1cb0
+push $N1cf74320
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox10
+   tile_color 0x4b5ec6ff
+   xpos 1911
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N61e72440 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5c75a750 [stack 0]
+push $N61e72440
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N20ce42d0 [stack 0]
+push $N5c75a750
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N20ce42d0
+push $N61e72440
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox11
+   tile_color 0x4b5ec6ff
+   xpos 2109
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N3cd557b0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N8a3ca620 [stack 0]
+push $N3cd557b0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N3c59d3d0 [stack 0]
+push $N8a3ca620
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N3c59d3d0
+push $N3cd557b0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox12
+   tile_color 0x4b5ec6ff
+   xpos 2307
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N3847d330 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N37ff2570 [stack 0]
+push $N3847d330
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N36aa25b0 [stack 0]
+push $N37ff2570
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N36aa25b0
+push $N3847d330
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox13
+   tile_color 0x4b5ec6ff
+   xpos 2499
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N135bfed0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N130e49d0 [stack 0]
+push $N135bfed0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N1d5020b0 [stack 0]
+push $N130e49d0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N1d5020b0
+push $N135bfed0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Dot {
+   name Dot67
+   xpos 2886
+   ypos 587
+  }
+push $Ne91f8e0
+  Dot {
+   name Dot105
+   xpos -79
+   ypos 688
+  }
+  Dot {
+   name Dot62
+   xpos 244
+   ypos 687
+  }
+set Nf1b54410 [stack 0]
+  Dot {
+   name Dot65
+   xpos 443
+   ypos 687
+  }
+set N48cf6d30 [stack 0]
+  Dot {
+   name Dot69
+   xpos 848
+   ypos 687
+  }
+set N35affe10 [stack 0]
+  Dot {
+   name Dot71
+   xpos 1245
+   ypos 687
+  }
+set N12fffcc0 [stack 0]
+  Dot {
+   name Dot82
+   xpos 1635
+   ypos 686
+  }
+set Nf15fd140 [stack 0]
+  Dot {
+   name Dot89
+   xpos 2036
+   ypos 686
+  }
+set Nc7612a00 [stack 0]
+  Dot {
+   name Dot91
+   xpos 2622
+   ypos 685
+  }
+  Grade {
+   channels rgba
+   blackpoint 0.7
+   white_clamp true
+   name Grade28
+   xpos 2588
+   ypos 778
+  }
+push $N5f1f0940
+  Dot {
+   name Dot106
+   xpos -248
+   ypos 728
+  }
+set N8ab21740 [stack 0]
+  Dot {
+   name Dot92
+   xpos 150
+   ypos 727
+  }
+set N8bdd85f0 [stack 0]
+  Dot {
+   name Dot93
+   xpos 352
+   ypos 727
+  }
+set N89848ea0 [stack 0]
+  Dot {
+   name Dot95
+   xpos 754
+   ypos 727
+  }
+set Ncb5f1b0 [stack 0]
+  Dot {
+   name Dot96
+   xpos 1154
+   ypos 727
+  }
+set Nc6b6eed0 [stack 0]
+  Dot {
+   name Dot100
+   xpos 1544
+   ypos 726
+  }
+set N1674cf50 [stack 0]
+  Dot {
+   name Dot102
+   xpos 1945
+   ypos 726
+  }
+set N5c7f05c0 [stack 0]
+  Dot {
+   name Dot104
+   xpos 2531
+   ypos 725
+  }
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur} {blur}}
+   name Defocus14
+   xpos 2497
+   ypos 779
+  }
+push $Nc7612a00
+  Grade {
+   channels rgba
+   blackpoint 0.5
+   whitepoint 0.7
+   white_clamp true
+   name Grade32
+   xpos 2002
+   ypos 779
+  }
+push $N5c7f05c0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*7} {blur/10*7}}
+   name Defocus16
+   xpos 1911
+   ypos 778
+  }
+push $Nf15fd140
+  Grade {
+   channels rgba
+   blackpoint 0.3
+   whitepoint 0.5
+   white_clamp true
+   name Grade37
+   xpos 1601
+   ypos 778
+  }
+push $N1674cf50
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*5} {blur/10*5}}
+   name Defocus18
+   xpos 1510
+   ypos 778
+  }
+push $N12fffcc0
+  Grade {
+   channels rgba
+   blackpoint 0.1
+   whitepoint 0.3
+   white_clamp true
+   name Grade43
+   xpos 1211
+   ypos 778
+  }
+push $Nc6b6eed0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*3} {blur/10*3}}
+   name Defocus22
+   xpos 1120
+   ypos 777
+  }
+push $N35affe10
+  Grade {
+   channels rgba
+   blackpoint 0.05
+   whitepoint 0.1
+   white_clamp true
+   name Grade44
+   xpos 814
+   ypos 778
+  }
+push $Ncb5f1b0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10} {blur/10}}
+   name Defocus23
+   xpos 720
+   ypos 778
+  }
+push $N48cf6d30
+  Grade {
+   channels rgba
+   blackpoint 0.025
+   whitepoint 0.05
+   white_clamp true
+   name Grade46
+   xpos 409
+   ypos 778
+  }
+push $N89848ea0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10/4*2} {blur/10/4*2}}
+   name Defocus25
+   xpos 318
+   ypos 777
+  }
+push $Nf1b54410
+  Grade {
+   channels rgba
+   whitepoint 0.025
+   white_clamp true
+   name Grade47
+   xpos 210
+   ypos 777
+  }
+push $N8bdd85f0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10/4} {blur/10/4}}
+   name Defocus26
+   xpos 116
+   ypos 778
+  }
+push $N8ab21740
+  Dot {
+   name Dot107
+   xpos -248
+   ypos 845
+  }
+  Group {
+   inputs 3
+   name KeymixBBox8
+   tile_color 0x4b5ec6ff
+   xpos 116
+   ypos 835
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N4866e710 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Ne5fe2050 [stack 0]
+push $N4866e710
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N35cc1740 [stack 0]
+push $Ne5fe2050
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N35cc1740
+push $N4866e710
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox14
+   tile_color 0x4b5ec6ff
+   xpos 318
+   ypos 835
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N43ccf200 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf1d11370 [stack 0]
+push $N43ccf200
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Ne6849040 [stack 0]
+push $Nf1d11370
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Ne6849040
+push $N43ccf200
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox15
+   tile_color 0x4b5ec6ff
+   xpos 720
+   ypos 836
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nc780b760 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf1b65040 [stack 0]
+push $Nc780b760
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N43158f90 [stack 0]
+push $Nf1b65040
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N43158f90
+push $Nc780b760
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox16
+   tile_color 0x4b5ec6ff
+   xpos 1120
+   ypos 836
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Ne54e7330 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf0282f50 [stack 0]
+push $Ne54e7330
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N361f44a0 [stack 0]
+push $Nf0282f50
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N361f44a0
+push $Ne54e7330
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox17
+   tile_color 0x4b5ec6ff
+   xpos 1510
+   ypos 836
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N3a035a60 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N3cfa6eb0 [stack 0]
+push $N3a035a60
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N43724b80 [stack 0]
+push $N3cfa6eb0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N43724b80
+push $N3a035a60
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox18
+   tile_color 0x4b5ec6ff
+   xpos 1911
+   ypos 836
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N8996bae0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N37236870 [stack 0]
+push $N8996bae0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N340e7430 [stack 0]
+push $N37236870
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N340e7430
+push $N8996bae0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox19
+   tile_color 0x4b5ec6ff
+   xpos 2497
+   ypos 836
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N132a3910 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf222d6c0 [stack 0]
+push $N132a3910
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N16543e30 [stack 0]
+push $Nf222d6c0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N16543e30
+push $N132a3910
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Switch {
+   inputs 2
+   which {{quality i}}
+   name Switch3
+   xpos 2852
+   ypos 842
+  }
+push $N8be271e0
+  Dot {
+   name Dot23
+   xpos 255
+   ypos -312
+  }
+set N356bc8e0 [stack 0]
+  Dot {
+   name Dot26
+   xpos 454
+   ypos -312
+  }
+set N3a59ed00 [stack 0]
+  Dot {
+   name Dot28
+   xpos 660
+   ypos -312
+  }
+set N3d8e5460 [stack 0]
+  Dot {
+   name Dot30
+   xpos 859
+   ypos -312
+  }
+set N8a0c8150 [stack 0]
+  Dot {
+   name Dot7
+   xpos 1054
+   ypos -312
+  }
+set N8a3113e0 [stack 0]
+  Dot {
+   name Dot5
+   xpos 1242
+   ypos -313
+  }
+set N8973e0b0 [stack 0]
+  Dot {
+   name Dot9
+   xpos 1447
+   ypos -313
+  }
+set N38a7a700 [stack 0]
+  Dot {
+   name Dot11
+   xpos 1643
+   ypos -313
+  }
+set N3839a560 [stack 0]
+  Dot {
+   name Dot13
+   xpos 1843
+   ypos -313
+  }
+set N303590a0 [stack 0]
+  Dot {
+   name Dot15
+   xpos 2045
+   ypos -313
+  }
+set N3bdd6ce0 [stack 0]
+  Dot {
+   name Dot17
+   xpos 2243
+   ypos -313
+  }
+set N8b382e80 [stack 0]
+  Dot {
+   name Dot19
+   xpos 2441
+   ypos -314
+  }
+set Ne6263040 [stack 0]
+  Dot {
+   name Dot21
+   xpos 2633
+   ypos -314
+  }
+  Grade {
+   channels rgba
+   blackpoint 0.9
+   white_clamp true
+   name Grade8
+   xpos 2599
+   ypos -225
+  }
+push $Nc74c2250
+  Dot {
+   name Dot24
+   xpos 161
+   ypos -272
+  }
+set Nc6a8a620 [stack 0]
+  Dot {
+   name Dot27
+   xpos 363
+   ypos -272
+  }
+set Nf203cf40 [stack 0]
+  Dot {
+   name Dot29
+   xpos 566
+   ypos -272
+  }
+set N1e021820 [stack 0]
+  Dot {
+   name Dot31
+   xpos 765
+   ypos -272
+  }
+set N3bd656d0 [stack 0]
+  Dot {
+   name Dot3
+   xpos 963
+   ypos -272
+  }
+set N346dd990 [stack 0]
+  Dot {
+   name Dot8
+   xpos 1151
+   ypos -273
+  }
+set N2e1cd320 [stack 0]
+  Dot {
+   name Dot10
+   xpos 1356
+   ypos -273
+  }
+set Nc71755f0 [stack 0]
+  Dot {
+   name Dot12
+   xpos 1552
+   ypos -273
+  }
+set N37d40540 [stack 0]
+  Dot {
+   name Dot14
+   xpos 1752
+   ypos -273
+  }
+set N3b8bd710 [stack 0]
+  Dot {
+   name Dot16
+   xpos 1954
+   ypos -273
+  }
+set N374e9f60 [stack 0]
+  Dot {
+   name Dot18
+   xpos 2152
+   ypos -273
+  }
+set N3cdc50a0 [stack 0]
+  Dot {
+   name Dot20
+   xpos 2350
+   ypos -274
+  }
+set N3c6eed10 [stack 0]
+  Dot {
+   name Dot22
+   xpos 2542
+   ypos -274
+  }
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*10} {blur/10*10}}
+   filter box
+   crop false
+   name Blur10
+   selected true
+   xpos 2508
+   ypos -224
+  }
+push $Ne6263040
+  Grade {
+   channels rgba
+   blackpoint 0.8
+   whitepoint 0.9
+   white_clamp true
+   name Grade7
+   xpos 2407
+   ypos -225
+  }
+push $N3c6eed10
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*9} {blur/10*9}}
+   filter box
+   crop false
+   name Blur9
+   selected true
+   xpos 2316
+   ypos -225
+  }
+push $N8b382e80
+  Grade {
+   channels rgba
+   blackpoint 0.7
+   whitepoint 0.8
+   white_clamp true
+   name Grade6
+   xpos 2209
+   ypos -225
+  }
+push $N3cdc50a0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*8} {blur/10*8}}
+   filter box
+   crop false
+   name Blur8
+   selected true
+   xpos 2118
+   ypos -225
+  }
+push $N3bdd6ce0
+  Grade {
+   channels rgba
+   blackpoint 0.6
+   whitepoint 0.7
+   white_clamp true
+   name Grade5
+   xpos 2011
+   ypos -225
+  }
+push $N374e9f60
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*7} {blur/10*7}}
+   filter box
+   crop false
+   name Blur7
+   selected true
+   xpos 1920
+   ypos -227
+  }
+push $N303590a0
+  Grade {
+   channels rgba
+   blackpoint 0.5
+   whitepoint 0.6
+   white_clamp true
+   name Grade4
+   xpos 1809
+   ypos -225
+  }
+push $N3b8bd710
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*6} {blur/10*6}}
+   filter box
+   crop false
+   name Blur6
+   selected true
+   xpos 1718
+   ypos -225
+  }
+push $N3839a560
+  Grade {
+   channels rgba
+   blackpoint 0.4
+   whitepoint 0.5
+   white_clamp true
+   name Grade3
+   xpos 1609
+   ypos -225
+  }
+push $N37d40540
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*5} {blur/10*5}}
+   filter box
+   crop false
+   name Blur5
+   selected true
+   xpos 1518
+   ypos -226
+  }
+push $N38a7a700
+  Grade {
+   channels rgba
+   blackpoint 0.3
+   whitepoint 0.4
+   white_clamp true
+   name Grade2
+   xpos 1413
+   ypos -225
+  }
+push $Nc71755f0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*4} {blur/10*4}}
+   filter box
+   crop false
+   name Blur4
+   selected true
+   xpos 1322
+   ypos -225
+  }
+push $N8973e0b0
+  Grade {
+   channels rgba
+   blackpoint 0.2
+   whitepoint 0.3
+   white_clamp true
+   name Grade1
+   xpos 1208
+   ypos -225
+  }
+push $N2e1cd320
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*3} {blur/10*3}}
+   filter box
+   crop false
+   name Blur3
+   selected true
+   xpos 1117
+   ypos -226
+  }
+push $N8a3113e0
+  Grade {
+   channels rgba
+   blackpoint 0.1
+   whitepoint 0.2
+   white_clamp true
+   name Grade13
+   xpos 1020
+   ypos -225
+  }
+push $N346dd990
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*2} {blur/10*2}}
+   filter box
+   crop false
+   name Blur2
+   selected true
+   xpos 929
+   ypos -226
+  }
+push $N8a0c8150
+  Grade {
+   channels rgba
+   blackpoint 0.075
+   whitepoint 0.1
+   white_clamp true
+   name Grade14
+   xpos 825
+   ypos -225
+  }
+push $N3bd656d0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10} {blur/10}}
+   filter box
+   crop false
+   name Blur14
+   selected true
+   xpos 731
+   ypos -226
+  }
+push $N3d8e5460
+  Grade {
+   channels rgba
+   blackpoint 0.05
+   whitepoint 0.075
+   white_clamp true
+   name Grade11
+   xpos 626
+   ypos -225
+  }
+push $N1e021820
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10/4*3} {blur/10/4*3}}
+   filter box
+   crop false
+   name Blur13
+   selected true
+   xpos 532
+   ypos -225
+  }
+push $N3a59ed00
+  Grade {
+   channels rgba
+   blackpoint 0.025
+   whitepoint 0.05
+   white_clamp true
+   name Grade10
+   xpos 420
+   ypos -225
+  }
+push $Nf203cf40
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10/4*2} {blur/10/4*2}}
+   filter box
+   crop false
+   name Blur12
+   selected true
+   xpos 329
+   ypos -227
+  }
+push $N356bc8e0
+  Grade {
+   channels rgba
+   whitepoint 0.025
+   white_clamp true
+   name Grade9
+   xpos 221
+   ypos -225
+  }
+push $Nc6a8a620
+  Blur {
+   size {{blur/10/4} {blur/10/4}}
+   filter box
+   crop false
+   name Blur11
+   selected true
+   xpos 127
+   ypos -229
+  }
+push $Nc65cdfc0
+  Group {
+   inputs 3
+   name KeymixBBox27
+   tile_color 0x4b5ec6ff
+   xpos 127
+   ypos -165
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nc73b05a0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N596a4250 [stack 0]
+push $Nc73b05a0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N5cc06f50 [stack 0]
+push $N596a4250
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N5cc06f50
+push $Nc73b05a0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox28
+   tile_color 0x4b5ec6ff
+   xpos 329
+   ypos -165
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N11f156a0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf0f869e0 [stack 0]
+push $N11f156a0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N8b5b1ee0 [stack 0]
+push $Nf0f869e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N8b5b1ee0
+push $N11f156a0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox29
+   tile_color 0x4b5ec6ff
+   xpos 532
+   ypos -165
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N3e11e1a0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf0a17db0 [stack 0]
+push $N3e11e1a0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Nf080fe30 [stack 0]
+push $Nf0a17db0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Nf080fe30
+push $N3e11e1a0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox30
+   tile_color 0x4b5ec6ff
+   xpos 731
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5ef79630 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N48df5070 [stack 0]
+push $N5ef79630
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Nf0e5cfe0 [stack 0]
+push $N48df5070
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Nf0e5cfe0
+push $N5ef79630
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox31
+   tile_color 0x4b5ec6ff
+   xpos 929
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5a16ea10 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N20cbe090 [stack 0]
+push $N5a16ea10
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N5a564ae0 [stack 0]
+push $N20cbe090
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N5a564ae0
+push $N5a16ea10
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox32
+   tile_color 0x4b5ec6ff
+   xpos 1117
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N3e147c00 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5a6f1b00 [stack 0]
+push $N3e147c00
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N5f352f00 [stack 0]
+push $N5a6f1b00
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N5f352f00
+push $N3e147c00
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox33
+   tile_color 0x4b5ec6ff
+   xpos 1322
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nc66cc9f0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf235e360 [stack 0]
+push $Nc66cc9f0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N3d944760 [stack 0]
+push $Nf235e360
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N3d944760
+push $Nc66cc9f0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox34
+   tile_color 0x4b5ec6ff
+   xpos 1518
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nf1f60d40 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nc65cf360 [stack 0]
+push $Nf1f60d40
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Nb47fd0f0 [stack 0]
+push $Nc65cf360
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Nb47fd0f0
+push $Nf1f60d40
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox35
+   tile_color 0x4b5ec6ff
+   xpos 1718
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nf161f470 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf23368c0 [stack 0]
+push $Nf161f470
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Nc7809190 [stack 0]
+push $Nf23368c0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Nc7809190
+push $Nf161f470
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox36
+   tile_color 0x4b5ec6ff
+   xpos 1920
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N43f7bb40 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nb4b379e0 [stack 0]
+push $N43f7bb40
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N8b831e20 [stack 0]
+push $Nb4b379e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N8b831e20
+push $N43f7bb40
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox37
+   tile_color 0x4b5ec6ff
+   xpos 2118
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N58f7d890 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N8a7fa8b0 [stack 0]
+push $N58f7d890
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N439fe940 [stack 0]
+push $N8a7fa8b0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N439fe940
+push $N58f7d890
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox38
+   tile_color 0x4b5ec6ff
+   xpos 2316
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N593750e0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Ne63abc70 [stack 0]
+push $N593750e0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N3f2fa730 [stack 0]
+push $Ne63abc70
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N3f2fa730
+push $N593750e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox39
+   tile_color 0x4b5ec6ff
+   xpos 2508
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N3e3fe4f0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N59079760 [stack 0]
+push $N3e3fe4f0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N3e19ce60 [stack 0]
+push $N59079760
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N3e19ce60
+push $N3e3fe4f0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Dot {
+   name Dot59
+   xpos 2883
+   ypos -155
+  }
+push $N49006390
+  Dot {
+   name Dot60
+   xpos 253
+   ypos -51
+  }
+set Nf03d6770 [stack 0]
+  Dot {
+   name Dot61
+   xpos 452
+   ypos -51
+  }
+set Nb4732610 [stack 0]
+  Dot {
+   name Dot63
+   xpos 857
+   ypos -51
+  }
+set N5a5457d0 [stack 0]
+  Dot {
+   name Dot64
+   xpos 1250
+   ypos -52
+  }
+set N8ab00600 [stack 0]
+  Dot {
+   name Dot66
+   xpos 1646
+   ypos -53
+  }
+set Nc710c010 [stack 0]
+  Dot {
+   name Dot68
+   xpos 2046
+   ypos -53
+  }
+set Nc7321080 [stack 0]
+  Dot {
+   name Dot72
+   xpos 2631
+   ypos -53
+  }
+  Grade {
+   channels rgba
+   blackpoint 0.7
+   white_clamp true
+   name Grade27
+   xpos 2597
+   ypos 36
+  }
+push $Nc63ed610
+  Dot {
+   name Dot73
+   xpos 159
+   ypos -11
+  }
+set Nf06ab4b0 [stack 0]
+  Dot {
+   name Dot74
+   xpos 361
+   ypos -11
+  }
+set Nf0cc0ec0 [stack 0]
+  Dot {
+   name Dot76
+   xpos 763
+   ypos -11
+  }
+set N3db6e2f0 [stack 0]
+  Dot {
+   name Dot77
+   xpos 1159
+   ypos -12
+  }
+set N3e505af0 [stack 0]
+  Dot {
+   name Dot79
+   xpos 1555
+   ypos -13
+  }
+set N43500700 [stack 0]
+  Dot {
+   name Dot81
+   xpos 1955
+   ypos -13
+  }
+set Nf2410ee0 [stack 0]
+  Dot {
+   name Dot85
+   xpos 2540
+   ypos -13
+  }
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*10} {blur/10*10}}
+   name Blur1
+   xpos 2506
+   ypos 35
+  }
+push $Nc7321080
+  Grade {
+   channels rgba
+   blackpoint 0.5
+   whitepoint 0.7
+   white_clamp true
+   name Grade31
+   xpos 2012
+   ypos 35
+  }
+push $Nf2410ee0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*7} {blur/10*7}}
+   name Blur18
+   xpos 1921
+   ypos 33
+  }
+push $Nc710c010
+  Grade {
+   channels rgba
+   blackpoint 0.3
+   whitepoint 0.5
+   white_clamp true
+   name Grade33
+   xpos 1612
+   ypos 34
+  }
+push $N43500700
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*5} {blur/10*5}}
+   name Blur20
+   xpos 1521
+   ypos 35
+  }
+push $N8ab00600
+  Grade {
+   channels rgba
+   blackpoint 0.1
+   whitepoint 0.3
+   white_clamp true
+   name Grade35
+   xpos 1216
+   ypos 35
+  }
+push $N3e505af0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*3} {blur/10*3}}
+   name Blur22
+   xpos 1125
+   ypos 35
+  }
+push $N5a5457d0
+  Grade {
+   channels rgba
+   blackpoint 0.05
+   whitepoint 0.1
+   white_clamp true
+   name Grade36
+   xpos 823
+   ypos 36
+  }
+push $N3db6e2f0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10} {blur/10}}
+   name Blur23
+   xpos 729
+   ypos 35
+  }
+push $Nb4732610
+  Grade {
+   channels rgba
+   blackpoint 0.025
+   whitepoint 0.05
+   white_clamp true
+   name Grade38
+   xpos 418
+   ypos 36
+  }
+push $Nf0cc0ec0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10/4*2} {blur/10/4*2}}
+   name Blur25
+   xpos 327
+   ypos 36
+  }
+push $Nf03d6770
+  Grade {
+   channels rgba
+   whitepoint 0.025
+   white_clamp true
+   name Grade39
+   xpos 219
+   ypos 38
+  }
+push $Nf06ab4b0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10/4} {blur/10/4}}
+   name Blur26
+   xpos 125
+   ypos 38
+  }
+push $Nb420fa60
+  Group {
+   inputs 3
+   name KeymixBBox40
+   tile_color 0x4b5ec6ff
+   xpos 125
+   ypos 96
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N43f30660 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nb4948e60 [stack 0]
+push $N43f30660
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -365
+   }
+set N781c2350 [stack 0]
+push $Nb4948e60
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N781c2350
+push $N43f30660
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox26
+   tile_color 0x4b5ec6ff
+   xpos 327
+   ypos 96
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N8a327af0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nc6ef0b70 [stack 0]
+push $N8a327af0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -365
+   }
+set Nf1448ae0 [stack 0]
+push $Nc6ef0b70
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Nf1448ae0
+push $N8a327af0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox25
+   tile_color 0x4b5ec6ff
+   xpos 729
+   ypos 98
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N434593e0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5c855a50 [stack 0]
+push $N434593e0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -365
+   }
+set N20e6f920 [stack 0]
+push $N5c855a50
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N20e6f920
+push $N434593e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox23
+   tile_color 0x4b5ec6ff
+   xpos 1125
+   ypos 97
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nf15ff460 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5a1564e0 [stack 0]
+push $Nf15ff460
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N59fefe00 [stack 0]
+push $N5a1564e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N59fefe00
+push $Nf15ff460
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox22
+   tile_color 0x4b5ec6ff
+   xpos 1521
+   ypos 97
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N88678220 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf021c870 [stack 0]
+push $N88678220
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Nc7420260 [stack 0]
+push $Nf021c870
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Nc7420260
+push $N88678220
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox20
+   tile_color 0x4b5ec6ff
+   xpos 1921
+   ypos 97
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N43071d70 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N493f9100 [stack 0]
+push $N43071d70
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N5f1b06a0 [stack 0]
+push $N493f9100
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N5f1b06a0
+push $N43071d70
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox21
+   tile_color 0x4b5ec6ff
+   xpos 2506
+   ypos 97
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5a0e8fc0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N8ad9fba0 [stack 0]
+push $N5a0e8fc0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N5a196730 [stack 0]
+push $N8ad9fba0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N5a196730
+push $N5a0e8fc0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Switch {
+   inputs 2
+   which {{quality i}}
+   name Switch2
+   xpos 2849
+   ypos 103
+  }
+  Dot {
+   name Dot75
+   xpos 3248
+   ypos 106
+  }
+  Switch {
+   inputs 2
+   which {{blur_type i}}
+   name Switch1
+   xpos 3214
+   ypos 842
+  }
+  Output {
+   name Output1
+   xpos 3214
+   ypos 1164
+  }
+ end_group
+ Group {
+  inputs 2
+  name iBlurU1
+  help "iBlur v1.0\n\nThis gizmo should work like the iBlur from Shake. I'm still missing a ramped blur in nuke, especially for technical stuff, where a zBlur is just not the right thing (and also too slow)."
+  tile_color 0xcc804eff
+  xpos 60
+  ypos 225
+  addUserKnob {20 Controls}
+  addUserKnob {41 channels t "Select the channels you want to iBlur." T Blur11.channels}
+  addUserKnob {26 divider2 l " " T " "}
+  addUserKnob {14 blur l "blur size" R 0 100}
+  blur {{parent.blur_size} {parent.blur_size}}
+  addUserKnob {4 blur_type l "blur type" t "The gizmo is indeed using Nuke's 'Blur' or 'Defocus'. You know the difference!" M {blur "defocus " "" "" ""}}
+  addUserKnob {4 quality t "This gizmo blurs the image in blended in slices. \nMore slices mean more accurate blur-ramp, and also more rendertime.  \n\nfast = 7 slices\naccurate = 13 slices" M {fast accurate "" ""}}
+  quality accurate
+  addUserKnob {26 spacer l "  " T "  "}
+  addUserKnob {26 divider l "" +STARTLINE}
+  addUserKnob {26 credit l "" +STARTLINE T "iBlur v2.0 | moritz eiche | 2011\nModified by Tony Lyons 2019"}
+ }
+  BackdropNode {
+   inputs 0
+   name BackdropNode1
+   tile_color 0x2e2e2eff
+   note_font_size 42
+   xpos 32
+   ypos -426
+   bdwidth 2731
+   bdheight 633
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode2
+   tile_color 0x262626ff
+   note_font_size 42
+   xpos 114
+   ypos -367
+   bdwidth 2572
+   bdheight 269
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode3
+   tile_color 0x262626ff
+   note_font_size 42
+   xpos 115
+   ypos -83
+   bdwidth 2573
+   bdheight 236
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode4
+   tile_color 0x2e2e2eff
+   note_font_size 42
+   xpos 33
+   ypos 320
+   bdwidth 2733
+   bdheight 625
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode5
+   tile_color 0x262626ff
+   note_font_size 42
+   xpos 108
+   ypos 373
+   bdwidth 2572
+   bdheight 269
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode6
+   tile_color 0x262626ff
+   note_font_size 42
+   xpos 109
+   ypos 652
+   bdwidth 2575
+   bdheight 237
+  }
+  Input {
+   inputs 0
+   name mask
+   label a
+   xpos -113
+   ypos -764
+   number 1
+  }
+  Dot {
+   name Dot6
+   xpos -79
+   ypos -312
+  }
+set N61c87460 [stack 0]
+  Dot {
+   name Dot87
+   xpos -79
+   ypos -51
+  }
+set N3e06c530 [stack 0]
+  Dot {
+   name Dot57
+   xpos -79
+   ypos 430
+  }
+set Ne5988230 [stack 0]
+  Dot {
+   name Dot2
+   xpos 246
+   ypos 430
+  }
+set Ne5461890 [stack 0]
+  Dot {
+   name Dot4
+   xpos 445
+   ypos 430
+  }
+set N8bc4af70 [stack 0]
+  Dot {
+   name Dot32
+   xpos 651
+   ypos 430
+  }
+set N49220540 [stack 0]
+  Dot {
+   name Dot33
+   xpos 850
+   ypos 430
+  }
+set N78bd7ba0 [stack 0]
+  Dot {
+   name Dot34
+   xpos 1045
+   ypos 430
+  }
+set N61b9f710 [stack 0]
+  Dot {
+   name Dot35
+   xpos 1233
+   ypos 429
+  }
+set N3e41c1d0 [stack 0]
+  Dot {
+   name Dot36
+   xpos 1438
+   ypos 429
+  }
+set Ne51b1e10 [stack 0]
+  Dot {
+   name Dot37
+   xpos 1634
+   ypos 429
+  }
+set N2099c810 [stack 0]
+  Dot {
+   name Dot38
+   xpos 1834
+   ypos 429
+  }
+set N5ccd92e0 [stack 0]
+  Dot {
+   name Dot39
+   xpos 2036
+   ypos 429
+  }
+set Nf05a9d30 [stack 0]
+  Dot {
+   name Dot40
+   xpos 2234
+   ypos 429
+  }
+set Ne526e930 [stack 0]
+  Dot {
+   name Dot41
+   xpos 2432
+   ypos 428
+  }
+set Ne66ed850 [stack 0]
+  Dot {
+   name Dot42
+   xpos 2624
+   ypos 428
+  }
+  Grade {
+   channels rgba
+   blackpoint 0.9
+   white_clamp true
+   name Grade12
+   xpos 2590
+   ypos 521
+  }
+  Input {
+   inputs 0
+   name image
+   label rgba
+   xpos -282
+   ypos -767
+  }
+  Dot {
+   name Dot1
+   xpos -248
+   ypos -272
+  }
+set Nf0f28cc0 [stack 0]
+  Dot {
+   name Dot25
+   xpos -248
+   ypos -155
+  }
+set N3f2f2ee0 [stack 0]
+  Dot {
+   name Dot86
+   xpos -248
+   ypos -11
+  }
+set Nc703cd50 [stack 0]
+  Dot {
+   name Dot88
+   xpos -248
+   ypos 106
+  }
+set N898ed2c0 [stack 0]
+  Dot {
+   name Dot58
+   xpos -248
+   ypos 470
+  }
+set N430022f0 [stack 0]
+  Dot {
+   name Dot43
+   xpos 152
+   ypos 470
+  }
+set N43202bc0 [stack 0]
+  Dot {
+   name Dot44
+   xpos 354
+   ypos 470
+  }
+set N61c58700 [stack 0]
+  Dot {
+   name Dot45
+   xpos 557
+   ypos 470
+  }
+set Ne5864b50 [stack 0]
+  Dot {
+   name Dot46
+   xpos 756
+   ypos 470
+  }
+set Nf19dbfd0 [stack 0]
+  Dot {
+   name Dot47
+   xpos 954
+   ypos 470
+  }
+set Ne66bca90 [stack 0]
+  Dot {
+   name Dot48
+   xpos 1142
+   ypos 469
+  }
+set N3e0c9230 [stack 0]
+  Dot {
+   name Dot49
+   xpos 1347
+   ypos 469
+  }
+set N8aee5d60 [stack 0]
+  Dot {
+   name Dot50
+   xpos 1543
+   ypos 469
+  }
+set N48df9e00 [stack 0]
+  Dot {
+   name Dot51
+   xpos 1743
+   ypos 469
+  }
+set N5f5232c0 [stack 0]
+  Dot {
+   name Dot52
+   xpos 1945
+   ypos 469
+  }
+set Ne5ab9810 [stack 0]
+  Dot {
+   name Dot53
+   xpos 2143
+   ypos 469
+  }
+set N48b0c200 [stack 0]
+  Dot {
+   name Dot54
+   xpos 2341
+   ypos 468
+  }
+set N3e3e8c50 [stack 0]
+  Dot {
+   name Dot55
+   xpos 2533
+   ypos 468
+  }
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur} {blur}}
+   name Defocus13
+   xpos 2499
+   ypos 521
+  }
+push $Ne66ed850
+  Grade {
+   channels rgba
+   blackpoint 0.8
+   whitepoint 0.9
+   white_clamp true
+   name Grade15
+   xpos 2398
+   ypos 521
+  }
+push $N3e3e8c50
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*9} {blur/10*9}}
+   name Defocus12
+   xpos 2307
+   ypos 520
+  }
+push $Ne526e930
+  Grade {
+   channels rgba
+   blackpoint 0.7
+   whitepoint 0.8
+   white_clamp true
+   name Grade16
+   xpos 2200
+   ypos 521
+  }
+push $N48b0c200
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*8} {blur/10*8}}
+   name Defocus11
+   xpos 2109
+   ypos 522
+  }
+push $Nf05a9d30
+  Grade {
+   channels rgba
+   blackpoint 0.6
+   whitepoint 0.7
+   white_clamp true
+   name Grade17
+   xpos 2002
+   ypos 521
+  }
+push $Ne5ab9810
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*7} {blur/10*7}}
+   name Defocus10
+   xpos 1911
+   ypos 521
+  }
+push $N5ccd92e0
+  Grade {
+   channels rgba
+   blackpoint 0.5
+   whitepoint 0.6
+   white_clamp true
+   name Grade18
+   xpos 1800
+   ypos 521
+  }
+push $N5f5232c0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*6} {blur/10*6}}
+   name Defocus9
+   xpos 1709
+   ypos 521
+  }
+push $N2099c810
+  Grade {
+   channels rgba
+   blackpoint 0.4
+   whitepoint 0.5
+   white_clamp true
+   name Grade19
+   xpos 1600
+   ypos 521
+  }
+push $N48df9e00
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*5} {blur/10*5}}
+   name Defocus8
+   xpos 1509
+   ypos 521
+  }
+push $Ne51b1e10
+  Grade {
+   channels rgba
+   blackpoint 0.3
+   whitepoint 0.4
+   white_clamp true
+   name Grade20
+   xpos 1404
+   ypos 521
+  }
+push $N8aee5d60
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*4} {blur/10*4}}
+   name Defocus7
+   xpos 1313
+   ypos 521
+  }
+push $N3e41c1d0
+  Grade {
+   channels rgba
+   blackpoint 0.2
+   whitepoint 0.3
+   white_clamp true
+   name Grade21
+   xpos 1199
+   ypos 521
+  }
+push $N3e0c9230
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*3} {blur/10*3}}
+   name Defocus6
+   xpos 1108
+   ypos 522
+  }
+push $N61b9f710
+  Grade {
+   channels rgba
+   blackpoint 0.1
+   whitepoint 0.2
+   white_clamp true
+   name Grade22
+   xpos 1011
+   ypos 521
+  }
+push $Ne66bca90
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*2} {blur/10*2}}
+   name Defocus5
+   xpos 920
+   ypos 524
+  }
+push $N78bd7ba0
+  Grade {
+   channels rgba
+   blackpoint 0.075
+   whitepoint 0.1
+   white_clamp true
+   name Grade23
+   xpos 816
+   ypos 521
+  }
+push $Nf19dbfd0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10} {blur/10}}
+   name Defocus4
+   xpos 722
+   ypos 522
+  }
+push $N49220540
+  Grade {
+   channels rgba
+   blackpoint 0.05
+   whitepoint 0.075
+   white_clamp true
+   name Grade24
+   xpos 617
+   ypos 521
+  }
+push $Ne5864b50
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10/4*3} {blur/10/4*3}}
+   name Defocus3
+   xpos 523
+   ypos 520
+  }
+push $N8bc4af70
+  Grade {
+   channels rgba
+   blackpoint 0.025
+   whitepoint 0.05
+   white_clamp true
+   name Grade25
+   xpos 411
+   ypos 521
+  }
+push $N61c58700
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10/4*2} {blur/10/4*2}}
+   name Defocus2
+   xpos 320
+   ypos 519
+  }
+push $Ne5461890
+  Grade {
+   channels rgba
+   whitepoint 0.025
+   white_clamp true
+   name Grade26
+   xpos 212
+   ypos 521
+  }
+push $N43202bc0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10/4} {blur/10/4}}
+   name Defocus1
+   xpos 118
+   ypos 518
+  }
+push $N430022f0
+  Dot {
+   name Dot56
+   xpos -248
+   ypos 587
+  }
+set N5a392290 [stack 0]
+  Group {
+   inputs 3
+   name KeymixBBox
+   tile_color 0x4b5ec6ff
+   xpos 118
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N489d43e0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N78cb1310 [stack 0]
+push $N489d43e0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N48721290 [stack 0]
+push $N78cb1310
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N48721290
+push $N489d43e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox1
+   tile_color 0x4b5ec6ff
+   xpos 320
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nefe6e2a0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf1d6d860 [stack 0]
+push $Nefe6e2a0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N8a3f7c50 [stack 0]
+push $Nf1d6d860
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N8a3f7c50
+push $Nefe6e2a0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox2
+   tile_color 0x4b5ec6ff
+   xpos 523
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N89d92e40 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf276f4a0 [stack 0]
+push $N89d92e40
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Nf0f0d0b0 [stack 0]
+push $Nf276f4a0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Nf0f0d0b0
+push $N89d92e40
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox3
+   tile_color 0x4b5ec6ff
+   xpos 722
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N61afdad0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N61b028f0 [stack 0]
+push $N61afdad0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N433fa8f0 [stack 0]
+push $N61b028f0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N433fa8f0
+push $N61afdad0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox4
+   tile_color 0x4b5ec6ff
+   xpos 920
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nc72fd130 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5f2d4530 [stack 0]
+push $Nc72fd130
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N886931c0 [stack 0]
+push $N5f2d4530
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N886931c0
+push $Nc72fd130
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox5
+   tile_color 0x4b5ec6ff
+   xpos 1108
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Ne5ec25b0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N3f1a2ee0 [stack 0]
+push $Ne5ec25b0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Nf117fc40 [stack 0]
+push $N3f1a2ee0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Nf117fc40
+push $Ne5ec25b0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox6
+   tile_color 0x4b5ec6ff
+   xpos 1313
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nc6401ca0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N488e6e30 [stack 0]
+push $Nc6401ca0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N489ea2a0 [stack 0]
+push $N488e6e30
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N489ea2a0
+push $Nc6401ca0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox7
+   tile_color 0x4b5ec6ff
+   xpos 1509
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Ne5709aa0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N4886dd80 [stack 0]
+push $Ne5709aa0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Nf000bfa0 [stack 0]
+push $N4886dd80
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Nf000bfa0
+push $Ne5709aa0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox9
+   tile_color 0x4b5ec6ff
+   xpos 1709
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5c80b540 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N8aa8c8e0 [stack 0]
+push $N5c80b540
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N6934d1d0 [stack 0]
+push $N8aa8c8e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N6934d1d0
+push $N5c80b540
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox10
+   tile_color 0x4b5ec6ff
+   xpos 1911
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N8a4566a0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Ne545a570 [stack 0]
+push $N8a4566a0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Nc7114260 [stack 0]
+push $Ne545a570
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Nc7114260
+push $N8a4566a0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox11
+   tile_color 0x4b5ec6ff
+   xpos 2109
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nf1cbd8c0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Nf1cc26e0 [stack 0]
+push $Nf1cbd8c0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Ne6392a20 [stack 0]
+push $Nf1cc26e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Ne6392a20
+push $Nf1cbd8c0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox12
+   tile_color 0x4b5ec6ff
+   xpos 2307
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5f470030 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5916adf0 [stack 0]
+push $N5f470030
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N59186ef0 [stack 0]
+push $N5916adf0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N59186ef0
+push $N5f470030
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox13
+   tile_color 0x4b5ec6ff
+   xpos 2499
+   ypos 577
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5a2e2720 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5a2e7540 [stack 0]
+push $N5a2e2720
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N3e3d4780 [stack 0]
+push $N5a2e7540
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N3e3d4780
+push $N5a2e2720
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Dot {
+   name Dot67
+   xpos 2886
+   ypos 587
+  }
+push $Ne5988230
+  Dot {
+   name Dot105
+   xpos -79
+   ypos 688
+  }
+  Dot {
+   name Dot62
+   xpos 244
+   ypos 687
+  }
+set N20bd7f50 [stack 0]
+  Dot {
+   name Dot65
+   xpos 443
+   ypos 687
+  }
+set N5f625990 [stack 0]
+  Dot {
+   name Dot69
+   xpos 848
+   ypos 687
+  }
+set N5f62ab30 [stack 0]
+  Dot {
+   name Dot71
+   xpos 1245
+   ypos 687
+  }
+set N208454f0 [stack 0]
+  Dot {
+   name Dot82
+   xpos 1635
+   ypos 686
+  }
+set N8a22cb60 [stack 0]
+  Dot {
+   name Dot89
+   xpos 2036
+   ypos 686
+  }
+set Nc76509d0 [stack 0]
+  Dot {
+   name Dot91
+   xpos 2622
+   ypos 685
+  }
+  Grade {
+   channels rgba
+   blackpoint 0.7
+   white_clamp true
+   name Grade28
+   xpos 2588
+   ypos 778
+  }
+push $N5a392290
+  Dot {
+   name Dot106
+   xpos -248
+   ypos 728
+  }
+set N5a3a1370 [stack 0]
+  Dot {
+   name Dot92
+   xpos 150
+   ypos 727
+  }
+set N48d52350 [stack 0]
+  Dot {
+   name Dot93
+   xpos 352
+   ypos 727
+  }
+set N8bdce870 [stack 0]
+  Dot {
+   name Dot95
+   xpos 754
+   ypos 727
+  }
+set Nc71bd770 [stack 0]
+  Dot {
+   name Dot96
+   xpos 1154
+   ypos 727
+  }
+set N43f426d0 [stack 0]
+  Dot {
+   name Dot100
+   xpos 1544
+   ypos 726
+  }
+set N43f47650 [stack 0]
+  Dot {
+   name Dot102
+   xpos 1945
+   ypos 726
+  }
+set N43172eb0 [stack 0]
+  Dot {
+   name Dot104
+   xpos 2531
+   ypos 725
+  }
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur} {blur}}
+   name Defocus14
+   xpos 2497
+   ypos 779
+  }
+push $Nc76509d0
+  Grade {
+   channels rgba
+   blackpoint 0.5
+   whitepoint 0.7
+   white_clamp true
+   name Grade32
+   xpos 2002
+   ypos 779
+  }
+push $N43172eb0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*7} {blur/10*7}}
+   name Defocus16
+   xpos 1911
+   ypos 778
+  }
+push $N8a22cb60
+  Grade {
+   channels rgba
+   blackpoint 0.3
+   whitepoint 0.5
+   white_clamp true
+   name Grade37
+   xpos 1601
+   ypos 778
+  }
+push $N43f47650
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*5} {blur/10*5}}
+   name Defocus18
+   xpos 1510
+   ypos 778
+  }
+push $N208454f0
+  Grade {
+   channels rgba
+   blackpoint 0.1
+   whitepoint 0.3
+   white_clamp true
+   name Grade43
+   xpos 1211
+   ypos 778
+  }
+push $N43f426d0
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10*3} {blur/10*3}}
+   name Defocus22
+   xpos 1120
+   ypos 777
+  }
+push $N5f62ab30
+  Grade {
+   channels rgba
+   blackpoint 0.05
+   whitepoint 0.1
+   white_clamp true
+   name Grade44
+   xpos 814
+   ypos 778
+  }
+push $Nc71bd770
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10} {blur/10}}
+   name Defocus23
+   xpos 720
+   ypos 778
+  }
+push $N5f625990
+  Grade {
+   channels rgba
+   blackpoint 0.025
+   whitepoint 0.05
+   white_clamp true
+   name Grade46
+   xpos 409
+   ypos 778
+  }
+push $N8bdce870
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10/4*2} {blur/10/4*2}}
+   name Defocus25
+   xpos 318
+   ypos 777
+  }
+push $N20bd7f50
+  Grade {
+   channels rgba
+   whitepoint 0.025
+   white_clamp true
+   name Grade47
+   xpos 210
+   ypos 777
+  }
+push $N48d52350
+  Defocus {
+   channels {{{parent.Blur11.channels}}}
+   scale {{blur/10/4} {blur/10/4}}
+   name Defocus26
+   xpos 116
+   ypos 778
+  }
+push $N5a3a1370
+  Dot {
+   name Dot107
+   xpos -248
+   ypos 845
+  }
+  Group {
+   inputs 3
+   name KeymixBBox8
+   tile_color 0x4b5ec6ff
+   xpos 116
+   ypos 835
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N61c45c60 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N494a13c0 [stack 0]
+push $N61c45c60
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Ne58b4660 [stack 0]
+push $N494a13c0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Ne58b4660
+push $N61c45c60
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox14
+   tile_color 0x4b5ec6ff
+   xpos 318
+   ypos 835
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N8ae4da70 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N781c7280 [stack 0]
+push $N8ae4da70
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N8adcd800 [stack 0]
+push $N781c7280
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N8adcd800
+push $N8ae4da70
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox15
+   tile_color 0x4b5ec6ff
+   xpos 720
+   ypos 836
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N8a0c3db0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N8a9b31b0 [stack 0]
+push $N8a0c3db0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N8ab91d90 [stack 0]
+push $N8a9b31b0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N8ab91d90
+push $N8a0c3db0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox16
+   tile_color 0x4b5ec6ff
+   xpos 1120
+   ypos 836
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N8aab10b0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N8973b4e0 [stack 0]
+push $N8aab10b0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N6192b1a0 [stack 0]
+push $N8973b4e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N6192b1a0
+push $N8aab10b0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox17
+   tile_color 0x4b5ec6ff
+   xpos 1510
+   ypos 836
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Ne51700e0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5f457fc0 [stack 0]
+push $Ne51700e0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N3eb464f0 [stack 0]
+push $N5f457fc0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N3eb464f0
+push $Ne51700e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox18
+   tile_color 0x4b5ec6ff
+   xpos 1911
+   ypos 836
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Nb4901ad0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5924af30 [stack 0]
+push $Nb4901ad0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N48743360 [stack 0]
+push $N5924af30
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N48743360
+push $Nb4901ad0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox19
+   tile_color 0x4b5ec6ff
+   xpos 2497
+   ypos 836
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N494d44c0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N6914e560 [stack 0]
+push $N494d44c0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N48b30200 [stack 0]
+push $N6914e560
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N48b30200
+push $N494d44c0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Switch {
+   inputs 2
+   which {{quality i}}
+   name Switch3
+   xpos 2852
+   ypos 842
+  }
+push $N61c87460
+  Dot {
+   name Dot23
+   xpos 255
+   ypos -312
+  }
+set Nf0377530 [stack 0]
+  Dot {
+   name Dot26
+   xpos 454
+   ypos -312
+  }
+set Nf037c6d0 [stack 0]
+  Dot {
+   name Dot28
+   xpos 660
+   ypos -312
+  }
+set Nf10fc460 [stack 0]
+  Dot {
+   name Dot30
+   xpos 859
+   ypos -312
+  }
+set Ne5505810 [stack 0]
+  Dot {
+   name Dot7
+   xpos 1054
+   ypos -312
+  }
+set N8a5d37f0 [stack 0]
+  Dot {
+   name Dot5
+   xpos 1242
+   ypos -313
+  }
+set N8a5d8990 [stack 0]
+  Dot {
+   name Dot9
+   xpos 1447
+   ypos -313
+  }
+set N59f62470 [stack 0]
+  Dot {
+   name Dot11
+   xpos 1643
+   ypos -313
+  }
+set N48baf4d0 [stack 0]
+  Dot {
+   name Dot13
+   xpos 1843
+   ypos -313
+  }
+set N61b8cdf0 [stack 0]
+  Dot {
+   name Dot15
+   xpos 2045
+   ypos -313
+  }
+set N61b91f90 [stack 0]
+  Dot {
+   name Dot17
+   xpos 2243
+   ypos -313
+  }
+set N3e40d7d0 [stack 0]
+  Dot {
+   name Dot19
+   xpos 2441
+   ypos -314
+  }
+set N5a5cd250 [stack 0]
+  Dot {
+   name Dot21
+   xpos 2633
+   ypos -314
+  }
+  Grade {
+   channels rgba
+   blackpoint 0.9
+   white_clamp true
+   name Grade8
+   xpos 2599
+   ypos -225
+  }
+push $Nf0f28cc0
+  Dot {
+   name Dot24
+   xpos 161
+   ypos -272
+  }
+set Ne5d91e50 [stack 0]
+  Dot {
+   name Dot27
+   xpos 363
+   ypos -272
+  }
+set Ne5d97100 [stack 0]
+  Dot {
+   name Dot29
+   xpos 566
+   ypos -272
+  }
+set N5a6583d0 [stack 0]
+  Dot {
+   name Dot31
+   xpos 765
+   ypos -272
+  }
+set Nc77c07c0 [stack 0]
+  Dot {
+   name Dot3
+   xpos 963
+   ypos -272
+  }
+set N3e176640 [stack 0]
+  Dot {
+   name Dot8
+   xpos 1151
+   ypos -273
+  }
+set N3e17b6e0 [stack 0]
+  Dot {
+   name Dot10
+   xpos 1356
+   ypos -273
+  }
+set N5941ed20 [stack 0]
+  Dot {
+   name Dot12
+   xpos 1552
+   ypos -273
+  }
+set N8be0a060 [stack 0]
+  Dot {
+   name Dot14
+   xpos 1752
+   ypos -273
+  }
+set N8be0f200 [stack 0]
+  Dot {
+   name Dot16
+   xpos 1954
+   ypos -273
+  }
+set N5ce9c130 [stack 0]
+  Dot {
+   name Dot18
+   xpos 2152
+   ypos -273
+  }
+set N3e3c17f0 [stack 0]
+  Dot {
+   name Dot20
+   xpos 2350
+   ypos -274
+  }
+set Nc72ce010 [stack 0]
+  Dot {
+   name Dot22
+   xpos 2542
+   ypos -274
+  }
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*10} {blur/10*10}}
+   crop false
+   name Blur10
+   xpos 2508
+   ypos -224
+  }
+push $N5a5cd250
+  Grade {
+   channels rgba
+   blackpoint 0.8
+   whitepoint 0.9
+   white_clamp true
+   name Grade7
+   xpos 2407
+   ypos -225
+  }
+push $Nc72ce010
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*9} {blur/10*9}}
+   crop false
+   name Blur9
+   xpos 2316
+   ypos -225
+  }
+push $N3e40d7d0
+  Grade {
+   channels rgba
+   blackpoint 0.7
+   whitepoint 0.8
+   white_clamp true
+   name Grade6
+   xpos 2209
+   ypos -225
+  }
+push $N3e3c17f0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*8} {blur/10*8}}
+   crop false
+   name Blur8
+   xpos 2118
+   ypos -225
+  }
+push $N61b91f90
+  Grade {
+   channels rgba
+   blackpoint 0.6
+   whitepoint 0.7
+   white_clamp true
+   name Grade5
+   xpos 2011
+   ypos -225
+  }
+push $N5ce9c130
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*7} {blur/10*7}}
+   crop false
+   name Blur7
+   xpos 1920
+   ypos -227
+  }
+push $N61b8cdf0
+  Grade {
+   channels rgba
+   blackpoint 0.5
+   whitepoint 0.6
+   white_clamp true
+   name Grade4
+   xpos 1809
+   ypos -225
+  }
+push $N8be0f200
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*6} {blur/10*6}}
+   crop false
+   name Blur6
+   xpos 1718
+   ypos -225
+  }
+push $N48baf4d0
+  Grade {
+   channels rgba
+   blackpoint 0.4
+   whitepoint 0.5
+   white_clamp true
+   name Grade3
+   xpos 1609
+   ypos -225
+  }
+push $N8be0a060
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*5} {blur/10*5}}
+   crop false
+   name Blur5
+   xpos 1518
+   ypos -226
+  }
+push $N59f62470
+  Grade {
+   channels rgba
+   blackpoint 0.3
+   whitepoint 0.4
+   white_clamp true
+   name Grade2
+   xpos 1413
+   ypos -225
+  }
+push $N5941ed20
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*4} {blur/10*4}}
+   crop false
+   name Blur4
+   xpos 1322
+   ypos -225
+  }
+push $N8a5d8990
+  Grade {
+   channels rgba
+   blackpoint 0.2
+   whitepoint 0.3
+   white_clamp true
+   name Grade1
+   xpos 1208
+   ypos -225
+  }
+push $N3e17b6e0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*3} {blur/10*3}}
+   crop false
+   name Blur3
+   xpos 1117
+   ypos -226
+  }
+push $N8a5d37f0
+  Grade {
+   channels rgba
+   blackpoint 0.1
+   whitepoint 0.2
+   white_clamp true
+   name Grade13
+   xpos 1020
+   ypos -225
+  }
+push $N3e176640
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*2} {blur/10*2}}
+   crop false
+   name Blur2
+   xpos 929
+   ypos -226
+  }
+push $Ne5505810
+  Grade {
+   channels rgba
+   blackpoint 0.075
+   whitepoint 0.1
+   white_clamp true
+   name Grade14
+   xpos 825
+   ypos -225
+  }
+push $Nc77c07c0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10} {blur/10}}
+   crop false
+   name Blur14
+   xpos 731
+   ypos -226
+  }
+push $Nf10fc460
+  Grade {
+   channels rgba
+   blackpoint 0.05
+   whitepoint 0.075
+   white_clamp true
+   name Grade11
+   xpos 626
+   ypos -225
+  }
+push $N5a6583d0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10/4*3} {blur/10/4*3}}
+   crop false
+   name Blur13
+   selected true
+   xpos 532
+   ypos -226
+  }
+push $Nf037c6d0
+  Grade {
+   channels rgba
+   blackpoint 0.025
+   whitepoint 0.05
+   white_clamp true
+   name Grade10
+   xpos 420
+   ypos -225
+  }
+push $Ne5d97100
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10/4*2} {blur/10/4*2}}
+   crop false
+   name Blur12
+   xpos 329
+   ypos -227
+  }
+push $Nf0377530
+  Grade {
+   channels rgba
+   whitepoint 0.025
+   white_clamp true
+   name Grade9
+   xpos 221
+   ypos -225
+  }
+push $Ne5d91e50
+  Blur {
+   size {{blur/10/4} {blur/10/4}}
+   crop false
+   name Blur11
+   xpos 127
+   ypos -229
+  }
+push $N3f2f2ee0
+  Group {
+   inputs 3
+   name KeymixBBox27
+   tile_color 0x4b5ec6ff
+   xpos 127
+   ypos -165
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N591cf8a0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N591d45d0 [stack 0]
+push $N591cf8a0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N69036240 [stack 0]
+push $N591d45d0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N69036240
+push $N591cf8a0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox28
+   tile_color 0x4b5ec6ff
+   xpos 329
+   ypos -165
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5915dfd0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N68ff3e70 [stack 0]
+push $N5915dfd0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N691f3300 [stack 0]
+push $N68ff3e70
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N691f3300
+push $N5915dfd0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox29
+   tile_color 0x4b5ec6ff
+   xpos 532
+   ypos -165
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N431b7970 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Ne5ea03b0 [stack 0]
+push $N431b7970
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N5cf32510 [stack 0]
+push $Ne5ea03b0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N5cf32510
+push $N431b7970
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox30
+   tile_color 0x4b5ec6ff
+   xpos 731
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5f50b4c0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5f5102e0 [stack 0]
+push $N5f50b4c0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N486f03d0 [stack 0]
+push $N5f5102e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N486f03d0
+push $N5f50b4c0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox31
+   tile_color 0x4b5ec6ff
+   xpos 929
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5a485ea0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N89148180 [stack 0]
+push $N5a485ea0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N5f710440 [stack 0]
+push $N89148180
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N5f710440
+push $N5a485ea0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox32
+   tile_color 0x4b5ec6ff
+   xpos 1117
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N48a11010 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N48a15c60 [stack 0]
+push $N48a11010
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N8ba955a0 [stack 0]
+push $N48a15c60
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N8ba955a0
+push $N48a11010
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox33
+   tile_color 0x4b5ec6ff
+   xpos 1322
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N8bdbad60 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N8bdbfb00 [stack 0]
+push $N8bdbad60
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Ne6708600 [stack 0]
+push $N8bdbfb00
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Ne6708600
+push $N8bdbad60
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox34
+   tile_color 0x4b5ec6ff
+   xpos 1518
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N59fe9190 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N59feddb0 [stack 0]
+push $N59fe9190
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N5903f390 [stack 0]
+push $N59feddb0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N5903f390
+push $N59fe9190
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox35
+   tile_color 0x4b5ec6ff
+   xpos 1718
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Ne52741f0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Ne5279010 [stack 0]
+push $Ne52741f0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N8af21670 [stack 0]
+push $Ne5279010
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N8af21670
+push $Ne52741f0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox36
+   tile_color 0x4b5ec6ff
+   xpos 1920
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5a44b7a0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5a4505c0 [stack 0]
+push $N5a44b7a0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N5ca3d780 [stack 0]
+push $N5a4505c0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N5ca3d780
+push $N5a44b7a0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox37
+   tile_color 0x4b5ec6ff
+   xpos 2118
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N8ae14130 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N8ae18e30 [stack 0]
+push $N8ae14130
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N61e61cb0 [stack 0]
+push $N8ae18e30
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N61e61cb0
+push $N8ae14130
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox38
+   tile_color 0x4b5ec6ff
+   xpos 2316
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N78d6f600 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N3e86e5e0 [stack 0]
+push $N78d6f600
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N69082cb0 [stack 0]
+push $N3e86e5e0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N69082cb0
+push $N78d6f600
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox39
+   tile_color 0x4b5ec6ff
+   xpos 2508
+   ypos -163
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Ne5801280 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Ne58060a0 [stack 0]
+push $Ne5801280
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set Ne55c3850 [stack 0]
+push $Ne58060a0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $Ne55c3850
+push $Ne5801280
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Dot {
+   name Dot59
+   xpos 2883
+   ypos -155
+  }
+push $N3e06c530
+  Dot {
+   name Dot60
+   xpos 253
+   ypos -51
+  }
+set N40618860 [stack 0]
+  Dot {
+   name Dot61
+   xpos 452
+   ypos -51
+  }
+set N4061d800 [stack 0]
+  Dot {
+   name Dot63
+   xpos 857
+   ypos -51
+  }
+set N61b58440 [stack 0]
+  Dot {
+   name Dot64
+   xpos 1250
+   ypos -52
+  }
+set N5f6c5cb0 [stack 0]
+  Dot {
+   name Dot66
+   xpos 1646
+   ypos -53
+  }
+set N5f6cab00 [stack 0]
+  Dot {
+   name Dot68
+   xpos 2046
+   ypos -53
+  }
+set N48fbe150 [stack 0]
+  Dot {
+   name Dot72
+   xpos 2631
+   ypos -53
+  }
+  Grade {
+   channels rgba
+   blackpoint 0.7
+   white_clamp true
+   name Grade27
+   xpos 2597
+   ypos 36
+  }
+push $Nc703cd50
+  Dot {
+   name Dot73
+   xpos 159
+   ypos -11
+  }
+set N48dc2900 [stack 0]
+  Dot {
+   name Dot74
+   xpos 361
+   ypos -11
+  }
+set N68f8fb60 [stack 0]
+  Dot {
+   name Dot76
+   xpos 763
+   ypos -11
+  }
+set N68f94d00 [stack 0]
+  Dot {
+   name Dot77
+   xpos 1159
+   ypos -12
+  }
+set N5f3712f0 [stack 0]
+  Dot {
+   name Dot79
+   xpos 1555
+   ypos -13
+  }
+set N5f376490 [stack 0]
+  Dot {
+   name Dot81
+   xpos 1955
+   ypos -13
+  }
+set N59fc8e30 [stack 0]
+  Dot {
+   name Dot85
+   xpos 2540
+   ypos -13
+  }
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*10} {blur/10*10}}
+   name Blur1
+   xpos 2506
+   ypos 35
+  }
+push $N48fbe150
+  Grade {
+   channels rgba
+   blackpoint 0.5
+   whitepoint 0.7
+   white_clamp true
+   name Grade31
+   xpos 2012
+   ypos 35
+  }
+push $N59fc8e30
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*7} {blur/10*7}}
+   name Blur18
+   xpos 1921
+   ypos 33
+  }
+push $N5f6cab00
+  Grade {
+   channels rgba
+   blackpoint 0.3
+   whitepoint 0.5
+   white_clamp true
+   name Grade33
+   xpos 1612
+   ypos 34
+  }
+push $N5f376490
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*5} {blur/10*5}}
+   name Blur20
+   xpos 1521
+   ypos 35
+  }
+push $N5f6c5cb0
+  Grade {
+   channels rgba
+   blackpoint 0.1
+   whitepoint 0.3
+   white_clamp true
+   name Grade35
+   xpos 1216
+   ypos 35
+  }
+push $N5f3712f0
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10*3} {blur/10*3}}
+   name Blur22
+   xpos 1125
+   ypos 35
+  }
+push $N61b58440
+  Grade {
+   channels rgba
+   blackpoint 0.05
+   whitepoint 0.1
+   white_clamp true
+   name Grade36
+   xpos 823
+   ypos 36
+  }
+push $N68f94d00
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10} {blur/10}}
+   name Blur23
+   xpos 729
+   ypos 35
+  }
+push $N4061d800
+  Grade {
+   channels rgba
+   blackpoint 0.025
+   whitepoint 0.05
+   white_clamp true
+   name Grade38
+   xpos 418
+   ypos 36
+  }
+push $N68f8fb60
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10/4*2} {blur/10/4*2}}
+   name Blur25
+   xpos 327
+   ypos 36
+  }
+push $N40618860
+  Grade {
+   channels rgba
+   whitepoint 0.025
+   white_clamp true
+   name Grade39
+   xpos 219
+   ypos 38
+  }
+push $N48dc2900
+  Blur {
+   channels {{{parent.Blur11.channels}}}
+   size {{blur/10/4} {blur/10/4}}
+   name Blur26
+   xpos 125
+   ypos 38
+  }
+push $N898ed2c0
+  Group {
+   inputs 3
+   name KeymixBBox40
+   tile_color 0x4b5ec6ff
+   xpos 125
+   ypos 96
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N78cc5e30 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N78ccac50 [stack 0]
+push $N78cc5e30
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -365
+   }
+set N5c945aa0 [stack 0]
+push $N78ccac50
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N5c945aa0
+push $N78cc5e30
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox26
+   tile_color 0x4b5ec6ff
+   xpos 327
+   ypos 96
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N492dbd70 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N492e0b90 [stack 0]
+push $N492dbd70
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -365
+   }
+set N20fba910 [stack 0]
+push $N492e0b90
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N20fba910
+push $N492dbd70
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox25
+   tile_color 0x4b5ec6ff
+   xpos 729
+   ypos 98
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set Ne560c890 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set Ne56116b0 [stack 0]
+push $Ne560c890
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -365
+   }
+set N78e014c0 [stack 0]
+push $Ne56116b0
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N78e014c0
+push $Ne560c890
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox23
+   tile_color 0x4b5ec6ff
+   xpos 1125
+   ypos 97
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5f611c40 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5f616a60 [stack 0]
+push $N5f611c40
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N48778ad0 [stack 0]
+push $N5f616a60
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N48778ad0
+push $N5f611c40
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox22
+   tile_color 0x4b5ec6ff
+   xpos 1521
+   ypos 97
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5f2fb6f0 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5f300510 [stack 0]
+push $N5f2fb6f0
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N488d4db0 [stack 0]
+push $N5f300510
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N488d4db0
+push $N5f2fb6f0
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox20
+   tile_color 0x4b5ec6ff
+   xpos 1921
+   ypos 97
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N5f09fd50 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N5f0a4b70 [stack 0]
+push $N5f09fd50
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N61e11f30 [stack 0]
+push $N5f0a4b70
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N61e11f30
+push $N5f09fd50
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Group {
+   inputs 3
+   name KeymixBBox21
+   tile_color 0x4b5ec6ff
+   xpos 2506
+   ypos 97
+   addUserKnob {20 KeymixBBox}
+   addUserKnob {41 channels T Keymix8.channels}
+   addUserKnob {41 maskChannel l "mask channel" T Keymix8.maskChannel}
+   addUserKnob {41 invertMask l invert -STARTLINE T Keymix8.invertMask}
+   addUserKnob {41 mix T Keymix8.mix}
+   addUserKnob {41 bbox l "Set BBox to" T Keymix8.bbox}
+  }
+   Input {
+    inputs 0
+    name InputA
+    xpos 189
+    ypos -485
+    number 1
+   }
+set N491df760 [stack 0]
+   Input {
+    inputs 0
+    name Inputmask
+    xpos 531
+    ypos -493
+    number 2
+   }
+set N491e4380 [stack 0]
+push $N491df760
+   Merge2 {
+    inputs 2
+    operation plus
+    bbox intersection
+    name Merge1
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    xpos 285
+    ypos -410
+   }
+   Merge2 {
+    inputs 2
+    name Merge2
+    label "\[ expr \{ \[value mix] == 1 ? \" \" : \[concat Mix: \[value mix]] \}]"
+    selected true
+    xpos 285
+    ypos -365
+   }
+set N69355b80 [stack 0]
+push $N491e4380
+   CopyBBox {
+    inputs 2
+    name CopyBBox2
+    xpos 531
+    ypos -259
+   }
+push $N69355b80
+push $N491df760
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos 189
+    ypos -259
+   }
+   Input {
+    inputs 0
+    name InputB
+    xpos 378
+    ypos -493
+   }
+   Keymix {
+    inputs 3
+    name Keymix8
+    xpos 378
+    ypos -259
+   }
+   Output {
+    name Output1
+    xpos 378
+    ypos -158
+   }
+  end_group
+  Switch {
+   inputs 2
+   which {{quality i}}
+   name Switch2
+   xpos 2849
+   ypos 103
+  }
+  Dot {
+   name Dot75
+   xpos 3248
+   ypos 106
+  }
+  Switch {
+   inputs 2
+   which {{blur_type i}}
+   name Switch1
+   xpos 3214
+   ypos 842
+  }
+  Output {
+   name Output1
+   xpos 3214
+   ypos 1164
+  }
+ end_group
+ Remove {
+  channels anamorphLensBlurMask
+  name Remove1
+  xpos 60
+  ypos 275
+ }
+push $N899c51e0
+ Merge2 {
+  inputs 2+1
+  operation copy
+  also_merge all
+  name Merge1
+  xpos 195
+  ypos 335
+  addUserKnob {20 TRX}
+  addUserKnob {22 swap l "swap to Merge All Node" -STARTLINE T "from csnuke_tools.trixter.snippets import convertMergeToAll as convertMergeToAll;convertMergeToAll.convToAll()"}
+ }
+ Output {
+  name Output1
+  xpos 195
+  ypos 415
+ }
+end_group
