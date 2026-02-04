@@ -15,9 +15,8 @@ def filepathCreateNode(gizmoName):
         newGizmo = nuke.createNode(gizmoName)
         fileNodes = newGizmo.nodes()
     for i in fileNodes:
-        if i.Class() == "Read" or i.Class() == "DeepRead" or i.Class() == "ReadGeo" or i.Class() == "ReadGeo2" or i.Class() == "Camera2"  or  i.Class() == "Axis2":
+        if i.Class() in ("Read", "DeepRead", "ReadGeo", "ReadGeo2", "Camera2", "Axis2"):
             filepath = i.knob("file").getValue()
             if "<<<replace>>>" in filepath:
                 newFilepath = filepath.replace("<<<replace>>>", NST_FolderPath)
                 i.knob("file").setValue(newFilepath)
-
