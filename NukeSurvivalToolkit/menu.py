@@ -9,6 +9,7 @@ import nuke
 import sys
 import os
 import webbrowser
+from pathlib import Path
 
 # Add PluginPaths to tools and icons
 nuke.pluginAddPath('./gizmos')
@@ -55,7 +56,7 @@ NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v2.1.0.pdf"
 
 # creating full filepath to the help doc
 NST_helpDoc_os_path = os.path.join(NST_FolderPath, NST_helpDoc)
-NST_helpDocPath = f"file:///{NST_helpDoc_os_path}"
+NST_helpDocPath = Path(NST_helpDoc_os_path).as_uri()
 
 
 ############################################################################################################
