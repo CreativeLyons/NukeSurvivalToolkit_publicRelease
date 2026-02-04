@@ -165,8 +165,8 @@ drawMenu.addCommand("Silk MHD", "nuke.createNode('{}h_silk')".format(prefixNST),
 try:
     import ColorGradientUi
     drawMenu.addCommand("GradientEditor MHD", "nuke.createNode('{}h_gradienteditor')".format(prefixNST), icon="h_gradienteditor.png")
-except:
-    print("Could not load ColorGradientUi from HagbarthTools folder")
+except ImportError as e:
+    print("Could not load ColorGradientUi from HagbarthTools folder: {}".format(e))
     pass
 
 drawMenu.addSeparator()
@@ -460,8 +460,8 @@ transformMenu.addCommand('Vectors_to_Degrees EL', "nuke.createNode('{}Vectors_to
 try:
     nuke.load('{}VectorTracker.py'.format(prefixNST))
     transformMenu.addCommand('VectorTracker NKPD', "nuke.createNode('{}VectorTracker.gizmo')".format(prefixNST), icon = 'vectorTools.png')
-except:
-    print("Could not load VectorTracker.py")
+except ImportError as e:
+    print("Could not load VectorTracker.py: {}".format(e))
     pass
 
 transformMenu.addSeparator()
@@ -488,8 +488,8 @@ transformMenu.addSeparator()
 try:
     import NST_cardToTrack
     transformMenu.addCommand('CardToTrack AK', "nuke.createNode('{}CardToTrack')".format(prefixNST), icon='Card.png')
-except:
-    print("Could not load NST_cardToTrack.py")
+except ImportError as e:
+    print("Could not load NST_cardToTrack.py: {}".format(e))
     pass
 
 transformMenu.addCommand('CProject AK', "nuke.createNode('{}CProject')".format(prefixNST), icon='CornerPin.png')
