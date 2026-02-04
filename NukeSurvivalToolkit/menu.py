@@ -50,7 +50,7 @@ NST_helpDocPath = "file:///{}".format(NST_helpDoc_os_path)
 
 # Create NukeSurivalToolkit Menu
 toolbar = nuke.menu('Nodes')
-m = toolbar.addMenu('NukeSurvivalToolkit', icon = "SurvivalToolkit.png")
+NST_menu = toolbar.addMenu('NukeSurvivalToolkit', icon = "SurvivalToolkit.png")
 
 
 ############################################################################################################
@@ -60,14 +60,14 @@ m = toolbar.addMenu('NukeSurvivalToolkit', icon = "SurvivalToolkit.png")
 def openNSTDocumentation():
     webbrowser.open(NST_helpDocPath)
 
-m.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png", index = 00)
+NST_menu.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png", index = 00)
 
 ############################################################################################################
 ############################################################################################################
 
 
 # Create Image Menu
-imageMenu = m.addMenu('Image', icon = 'ToolbarImage.png', index = 10)
+imageMenu = NST_menu.addMenu('Image', icon = 'ToolbarImage.png', index = 10)
 
 imageMenu.addCommand('LabelFromRead TL', "nuke.createNode('{}LabelFromRead')".format(prefixNST), icon="LabelFromRead.png")
 
@@ -75,7 +75,7 @@ imageMenu.addCommand('LabelFromRead TL', "nuke.createNode('{}LabelFromRead')".fo
 ############################################################################################################
 
 # Create Draw Menu
-drawMenu = m.addMenu('Draw', icon = 'ToolbarDraw.png', index = 20)
+drawMenu = NST_menu.addMenu('Draw', icon = 'ToolbarDraw.png', index = 20)
 
 if LOAD_EXPRESSION_MENU:
     expressionMenu = drawMenu.addMenu("Expression Nodes AG", icon = os.path.join(NST_FolderPath, "icons/expr.png"), index=000 )
@@ -209,7 +209,7 @@ drawMenu.addCommand("LensEngine KB", "nuke.createNode('{}LensEngine')".format(pr
 ############################################################################################################
 
 # Create Time Menu
-timeMenu = m.addMenu('Time', icon = 'ToolbarTime.png', index = 30)
+timeMenu = NST_menu.addMenu('Time', icon = 'ToolbarTime.png', index = 30)
 
 timeMenu.addCommand('apLoop AP', 'nuke.createNode("{}apLoop")'.format(prefixNST), icon='apLoop.png')
 
@@ -225,7 +225,7 @@ timeMenu.addCommand('FrameFiller MJT', "nuke.createNode('{}FrameFiller')".format
 ############################################################################################################
 
 # Create Channel Menu
-channelMenu = m.addMenu('Channel', icon = 'ToolbarChannel.png', index = 40)
+channelMenu = NST_menu.addMenu('Channel', icon = 'ToolbarChannel.png', index = 40)
 
 channelMenu.addCommand('BinaryAlpha TL', "nuke.createNode('{}BinaryAlpha')".format(prefixNST), icon="BumpBoss.png")
 channelMenu.addCommand('ChannelCombiner TL', "nuke.createNode('{}ChannelCombiner')".format(prefixNST), icon="ChannelMerge.png")
@@ -244,7 +244,7 @@ channelMenu.addCommand('renameChannels AG', "nuke.createNode('{}renameChannels')
 ############################################################################################################
 
 # Create Color Menu
-colorMenu = m.addMenu('Color', icon = 'ToolbarColor.png', index = 50)
+colorMenu = NST_menu.addMenu('Color', icon = 'ToolbarColor.png', index = 50)
 
 colorMenu.addCommand('BlacksMatch TL', "nuke.createNode('{}BlacksMatch')".format(prefixNST), icon="BlacksMatch.png")
 colorMenu.addCommand('ColorCopy TL', "nuke.createNode('{}ColorCopy')".format(prefixNST), icon="Crosstalk.png")
@@ -275,7 +275,7 @@ colorMenu.addCommand('HSL_Tool NKPD', "nuke.createNode('{}HSL_Tool')".format(pre
 
 # Create Filter Menu
 
-filterMenu = m.addMenu('Filter', icon = 'ToolbarFilter.png', index = 60)
+filterMenu = NST_menu.addMenu('Filter', icon = 'ToolbarFilter.png', index = 60)
 
 glowMenu = filterMenu.addMenu("Glows", icon="Glow.png")
 glowMenu.addCommand('apGlow AP', 'nuke.createNode("{}apeGlow")'.format(prefixNST), icon='apGlow.png')
@@ -379,7 +379,7 @@ filterMenu.addCommand('MECfiller NKPD', "nuke.createNode('{}MECfiller')".format(
 ############################################################################################################
 
 # Create Keyer Menu
-keyerMenu = m.addMenu('Keyer', icon = 'ToolbarKeyer.png', index = 70)
+keyerMenu = NST_menu.addMenu('Keyer', icon = 'ToolbarKeyer.png', index = 70)
 
 keyerMenu.addCommand('apDespill AP', 'nuke.createNode("{}apDespill_v2")'.format(prefixNST), icon='apDespill.png')
 keyerMenu.addCommand('SpillCorrect SPIN', "nuke.createNode('{}Spill_Correct')".format(prefixNST), icon='spin_tools.png')
@@ -401,7 +401,7 @@ keyerMenu.addCommand('PointCloudKeyer IS', "nuke.createNode('{}PointCloudKeyer')
 ############################################################################################################
 
 # Create Merge Menu
-mergeMenu = m.addMenu('Merge', icon = 'ToolbarMerge.png', index = 80)
+mergeMenu = NST_menu.addMenu('Merge', icon = 'ToolbarMerge.png', index = 80)
 
 mergeMenu.addCommand('ContactSheetAuto TL', "nuke.createNode('{}ContactSheetAuto')".format(prefixNST), icon="ContactSheet.png")
 mergeMenu.addCommand('KeymixBBox TL', "nuke.createNode('{}KeymixBBox')".format(prefixNST), icon="Keymix.png")
@@ -416,7 +416,7 @@ mergeMenu.addCommand('MergeAll AP', "nuke.createNode('{}MergeAll')".format(prefi
 ############################################################################################################
 
 # Create Transform Menu
-transformMenu = m.addMenu('Transform', icon = 'ToolbarTransform.png', index = 90)
+transformMenu = NST_menu.addMenu('Transform', icon = 'ToolbarTransform.png', index = 90)
 
 # Add Vector Tools SubMenu
 VMTmenu = transformMenu.addMenu('Vector Math Tools VM', icon = 'Math.png')
@@ -530,7 +530,7 @@ transformMenu.addCommand('Reconcile3DFast DR', "nuke.createNode('{}Reconcile3DFa
 
 # Create 3D Menu
 
-ThreeDMenu = m.addMenu('3D', icon = 'Toolbar3D.png', index = 100)
+ThreeDMenu = NST_menu.addMenu('3D', icon = 'Toolbar3D.png', index = 100)
 
 ThreeDMenu.addCommand('aPCard AP', 'nuke.createNode("{}aPCard")'.format(prefixNST), icon='ap_tools.png')
 ThreeDMenu.addCommand('DummyCam', 'nuke.createNode("{}DummyCam")'.format(prefixNST), icon='DummyCam.png')
@@ -560,7 +560,7 @@ ThreeDMenu.addCommand('MirrorDimension TL', "nuke.createNode('{}MirrorDimension'
 
 # Create Paricles Menu
 
-particlesMenu = m.addMenu('Particles', icon = 'ToolbarParticles.png', index = 110)
+particlesMenu = NST_menu.addMenu('Particles', icon = 'ToolbarParticles.png', index = 110)
 
 particlesMenu.addCommand('waterSchmutz DR', "nuke.createNode('{}waterSchmutz')".format(prefixNST), icon="WaterLens.png")
 particlesMenu.addCommand('RainMaker MR', "nuke.createNode('{}RainMaker')".format(prefixNST), icon="ParticleDrag.png")
@@ -574,7 +574,7 @@ particlesMenu.addCommand('ParticleKiller NKPD', "nuke.createNode('{}ParticleKill
 
 # Create Deep Menu
 
-deepMenu = m.addMenu('Deep', icon = 'ToolbarDeep.png', index = 120)
+deepMenu = NST_menu.addMenu('Deep', icon = 'ToolbarDeep.png', index = 120)
 
 deep2VP_suite = deepMenu.addMenu("Deep2VP Suite MJT", icon='Deep2VP.png')
 
@@ -629,7 +629,7 @@ deepMenu.addCommand('DeepCopyBBox NKPD', "nuke.createNode('{}DeepCopyBBox')".for
 
 # Create CG Menu
 
-cgMenu = m.addMenu('CG', icon = 'RenderManShader.png', index = 130)
+cgMenu = NST_menu.addMenu('CG', icon = 'RenderManShader.png', index = 130)
 
 cgMenu.addCommand('UV Mapper TL', "nuke.createNode('{}UV_Mapper')".format(prefixNST), icon="Tile.png")
 
@@ -688,7 +688,7 @@ cgMenu.addCommand('LightSwitchPuppet TL', "nuke.nodePaste('{}/nk_files/{}LightSw
 
 # Create Curves Menu
 
-curvesMenu = m.addMenu('Curves', icon = 'ParticleCurve.png', index = 140)
+curvesMenu = NST_menu.addMenu('Curves', icon = 'ParticleCurve.png', index = 140)
 
 waveMachineMenu = curvesMenu.addMenu("Wave Machine FL", icon='waveMachine.png')
 waveMachineMenu.addCommand('WaveMaker FL', "nuke.createNode('{}waveMaker')".format(prefixNST), icon="waveMaker.png")
@@ -709,7 +709,7 @@ curvesMenu.addCommand('bm_NoiseGen BM', "nuke.createNode('{}bm_NoiseGen')".forma
 
 # Create Utilities Menu
 
-utilitiesMenu = m.addMenu('Utilities', icon = 'Modify.png', index = 150)
+utilitiesMenu = NST_menu.addMenu('Utilities', icon = 'Modify.png', index = 150)
 
 utilitiesMenu.addCommand('GUI Switch TL', "nuke.createNode('{}GUI_Switch')".format(prefixNST), icon="Switch.png")
 utilitiesMenu.addCommand('NAN INF Killer TL', "nuke.createNode('{}NAN_INF_Killer')".format(prefixNST), icon="Assert.png")
@@ -734,7 +734,7 @@ utilitiesMenu.addCommand('Pyclopedia MJT', 'nuke.createNode("{}Pyclopedia")'.for
 
 # Create Templates Menu
 
-templatesMenu = m.addMenu('Templates', icon = 'PointsTo3D.png', index = 200)
+templatesMenu = NST_menu.addMenu('Templates', icon = 'PointsTo3D.png', index = 200)
 
 templatesMenu.addCommand('Advanced Keying Template Stamps TL', "nuke.nodePaste('{}/nk_files/{}AdvancedKeyingTemplate_Stamps.nk')".format(NST_FolderPath, prefixNST), icon="Keyer.png")
 templatesMenu.addCommand('Advanced Keying Template TL', "nuke.nodePaste('{}/nk_files/{}AdvancedKeyingTemplate.nk')".format(NST_FolderPath, prefixNST), icon="Keyer.png")
