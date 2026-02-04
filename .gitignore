@@ -157,3 +157,10 @@ dmypy.json
 .pyre/
 .DS_Store
 *.dat
+
+# Cursor IDE
+.cursor/
+
+# Code review reports
+.code-review/
+.code-review
