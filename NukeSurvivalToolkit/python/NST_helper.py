@@ -1,5 +1,8 @@
 import nuke
 import nukescripts
+import os
+
+NST_FolderPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 # Defining a function to replace filepaths on tools importing files on creation
 
