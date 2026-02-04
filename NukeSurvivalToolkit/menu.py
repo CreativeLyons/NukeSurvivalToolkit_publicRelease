@@ -460,7 +460,7 @@ transformMenu.addCommand('Vectors_to_Degrees EL', "nuke.createNode('{}Vectors_to
 try:
     nuke.load('{}VectorTracker.py'.format(prefixNST))
     transformMenu.addCommand('VectorTracker NKPD', "nuke.createNode('{}VectorTracker.gizmo')".format(prefixNST), icon = 'vectorTools.png')
-except ImportError as e:
+except RuntimeError as e:
     print("Could not load VectorTracker.py: {}".format(e))
     pass
 
