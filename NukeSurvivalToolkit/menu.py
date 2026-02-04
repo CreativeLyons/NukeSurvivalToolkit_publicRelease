@@ -26,19 +26,20 @@ global prefixNST
 prefixNST = "NST_"
 
 # Store the location of this menu.py to help with nuke.nodePaste() which requires a filepath to paste
-NST_FolderPath = os.path.dirname(__file__)
+# Use Path.as_posix() to ensure forward slashes on all platforms (fixes Windows path issues)
+NST_FolderPath = Path(__file__).parent.as_posix()
 NST_helper.NST_FolderPath = NST_FolderPath
 
 
 def nk_path(filename, prefix=False):
     """Return full path to an .nk file in nk_files folder."""
     name = f"{prefixNST}{filename}" if prefix else filename
-    return os.path.join(NST_FolderPath, "nk_files", name)
+    return f"{NST_FolderPath}/nk_files/{name}"
 
 
 def icon_path(filename):
     """Return full path to an icon file."""
-    return os.path.join(NST_FolderPath, "icons", filename)
+    return f"{NST_FolderPath}/icons/{filename}"
 
 
 ############################################################################################################
@@ -55,8 +56,7 @@ LOAD_EXPRESSION_MENU = False
 NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v2.1.0.pdf"
 
 # creating full filepath to the help doc
-NST_helpDoc_os_path = os.path.join(NST_FolderPath, NST_helpDoc)
-NST_helpDocPath = Path(NST_helpDoc_os_path).as_uri()
+NST_helpDocPath = Path(f"{NST_FolderPath}/{NST_helpDoc}").as_uri()
 
 
 ############################################################################################################
