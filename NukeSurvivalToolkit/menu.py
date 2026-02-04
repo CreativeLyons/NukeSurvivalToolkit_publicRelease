@@ -26,7 +26,6 @@ prefixNST = "NST_"
 
 # Store the location of this menu.py to help with nuke.nodePaste() which requires a filepath to paste
 NST_FolderPath = os.path.dirname(__file__)
-NST_helper.NST_FolderPath = NST_FolderPath
 
 # give the name of the help doc .pdf in main folder
 NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v2.1.0.pdf"
