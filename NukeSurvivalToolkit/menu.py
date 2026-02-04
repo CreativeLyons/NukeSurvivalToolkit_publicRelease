@@ -27,6 +27,16 @@ prefixNST = "NST_"
 # Store the location of this menu.py to help with nuke.nodePaste() which requires a filepath to paste
 NST_FolderPath = os.path.dirname(__file__)
 
+############################################################################################################
+# User Configuration Variables
+############################################################################################################
+
+# Set to True to load the Expression Nodes AG submenu under Draw; set to False to skip it
+LOAD_EXPRESSION_MENU = False
+
+############################################################################################################
+############################################################################################################
+
 # give the name of the help doc .pdf in main folder
 NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v2.1.0.pdf"
 
@@ -67,83 +77,84 @@ imageMenu.addCommand('LabelFromRead TL', "nuke.createNode('{}LabelFromRead')".fo
 # Create Draw Menu
 drawMenu = m.addMenu('Draw', icon = 'ToolbarDraw.png', index = 20)
 
-expressionMenu = drawMenu.addMenu("Expression Nodes AG", icon = os.path.join(NST_FolderPath, "icons/expr.png"), index=000 )
-expressionMenu.addMenu( 'Creations', icon = os.path.join(NST_FolderPath, "icons/expr_01.png") )
-expressionMenu.addMenu( 'Alpha', icon = os.path.join(NST_FolderPath, "icons/expr_02.png") )
-expressionMenu.addMenu( 'Pixel', icon = os.path.join(NST_FolderPath, "icons/expr_03.png") )
-expressionMenu.addMenu( 'Keying and Despill', icon = os.path.join(NST_FolderPath, "icons/expr_04.png") )
-expressionMenu.addMenu( 'Transform', icon = os.path.join(NST_FolderPath, "icons/expr_05.png") )
-expressionMenu.addMenu( '3D and Deep', icon = os.path.join(NST_FolderPath, "icons/expr_06.png") )
+if LOAD_EXPRESSION_MENU:
+    expressionMenu = drawMenu.addMenu("Expression Nodes AG", icon = os.path.join(NST_FolderPath, "icons/expr.png"), index=000 )
+    expressionMenu.addMenu( 'Creations', icon = os.path.join(NST_FolderPath, "icons/expr_01.png") )
+    expressionMenu.addMenu( 'Alpha', icon = os.path.join(NST_FolderPath, "icons/expr_02.png") )
+    expressionMenu.addMenu( 'Pixel', icon = os.path.join(NST_FolderPath, "icons/expr_03.png") )
+    expressionMenu.addMenu( 'Keying and Despill', icon = os.path.join(NST_FolderPath, "icons/expr_04.png") )
+    expressionMenu.addMenu( 'Transform', icon = os.path.join(NST_FolderPath, "icons/expr_05.png") )
+    expressionMenu.addMenu( '3D and Deep', icon = os.path.join(NST_FolderPath, "icons/expr_06.png") )
 
-#CREATIONS
-expressionMenu.addCommand('Creations/Random/Random Colors', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Random_colors.nk") + "\")")
-expressionMenu.addCommand('Creations/Random/Random every Frame', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Random_every_frame.nk") + "\")")
-expressionMenu.addCommand('Creations/Random/Random every Pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Random_every_pixel.nk") + "\")")
-#expressionMenu.addCommand('Creations/Noise/Noise', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Noise.nk") + "\")")
-#expressionMenu.addCommand('Creations/Noise/fBm', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/fBm.nk") + "\")")
-#expressionMenu.addCommand('Creations/Noise/Turbulence', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/turbulence.nk") + "\")")
-expressionMenu.addCommand('Creations/lines vertical', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Vertical.nk") + "\")")
-expressionMenu.addCommand('Creations/lines horizontal', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Horizontal.nk") + "\")")
-expressionMenu.addCommand('Creations/lines vertical animated', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Vertical_Animated.nk") + "\")")
-expressionMenu.addCommand('Creations/lines horizontal animated', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Horizontal_Animated.nk") + "\")")
-expressionMenu.addCommand('Creations/circles', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/circles.nk") + "\")")
-expressionMenu.addCommand('Creations/circles user', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/circles_user.nk") + "\")")
-expressionMenu.addCommand('Creations/points', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/points.nk") + "\")")
-expressionMenu.addCommand('Creations/points advanced', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/points_advanced.nk") + "\")")
-expressionMenu.addCommand('Creations/bricks', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/bricks.nk") + "\")")
-expressionMenu.addCommand('Creations/gradient horizontal', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_horizontal.nk") + "\")")
-expressionMenu.addCommand('Creations/gradient horizontal invert', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_horizontal_invert.nk") + "\")")
-expressionMenu.addCommand('Creations/gradient vertical', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_vertical.nk") + "\")")
-expressionMenu.addCommand('Creations/gradient vertical invert', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_vertical_invert.nk") + "\")")
-expressionMenu.addCommand('Creations/gradient 4 corners', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/GradientCorner.nk") + "\")")
-expressionMenu.addCommand('Creations/radial', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/radial.nk") + "\")")
-expressionMenu.addCommand('Creations/radial gradient', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/radial_gradient.nk") + "\")")
-expressionMenu.addCommand('Creations/radial rays', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/radial_rays.nk") + "\")")
-expressionMenu.addCommand('Creations/Trunc', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Trunc.nk") + "\")")
+    #CREATIONS
+    expressionMenu.addCommand('Creations/Random/Random Colors', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Random_colors.nk") + "\")")
+    expressionMenu.addCommand('Creations/Random/Random every Frame', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Random_every_frame.nk") + "\")")
+    expressionMenu.addCommand('Creations/Random/Random every Pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Random_every_pixel.nk") + "\")")
+    #expressionMenu.addCommand('Creations/Noise/Noise', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Noise.nk") + "\")")
+    #expressionMenu.addCommand('Creations/Noise/fBm', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/fBm.nk") + "\")")
+    #expressionMenu.addCommand('Creations/Noise/Turbulence', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/turbulence.nk") + "\")")
+    expressionMenu.addCommand('Creations/lines vertical', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Vertical.nk") + "\")")
+    expressionMenu.addCommand('Creations/lines horizontal', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Horizontal.nk") + "\")")
+    expressionMenu.addCommand('Creations/lines vertical animated', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Vertical_Animated.nk") + "\")")
+    expressionMenu.addCommand('Creations/lines horizontal animated', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Lines_Horizontal_Animated.nk") + "\")")
+    expressionMenu.addCommand('Creations/circles', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/circles.nk") + "\")")
+    expressionMenu.addCommand('Creations/circles user', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/circles_user.nk") + "\")")
+    expressionMenu.addCommand('Creations/points', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/points.nk") + "\")")
+    expressionMenu.addCommand('Creations/points advanced', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/points_advanced.nk") + "\")")
+    expressionMenu.addCommand('Creations/bricks', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/bricks.nk") + "\")")
+    expressionMenu.addCommand('Creations/gradient horizontal', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_horizontal.nk") + "\")")
+    expressionMenu.addCommand('Creations/gradient horizontal invert', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_horizontal_invert.nk") + "\")")
+    expressionMenu.addCommand('Creations/gradient vertical', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_vertical.nk") + "\")")
+    expressionMenu.addCommand('Creations/gradient vertical invert', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/gradient_vertical_invert.nk") + "\")")
+    expressionMenu.addCommand('Creations/gradient 4 corners', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/GradientCorner.nk") + "\")")
+    expressionMenu.addCommand('Creations/radial', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/radial.nk") + "\")")
+    expressionMenu.addCommand('Creations/radial gradient', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/radial_gradient.nk") + "\")")
+    expressionMenu.addCommand('Creations/radial rays', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/radial_rays.nk") + "\")")
+    expressionMenu.addCommand('Creations/Trunc', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Trunc.nk") + "\")")
 
-#ALPHA
-expressionMenu.addCommand('Alpha/alpha binary', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_binary.nk") + "\")")
-expressionMenu.addCommand('Alpha/alpha comparison', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_comparison.nk") + "\")")
-expressionMenu.addCommand('Alpha/alpha exists?', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_exists.nk") + "\")")
-expressionMenu.addCommand('Alpha/alpha sum', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_sum.nk") + "\")")
+    #ALPHA
+    expressionMenu.addCommand('Alpha/alpha binary', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_binary.nk") + "\")")
+    expressionMenu.addCommand('Alpha/alpha comparison', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_comparison.nk") + "\")")
+    expressionMenu.addCommand('Alpha/alpha exists?', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_exists.nk") + "\")")
+    expressionMenu.addCommand('Alpha/alpha sum', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/alpha_sum.nk") + "\")")
 
-#PIXEL
-expressionMenu.addCommand('Pixel/absolute value', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/abs.nk") + "\")")
-expressionMenu.addCommand('Pixel/check negative', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/check_negative.nk") + "\")")
-expressionMenu.addCommand('Pixel/check nan inf pixels', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/check_nan_inf.nk") + "\")")
-expressionMenu.addCommand('Pixel/create nan pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/create_nan.nk") + "\")")
-expressionMenu.addCommand('Pixel/kill nan pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/kill_nan.nk") + "\")")
-expressionMenu.addCommand('Pixel/create inf pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/create_inf.nk") + "\")")
-expressionMenu.addCommand('Pixel/kill inf pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/kill_inf.nk") + "\")")
+    #PIXEL
+    expressionMenu.addCommand('Pixel/absolute value', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/abs.nk") + "\")")
+    expressionMenu.addCommand('Pixel/check negative', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/check_negative.nk") + "\")")
+    expressionMenu.addCommand('Pixel/check nan inf pixels', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/check_nan_inf.nk") + "\")")
+    expressionMenu.addCommand('Pixel/create nan pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/create_nan.nk") + "\")")
+    expressionMenu.addCommand('Pixel/kill nan pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/kill_nan.nk") + "\")")
+    expressionMenu.addCommand('Pixel/create inf pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/create_inf.nk") + "\")")
+    expressionMenu.addCommand('Pixel/kill inf pixel', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/kill_inf.nk") + "\")")
 
-#TRANSFORM
-expressionMenu.addCommand('Transform/Coordinates', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/coordinates.nk") + "\")")
-expressionMenu.addCommand('Transform/UV to Vector', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/UV_to_Vector.nk") + "\")")
-expressionMenu.addCommand('Transform/Vector to UV', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Vector_to_UV.nk") + "\")")
-expressionMenu.addCommand('Transform/transform', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/transform.nk") + "\")")
-expressionMenu.addCommand('Transform/transform advanced', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/transform_advanced.nk") + "\")")
-expressionMenu.addCommand('Transform/twist', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/twist.nk") + "\")")
-expressionMenu.addCommand('Transform/STMap_invert', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/STMap_invert.nk") + "\")")
+    #TRANSFORM
+    expressionMenu.addCommand('Transform/Coordinates', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/coordinates.nk") + "\")")
+    expressionMenu.addCommand('Transform/UV to Vector', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/UV_to_Vector.nk") + "\")")
+    expressionMenu.addCommand('Transform/Vector to UV', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/Vector_to_UV.nk") + "\")")
+    expressionMenu.addCommand('Transform/transform', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/transform.nk") + "\")")
+    expressionMenu.addCommand('Transform/transform advanced', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/transform_advanced.nk") + "\")")
+    expressionMenu.addCommand('Transform/twist', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/twist.nk") + "\")")
+    expressionMenu.addCommand('Transform/STMap_invert', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/STMap_invert.nk") + "\")")
 
-#3D and DEEP
-expressionMenu.addCommand('3D and Deep/Normal Pass - Relight', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/normalPass_relight.nk") + "\")")
-expressionMenu.addCommand('3D and Deep/C4x4', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/C4x4.nk") + "\")")
-expressionMenu.addCommand('3D and Deep/Deep to Depth', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/deepToDepth.nk") + "\")")
-expressionMenu.addCommand('3D and Deep/Depth normalize', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/depth_normalize.nk") + "\")")
+    #3D and DEEP
+    expressionMenu.addCommand('3D and Deep/Normal Pass - Relight', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/normalPass_relight.nk") + "\")")
+    expressionMenu.addCommand('3D and Deep/C4x4', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/C4x4.nk") + "\")")
+    expressionMenu.addCommand('3D and Deep/Deep to Depth', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/deepToDepth.nk") + "\")")
+    expressionMenu.addCommand('3D and Deep/Depth normalize', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/depth_normalize.nk") + "\")")
 
-#KEYING and DESPILL
-expressionMenu.addCommand('Keying and Despill/despill green', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_green.nk") + "\")")
-expressionMenu.addCommand('Keying and Despill/despill green list', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_green_list.nk") + "\")")
-expressionMenu.addCommand('Keying and Despill/despill blue', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_blue.nk") + "\")")
-expressionMenu.addCommand('Keying and Despill/despill blue list', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_blue_list.nk") + "\")")
-expressionMenu.addCommand('Keying and Despill/keying', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/keying.nk") + "\")")
-expressionMenu.addCommand('Keying and Despill/differenceKey', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/differenceKey.nk") + "\")")
-expressionMenu.addCommand('Keying and Despill/IBKGizmo_Expression', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/IBKGizmo_Expression.nk") + "\")")
+    #KEYING and DESPILL
+    expressionMenu.addCommand('Keying and Despill/despill green', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_green.nk") + "\")")
+    expressionMenu.addCommand('Keying and Despill/despill green list', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_green_list.nk") + "\")")
+    expressionMenu.addCommand('Keying and Despill/despill blue', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_blue.nk") + "\")")
+    expressionMenu.addCommand('Keying and Despill/despill blue list', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/despill_blue_list.nk") + "\")")
+    expressionMenu.addCommand('Keying and Despill/keying', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/keying.nk") + "\")")
+    expressionMenu.addCommand('Keying and Despill/differenceKey', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/differenceKey.nk") + "\")")
+    expressionMenu.addCommand('Keying and Despill/IBKGizmo_Expression', "nuke.nodePaste(\"" + os.path.join(NST_FolderPath + "/nk_files/IBKGizmo_Expression.nk") + "\")")
 
-expressionMenu.addSeparator()
+    expressionMenu.addSeparator()
 
-#INFO
-expressionMenu.addCommand('Info e Tutorial', "nuke.tcl('start', 'http://www.andreageremia.it/tutorial_expression_node.html')", icon = os.path.join(NST_FolderPath, "icons/question_mark.png"))
+    #INFO
+    expressionMenu.addCommand('Info e Tutorial', "nuke.tcl('start', 'http://www.andreageremia.it/tutorial_expression_node.html')", icon = os.path.join(NST_FolderPath, "icons/question_mark.png"))
 
 drawMenu.addSeparator()
 
