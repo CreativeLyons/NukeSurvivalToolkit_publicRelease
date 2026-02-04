@@ -1,8 +1,10 @@
 import nuke
 import nukescripts
 import os
+from pathlib import Path
 
-NST_FolderPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+# Use Path.as_posix() to ensure forward slashes on all platforms (fixes Windows path issues)
+NST_FolderPath = Path(__file__).parent.parent.as_posix()
 
 # Defining a function to replace filepaths on tools importing files on creation
 
