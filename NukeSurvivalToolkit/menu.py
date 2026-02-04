@@ -26,7 +26,6 @@ prefixNST = "NST_"
 
 # Store the location of this menu.py to help with nuke.nodePaste() which requires a filepath to paste
 NST_FolderPath = os.path.dirname(__file__)
-NST_helper.NST_FolderPath = NST_FolderPath
 
 # give the name of the help doc .pdf in main folder
 NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v2.1.0.pdf"
@@ -166,8 +165,9 @@ drawMenu.addCommand("Silk MHD", "nuke.createNode('{}h_silk')".format(prefixNST),
 try:
     import ColorGradientUi
     drawMenu.addCommand("GradientEditor MHD", "nuke.createNode('{}h_gradienteditor')".format(prefixNST), icon="h_gradienteditor.png")
-except Exception as e:
-    print(f"Could not load 'ColorGradientUi.py': {e}")
+except ImportError as e:
+    print("Could not load ColorGradientUi from HagbarthTools folder: {}".format(e))
+    pass
 
 drawMenu.addSeparator()
 
@@ -460,8 +460,8 @@ transformMenu.addCommand('Vectors_to_Degrees EL', "nuke.createNode('{}Vectors_to
 try:
     nuke.load('{}VectorTracker.py'.format(prefixNST))
     transformMenu.addCommand('VectorTracker NKPD', "nuke.createNode('{}VectorTracker.gizmo')".format(prefixNST), icon = 'vectorTools.png')
-except:
-    print("Could not load VectorTracker.py")
+except RuntimeError as e:
+    print("Could not load VectorTracker.py: {}".format(e))
     pass
 
 transformMenu.addSeparator()
@@ -488,8 +488,8 @@ transformMenu.addSeparator()
 try:
     import NST_cardToTrack
     transformMenu.addCommand('CardToTrack AK', "nuke.createNode('{}CardToTrack')".format(prefixNST), icon='Card.png')
-except:
-    print("Could not load NST_cardToTrack.py")
+except ImportError as e:
+    print("Could not load NST_cardToTrack.py: {}".format(e))
     pass
 
 transformMenu.addCommand('CProject AK', "nuke.createNode('{}CProject')".format(prefixNST), icon='CornerPin.png')
