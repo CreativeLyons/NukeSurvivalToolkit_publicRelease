@@ -57,7 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Icon assets recompressed for ~53% size reduction (~127 KB saved); no visual changes.
-- `ColorGradientUi.py` updated for Nuke 14.1+ compatibility and PySide6 migration (GradientEditor MHD).
+- `ColorGradientUi.py` updated for Nuke 16+ compatibility and PySide6 migration (GradientEditor MHD).
 - Menu refactor: `nk_path()` and `icon_path()` helpers, f-strings, improved readability; no user-visible behavior change.
 - Updated .nk templates: NST_AdvancedKeyingTemplate_Stamps.nk, NST_X_Aton_Examples.nk, deepThickness.nk.
 - New icon assets for aeRefracTHOR, aeShadows.
