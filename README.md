@@ -5,15 +5,18 @@
 
 [Intro and Installation Video](https://youtu.be/MQq9GH3SekA)
 
-For full online documentation and tool index, visit:
+## Online Wiki
+For full online documentation and tool index Wiki, visit:
 
-[Nuke Survival Toolkit Documentation](https://docs.google.com/document/d/1eyh2JIecaphItZeq0uuGxlqoASuXNQy1leJGqFI-EeU/edit?usp=sharing)
+[Nuke Survival Toolkit Online Wiki](https://creativelyons.github.io/NukeSurvivalToolkit_Wiki/)
 
 The Nuke Survival Toolkit is a portable tool menu for the Foundry’s Nuke with a hand-picked selection of nuke gizmos collected from all over the web, organized into 1 easy to install toolbar.
 
-Here’s how to install and use the Nuke Survival Toolkit: 
+## Installation
 
-1.) Download the .zip folder from the Nuke Survival Toolkit github website.  
+Here’s how to install and use the Nuke Survival Toolkit:
+
+1.) Download the .zip folder from the Nuke Survival Toolkit github website.
 
 https://github.com/CreativeLyons/NukeSurvivalToolkit_publicRelease/releases/latest
 
@@ -34,4 +37,18 @@ Your/NukeSurvivalToolkit/FolderPath/Here text with your NukeSurvivalToolkit file
 
 6.) Save your init.py file, and restart your Nuke session
 
-7.) That’s it! Congrats, you will now see a little red multi-tool in your nuke toolbar.    
+7.) That’s it! Congrats, you will now see a little red multi-tool in your nuke toolbar.
+
+
+## Development
+
+For a more in-depth look into the repo and menu structure, check the development guide.
+
+[View the Development Guide](DEVELOPMENT.md)
+
+
+## Changelog
+
+View recent updates, tools additions, bug fixes, etc.
+
+[View the Changelog](CHANGELOG.md)
