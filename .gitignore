@@ -161,6 +161,9 @@ dmypy.json
 # Cursor IDE
 .cursor/
 
+# JetBrains IDE
+.idea/
+
 # Code review reports
 .code-review/
 .code-review

@@ -5,11 +5,13 @@
 #*****************************************************************
 #*****************************************************************
 
+# Imports
 import nuke
 import sys
 import os
-import webbrowser
 from pathlib import Path
+
+############################################################################################################
 
 # Add PluginPaths to tools and icons
 nuke.pluginAddPath('./gizmos')
@@ -30,36 +32,37 @@ prefixNST = "NST_"
 NST_FolderPath = Path(__file__).parent.as_posix()
 NST_helper.NST_FolderPath = NST_FolderPath
 
+############################################################################################################
+# Helpers to keep code readable
 
 def nk_path(filename, prefix=False):
     """Return full path to an .nk file in nk_files folder."""
     name = f"{prefixNST}{filename}" if prefix else filename
     return f"{NST_FolderPath}/nk_files/{name}"
 
-
 def icon_path(filename):
     """Return full path to an icon file."""
     return f"{NST_FolderPath}/icons/{filename}"
-
 
 ############################################################################################################
 # User Configuration Variables
 ############################################################################################################
 
+# Documentation behavior/config (kept in menu.py for explicit user editing)
+NST_helper.NST_DOCS_ONLINE_URL = "https://creativelyons.github.io/NukeSurvivalToolkit_Wiki/"
+NST_helper.NST_DOCS_ONLINE_TIMEOUT_SECONDS = 1.5
+NST_helper.NST_DOCS_PDF_NAME = "NukeSurvivalToolkit_Documentation_Release_v2.1.0.pdf"
+NST_helper.NST_DOCS_OFFLINE_INDEX = Path("NST_Documentation/index.html")
+
 # Set to True to load the Expression Nodes AG submenu under Draw; set to False to skip it
 LOAD_EXPRESSION_MENU = False
 
 ############################################################################################################
+# End of User Configuration Variables
 ############################################################################################################
 
-# give the name of the help doc .pdf in main folder
-NST_helpDoc = "NukeSurvivalToolkit_Documentation_Release_v2.1.0.pdf"
-
-# creating full filepath to the help doc
-NST_helpDocPath = Path(f"{NST_FolderPath}/{NST_helpDoc}").as_uri()
-
-
 ############################################################################################################
+# Start of Menu Creation
 ############################################################################################################
 
 # Create NukeSurivalToolkit Menu
@@ -70,11 +73,12 @@ NST_menu = toolbar.addMenu('NukeSurvivalToolkit', icon = "SurvivalToolkit.png")
 ############################################################################################################
 ############################################################################################################
 
-# Create Button to Open NukeSurivalToolkit Documentation
-def openNSTDocumentation():
-    webbrowser.open(NST_helpDocPath)
-
-NST_menu.addCommand("Documentation", "openNSTDocumentation()", icon="info_icon.png", index = 00)
+# Create Documentation Submenu
+documentationMenu = NST_menu.addMenu("Documentation", icon="info_icon.png", index=00)
+documentationMenu.addCommand("Wiki\\/Docs (Auto)", "NST_helper.openNSTDocumentationDefault()", icon="wiki_default.png")
+documentationMenu.addCommand("Wiki (Online)", "NST_helper.openNSTDocumentationOnline()", icon="wiki_online.png")
+documentationMenu.addCommand("Wiki (Offline)", "NST_helper.openNSTDocumentationOffline()", icon="wiki_offline.png")
+documentationMenu.addCommand("Docs (PDF)", "NST_helper.openNSTDocumentationPDF()", icon="StickyNote.png")
 
 ############################################################################################################
 ############################################################################################################

@@ -10,6 +10,26 @@ For full online documentation and tool index Wiki, visit:
 
 [Nuke Survival Toolkit Online Wiki](https://creativelyons.github.io/NukeSurvivalToolkit_Wiki/)
 
+## Offline Documentation (optional)
+You can install local wiki docs for offline use.
+
+1.) Download the documentation ZIP release from either location:
+
+[Nuke Survival Toolkit Releases (latest)](https://github.com/CreativeLyons/NukeSurvivalToolkit_publicRelease/releases/latest)
+
+[Nuke Survival Toolkit Wiki Releases](https://github.com/CreativeLyons/NukeSurvivalToolkit_Wiki/releases/)
+
+2.) Unzip `NST_Documentation_Release_x.y.z.zip` directly into the toolkit root so this file exists:
+
+`NukeSurvivalToolkit/NST_Documentation/index.html`
+
+3.) In Nuke, open `NukeSurvivalToolkit > Documentation` and use:
+
+- `Wiki/Docs (Auto)` which falls back in this order: `Wiki (Online)` -> `Wiki (Offline)` -> `Docs (PDF)`.
+- `Wiki (Online)` for the live wiki (checked first for reachability).
+- `Wiki (Offline)` for local HTML docs.
+- `Docs (PDF)` for local PDF docs.
+
 The Nuke Survival Toolkit is a portable tool menu for the Foundry’s Nuke with a hand-picked selection of nuke gizmos collected from all over the web, organized into 1 easy to install toolbar.
 
 ## Installation

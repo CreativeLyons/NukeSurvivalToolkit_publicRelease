@@ -59,6 +59,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Icon assets recompressed for ~53% size reduction (~127 KB saved); no visual changes.
 - `ColorGradientUi.py` updated for Nuke 16+ compatibility and PySide6 migration (GradientEditor MHD).
 - Menu refactor: `nk_path()` and `icon_path()` helpers, f-strings, improved readability; no user-visible behavior change.
+- Documentation menu now uses a `Documentation` submenu with `Wiki/Docs (Auto)`, `Wiki (Online)`, `Wiki (Offline)`, and `Docs (PDF)` commands. The auto command now falls back in order: online wiki -> offline local wiki -> local PDF, with reachability checks and concise missing-target guidance.
+- Added dedicated icons for documentation submenu entries (`wiki_default`, `wiki_online`, `wiki_offline`) and used Nuke native `StickyNote` for PDF.
+- `README.md` now includes an optional offline documentation install section that points users to release ZIP downloads and the required local path (`NukeSurvivalToolkit/NST_Documentation/index.html`).
 - Updated .nk templates: NST_AdvancedKeyingTemplate_Stamps.nk, NST_X_Aton_Examples.nk, deepThickness.nk.
 - New icon assets for aeRefracTHOR, aeShadows.
 
@@ -121,6 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Windows filepath issues: use `Path.as_posix()` for all toolkit paths so forward slashes are used on every platform, avoiding backslash escape sequences (e.g. `\n` in `\nk_files`) that broke `nuke.nodePaste()` and file knobs on Windows.
 - Help documentation link on Windows: use `Path.as_uri()` for the documentation PDF URL so drive-letter paths open correctly in the browser.
+- Documentation online reachability check now handles environments where Python SSL certificate validation fails, preventing false fallback from online docs to PDF.
 - Node class check in `filepathCreateNode`: use tuple membership instead of chained `or` for file-node detection.
 - Replaced bare `except:` clauses with specific exception handling (ImportError, RuntimeError) for ColorGradientUi, VectorTracker, and NST_cardToTrack imports.
 - Issue #43: menu and helper module loading.
