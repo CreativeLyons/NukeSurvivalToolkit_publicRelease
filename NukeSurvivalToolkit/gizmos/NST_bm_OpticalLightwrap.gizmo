@@ -1,15 +1,19 @@
+set cut_paste_input [stack 0]
+version 13.2 v8
+push $cut_paste_input
 Group {
  name bm_OpticalLightwrap
  help "bm_OpticalLightwrap uses common algorithms to produce an optically-correct exponential-glow-based lightwrap.\n\nCompletely rebuilt from v3.1 to be light-weight and easier to use."
  tile_color 0x222222ff
  selected true
- xpos -33
- ypos 350
+ xpos 213
+ ypos -312
  addUserKnob {20 Options}
  addUserKnob {52 algorithm_code l "" +STARTLINE T "def change_algorithm():\n\n\t# Get this node\n\tnode = nuke.thisNode()\n\n\t# Number sequences to drive iterative blur values.\n\talgorithm_double = \[2, 4, 6, 8, 16, 32, 64, 128, 256, 512, 1024]\n\talgorithm_fibonacci = \[3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377]\n\n\t# Set algorithm based off user selection\n\tif node.knob('algorithm_choice').value() == \"Double\":\n\t\talgorithm = algorithm_double\n\telif node.knob('algorithm_choice').value() == \"Double\":\n\t\talgorithm = algorithm_fibonacci\n\telse:\n\t\tnuke.message(\"No algorithm selected\")\n\t\tbreak\n\n\t# Dive inside the ground and get the blur node controlling the glow.\n\tnuke.toNode(\"Group1\").begin()\n\tglow_blur = nuke.toNode(\"glow_blur\")\n\n\t# Make some space in the script editor...\n\tprint \"\\n\\n\\n\"\n\n\t# Find the glow_blur's keyframes\n\tkeyframes = glow_blur.knob('size').a.nimation(0).keys()\n\titeration = 0\n\n\t# Loop through the pre-set 11 keyframes and set the values to correspond with the number sequences we defined above.\n\tfor keyframe in keyframes:\n\t    n.knob('size').animation(0).setKey(keyframe.x, algorithm\[iteration])\n\t    iteration = iteration+1\n\n\t    # Print what is going on for visibility.\n\t    print \"keyframe at frame %s changed to value: %s\" % (round(keyframe.x, 1), round(keyframe.y, 1))\n\n\t# End being inside the group.\n\tnuke.toNode(\"Group1\").end()" +STARTLINE}
  addUserKnob {4 algorithm_choice l "Glow Math" t "Glow is built with a sequence of exponentially-increasing sub-frame values on a Blur node, which are then combined with a TimeBlur to produce the end result." M {Inverse-Square Fibonacci Double Distributed "" "" "" "" "" "" ""}}
  addUserKnob {26 spacer2 l "" -STARTLINE T "  "}
  addUserKnob {6 effect_only l "effect only" t "Display the glow only." -STARTLINE}
+ effect_only true
  addUserKnob {3 glow_divisions l Divisions t "How many glow layers to add up. A higher number will result in a smoother glow, but a slower processing time."}
  glow_divisions 10
  addUserKnob {26 spacer1 l "" -STARTLINE T "             "}
@@ -38,7 +42,7 @@ Group {
  addUserKnob {7 mix}
  mix 1
  addUserKnob {26 ""}
- addUserKnob {26 info l "" +STARTLINE T "<font color='#777'><b>bm_OpticalLightwrap v4.1</b></font><font color='#555'> created by </font><b><a href=\"https://github.com/BenMcEwan/nuke_public\" style=\"color:#777;\">Ben McEwan</a></b>.<br>\n<font color='#555'><b>Last updated:</b> 9th September, 2021.</font>"}
+ addUserKnob {26 info l "" +STARTLINE T "<font color='#777'><b>bm_OpticalLightwrap v4.2</b></font><font color='#555'> created by </font><b><a href=\"https://github.com/BenMcEwan/nuke_public\" style=\"color:#777;\">Ben McEwan</a></b>.<br>\n<font color='#555'><b>Last updated:</b> 25th February, 2025.</font>"}
 }
  Input {
   inputs 0
@@ -65,7 +69,7 @@ Group {
   xpos 619
   ypos -17
  }
-set Nc5c9a400 [stack 0]
+set N1689c880 [stack 0]
  Dot {
   name Dot13
   label "  "
@@ -74,7 +78,7 @@ set Nc5c9a400 [stack 0]
   xpos 619
   ypos 316
  }
-set Nc5c99d00 [stack 0]
+set N168a1a00 [stack 0]
  Dot {
   name Dot14
   label "  "
@@ -83,7 +87,7 @@ set Nc5c99d00 [stack 0]
   xpos 619
   ypos 522
  }
-set Nc5c99600 [stack 0]
+set N168a69e0 [stack 0]
  Dot {
   name Dot15
   label "  "
@@ -92,7 +96,7 @@ set Nc5c99600 [stack 0]
   xpos 619
   ypos 598
  }
-set Nc5c98f00 [stack 0]
+set N168aba40 [stack 0]
  Input {
   inputs 0
   name bg
@@ -120,7 +124,7 @@ set Nc5c98f00 [stack 0]
   xpos -226
   ypos -115
  }
-set Nc5c6f200 [stack 0]
+set N168cb3f0 [stack 0]
  Keyer {
   operation "luminance key"
   range {0.5 1 1 1}
@@ -128,8 +132,8 @@ set Nc5c6f200 [stack 0]
   xpos -260
   ypos -50
  }
-set Nc5c6eb00 [stack 0]
-push $Nc5c6eb00
+set N168d0520 [stack 0]
+push $N168d0520
  Copy {
   inputs 2
   from0 rgba.alpha
@@ -159,7 +163,6 @@ push $Nc5c6eb00
  }
  NoTimeBlur {
   name NoTimeBlur4
-  selected true
   xpos 796
   ypos -220
  }
@@ -177,9 +180,9 @@ push $Nc5c6eb00
   xpos 830
   ypos 351
  }
-push $Nc5c99d00
-push $Nc5c9a400
-push $Nc5c6eb00
+push $N168a1a00
+push $N1689c880
+push $N168d0520
  Input {
   inputs 0
   name area
@@ -198,7 +201,7 @@ push $Nc5c6eb00
   xpos 27
   ypos -194
  }
-push $Nc5c6f200
+push $N168cb3f0
  Merge2 {
   inputs 2
   operation mask
@@ -233,7 +236,7 @@ push $Nc5c6f200
   xpos 61
   ypos 60
  }
-set Nc5c48f00 [stack 0]
+set N16958e80 [stack 0]
  Dot {
   name Dot10
   label "  "
@@ -242,7 +245,7 @@ set Nc5c48f00 [stack 0]
   xpos 177
   ypos 60
  }
-set Nc5c48800 [stack 0]
+set N1695def0 [stack 0]
  Dot {
   name Dot9
   label "  "
@@ -251,7 +254,7 @@ set Nc5c48800 [stack 0]
   xpos 283
   ypos 60
  }
-set Nc5c48100 [stack 0]
+set N16962e60 [stack 0]
  Dot {
   name Dot8
   label "  "
@@ -268,7 +271,7 @@ set Nc5c48100 [stack 0]
   xpos 365
   ypos 108
  }
-push $Nc5c48100
+push $N16962e60
  Blur {
   channels rgba
   size {{aspect>1?curve(((frame-1)%(1-1+1))+1)*glow_size/25*aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 2 x1.100000024 4 8 x1.299999952 16 x1.399999976 32 64 128 256 x1.799999952 512 x1.899999976 1024 2048} {aspect<1?curve(((frame-1)%(1-1+1))+1)*glow_size/25/aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 2 x1.100000024 4 8 x1.299999952 16 x1.399999976 32 64 128 256 x1.799999952 512 x1.899999976 1024 2048}}
@@ -277,7 +280,7 @@ push $Nc5c48100
   xpos 249
   ypos 108
  }
-push $Nc5c48800
+push $N1695def0
  Blur {
   channels rgba
   size {{aspect>1?curve(((frame-1)%(1-1+1))+1)*glow_size/25*aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 3 x1.100000024 5 8 x1.299999952 13 x1.399999976 21 34 55 89 x1.799999952 144 x1.899999976 233 377} {aspect<1?curve(((frame-1)%(1-1+1))+1)*glow_size/25/aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 3 x1.100000024 5 8 x1.299999952 13 x1.399999976 21 34 55 89 x1.799999952 144 x1.899999976 233 377}}
@@ -286,7 +289,7 @@ push $Nc5c48800
   xpos 143
   ypos 108
  }
-push $Nc5c48f00
+push $N16958e80
  Blur {
   channels rgba
   size {{aspect>1?curve(((frame-1)%(1-1+1))+1)*glow_size/25*aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 1 x1.100000024 4 9 x1.299999952 16 x1.399999976 25 36 49 64 x1.799999952 81 x1.899999976 100 121} {aspect<1?curve(((frame-1)%(1-1+1))+1)*glow_size/25/aspect:curve(((frame-1)%(1-1+1))+1)*glow_size/25 i x1 1 x1.100000024 4 9 x1.299999952 16 x1.399999976 25 36 49 64 x1.799999952 81 x1.899999976 100 121}}
@@ -347,9 +350,9 @@ push $Nc5c48f00
   xpos 61
   ypos 405
  }
-set Nc079dd00 [stack 0]
-push $Nc079dd00
-push $Nc5c99600
+set N169f5ae0 [stack 0]
+push $N169f5ae0
+push $N168a69e0
  Merge2 {
   inputs 2
   operation plus
@@ -371,13 +374,24 @@ push $Nc5c99600
   xpos -260
   ypos 595
  }
-push $Nc5c98f00
+push $N168aba40
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  mappings "4 black -1 -1 rgba.red 0 0 black -1 -1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 black -1 -1 rgba.alpha 0 3"
+  name Shuffle1
+  label "\[value in1]"
+  selected true
+  xpos 585
+  ypos 635
+  disable {{!effect_only}}
+ }
  Dissolve {
   inputs 2
   which {{parent.mix}}
   name Dissolve2
   xpos -260
-  ypos 619
+  ypos 635
  }
  Output {
   name Output1
