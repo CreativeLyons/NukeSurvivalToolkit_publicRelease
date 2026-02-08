@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- CellNoise: Blink kernel compile errors on Nuke 15+ (moved globals to #define, replaced abs() with signedness check) (#36)
+
 ### Added
 
 **Tools (gizmos and Python)**
