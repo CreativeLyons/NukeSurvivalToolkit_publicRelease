@@ -15,9 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Tools (gizmos and Python)**
 
-**2025**
-- AnamorphicLensBlur (XM)
-
 **2024**
 - aeShadows (AE) v1.0
 - FastComplexity_Distort (X_Distort)
