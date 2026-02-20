@@ -597,6 +597,7 @@ deepMenu = NST_menu.addMenu('Deep', icon = 'ToolbarDeep.png', index = 120)
 deep2VP_suite = deepMenu.addMenu("Deep2VP Suite MJT", icon='Deep2VP.png')
 
 deep2VP_suite.addCommand('Deep2VP MJT', f"nuke.createNode('{prefixNST}Deep2VP')", icon="Deep2VP.png")
+deep2VP_suite.addCommand('Deep2VPosition MJT', f"nuke.createNode('{prefixNST}Deep2VPosition')", icon="Deep2VP.png")
 deep2VP_suite.addCommand('DVPColorCorrect MJT', f"nuke.createNode('{prefixNST}DVPColorCorrect')", icon="DVPColorCorrect.png")
 deep2VP_suite.addCommand('DVPortal MJT', f"nuke.createNode('{prefixNST}DVPortal')", icon="DVPortal.png")
 deep2VP_suite.addCommand('DVPToImage MJT', f"nuke.createNode('{prefixNST}DVPToImage')", icon="DVPToImage.png")
@@ -630,7 +631,6 @@ deepMenu.addCommand('DeepSer MJT', f"nuke.createNode('{prefixNST}DeepSer')", ico
 deepMenu.addSeparator()
 
 deepMenu.addCommand('DeepFromDepth AG', f"nuke.createNode('{prefixNST}DeepFromDepth')", icon="DeepRecolor.png")
-deepMenu.addCommand('DeepToPosition TL', f"nuke.createNode('{prefixNST}DeepToPosition')", icon="Deep2VPosition.png")
 deepMenu.addCommand('DeepRecolorMatte TL', f"nuke.createNode('{prefixNST}DeepRecolorMatte')", icon="DeepRecolor.png")
 
 deepMenu.addSeparator()
