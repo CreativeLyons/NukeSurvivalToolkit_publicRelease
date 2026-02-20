@@ -1,0 +1,232 @@
+Group {
+ name FastComplexity_Distort
+ tile_color 0xa57aaaff
+ selected true
+ addUserKnob {20 User}
+ addUserKnob {26 text l "" +STARTLINE T "<p style=\"font-size:20px\">Fast IDistort & STMap v1.0</p>\nFast implementation of iDistort and STMap for UV's with high complexity/detail\n<p style=\"font-size:10px\"></p>\n "}
+ addUserKnob {41 useGPUIfAvailable l "Use GPU if available" T BlinkScript33.useGPUIfAvailable}
+ addUserKnob {26 ""}
+ addUserKnob {4 method l Method M {ST-Map IDistort}}
+ addUserKnob {41 SaturationKernel_scaler l "Mip Level Scale" t "Scale mip level by this value \nHigher = Softer\nLower = Sharper but might skip details" T BlinkScript33.SaturationKernel_scaler}
+ addUserKnob {6 boolean l "Keep uv Alpha" +STARTLINE}
+ boolean true
+ addUserKnob {20 advanced_tab l Advanced}
+ addUserKnob {41 SaturationKernel_mip_levels l "mip limit" t "Clamp mip level at this" T BlinkScript33.SaturationKernel_mip_levels}
+}
+ Input {
+  inputs 0
+  name InputUV
+  xpos 701
+  ypos 121
+  number 1
+ }
+set N8a65150 [stack 0]
+ Input {
+  inputs 0
+  name InputSrc
+  xpos 583
+  ypos 119
+ }
+ AddChannels {
+  channels rgba
+  name AddChannels1
+  xpos 583
+  ypos 177
+ }
+ Dot {
+  name Dot2
+  xpos 617
+  ypos 254
+ }
+set N2d0e67e0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  name Reformat26
+  xpos 78
+  ypos 251
+ }
+set N67cce60 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  name Reformat27
+  xpos 78
+  ypos 299
+ }
+set N8cbca560 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  name Reformat28
+  xpos 78
+  ypos 342
+ }
+set Nfc78aed0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  name Reformat29
+  xpos 78
+  ypos 401
+  disable {{!(min(input.width,input.height)>1)}}
+ }
+set N78628ad0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  name Reformat30
+  xpos 78
+  ypos 449
+  disable {{!(min(input.width,input.height)>1)}}
+ }
+set N3934e4d0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  name Reformat31
+  xpos 78
+  ypos 504
+  disable {{!(min(input.width,input.height)>1)}}
+ }
+set N278cb280 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  name Reformat32
+  xpos 78
+  ypos 552
+  disable {{!(min(input.width,input.height)>1)}}
+ }
+set N8d4631a0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  name Reformat33
+  xpos 78
+  ypos 608
+  disable {{!(min(input.width,input.height)>1)}}
+ }
+set Nb96b1920 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  name Reformat34
+  xpos 78
+  ypos 664
+  disable {{!(min(input.width,input.height)>1)}}
+ }
+set N100bb4d0 [stack 0]
+ Reformat {
+  type scale
+  scale 0.5
+  name Reformat35
+  xpos 78
+  ypos 719
+  disable {{!(min(input.width,input.height)>1)}}
+ }
+push $N100bb4d0
+push $Nb96b1920
+push $N8d4631a0
+push $N278cb280
+push $N3934e4d0
+push $N78628ad0
+push $Nfc78aed0
+push $N8cbca560
+push $N67cce60
+push $N2d0e67e0
+push $N8a65150
+ Grade {
+  white {{InputSrc.width} {InputSrc.height} 0 0}
+  white_panelDropped true
+  black_clamp false
+  name Grade44
+  xpos 812
+  ypos 225
+  disable {{parent.method!=0}}
+ }
+set N8f0652a0 [stack 0]
+push $N8a65150
+ Expression {
+  expr0 (x)/width
+  expr1 (y)/height
+  name Expression2
+  xpos 701
+  ypos 229
+ }
+ Grade {
+  white {{InputSrc.width} {InputSrc.height} 0 0}
+  white_panelDropped true
+  black_clamp false
+  name Grade2
+  xpos 701
+  ypos 253
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge1
+  xpos 812
+  ypos 373
+ }
+push $N8f0652a0
+ Expression {
+  expr0 r-.5
+  expr1 g-.5
+  name Expression11
+  xpos 937
+  ypos 225
+ }
+ Dot {
+  name Dot3
+  xpos 971
+  ypos 258
+ }
+ Dot {
+  name Dot4
+  xpos 971
+  ypos 459
+ }
+ Switch {
+  inputs 2
+  which {{parent.method}}
+  name Switch1
+  xpos 812
+  ypos 456
+ }
+ Dot {
+  name Dot1
+  xpos 846
+  ypos 722
+ }
+ BlinkScript {
+  inputs 12
+  recompileCount 226
+  ProgramGroup 1
+  KernelDescription "3 \"SaturationKernel\" iterate pixelWise d50b72ba34d6ca9c9e9846cee724250e1501d93b99201af43f5270b3281f99ff 13 \"srcUV\" Read Random \"src00\" Read Random \"src01\" Read Random \"src02\" Read Random \"src03\" Read Random \"src04\" Read Random \"src05\" Read Random \"src06\" Read Random \"src07\" Read Random \"src08\" Read Random \"src09\" Read Random \"src10\" Read Random \"dst\" Write Point 3 \"mip_levels\" Int 1 AAAAAA== \"scaler\" Float 1 AAAAAA== \"miplevel\" Int 1 AAAAAA== 3 \"mip_levels\" 1 1 Default \"scaler\" 1 1 Default \"miplevel\" 1 1 Default 0"
+  kernelSource "inline float4 mix(float4 _X,float4 _Y,float _A)\{\n  return _X*(1.0f-_A)+_Y*_A;\n\}\ninline float fract(float a_X)\n\{\n    return a_X-floor(a_X);\n\}\n\nkernel SaturationKernel : ImageComputationKernel<ePixelWise>\n\{\n  Image<eRead, eAccessRandom, eEdgeClamped> srcUV; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> src00; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> src01; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> src02; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> src03; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> src04; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> src05; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> src06; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> src07; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> src08; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> src09; // the input image\n  Image<eRead, eAccessRandom, eEdgeClamped> src10; // the input image\n  Image<eWrite> dst; // the output image\n\n  param:\n    int mip_levels;\n    float scaler;\n    int miplevel; //Not implemented, but used to control the mip manually\n\n  float4 reader( float2 position, int mip_level )\{\n    if (mip_level == 0)\{\n      return bilinear(src00,position.x,position.y);\n    \}\n    else if (mip_level == 1)\{\n      return bilinear(src01,position.x-.25f,position.y-.25f);\n    \}\n    else if (mip_level == 2)\{\n      return bilinear(src02,position.x-0.5f,position.y-0.5f);\n    \}\n    else if (mip_level == 3)\{\n      return bilinear(src03,position.x-0.5f,position.y-0.5f);\n    \}\n    else if (mip_level == 4)\{\n      return bilinear(src04,position.x-0.5f,position.y-0.5f);\n    \}\n    else if (mip_level == 5)\{\n      return bilinear(src05,position.x-0.5f,position.y-0.5f);\n    \}    \n    else if (mip_level == 6)\{\n      return bilinear(src06,position.x-0.5f,position.y-0.5f);\n    \}   \n    else if (mip_level == 7)\{\n      return bilinear(src07,position.x-0.5f,position.y-0.5f);\n    \}   \n    else if (mip_level == 8)\{\n      return bilinear(src08,position.x-0.5f,position.y-0.5f);\n    \}   \n    else if (mip_level == 9)\{\n      return bilinear(src09,position.x-0.5f,position.y-0.5f);\n    \}     \n    else \{\n      return bilinear(src10,position.x-0.5f,position.y-0.5f);\n    \}          \n  \}\n\n  void process(int2 pos) \{\n      float4 p1 = srcUV(pos.x, pos.y);\n      float4 p2 = srcUV(pos.x + 1, pos.y);\n      float4 p3 = srcUV(pos.x, pos.y + 1);\n      float4 p4 = srcUV(pos.x + 1, pos.y + 1);\n\n      float minX = min(min(p1.x, p2.x), min(p3.x, p4.x));\n      float maxX = max(max(p1.x, p2.x), max(p3.x, p4.x));\n      float minY = min(min(p1.y, p2.y), min(p3.y, p4.y));\n      float maxY = max(max(p1.y, p2.y), max(p3.y, p4.y));\n\n      float width = maxX - minX;\n      float height = maxY - minY;\n      float mipfract = max(0.0f, min(mip_levels, (log2(max(width, height)) * scaler) + 0.0f));\n      //mipfract = (int)miplevel; //Used to manually control the mip, not implemented\n      int mipLevel = int(mipfract);\n\n      float2 fpos = float2(p1.x,p1.y);\n\n      float4 sample = reader(fpos/(pow(2.0f,mipLevel)),mipLevel);\n      sample = mix(sample,reader(fpos/(pow(2.0f,mipLevel+1.0)),mipLevel+1.0f),fract(mipfract));\n\n      dst() =sample;\n    \}\n\n\};\n"
+  useGPUIfAvailable false
+  rebuild ""
+  SaturationKernel_mip_levels 10
+  SaturationKernel_scaler 0.75
+  SaturationKernel_miplevel 7
+  rebuild_finalise ""
+  name BlinkScript33
+  xpos 583
+  ypos 713
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+  name Merge2
+  xpos 583
+  ypos 864
+  disable {{!parent.boolean}}
+ }
+ Output {
+  name Output1
+  xpos 583
+  ypos 1019
+ }
+end_group
