@@ -414,6 +414,7 @@ keyerMenu.addSeparator()
 keyerMenu.addCommand('KeyChew NKPD', f"nuke.createNode('{prefixNST}KeyChew')", icon="Keyer.png")
 keyerMenu.addCommand('LumaKeyer DR', f"nuke.createNode('{prefixNST}LumaKeyer')", icon="Keyer.png")
 keyerMenu.addCommand('PointCloudKeyer IS', f"nuke.createNode('{prefixNST}PointCloudKeyer')", icon="PointCloudGenerator.png")
+keyerMenu.addCommand('SkyMatte CF', f"nuke.createNode('{prefixNST}SkyMatte')", icon="nukepedia_icon.png")
 
 ############################################################################################################
 ############################################################################################################
