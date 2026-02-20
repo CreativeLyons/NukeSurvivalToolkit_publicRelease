@@ -15,6 +15,7 @@ Group {
  addUserKnob {7 refFrame l "Reference Frame" t "Setting a reference frame is handy for scaling a curve's frequency around a specific point in time.\n\nNote: must be set prior to tweaking any parameters, as changing reference frame will offset your curve." R 1000 1100}
  refFrame 1001
  addUserKnob {22 setRef l "Set to current Frame" t "Set the Reference Frame to the current frame in the Viewer." T nuke.thisNode().knob('refFrame').setValue(nuke.frame()) +STARTLINE}
+ addUserKnob {22 global_random_seed l "Global Random Seed" t "Randomize all seed values (Jitter, Shake and Float)." T "n = nuke.thisNode()\nfor knob_name in ('jitterSeedRandomBtn', 'shakeSeedRandomBtn', 'floatSeedRandomBtn'):\n    k = n.knob(knob_name)\n    if k:\n        k.execute()"}
  addUserKnob {26 ""}
  addUserKnob {7 globalAmt l "Global Amount" t "Control the overall amount of camera shake in one go." R 0 5}
  globalAmt 1
@@ -51,11 +52,13 @@ Group {
  addUserKnob {26 spacer_02 l "" +STARTLINE T " "}
  addUserKnob {6 toggleMoblur l "Motion Blur" t "Turn motion blur on/off." +STARTLINE}
  toggleMoblur true
+ addUserKnob {6 show_render_samples l "Show Render Samples" t "When enabled, the viewer uses Render Samples even when not rendering." -STARTLINE}
+ show_render_samples false
  addUserKnob {26 spacer_03 l "" +STARTLINE T " "}
  addUserKnob {41 filter T jitterCTRL_fBm.filter}
  addUserKnob {26 spacer_misc l "" +STARTLINE T " "}
- addUserKnob {7 moblurSamples l INVISIBLE +INVISIBLE}
- moblurSamples 1
+ addUserKnob {3 which_samples l which_samples +INVISIBLE}
+ which_samples {{"toggleMoblur==0?0:(show_render_samples?RenderSamples:([python {nuke.executing()}]?RenderSamples:GUISamples))"}}
  addUserKnob {3 GUISamples l "GUI Samples" t "How many motion blur samples to display in the GUI. (keep this low for Nuke Script interactivity.)"}
  GUISamples 1
  addUserKnob {3 RenderSamples l "    Render Samples" t "How many motion blur samples to use in the render. (the higher the number, the better your result!)" -STARTLINE}
@@ -479,7 +482,7 @@ set Naa757c00 [stack 0]
   center {{"width/2 - translate"} {"height/2 - translate"}}
   filter {{jitterCTRL_fBm.filter}}
   black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
+  motionblur {{which_samples}}
   shutter {{jitterCTRL_fBm.shutter}}
   shutteroffset {{jitterCTRL_fBm.shutteroffset}}
   shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
@@ -567,7 +570,7 @@ push $Naa757c00
   center {{"width/2 - translate"} {"height/2 - translate"}}
   filter {{jitterCTRL_fBm.filter}}
   black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
+  motionblur {{which_samples}}
   shutter {{jitterCTRL_fBm.shutter}}
   shutteroffset {{jitterCTRL_fBm.shutteroffset}}
   shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
@@ -582,7 +585,7 @@ push $Naa757c00
   scale {1 1}
   center {{toggleJitter==1?((fBm((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),2.5,3.5,jitterOctaves,2,.5)*input.width)+input.width/2):(input.width/2)*globalAmt*jitterAmt} {toggleJitter==1?((fBm((base2-base2(refFrame))*(jitterSpeed/bfreq)+base2(refFrame),10.5,11.5,jitterOctaves,2,.5)*input.height)+input.height/2):(input.height/2)*globalAmt*jitterAmt}}
   black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
+  motionblur {{which_samples}}
   shutteroffset centred
   name jitterCTRL_fBm
   selected true
@@ -652,7 +655,7 @@ push $Naa757c00
   center {{"width/2 - translate"} {"height/2 - translate"}}
   filter {{jitterCTRL_fBm.filter}}
   black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
+  motionblur {{which_samples}}
   shutter {{jitterCTRL_fBm.shutter}}
   shutteroffset {{jitterCTRL_fBm.shutteroffset}}
   shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
