@@ -18,6 +18,7 @@ Group {
  addUserKnob {3 reference_frame l "Reference Frame" t "Sets a time-based pivot-point from where to adjust the curve.\n\n<i>(This helps prevent the entire camera shake changing when you just want to slow down the frequency a little bit)</i>"}
  reference_frame 1001
  addUserKnob {22 set_ref_frame_btn l "Set to Current Frame" t "Set the Reference Frame to the current frame in the Viewer." -STARTLINE T nuke.thisNode().knob('reference_frame').setValue(nuke.frame())}
+ addUserKnob {22 global_random_seed l "Global Random Seed" t "Randomize the Camera Shake seed." -STARTLINE T "n = nuke.thisNode()\nk = n.knob('random_seed_btn')\nif k:\n    k.execute()"}
  addUserKnob {3 random_seed l "Random Seed" t "Randomize the Camera Shake."}
  random_seed 303
  addUserKnob {22 random_seed_btn l "Randomize Seed" -STARTLINE T "import random\nnuke.thisNode().knob('random_seed').setValue(random.randint(1,99999))"}
@@ -55,6 +56,10 @@ Group {
  addUserKnob {41 filter l Filter T Camera_Shake_Output.filter}
  addUserKnob {41 clamp -STARTLINE +INVISIBLE T Camera_Shake_Output.clamp}
  addUserKnob {41 black_outside l "black outside" -STARTLINE +INVISIBLE T Camera_Shake_Output.black_outside}
+ addUserKnob {6 show_render_samples l "Show Render Samples" t "When enabled, the viewer uses Render Samples even when not rendering." +STARTLINE}
+ show_render_samples false
+ addUserKnob {3 which_samples l which_samples +INVISIBLE}
+ which_samples {{"show_render_samples ? motionblur_render_samples : ([python {nuke.executing()}] ? motionblur_render_samples : motionblur_gui_samples)"}}
  addUserKnob {7 motionblur_gui_samples l "GUI / Render samples" t "How many samples to use when viewing in your active nuke session (GUI)." R 0 4}
  motionblur_gui_samples 4
  addUserKnob {7 motionblur_render_samples l " " t "How many samples to use when rendering on the farm." -STARTLINE}
@@ -229,7 +234,7 @@ push $N1750b0d0
   rotate {{"smooth_curve > 0 ? combined_rotation_curve.integrate(frame - (smooth_curve / 2), frame + (smooth_curve / 2)) / smooth_curve : combined_rotation_curve"}}
   center {{"shake_center_chk ? (input.width/2) - (shake_center_amount * translate.x(frame+1000)) : (input.width/2)"} {"shake_center_chk ? (input.height/2) - (shake_center_amount * translate.x(frame+2000)) : (input.height/2)"}}
   black_outside false
-  motionblur {{"\$gui ? motionblur_gui_samples : motionblur_render_samples"}}
+  motionblur {{which_samples}}
   shutteroffset centred
   name Camera_Shake_Output
   xpos 1
