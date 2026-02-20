@@ -400,7 +400,7 @@ filterMenu.addCommand('MECfiller NKPD', f"nuke.createNode('{prefixNST}MECfiller'
 # Create Keyer Menu
 keyerMenu = NST_menu.addMenu('Keyer', icon = 'ToolbarKeyer.png', index = 70)
 
-keyerMenu.addCommand('apDespill AP', f'nuke.createNode("{prefixNST}apDespill_v2")', icon='apDespill.png')
+keyerMenu.addCommand('apDespill AP', f'nuke.createNode("{prefixNST}apDespill")', icon='apDespill.png')
 keyerMenu.addCommand('SpillCorrect SPIN', f"nuke.createNode('{prefixNST}Spill_Correct')", icon='spin_tools.png')
 keyerMenu.addCommand('DespillToColor NKPD', f"nuke.createNode('{prefixNST}DespillToColor')", icon="nukepedia_icon.png")
 
@@ -506,7 +506,6 @@ transformMenu.addCommand('Matrix4x4Math TL', f"nuke.createNode('{prefixNST}Matri
 transformMenu.addCommand('MirrorBorder TL', f"nuke.createNode('{prefixNST}MirrorBorder')", icon="AdjBBox.png")
 transformMenu.addCommand('TransformCutOut TL', f"nuke.createNode('{prefixNST}TransformCutOut')", icon="MergeOut.png")
 transformMenu.addCommand('iMorph AP', f"nuke.createNode('{prefixNST}iMorph')", icon="VectorDistort.png")
-transformMenu.addCommand('iMorph v2 AP (beta)', f"nuke.createNode('{prefixNST}iMorph_v2')", icon="VectorDistort.png")
 transformMenu.addCommand('Symmetry TL', f"nuke.createNode('{prefixNST}Symmetry')", icon="Convolve.png")
 
 transformMenu.addSeparator()
