@@ -360,7 +360,7 @@ filterMenu.addCommand('Diffusion TL', f"nuke.createNode('{prefixNST}Diffusion')"
 filterMenu.addSeparator()
 
 filterMenu.addCommand('LightWrapPro TL', f"nuke.createNode('{prefixNST}LightWrapPro')", icon="LightWrap.png")
-filterMenu.addCommand('bm_Lightwrap BM', f"nuke.createNode('{prefixNST}bm_Lightwrap')", icon="bm_Lightwrap_icon.png")
+filterMenu.addCommand('bm_Lightwrap BM', f"nuke.createNode('{prefixNST}bm_OpticalLightwrap')", icon="bm_Lightwrap_icon.png")
 
 filterMenu.addSeparator()
 
