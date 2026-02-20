@@ -339,7 +339,7 @@ distortMenu = filterMenu.addMenu("Distortions", icon="IDistort.png")
 distortMenu.addCommand('Glass FR', f"nuke.createNode('{prefixNST}Glass')", icon="nukepedia_icon.png")
 distortMenu.addCommand('HeatWave DB', f"nuke.createNode('{prefixNST}HeatWave')", icon="HeatWave_Icon.png")
 distortMenu.addCommand("X_Distort XM", f"nuke.createNode('{prefixNST}X_Distort')", icon="X_Distort.png")
-distortMenu.addCommand('FastComplexity_Distort MHD', f"nuke.createNode('{prefixNST}FastComplexity_Distort')", icon="IDistort.png")
+distortMenu.addCommand('FastComplexityDistort MHD', f"nuke.createNode('{prefixNST}FastComplexityDistort')", icon="IDistort.png")
 
 filterMenu.addSeparator()
 
