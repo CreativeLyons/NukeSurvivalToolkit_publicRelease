@@ -504,6 +504,7 @@ transformMenu.addCommand('Matrix4x4Math TL', f"nuke.createNode('{prefixNST}Matri
 transformMenu.addCommand('MirrorBorder TL', f"nuke.createNode('{prefixNST}MirrorBorder')", icon="AdjBBox.png")
 transformMenu.addCommand('TransformCutOut TL', f"nuke.createNode('{prefixNST}TransformCutOut')", icon="MergeOut.png")
 transformMenu.addCommand('iMorph AP', f"nuke.createNode('{prefixNST}iMorph')", icon="VectorDistort.png")
+transformMenu.addCommand('iMorph v2 AP (beta)', f"nuke.createNode('{prefixNST}iMorph_v2')", icon="VectorDistort.png")
 transformMenu.addCommand('Symmetry TL', f"nuke.createNode('{prefixNST}Symmetry')", icon="Convolve.png")
 
 transformMenu.addSeparator()
