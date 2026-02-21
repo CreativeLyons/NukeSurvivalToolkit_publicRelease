@@ -332,7 +332,7 @@ filterMenu.addCommand('Diffusion TL', "nuke.createNode('{}Diffusion')".format(pr
 filterMenu.addSeparator()
 
 filterMenu.addCommand('LightWrapPro TL', "nuke.createNode('{}LightWrapPro')".format(prefixNST), icon="LightWrap.png")
-filterMenu.addCommand('bm_OpticalLightwrap BM', "nuke.createNode('{}bm_OpticalLightwrap')".format(prefixNST), icon="bm_Lightwrap_icon.png")
+filterMenu.addCommand('bm_OpticalLightwrap BM', "nuke.createNode('{}bm_OpticalLightwrap')".format(prefixNST), icon="bm_OpticalLightwrap_icon.png")
 
 filterMenu.addSeparator()
 
