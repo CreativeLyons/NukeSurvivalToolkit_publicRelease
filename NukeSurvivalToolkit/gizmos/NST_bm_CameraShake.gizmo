@@ -4,8 +4,6 @@ Group {
  tile_color 0x222222ff
  note_font Verdana
  selected true
- xpos -341
- ypos 123
  mapsize {0.15 0.15}
  addUserKnob {20 Options}
  addUserKnob {26 ""}
@@ -15,6 +13,7 @@ Group {
  addUserKnob {7 refFrame l "Reference Frame" t "Setting a reference frame is handy for scaling a curve's frequency around a specific point in time.\n\nNote: must be set prior to tweaking any parameters, as changing reference frame will offset your curve." R 1000 1100}
  refFrame 1001
  addUserKnob {22 setRef l "Set to current Frame" t "Set the Reference Frame to the current frame in the Viewer." T nuke.thisNode().knob('refFrame').setValue(nuke.frame()) +STARTLINE}
+ addUserKnob {22 global_random_seed l "Global Random Seed" t "Randomize all seed values (Jitter, Shake and Float)." -STARTLINE T "n = nuke.thisNode()\nfor knob_name in ('jitterSeedRandomBtn', 'shakeSeedRandomBtn', 'floatSeedRandomBtn'):\n    k = n.knob(knob_name)\n    if k:\n        k.execute()"}
  addUserKnob {26 ""}
  addUserKnob {7 globalAmt l "Global Amount" t "Control the overall amount of camera shake in one go." R 0 5}
  globalAmt 1
@@ -39,6 +38,14 @@ Group {
  weightGroup 0
  addUserKnob {26 unnames l "" +STARTLINE T " "}
  addUserKnob {4 edgePulldown l "Edge Type" t "For larger camera shakes, you will see edge encroachment issues.\n\nSpread will \"pixel smear\" the outer-most pixels to the edge of your format.\n\nMirror will flip/flop the input image around it's edges for more detail." M {None Spread Mirror "" "" ""}}
+ addUserKnob {26 ""}
+ addUserKnob {41 type l "Tile Region" T MirrorBorder.type}
+ addUserKnob {41 size l "Tile Amount (px)" T MirrorBorder.size}
+ addUserKnob {26 chokeEdgesText l "<b><font color=skyblue>Choke Edges"}
+ addUserKnob {41 leftChoke l "Left Choke" T MirrorBorder.leftChoke}
+ addUserKnob {41 rightChoke l "Right Choke" T MirrorBorder.rightChoke}
+ addUserKnob {41 topChoke l "Top Choke" T MirrorBorder.topChoke}
+ addUserKnob {41 bottomChoke l "Bottom Choke" T MirrorBorder.bottomChoke}
  addUserKnob {26 edgeSpacer l " "}
  addUserKnob {12 edgeTranslate l Translate t "Manually translate the image."}
  addUserKnob {7 edgeRotate l Rotate t "Manually rotate the image." R 0 360}
@@ -51,11 +58,12 @@ Group {
  addUserKnob {26 spacer_02 l "" +STARTLINE T " "}
  addUserKnob {6 toggleMoblur l "Motion Blur" t "Turn motion blur on/off." +STARTLINE}
  toggleMoblur true
+ addUserKnob {6 show_render_samples l "Show Render Samples" t "When enabled, the viewer uses Render Samples even when not rendering." -STARTLINE}
  addUserKnob {26 spacer_03 l "" +STARTLINE T " "}
  addUserKnob {41 filter T jitterCTRL_fBm.filter}
  addUserKnob {26 spacer_misc l "" +STARTLINE T " "}
- addUserKnob {7 moblurSamples l INVISIBLE +INVISIBLE}
- moblurSamples 1
+ addUserKnob {3 which_samples +INVISIBLE}
+ which_samples {{"toggleMoblur==0?0:(show_render_samples?RenderSamples:(\[python \{nuke.executing()\}]?RenderSamples:GUISamples))"}}
  addUserKnob {3 GUISamples l "GUI Samples" t "How many motion blur samples to display in the GUI. (keep this low for Nuke Script interactivity.)"}
  GUISamples 1
  addUserKnob {3 RenderSamples l "    Render Samples" t "How many motion blur samples to use in the render. (the higher the number, the better your result!)" -STARTLINE}
@@ -68,7 +76,7 @@ Group {
  addUserKnob {26 ""}
  addUserKnob {26 overallOutput l "" -STARTLINE T "Load these values into the curve editor to view the overall animation curve.\n"}
  addUserKnob {12 outputOverallValue l " " t "The final animation curve of your camera shake."}
- outputOverallValue {{(toggleJitter==1?jitterCTRL_fBm.translate.x:0)+(toggleShake==1?shakeCTRL_fBm.translate.x:0)+(toggleFloat==1?floatCTRL_fBm.translate.x:0)} {(toggleJitter==1?jitterCTRL_fBm.translate.y:0)+(toggleShake==1?shakeCTRL_fBm.translate.y:0)+(toggleFloat==1?floatCTRL_fBm.translate.y:0) i}}
+ outputOverallValue {{(toggleJitter==1?jitterCTRL_fBm.translate.x:0)+(toggleShake==1?shakeCTRL_fBm.translate.x:0)+(toggleFloat==1?floatCTRL_fBm.translate.x:0)} {(toggleJitter==1?jitterCTRL_fBm.translate.y:0)+(toggleShake==1?shakeCTRL_fBm.translate.y:0)+(toggleFloat==1?floatCTRL_fBm.translate.y:0)}}
  addUserKnob {26 ""}
  addUserKnob {26 info_1 l "" +STARTLINE T "<font color='#777'><b>bm_CameraShake v4.0</b></font><font color='#555'> created by </font><b><a href=\"https://github.com/BenMcEwan/nuke_public\" style=\"color:#777;\">Ben McEwan</a></b>.<br>\n<font color='#555'>Thanks to</font> <a href=\"https://github.com/mileslauridsen\" style=\"color:#777;\">Miles Lauridsen</a><font color='#555'> &</font> <a href=\"https://www.linkedin.com/in/lukas-fabian-6a8184147/\" style=\"color:#777;\">Lukas Fabian</a><font color='#555'> for their contributions.<br>\n<b>Last updated:</b> 29th November, 2020.</font>"}
  addUserKnob {20 jitterTab l Jitter}
@@ -87,7 +95,7 @@ Group {
  addUserKnob {26 ""}
  addUserKnob {26 drg l "" +STARTLINE T "Load these values into the curve editor to view the jitter animation curve.\n"}
  addUserKnob {12 outputJitterValue l " "}
- outputJitterValue {{(jitterCTRL_fBm.translate.x) i} {(jitterCTRL_fBm.translate.y) i}}
+ outputJitterValue {{(jitterCTRL_fBm.translate.x)} {(jitterCTRL_fBm.translate.y)}}
  addUserKnob {26 ""}
  addUserKnob {20 shakeTab l Shake}
  addUserKnob {26 ""}
@@ -106,7 +114,7 @@ Group {
  addUserKnob {26 ""}
  addUserKnob {26 ehhkmlkjhg l "" +STARTLINE T "Load these values into the curve editor to view the shake animation curve.\n"}
  addUserKnob {12 outputShakeValue l " "}
- outputShakeValue {{(shakeCTRL_fBm.translate.x) i} {(shakeCTRL_fBm.translate.y) i}}
+ outputShakeValue {{(shakeCTRL_fBm.translate.x)} {(shakeCTRL_fBm.translate.y)}}
  addUserKnob {26 ""}
  addUserKnob {20 floatTab l Float}
  addUserKnob {26 ""}
@@ -125,7 +133,7 @@ Group {
  addUserKnob {26 ""}
  addUserKnob {26 wd l "" +STARTLINE T "Load these values into the curve editor to view the float animation curve.\n"}
  addUserKnob {12 outputFloatValue l " "}
- outputFloatValue {{(floatCTRL_fBm.translate.x) i} {(floatCTRL_fBm.translate.y) i}}
+ outputFloatValue {{(floatCTRL_fBm.translate.x)} {(floatCTRL_fBm.translate.y)}}
  addUserKnob {26 ""}
 }
  CheckerBoard2 {
@@ -164,7 +172,13 @@ Group {
   xpos 17
   ypos -277
  }
-set Nac853800 [stack 0]
+ Dot {
+  name Dot3
+  note_font_size 41
+  xpos 51
+  ypos -219
+ }
+set N6a0db700 [stack 0]
  Dot {
   name Dot11
   label "  "
@@ -181,215 +195,620 @@ set Nac853800 [stack 0]
   xpos 298
   ypos 365
  }
-push $Nac853800
- Dot {
-  name Dot10
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -87
-  ypos -151
- }
-set Nac852c00 [stack 0]
- Mirror {
-  Horizontal true
-  name Mirror8
-  xpos -121
-  ypos -133
- }
- Transform {
-  translate {{-input.format.w} 0}
-  center {1075 860}
-  shutteroffset centred
-  name Transform8
-  xpos -121
-  ypos -107
- }
-push $Nac852c00
- Dot {
-  name Dot9
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -197
-  ypos -151
- }
-set Nac852000 [stack 0]
- Mirror {
-  Horizontal true
-  Vertical true
-  name Mirror7
-  xpos -228
-  ypos -131
- }
- Transform {
-  translate {{-input.format.w} {input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform7
-  xpos -228
-  ypos -105
- }
-push $Nac852000
- Dot {
-  name Dot8
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -315
-  ypos -151
- }
-set Nac851400 [stack 0]
- Dot {
-  name Dot7
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -425
-  ypos -151
- }
-set Nac851000 [stack 0]
- Dot {
-  name Dot6
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -535
-  ypos -151
- }
-set Nac850c00 [stack 0]
- Dot {
-  name Dot5
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -645
-  ypos -151
- }
-set Nac850800 [stack 0]
+push $N6a0db700
  Dot {
   name Dot4
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -748
-  ypos -151
+  note_font_size 41
+  xpos 51
+  ypos -154
  }
-set Nac850400 [stack 0]
- Mirror {
-  Vertical true
-  name Mirror2
-  xpos -782
-  ypos -134
+set N6ada6d00 [stack 0]
+ Group {
+  name MirrorBorder
+  onCreate "n = nuke.thisNode()\nsize = n.knob(\"size\")\n\nsize.setRange(0, 500)"
+  tile_color 0xa57aaaff
+  note_font "Bitstream Vera Sans Bold"
+  note_font_color 0xffffffff
+  xpos -93
+  ypos -91
+  addUserKnob {20 MirrorBorder}
+  addUserKnob {4 type l "Tile Region" M {"to Format" "to input BBox" "" ""}}
+  addUserKnob {14 size l "Tile Amount" R 0 500}
+  size 100
+  addUserKnob {26 chokeEdgesText l "<b><font color=skyblue>Choke Edges"}
+  addUserKnob {7 leftChoke l "Left Choke" R -100 100}
+  addUserKnob {7 rightChoke l "Right Choke" R -100 100}
+  addUserKnob {7 topChoke l "Top Choke" R -100 100}
+  addUserKnob {7 bottomChoke l "Bottom Choke" R -100 100}
+  addUserKnob {26 ""}
+  addUserKnob {26 "" l mask T ""}
+  addUserKnob {41 maskChannelMask l "" -STARTLINE T Multiply1.maskChannelMask}
+  addUserKnob {41 inject -STARTLINE T Multiply1.inject}
+  addUserKnob {41 invert_mask l invert -STARTLINE T Multiply1.invert_mask}
+  addUserKnob {41 fringe -STARTLINE T Multiply1.fringe}
+  addUserKnob {7 mix}
+  mix 1
+  addUserKnob {20 Info}
+  addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+  addUserKnob {26 desc l Name: T MirrorBorder}
+  addUserKnob {26 ver l Version: T v03}
  }
- Transform {
-  translate {0 {-input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform2
-  xpos -782
-  ypos -108
- }
-push $Nac850800
- Mirror {
-  Horizontal true
-  Vertical true
-  name Mirror3
-  xpos -679
-  ypos -133
- }
- Transform {
-  translate {{input.format.w} {-input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform3
-  xpos -679
-  ypos -107
- }
-push $Nac850c00
- Mirror {
-  Horizontal true
-  name Mirror4
-  xpos -569
-  ypos -134
- }
- Transform {
-  translate {{input.format.w} 0}
-  center {1075 860}
-  shutteroffset centred
-  name Transform4
-  xpos -569
-  ypos -108
- }
-push $Nac851000
- Mirror {
-  Horizontal true
-  Vertical true
-  name Mirror5
-  xpos -459
-  ypos -133
- }
- Transform {
-  translate {{input.format.w} {input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform5
-  xpos -459
-  ypos -107
- }
+  BackdropNode {
+   inputs 0
+   name BackdropNode1
+   tile_color 0x3f414400
+   label "width mirror"
+   note_font_size 60
+   note_font_color 0xffffffff
+   xpos 704
+   ypos -277
+   bdwidth 265
+   bdheight 260
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode2
+   tile_color 0x43504700
+   label "height mirror"
+   note_font_size 60
+   note_font_color 0xffffffff
+   xpos 1072
+   ypos -271
+   bdwidth 259
+   bdheight 267
+  }
+  BackdropNode {
+   inputs 0
+   name BackdropNode3
+   tile_color 0x5f6870ff
+   label Corners
+   note_font_size 60
+   note_font_color 0xffffffff
+   xpos 1416
+   ypos -270
+   bdwidth 545
+   bdheight 264
+  }
+  Input {
+   inputs 0
+   name Input
+   xpos 2050
+   ypos -606
+  }
+  Dot {
+   name Dot1
+   note_font_size 41
+   xpos 2084
+   ypos -546
+  }
+set N593fd900 [stack 0]
+  Group {
+   name BBoxToFormat
+   onCreate "n = nuke.thisNode()\ninputFormat = n.knob(\"inputFormat\")\ninputBBox = n.knob(\"inputBBox\")\ncrop = nuke.toNode(\"Crop6\")\ncropb = crop.knob('box')\noutputBBox = n.knob('outputBBox')\noutputBBoxCenter = n.knob(\"outputBBoxCenter\")\n\ninputFormat.setFlag(0x0000000000008000)\ninputBBox.setFlag(0x0000000000008000)\ncropb.setFlag(0x0000000000008000)\noutputBBox.setFlag(0x0000000000008000)\noutputBBoxCenter.setFlag(0x0000000000008000)\n\nn = nuke.thisNode()\nn.knob(\"overscan\").setRange(0,400)\nn.knob(\"overscanPercent\").setRange(1,4)"
+   knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"overscanType\":\n    if n.knob(\"overscanType\").getValue() == 1:\n        n.knob(\"overscanPercent\").setVisible(True)\n        n.knob(\"overscan\").setVisible(False)\n    else:\n        n.knob(\"overscanPercent\").setVisible(False)\n        n.knob(\"overscan\").setVisible(True)"
+   tile_color 0xa57aaaff
+   note_font "Verdana Bold"
+   note_font_color 0xffffffff
+   xpos 1907
+   ypos -549
+   addUserKnob {20 CropBBox}
+   addUserKnob {4 type l Type +INVISIBLE M {"To Format" "To BBox"}}
+   addUserKnob {41 intersect T Crop6.intersect}
+   addUserKnob {6 blackOutside l "Black Outside" -STARTLINE}
+   addUserKnob {4 overscanType l "Overscan Type:" M {Pixels Percentage}}
+   addUserKnob {14 overscan l Overscan R 0 400}
+   addUserKnob {14 overscanPercent l "Overscan Percent" +HIDDEN R 1 4}
+   overscanPercent 1
+   addUserKnob {20 inputBbox l "BBox Data" n 1}
+   addUserKnob {15 inputFormat l "Input Format"}
+   inputFormat {0 0 {input.width} {input.height}}
+   addUserKnob {15 inputBBox l "Input BBox"}
+   inputBBox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+   addUserKnob {12 outputBBoxCenter l OutputBBoxCenter}
+   outputBBoxCenter {{OutputBBox1.outputBBoxCenter.w} {OutputBBox1.outputBBoxCenter.h}}
+   addUserKnob {15 outputBBox l "Output BBox"}
+   outputBBox {{OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox} {OutputBBox1.OutputBBox}}
+   addUserKnob {20 endGroup n -1}
+   addUserKnob {20 info_1 l Info}
+   addUserKnob {26 creator l Creator: T "<b><big>Tony Lyons"}
+   addUserKnob {26 desc l Description: t "crop to inputformat\n\ndisplays values of input bbox" T CropBBox}
+   addUserKnob {26 ver l Version: T v02}
+  }
+   Input {
+    inputs 0
+    name Input
+    xpos 261
+    ypos 394
+   }
+   Dot {
+    name Dot2
+    note_font_size 41
+    xpos 295
+    ypos 462
+   }
+set N2aa26300 [stack 0]
+   Dot {
+    name Dot1
+    note_font_size 41
+    xpos -160
+    ypos 462
+   }
+set N6a0c4500 [stack 0]
+push $N2aa26300
+   Crop {
+    box {{curve} {curve} {input.width} {input.height}}
+    crop {{parent.blackOutside}}
+    name Crop6
+    xpos 261
+    ypos 510
+    addUserKnob {20 User}
+    addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+   }
+set N6adfc000 [stack 0]
+   Remove {
+    operation keep
+    channels none
+    name Remove1
+    xpos 120
+    ypos 504
+   }
+set N6adfc500 [stack 0]
+   Transform {
+    scale {{parent.overscanPercent} {parent.overscanPercent}}
+    center {{input.bbox.r/2} {input.bbox.t/2}}
+    shutteroffset centred
+    name Transform1
+    xpos 120
+    ypos 555
+   }
+push $N6adfc500
+   AdjBBox {
+    numpixels {{parent.overscan} {parent.overscan}}
+    name AdjBBox1
+    xpos -5
+    ypos 510
+   }
+   Switch {
+    inputs 2
+    which {{overscanType}}
+    name Switch2
+    label "\[value which]"
+    xpos -5
+    ypos 549
+   }
+   Merge2 {
+    inputs 2
+    bbox intersection
+    Achannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+    Bchannels {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+    output {-rgba.red -rgba.green -rgba.blue rgba.alpha}
+    name Merge1
+    xpos -5
+    ypos 647
+    disable {{!parent.Crop6.intersect}}
+   }
+push $N6a0c4500
+   CopyBBox {
+    inputs 2
+    name CopyBBox1
+    xpos -194
+    ypos 653
+   }
+   BlackOutside {
+    name BlackOutside1
+    xpos -194
+    ypos 692
+    disable {{!parent.blackOutside}}
+   }
+   Dot {
+    name Dot4
+    note_font_size 41
+    xpos -160
+    ypos 769
+   }
+push $N6adfc000
+   Switch {
+    inputs 2
+    which {{"overscanType == 0 ? overscan.w != 0 || overscan.h != 0 : overscanPercent.w != 1 || overscanPercent.h != 1 ? 1 : 0"}}
+    name Switch1
+    label "\[value which]"
+    xpos 261
+    ypos 759
+   }
+set N28986a00 [stack 0]
+   Output {
+    name Output1
+    xpos 261
+    ypos 921
+   }
+push $N28986a00
+   NoOp {
+    name OutputBBox1
+    xpos 378
+    ypos 821
+    addUserKnob {20 User}
+    addUserKnob {15 OutputBBox l "Output BBox"}
+    OutputBBox {{input.bbox.x} {input.bbox.y} {input.bbox.r} {input.bbox.t}}
+    addUserKnob {14 outputBBoxCenter l "Output BBox Center" R 0 100}
+    outputBBoxCenter {{OutputBBox.x+(OutputBBox.r-OutputBBox.x)/2} {OutputBBox.y+(OutputBBox.t-OutputBBox.y)/2}}
+   }
+  end_group
+  NoOp {
+   name Settings
+   xpos 1907
+   ypos -493
+   addUserKnob {20 User}
+   addUserKnob {15 mirrorRegion l "Mirror Region"}
+   mirrorRegion {{"(type == 0 ? parent.BBoxToFormat.inputFormat : parent.BBoxToFormat.inputBBox) + int(parent.leftChoke)"} {"(type == 0 ? parent.BBoxToFormat.inputFormat : parent.BBoxToFormat.inputBBox) + int(parent.bottomChoke)"} {"(type == 0 ? parent.BBoxToFormat.inputFormat : parent.BBoxToFormat.inputBBox) - int(parent.rightChoke)"} {"(type == 0 ? parent.BBoxToFormat.inputFormat : parent.BBoxToFormat.inputBBox) - int(parent.topChoke)"}}
+  }
+  Input {
+   inputs 0
+   name Inputmask
+   xpos 1818
+   ypos 134
+   number 1
+  }
+  Dot {
+   name Dot26
+   note_font_size 41
+   xpos 1852
+   ypos 236
+  }
+set N6ae10000 [stack 0]
+  Invert {
+   name Invert1
+   xpos 1818
+   ypos 275
+  }
+push $N6ae10000
+push $N593fd900
+  Dot {
+   name Dot4
+   xpos 2084
+   ypos -344
+  }
+set N6ae10a00 [stack 0]
+  Dot {
+   name Dot8
+   xpos 1491
+   ypos -344
+  }
+set N6ae10f00 [stack 0]
+  Dot {
+   name Dot9
+   xpos 1491
+   ypos -170
+  }
+set N6ae11400 [stack 0]
+  Dot {
+   name Dot11
+   xpos 1607
+   ypos -170
+  }
+set N6ae11900 [stack 0]
+  Dot {
+   name Dot13
+   xpos 1735
+   ypos -170
+  }
+set N6ae11e00 [stack 0]
+  Dot {
+   name Dot14
+   xpos 1876
+   ypos -170
+  }
+  Crop {
+   box {{parent.Settings.mirrorRegion.r-parent.size.w} {parent.Settings.mirrorRegion.y} {parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.y+parent.size.h}}
+   name Crop_BR
+   xpos 1842
+   ypos -124
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+   addUserKnob {22 cropToBbox_1 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+   addUserKnob {22 cropToBbox_2 l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Transform {
+   scale -1
+   center {{parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.y}}
+   name Transform_BR
+   label BottomRight
+   xpos 1842
+   ypos -71
+  }
+push $N6ae11e00
+  Crop {
+   box {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.y} {parent.Settings.mirrorRegion.x+parent.size.w} {parent.Settings.mirrorRegion.y+parent.size.h}}
+   name Crop_BL
+   xpos 1701
+   ypos -125
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Transform {
+   scale -1
+   center {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.y}}
+   name Transform_BL
+   label "Bottom Left"
+   xpos 1701
+   ypos -70
+  }
+push $N6ae11900
+  Crop {
+   box {{parent.Settings.mirrorRegion.r-parent.size.w} {parent.Settings.mirrorRegion.t-parent.size.h} {parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.t}}
+   name Crop_TR
+   xpos 1573
+   ypos -122
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Transform {
+   scale -1
+   center {{parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.t}}
+   name Transform_TR
+   label "Top Right"
+   xpos 1573
+   ypos -70
+  }
+push $N6ae11400
+  Crop {
+   box {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.t-parent.size.h} {parent.Settings.mirrorRegion.x+parent.size.w} {parent.Settings.mirrorRegion.t}}
+   name Crop_TL
+   xpos 1457
+   ypos -124
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Transform {
+   scale -1
+   center {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.t}}
+   name Transform_TL
+   label "Top Left"
+   xpos 1457
+   ypos -72
+  }
+push $N6ae10f00
+  Dot {
+   name Dot7
+   xpos 1146
+   ypos -344
+  }
+set N6ae25400 [stack 0]
+  Dot {
+   name Dot5
+   xpos 1146
+   ypos -171
+  }
+set N6ae25900 [stack 0]
+  Dot {
+   name Dot6
+   xpos 1245
+   ypos -171
+  }
+  Crop {
+   box {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.t-parent.size.h} {parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.t}}
+   name Crop_T
+   xpos 1211
+   ypos -124
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Transform {
+   scale {1 -1}
+   center {0 {parent.Settings.mirrorRegion.t}}
+   name Transform_T
+   label Top
+   xpos 1211
+   ypos -73
+  }
+push $N6ae25900
+  Crop {
+   box {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.y} {parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.y+parent.size.h}}
+   name Crop_B
+   xpos 1112
+   ypos -126
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Transform {
+   scale {1 -1}
+   center {0 {parent.Settings.mirrorRegion.y}}
+   name Transform_B
+   label Bottom
+   xpos 1112
+   ypos -71
+  }
 push 0
-push $Nac851400
- Mirror {
-  Vertical true
-  name Mirror6
-  xpos -349
-  ypos -133
- }
- Transform {
-  translate {0 {input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform6
-  xpos -349
-  ypos -107
- }
-push $Nac850400
- Dot {
-  name Dot3
-  label "  "
-  note_font "Arial Black"
-  note_font_size 16
-  xpos -851
-  ypos -151
- }
- Mirror {
-  Horizontal true
-  Vertical true
-  name Mirror1
-  xpos -885
-  ypos -133
- }
- Transform {
-  translate {{-input.format.w} {-input.format.h}}
-  center {1075 860}
-  shutteroffset centred
-  name Transform1
-  xpos -885
-  ypos -107
- }
- Merge2 {
-  inputs 8+1
-  name Merge1
-  xpos -459
-  ypos -49
- }
-push $Nac853800
- Merge2 {
+push $N6ae25400
+  Dot {
+   name Dot2
+   xpos 883
+   ypos -344
+  }
+set N6ae27700 [stack 0]
+  Dot {
+   name Dot3
+   xpos 883
+   ypos -177
+  }
+set N6ae3c000 [stack 0]
+  Crop {
+   box {{parent.Settings.mirrorRegion.r-parent.size.w} {parent.Settings.mirrorRegion.y} {parent.Settings.mirrorRegion.r} {parent.Settings.mirrorRegion.t}}
+   name Crop_R
+   xpos 849
+   ypos -128
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Transform {
+   scale {-1 1}
+   center {{parent.Settings.mirrorRegion.r} 0}
+   filter impulse
+   name Transform_R
+   label Right
+   xpos 849
+   ypos -84
+  }
+push $N6ae3c000
+  Dot {
+   name Dot10
+   xpos 778
+   ypos -177
+  }
+  Crop {
+   box {{parent.Settings.mirrorRegion.x} {parent.Settings.mirrorRegion.y} {parent.Settings.mirrorRegion.x+parent.size.w} {parent.Settings.mirrorRegion.t}}
+   name Crop_L
+   xpos 744
+   ypos -126
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Transform {
+   scale {-1 1}
+   center {{parent.Settings.mirrorRegion.x} 0}
+   filter impulse
+   name Transform_L
+   label Left
+   xpos 744
+   ypos -82
+  }
+  Merge2 {
+   inputs 8+1
+   operation disjoint-over
+   also_merge all
+   name Merge5
+   xpos 1346
+   ypos 122
+  }
+  Dot {
+   name Dot15
+   note_font_size 41
+   xpos 1380
+   ypos 236
+  }
+set N6ae3e300 [stack 0]
+  Merge2 {
+   inputs 2
+   operation mask
+   bbox intersection
+   name MergeIntersection1
+   xpos 1701
+   ypos 233
+   disable {{"!\[exists parent.input1]"}}
+  }
+push $N6ae3e300
+  Dot {
+   name Dot17
+   note_font_size 41
+   xpos 1380
+   ypos 359
+  }
+  CopyBBox {
+   inputs 2
+   name CopyBBox1
+   xpos 1701
+   ypos 356
+   disable {{"!\[exists parent.input1]"}}
+  }
+  Multiply {
+   inputs 1+1
+   value 0
+   name Multiply1
+   label "\[value value]"
+   xpos 1818
+   ypos 347
+   disable {{"!\[exists parent.input1]"}}
+  }
+push $N6ae10a00
+  Crop {
+   box {{parent.Settings.mirrorRegion} {parent.Settings.mirrorRegion} {parent.Settings.mirrorRegion} {parent.Settings.mirrorRegion}}
+   name Crop1
+   xpos 2050
+   ypos -200
+   addUserKnob {20 User}
+   addUserKnob {22 cropToBbox l "Crop to Bounding Box" -STARTLINE T codeBBox()}
+  }
+  Merge2 {
+   inputs 2
+   operation disjoint-over
+   also_merge all
+   maskChannelMask {{{exists parent.input[value input1.number] == 0 ? 0 : 5}}}
+   name Merge3
+   xpos 2050
+   ypos 356
+  }
+  Dot {
+   name Dot20
+   label A
+   note_font_size 41
+   xpos 2084
+   ypos 469
+  }
+push $N6ae27700
+  Dot {
+   name Dot12
+   note_font_size 41
+   xpos 600
+   ypos -344
+  }
+  Dot {
+   name Dot18
+   label B
+   note_font_size 41
+   xpos 600
+   ypos 471
+  }
+  Dot {
+   name Dot23
+   note_font_size 41
+   xpos 600
+   ypos 558
+  }
+  Dot {
+   name Dot16
+   note_font_size 41
+   xpos 1940
+   ypos 558
+  }
+set N6ae52300 [stack 0]
+  Merge2 {
+   inputs 2
+   operation copy
+   Achannels none
+   Bchannels none
+   output none
+   also_merge all
+   mix {{parent.mix}}
+   name MergeKeymix
+   xpos 2050
+   ypos 551
+  }
+push $N6ae52300
+  Dot {
+   name Dot19
+   note_font_size 41
+   xpos 1940
+   ypos 640
+  }
+  Switch {
+   inputs 2
+   which {{"parent.mix > 0 ? 1 : 0"}}
+   name Switch1
+   xpos 2050
+   ypos 637
+  }
+  Output {
+   name Output1
+   xpos 2050
+   ypos 841
+  }
+ end_group
+push $N6ada6d00
+ Switch {
   inputs 2
-  name Merge2
+  which {{edgePulldown==2?1:0}}
+  name Switch2
   xpos 17
-  ypos -49
-  disable {{edgePulldown==2?0:1}}
+  ypos -91
  }
  Dot {
   name Dot1
@@ -399,7 +818,7 @@ push $Nac853800
   xpos 51
   ypos 50
  }
-set Naa757c00 [stack 0]
+set N6ae53700 [stack 0]
  Transform {
   translate {{noise((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),2.5,3.5)*jitterTranslate.w*globalAmt*jitterAmt} {noise(2.5,(base2-base2(refFrame))*(jitterSpeed/bfreq)+base2(refFrame),3.5)*jitterTranslate.h*globalAmt*jitterAmt}}
   rotate {{noise((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),jitterOctaves,.5)*jitterRotate*globalAmt*jitterAmt}}
@@ -479,7 +898,7 @@ set Naa757c00 [stack 0]
   center {{"width/2 - translate"} {"height/2 - translate"}}
   filter {{jitterCTRL_fBm.filter}}
   black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
+  motionblur {{which_samples}}
   shutter {{jitterCTRL_fBm.shutter}}
   shutteroffset {{jitterCTRL_fBm.shutteroffset}}
   shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
@@ -487,7 +906,7 @@ set Naa757c00 [stack 0]
   xpos 169
   ypos 200
  }
-push $Naa757c00
+push $N6ae53700
  Transform {
   translate {{turbulence((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),2.5,3.5,jitterOctaves,2,.5)*jitterTranslate.w*globalAmt*jitterAmt} {turbulence((base2-base2(refFrame))*(jitterSpeed/bfreq)+base2(refFrame),10.5,11.5,jitterOctaves,2,.5)*jitterTranslate.h*globalAmt*jitterAmt}}
   rotate {{turbulence((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),20.5,21.5,jitterOctaves,2,.5)*jitterRotate*globalAmt*jitterAmt}}
@@ -567,7 +986,7 @@ push $Naa757c00
   center {{"width/2 - translate"} {"height/2 - translate"}}
   filter {{jitterCTRL_fBm.filter}}
   black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
+  motionblur {{which_samples}}
   shutter {{jitterCTRL_fBm.shutter}}
   shutteroffset {{jitterCTRL_fBm.shutteroffset}}
   shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
@@ -575,17 +994,16 @@ push $Naa757c00
   xpos 17
   ypos 204
  }
-push $Naa757c00
+push $N6ae53700
  Transform {
   translate {{fBm((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),2.5,3.5,jitterOctaves,2,.5)*jitterTranslate.w*globalAmt*jitterAmt} {fBm((base2-base2(refFrame))*(jitterSpeed/bfreq)+base2(refFrame),10.5,11.5,jitterOctaves,2,.5)*jitterTranslate.h*globalAmt*jitterAmt}}
   rotate {{fBm((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),20.5,21.5,jitterOctaves,2,.5)*jitterRotate*globalAmt*jitterAmt}}
   scale {1 1}
   center {{toggleJitter==1?((fBm((base-base(refFrame))*(jitterSpeed/bfreq)+base(refFrame),2.5,3.5,jitterOctaves,2,.5)*input.width)+input.width/2):(input.width/2)*globalAmt*jitterAmt} {toggleJitter==1?((fBm((base2-base2(refFrame))*(jitterSpeed/bfreq)+base2(refFrame),10.5,11.5,jitterOctaves,2,.5)*input.height)+input.height/2):(input.height/2)*globalAmt*jitterAmt}}
   black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
+  motionblur {{which_samples}}
   shutteroffset centred
   name jitterCTRL_fBm
-  selected true
   xpos -128
   ypos 103
   disable {{!toggleJitter}}
@@ -652,7 +1070,7 @@ push $Naa757c00
   center {{"width/2 - translate"} {"height/2 - translate"}}
   filter {{jitterCTRL_fBm.filter}}
   black_outside {{edgePulldown==0?1:0}}
-  motionblur {{"toggleMoblur==0?0:\$gui?GUISamples:RenderSamples"}}
+  motionblur {{which_samples}}
   shutter {{jitterCTRL_fBm.shutter}}
   shutteroffset {{jitterCTRL_fBm.shutteroffset}}
   shuttercustomoffset {{jitterCTRL_fBm.shuttercustomoffset}}
