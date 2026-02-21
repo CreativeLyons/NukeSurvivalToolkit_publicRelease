@@ -1,6 +1,3 @@
-set cut_paste_input [stack 0]
-version 13.2 v8
-push $cut_paste_input
 Group {
  name bm_OpticalGlow
  help "bm_OpticalGlow uses common algorithms to produce an optically-correct exponential glow.\n\nCompletely rebuilt from v3.1 to be light-weight and easier to use."
