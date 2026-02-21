@@ -1299,7 +1299,7 @@ push $N7fff3c00
  }
  Constant {
   inputs 0
-  channels rgb
+  channels rgba
   format "512 512 0 0 512 512 1 square_512"
   name Constant1
   xpos -78
