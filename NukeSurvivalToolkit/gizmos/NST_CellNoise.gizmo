@@ -1,6 +1,6 @@
 Group {
 name CellNoise
-onCreate "n = nuke.thisNode()\nw = n.format().width()/2\nh = n.format().height()/2\n\ncenter = \[w,h]    \n\nif n.knob('create').value()==False:\n    n.knob('center').setValue(center)\n    n.knob('create').setValue(1)"
+onCreate "n = nuke.thisNode()\nif n is not None:\n    w = n.format().width()/2\n    h = n.format().height()/2\n    center = \[w, h]\n    center_knob = n.knob('center')\n    create_knob = n.knob('create')\n    if center_knob and (create_knob is None or not create_knob.value()):\n        center_knob.setValue(center)\n    if create_knob:\n        create_knob.setValue(1)"
 knobChanged "\nknob = nuke.thisKnob()\nif knob.name() == 'skew_order':\n    nuke.toNode('NoiseTransform')\['rot_order'].setValue('Z' + knob.value())\nif knob.name() == 'noise_type':\n    if knob.value() in ['Voronoi', 'Manhattan', 'Chebyshev', 'Euclidian']:\n        nuke.thisNode()['range'].clearFlag(0x00040000)\n    else:\n        nuke.thisNode()['range'].setFlag(0x00040000)\n"
 tile_color 0x5f5f5fff
 note_font "Bitstream Vera Sans Bold"

@@ -106,7 +106,7 @@ set N9d40f900 [stack 0]
   name AdjBBox2
   xpos 260
   ypos -408
-  disable {{parent.input1}}
+  disable {{"!\[exists parent.input1]"}}
  }
 set N9d433870 [stack 0]
 push $N9d40f900
@@ -114,7 +114,7 @@ push $N9d433870
 push $N9d40ba30
  Switch {
   inputs 2
-  which {{parent.input1.name+1}}
+  which {{"\[exists parent.input1]"}}
   name Auto
   xpos 160
   ypos -360
@@ -255,7 +255,7 @@ push $N9d407b20
   name AdjBBox1
   xpos -140
   ypos -360
-  disable {{parent.input0}}
+  disable {{"!\[exists parent.input0]"}}
  }
  Dot {
   name Dot10
