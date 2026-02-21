@@ -157,3 +157,17 @@ dmypy.json
 .pyre/
 .DS_Store
 *.dat
+
+# Cursor IDE
+.cursor/
+
+# AI assistant/tooling
+.claude/
+.codex/
+
+# JetBrains IDE
+.idea/
+
+# Code review reports
+.code-review/
+.code-review
