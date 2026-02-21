@@ -161,6 +161,10 @@ dmypy.json
 # Cursor IDE
 .cursor/
 
+# AI assistant/tooling
+.claude/
+.codex/
+
 # JetBrains IDE
 .idea/
 
