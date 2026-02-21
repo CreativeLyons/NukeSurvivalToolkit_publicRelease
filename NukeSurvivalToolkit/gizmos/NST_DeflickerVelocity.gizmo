@@ -1,8 +1,8 @@
 Group {
- inputs 3
  name DeflickerVelocity
  tile_color 0x7f00ffff
  note_font Verdana
+ selected true
  mapsize {0.15 0.15}
  addUserKnob {20 User l Controls}
  addUserKnob {4 velocity_type l "Velocity Type" M {" 0 > 1  -  3DS Max " "-1 > 1  -  Maya\\Nuke " "" "" "" "" "" "" ""}}
@@ -75,14 +75,14 @@ Group {
  }
  BackdropNode {
   inputs 0
-  name BackdropNode5
+  name BackdropNode3
   tile_color 0x7171c600
-  label "MASK\nDIFFERENCE"
+  label "MASK VELOCITY"
   note_font_size 42
-  xpos -897
-  ypos -1102
-  bdwidth 341
-  bdheight 1019
+  xpos 69
+  ypos -946
+  bdwidth 375
+  bdheight 813
  }
  BackdropNode {
   inputs 0
@@ -97,14 +97,14 @@ Group {
  }
  BackdropNode {
   inputs 0
-  name BackdropNode3
+  name BackdropNode5
   tile_color 0x7171c600
-  label "MASK VELOCITY"
+  label "MASK\nDIFFERENCE"
   note_font_size 42
-  xpos 69
-  ypos -946
-  bdwidth 375
-  bdheight 813
+  xpos -897
+  ypos -1102
+  bdwidth 341
+  bdheight 1019
  }
  BackdropNode {
   inputs 0
@@ -123,6 +123,21 @@ Group {
   xpos -680
   ypos -796
  }
+ Dilate {
+  inputs 0
+  size -1
+  name Dilate4
+  xpos -884
+  ypos -469
+  disable true
+ }
+ Dilate {
+  size 2
+  name Dilate5
+  xpos -884
+  ypos -433
+  disable true
+ }
  Constant {
   inputs 0
   channels rgb
@@ -136,13 +151,12 @@ Group {
   box_width {{img.width i}}
   box_height {{img.height i}}
   box_fixed true
-  filter Impulse
+  filter impulse
   name Reformat1
   xpos 366
   ypos -1301
  }
-set N2879ea10 [stack 0]
-push $N2879ea10
+set Nfc13700 [stack 0]
  Input {
   inputs 0
   name velocity
@@ -150,7 +164,7 @@ push $N2879ea10
   ypos -1347
   number 1
  }
-push $N2879ea10
+push $Nfc13700
  Switch {
   inputs 2
   which {{"\[python -execlocal ret\\ =\\ min\\ (\\ len(nuke.toNode(\\\"velocity\\\").channels())\\ ,\\ 1\\ )]" i}}
@@ -182,7 +196,7 @@ push $N2879ea10
   ypos -1047
   disable {{parent.velocity_type i}}
  }
-set N27d554e0 [stack 0]
+set Nfe3a800 [stack 0]
  Input {
   inputs 0
   name img
@@ -202,7 +216,7 @@ set N27d554e0 [stack 0]
   xpos -41
   ypos -1276
  }
-set N54a4840 [stack 0]
+set Ndc53de00 [stack 0]
  Copy {
   inputs 2
   from0 rgba.red
@@ -218,13 +232,13 @@ set N54a4840 [stack 0]
   xpos 3
   ypos -990
  }
-set N27d55e70 [stack 0]
+set Nfe3e800 [stack 0]
  Dot {
   name Dot5
   xpos -166
   ypos -990
  }
-set N27d561a0 [stack 0]
+set Nfe3ed00 [stack 0]
  Dot {
   name Dot9
   xpos -231
@@ -235,14 +249,15 @@ set N27d561a0 [stack 0]
   xpos -231
   ypos -571
  }
-set N27d90b50 [stack 0]
+set Nfe3f700 [stack 0]
  TimeOffset {
   time_offset -1
+  time ""
   name TimeOffset2
   xpos -319
   ypos -510
  }
- set C27d90e80 [stack 0]
+ set Cf7725c00 [stack 0]
  Crop {
   box {0 0 {img.width i} {img.height i}}
   crop false
@@ -250,7 +265,7 @@ set N27d90b50 [stack 0]
   xpos -319
   ypos -486
  }
- set C27d911b0 [stack 0]
+ set Cfe4c000 [stack 0]
  IDistort {
   uv forward
   uv_scale {{parent.velocity_multiplier i}}
@@ -260,7 +275,7 @@ set N27d90b50 [stack 0]
   ypos -462
   disable {{parent.noVelocity i}}
  }
-set N27d914e0 [stack 0]
+set Nfe4c500 [stack 0]
  Dot {
   name Dot22
   xpos -526
@@ -277,14 +292,14 @@ set N27d914e0 [stack 0]
   xpos -863
   ypos -933
  }
- set C27d91e70 [stack 0]
-push $N54a4840
+ set Cfe4d400 [stack 0]
+push $Ndc53de00
  Dot {
   name Dot4
   xpos -397
   ypos -1273
  }
-set N27d921a0 [stack 0]
+set Nfe4d900 [stack 0]
  Dot {
   name Dot11
   xpos -464
@@ -295,14 +310,14 @@ set N27d921a0 [stack 0]
   xpos -464
   ypos -962
  }
-set N27dbeb50 [stack 0]
+set Nfe4e300 [stack 0]
  Crop {
   box {0 0 {img.width i} {img.height i}}
   name Crop1
   xpos -665
   ypos -965
  }
-clone $C27d91e70 {
+clone $Cfe4d400 {
   xpos -775
   ypos -971
   selected false
@@ -312,7 +327,7 @@ clone $C27d91e70 {
   xpos -731
   ypos -861
  }
-set N27dbf4e0 [stack 0]
+set Nfe4f200 [stack 0]
  Merge2 {
   inputs 2
   operation difference
@@ -320,15 +335,16 @@ set N27dbf4e0 [stack 0]
   xpos -863
   ypos -544
  }
-push $N27d90b50
+push $Nfe3f700
  TimeOffset {
   time_offset 1
+  time ""
   name TimeOffset3
   xpos -320
   ypos -351
  }
- set C27dbfb40 [stack 0]
-clone $C27d911b0 {
+ set Cf7725500 [stack 0]
+clone $Cfe4c000 {
   xpos -320
   ypos -327
   selected false
@@ -342,7 +358,7 @@ clone $C27d911b0 {
   ypos -303
   disable {{parent.noVelocity i}}
  }
-set N27dc01a0 [stack 0]
+set Nfe6c500 [stack 0]
  Dot {
   name Dot21
   xpos -539
@@ -353,12 +369,12 @@ set N27dc01a0 [stack 0]
   xpos -539
   ypos -886
  }
-clone $C27d91e70 {
+clone $Cfe4d400 {
   xpos -886
   ypos -895
   selected false
  }
-push $N27dbf4e0
+push $Nfe4f200
  Merge2 {
   inputs 2
   operation difference
@@ -416,13 +432,13 @@ push $N27dbf4e0
   xpos -706
   ypos -120
  }
-push $N27d554e0
+push $Nfe3a800
  Dot {
   name Dot18
   xpos 297
   ypos -997
  }
-set N27e29ab0 [stack 0]
+set Nfe90000 [stack 0]
  Grade {
   multiply -1
   black_clamp false
@@ -435,7 +451,7 @@ set N27e29ab0 [stack 0]
   xpos 190
   ypos -759
  }
-push $N27e29ab0
+push $Nfe90000
  Grade {
   name CLAMP_BLACK2
   xpos 330
@@ -472,20 +488,20 @@ push $N27e29ab0
   xpos 374
   ypos -650
  }
-set N27e2b430 [stack 0]
-push $N27e2b430
-clone $C27dbfb40 {
+set Nfeac000 [stack 0]
+push $Nfeac000
+clone $Cf7725500 {
   xpos 86
   ypos -426
   selected false
  }
-push $N27e2b430
-clone $C27d90e80 {
+push $Nfeac000
+clone $Cf7725c00 {
   xpos 79
   ypos -579
   selected false
  }
-push $N27e2b430
+push $Nfeac000
  Merge2 {
   inputs 2
   operation plus
@@ -558,7 +574,7 @@ push $N27e2b430
   box_width {{img.width i}}
   box_height {{img.height i}}
   box_fixed true
-  filter Impulse
+  filter impulse
   name Reformat2
   xpos 604
   ypos -662
@@ -569,7 +585,7 @@ push $N27e2b430
   ypos -623
   disable {{parent.input_mask_invert i}}
  }
- set C27f04dd0 [stack 0]
+ set Cfecf200 [stack 0]
  Input {
   inputs 0
   name mask
@@ -577,7 +593,7 @@ push $N27e2b430
   ypos -929
   number 2
  }
-set N27f05100 [stack 0]
+set Nfecf700 [stack 0]
  Shuffle {
   red alpha
   green alpha
@@ -586,7 +602,7 @@ set N27f05100 [stack 0]
   xpos 837
   ypos -841
  }
-push $N27f05100
+push $Nfecf700
  Shuffle {
   red blue
   green blue
@@ -595,7 +611,7 @@ push $N27f05100
   xpos 769
   ypos -816
  }
-push $N27f05100
+push $Nfecf700
  Shuffle {
   red green
   blue green
@@ -604,7 +620,7 @@ push $N27f05100
   xpos 691
   ypos -844
  }
-push $N27f05100
+push $Nfecf700
  Shuffle {
   green red
   blue red
@@ -640,20 +656,20 @@ push $N27f05100
   xpos 836
   ypos -565
  }
-set N27f06750 [stack 0]
-push $N27f06750
-clone $C27dbfb40 {
+set Nfef0500 [stack 0]
+push $Nfef0500
+clone $Cf7725500 {
   xpos 561
   ypos -459
   selected false
  }
-push $N27f06750
-clone $C27d90e80 {
+push $Nfef0500
+clone $Cf7725c00 {
   xpos 562
   ypos -568
   selected false
  }
-push $N27f06750
+push $Nfef0500
  Merge2 {
   inputs 2
   operation plus
@@ -703,7 +719,7 @@ push $N27f06750
   xpos 792
   ypos -294
  }
-clone $C27f04dd0 {
+clone $Cfecf200 {
   xpos 792
   ypos -265
   selected false
@@ -760,32 +776,32 @@ clone $C27f04dd0 {
   xpos 726
   ypos 59
  }
-set N280070e0 [stack 0]
+set Nff31400 [stack 0]
  Invert {
   name Invert1
   xpos 165
   ypos 284
  }
-push $N27dbeb50
+push $Nfe4e300
  Dot {
   name Dot13
   xpos -464
   ypos 193
  }
-push $N280070e0
-push $N27d921a0
+push $Nff31400
+push $Nfe4d900
  Dot {
   name Dot10
   xpos -397
   ypos 59
  }
-push $N27d55e70
+push $Nfe3e800
  Dot {
   name Dot2
   xpos 3
   ypos -460
  }
-set N28007da0 [stack 0]
+set Nff32800 [stack 0]
  Constant {
   inputs 0
   color 1
@@ -798,12 +814,12 @@ set N28007da0 [stack 0]
   box_width {{img.width i}}
   box_height {{img.height i}}
   box_fixed true
-  filter Impulse
+  filter impulse
   name Reformat3
   xpos -119
   ypos -466
  }
-push $N28007da0
+push $Nff32800
  Switch {
   inputs 2
   which {{abs(parent.protect_alpha-1) i}}
@@ -811,21 +827,21 @@ push $N28007da0
   xpos -119
   ypos -431
  }
-set N54a44f0 [stack 0]
-push $N27dc01a0
+set Ndc4f5200 [stack 0]
+push $Nfe6c500
  Dot {
   name Dot3
   xpos -210
   ypos -308
  }
-push $N54a44f0
-push $N27d914e0
+push $Ndc4f5200
+push $Nfe4c500
  Dot {
   name Dot1
   xpos -221
   ypos -466
  }
-push $N27d561a0
+push $Nfe3ed00
  Merge2 {
   inputs 2+1
   operation copy
@@ -880,48 +896,89 @@ push $N27d561a0
   ypos 290
   disable {{abs(parent.CheckMask-1) i}}
  }
- Text {
+ Text2 {
+  font_size_toolbar 50
+  font_width_toolbar 100
+  font_height_toolbar 100
   message "Velocity input missing"
-  font C:/Windows/Fonts/arial.ttf
-  yjustify bottom
-  Transform 1
-  box {10 10 1000 10}
+  old_message {
+   {86 101 108 111 99 105 116 121 32 105 110 112 117 116 32 109 105 115 115 105 110 103}
+  }
+  box {10 5 1000 65}
+  transforms {
+   {0 2}
+  }
+  font_size_values {
+   {0 50 1 50 2 50 3 50 4 50 5 50 6 50 7 50 8 50 9 50 10 50 11 50 12 50 13 50 14 50 15 50 16 50 17 50 18 50 19 50 20 50 21 50}
+  }
+  cursor_position 19
+  font_size 50
+  center {960 540}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {
+   {0 1080}
+  }
+  group_animations {
+   {0}
+   imported:
+   0
+   selected:
+   items:
+   "root transform/"
+  }
+  animation_layers {
+   {1 11 960 540 0 0 1 1 0 0 0 0}
+  }
   color {1 0 0 1}
   name Warning_Velocity
   xpos -79
-  ypos 447
-  disable {{"\[python min\\ (\\ (len(nuke.toNode(\\\"velocity\\\").channels())\\ +\\ nuke.toNode(\\\"Switch_NoVelocity\\\")\\\['which'\\].value())\\ ,\\ 1\\ )]" i}}
+  ypos 464
+  disable {{"\[python min\\ (\\ (len(nuke.toNode(\\\"velocity\\\").channels())\\ +\\ nuke.toNode(\\\"Switch_NoVelocity\\\")\\\['which'\\].value())\\ ,\\ 1\\ )]"}}
  }
- Text {
+ Text2 {
+  font_size_toolbar 50
+  font_width_toolbar 100
+  font_height_toolbar 100
   message "Img input missing"
-  font C:/Windows/Fonts/arial.ttf
-  yjustify bottom
-  Transform 1
-  box {10 70 1000 70}
+  old_message {
+   {73 109 103 32 105 110 112 117 116 32 109 105 115 115 105 110 103}
+  }
+  box {10 73 1000 133}
+  transforms {
+   {0 2}
+  }
+  font_size_values {
+   {0 50 1 50 2 50 3 50 4 50 5 50 6 50 7 50 8 50 9 50 10 50 11 50 12 50 13 50 14 50 15 50 16 50}
+  }
+  cursor_position 17
+  font_size 50
+  center {960 540}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {
+   {0 1080}
+  }
+  group_animations {
+   {0}
+   imported:
+   0
+   selected:
+   items:
+   "root transform/"
+  }
+  animation_layers {
+   {1 11 960 540 0 0 1 1 0 0 0 0}
+  }
   color {1 0 0 1}
   name Warning_Img
   xpos -79
-  ypos 487
-  disable {{"\[python min\\ (\\ len(nuke.toNode(\\\"img\\\").channels())\\ ,\\ 1\\ )]" i}}
+  ypos 507
+  disable {{"\[python min\\ (\\ len(nuke.toNode(\\\"img\\\").channels())\\ ,\\ 1\\ )]"}}
  }
  Output {
   name Output1
   xpos -79
   ypos 766
- }
- Dilate {
-  inputs 0
-  size -1
-  name Dilate4
-  xpos -884
-  ypos -469
-  disable true
- }
- Dilate {
-  size 2
-  name Dilate5
-  xpos -884
-  ypos -433
-  disable true
  }
 end_group
