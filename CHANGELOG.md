@@ -7,10 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- CellNoise: Blink kernel compile errors on Nuke 15+ (moved globals to #define, replaced abs() with signedness check) (#36)
-
 ### Added
 
 **Tools (gizmos and Python)**
@@ -65,6 +61,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `README.md` now includes an optional offline documentation install section that points users to release ZIP downloads and the required local path (`NukeSurvivalToolkit/NST_Documentation/index.html`).
 - Updated .nk templates: NST_AdvancedKeyingTemplate_Stamps.nk, NST_X_Aton_Examples.nk, deepThickness.nk.
 - New icon assets for aeRefracTHOR, aeShadows.
+- EdgeDetect, GuidedBlur: corrected icons and attribution (#62).
+- iMorph v2 AP (beta) added alongside v1 in menu.
 
 **Updated Tools**
 
@@ -94,10 +92,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - apeGlow (fixed overscan bug on crop knobs)
 - apChroma (internal restructure)
 - apChromaMergeNew (internal restructure)
-- apDespill_v2 (internal cleanup)
+- apDespill: v1 deprecated, v2 promoted as canonical — `NST_apDespill_v2.gizmo` renamed to `NST_apDespill.gizmo` (#63)
 - apVignette (v0.5: added transform tab, "Apply to White Constant" option)
-- bm_CameraShake (updated to v4.0)
-- bm_OpticalGlow (updated to v4.1)
+- bm_CameraShake (v4.0: fewer internal nodes/expressions, curve smoothness control, cleaner UI, experimental auto-motionblur beta) (#39)
+- bm_OpticalGlow (v4.1: fixed mix slider with mask input, removed stale `algorithm_code` knob) (#40, #64)
+- bm_OpticalLightwrap (fixed mix slider with mask input, removed stale `algorithm_code` knob, default `effect_only` to false, renamed menu entry and icon) (#41)
 - CameraNormals (updated DummyCam to v1.3)
 - CellNoise (fixed onCreate center calculation)
 - ColorSampler (added option to export constant)
@@ -119,15 +118,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `h_Qt.py` — obsolete Qt compatibility shim (no longer needed after PySide6 migration).
 - `NST_bm_Lightwrap.gizmo` — replaced by bm_OpticalLightwrap.
+- `NST_apDespill_v2.gizmo` — renamed to `NST_apDespill.gizmo` (v2 promoted as canonical).
+- GlobalCTRL, AnamorphicLensBlur — removed from toolkit (no menu entry, not maintained).
+- Duplicate `NST_ImagePlane3D_v2.gizmo` — identical to v1, single copy retained.
 
 ### Fixed
 
+- CellNoise: Blink kernel compile errors on Nuke 15+ (moved globals to #define, replaced abs() with signedness check) (#36).
+- apEdgeCrush: BlinkScript compile error on Nuke 16 — replaced global inline `lerp()` with `#define` macro (#59).
 - Windows filepath issues: use `Path.as_posix()` for all toolkit paths so forward slashes are used on every platform, avoiding backslash escape sequences (e.g. `\n` in `\nk_files`) that broke `nuke.nodePaste()` and file knobs on Windows.
 - Help documentation link on Windows: use `Path.as_uri()` for the documentation PDF URL so drive-letter paths open correctly in the browser.
 - Documentation online reachability check now handles environments where Python SSL certificate validation fails, preventing false fallback from online docs to PDF.
 - Node class check in `filepathCreateNode`: use tuple membership instead of chained `or` for file-node detection.
 - Replaced bare `except:` clauses with specific exception handling (ImportError, RuntimeError) for ColorGradientUi, VectorTracker, and NST_cardToTrack imports.
+- Menu: corrected bm_Lightwrap node name to bm_OpticalLightwrap (#61).
+- Menu: replaced broken DeepToPosition TL with Deep2VPosition MJT (#60).
 - Issue #43: menu and helper module loading.
+- Issue #45: `nuke.load` RuntimeError handling.
+- Issue #46: `filepathCreateNode` cleanup.
 
 ---
 
