@@ -102,7 +102,6 @@ set N36754800 [stack 0]
   yjustify {{parent.FileName.yjustify}}
   transforms {{0 2}
     }
-  font {{ Arial : Regular : arial.ttf : 0 }}
   global_font_scale {{(input.width/35+parent.size)/100}}
   scale {1 1}
   cursor_initialised true
@@ -139,7 +138,6 @@ set N36754800 [stack 0]
   transforms {{0 2}
     }
   cursor_position 1
-  font {{ Arial : Regular : arial.ttf : 0 }}
   global_font_scale {{(input.width/35+parent.size)/100}}
   scale {1 1}
   cursor_initialised true
