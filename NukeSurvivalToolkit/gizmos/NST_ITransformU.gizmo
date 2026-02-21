@@ -14,7 +14,7 @@ Group {
  addUserKnob {41 skewX l "skew X" T Transform1.skewX}
  addUserKnob {41 skewY l "skew Y" T Transform1.skewY}
  addUserKnob {41 center T Transform1.center}
- addUserKnob {22 setCenter l "Set Center" -STARTLINE T "n = nuke.thisGroup()\nw= n.width()\nh=n.height()\nprint w,h\nn\['center'].setValue(\[w/2,h/2])"}
+ addUserKnob {22 setCenter l "Set Center" -STARTLINE T "n = nuke.thisGroup()\nw= n.width()\nh=n.height()\nn\['center'].setValue(\[w/2,h/2])"}
  addUserKnob {41 filter_1 l filter T IDistort2.filter}
  addUserKnob {41 clamp T Transform1.clamp}
  addUserKnob {26 ""}
