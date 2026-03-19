@@ -51,7 +51,7 @@ def icon_path(filename):
 # Documentation behavior/config (kept in menu.py for explicit user editing)
 NST_helper.NST_DOCS_ONLINE_URL = "https://creativelyons.github.io/NukeSurvivalToolkit_Wiki/"
 NST_helper.NST_DOCS_ONLINE_TIMEOUT_SECONDS = 1.5
-NST_helper.NST_DOCS_PDF_NAME = "NukeSurvivalToolkit_Documentation_Release_v2.1.0.pdf"
+NST_helper.NST_DOCS_PDF_NAME = "NukeSurvivalToolkit_Documentation_Release_v2.2.0.pdf"
 NST_helper.NST_DOCS_OFFLINE_INDEX = Path("NST_Documentation/index.html")
 
 # Set to True to load the Expression Nodes AG submenu under Draw; set to False to skip it
