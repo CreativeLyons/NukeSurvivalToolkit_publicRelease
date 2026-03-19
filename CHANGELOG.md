@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Tools (gizmos and Python)**
 
+**2025**
+- CardToTrack (AK) v9.0: NST_CardToTrack2.gizmo, NST_CProject2.gizmo, NST_TProject2.gizmo with NST_cardToTrack_v9.py (single consolidated module for Nuke 15 and 16+; replaces version-split backends).
+
 **2024**
 - aeShadows (AE) v1.0
 - FastComplexity_Distort (X_Distort)
@@ -63,6 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New icon assets for aeRefracTHOR, aeShadows.
 - EdgeDetect, GuidedBlur: corrected icons and attribution (#62).
 - iMorph v2 AP (beta) added alongside v1 in menu.
+- CardToTrack v9 (AK): Transform menu entries CardToTrack_v9 AK, CProject2 AK, TProject2 AK now use NST_-prefixed gizmos (NST_CardToTrack2, NST_CProject2, NST_TProject2) and NST_cardToTrack_v9.py.
 
 **Updated Tools**
 

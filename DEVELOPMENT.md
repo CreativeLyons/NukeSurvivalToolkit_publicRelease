@@ -338,7 +338,8 @@ except:
 | `ColorGradientUi.py` | PySide6 gradient editor widget |
 | `NST_ID_Extractor.py` | RGB channel extraction with Stamps |
 | `NST_VectorTracker.py` | Vector/motion vector based tracking |
-| `NST_cardToTrack.py` | CardToTrack 3D→2D conversion |
+| `NST_cardToTrack.py` | CardToTrack v7 3D→2D conversion |
+| `NST_cardToTrack_v9.py` | CardToTrack v9 3D→2D conversion (single module, Nuke 15 and 16+); used by NST_CardToTrack2, NST_CProject2, NST_TProject2 gizmos |
 | `NST_stickit.py` | SplineWarp from CameraTracker |
 | `GradientPresets.cfg` | Stored gradient presets (ConfigParser) |
 

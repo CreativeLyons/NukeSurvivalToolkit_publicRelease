@@ -1,0 +1,1742 @@
+Group {
+ name CardToTrack_v9_
+ inputs 3
+ help "This group helps to find position of 3d point in space, extract this position back to screen space and create Cornerpin or roto that is tracked to this position."
+ tile_color 0x5236ff
+ gl_color 0xff0000ff
+ note_font "DejaVu Sans"
+ note_font_size 14
+ note_font_color 0xff
+ addUserKnob {20 card_to_track l "Card To Track"}
+ addUserKnob {26 ""}
+ addUserKnob {26 extras l "" t "tooltip is in next knob :)" +STARTLINE T "I have a Camera and"}
+ addUserKnob {41 _1 l "" t "Here you can choose the way you would like to extract the positoin.\n(do not forget to undistort your input)\n\n> I have a Camera and great Matchmove\n   Means you have only a tracked Camera:\n   - Set a reference frame - move the 'picker' to area you want to extract position from, \n   - pres 'Set' Button\n   - Move to different frame and move 'z' knob value till grid is moving back to same location you had in a Reference frame\n   - Use Stabilize and Highpass function to be presize\n   - Press 'Happy' button\n   - Adjust the Rotation, Position and Scale of your card if needed\n   - Press 'Go'\n\n>  I have a Camera and Geometry\n    - connect geometry to the \"Extra\" input.\n    - move the 'picker' to area you want to extract position from, pres 'Set'\n    - Adjust the Rotation, Position and Scale of your card if needed\n    - Press 'Go'\n\n>  I have a Camera and Wpos pass\n    If nice 3D Artist rendered for you a World position pass, connect it to the \"Extra\" input (world position should be shuffled to RGB)\n    - move the 'picker' to area you want to extract position from, pres 'Set'\n    - Adjust the Rotation, Position and Scale of your card if needed\n    - Press 'Go'\n\n>  I have a Camera ande a 3D Locator(card or axis)\n    Let say you have animated Card, an Axis or an array of Axises\n    - connect an Axis or Card to the \"Extra\" input.\n    - Press 'Go'\n    (you can add additional Axis between your animated Axis and card_to_track if you would like to refine your position or rotation)\n\n>  I have a Camera and Deep\n    If you do have a Deep render, connect it to the \"Extra\" input.\n    - move the 'picker' to area you want to extract position from, pres 'Set'\n    - Adjust the Rotation, Position and Scale of your card if needed\n    - Press 'Go'\n    \n    DONE!!!" -STARTLINE T NoOp2.extraStuff}
+ addUserKnob {41 extraHelper l "" -STARTLINE +INVISIBLE T NoOp2.extraHelper}
+ addUserKnob {26 ""}
+ addUserKnob {20 setGroup l "set Reference" n 1}
+ addUserKnob {26 ds l <b>1. t "first step in finding desired position.\n\nplease find some feature on the screen, feature you can see on the other frames as well.\nnot position the picker on this feature and press \"Set\" button\n\nthe reference frame is set, yo should see now the grid centering on the \"picker\"\n\nthere is a chance that \"grid\" will be very small or very big depends on the size of your scene, feel free to adjust it's size with the u_scale knob.\n\nnow you ready for the next step" T "Set reference frame."}
+ addUserKnob {22 REF l Set t "- Please find some feature on the screen, feature you can see on the other frames as well.\n- Move position the 'picker' to this feature and press \"Set\" button, \n    you will see a grid is jumping to this location.\n    We found 'XY' of the point, now lets find the 'Z' in a next step" T "import NST_cardToTrack_v9\nNST_cardToTrack_v9.set_ref_frame()" +STARTLINE}
+ addUserKnob {6 S l INVISIBLE -STARTLINE +INVISIBLE}
+ addUserKnob {3 refFrame l "   reference frame:" -STARTLINE}
+ refFrame 49
+ addUserKnob {41 picker l "     " -STARTLINE T NoOp1.picker}
+ addUserKnob {20 endGroup_3 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 findZ l "Find Z" n 1}
+ findZ 0
+ addUserKnob {26 d l "<b>2. " t "Second step help us to find exact position in 3d space\n\n    - Start advance few frames, you should see that a grid is not fixed anymore to your reference feature \n    - From the moment you noticing it is happening adjust \"Z\" knob to bring the \"grid\" back to the place it was. \n    - Already after first adjustment you will see that grid is sticking well to the feature. \n    - Now you can go to some other frame and refine the position again if needed\n    - If camera move is a nodal pan - you will nail it from very beginning.\n\nTipp:\nit is possible that already after one or two frames of advancement your grid will disappear it can happen because of the size of your scene. just play with \"Z\" slider till you will bring the \"grid\" back to the screen. it is possible that you will have to go to negative values as well." T "go to some other frame and adjust Z. Use stabilize if needed."}
+ addUserKnob {41 Stabilize -STARTLINE T NoOp2.Stabilize}
+ addUserKnob {6 HighPass -STARTLINE +HIDDEN}
+ addUserKnob {7 sharpen l "" -STARTLINE +HIDDEN R 1 10}
+ sharpen 2
+ addUserKnob {7 Zfind l Z t "Second step help us to find exact position in 3d space\n\n    - Start advance few frames, you should see that a grid is not fixed anymore to your reference feature \n    - From the moment you noticing it is happening adjust \"Z\" knob to bring the \"grid\" back to the place it was. \n    - Already after first adjustment you will see that grid is sticking well to the feature. \n    - Now you can go to some other frame and refine the position again if needed\n    - If camera move is a nodal pan - you will nail it from very beginning.\n\nTipp:\nit is possible that already after one or two frames of advancement your grid will disappear it can happen because of the size of your scene. just play with \"Z\" slider till you will bring the \"grid\" back to the screen. it is possible that you will have to go to negative values as well." R -100 100}
+ Zfind -10.5
+ addUserKnob {26 s l <b>3. t "this will create an axis in exact 3D position you found\nplease adjust (if needed)\nrotation of the card to match exact perspective you want\n\nTipp :\nadjusting \"scale\" and \"u_scale\":\nbe carefull when scaling up the card!!! from the moment one of the corners of the \"grid\" is passing the origin of the Camera the calculation will fail. So as a good practice leave your \"grid\" not too big it will not matter for final calculation since it still will lay on the same plane.\n\n" T "Happy with Z? Press \"Happy\" button and adjust perspective."}
+ addUserKnob {22 Adjust l Happy!!! t "This will position a Grid in exact 3D position you found\nplease adjust (if needed) Position, Scale and Rotation of the Grid to match exact perspective you want.\n\nTipp :\nAdjusting \"scale\" and \"u_scale\":\n    - Be carefull when scaling up the card!!! From the moment one of the corners of the \"grid\" is passing the origin of the Camera the calculation will fail. \n        So as a good practice leave your \"grid\" not too big.\n    - You do not want your grid to be too small neither as it will introduce polsition error." T "import NST_cardToTrack_v9\nNST_cardToTrack_v9.happy()" +STARTLINE}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 happyGroup l "Adjust TRS" t "\nPlease adjust (if needed) Position, Scale and Rotation of the Grid to match exact perspective you want.\n\nTipp :\nAdjusting \"scale\" and \"u_scale\":\n    - Be carefull when scaling up the card!!! From the moment one of the corners of the \"grid\" is passing the origin of the Camera the calculation will fail. \n        So as a good practice leave your \"grid\" not too big.\n    - You do not want your grid to be too small neither as it will introduce polsition error." n 1}
+ happyGroup 0
+ addUserKnob {41 translate T Perspective.translate}
+ addUserKnob {41 Stabilize_1 l Stabilize -STARTLINE T NoOp2.Stabilize}
+ addUserKnob {6 HighPass_1 l HighPass -STARTLINE +HIDDEN}
+ addUserKnob {41 rotate l "rotate    " T Perspective.rotate}
+ addUserKnob {22 show_axis l "show axis" t "show grid Axis if it is gone" -STARTLINE T "import NST_cardToTrack_v9\nNST_cardToTrack_v9.show_grid_axis()"}
+ addUserKnob {41 scaling l "scale     " T Perspective.scaling}
+ addUserKnob {41 uniform_scale l "u_scale " T Perspective.uniform_scale}
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 goGroup l GO!!! n 1}
+ goGroup 0
+ addUserKnob {22 C2T l <b>-----------------------GO!----------------------- t "This little fellow will create a new Tab with extracted information\n    - panel will pop up prompting\n        - name for extracted material\n        - Reference Frame - will be a current frame by default, \n            you easily can change it later on.\n        - First and Last frame of the extraction. \n            By default it will take first and last frame of Animation of Camera or animated Axis." T "import NST_cardToTrack_v9\nNST_cardToTrack_v9.go()" +STARTLINE}
+ addUserKnob {20 endGroup_2 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 cameraExchange l "Camera Recalculate and Update Nodes" t "Sometimes camera is getting updated after you already\nextracted nodes and using them in the nodegraph.\nThis workflow will help you to recalculate camera information\nand update your nodes in the script.\nOne more case to use recalculate camera option is when you have few shots \nin the same matchmoved scene - you can set up a template for multiple\nareas in the scene and in every new shot just recalculate position." n 1}
+ cameraExchange 0
+ addUserKnob {22 recalculate l "Recalculate Camera" t "First connect updated Camera please.\nPressing the button will update tracking information\nin all Tabs of the card_to_track\nNo baked nodes in the nodegraph will be updated.\nAll Linked nodes will update their position." T "import NST_cardToTrack_v9\nNST_cardToTrack_v9.recalculate_camera()" +STARTLINE}
+ addUserKnob {22 selectBaked l "Select associated nodes" t "This will select all nodes associated with this card_to_track Gizmo.\nIf you have few Card To Track Gizmos in the script - only nodes created by this gizmo will be selected. Be sure you do not change the name of this node." T "import NST_cardToTrack_v9\nNST_cardToTrack_v9.select_associated_nodes()\n" +STARTLINE}
+ addUserKnob {22 updateBaked l "Updated Selected Nodes" t "This will update all selected baked nodes in nodegraph to get animation from new camera.\n\nIf you do want some of the nodes to not get updated - deselect them before Pressing the button." T "import NST_cardToTrack_v9\nNST_cardToTrack_v9.update_baked()" +STARTLINE}
+ addUserKnob {20 endGroup_4 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 scene_settings l "grid settings" n 1}
+ scene_settings 0
+ addUserKnob {3 scene l "      scene size" t "the tool does not know how big your scene is, if after adjusting \"Z\" slider you see that the card you generating is too big or too small - adjust the scene size.\n\nyou not going to see something changing till you will press \"Set\" button again\n\nif you do happy you can leave this knob alone there will be no need to touch it again\n\njust remember the value so you will be able to enter it when you will be work on the other shots from the same sequence\n\ncheers!"}
+ scene 1
+ addUserKnob {41 hue_rotation l hue T HueShift1.hue_rotation}
+ addUserKnob {41 line_width l thikness T Wireframe2.line_width}
+ addUserKnob {7 op l opacity}
+ op 1
+ addUserKnob {3 grid_sub l subdivisions}
+ grid_sub 4
+ addUserKnob {20 endGroup_5 l endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {26 text l "" +STARTLINE T " &copy; Alexey Kuchinski. 2025<span style=\\\"color:#666\\\"><br/><b>Card To Track v9.6</b> - <a href=\\\"https://youtu.be/xjzkxVZkvXM\\\" style=\\\"color:#666;text-decoration: none;\\\">Help Videos</a></span>\n"}
+}
+ BackdropNode {
+  inputs 0
+  name Backdrop_Main_Setup
+  tile_color 0x595947ff
+  label "Main Setup - using look at frosen on reference\nframe in order to find 'z' position of the \npoint in space"
+  note_font_size 40
+  xpos -1237
+  ypos -623
+  bdwidth 945
+  bdheight 776
+  z_order -29
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x546b3d01
+  note_font "Helvetica Bold"
+  note_font_size 100
+  xpos -3303
+  ypos 724
+  bookmark false
+  bdwidth 287
+  bdheight 334
+ }
+ BackdropNode {
+  inputs 0
+  name Backdrop_Card_or_Axis_visualisation
+  tile_color 0x59474dff
+  label "Card or Axis visualisation"
+  note_font_size 40
+  xpos 263
+  ypos -79
+  bdwidth 483
+  bdheight 699
+  z_order 3
+ }
+ BackdropNode {
+  inputs 0
+  name Backdrop_High_pass_setup
+  tile_color 0x594753ff
+  label "High pass setup"
+  note_font_size 40
+  xpos 483
+  ypos 2776
+  bdwidth 447
+  bdheight 533
+  z_order 3
+ }
+ BackdropNode {
+  inputs 0
+  name Backdrop_INPUTS
+  tile_color 0x59474aff
+  label INPUTS
+  note_font_size 40
+  xpos 1275
+  ypos -1329
+  bdwidth 677
+  bdheight 220
+  z_order 3
+ }
+ BackdropNode {
+  inputs 0
+  name Backdrop_NoOp_controller
+  tile_color 0x475956ff
+  label "NoOp controller"
+  note_font_size 40
+  xpos 824
+  ypos -1329
+  bdwidth 340
+  bdheight 209
+  z_order 3
+ }
+ BackdropNode {
+  inputs 0
+  name Backdrop_Stabilization_setup
+  tile_color 0x594750ff
+  label "Stabilization setup"
+  note_font_size 40
+  xpos 300
+  ypos 653
+  bdwidth 450
+  bdheight 566
+  z_order 3
+ }
+ BackdropNode {
+  inputs 0
+  name Backdrop_World_Position_from_Card
+  tile_color 0x4a5947ff
+  label "World Position from Card\nor Geometry."
+  note_font_size 40
+  xpos -2697
+  ypos 253
+  bdwidth 481
+  bdheight 565
+  z_order 3
+ }
+ BackdropNode {
+  inputs 0
+  name Backdrop_World_Position_from_Render
+  tile_color 0x475259ff
+  label "World Position \nfrom Render"
+  note_font_size 40
+  xpos -2150
+  ypos 792
+  bdwidth 319
+  bdheight 219
+  z_order 3
+ }
+ BackdropNode {
+  inputs 0
+  name Backdrop_main_GRID
+  tile_color 0x594b47ff
+  label "main GRID"
+  note_font_size 40
+  xpos -941
+  ypos -1613
+  bdwidth 839
+  bdheight 664
+  z_order 3
+ }
+ BackdropNode {
+  inputs 0
+  name Backdrop_prepare_to_reconsile
+  tile_color 0x594758ff
+  label "this is a setup that serve as a base \nfor our reconcile process. we do 'reconcile3d' \nfrom four axices in bottom part\nof the backdrop"
+  note_font_size 40
+  xpos 2037
+  ypos -1352
+  bdwidth 671
+  bdheight 643
+  z_order 3
+ }
+ Input {
+  inputs 0
+  name Extra
+  xpos 1305
+  ypos -1230
+  number 2
+ }
+ NoOp {
+  name Anchor1
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0xffffff01
+  note_font_size 20
+  xpos 1305
+  ypos -1186
+  addUserKnob {20 anchor_tab l "Anchor Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T anchor}
+  addUserKnob {1 title l Title}
+  title Extra
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Extra}
+ }
+set N2deb95d0 [stack 0]
+ NoOp {
+  name StampAboveDeep
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos -3267
+  ypos 769
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title Extra
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Extra}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor1
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+ DeepExpression {
+  chans0 rgb
+  chans1 none
+  rgba.red "( ( x/\[value input.width] ) - 0.5 ) * \[value hratio] * deep.front )"
+  rgba.green "( ( y/\[value input.height] ) - 0.5 ) * ( ( \[value hratio]*deep.front ) / ( \[value input.width]/\[value input.height] ) )"
+  rgba.blue -deep.front
+  name DeepExpressionTopNode
+  label "initial setup"
+  xpos -3267
+  ypos 837
+  addUserKnob {20 User}
+  addUserKnob {7 hratio}
+  hratio {{"\[value DummyCam.haperture] / \[value DummyCam.focal]"}}
+ }
+ DeepExpression {
+  chans0 {rgba.red rgba.green rgba.blue none}
+  chans1 none
+  rgba.red "(r * \[value DummyCam.world_matrix.0] + g * \[value DummyCam.world_matrix.1] + b * \[value DummyCam.world_matrix.2]) + \[value DummyCam.world_matrix.3]"
+  rgba.green "(r * \[value DummyCam.world_matrix.4] + g * \[value DummyCam.world_matrix.5] + b * \[value DummyCam.world_matrix.6]) + \[value DummyCam.world_matrix.7]"
+  rgba.blue "(r * \[value DummyCam.world_matrix.8] + g * \[value DummyCam.world_matrix.9] + b * \[value DummyCam.world_matrix.10]) + \[value DummyCam.world_matrix.11]"
+  name deepCT_00
+  label camera
+  xpos -3267
+  ypos 923
+  addUserKnob {20 User}
+ }
+ DeepToImage {
+  name DeepToImage3
+  xpos -3267
+  ypos 987
+ }
+ Dot {
+  name Dot26
+  xpos -3233
+  ypos 1119
+ }
+push $N2deb95d0
+ NoOp {
+  name Stamp2
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos -2059
+  ypos 920
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title Extra
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Extra}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor1
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+ Dot {
+  name Dot4
+  xpos -2025
+  ypos 1119
+ }
+ Input {
+  inputs 0
+  name Camera
+  xpos 1542
+  ypos -1227
+  number 1
+ }
+set N33cd6dc0 [stack 0]
+ NoOp {
+  name Anchor3
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0xffffff01
+  note_font_size 20
+  xpos 1542
+  ypos -1181
+  addUserKnob {20 anchor_tab l "Anchor Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T anchor}
+  addUserKnob {1 title l Title}
+  title Camera
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Camera}
+ }
+set N33cfd4c0 [stack 0]
+ NoOp {
+  name Stamp9
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos -2364
+  ypos 731
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title Camera
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Camera}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor3
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+push $N2deb95d0
+ NoOp {
+  name Stamp1
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos -2647
+  ypos 655
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title Extra
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Extra}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor1
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+push $N33cfd4c0
+ NoOp {
+  name Stamp10
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos -2650
+  ypos 529
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title Camera
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Camera}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor3
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+ Constant {
+  inputs 0
+  color 1
+  format "512 512 0 0 512 512 1 square_512"
+  name Constant1
+  tile_color 0xff
+  xpos -2513
+  ypos 372
+  postage_stamp false
+ }
+ Card2 {
+  display off
+  selectable false
+  image_aspect false
+  rows 4
+  columns 4
+  z 10
+  lens_in_focal {{parent.DummyCam.focal}}
+  lens_in_haperture {{parent.DummyCam.haperture}}
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card2
+  xpos -2513
+  ypos 431
+  addUserKnob {20 User}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_1" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_1" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_1 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_2" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_2" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_2 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_3" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_3" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_3 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+ }
+ TransformGeo {
+  inputs 2
+  selectable false
+  name TransformGeo2
+  xpos -2513
+  ypos 534
+ }
+ Switch {
+  inputs 2
+  which {{parent.extraHelper==2?1:0}}
+  name GeoInput
+  label "\[value which]\nswitch to pick up world\nposition from the internal card\nor from extra geometry if provided."
+  xpos -2513
+  ypos 636
+ }
+ Input {
+  inputs 0
+  name BG
+  xpos 1409
+  ypos -1231
+ }
+ NoOp {
+  name Anchor2
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0xffffff01
+  note_font_size 20
+  xpos 1409
+  ypos -1183
+  addUserKnob {20 anchor_tab l "Anchor Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T anchor}
+  addUserKnob {1 title l Title}
+  title BG
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T BG}
+ }
+set N33dafbb0 [stack 0]
+ NoOp {
+  name Stamp4
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos -2647
+  ypos 731
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title BG
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T BG}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor2
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+ ScanlineRender {
+  inputs 3
+  motion_vectors_type distance
+  output_shader_vectors true
+  P_channel rgb
+  name ScanlineRender2
+  xpos -2513
+  ypos 736
+ }
+ Switch {
+  inputs 3
+  which {{parent.extraHelper==3?1:parent.extraHelper==4?2:0}}
+  name WorldPositionSource
+  label "\[value which]\nswitch is redirecting to pick up \nposition values depending on the \nchoicein the main dropdown"
+  xpos -2513
+  ypos 1092
+ }
+ NoOp {
+  name NoOp1
+  tile_color 0xffff
+  gl_color 0xffff
+  label "Picking World Position"
+  note_font_size 16
+  xpos -2513
+  ypos 1268
+  addUserKnob {20 User}
+  addUserKnob {22 pick T "a=nuke.toNode(\"NoOp1\")\nr=nuke.sample(a,\"red\",a\['picker'].value(0),a\['picker'].value(1),1,1)\ng=nuke.sample(a,\"green\",a\['picker'].value(0),a\['picker'].value(1),1,1)\nb=nuke.sample(a,\"blue\",a\['picker'].value(0),a\['picker'].value(1),1,1)\n#nuke.tprint(r)\nnuke.toNode('look_at_Axis')\['translate'].setValue(\[r,g,b])\n#nuke.toNode('Perspective')\['translate'].setValue(\[r,g,b])" +STARTLINE}
+  addUserKnob {12 picker}
+  picker {928 500}
+ }
+ Clamp {
+  channels rgba
+  name Clamp1
+  xpos -2513
+  ypos 1378
+ }
+ Dot {
+  name Dot5
+  xpos -2479
+  ypos 2406
+ }
+push $N33cfd4c0
+ NoOp {
+  name Stamp15
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos 322
+  ypos 1082
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title Camera
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Camera}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor3
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+set N33ae9030 [stack 0]
+push $N33ae9030
+ FrameHold {
+  firstFrame 49
+  name StabFrameHold
+  xpos 225
+  ypos 1138
+  disable true
+ }
+ set C33af12b0 [stack 0]
+ Switch {
+  inputs 2
+  which {{parent.StabFrameHold.disable}}
+  name Switch4
+  xpos 361
+  ypos 1147
+ }
+ Axis {
+  inputs 0
+  translate {-4.458946705 10.26000023 -5.941508293}
+  uniform_scale 2
+  name Perspective
+  tile_color 0xff0000ff
+  label "this is the center\n of the Grid!!!"
+  xpos -876
+  ypos -80
+ }
+push $N33cfd4c0
+ NoOp {
+  name Stamp12
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos -707
+  ypos -411
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title Camera
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Camera}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor3
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+ FrameHold {
+  firstFrame {{parent.refFrame}}
+  name FrameHold2
+  xpos -707
+  ypos -360
+ }
+push 0
+ Axis2 {
+  inputs 2
+  display off
+  selectable false
+  translate {1.563220501 11.32060719 1.955564976}
+  name look_at_Axis
+  tile_color 0xff0000ff
+  xpos -697
+  ypos -268
+ }
+ Axis {
+  display off
+  selectable false
+  translate {0 0 {parent.Zfind}}
+  uniform_scale {{parent.Perspective.uniform_scale}}
+  name Z_finder
+  tile_color 0xff0000ff
+  xpos -697
+  ypos -177
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch
+  label "\[value which]\nwill switch to Perspective Axis\nafter 'Happy' button is pressed"
+  xpos -708
+  ypos -77
+ }
+ NoOp {
+  name Anchor5
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0xffffff01
+  note_font_size 20
+  xpos -708
+  ypos 48
+  addUserKnob {20 anchor_tab l "Anchor Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T anchor}
+  addUserKnob {1 title l Title}
+  title position_finder
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T position_finder}
+ }
+set N33b628b0 [stack 0]
+ NoOp {
+  name Stamp13
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos 375
+  ypos 946
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title position_finder
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T position_finder}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor5
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+ Dot {
+  name Dot8
+  xpos 409
+  ypos 1038
+ }
+push $N33cfd4c0
+ NoOp {
+  name Stamp6
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos 383
+  ypos 801
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title Camera
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Camera}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor3
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+push $N33dafbb0
+ NoOp {
+  name Stamp5
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos 502
+  ypos 751
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title BG
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T BG}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor2
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+ Project3D {
+  inputs 2
+  crop false
+  name Project3D1
+  xpos 502
+  ypos 812
+ }
+ Card2 {
+  display wireframe
+  selectable false
+  rows 4
+  columns 4
+  uniform_scale 100000
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card10
+  xpos 502
+  ypos 914
+  addUserKnob {20 User}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_1" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_1" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_1 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_2" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_2" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_2 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_3" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_3" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_3 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+ }
+ TransformGeo {
+  inputs 2
+  selectable false
+  name TransformGeo4
+  xpos 502
+  ypos 1035
+ }
+push $N33dafbb0
+ NoOp {
+  name Stamp16
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos 620
+  ypos 1023
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title BG
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T BG}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor2
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+ Remove {
+  name Remove2
+  xpos 620
+  ypos 1069
+ }
+ ScanlineRender {
+  inputs 3
+  shutter 0
+  motion_vectors_type distance
+  name ScanlineRender3
+  xpos 502
+  ypos 1147
+ }
+ Dot {
+  name Dot1
+  xpos 536
+  ypos 1264
+ }
+push $N33dafbb0
+ NoOp {
+  name Stamp3
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos 800
+  ypos 1150
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title BG
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T BG}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor2
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+ Switch {
+  inputs 2
+  which 1
+  name StabSwitch
+  label "\[value which]"
+  xpos 800
+  ypos 1257
+  disable true
+ }
+ Dot {
+  name Dot3
+  xpos 834
+  ypos 1415
+ }
+set N33c3c710 [stack 0]
+push $N33cfd4c0
+ NoOp {
+  name Stamp7
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos -383
+  ypos 1317
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title Camera
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Camera}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor3
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+set N33c42d40 [stack 0]
+push $N33c42d40
+clone $C33af12b0 {
+  xpos -465
+  ypos 1372
+  selected false
+ }
+ Switch {
+  inputs 2
+  which {{parent.StabFrameHold.disable}}
+  name Switch3
+  xpos -383
+  ypos 1417
+ }
+push $N33b628b0
+ Constant {
+  inputs 0
+  format "512 512 0 0 512 512 1 square_512"
+  name Constant2
+  tile_color 0xff
+  xpos -235
+  ypos -1538
+  postage_stamp false
+ }
+ Dot {
+  name Dot9
+  xpos -201
+  ypos -1487
+ }
+set N33c6cb60 [stack 0]
+ Wireframe {
+  operation "see through"
+  line_width 1
+  line_color {1 0 0 1}
+  name Wireframe4
+  xpos -642
+  ypos -1300
+ }
+set N33e861f0 [stack 0]
+ Card2 {
+  display wireframe
+  selectable false
+  image_aspect false
+  rows 1
+  columns 1
+  translate {0.5 -0.5 0}
+  uniform_scale 0.03
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card9
+  xpos -891
+  ypos -1251
+  addUserKnob {20 User}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_1" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_1" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_1 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_2" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_2" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_2 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_3" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_3" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_3 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+ }
+ Dot {
+  name Dot19
+  xpos -857
+  ypos -1140
+ }
+push $N33e861f0
+ Card2 {
+  display wireframe
+  selectable false
+  image_aspect false
+  rows 1
+  columns 1
+  translate {0.5 0.5 0}
+  uniform_scale 0.03
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card8
+  xpos -806
+  ypos -1248
+  addUserKnob {20 User}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_1" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_1" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_1 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_2" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_2" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_2 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_3" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_3" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_3 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+ }
+ Dot {
+  name Dot18
+  xpos -772
+  ypos -1166
+ }
+push $N33e861f0
+ Card2 {
+  display wireframe
+  selectable false
+  image_aspect false
+  rows 1
+  columns 1
+  translate {-0.5 -0.5 0}
+  uniform_scale 0.03
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card7
+  xpos -724
+  ypos -1248
+  addUserKnob {20 User}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_1" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_1" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_1 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_2" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_2" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_2 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_3" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_3" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_3 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+ }
+ Dot {
+  name Dot17
+  xpos -690
+  ypos -1192
+ }
+push $N33e861f0
+ Card2 {
+  display wireframe
+  selectable false
+  image_aspect false
+  rows 1
+  columns 1
+  translate {-0.5 0.5 0}
+  uniform_scale 0.03
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card6
+  xpos -642
+  ypos -1254
+  addUserKnob {20 User}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_1" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_1" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_1 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_2" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_2" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_2 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_3" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_3" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_3 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+ }
+ MergeGeo {
+  inputs 2
+  selectable false
+  name MergeGeo5
+  xpos -642
+  ypos -1196
+ }
+ MergeGeo {
+  inputs 2
+  selectable false
+  name MergeGeo6
+  xpos -642
+  ypos -1170
+ }
+ MergeGeo {
+  inputs 2
+  selectable false
+  name MergeGeo7
+  xpos -642
+  ypos -1144
+ }
+ Dot {
+  name Dot16
+  xpos -608
+  ypos -1067
+ }
+push $N33c6cb60
+ Wireframe {
+  operation "see through"
+  line_width 1
+  line_color {0 1 0 1}
+  name Wireframe5
+  xpos -495
+  ypos -1305
+ }
+ Card2 {
+  display wireframe
+  selectable false
+  cast_shadow false
+  receive_shadow false
+  image_aspect false
+  rows 2
+  columns 2
+  uniform_scale 100
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card5
+  xpos -495
+  ypos -1253
+  addUserKnob {20 User}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_1" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_1" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_1 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_2" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_2" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_2 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_3" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_3" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_3 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+ }
+ Dot {
+  name Dot15
+  xpos -461
+  ypos -1187
+ }
+push $N33c6cb60
+ Wireframe {
+  operation "see through"
+  line_width 1
+  line_color {1 0 1 1}
+  name Wireframe3
+  xpos -352
+  ypos -1302
+ }
+ Card2 {
+  display wireframe
+  selectable false
+  image_aspect false
+  rows 2
+  columns 2
+  translate {0 0 -0.0001}
+  uniform_scale 0.1
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card4
+  xpos -352
+  ypos -1260
+  addUserKnob {20 User}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_1" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_1" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_1 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_2" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_2" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_2 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_3" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_3" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_3 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+ }
+ Dot {
+  name Dot14
+  xpos -318
+  ypos -1213
+ }
+push $N33c6cb60
+ Wireframe {
+  operation "see through"
+  line_width 0.1
+  name Wireframe2
+  xpos -235
+  ypos -1306
+ }
+ Card2 {
+  display wireframe
+  selectable false
+  rows {{parent.grid_sub}}
+  columns {{rows}}
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card1
+  xpos -232
+  ypos -1254
+  addUserKnob {20 User}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_1" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_1" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_1 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_2" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_2" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_2 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_3" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_3" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_3 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+ }
+ MergeGeo {
+  inputs 2
+  selectable false
+  name MergeGeo2
+  xpos -232
+  ypos -1217
+ }
+ MergeGeo {
+  inputs 2
+  selectable false
+  name MergeGeo3
+  xpos -232
+  ypos -1191
+ }
+ MergeGeo {
+  inputs 2
+  selectable false
+  name MergeGeo4
+  xpos -232
+  ypos -1070
+ }
+ Switch {
+  which {{parent.HighPass_1}}
+  name killGrid
+  label "this switch will kill the visibility \nof the grid when we are in \nhighpass mode"
+  xpos -232
+  ypos -531
+ }
+ TransformGeo {
+  inputs 2
+  selectable false
+  name TransformGeo1
+  xpos -231
+  ypos 52
+ }
+ Dot {
+  name Dot11
+  xpos -197
+  ypos 475
+ }
+set N3413ed80 [stack 0]
+ Dot {
+  name Dot12
+  xpos 100
+  ypos 473
+ }
+ Wireframe {
+  inputs 0
+  operation "see through"
+  line_width 1
+  line_color {1 0 1 1}
+  name Wireframe6
+  xpos 288
+  ypos 337
+ }
+push $N2deb95d0
+ NoOp {
+  name Stamp17
+  help "Redone by Adrian Pueyo.\nUpdated 29 Mar 2019\n\nFull original concept and \"Postage Stamps\" created by Alexey Kuchinski."
+  onCreate "if nuke.GUI:\n    try:\n        nuke.thisNode().knob(\"toReconnect\").setValue(1)\n    except:\n        pass\n"
+  autolabel "nuke.thisNode().knob(\"title\").value()"
+  tile_color 0x1000001
+  note_font "Bitstream Vera Sans"
+  note_font_size 20
+  xpos 503
+  ypos 3
+  hide_input true
+  addUserKnob {20 wired_tab l "Wired Stamp"}
+  addUserKnob {26 identifier -STARTLINE +HIDDEN T wired}
+  addUserKnob {6 toReconnect -STARTLINE +HIDDEN}
+  toReconnect true
+  addUserKnob {1 title l Title}
+  title Extra
+  addUserKnob {26 prev_title l "" +STARTLINE +HIDDEN T Extra}
+  addUserKnob {1 anchor l Anchor}
+  anchor Anchor1
+  addUserKnob {26 anchorLabel l "Anchor Stamp"}
+ }
+set N34158510 [stack 0]
+ Card2 {
+  inputs 0
+  image_aspect false
+  rows 4
+  columns 4
+  control_points {3 3 3 6
+
+1 {-0.5 -0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0 0 0}
+1 {0 -0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {0.5 0 0}
+1 {0.5 -0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666865 0} 0 {0 0 0} 0 {1 0 0}
+1 {-0.5 0 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0 0.5 0}
+1 {0 0 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {0.5 0.5 0}
+1 {0.5 0 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0.1666666716 0} 0 {0 -0.1666666716 0} 0 {1 0.5 0}
+1 {-0.5 0.5 0} 0 {0.1666666865 0 0} 0 {0 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0 1 0}
+1 {0 0.5 0} 0 {0.1666666716 0 0} 0 {-0.1666666716 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {0.5 1 0}
+1 {0.5 0.5 0} 0 {0 0 0} 0 {-0.1666666865 0 0} 0 {0 0 0} 0 {0 -0.1666666865 0} 0 {1 1 0} }
+  name Card11
+  xpos 349
+  ypos 20
+  addUserKnob {20 User}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_1" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_1" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_1 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_2" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_2" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_2 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot_3" l "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot_3" l "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected_3 l snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+  addUserKnob {22 "floor Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[0,0.5,0])\nn\['pivot'].setValue(\[0,-0.5,0])"}
+  addUserKnob {22 "corner Pivot" -STARTLINE T "n=nuke.thisNode()\nn\['translate'].setValue(\[-.5,.5,0])\nn\['pivot'].setValue(\[.5,-.5,0])"}
+  addUserKnob {22 snapToSelected -STARTLINE T "b=nuke.selectedNode()\['translate'].value()\nn=nuke.thisNode()\nn\['translate'].setValue(b)"}
+ }
+ TransformGeo {
+  inputs 2
+  name TransformGeo6
+  label "when we do use an axis as locator\nthis will help us to \nprevisualize the locator"
+  xpos 349
+  ypos 94
+ }
+push $N34158510
+ Switch {
+  inputs 2
+  which {{"\[exists input2.world_matrix]?1:0"}}
+  name SwitchCardAxis
+  label "will switch depending if Card or \nAxis is using as a locator."
+  xpos 503
+  ypos 188
+ }
+ ApplyMaterial {
+  inputs 2
+  name ApplyMaterialVisualisation
+  xpos 503
+  ypos 337
+ }
+ Dot {
+  name Dot2
+  xpos 537
+  ypos 558
+ }
+ MergeGeo {
+  inputs 2
+  selectable false
+  name MergeGeo9
+  label "it will be enabled only when we are in \ngeometry mode in order to give us\ngrid overlay on top of geometry wireframe"
+  xpos 66
+  ypos 537
+  disable {{parent.extraHelper==2?0:1}}
+ }
+push $N3413ed80
+ Switch {
+  inputs 2
+  which {{parent.extraHelper==1||parent.extraHelper==2?1:0}}
+  name AnimCard
+  label "switch to 1 when we in \nlocator mode or in geometry node.\nit will give us visual on locator position and scale \nor geometry wireframe"
+  xpos -231
+  ypos 533
+ }
+push $N33c3c710
+ Remove {
+  name Remove1
+  xpos 154
+  ypos 1411
+ }
+ ScanlineRender {
+  inputs 3
+  shutter 0
+  motion_vectors_type distance
+  name ScanlineRender1
+  xpos -235
+  ypos 1417
+ }
+ HueShift {
+  name HueShift1
+  xpos -235
+  ypos 1537
+ }
+ Multiply {
+  channels rgba
+  value {{parent.op}}
+  name Multiply1
+  xpos -235
+  ypos 1563
+ }
+ Dot {
+  name Dot6
+  xpos -201
+  ypos 1891
+ }
+ Multiply {
+  channels rgba
+  value {{!HighPass}}
+  name Multiply2
+  label "turn off grid when in highpass mode"
+  note_font_size 14
+  xpos 605
+  ypos 1873
+ }
+ Merge2 {
+  inputs 2
+  operation under
+  name Merge4
+  xpos 804
+  ypos 2002
+ }
+ Merge2 {
+  inputs 2
+  mix 0.001
+  name Merge1
+  xpos 800
+  ypos 2403
+ }
+ Dot {
+  name Dot29
+  xpos 834
+  ypos 2874
+ }
+set N34282e70 [stack 0]
+ Dot {
+  name Dot13
+  xpos 711
+  ypos 2874
+ }
+ Shuffle {
+  alpha white
+  name Shuffle1
+  tile_color 0xffffffff
+  label "White Alpha"
+  xpos 677
+  ypos 2915
+ }
+ Dot {
+  name Dot23
+  xpos 711
+  ypos 2977
+ }
+set N342a4380 [stack 0]
+ Dot {
+  name Dot27
+  xpos 567
+  ypos 2977
+ }
+ Invert {
+  channels rgba
+  name Invert1
+  xpos 533
+  ypos 3013
+ }
+ FrameHold {
+  firstFrame 49
+  name StabRef
+  xpos 533
+  ypos 3051
+ }
+ Dot {
+  name Dot28
+  xpos 567
+  ypos 3113
+ }
+push $N342a4380
+ Merge2 {
+  inputs 2
+  bbox A
+  name Merge3
+  xpos 677
+  ypos 3109
+ }
+ Grade {
+  add -1
+  black_clamp false
+  name Grade1
+  xpos 677
+  ypos 3135
+  addUserKnob {20 User}
+  addUserKnob {22 "keep luma" -STARTLINE T keepLuma()}
+  addUserKnob {22 "keep luma_1" l "keep luma" -STARTLINE T keepLuma()}
+  addUserKnob {22 "keep luma_2" l "keep luma" -STARTLINE T keepLuma()}
+  addUserKnob {22 "keep luma_3" l "keep luma" -STARTLINE T keepLuma()}
+  addUserKnob {22 "keep luma" -STARTLINE T keepLuma()}
+ }
+ Grade {
+  multiply {{parent.sharpen}}
+  add 0.5
+  name Grade2
+  xpos 677
+  ypos 3161
+  addUserKnob {20 User}
+  addUserKnob {22 "keep luma" -STARTLINE T keepLuma()}
+  addUserKnob {22 "keep luma_1" l "keep luma" -STARTLINE T keepLuma()}
+  addUserKnob {22 "keep luma_2" l "keep luma" -STARTLINE T keepLuma()}
+  addUserKnob {22 "keep luma_3" l "keep luma" -STARTLINE T keepLuma()}
+  addUserKnob {22 "keep luma" -STARTLINE T keepLuma()}
+ }
+ Dot {
+  name Dot30
+  xpos 711
+  ypos 3240
+ }
+push $N34282e70
+ Switch {
+  inputs 2
+  which {{"HighPass==1 || HighPass_1 ==1?1:0"}}
+  name HighPass
+  label "\[value which]"
+  xpos 800
+  ypos 3233
+ }
+ Output {
+  name Output1
+  xpos 800
+  ypos 3435
+ }
+ Axis2 {
+  inputs 0
+  rot_order XYZ
+  useMatrix true
+  matrix {
+
+       {{DummyCam.world_matrix.0} {DummyCam.world_matrix.4} {DummyCam.world_matrix.8} {"-(matrix.0*DummyCam.world_matrix.3 + matrix.1*DummyCam.world_matrix.7 + matrix.2*DummyCam.world_matrix.11)"}}
+       {{DummyCam.world_matrix.1} {DummyCam.world_matrix.5} {DummyCam.world_matrix.9} {"-(matrix.4*DummyCam.world_matrix.3 + matrix.5*DummyCam.world_matrix.7 + matrix.6*DummyCam.world_matrix.11)"}}
+       {{DummyCam.world_matrix.2} {DummyCam.world_matrix.6} {DummyCam.world_matrix.10} {"-(matrix.8*DummyCam.world_matrix.3 + matrix.9*DummyCam.world_matrix.7 + matrix.10*DummyCam.world_matrix.11)"}}
+       {0 0 0 1}
+  }
+  name Inverse1
+  label "reverse camera tracking"
+  xpos 2340
+  ypos -1076
+  addUserKnob {20 User}
+  addUserKnob {1 camera}
+  camera Camera10
+  addUserKnob {26 t l "" +STARTLINE T eshirazi}
+ }
+ Axis2 {
+  selectable false
+  translate {{parent.Perspective.translate} {parent.Perspective.translate} {parent.Perspective.translate}}
+  rotate {{parent.Perspective.rotate} {parent.Perspective.rotate} {parent.Perspective.rotate}}
+  name aM
+  gl_color 0xffff00ff
+  label "main axis"
+  xpos 2340
+  ypos -955
+ }
+set N34347730 [stack 0]
+ Axis2 {
+  selectable false
+  xform_order STR
+  translate {{-0.5*Perspective.uniform_scale*Perspective.scaling.x} {input0.pixel_aspect*0.5*Perspective.uniform_scale*Perspective.scaling.y} 0}
+  name a4
+  xpos 2598
+  ypos -819
+ }
+push $N34347730
+ Axis2 {
+  selectable false
+  xform_order STR
+  translate {{0.5*Perspective.uniform_scale*Perspective.scaling.x} {input0.pixel_aspect*0.5*Perspective.uniform_scale*Perspective.scaling.y} 0}
+  name a3
+  xpos 2445
+  ypos -819
+ }
+push $N34347730
+ Axis2 {
+  selectable false
+  xform_order STR
+  translate {{0.5*Perspective.uniform_scale*Perspective.scaling.x} {input0.pixel_aspect*-0.5*Perspective.uniform_scale*Perspective.scaling.y} 0}
+  name a2
+  xpos 2272
+  ypos -819
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  tile_color 0xffffffff
+  label "<b>Mark Joey Tang Deep2VP                .\nDeep to World Position"
+  note_font "Helvetica Bold"
+  note_font_size 20
+  xpos -3302
+  ypos 657
+ }
+ NoOp {
+  inputs 0
+  name NoOp2
+  knobChanged "nn = nuke.thisGroup()\nk = nuke.thisKnob()\nkn = k.name()\n\nif kn == \"extraStuff\":\n    if nn\['extraHelper'].value() in \[0,2,5]:\n        nn\[\"setGroup\"].clearFlag(1)\n        nn\['findZ'].setFlag(1)\n        nn\[\"happyGroup\"].setFlag(1)\n        nn\[\"goGroup\"].setFlag(1)\n        nn\[\"Zfind\"].setValue(0)\n        nn\['translate'].setValue(0)\n        nn\['rotate'].setValue(0)\n        nn\['scaling'].setValue(0)\n          \n    elif nn\['extraHelper'].value() in \[1]:\n        nn\[\"setGroup\"].setFlag(1)\n        nn\['findZ'].setFlag(1)\n        nn\[\"happyGroup\"].setFlag(1)\n        nn\[\"goGroup\"].clearFlag(1)\n        nn\[\"Zfind\"].setValue(0)\n        with nn:\n            perspective_axis = nuke.toNode('Perspective')\n            perspective_axis.setSelected(False)   \n    with nn:\n        nuke.toNode('ApplyMaterialVisualisation').setInput(0,nuke.toNode('SwitchCardAxis'))\n        nuke.toNode('DeepExpressionTopNode').setInput(0,nuke.toNode('StampAboveDeep'))\n          \nelif kn == \"Stabilize\":\n    t = nn\['S']\n    if t.value() == 0:\n        nn\['HighPass'].setVisible(False)\n        nn\['HighPass_1'].setVisible(False)\n        nn\['sharpen'].setVisible(False)\n    else:\n        nn\['HighPass'].setVisible(True)\n        nn\['HighPass_1'].setVisible(True)\n        nn\['sharpen'].setVisible(True)\n    "
+  label "this controler was created to eliminate\nknobChanged callbacks in the main card_to_track \ngroup."
+  xpos 951
+  ypos -1216
+  addUserKnob {20 User}
+  addUserKnob {4 extraStuff t "here you can choose the way you would like find your position\n\n1 I have a Camera and great Matchmove\n   means you have only a tracked Camera - you will have to go normal way in finding position\n\n2  I have a Camera and Geometry\n   see little input called \"Extra\"? this is your new friend, if you have by any chance a geometry of the Scene - can be a model, lidar scan or just a bunch Nuke objects, connect it to the \"Extra\" input and press \"Set\" button, congrats you found your 3D position and ready sdjust your perspective(no need to bother with \"Z\" and \"Happy\" button\n\n3  I have a Camera and Wpos pass\n    if your nice 3D Artist rendered for you a Wpos pass, connect it to the \"Extra\" input and press \"Set\" button, congrats you found your 3D position and ready sdjust your perspective(no need to bother with \"Z\" and \"Happy\" button\n\n4  I have a Camera and Card\n    Let say you have animated Card and you want to translate it's position to Screen space,\n     connect the Card to the .... \n    Adjust rotation/position/scaling  in the Card it self if needed\n     and press \"GO\" button\n    DONE!!!\n\n5 I have a Camera and an Axis\n    In some cases you have to use multiple Axises to refine position of your card.\n    This option will consolidate transformations stored in Axises.\n    Adjust rotation/position/scaling  in the Axis it self if needed\n    Connect the last (lowest) axis to Extra pipe and press GO button\n\n6 Use this one in case you have deep image." M {"great match move!!!" "3D Locator(card or axis)" Geometry "Wpos pass" Deep "" ""}}
+  addUserKnob {3 extraHelper}
+  extraHelper {{"\[numvalue extraStuff]"}}
+ addUserKnob {22 Stabilize T "import NST_cardToTrack_v9\nNST_cardToTrack_v9.stabilize()" +STARTLINE}
+ }
+push $N33cd6dc0
+ Camera {
+  projection_mode {{"\[expression \[value the_cam]projection_mode(\[value the_frame])]"}}
+  focal {{"\[expression \[value the_cam]focal(\[value the_frame])]" x1 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20}}
+  haperture {{"\[expression \[value the_cam]haperture(\[value the_frame])]"}}
+  vaperture {{"\[expression \[value the_cam]vaperture(\[value the_frame])]"}}
+  near {{"\[expression \[value the_cam]near(\[value the_frame])]"}}
+  far {{"\[expression \[value the_cam]far(\[value the_frame])]"}}
+  win_translate {{"\[expression \[value the_cam]win_translate.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_translate.v(\[value the_frame])]"}}
+  win_scale {{"\[expression \[value the_cam]win_scale.u(\[value the_frame])]"} {"\[expression \[value the_cam]win_scale.v(\[value the_frame])]"}}
+  winroll {{"\[expression \[value the_cam]winroll(\[value the_frame])]"}}
+  focal_point {{"\[expression \[value the_cam]focal_point(\[value the_frame])]"}}
+  fstop {{"\[expression \[value the_cam]fstop(\[value the_frame])]"}}
+  name DummyCam
+  help "DummyCam by Adrian Pueyo\n\nCamera that apart from the matrices also grabs all the \"Projection\" values from the upstream camera that it's connected to. Turns into a default Camera if no Camera connected. Can also be used inside of groups and gizmos, as many levels deep as you want :D All using live and super fast TCL.\n\nUpdated v1.1: Now grabs the correct frame too (thanks Erwan Leroy for the idea).\n\nUpdated v1.3: Now accepts Nuke13's Camera3\n\nadrianpueyo.com, 2019-2021"
+  onCreate "n = nuke.thisNode()\nfor k in \[\"projection_mode\",\"focal\",\"haperture\",\"vaperture\",\"near\",\"far\",\"win_translate\",\"win_scale\",\"winroll\",\"focal_point\",\"fstop\"]:\n    n\[k].setFlag(0x0000000010000000)"
+  label "This is a Gizmo created by Adrian Pueyo.\nIt finds the camera connected upstream \nand collects all needed information from it."
+  xpos 1804
+  ypos -1248
+  addUserKnob {20 DummyCam l Defaults}
+  addUserKnob {43 the_cam +INVISIBLE}
+  the_cam "\[\n#DummyCam v1.3 - Updated 5 May 2021.\nset starting_point \"this.input0\"\nset default \"this.d_\"\n\n# If cam has no inputs, return the default.\nif \{\[exists \$starting_point]\} \{\n    set x \[node \$starting_point]\n\} \{ \n    return \$default\n\}\n\nset finished 0\nwhile \{\$finished != 1\} \{\n\n    # First look for a Cam or Input or topnode.\n    while \{\[class \$x] != \"Camera3\" && \[class \$x] != \"Camera2\" && \[class \$x] != \"Camera\" && \[class \$x] != \"Input\" && \$x != \[topnode \$x]\} \{\n        set x \[node \$x.input0]\n    \}\n\n    # Then, check if node is a cam (and return), and otherwise, if it's an input, see if the parent exists and move to it.\n    if \{\[class \$x]==\"Camera3\"||\[class \$x]==\"Camera2\"||\[class \$x]==\"Camera\"\} \{\n        set x \[append x \".\"]\n        return \$x\n    \} \{ \n        if \{ \[class \$x]==\"Input\" \} \{ \n            set inp \"\$x.parent.input\"\n            set inputNum \[value \$x.number]\n            set inp \[append inp \$inputNum]\n            if \{ \[exists \$inp] \} \{\n                set x \[node \$inp]\n            \} \{ \n                set finished 1\n            \}\n        \} \{ \n            set finished 1\n        \}\n    \}\n\}\nreturn \$default\n]"
+  addUserKnob {43 the_frame +INVISIBLE}
+  the_frame "\[\nset the_camera \[string trimright \[value the_cam] .]\nif \{\[exists \$the_camera]\} \{\n    return \[value \$the_camera.frame]\n\} \{ \n    return \[frame]\n\}\n]"
+  addUserKnob {4 d_projection_mode l projection M {perspective orthographic uv spherical ""}}
+  addUserKnob {7 d_focal l "focal length" R 0 100}
+  d_focal 50
+  addUserKnob {7 d_haperture l "horiz aperture" R 0 50}
+  d_haperture 24.576
+  addUserKnob {7 d_vaperture l "vert aperture" R 0 50}
+  d_vaperture 18.672
+  addUserKnob {7 d_near l near R 0 10}
+  d_near 0.1
+  addUserKnob {7 d_far l far R 0 10000}
+  d_far 10000
+  addUserKnob {30 d_win_translate l "window translate"}
+  addUserKnob {30 d_win_scale l "window scale"}
+  d_win_scale {1 1}
+  addUserKnob {7 d_winroll l "window roll" R 0 45}
+  addUserKnob {7 d_focal_point l "focal distance" R 0 10}
+  d_focal_point 2
+  addUserKnob {7 d_fstop l fstop R 0 30}
+  d_fstop 16
+  addUserKnob {26 version l " " t "Updated 5 May 2021" T "<span style=\"color:#666\"><br/><b>DummyCam v1.3</b> - <a href=\"http://www.adrianpueyo.com\" style=\"color:#666;text-decoration: none;\">adrianpueyo.com</a>, 2019-2021</span>"}
+ }
+push $N34347730
+ Axis2 {
+  selectable false
+  xform_order STR
+  translate {{-0.5*Perspective.uniform_scale*Perspective.scaling.x} {input0.pixel_aspect*-0.5*Perspective.uniform_scale*Perspective.scaling.y} 0}
+  name a1
+  xpos 2087
+  ypos -819
+ }
+end_group

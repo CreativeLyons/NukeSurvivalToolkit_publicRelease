@@ -518,13 +518,22 @@ transformMenu.addSeparator()
 
 try:
     import NST_cardToTrack
-    transformMenu.addCommand('CardToTrack AK', f"nuke.createNode('{prefixNST}CardToTrack')", icon='Card.png')
+    transformMenu.addCommand('CardToTrack_v7 AK', f"nuke.createNode('{prefixNST}CardToTrack')", icon='Card.png')
 except ImportError as e:
     print(f"Could not load NST_cardToTrack.py: {e}")
     pass
 
+try:
+    import NST_cardToTrack_v9
+    transformMenu.addCommand('CardToTrack_v9 AK', f"nuke.createNode('{prefixNST}CardToTrack2')", icon='Card.png')
+except ImportError as e:
+    print(f"Could not load NST_cardToTrack_v9.py: {e}")
+    pass
+
 transformMenu.addCommand('CProject AK', f"nuke.createNode('{prefixNST}CProject')", icon='CornerPin.png')
+transformMenu.addCommand('CProject2 AK', f"nuke.createNode('{prefixNST}CProject2')", icon='CornerPin.png')
 transformMenu.addCommand('TProject AK', f"nuke.createNode('{prefixNST}TProject')", icon='Transform.png')
+transformMenu.addCommand('TProject2 AK', f"nuke.createNode('{prefixNST}TProject2')", icon='Transform.png')
 
 transformMenu.addCommand("StickIt MHD", f"nuke.createNode('{prefixNST}h_stickit')", icon="h_stickit.png")
 transformMenu.addSeparator()
