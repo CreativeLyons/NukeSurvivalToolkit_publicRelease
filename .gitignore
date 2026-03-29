@@ -39,6 +39,7 @@ Temporary Items
 *.so
 
 # Distribution / packaging
+*.zip
 .Python
 build/
 develop-eggs/
