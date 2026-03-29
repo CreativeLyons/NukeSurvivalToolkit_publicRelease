@@ -39,6 +39,8 @@ For full online documentation and tool index Wiki, visit:
 
 [Nuke Survival Toolkit Online Wiki](https://creativelyons.github.io/NukeSurvivalToolkit_Wiki/)
 
+[Wiki GitHub repository](https://github.com/CreativeLyons/NukeSurvivalToolkit_Wiki) — source, issues, and [wiki releases](https://github.com/CreativeLyons/NukeSurvivalToolkit_Wiki/releases/)
+
 ## Offline Documentation (optional)
 You can install local wiki docs for offline use.
 
