@@ -11,8 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Tools (gizmos and Python)**
 
-**2025**
-- CardToTrack (AK) v9.0: NST_CardToTrack2.gizmo, NST_CProject2.gizmo, NST_TProject2.gizmo with NST_cardToTrack_v9.py (single consolidated module for Nuke 15 and 16+; replaces version-split backends).
+**2026**
+- CardToTrack (AK) v9.0
 
 **2024**
 - aeShadows (AE) v1.0
@@ -60,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ColorGradientUi.py` updated for Nuke 16+ compatibility and PySide6 migration (GradientEditor MHD).
 - Menu refactor: `nk_path()` and `icon_path()` helpers, f-strings, improved readability; no user-visible behavior change.
 - Documentation menu now uses a `Documentation` submenu with `Wiki/Docs (Auto)`, `Wiki (Online)`, `Wiki (Offline)`, and `Docs (PDF)` commands. The auto command now falls back in order: online wiki -> offline local wiki -> local PDF, with reachability checks and concise missing-target guidance.
+- Documentation (offline HTML): **`Wiki/Docs (Auto)`** and **`Wiki (Offline)`** open the bundled wiki via a local **`http://127.0.0.1`** static server (ephemeral port) so **MkDocs Material search** works; falls back to **`file://`** if the server cannot start; browser launch is **non-blocking** (background thread). Reuses the same server when the offline root path is unchanged.
 - Added dedicated icons for documentation submenu entries (`wiki_default`, `wiki_online`, `wiki_offline`) and used Nuke native `StickyNote` for PDF.
 - `README.md` now includes an optional offline documentation install section that points users to release ZIP downloads and the required local path (`NukeSurvivalToolkit/NST_Documentation/index.html`).
 - Updated .nk templates: NST_AdvancedKeyingTemplate_Stamps.nk, NST_X_Aton_Examples.nk, deepThickness.nk.
@@ -133,13 +134,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Windows filepath issues: use `Path.as_posix()` for all toolkit paths so forward slashes are used on every platform, avoiding backslash escape sequences (e.g. `\n` in `\nk_files`) that broke `nuke.nodePaste()` and file knobs on Windows.
 - Help documentation link on Windows: use `Path.as_uri()` for the documentation PDF URL so drive-letter paths open correctly in the browser.
 - Documentation online reachability check now handles environments where Python SSL certificate validation fails, preventing false fallback from online docs to PDF.
-- Node class check in `filepathCreateNode`: use tuple membership instead of chained `or` for file-node detection.
-- Replaced bare `except:` clauses with specific exception handling (ImportError, RuntimeError) for ColorGradientUi, VectorTracker, and NST_cardToTrack imports.
+- Offline MkDocs **search** was unreliable when the wiki was opened as **`file://`** — mitigated by serving the same folder over **localhost** when launching from Nuke (**Wiki/Docs (Auto)** / **Wiki (Offline)**).
+- Node class check in `filepathCreateNode`: use tuple membership instead of chained `or` for file-node detection (#46).
+- Replaced bare `except:` clauses with specific exception handling (ImportError, RuntimeError) for ColorGradientUi, VectorTracker, and NST_cardToTrack imports (#45).
 - Menu: corrected bm_Lightwrap node name to bm_OpticalLightwrap (#61).
 - Menu: replaced broken DeepToPosition TL with Deep2VPosition MJT (#60).
-- Issue #43: menu and helper module loading.
-- Issue #45: `nuke.load` RuntimeError handling.
-- Issue #46: `filepathCreateNode` cleanup.
+- Issue #43: **`NST_FolderPath` is defined inside `NST_helper`** (from `__file__`) instead of being assigned from `menu.py`, so the helper does not depend on `menu.py` having run first and avoids import-order `NameError` risk.
 
 ---
 
