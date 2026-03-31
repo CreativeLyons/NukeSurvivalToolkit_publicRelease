@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **2024**
 - aeShadows (AE) v1.0
-- FastComplexity_Distort (X_Distort)
+- FastComplexity_Distort (MHD)
 - fxT_ChromaticAberration (fxT) v3.1
 - Emission (NW) v1.2
 - aeRefracTHOR (AE) v1.0
