@@ -5,6 +5,14 @@ All notable changes to the Nuke Survival Toolkit are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- apGlow: preserve connections when rebuilding steps during Gizmo paste; keep step edits consistent through undo/redo and limit cleanup to generated blur branches. The shipped tool remains a self-contained Group.
+- apDespill: restore image-based limit channel routing by removing the all-black Shuffle mapping; retain channel selection, inversion and the existing negative-RGB handling.
+- apGlow and apDespill: disable inline Group View when supported, without serializing the newer knob into scripts intended for older Nuke versions.
+
 ## [2.2.0] - 2026-03-19
 
 ### Added
